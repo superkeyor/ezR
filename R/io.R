@@ -21,7 +21,6 @@
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
 z.read = read.csv
 
-
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}
 #' @param
 #' @return
@@ -68,11 +67,7 @@ z.readx = function(file, sheetIndex=1, ...){
 }
 
 #' alias of \code{\link[sjmisc]{read_spss}}
-#' @description potentially keep variable labels and value labels. General logic:
-#' \cr keep labels information in variable attr (not data frame attr) during reading/saving
-#' \cr if attr lost/non-exist, use add_* (remove_*) in a batch way, or set_* manually
-#' \cr if needed, use get_* to get attr
-#' \cr to_* convert
+#' @description potentially keep variable labels and value labels.
 #' @import sjmisc
 #' @export
 z.reads = read_spss

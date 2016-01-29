@@ -8,10 +8,6 @@ z.reads(path, enc = NA, attach.var.labels = FALSE, atomic.to.fac = FALSE,
   keep.na = FALSE, option = "haven")
 }
 \description{
-potentially keep variable labels and value labels. General logic:
-\cr keep labels information in variable attr (not data frame attr) during reading/saving
-\cr if attr lost/non-exist, use add_* (remove_*) in a batch way, or set_* manually
-\cr if needed, use get_* to get attr
-\cr to_* convert
+potentially keep variable labels and value labels.
 }
 

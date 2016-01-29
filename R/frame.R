@@ -71,6 +71,150 @@ z.names = names
 
 
 
+#' recode
+#' @description Recodes a set of variables according to a set of rules
+#' @param data A data.frame to be recoded
+#' @param recodes Definition of the recoding rules. See details
+#' @details recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
+#' \itemize{
+#'  \item{}{The simplest codes one value to another. If we wish to recode 1 into 2, we could use the rule "1->2;".}
+#'  \item{}{A range of values can be coded to a single value using "1:3->4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the Lo and Hi key words (e.g."Lo:3->0; 4:Hi->1")}
+#'  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:Hi->1; else->NA")}
+#' }
+#' @author Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
+#' @examples
+#' data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
+#' z.recode(data[c("a","b")] , "Lo:0 -> 0;0:Hi -> 1;")
+#' data[c("male")] <- z.recode(data[c("male")] , "1 -> 'Male';0 -> 'Female';else -> NA;")
+#' @return returns a new df, old one does not change
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.recode<-function(data,recodes){
+    recode.other<-function(var){
+        if(is.factor(var)) stop("use recode.factor to recode factors")
+        warning.flag<-TRUE
+        result <- var
+        else.target<-""
+        if(else.term!=""){
+            else.target <- eval(parse(text = strsplit(else.term, "->")[[1]][2]))
+            result[1:length(var)] <- else.target
+        }
+        if(is.numeric(var)){
+            Lo <- min(var, na.rm = TRUE)
+            Hi <- max(var, na.rm = TRUE)
+        }else{
+            Lo <-""
+            Hi <-max(var, na.rm = TRUE)
+        }
+        for(term in recode.list){
+            if(0 < length(grep(":", term))){
+                if(is.character(var) && warning.flag){
+                    warning("Recoding a range of characters may not do what you think it does.\n Example: '15' is less than '9'.")
+                    warning.flag<-FALSE
+                }
+                range <- strsplit(strsplit(term, "->")[[1]][1], ":")
+                low <- eval(parse(text = range[[1]][1]))
+                high <- eval(parse(text = range[[1]][2]))
+                if(high<low) next
+                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
+                result[(var >= low) & (var <= high)] <- target
+            }else{
+                set <- eval(parse(text = strsplit(term, "->")[[1]][1]))
+                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
+                for (val in set) {
+                    if (is.na(val))
+                        result[is.na(var)] <- target
+                    else{
+                        result[var == val] <- target
+                    }
+                }
+            }
+        }
+        return(result)
+    }
+
+    recode.factor<-function(var){
+        if(!is.factor(var)) stop("var must be a factor")
+        result<-var
+        else.target<-""
+        if(else.term!=""){
+            else.target <- eval(parse(text = strsplit(else.term, "->")[[1]][2]))
+            if(!(else.target %in% levels(result))){
+                levels(result)<-c(levels(result),else.target)
+            }
+            result<-factor(rep(else.target,length(var)),levels=else.target)
+        }
+
+        for(term in recode.list){
+            Lo<-levels(var)[1]
+            Hi<-levels(var)[length(levels(var))]
+            if(0 < length(grep(":", term))){
+                range <- strsplit(strsplit(term, "->")[[1]][1], ":")
+                low <- eval(parse(text = range[[1]][1]))
+                low<-which(levels(var)==low)[1]
+                if(is.na(low)) stop(paste("Lower value in range not a valid factor level.",term))
+                high <- eval(parse(text = range[[1]][2]))
+                high <- which(levels(var)==high)[1]
+                if(is.na(high)) stop(paste("upper value in range not a valid factor level.",term))
+                if(high<low) stop(paste("Upper value must be ordered after lower value in the factor ordering.",term))
+
+                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
+                set<-levels(var)[low:high]
+                if(!(target %in% levels(result))){
+                    levels(result)<-c(levels(result),target)
+                }
+                result[var %in% set] <- target
+                set<-setdiff(set,target)
+                levels(result)<-ifelse(levels(result) %in% set,NA,levels(result))
+            }else{
+                set <- eval(parse(text = strsplit(term, "->")[[1]][1]))
+                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
+                for (val in set) {
+                    if(!(target %in% levels(result))){
+                        levels(result)<-c(levels(result),target)
+                    }
+                    if (is.na(val))
+                        result[is.na(var)] <- target
+                    else{
+                        result[var == val] <- target
+                        if (!is.na(val) && !is.na(target) && val != target){
+                            levels(result)<-ifelse(levels(result)==val,NA,levels(result))
+                        }
+                    }
+                }
+            }
+        }
+        return(result)
+    }
+
+    if(!is.data.frame(data)) data<-as.data.frame(data)
+    recode.list <- strsplit(recodes, ";")[[1]]
+    else.term<-""
+    else.ind<-c()
+    for(i in 1:length(recode.list)){
+        first.part<-strsplit(recode.list[[i]],"->")[[1]][1]
+        if(length(grep("else",first.part))>0 && length(grep("'",first.part))<1){
+            else.term<-recode.list[[i]]
+            else.ind<-c(else.ind,-i)
+        }
+    }
+    if(length(else.ind)>0) recode.list<-recode.list[else.ind]
+    result.data<-data.frame(1:dim(data)[1])
+    for(variable in data){
+        if(is.factor(variable)){
+            result.data<-data.frame(result.data,recode.factor(variable),stringsAsFactors=FALSE)
+        }else result.data<-data.frame(result.data,recode.other(variable),stringsAsFactors=FALSE)
+    }
+    return(result.data[-1])
+}
+
 #' reorder all cols
 #' @param newColOrder c('','',''), number of cols must match
 #' @return returns a new df, old one does not change
