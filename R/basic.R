@@ -23,19 +23,6 @@ z.num = as.numeric
 #' @export
 z.str = as.character
 
-#' mimic python join, supports vectorization, wrapper of \code{\link{paste}}
-#' @param sep default is nothing
-#' @examples
-#' z.join('','a',' x ','b') # "a x b"
-#' z.join(..., sep = " ", collapse = NULL)
-#' z.join(1:12) # same as as.character(1:12)
-#' z.join("A", 1:6, sep = "")
-#' z.join("Today is", date())
-#' @export
-z.join = function(sep='',...){
-    paste(...,sep=sep)
-}
-
 #' alias of \code{\link{ceiling}}
 #' @param
 #' @return
@@ -262,7 +249,7 @@ z.reshape = function (a, n, m){
 #' @return
 #' @examples
 #' @export
-z.arrayfun = function (func, ...){
+z.arrayfun = function(func, ...){
     dots <- list(...)
     if (length(dots) < 1)
         stop("Empty list of arrays: Rsult cannot be computed.")
@@ -270,39 +257,6 @@ z.arrayfun = function (func, ...){
     r <- mapply(func, ...)
     dim(r) <- d
     return(r)
-}
-
-#' size of an object
-#' @param x data.frame
-#' @param dimension 0=both, 1=row, 2=col
-#' @export
-z.size = function(x,dimension=0) {
-    if (dimension == 0) {
-        return(dim(x))
-    } else if (dimension == 1) {
-        return(nrow(x))
-    } else if (dimension == 2) {
-        return(ncol(x))
-    }
-}
-
-#' length of an object
-#' @export
-z.len = function(x) {
-    if (class(x) == 'character') {
-        # require('stringi')
-        # return(stri_length(x))  # in case of stri_length(NA) = NA
-        return(nchar(x))  # nchar(NA) = 2
-    }
-    else if (class(x) == 'data.frame') {
-        return(nrow(x))
-    }
-    else if (is.na(x) || is.nan(x)) {
-        return(0)
-    }
-    else {
-        return(length(x))
-    }
 }
 
 #' similar to matlab find, find non-zero in a vector
@@ -322,6 +276,19 @@ z.find = function(v){
 #' runif(n, min = 0, max = 1)
 #' @export
 z.rand = runif
+
+#' mimic python join, supports vectorization, wrapper of \code{\link{paste}}
+#' @param sep default is nothing
+#' @examples
+#' z.join('','a',' x ','b') # "a x b"
+#' z.join(..., sep = " ", collapse = NULL)
+#' z.join(1:12) # same as as.character(1:12)
+#' z.join("A", 1:6, sep = "")
+#' z.join("Today is", date())
+#' @export
+z.join = function(sep='',...){
+    paste(...,sep=sep)
+}
 
 #' wrapper of cat
 #' @param

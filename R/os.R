@@ -32,6 +32,13 @@ z.include = z.import
 #' @export
 z.install = install.packages
 
+#' alias of \code{\link{devtools::install_github}}
+#' @param
+#' @return
+#' @examples
+#' @export
+z.github = devtools::install_github
+
 #' alias of \code{\link{remove.packages}}
 #' @param
 #' @return
