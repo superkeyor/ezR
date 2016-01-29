@@ -71,22 +71,84 @@ z.names = names
 
 
 
-#' recode
-#' @description Recodes a set of variables according to a set of rules
-#' @param data A data.frame to be recoded
-#' @param recodes Definition of the recoding rules. See details
-#' @details recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
-#' \itemize{
-#'  \item{}{The simplest codes one value to another. If we wish to recode 1 into 2, we could use the rule "1->2;".}
-#'  \item{}{A range of values can be coded to a single value using "1:3->4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the Lo and Hi key words (e.g."Lo:3->0; 4:Hi->1")}
-#'  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:Hi->1; else->NA")}
-#' }
-#' @author Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
+
+#' recode, alias of \code{\link[sjmisc]{rec}}
+#' @description Recodes a numeric variable according to a set of rules.
+#' \cr (x, recodes)
+#' @param x Numeric variable (vector) or a \code{\link{factor}} with numeric
+#'          levels that should be recoded; or a \code{data.frame} or \code{list} of
+#'          variables.
+#' @param recodes String with recode pairs of old and new values. See 'Details' for
+#'          examples.
+#' @return A numeric variable (or a factor, if \code{as.fac = TRUE}) with
+#'           recoded category values, or a data frame or \code{list}-object
+#'           with recoded categories for all variables.
+#'
+#' @details  The \code{recodes} string has following syntax:
+#'           \describe{
+#'            \item{recode pairs}{each recode pair has to be separated by a \code{;}, e.g. \code{recodes = "1=1; 2=4; 3=2; 4=3"}}
+#'            \item{multiple values}{multiple old values that should be recoded into a new single value may be separated with comma, e.g. \code{"1,2=1; 3,4=2"}}
+#'            \item{value range}{a value range is indicated by a colon, e.g. \code{"1:4=1; 5:8=2"} (recodes all values from 1 to 4 into 1, and from 5 to 8 into 2)}
+#'            \item{\code{"min"} and \code{"max"}}{minimum and maximum values are indicates by \emph{min} (or \emph{lo}) and \emph{max} (or \emph{hi}), e.g. \code{"min:4=1; 5:max=2"} (recodes all values from minimum values of \code{x} to 4 into 1, and from 5 to maximum values of \code{x} into 2)}
+#'            \item{\code{"else"}}{all other values except specified are indicated by \emph{else}, e.g. \code{"3=1; 1=2; else=3"} (recodes 3 into 1, 1 into 2 and all other values into 3)}
+#'            \item{\code{"copy"}}{the \code{"else"}-token can be combined with \emph{copy}, indicating that all remaining, not yet recoded values should stay the same (are copied from the original value), e.g. \code{"3=1; 1=2; else=copy"} (recodes 3 into 1, 1 into 2 and all other values like 2, 4 or 5 etc. will not be recoded, but copied, see 'Examples')}
+#'            \item{\code{NA}'s}{\code{\link{NA}} values are allowed both as old and new value, e.g. \code{"NA=1; 3:5=NA"} (recodes all NA from old value into 1, and all old values from 3 to 5 into NA in the new variable)}
+#'            \item{\code{"rev"}}{\code{"rev"} is a special token that reverses the value order (see 'Examples')}
+#'           }
+#'
+#' @note Please note following behaviours of the function:
+#'       \itemize{
+#'         \item the \code{"else"}-token should always be the last argument in the \code{recodes}-string.
+#'         \item Non-matching values will be set to \code{\link{NA}}, unless captured by the \code{"else"}-token.
+#'         \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved (unless changes via \code{var.label}-argument), however, value label attributes are removed (except for \code{"rev"}, where present value labels will be automatically reversed as well). Use \code{val.labels}-argument to add labels for recoded values.
+#'         \item If \code{x} is a \code{data.frame} or \code{list} of variables, all variables should have the same categories resp. value range (else, see second bullet, \code{NA}s are produced).
+#'         \item If multiple ranges overlap, the latter one prevails (because later looping). 1:3=1;3:5=2 (3->2 finally).
+#'       }
+#'
 #' @examples
-#' data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
-#' z.recode(data[c("a","b")] , "Lo:0 -> 0;0:Hi -> 1;")
-#' data[c("male")] <- z.recode(data[c("male")] , "1 -> 'Male';0 -> 'Female';else -> NA;")
-#' @return returns a new df, old one does not change
+#' data(efc)
+#' table(efc$e42dep, exclude = NULL)
+#'
+#' # replace NA with 5
+#' table(rec(efc$e42dep, "1=1;2=2;3=3;4=4;NA=5"), exclude = NULL)
+#'
+#' # recode 1 to 2 into 1 and 3 to 4 into 2
+#' table(rec(efc$e42dep, "1,2=1; 3,4=2"), exclude = NULL)
+#'
+#' # or:
+#' # rec(efc$e42dep) <- "1,2=1; 3,4=2"
+#' # table(efc$e42dep, exclude = NULL)
+#'
+#' # keep value labels. variable label is automatically preserved
+#' str(rec(efc$e42dep,
+#'         "1,2=1; 3,4=2",
+#'         val.labels = c("low dependency", "high dependency")))
+#'
+#' # recode 1 to 3 into 4 into 2
+#' table(rec(efc$e42dep, "min:3=1; 4=2"), exclude = NULL)
+#'
+#' # recode 2 to 1 and all others into 2
+#' table(rec(efc$e42dep, "2=1; else=2"), exclude = NULL)
+#'
+#' # reverse value order
+#' table(rec(efc$e42dep, "rev"), exclude = NULL)
+#'
+#' # recode only selected values, copy remaining
+#' table(efc$e15relat)
+#' table(rec(efc$e15relat, "1,2,4=1; else=copy"))
+#'
+#' # recode variables with same categorie in a data frame
+#' head(efc[, 6:9])
+#' head(rec(efc[, 6:9], "1=10;2=20;3=30;4=40"))
+#'
+#' # recode list of variables. create dummy-list of
+#' # variables with same value-range
+#' dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
+#' # show original distribution
+#' lapply(dummy, table, exclude = NULL)
+#' # show recodes
+#' lapply(rec(dummy, "1,2=1; NA=9; else=copy"), table, exclude = NULL)
+#'
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -96,123 +158,21 @@ z.names = names
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.recode_old<-function(data,recodes){
-    recode.other<-function(var){
-        if(is.factor(var)) stop("use recode.factor to recode factors")
-        warning.flag<-TRUE
-        result <- var
-        else.target<-""
-        if(else.term!=""){
-            else.target <- eval(parse(text = strsplit(else.term, "->")[[1]][2]))
-            result[1:length(var)] <- else.target
-        }
-        if(is.numeric(var)){
-            Lo <- min(var, na.rm = TRUE)
-            Hi <- max(var, na.rm = TRUE)
-        }else{
-            Lo <-""
-            Hi <-max(var, na.rm = TRUE)
-        }
-        for(term in recode.list){
-            if(0 < length(grep(":", term))){
-                if(is.character(var) && warning.flag){
-                    warning("Recoding a range of characters may not do what you think it does.\n Example: '15' is less than '9'.")
-                    warning.flag<-FALSE
-                }
-                range <- strsplit(strsplit(term, "->")[[1]][1], ":")
-                low <- eval(parse(text = range[[1]][1]))
-                high <- eval(parse(text = range[[1]][2]))
-                if(high<low) next
-                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
-                result[(var >= low) & (var <= high)] <- target
-            }else{
-                set <- eval(parse(text = strsplit(term, "->")[[1]][1]))
-                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
-                for (val in set) {
-                    if (is.na(val))
-                        result[is.na(var)] <- target
-                    else{
-                        result[var == val] <- target
-                    }
-                }
-            }
-        }
-        return(result)
-    }
+z.recode = function(df, var, recodes){
+    newVar = sjmisc::rec(df[var],recodes)
+    cmd = sprintf("dplyr::mutate(df,'%s = %s')",var, newVar)
+    df = eval(parse(text=cmd))
+}
 
-    recode.factor<-function(var){
-        if(!is.factor(var)) stop("var must be a factor")
-        result<-var
-        else.target<-""
-        if(else.term!=""){
-            else.target <- eval(parse(text = strsplit(else.term, "->")[[1]][2]))
-            if(!(else.target %in% levels(result))){
-                levels(result)<-c(levels(result),else.target)
-            }
-            result<-factor(rep(else.target,length(var)),levels=else.target)
-        }
 
-        for(term in recode.list){
-            Lo<-levels(var)[1]
-            Hi<-levels(var)[length(levels(var))]
-            if(0 < length(grep(":", term))){
-                range <- strsplit(strsplit(term, "->")[[1]][1], ":")
-                low <- eval(parse(text = range[[1]][1]))
-                low<-which(levels(var)==low)[1]
-                if(is.na(low)) stop(paste("Lower value in range not a valid factor level.",term))
-                high <- eval(parse(text = range[[1]][2]))
-                high <- which(levels(var)==high)[1]
-                if(is.na(high)) stop(paste("upper value in range not a valid factor level.",term))
-                if(high<low) stop(paste("Upper value must be ordered after lower value in the factor ordering.",term))
-
-                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
-                set<-levels(var)[low:high]
-                if(!(target %in% levels(result))){
-                    levels(result)<-c(levels(result),target)
-                }
-                result[var %in% set] <- target
-                set<-setdiff(set,target)
-                levels(result)<-ifelse(levels(result) %in% set,NA,levels(result))
-            }else{
-                set <- eval(parse(text = strsplit(term, "->")[[1]][1]))
-                target <- eval(parse(text = strsplit(term, "->")[[1]][2]))
-                for (val in set) {
-                    if(!(target %in% levels(result))){
-                        levels(result)<-c(levels(result),target)
-                    }
-                    if (is.na(val))
-                        result[is.na(var)] <- target
-                    else{
-                        result[var == val] <- target
-                        if (!is.na(val) && !is.na(target) && val != target){
-                            levels(result)<-ifelse(levels(result)==val,NA,levels(result))
-                        }
-                    }
-                }
-            }
-        }
-        return(result)
-    }
-
-    if(!is.data.frame(data)) data<-as.data.frame(data)
-    recode.list <- strsplit(recodes, ";")[[1]]
-    else.term<-""
-    else.ind<-c()
-    for(i in 1:length(recode.list)){
-        first.part<-strsplit(recode.list[[i]],"->")[[1]][1]
-        if(length(grep("else",first.part))>0 && length(grep("'",first.part))<1){
-            else.term<-recode.list[[i]]
-            else.ind<-c(else.ind,-i)
-        }
-    }
-    if(length(else.ind)>0) recode.list<-recode.list[else.ind]
-    result.data<-data.frame(1:dim(data)[1])
-    for(variable in data){
-        if(is.factor(variable)){
-            result.data<-data.frame(result.data,recode.factor(variable),stringsAsFactors=FALSE)
-        }else result.data<-data.frame(result.data,recode.other(variable),stringsAsFactors=FALSE)
-    }
-    return(result.data[-1])
+z.recode2 = function(df, var, recodes){
+    newVar = sjmisc::rec(df[var],recodes)
+    cmd = sprintf("reshape::rename(df,c(%s='%s'))",var,paste0(var,'_ori'))
+    # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
+    df = eval(parse(text=cmd))
+    df = bind_cols(df,newVar)
+    cmd = sprintf("z.move(df,'%s before %s')",var, paste0(var,'_ori'))
+    df = eval(parse(text=cmd))
 }
 
 #' reorder all cols

@@ -2,36 +2,94 @@
 % Please edit documentation in R/frame.R
 \name{z.recode}
 \alias{z.recode}
-\title{recode}
+\title{recode, alias of \code{\link[sjmisc]{rec}}}
 \usage{
-z.recode(data, recodes)
+z.recode(x, recodes, as.fac = FALSE, var.label = NULL, val.labels = NULL)
 }
 \arguments{
-\item{data}{A data.frame to be recoded}
+\item{x}{Numeric variable (vector) or a \code{\link{factor}} with numeric
+levels that should be recoded; or a \code{data.frame} or \code{list} of
+variables.}
 
-\item{recodes}{Definition of the recoding rules. See details}
+\item{recodes}{String with recode pairs of old and new values. See 'Details' for
+examples.}
 }
 \value{
-returns a new df, old one does not change
+A numeric variable (or a factor, if \code{as.fac = TRUE}) with
+          recoded category values, or a data frame or \code{list}-object
+          with recoded categories for all variables.
 }
 \description{
-Recodes a set of variables according to a set of rules
+Recodes a numeric variable according to a set of rules.
+\cr (x, recodes)
 }
 \details{
-recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
-\itemize{
- \item{}{The simplest codes one value to another. If we wish to recode 1 into 2, we could use the rule "1->2;".}
- \item{}{A range of values can be coded to a single value using "1:3->4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the Lo and Hi key words (e.g."Lo:3->0; 4:Hi->1")}
- \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:Hi->1; else->NA")}
+The \code{recodes} string has following syntax:
+          \describe{
+           \item{recode pairs}{each recode pair has to be separated by a \code{;}, e.g. \code{recodes = "1=1; 2=4; 3=2; 4=3"}}
+           \item{multiple values}{multiple old values that should be recoded into a new single value may be separated with comma, e.g. \code{"1,2=1; 3,4=2"}}
+           \item{value range}{a value range is indicated by a colon, e.g. \code{"1:4=1; 5:8=2"} (recodes all values from 1 to 4 into 1, and from 5 to 8 into 2)}
+           \item{\code{"min"} and \code{"max"}}{minimum and maximum values are indicates by \emph{min} (or \emph{lo}) and \emph{max} (or \emph{hi}), e.g. \code{"min:4=1; 5:max=2"} (recodes all values from minimum values of \code{x} to 4 into 1, and from 5 to maximum values of \code{x} into 2)}
+           \item{\code{"else"}}{all other values except specified are indicated by \emph{else}, e.g. \code{"3=1; 1=2; else=3"} (recodes 3 into 1, 1 into 2 and all other values into 3)}
+           \item{\code{"copy"}}{the \code{"else"}-token can be combined with \emph{copy}, indicating that all remaining, not yet recoded values should stay the same (are copied from the original value), e.g. \code{"3=1; 1=2; else=copy"} (recodes 3 into 1, 1 into 2 and all other values like 2, 4 or 5 etc. will not be recoded, but copied, see 'Examples')}
+           \item{\code{NA}'s}{\code{\link{NA}} values are allowed both as old and new value, e.g. \code{"NA=1; 3:5=NA"} (recodes all NA from old value into 1, and all old values from 3 to 5 into NA in the new variable)}
+           \item{\code{"rev"}}{\code{"rev"} is a special token that reverses the value order (see 'Examples')}
+          }
 }
+\note{
+Please note following behaviours of the function:
+      \itemize{
+        \item the \code{"else"}-token should always be the last argument in the \code{recodes}-string.
+        \item Non-matching values will be set to \code{\link{NA}}, unless captured by the \code{"else"}-token.
+        \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved (unless changes via \code{var.label}-argument), however, value label attributes are removed (except for \code{"rev"}, where present value labels will be automatically reversed as well). Use \code{val.labels}-argument to add labels for recoded values.
+        \item If \code{x} is a \code{data.frame} or \code{list} of variables, all variables should have the same categories resp. value range (else, see second bullet, \code{NA}s are produced).
+        \item If multiple ranges overlap, the latter one prevails (because later looping). 1:3=1;3:5=2 (3->2 finally).
+      }
 }
 \examples{
-data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
-z.recode(data[c("a","b")] , "Lo:0 -> 0;0:Hi -> 1;")
-data[c("male")] <- z.recode(data[c("male")] , "1 -> 'Male';0 -> 'Female';else -> NA;")
-}
-\author{
-Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
+data(efc)
+table(efc$e42dep, exclude = NULL)
+
+# replace NA with 5
+table(rec(efc$e42dep, "1=1;2=2;3=3;4=4;NA=5"), exclude = NULL)
+
+# recode 1 to 2 into 1 and 3 to 4 into 2
+table(rec(efc$e42dep, "1,2=1; 3,4=2"), exclude = NULL)
+
+# or:
+# rec(efc$e42dep) <- "1,2=1; 3,4=2"
+# table(efc$e42dep, exclude = NULL)
+
+# keep value labels. variable label is automatically preserved
+str(rec(efc$e42dep,
+        "1,2=1; 3,4=2",
+        val.labels = c("low dependency", "high dependency")))
+
+# recode 1 to 3 into 4 into 2
+table(rec(efc$e42dep, "min:3=1; 4=2"), exclude = NULL)
+
+# recode 2 to 1 and all others into 2
+table(rec(efc$e42dep, "2=1; else=2"), exclude = NULL)
+
+# reverse value order
+table(rec(efc$e42dep, "rev"), exclude = NULL)
+
+# recode only selected values, copy remaining
+table(efc$e15relat)
+table(rec(efc$e15relat, "1,2,4=1; else=copy"))
+
+# recode variables with same categorie in a data frame
+head(efc[, 6:9])
+head(rec(efc[, 6:9], "1=10;2=20;3=30;4=40"))
+
+# recode list of variables. create dummy-list of
+# variables with same value-range
+dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
+# show original distribution
+lapply(dummy, table, exclude = NULL)
+# show recodes
+lapply(rec(dummy, "1,2=1; NA=9; else=copy"), table, exclude = NULL)
+
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -45,10 +103,11 @@ Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
 Other data.transformation.functions: \code{\link{z.compute}},
   \code{\link{z.delete}}, \code{\link{z.del}},
   \code{\link{z.leftjoin}}, \code{\link{z.move}},
-  \code{\link{z.newcol}}, \code{\link{z.recols}},
-  \code{\link{z.recol}}, \code{\link{z.rename}},
-  \code{\link{z.rncols}}, \code{\link{z.rncol}},
-  \code{\link{z.select}}, \code{\link{z.sort}},
-  \code{\link{z.split}}, \code{\link{z.unique}}
+  \code{\link{z.newcol}}, \code{\link{z.recode_old}},
+  \code{\link{z.recols}}, \code{\link{z.recol}},
+  \code{\link{z.rename}}, \code{\link{z.rncols}},
+  \code{\link{z.rncol}}, \code{\link{z.select}},
+  \code{\link{z.sort}}, \code{\link{z.split}},
+  \code{\link{z.unique}}
 }
 

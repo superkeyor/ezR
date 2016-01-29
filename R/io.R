@@ -68,9 +68,8 @@ z.readx = function(file, sheetIndex=1, ...){
 
 #' alias of \code{\link[sjmisc]{read_spss}}
 #' @description potentially keep variable labels and value labels.
-#' @import sjmisc
 #' @export
-z.reads = read_spss
+z.reads = sjmisc::read_spss
 
 #' read spss .sav file with foreign package
 #' @description use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
@@ -102,15 +101,13 @@ z.reads_old = function(file, valuelabel=TRUE, tolower=FALSE){
 
 #' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{z.writes}}
 #' @description potentially keep variable labels and value labels
-#' @import sjmisc
 #' @export
-z.saves = write_spss
+z.saves = sjmisc::write_spss
 
 #' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{z.saves}}
 #' @description potentially keep variable labels and value labels
-#' @import sjmisc
 #' @export
-z.writes = write_spss
+z.writes = sjmisc::write_spss
 
 #' save an xlsx file, alias of \code{\link{z.writex}}
 #' @param

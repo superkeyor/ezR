@@ -27,10 +27,11 @@ rename all cols
 Other data.transformation.functions: \code{\link{z.compute}},
   \code{\link{z.delete}}, \code{\link{z.del}},
   \code{\link{z.leftjoin}}, \code{\link{z.move}},
-  \code{\link{z.newcol}}, \code{\link{z.recode}},
-  \code{\link{z.recols}}, \code{\link{z.recol}},
-  \code{\link{z.rename}}, \code{\link{z.rncol}},
-  \code{\link{z.select}}, \code{\link{z.sort}},
-  \code{\link{z.split}}, \code{\link{z.unique}}
+  \code{\link{z.newcol}}, \code{\link{z.recode_old}},
+  \code{\link{z.recode}}, \code{\link{z.recols}},
+  \code{\link{z.recol}}, \code{\link{z.rename}},
+  \code{\link{z.rncol}}, \code{\link{z.select}},
+  \code{\link{z.sort}}, \code{\link{z.split}},
+  \code{\link{z.unique}}
 }
 
