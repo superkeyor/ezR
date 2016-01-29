@@ -96,7 +96,7 @@ z.names = names
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.recode<-function(data,recodes){
+z.recode_old<-function(data,recodes){
     recode.other<-function(var){
         if(is.factor(var)) stop("use recode.factor to recode factors")
         warning.flag<-TRUE
