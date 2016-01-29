@@ -11,6 +11,19 @@
 #' @export
 z.error = stop
 
+#' print the version of a package
+#' @param pkg package name in quotes, default is NULL
+#' @return if pkg not provided, prints only R version
+#' @examples
+#' @export
+z.ver = function(pkg=NULL){
+    if (!is.null(pkg)) {
+        cat(sprintf("%s\n%s: %s", R.version.string, pkg, as.character(packageVersion(pkg))))
+    } else {
+        cat(R.version.string)
+    }
+}
+
 #' alias of \code{\link{library}}
 #' @param
 #' @return

@@ -14,9 +14,5 @@ mimic python join, supports vectorization, wrapper of \code{\link{paste}}
 }
 \examples{
 z.join('','a',' x ','b') # "a x b"
-z.join(..., sep = " ", collapse = NULL)
-z.join(1:12) # same as as.character(1:12)
-z.join("A", 1:6, sep = "")
-z.join("Today is", date())
 }
 

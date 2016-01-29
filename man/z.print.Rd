@@ -2,14 +2,20 @@
 % Please edit documentation in R/basic.R
 \name{z.print}
 \alias{z.print}
-\title{wrapper of cat}
+\title{wrapper of \code{\link{cat}}}
 \usage{
 z.print(...)
 }
+\value{
+each print generates a new line automatically
+}
 \description{
-wrapper of cat
+wrapper of \code{\link{cat}}
+}
+\details{
+do not use R \code{\link{print}}, not actually printing \\n
 }
 \seealso{
-\code{\link{sprintf}},  \code{\link{print}}
+\code{\link{sprintf}}
 }
 

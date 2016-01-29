@@ -85,7 +85,7 @@ z.reads = read_spss
 #'
 #' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
-z.reads2 = function(file, valuelabel=TRUE, tolower=FALSE){
+z.reads_old = function(file, valuelabel=TRUE, tolower=FALSE){
     # can safely ignore the warnings about type 7 and etc; data is not lost
     # # http://stackoverflow.com/questions/3136293/read-spss-file-into-r
 

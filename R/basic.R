@@ -281,20 +281,17 @@ z.rand = runif
 #' @param sep default is nothing
 #' @examples
 #' z.join('','a',' x ','b') # "a x b"
-#' z.join(..., sep = " ", collapse = NULL)
-#' z.join(1:12) # same as as.character(1:12)
-#' z.join("A", 1:6, sep = "")
-#' z.join("Today is", date())
 #' @export
 z.join = function(sep='',...){
     paste(...,sep=sep)
 }
 
-#' wrapper of cat
+#' wrapper of \code{\link{cat}}
 #' @param
-#' @return
+#' @return each print generates a new line automatically
 #' @examples
-#' @seealso \code{\link{sprintf}},  \code{\link{print}}
+#' @details do not use R \code{\link{print}}, not actually printing \\n
+#' @seealso \code{\link{sprintf}}
 #' @export
 z.print = function(...){
     cat(..., "\n")
