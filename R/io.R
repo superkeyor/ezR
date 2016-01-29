@@ -67,7 +67,18 @@ z.readx = function(file, sheetIndex=1, ...){
     return(result)
 }
 
+#' alias of \code{\link[sjmisc]{read_spss}}
+#' @description potentially keep variable labels and value labels. General logic:
+#' \cr keep labels information in variable attr (not data frame attr) during reading/saving
+#' \cr if attr lost/non-exist, use add_* (remove_*) in a batch way, or set_* manually
+#' \cr if needed, use get_* to get attr
+#' \cr to_* convert
+#' @import sjmisc
+#' @export
+z.reads = read_spss
+
 #' read spss .sav file with foreign package
+#' @description use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
 #' @param
 #' @return
 #' @examples
@@ -93,6 +104,18 @@ z.reads2 = function(file, valuelabel=TRUE, tolower=FALSE){
     if (tolower) names(result) = tolower(names(result))
     return(result)
 }
+
+#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{z.writes}}
+#' @description potentially keep variable labels and value labels
+#' @import sjmisc
+#' @export
+z.saves = write_spss
+
+#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{z.saves}}
+#' @description potentially keep variable labels and value labels
+#' @import sjmisc
+#' @export
+z.writes = write_spss
 
 #' save an xlsx file, alias of \code{\link{z.writex}}
 #' @param

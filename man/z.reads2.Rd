@@ -7,7 +7,7 @@
 z.reads2(file, valuelabel = TRUE, tolower = FALSE)
 }
 \description{
-read spss .sav file with foreign package
+use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
 }
 \examples{
 (file, valuelabel=TRUE,tolower=FALSE)
