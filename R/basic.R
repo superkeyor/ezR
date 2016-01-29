@@ -1,0 +1,334 @@
+###**************************************************.
+###*functions for simple data type.
+###**************************************************.
+#' alias of TRUE
+true <- TRUE
+#' alias of TRUE
+True <- TRUE
+
+#' alias of FALSE
+false <- FALSE
+#' alias of FALSE
+False <- FALSE
+
+#' alias of \code{\link{class}}
+#' @export
+z.typeof = class
+
+#' alias of \code{\link{as.numeric}}
+#' @export
+z.num = as.numeric
+
+#' alias of \code{\link{as.character}}
+#' @export
+z.str = as.character
+
+#' mimic python join, supports vectorization, wrapper of \code{\link{paste}}
+#' @param sep default is nothing
+#' @examples
+#' z.join('','a',' x ','b') # "a x b"
+#' z.join(..., sep = " ", collapse = NULL)
+#' z.join(1:12) # same as as.character(1:12)
+#' z.join("A", 1:6, sep = "")
+#' z.join("Today is", date())
+#' @export
+z.join = function(sep='',...){
+    paste(...,sep=sep)
+}
+
+#' alias of \code{\link{ceiling}}
+#' @param
+#' @return
+#' @examples
+#' @export
+z.ceil = ceiling
+
+#' alias of \code{\link{floor}}
+#' @param
+#' @return
+#' @examples
+#' @export
+z.floor = floor
+
+#' alias of \code{\link{trunc}}
+#' @param
+#' @return
+#' @examples
+#' @export
+z.fix = trunc
+
+#' alias of \code{\link{round}}
+#' @param
+#' @return
+#' @examples
+#' @export
+z.round = round
+
+#' quotient
+#' @param m dividend
+#' @param n divider
+#' @examples
+#' 11 is given as the dividend and 5 the divider, (ie, 11 divided by 5, or divide 11 by 5), then 2(quotient) and 1(remainder).
+#' @export
+#' @seealso \code{\link{z.remainder}}
+z.quotient = function (m,n) {
+    return(m%/%n)
+}
+
+#' remainder
+#' @param m dividend
+#' @param n divider
+#' @examples
+#' 11 is given as the dividend and 5 the divider, (ie, 11 divided by 5, or divide 11 by 5), then 2(quotient) and 1(remainder).
+#' @export
+#' @seealso \code{\link{z.quotient}}
+z.remainder = function (m,n){
+    return(m%%n)
+}
+
+#' similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
+#' @param
+#' @return returns a vector (both ends inclusive)
+#' @examples
+#' z.range(1,3) # 1 2 3, equivalent to 1:3
+#' @export
+z.range = function(start, stop, step=1){seq(start, stop, by=step)}
+
+#' linspace
+#' @param n number of points
+#' @return
+#' @examples
+#' @export
+z.linspace = function(start, stop, n){
+    seq(start, stop, length=n)
+}
+
+#' replicate a matrix, n * n (if m not provided) or n * m
+#' @param
+#' @return
+#' @examples
+#' @export
+z.repmat = function(a, n, m = n) {
+    if (length(a) == 0) return(c())
+    if (!is.numeric(a) && !is.complex(a))
+        stop("Argument 'a' must be a numeric or complex.")
+    if (is.vector(a))
+        a <- matrix(a, nrow = 1, ncol = length(a))
+    if (!is.numeric(n) || !is.numeric(m) ||
+        length(n) != 1 || length(m) != 1)
+        stop("Arguments 'n' and 'm' must be single integers.")
+    n <- max(floor(n), 0)
+    m <- max(floor(m), 0)
+    if (n <= 0 || m <= 0)
+        return(matrix(0, nrow = n, ncol = m))
+
+    matrix(1, n, m) %x% a  # Kronecker product
+}
+
+#' find with regular expression (case sensitive)
+#' @param s string
+#' @param pat regular expression pattern
+#' @param once match once or many times
+#' @param split split or not (see below)
+#' @return  returns a list ($start, $end, $match, $split)
+#' \cr $start and $end as numeric vectors indicating the start and end positions of the matches.
+#' \cr $match contains each exact match
+#' \cr $split contains the character vector of splitted strings (split by the matched pattern, ie, the rest that do not match).
+#' \cr If no match is found and split=FALSE, all components will be NULL
+#' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
+#' @examples
+#' @export
+z.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
+    stopifnot(is.character(pat), is.character(s))
+    if (length(pat) > 1) {
+        warning("Only the first string in argument 'pat' is taken.")
+        pat <- pat[1]
+    }
+    if (length(s) > 1) {
+        warning("Only the first string in argument 's' is taken.")
+        s <- s[1]
+    }
+    if (is.na(pat) || is.na(s))
+        stop("In arguments 'pat' and 's' NA values not allowed.")
+    if (once) {
+        res <- regexpr(pat, s, ignore.case = ignorecase, perl = TRUE)
+    }
+    else {
+        res <- gregexpr(pat, s, ignore.case = ignorecase, perl = TRUE)[[1]]
+    }
+    if (length(res) == 1 && res < 0)
+        if (split)
+            return(list(start = NULL, end = NULL, match = NULL,
+                        split = s))
+    else return(list(start = NULL, end = NULL, match = NULL,
+                     split = NULL))
+    rstart <- res
+    rend <- rstart + attr(res, "match.length") - 1
+    attr(rstart, "match.length") <- attr(rend, "match.length") <- NULL
+    rmatch <- substring(s, rstart, rend)
+    if (split) {
+        n <- nchar(s)
+        rs <- c(0, rstart, n + 1)
+        re <- c(0, rend, n + 1)
+        rsplit <- c()
+        for (i in 1:(length(rs) - 1)) {
+            if (rs[i + 1] - re[i] > 1)
+                rsplit <- c(rsplit, substr(s, re[i] + 1, rs[i +
+                                                                1] - 1))
+        }
+    }
+    else {
+        rsplit <- NULL
+    }
+    list(start = rstart, end = rend, match = rmatch, split = rsplit)
+}
+
+#' find with regular expression (case insensitive)
+#' @param s string
+#' @param pat regular expression pattern
+#' @param once match once or many times
+#' @param split split or not (see below)
+#' @return  returns a list ($start, $end, $match, $split)
+#' \cr $start and $end as numeric vectors indicating the start and end positions of the matches.
+#' \cr $match contains each exact match
+#' \cr $split contains the character vector of splitted strings (split by the matched pattern, ie, the rest that do not match).
+#' \cr If no match is found and split=FALSE, all components will be NULL
+#' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
+#' @examples
+#' @export
+z.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
+    # A list with components start and end as numeric vectors indicating the start and end positions of the matches.
+    # match contains each exact match, and split contains the character vector of splitted strings.
+    # If no match is found all components will be NULL, except split that will contain the whole string if split = TRUE.
+    # $start, $end, $match, $split
+    z.regexp(s, pat, ignorecase, once, split)
+}
+
+#' replace string using regular expression (case sensitive)
+#' @param
+#' @return
+#' @examples
+#' @export
+z.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
+    if (!is.character(s))
+        stop("Argument 's' must be a character vector.")
+    if (!is.character(expr) || !is.character(repstr) || length(expr) !=
+        1 || length(repstr) != 1)
+        stop("Arguments 'old' and 'new' must be simple character strings.")
+    if (once) {
+        sub(expr, repstr, s, ignore.case = ignorecase, perl = TRUE)
+    }
+    else {
+        gsub(expr, repstr, s, ignore.case = ignorecase, perl = TRUE)
+    }
+}
+
+#' replace string using regular expression (case insensitive)
+#' @param
+#' @return
+#' @examples
+#' @export
+z.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
+    if (!is.character(s))
+        stop("Argument 's' must be a character vector.")
+    if (!is.character(expr) || !is.character(repstr) || length(expr) !=
+        1 || length(repstr) != 1)
+        stop("Arguments 'old' and 'new' must be simple character strings.")
+    if (once) {
+        sub(expr, repstr, s, ignore.case = ignorecase, perl = TRUE)
+    }
+    else {
+        gsub(expr, repstr, s, ignore.case = ignorecase, perl = TRUE)
+    }
+}
+
+#' reshape matrix
+#' @param
+#' @return reshape(a, n, m) returns the n-by-m matrix whose elements are taken column-wise from a.
+#' \cr An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.
+#' @examples
+#' @export
+z.reshape = function (a, n, m){
+    if (missing(m))
+        m <- length(a)%/%n
+    if (length(a) != n * m)
+        stop("Matrix 'a' does not have n*m elements")
+    dim(a) <- c(n, m)
+    return(a)
+}
+
+#' apply array function
+#' @param
+#' @return
+#' @examples
+#' @export
+z.arrayfun = function (func, ...){
+    dots <- list(...)
+    if (length(dots) < 1)
+        stop("Empty list of arrays: Rsult cannot be computed.")
+    d <- dim(dots[[1]])
+    r <- mapply(func, ...)
+    dim(r) <- d
+    return(r)
+}
+
+#' size of an object
+#' @param x data.frame
+#' @param dimension 0=both, 1=row, 2=col
+#' @export
+z.size = function(x,dimension=0) {
+    if (dimension == 0) {
+        return(dim(x))
+    } else if (dimension == 1) {
+        return(nrow(x))
+    } else if (dimension == 2) {
+        return(ncol(x))
+    }
+}
+
+#' length of an object
+#' @export
+z.len = function(x) {
+    if (class(x) == 'character') {
+        # require('stringi')
+        # return(stri_length(x))  # in case of stri_length(NA) = NA
+        return(nchar(x))  # nchar(NA) = 2
+    }
+    else if (class(x) == 'data.frame') {
+        return(nrow(x))
+    }
+    else if (is.na(x) || is.nan(x)) {
+        return(0)
+    }
+    else {
+        return(length(x))
+    }
+}
+
+#' similar to matlab find, find non-zero in a vector
+#' @param v logical input
+#' @return returns index vector
+#' @examples
+#' z.find(a>1)
+#' @export
+z.find = function(v){
+    which( if (is.logical(v)) v else v != 0 )
+}
+
+#' random number, alias of \code{\link{runif}}
+#' @param
+#' @return
+#' @examples
+#' runif(n, min = 0, max = 1)
+#' @export
+z.rand = runif
+
+#' wrapper of cat
+#' @param
+#' @return
+#' @examples
+#' @seealso \code{\link{sprintf}},  \code{\link{print}}
+#' @export
+z.print = function(...){
+    cat(..., "\n")
+}
