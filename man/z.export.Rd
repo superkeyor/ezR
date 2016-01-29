@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{z.export}
 \alias{z.export}
-\title{alias of pdf}
+\title{alias of \code{\link{pdf}}}
 \usage{
 z.export(file = ifelse(onefile, "Rplots.pdf", "Rplot\%03d.pdf"), width,
   height, onefile, family, title, fonts, version, paper, encoding, bg, fg,
@@ -10,7 +10,7 @@ z.export(file = ifelse(onefile, "Rplots.pdf", "Rplot\%03d.pdf"), width,
   compress)
 }
 \description{
-alias of pdf
+alias of \code{\link{pdf}}
 }
 \examples{
 first z.export(filename) to create a new canvas

@@ -2,7 +2,7 @@
 % Please edit documentation in R/os.R
 \name{z.path}
 \alias{z.path}
-\title{alias of \code{\link{search}}}
+\title{user path like in Matlab}
 \usage{
 z.path()
 }

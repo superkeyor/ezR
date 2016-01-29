@@ -22,7 +22,7 @@
 z.read = read.csv
 
 
-#' wrapper of write.csv, but with row.names removed
+#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}
 #' @param
 #' @return
 #' @examples
@@ -32,12 +32,24 @@ z.read = read.csv
 #'             fileEncoding = "")
 #' dec: decimal point
 #' @export
-z.save = z.write = function(x, file="RData.csv", row.names=FALSE, ...){
+z.save = function(x, file="RData.csv", row.names=FALSE, ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     x = data.frame(x)
     rownames(x) <- NULL
     write.csv(x=x, file=file, row.names=row.names, ...)
 }
+
+#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.save}}
+#' @param
+#' @return
+#' @examples
+#' (x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
+#'             na = "NA", dec = ".",
+#'             col.names = TRUE, qmethod = c("escape", "double"),
+#'             fileEncoding = "")
+#' dec: decimal point
+#' @export
+z.write = z.save
 
 #' read an xlsx file
 #' @param
@@ -82,14 +94,14 @@ z.reads2 = function(file, valuelabel=TRUE, tolower=FALSE){
     return(result)
 }
 
-#' save an xlsx file
+#' save an xlsx file, alias of \code{\link{z.writex}}
 #' @param
 #' @return
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
 #' @export
-z.savex = z.writex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names = FALSE, ...){
+z.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names = FALSE, ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     # require('xlsx')
     x = data.frame(x)
@@ -97,6 +109,15 @@ z.savex = z.writex = function(x, file="RData.xlsx", sheetName="Sheet1", row.name
     xlsx::write.xlsx2(x=x, file=file, sheetName=sheetName, ..., row.names=row.names)
     # detach("package:xlsx", unload=TRUE)
 }
+
+#' save an xlsx file, alias of \code{\link{z.savex}}
+#' @param
+#' @return
+#' @examples
+#' (x, file, sheetName="Sheet1", row.names=FALSE,
+#'   col.names=TRUE, append=FALSE, showNA=TRUE)
+#' @export
+z.writex = z.savex
 
 #' show the content of a file in read-only mode
 #' @param

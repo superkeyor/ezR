@@ -93,19 +93,28 @@ z.clean = z.clear
 #' @export
 z.which = find
 
-#' alias of \code{\link{objects}}
+#' alias of \code{\link{sessionInfo}}, \code{\link{z.who}}
 #' @param
-#' @return returns/gives the names of the objects in the specified environment
+#' @return Print version information about R, the OS and attached or loaded packages.
 #' @examples
 #' @export
-z.whos = objects
+#' @seealso \code{\link{objects}}
+z.whos = sessionInfo
 
-#' alias of \code{\link{search}}
+#' alias of \code{\link{sessionInfo}}, \code{\link{z.whos}}
+#' @param
+#' @return Print version information about R, the OS and attached or loaded packages.
+#' @examples
+#' @export
+#' @seealso \code{\link{objects}}
+z.who = z.whos
+
+#' user path like in Matlab
+#' @description alias of \code{\link{search}}
 #' @param
 #' @return
 #' @examples
 #' @export
-# user path like in Matlab
 z.path = search
 
 #' alias of \code{\link{system}}
@@ -213,7 +222,6 @@ z.csd <- function() {
 
     NULL
 }
-
 
 #' lsd
 #' @param
