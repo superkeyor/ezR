@@ -31,14 +31,13 @@ Other data.transformation.functions: \code{\link{z.2label}},
   \code{\link{z.2value}}, \code{\link{z.compute}},
   \code{\link{z.delete}}, \code{\link{z.del}},
   \code{\link{z.label.get}}, \code{\link{z.label.set}},
-  \code{\link{z.label}}, \code{\link{z.leftjoin}},
-  \code{\link{z.move}}, \code{\link{z.newcol}},
-  \code{\link{z.recode2}}, \code{\link{z.recode}},
-  \code{\link{z.recols}}, \code{\link{z.recol}},
-  \code{\link{z.rename}}, \code{\link{z.rncols}},
-  \code{\link{z.rncol}}, \code{\link{z.select}},
-  \code{\link{z.sort}}, \code{\link{z.split}},
-  \code{\link{z.unique}}, \code{\link{z.values.get}},
-  \code{\link{z.values.set}}
+  \code{\link{z.leftjoin}}, \code{\link{z.move}},
+  \code{\link{z.newcol}}, \code{\link{z.recode2}},
+  \code{\link{z.recode}}, \code{\link{z.recols}},
+  \code{\link{z.recol}}, \code{\link{z.rename}},
+  \code{\link{z.rncols}}, \code{\link{z.rncol}},
+  \code{\link{z.select}}, \code{\link{z.sort}},
+  \code{\link{z.split}}, \code{\link{z.unique}},
+  \code{\link{z.values.get}}, \code{\link{z.values.set}}
 }
 
