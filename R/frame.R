@@ -71,6 +71,167 @@ z.names = names
 
 
 
+#' get value labels, wrapper of \code{\link[sjmisc]{get_labels}}
+#' @description
+#' @param
+#' @details see also \code{\link[sjmisc]{get_values}}
+#' @examples
+#'
+#' @return returns a list $varname
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.values.get = function(x, include.values=NULL, attr.only=T, include.non.labelled=F, ...){
+    result=sjmisc::get_labels(x, include.values=include.values, attr.only=attr.only, include.non.labelled=include.non.labelled, ...)
+    return(result)
+}
+
+#' set value labels, wrapper of \code{\link[sjmisc]{set_labels}}
+#' @description
+#' @param
+#' @details
+#' @examples
+#' # 1 4 5 9 do not have to all appear in x
+#' # notice the particular order and symbol: "strongly agree" <- 1
+#' set_labels(x, c("strongly agree"=1,
+#'                "totally disagree"=4,
+#'                "refused"=5,
+#'                "missing"=9))
+#' @return returns a new changed df
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, ...){
+    result=sjmisc::set_labels(x, valuelabels, force.labels=force.labels, force.values=force.values, ...)
+    return(result)
+}
+
+#' get variable label, wrapper of \code{\link[sjmisc]{get_label}}
+#' @description
+#' @param ... var1, var2,  one or many
+#' @details
+#' @examples
+#'
+#' @return returns character
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.label.get = function(...){
+    result=sjmisc::get_label(list(...))
+    return(result)
+}
+
+#' set variable label, wrapper of \code{\link[sjmisc]{set_label}}
+#' @description
+#' @param
+#' @details
+#' @examples
+#'
+#' @return returns a new changed df
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.label.set = sjmisc::set_label
+
+#' wrapper of \code{\link[sjmisc]{to_label}}
+#' @description continous/factorial number-->factorial level string, say, gender=0/1-->male/female
+#' \cr more "agressive" than \code{\link{z.2factor}}; opposite of \code{\link{z.2value}}
+#' @param drop.is_na ignore is_na attr, if yes, treat as NA
+#' @details Both value and variable label attributes will be removed when converting variables to factors.
+#' @examples
+#'
+#' @return returns a factor with string as its levels
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
+    result=sjmisc::to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.is_na)
+    return(result)
+}
+
+#' wrapper of \code{\link[sjmisc]{to_factor}}
+#' @description continous number-->categorical number
+#' \cr converts a variable into a factor, but preserves variable and value label attributes.
+#' \cr more "gentle" than \code{\link{z.2label}}; opposite of \code{\link{z.2value}}
+#' @param
+#' @details
+#' @examples
+#'
+#' @return returns a factor with number as its levels
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
+    result=sjmisc::to_factor(x, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+    return(result)
+}
+
+#' wrapper of \code{\link[sjmisc]{to_value}}
+#' @description continous number<--categorical string/number
+#' @param x factor or a data frame with factors. May also be a character vector.
+#' @param start.at starting index, i.e. the lowest numeric value of the variable's value range. By default, this argument is NULL, hence the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric) or to 1 (if factor levels are not numeric).
+#' @details opposite of \code{\link{z.2factor}}, \code{\link{z.2label}}
+#' @examples
+#' # starting at 1
+#' dummy <- factor(c("D", "F", "H"))
+#' to_value(dummy)
+#' # [1] 1 2 3
+#' # attr(,"labels")
+#' # D F H
+#' # 1 2 3
+#' @return returns a numeric variable
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
+    result=sjmisc::to_value(x, start.at=start.at, keep.labels=keep.labels,...)
+    return(result)
+}
+
+
+
 # copied from https://cran.r-project.org/web/packages/Deducer/Deducer.pdf
 # though the function can accepts a data frame with multiple columns
 # when adapted, restrict the use to be with a data frame with only one column
@@ -192,14 +353,11 @@ z.names = names
     }
     return(result.data[-1])
 }
-
-
-
-
 #' recode
 #' @description Recodes one single according to a set of rules
-#' \cr z.recode replaces the original var with recoded var; z.recode2 saves orignal var as var_ori, and then recodes var
-#' @param data A data.frame to be recoded
+#' \cr\cr z.recode replaces the original var with recoded var;
+#' \cr z.recode2 saves orignal var as var_ori, and then recodes var
+#' @param df data.frame to be recoded
 #' @param varName the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
 #' @details recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
@@ -216,6 +374,7 @@ z.names = names
 #'         \item if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
 #'         \item hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well
 #'         \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
+#'         \item the \code{\link[sjmisc]{rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 #' }
 #'
 #' @author Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
@@ -269,8 +428,9 @@ z.recode = function(df, varName, recodes){
 
 #' recode
 #' @description Recodes one single according to a set of rules
-#' \cr z.recode replaces the original var with recoded var; z.recode2 saves orignal var as var_ori, and then recodes var
-#' @param data A data.frame to be recoded
+#' \cr\cr z.recode replaces the original var with recoded var;
+#' \cr z.recode2 saves orignal var as var_ori, and then recodes var
+#' @param df data.frame to be recoded
 #' @param varName the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
 #' @details recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
@@ -287,6 +447,7 @@ z.recode = function(df, varName, recodes){
 #'         \item if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
 #'         \item hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well
 #'         \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
+#'         \item the \code{\link[sjmisc]{rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 #' }
 #'
 #' @author Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
@@ -426,7 +587,7 @@ z.rncols = function(df,newColNames){
 
 #' rename a single or many col
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{z.rename}}
-#' @param replace c("oldColName"="newColName")) or c(oldColName="newColName"))
+#' @param replace c("oldColName"="newColName") or c(oldColName="newColName")
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions
@@ -442,7 +603,7 @@ z.rncol = reshape::rename
 
 #' rename a single or many col
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{z.rncol}}
-#' @param replace c("oldColName"="newColName")) or c(oldColName="newColName"))
+#' @param replace c("oldColName"="newColName") or c(oldColName="newColName")
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions
