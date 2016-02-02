@@ -4,8 +4,10 @@
 \alias{z.read}
 \title{read csv table, alias of \code{\link{read.csv}}}
 \usage{
-z.read(file, header = TRUE, sep = ",", quote = "\\"", dec = ".",
-  fill = TRUE, comment.char = "", ...)
+z.read(..., tolower = FALSE)
+}
+\arguments{
+\item{tolower}{whether to convert all column names to lower case}
 }
 \value{
 returns a data frame

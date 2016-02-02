@@ -4,8 +4,10 @@
 \alias{z.reads}
 \title{alias of \code{\link[sjmisc]{read_spss}}}
 \usage{
-z.reads(path, enc = NA, attach.var.labels = FALSE, atomic.to.fac = FALSE,
-  keep.na = FALSE, option = "haven")
+z.reads(..., tolower = FALSE)
+}
+\arguments{
+\item{tolower}{whether to convert all column names to lower case}
 }
 \description{
 potentially keep variable labels and value labels.

@@ -2,7 +2,7 @@
 # import/export data file
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' read csv table, alias of \code{\link{read.csv}}
-#' @param
+#' @param tolower whether to convert all column names to lower case
 #' @return returns a data frame
 #' @export
 #' @examples
@@ -19,7 +19,11 @@
 #'
 #' read.csv(file, header = TRUE, sep = ",",
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
-z.read = read.csv
+z.read = function(..., tolower=FALSE){
+    result = read.csv(...)
+    if (tolower) names(result) = tolower(names(result))
+    return(result)
+}
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}
 #' @param
@@ -51,7 +55,7 @@ z.save = function(x, file="RData.csv", row.names=FALSE, ...){
 z.write = z.save
 
 #' read an xlsx file
-#' @param
+#' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
 #' read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
@@ -61,19 +65,25 @@ z.write = z.save
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-z.readx = function(file, sheetIndex=1, ...){
+z.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
+    if (tolower) names(result) = tolower(names(result))
     return(result)
 }
 
 #' alias of \code{\link[sjmisc]{read_spss}}
 #' @description potentially keep variable labels and value labels.
+#' @param tolower whether to convert all column names to lower case
 #' @export
-z.reads = sjmisc::read_spss
+z.reads = function(..., tolower=FALSE){
+    result = sjmisc::read_spss(...)
+    if (tolower) names(result) = tolower(names(result))
+    return(result)
+}
 
 #' read spss .sav file with foreign package
 #' @description use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
-#' @param
+#' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
 #' (file, valuelabel=TRUE,tolower=FALSE)

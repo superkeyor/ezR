@@ -412,7 +412,7 @@ z.recode = function(df, varName, recodes){
     # the helper function changes column name to sth like recode.other.variable.
     # now change it back
     names(newVar) = varName
-    # remove all label attr
+    # remove all value labels attr
     newVar = sjmisc::set_labels(newVar,"")
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
@@ -485,7 +485,7 @@ z.recode2 = function(df, varName, recodes){
     # the helper function changes column name to sth like recode.other.variable.
     # now change it back
     names(newVar) = varName
-    # remove value labels
+    # remove all value labels attr
     newVar = sjmisc::set_labels(newVar,"")
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
@@ -583,6 +583,25 @@ z.move = z.recol
 z.rncols = function(df,newColNames){
     names(df) = newColNames
     return(df)
+}
+
+#' convert all column names to lower case
+#' @param df a data frame
+#' @return returns a new df, old one does not change
+#' @examples
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.2lower = function(df){
+    result = df
+    names(result) = tolower(names(result))
+    return(result)
 }
 
 #' rename a single or many col

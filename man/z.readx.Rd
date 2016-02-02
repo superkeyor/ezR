@@ -4,7 +4,10 @@
 \alias{z.readx}
 \title{read an xlsx file}
 \usage{
-z.readx(file, sheetIndex = 1, ...)
+z.readx(file, sheetIndex = 1, tolower = FALSE, ...)
+}
+\arguments{
+\item{tolower}{whether to convert all column names to lower case}
 }
 \description{
 read an xlsx file

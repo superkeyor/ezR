@@ -2,6 +2,7 @@
 
 export(z.2factor)
 export(z.2label)
+export(z.2lower)
 export(z.2value)
 export(z.arrayfun)
 export(z.cd)

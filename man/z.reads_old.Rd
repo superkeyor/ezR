@@ -6,6 +6,9 @@
 \usage{
 z.reads_old(file, valuelabel = TRUE, tolower = FALSE)
 }
+\arguments{
+\item{tolower}{whether to convert all column names to lower case}
+}
 \description{
 use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
 }
