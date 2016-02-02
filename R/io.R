@@ -75,7 +75,7 @@ z.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
 #' @description potentially keep variable labels and value labels.
 #' @param tolower whether to convert all column names to lower case
 #' @export
-z.reads = function(..., tolower=FALSE){
+z.reads2 = function(..., tolower=FALSE){
     result = sjmisc::read_spss(...)
     if (tolower) names(result) = tolower(names(result))
     return(result)
@@ -94,7 +94,7 @@ z.reads = function(..., tolower=FALSE){
 #'
 #' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
-z.reads_old = function(file, valuelabel=TRUE, tolower=FALSE){
+z.reads = function(file, valuelabel=TRUE, tolower=FALSE){
     # can safely ignore the warnings about type 7 and etc; data is not lost
     # # http://stackoverflow.com/questions/3136293/read-spss-file-into-r
 
