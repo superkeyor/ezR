@@ -867,30 +867,40 @@ z.del = function(df,del){
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 z.delete = z.del
 
-#' remove rows that have an NA anywhere/somewhere or a certain number of NAs
+#' keep rows that have a certain number of NAs anywhere/somewhere and delete others
 #' @param df a data frame
 #' @param col restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
-#' @param n integer, remove rows that have >n NAs (ie, max number of NAs allowed)
+#' \cr default is NULL, search for all columns
+#' @param n integer or vector, 0, c(3,5), number/range of NAs allowed.
+#' \cr Range includes both ends 3<=n<=5
+#' \cr Range could be -Inf, Inf
 #' @return returns a new df with rows that have NA(s) removed
 #' @export
-#' @note if neither col,n provided, search all columns for NA
-#' \cr if col provided, n is ignored
-#' \cr to use n, call the function like this: (df,n=3), where n=0 means searching all columns
-z.na.remove = function(df, col=NULL, n=0){
+z.na.keep = function(df, col=NULL, n=0){
     if (!is.null(col)) {
-        n <- NULL  # override n when col provided
-        result = df[complete.cases(df[,col]),]
+        df.temp = df[,col]
+    } else {
+        df.temp = df
     }
-    if (!is.null(n)) {
+
+    if (length(n)==1){
         if (n==0) {
             # simply call complete.cases which might be faster
-            result = df[complete.cases(df),]
+            result = df[complete.cases(df.temp),]
         } else {
             # credit: http://stackoverflow.com/a/30461945/2292993
-            log <- apply(df, 2, is.na)
-            logindex <- apply(log, 1, function(x) sum(x) <= n)
+            log <- apply(df.temp, 2, is.na)
+            logindex <- apply(log, 1, function(x) sum(x) == n)
             result = df[logindex, ]
         }
     }
+
+    if (length(n)==2){
+        min = n[1]; max = n[2]
+        log <- apply(df.temp, 2, is.na)
+        logindex <- apply(log, 1, function(x) {sum(x) >= min && sum(x) <= max})
+        result = df[logindex, ]
+    }
+
     return(result)
 }
