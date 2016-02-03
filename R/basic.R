@@ -15,10 +15,21 @@ False <- FALSE
 #' @export
 z.typeof = class
 
-#' alias of \code{\link{type.convert}}
+#' sort of a wrapper of \code{\link{type.convert}}
 #' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
+#' @param x a character vector, or a factor
+#' @return returns a converted vector
+#' @details see \url{http://stackoverflow.com/a/22701462/2292993}
 #' @export
-z.num = type.convert
+z.num = function(x, ...){
+    if (is.factor(x)) {
+        # http://stackoverflow.com/a/22701462/2292993
+        result = as.numeric(levels(x))[x]
+    } else {
+        result = utils::type.convert(x, ...)
+    }
+    return(result)
+}
 
 #' alias of \code{\link{as.character}}
 #' @export
