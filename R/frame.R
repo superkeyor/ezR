@@ -95,7 +95,7 @@ z.names = names
 #'        "loop_number",c(1:3),
 #'        c('Q3.2','Q3.3'),
 #'        list(c("Q3.2.1.","Q3.2.2.","Q3.2.3."),c("Q3.3.1.","Q3.3.2.","Q3.3.3.")))
-#' @return returns a new df
+#' @return returns a new df, label attributes seem to be intact.
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -105,7 +105,7 @@ z.names = names
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2long = function(df, indexname, index, measurename, measure, drop=NULL,...){
+z.2long = function(df, indexname, index, measurename=NULL, measure=NULL, drop=NULL,...){
     # 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
     # timevar: variable name for timing/repetition variable, such as "session"
     # times: level name for each timing/repetition point, such as c("1,2"), c("Pre, Post")
@@ -144,7 +144,7 @@ z.2long = function(df, indexname, index, measurename, measure, drop=NULL,...){
 #'         "Person",
 #'         "Time",
 #'         c("Score1","Score2","Score3"))
-#' @return returns a new df
+#' @return returns a new df. Because of the structural change, lable attributes would be lost and can NOT be copied with \code{\link[sjmisc]{copy_labels}}--not a subset.
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -154,7 +154,7 @@ z.2long = function(df, indexname, index, measurename, measure, drop=NULL,...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2wide = function(df, id, indexname, measure, drop=NULL,...){
+z.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
     # 'SUBJID * Time [School] - Measure2'
     # note: v.names not varying
     result = stats::reshape(df,

@@ -4,7 +4,14 @@
 \alias{z.label.set}
 \title{set variable label, wrapper of \code{\link[sjmisc]{set_label}}}
 \usage{
-z.label.set(x, lab, attr.string = NULL)
+z.label.set(df, varname, label)
+}
+\arguments{
+\item{df}{data frame}
+
+\item{varname}{variable name with quote ""}
+
+\item{label}{explanatory string}
 }
 \value{
 returns a new changed df

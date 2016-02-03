@@ -4,7 +4,8 @@
 \alias{z.2long}
 \title{reconstruct to long format}
 \usage{
-z.2long(df, indexname, index, measurename, measure, drop = NULL, ...)
+z.2long(df, indexname, index, measurename = NULL, measure = NULL,
+  drop = NULL, ...)
 }
 \arguments{
 \item{indexname}{variable name for timing/repetition/index variable, such as "session"}
@@ -18,7 +19,7 @@ z.2long(df, indexname, index, measurename, measure, drop = NULL, ...)
 \item{drop}{variables to drop before reshaping}
 }
 \value{
-returns a new df
+returns a new df, label attributes seem to be intact.
 }
 \note{
 refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'

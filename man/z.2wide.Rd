@@ -4,7 +4,7 @@
 \alias{z.2wide}
 \title{reconstruct to wide format}
 \usage{
-z.2wide(df, id, indexname, measure, drop = NULL, ...)
+z.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
 }
 \arguments{
 \item{indexname}{variable name for timing/repetition/index variable, such as "session"}
@@ -14,20 +14,21 @@ z.2wide(df, id, indexname, measure, drop = NULL, ...)
 \item{drop}{variables to drop before reshaping}
 }
 \value{
-returns a new df
+returns a new df. Because of the structural change, lable attributes would be lost and can NOT be copied with \code{\link[sjmisc]{copy_labels}}--not a subset.
 }
 \note{
 refer to my spss syntax 'SUBJID * Time [School] - Measure2'
 }
 \examples{
 set.seed(10)
-df <- data.frame(
+df <- data_frame(
     Person = rep(c("greg", "sally", "sue"), each=2),
     Time = rep(c("Pre", "Post"), 3),
     Score1 = round(rnorm(6, mean = 80, sd=4), 0),
     Score2 = round(jitter(Score1, 15), 0),
     Score3 = 5 + (Score1 + Score2)/2
 )
+df = data.frame(df)
 z.2wide(df,
         "Person",
         "Time",
