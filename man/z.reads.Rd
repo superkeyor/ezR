@@ -9,9 +9,6 @@ z.reads(file, valuelabel = TRUE, tolower = FALSE)
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
-\description{
-use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
-}
 \examples{
 (file, valuelabel=TRUE,tolower=FALSE)
 label means variable value label, not variable label

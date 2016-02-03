@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{z.read}
 \alias{z.read}
-\title{read csv table, alias of \code{\link{read.csv}}}
+\title{read csv table, wrapper of \code{\link{read.csv}}}
 \usage{
 z.read(..., tolower = FALSE)
 }
@@ -13,7 +13,7 @@ z.read(..., tolower = FALSE)
 returns a data frame
 }
 \description{
-read csv table, alias of \code{\link{read.csv}}
+read csv table, wrapper of \code{\link{read.csv}}
 }
 \examples{
 read.table(file, header = FALSE, sep = "",

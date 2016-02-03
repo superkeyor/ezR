@@ -1,7 +1,7 @@
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # import/export data file
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#' read csv table, alias of \code{\link{read.csv}}
+#' read csv table, wrapper of \code{\link{read.csv}}
 #' @param tolower whether to convert all column names to lower case
 #' @return returns a data frame
 #' @export
@@ -25,7 +25,7 @@ z.read = function(..., tolower=FALSE){
     return(result)
 }
 
-#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}
+#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}, wrapper of \code{\link{write.csv}}
 #' @param
 #' @return
 #' @examples
@@ -42,7 +42,7 @@ z.save = function(x, file="RData.csv", row.names=FALSE, ...){
     write.csv(x=x, file=file, row.names=row.names, ...)
 }
 
-#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.save}}
+#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.save}}, wrapper of \code{\link{write.csv}}
 #' @param
 #' @return
 #' @examples
@@ -54,7 +54,7 @@ z.save = function(x, file="RData.csv", row.names=FALSE, ...){
 #' @export
 z.write = z.save
 
-#' read an xlsx file
+#' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}}
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
@@ -71,7 +71,7 @@ z.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
     return(result)
 }
 
-#' alias of \code{\link[sjmisc]{read_spss}}
+#' wrapper of \code{\link[sjmisc]{read_spss}}
 #' @description potentially keep variable labels and value labels.
 #' @param tolower whether to convert all column names to lower case
 #' @export
@@ -82,7 +82,7 @@ z.reads2 = function(..., tolower=FALSE){
 }
 
 #' read spss .sav file with foreign package
-#' @description use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
+#' @description
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
@@ -119,23 +119,23 @@ z.saves = sjmisc::write_spss
 #' @export
 z.writes = sjmisc::write_spss
 
-#' save an xlsx file, alias of \code{\link{z.writex}}
+#' save an xlsx file, alias of \code{\link{z.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
 #' @param
 #' @return
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
 #' @export
-z.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names = FALSE, ...){
+z.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, showNA=FALSE, ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     # require('xlsx')
     x = data.frame(x)
     rownames(x) <- NULL
-    xlsx::write.xlsx(x=x, file=file, sheetName=sheetName, ..., row.names=row.names)
+    xlsx::write.xlsx(x=x, file=file, sheetName=sheetName, ..., row.names=row.names, showNA=showNA)
     # detach("package:xlsx", unload=TRUE)
 }
 
-#' save an xlsx file, alias of \code{\link{z.savex}}
+#' save an xlsx file, alias of \code{\link{z.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
 #' @param
 #' @return
 #' @examples
@@ -144,7 +144,7 @@ z.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names = FALSE, 
 #' @export
 z.writex = z.savex
 
-#' show the content of a file in read-only mode
+#' show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 #' @param
 #' @return
 #' @examples
@@ -153,7 +153,7 @@ z.type = function(path){
     result = file.show(path,title='File (read-only)')
 }
 
-#' edit a file
+#' edit a file, wrapper of wrapper of \code{\link{file.edit}}
 #' @param
 #' @return
 #' @examples

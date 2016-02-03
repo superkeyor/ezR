@@ -2,11 +2,11 @@
 % Please edit documentation in R/io.R
 \name{z.edit}
 \alias{z.edit}
-\title{edit a file}
+\title{edit a file, wrapper of wrapper of \code{\link{file.edit}}}
 \usage{
 z.edit(path)
 }
 \description{
-edit a file
+edit a file, wrapper of wrapper of \code{\link{file.edit}}
 }
 

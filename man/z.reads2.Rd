@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{z.reads2}
 \alias{z.reads2}
-\title{alias of \code{\link[sjmisc]{read_spss}}}
+\title{wrapper of \code{\link[sjmisc]{read_spss}}}
 \usage{
 z.reads2(..., tolower = FALSE)
 }

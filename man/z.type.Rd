@@ -2,11 +2,11 @@
 % Please edit documentation in R/io.R
 \name{z.type}
 \alias{z.type}
-\title{show the content of a file in read-only mode}
+\title{show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}}
 \usage{
 z.type(path)
 }
 \description{
-show the content of a file in read-only mode
+show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 }
 

@@ -2,12 +2,12 @@
 % Please edit documentation in R/io.R
 \name{z.save}
 \alias{z.save}
-\title{wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}}
+\title{wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}, wrapper of \code{\link{write.csv}}}
 \usage{
 z.save(x, file = "RData.csv", row.names = FALSE, ...)
 }
 \description{
-wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}
+wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}, wrapper of \code{\link{write.csv}}
 }
 \examples{
 (x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",

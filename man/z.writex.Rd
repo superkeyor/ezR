@@ -2,13 +2,13 @@
 % Please edit documentation in R/io.R
 \name{z.writex}
 \alias{z.writex}
-\title{save an xlsx file, alias of \code{\link{z.savex}}}
+\title{save an xlsx file, alias of \code{\link{z.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}}}
 \usage{
 z.writex(x, file = "RData.xlsx", sheetName = "Sheet1", row.names = FALSE,
-  ...)
+  showNA = FALSE, ...)
 }
 \description{
-save an xlsx file, alias of \code{\link{z.savex}}
+save an xlsx file, alias of \code{\link{z.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
 }
 \examples{
 (x, file, sheetName="Sheet1", row.names=FALSE,
