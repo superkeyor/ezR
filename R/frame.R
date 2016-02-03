@@ -71,7 +71,7 @@ z.names = names
 
 
 
-#' reconstruct to long format
+#' reconstruct to long format, wrapper of \code{\link[stats]{reshape}}
 #' @description
 #' @param indexname variable name for timing/repetition/index variable, such as "session"
 #' @param index level name for each timing/repetition/index point, such as c("1,2"), c("Pre, Post")
@@ -123,7 +123,7 @@ z.2long = function(df, indexname, index, measurename=NULL, measure=NULL, drop=NU
     return(result)
 }
 
-#' reconstruct to wide format
+#' reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}
 #' @description
 #' @param indexname variable name for timing/repetition/index variable, such as "session"
 #' @param measure column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")

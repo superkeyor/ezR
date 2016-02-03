@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{z.2long}
 \alias{z.2long}
-\title{reconstruct to long format}
+\title{reconstruct to long format, wrapper of \code{\link[stats]{reshape}}}
 \usage{
 z.2long(df, indexname, index, measurename = NULL, measure = NULL,
   drop = NULL, ...)

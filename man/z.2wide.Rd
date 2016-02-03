@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{z.2wide}
 \alias{z.2wide}
-\title{reconstruct to wide format}
+\title{reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}}
 \usage{
 z.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
 }
