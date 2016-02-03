@@ -2,11 +2,12 @@
 % Please edit documentation in R/basic.R
 \name{z.num}
 \alias{z.num}
-\title{alias of \code{\link{as.numeric}}}
+\title{alias of \code{\link{type.convert}}}
 \usage{
-z.num()
+z.num(x, na.strings = "NA", as.is = FALSE, dec = ".",
+  numerals = c("allow.loss", "warn.loss", "no.loss"))
 }
 \description{
-alias of \code{\link{as.numeric}}
+Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
 }
 

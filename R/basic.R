@@ -15,9 +15,10 @@ False <- FALSE
 #' @export
 z.typeof = class
 
-#' alias of \code{\link{as.numeric}}
+#' alias of \code{\link{type.convert}}
+#' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
 #' @export
-z.num = as.numeric
+z.num = type.convert
 
 #' alias of \code{\link{as.character}}
 #' @export
