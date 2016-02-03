@@ -132,13 +132,14 @@ z.2long = function(df, indexname, index, measurename, measure, drop=NULL,...){
 #' @note refer to my spss syntax 'SUBJID * Time [School] - Measure2'
 #' @examples
 #' set.seed(10)
-#' df <- data.frame(
+#' df <- data_frame(
 #'     Person = rep(c("greg", "sally", "sue"), each=2),
 #'     Time = rep(c("Pre", "Post"), 3),
 #'     Score1 = round(rnorm(6, mean = 80, sd=4), 0),
 #'     Score2 = round(jitter(Score1, 15), 0),
 #'     Score3 = 5 + (Score1 + Score2)/2
 #' )
+#' df = data.frame(df)
 #' z.2wide(df,
 #'         "Person",
 #'         "Time",
@@ -166,7 +167,6 @@ z.2wide = function(df, id, indexname, measure, drop=NULL,...){
     row.names(result) <- NULL
     return(result)
 }
-
 
 #' get value labels, wrapper of \code{\link[sjmisc]{get_labels}}
 #' @description
@@ -238,7 +238,9 @@ z.label.get = function(...){
 
 #' set variable label, wrapper of \code{\link[sjmisc]{set_label}}
 #' @description
-#' @param
+#' @param df data frame
+#' @param varname variable name with quote ""
+#' @param label explanatory string
 #' @details
 #' @examples
 #'
@@ -252,7 +254,10 @@ z.label.get = function(...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.label.set = sjmisc::set_label
+z.label.set = function(df,varname,label){
+    df[varname] <- sjmisc::set_label(df[varname],label)
+    return(df)
+}
 
 #' wrapper of \code{\link[sjmisc]{to_label}}
 #' @description continous/factorial number-->factorial level string, say, gender=0/1-->male/female
