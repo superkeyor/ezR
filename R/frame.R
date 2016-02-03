@@ -71,6 +71,103 @@ z.names = names
 
 
 
+#' reconstruct to long format
+#' @description
+#' @param indexname variable name for timing/repetition/index variable, such as "session"
+#' @param index level name for each timing/repetition/index point, such as c("1,2"), c("Pre, Post")
+#' @param measurename variable name for the measurement, such as "BDI"
+#' @param measure column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
+#' @param drop variables to drop before reshaping
+#' @details
+#' @note refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
+#' @examples
+#' df <- data.frame(
+#'     id = 1:10,
+#'     time = as.Date('2009-01-01') + 0:9,
+#'     Q3.2.1. = rnorm(10, 0, 1),
+#'     Q3.2.2. = rnorm(10, 0, 1),
+#'     Q3.2.3. = rnorm(10, 0, 1),
+#'     Q3.3.1. = rnorm(10, 0, 1),
+#'     Q3.3.2. = rnorm(10, 0, 1),
+#'     Q3.3.3. = rnorm(10, 0, 1)
+#' )
+#'z.2long(df,
+#'        "loop_number",c(1:3),
+#'        c('Q3.2','Q3.3'),
+#'        list(c("Q3.2.1.","Q3.2.2.","Q3.2.3."),c("Q3.3.1.","Q3.3.2.","Q3.3.3.")))
+#' @return returns a new df
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.2long = function(df, indexname, index, measurename, measure, drop=NULL,...){
+    # 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
+    # timevar: variable name for timing/repetition variable, such as "session"
+    # times: level name for each timing/repetition point, such as c("1,2"), c("Pre, Post")
+    # v.names: variable name for the measurement, such as "BDI"
+    # varying: column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
+    # drop: variables to drop before reshaping
+    # sep: separator in the variable names
+    result = stats::reshape(df,
+                            timevar=indexname, times=index,
+                            v.names=measurename,varying=measure,
+                            direction="long",
+                            drop=drop,
+                            sep="_",...)
+    row.names(result) <- NULL
+    return(result)
+}
+
+#' reconstruct to wide format
+#' @description
+#' @param indexname variable name for timing/repetition/index variable, such as "session"
+#' @param measure column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
+#' @param drop variables to drop before reshaping
+#' @details
+#' @note refer to my spss syntax 'SUBJID * Time [School] - Measure2'
+#' @examples
+#' set.seed(10)
+#' df <- data.frame(
+#'     Person = rep(c("greg", "sally", "sue"), each=2),
+#'     Time = rep(c("Pre", "Post"), 3),
+#'     Score1 = round(rnorm(6, mean = 80, sd=4), 0),
+#'     Score2 = round(jitter(Score1, 15), 0),
+#'     Score3 = 5 + (Score1 + Score2)/2
+#' )
+#' z.2wide(df,
+#'         "Person",
+#'         "Time",
+#'         c("Score1","Score2","Score3"))
+#' @return returns a new df
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+z.2wide = function(df, id, indexname, measure, drop=NULL,...){
+    # 'SUBJID * Time [School] - Measure2'
+    # note: v.names not varying
+    result = stats::reshape(df,
+                            idvar=id,
+                            timevar=indexname,
+                            v.names=measure,
+                            direction="wide",
+                            drop=drop,
+                            sep="_",...)
+    row.names(result) <- NULL
+    return(result)
+}
+
+
 #' get value labels, wrapper of \code{\link[sjmisc]{get_labels}}
 #' @description
 #' @param
