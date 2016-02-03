@@ -73,6 +73,7 @@ z.names = names
 
 #' reconstruct to long format, wrapper of \code{\link[stats]{reshape}}
 #' @description
+#' @param id unique identification variable, or variable combination
 #' @param indexname variable name for timing/repetition/index variable, such as "session"
 #' @param index level name for each timing/repetition/index point, such as c("1,2"), c("Pre, Post")
 #' @param measurename variable name for the measurement, such as "BDI"
@@ -80,6 +81,7 @@ z.names = names
 #' @param drop variables to drop before reshaping
 #' @details
 #' @note refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
+#' \cr if index=c("Pre","Post"), then the character would not be viewed by z.view; index=1:2 will be int and fine.
 #' @examples
 #' df <- data.frame(
 #'     id = 1:10,
@@ -91,7 +93,7 @@ z.names = names
 #'     Q3.3.2. = rnorm(10, 0, 1),
 #'     Q3.3.3. = rnorm(10, 0, 1)
 #' )
-#'z.2long(df,
+#'z.2long(df, "id",
 #'        "loop_number",c(1:3),
 #'        c('Q3.2','Q3.3'),
 #'        list(c("Q3.2.1.","Q3.2.2.","Q3.2.3."),c("Q3.3.1.","Q3.3.2.","Q3.3.3.")))
@@ -105,7 +107,7 @@ z.names = names
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2long = function(df, indexname, index, measurename=NULL, measure=NULL, drop=NULL,...){
+z.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, drop=NULL,...){
     # 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
     # timevar: variable name for timing/repetition variable, such as "session"
     # times: level name for each timing/repetition point, such as c("1,2"), c("Pre, Post")
@@ -113,7 +115,7 @@ z.2long = function(df, indexname, index, measurename=NULL, measure=NULL, drop=NU
     # varying: column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
     # drop: variables to drop before reshaping
     # sep: separator in the variable names
-    result = stats::reshape(df,
+    result = stats::reshape(df, idvar=id,
                             timevar=indexname, times=index,
                             v.names=measurename,varying=measure,
                             direction="long",
@@ -125,6 +127,7 @@ z.2long = function(df, indexname, index, measurename=NULL, measure=NULL, drop=NU
 
 #' reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}
 #' @description
+#' @param id unique identification variable, or variable combination
 #' @param indexname variable name for timing/repetition/index variable, such as "session"
 #' @param measure column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
 #' @param drop variables to drop before reshaping
@@ -514,8 +517,8 @@ z.recode = function(df, varName, recodes){
     # the helper function changes column name to sth like recode.other.variable.
     # now change it back
     names(newVar) = varName
-    # remove all value labels attr
-    newVar = sjmisc::set_labels(newVar,"")
+    # remove all value labels attr, with graceful failure
+    newVar=tryCatch(sjmisc::set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
     df = eval(parse(text=cmd))
@@ -587,8 +590,8 @@ z.recode2 = function(df, varName, recodes){
     # the helper function changes column name to sth like recode.other.variable.
     # now change it back
     names(newVar) = varName
-    # remove all value labels attr
-    newVar = sjmisc::set_labels(newVar,"")
+    # remove all value labels attr, with graceful failure
+    newVar=tryCatch(sjmisc::set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
     df = eval(parse(text=cmd))

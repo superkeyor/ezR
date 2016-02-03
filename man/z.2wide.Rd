@@ -7,6 +7,8 @@
 z.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
 }
 \arguments{
+\item{id}{unique identification variable, or variable combination}
+
 \item{indexname}{variable name for timing/repetition/index variable, such as "session"}
 
 \item{measure}{column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")}

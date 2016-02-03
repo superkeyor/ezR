@@ -4,10 +4,12 @@
 \alias{z.2long}
 \title{reconstruct to long format, wrapper of \code{\link[stats]{reshape}}}
 \usage{
-z.2long(df, indexname, index, measurename = NULL, measure = NULL,
+z.2long(df, id, indexname, index, measurename = NULL, measure = NULL,
   drop = NULL, ...)
 }
 \arguments{
+\item{id}{unique identification variable, or variable combination}
+
 \item{indexname}{variable name for timing/repetition/index variable, such as "session"}
 
 \item{index}{level name for each timing/repetition/index point, such as c("1,2"), c("Pre, Post")}
@@ -23,6 +25,7 @@ returns a new df, label attributes seem to be intact.
 }
 \note{
 refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
+\cr if index=c("Pre","Post"), then the character would not be viewed by z.view; index=1:2 will be int and fine.
 }
 \examples{
 df <- data.frame(
@@ -35,7 +38,7 @@ df <- data.frame(
     Q3.3.2. = rnorm(10, 0, 1),
     Q3.3.3. = rnorm(10, 0, 1)
 )
-z.2long(df,
+z.2long(df, "id",
        "loop_number",c(1:3),
        c('Q3.2','Q3.3'),
        list(c("Q3.2.1.","Q3.2.2.","Q3.2.3."),c("Q3.3.1.","Q3.3.2.","Q3.3.3.")))
