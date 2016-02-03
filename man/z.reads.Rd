@@ -2,14 +2,23 @@
 % Please edit documentation in R/io.R
 \name{z.reads}
 \alias{z.reads}
-\title{alias of \code{\link[sjmisc]{read_spss}}}
+\title{read spss .sav file with foreign package}
 \usage{
-z.reads(..., tolower = FALSE)
+z.reads(file, valuelabel = TRUE, tolower = FALSE)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-potentially keep variable labels and value labels.
+use \code{\link{z.reads}} instead (more powerful/flexible, recommended)
+}
+\examples{
+(file, valuelabel=TRUE,tolower=FALSE)
+label means variable value label, not variable label
+if TRUE, varialbe becomes a factor, and its levels becomes character labels
+ie, without label False gender=1,2; with label True gender=Male,Female
+tolower, whether convert all variable names to lower case
+
+alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 }
 

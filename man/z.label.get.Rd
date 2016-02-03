@@ -25,8 +25,9 @@ returns character
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
 Other data.transformation.functions: \code{\link{z.2factor}},
-  \code{\link{z.2label}}, \code{\link{z.2lower}},
-  \code{\link{z.2value}}, \code{\link{z.compute}},
+  \code{\link{z.2label}}, \code{\link{z.2long}},
+  \code{\link{z.2lower}}, \code{\link{z.2value}},
+  \code{\link{z.2wide}}, \code{\link{z.compute}},
   \code{\link{z.delete}}, \code{\link{z.del}},
   \code{\link{z.label.set}}, \code{\link{z.leftjoin}},
   \code{\link{z.move}}, \code{\link{z.newcol}},
