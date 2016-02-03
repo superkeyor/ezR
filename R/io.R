@@ -131,7 +131,7 @@ z.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names = FALSE, 
     # require('xlsx')
     x = data.frame(x)
     rownames(x) <- NULL
-    xlsx::write.xlsx2(x=x, file=file, sheetName=sheetName, ..., row.names=row.names)
+    xlsx::write.xlsx(x=x, file=file, sheetName=sheetName, ..., row.names=row.names)
     # detach("package:xlsx", unload=TRUE)
 }
 
