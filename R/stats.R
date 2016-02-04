@@ -8,12 +8,11 @@
 #' @export
 z.show = function(...){
     # show(...)
+    z.view(...)
     cat('------------------------------\n')
     str(...)
     cat('------------------------------\n')
     summary(...)
-
-    z.view(...)
 }
 
 #' show information about a data frame or other object
