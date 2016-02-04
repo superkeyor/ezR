@@ -115,6 +115,9 @@ z.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dro
     # varying: column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
     # drop: variables to drop before reshaping
     # sep: separator in the variable names
+
+    # re-assure df is a data frame, rather than tbl or data.table types, which reshape would not work well
+    df = data.frame(df)
     result = stats::reshape(df, idvar=id,
                             timevar=indexname, times=index,
                             v.names=measurename,varying=measure,
@@ -160,6 +163,7 @@ z.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dro
 z.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
     # 'SUBJID * Time [School] - Measure2'
     # note: v.names not varying
+    df = data.frame(df)
     result = stats::reshape(df,
                             idvar=id,
                             timevar=indexname,

@@ -25,6 +25,8 @@ z.num = function(x, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
         result = as.numeric(levels(x))[x]
+    } else if (is.list(x)){
+        result = utils::type.convert(as.character(unlist(x)), ...)
     } else {
         result = utils::type.convert(x, ...)
     }
