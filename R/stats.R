@@ -7,12 +7,18 @@
 #' @examples
 #' @export
 z.show = function(...){
+    # flush otherwise not print large text
     # show(...)
-    z.view(...)
-    cat('------------------------------\n')
-    str(...)
+    Hmisc::describe(...)
+    flush.console()
     cat('------------------------------\n')
     summary(...)
+    flush.console()
+    cat('------------------------------\n')
+    str(...)
+    flush.console()
+    cat('------------------------------\n')
+    z.view(...)
 }
 
 #' show information about a data frame or other object
