@@ -9,15 +9,12 @@
 z.show = function(...){
     # flush otherwise not print large text
     # show(...)
-    flush.console()
-    Hmisc::describe(...)
-    flush.console()
-    cat('------------------------------\n')
-    flush.console()
-    summary(...)
+    print(Hmisc::describe(...))
     flush.console()
     cat('------------------------------\n')
+    print(summary(...))
     flush.console()
+    cat('------------------------------\n')
     str(...)
     flush.console()
     cat('------------------------------\n')
