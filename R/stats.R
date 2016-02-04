@@ -12,6 +12,8 @@ z.show = function(...){
     str(...)
     cat('------------------------------\n')
     summary(...)
+
+    z.view(...)
 }
 
 #' show information about a data frame or other object
