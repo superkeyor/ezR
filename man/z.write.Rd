@@ -4,7 +4,7 @@
 \alias{z.write}
 \title{wrapper of write.csv, but with row.names removed, alias of \code{\link{z.save}}, wrapper of \code{\link{write.csv}}}
 \usage{
-z.write(x, file = "RData.csv", row.names = FALSE, ...)
+z.write(x, file = "RData.csv", row.names = FALSE, na = "", ...)
 }
 \description{
 wrapper of write.csv, but with row.names removed, alias of \code{\link{z.save}}, wrapper of \code{\link{write.csv}}

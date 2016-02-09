@@ -35,11 +35,11 @@ z.read = function(..., tolower=FALSE){
 #'             fileEncoding = "")
 #' dec: decimal point
 #' @export
-z.save = function(x, file="RData.csv", row.names=FALSE, ...){
+z.save = function(x, file="RData.csv", row.names=FALSE, na = "", ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     x = data.frame(x)
     rownames(x) <- NULL
-    write.csv(x=x, file=file, row.names=row.names, ...)
+    write.csv(x=x, file=file, row.names=row.names, na=na, ...)
 }
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.save}}, wrapper of \code{\link{write.csv}}
