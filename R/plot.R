@@ -6,9 +6,12 @@
 #' @return
 #' @seealso \code{\link{pdf}}
 #' @examples
+#' A4:     width 7(inches) height = 5
+#' Letter: 8.5 x 11
 #' @export
-z.export = function(filename = "RPlot.pdf", pdf.width = 7, pdf.height = 5, ...) {
+z.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...) {
     dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
+    return(NULL)
 }
 
 #' subplot, wrapper of \code{\link{par}}

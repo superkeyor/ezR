@@ -4,10 +4,14 @@
 \alias{z.export}
 \title{wrapper of \code{\link{dev.copy2pdf}}}
 \usage{
-z.export(filename = "RPlot.pdf", pdf.width = 7, pdf.height = 5, ...)
+z.export(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...)
 }
 \description{
 wrapper of \code{\link{dev.copy2pdf}}
+}
+\examples{
+A4:     width 7(inches) height = 5
+Letter: 8.5 x 11
 }
 \seealso{
 \code{\link{pdf}}
