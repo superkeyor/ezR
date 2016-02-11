@@ -1,24 +1,15 @@
 ###**************************************************.
 ###*plot.
 ###**************************************************.
-#' alias of \code{\link{pdf}}
+#' wrapper of \code{\link{dev.copy2pdf}}
 #' @param
 #' @return
+#' @seealso \code{\link{pdf}}
 #' @examples
-#' first z.export(filename) to create a new canvas
-#' then plot all following graphs to it and
-#' finally dev.off()/z.clean(3) to unlink
-#'
-#' pdf(file = ifelse(onefile, "Rplots.pdf", "Rplot%03d.pdf"),
-#' width, height, onefile, family, title, fonts, version,
-#' paper, encoding, bg, fg, pointsize, pagecentre, colormodel,
-#' useDingbats, useKerning, fillOddEven, compress)
-#'
-#' i = 100
-#' fileName = z.join('plot', i, '.pdf')
 #' @export
-z.export = pdf
-
+z.export = function(filename = "RPlot.pdf", pdf.width = 7, pdf.height = 5, ...) {
+    dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
+}
 
 #' subplot, wrapper of \code{\link{par}}
 #' @param

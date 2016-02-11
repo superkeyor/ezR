@@ -2,27 +2,14 @@
 % Please edit documentation in R/plot.R
 \name{z.export}
 \alias{z.export}
-\title{alias of \code{\link{pdf}}}
+\title{wrapper of \code{\link{dev.copy2pdf}}}
 \usage{
-z.export(file = ifelse(onefile, "Rplots.pdf", "Rplot\%03d.pdf"), width,
-  height, onefile, family, title, fonts, version, paper, encoding, bg, fg,
-  pointsize, pagecentre, colormodel, useDingbats, useKerning, fillOddEven,
-  compress)
+z.export(filename = "RPlot.pdf", pdf.width = 7, pdf.height = 5, ...)
 }
 \description{
-alias of \code{\link{pdf}}
+wrapper of \code{\link{dev.copy2pdf}}
 }
-\examples{
-first z.export(filename) to create a new canvas
-then plot all following graphs to it and
-finally dev.off()/z.clean(3) to unlink
-
-pdf(file = ifelse(onefile, "Rplots.pdf", "Rplot\%03d.pdf"),
-width, height, onefile, family, title, fonts, version,
-paper, encoding, bg, fg, pointsize, pagecentre, colormodel,
-useDingbats, useKerning, fillOddEven, compress)
-
-i = 100
-fileName = z.join('plot', i, '.pdf')
+\seealso{
+\code{\link{pdf}}
 }
 
