@@ -4,7 +4,8 @@
 \alias{z.heatmap}
 \title{plot a heatmap with values shown}
 \usage{
-z.heatmap(df, id, show.values = T)
+z.heatmap(df, id, show.values = T, angle = 270, colors = c("blue",
+  "white", "red"))
 }
 \arguments{
 \item{df}{data frame in wide format, like a correlation matrix}
@@ -12,6 +13,10 @@ z.heatmap(df, id, show.values = T)
 \item{id}{a column name as id, will be shown as x axis, quoted ""}
 
 \item{show.values}{whether to show values, default TRUE}
+
+\item{angle}{the x axis label angle, default=270 (vertical), suggests 330 if label is not too long}
+
+\item{colors}{low, middle, high; default c("blue", "white", "red")}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)

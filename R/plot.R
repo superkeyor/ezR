@@ -11,7 +11,7 @@
 #' @export
 z.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...) {
     dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
-    return(NULL)
+    cat('Image exported.\n')
 }
 
 #' subplot, wrapper of \code{\link{par}}
@@ -150,10 +150,12 @@ z.describe = function(df,cmd){
 #' @param df data frame in wide format, like a correlation matrix
 #' @param id a column name as id, will be shown as x axis, quoted ""
 #' @param show.values whether to show values, default TRUE
+#' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
+#' @param colors low, middle, high; default c("blue", "white", "red")
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.heatmap = function(df, id, show.values=T){
+z.heatmap = function(df, id, show.values=T, angle=270, colors=c("blue", "white", "red")){
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
@@ -164,28 +166,28 @@ z.heatmap = function(df, id, show.values=T){
         t = sprintf('
                     p = ggplot(df, aes(%s, %s)) +
                     geom_tile(aes(fill = %s)) +
-                    scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
+                    scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
                     geom_text(aes(fill = %s, label = round(%s, 1))) +
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
                     theme_grey(base_size = 9) +
                     theme(legend.position = "right",
                     axis.ticks = element_blank(),
-                    axis.text.x = element_text(angle = 330, hjust = 0))'
-                    , x, y, z, z, z
+                    axis.text.x = element_text(angle = %d, hjust = 0))'
+                    , x, y, z, colors[1], colors[2], colors[3], z, z, angle
 )
     } else {
         t = sprintf('
                     p = ggplot(df, aes(%s, %s)) +
                     geom_tile(aes(fill = %s)) +
-                    scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
+                    scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
                     theme_grey(base_size = 9) +
                     theme(legend.position = "right",
                     axis.ticks = element_blank(),
-                    axis.text.x = element_text(angle = 330, hjust = 0))'
-                    , x, y, z
+                    axis.text.x = element_text(angle = %d, hjust = 0))'
+                    , x, y, z, colors[1], colors[2], colors[3], angle
         )
     }
     eval(parse(text = t))
