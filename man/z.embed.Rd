@@ -15,12 +15,15 @@ see from http://cran.r-project.org/web/packages/TeachingDemos/TeachingDemos.pdf
 # e.g.,
 # 3 rows subplots
 par(mfrow=c(3,1) )
+
 plot(1:10, 1:10, main = "Plot 1")
 # draw another arbitrary subplot
 z.embed(plot(10,10, xlab="", ylab=""), x=2, y=8, size = c(0.5, 0.5) )
+
 # demonstrates mfg usage, draw the third plot before the drawing the second
 par(mfg=c(3,1) ); plot(11:20, 11:20, main = "Plot 3")
 z.embed(plot(10,10, xlab="", ylab=""), x=12, y=18, size = c(0.5, 0.5))
+
 par(mfg=c(2,1)); plot(21:30, 21:30, main = "Plot 2")
 z.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))
 }

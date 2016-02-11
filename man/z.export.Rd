@@ -16,10 +16,12 @@ alias of \code{\link{pdf}}
 first z.export(filename) to create a new canvas
 then plot all following graphs to it and
 finally dev.off()/z.clean(3) to unlink
+
 pdf(file = ifelse(onefile, "Rplots.pdf", "Rplot\%03d.pdf"),
 width, height, onefile, family, title, fonts, version,
 paper, encoding, bg, fg, pointsize, pagecentre, colormodel,
 useDingbats, useKerning, fillOddEven, compress)
+
 i = 100
 fileName = z.join('plot', i, '.pdf')
 }
