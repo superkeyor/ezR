@@ -10,7 +10,7 @@ z.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 \arguments{
 \item{df}{data frame in wide format, should be all numeric}
 
-\item{corr.type}{"pearson" or "spearman"}
+\item{corr.type}{"pearson" or "spearman", pairwise deletion for NA}
 
 \item{sig.level}{sig.level}
 

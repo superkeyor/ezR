@@ -151,7 +151,7 @@ z.describe = function(df,cmd){
 #' @param id a column name as id, will be shown as x axis, quoted ""
 #' @param show.values whether to show values in addition to color in the plot
 #' @param remove.zero remove the leading 0 as in correlation, 0.02->.02 (0.00 becomes "<.01")
-#' \crf only works when show.value=T
+#' \cr only works when show.value=T
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
 #' @param colors low, middle, high
 #' @return a ggplot object (+theme_apa() to get apa format plot)
@@ -222,7 +222,7 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
 #' plot a correlation matrix map
 #' @description a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}
 #' @param df data frame in wide format, should be all numeric
-#' @param corr.type "pearson" or "spearman"
+#' @param corr.type "pearson" or "spearman", pairwise deletion for NA
 #' @param sig.level sig.level
 #' @param insig how to treat insig values, one of "pch"(show x),"p-value","blank", "n"(no change, as is)
 #' @param ... see \code{\link[corrplot]{corrplot}} for more parameters

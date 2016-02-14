@@ -15,7 +15,7 @@ z.heatmap(df, id, show.values = F, remove.zero = T, angle = 270,
 \item{show.values}{whether to show values in addition to color in the plot}
 
 \item{remove.zero}{remove the leading 0 as in correlation, 0.02->.02 (0.00 becomes "<.01")
-\crf only works when show.value=T}
+\cr only works when show.value=T}
 
 \item{angle}{the x axis label angle, default=270 (vertical), suggests 330 if label is not too long}
 
