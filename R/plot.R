@@ -149,13 +149,15 @@ z.describe = function(df,cmd){
 #' plot a heatmap with values shown
 #' @param df data frame in wide format, like a correlation matrix
 #' @param id a column name as id, will be shown as x axis, quoted ""
-#' @param show.values whether to show values, default TRUE
+#' @param show.values whether to show values in addition to color in the plot
+#' @param remove.zero remove the leading 0 as in correlation, 0.02->.02 (0.00 becomes "<.01")
+#' \crf only works when show.value=T
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
-#' @param colors low, middle, high; default c("blue", "white", "red")
+#' @param colors low, middle, high
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.heatmap = function(df, id, show.values=T, angle=270, colors=c("blue", "white", "red")){
+z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red")){
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
@@ -167,14 +169,14 @@ z.heatmap = function(df, id, show.values=T, angle=270, colors=c("blue", "white",
                     p = ggplot(df, aes(%s, %s)) +
                     geom_tile(aes(fill = %s)) +
                     scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
-                    geom_text(aes(fill = %s, label = round(%s, 1))) +
+                    geom_text(aes(fill = %s, label = .remove0(%s,%s))) +
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
                     theme_grey(base_size = 9) +
                     theme(legend.position = "right",
                     axis.ticks = element_blank(),
                     axis.text.x = element_text(angle = %d, hjust = 0))'
-                    , x, y, z, colors[1], colors[2], colors[3], z, z, angle
+                    , x, y, z, colors[1], colors[2], colors[3], z, z, remove.zero, angle
 )
     } else {
         t = sprintf('
@@ -192,4 +194,55 @@ z.heatmap = function(df, id, show.values=T, angle=270, colors=c("blue", "white",
     }
     eval(parse(text = t))
     return(p)
+}
+# helper function to remove leading 0 in correlation
+.remove0 <- function(value, remove.zero=T, prefix=""){  # format string more concisely
+    if (remove.zero) {
+        lst = c()
+        for (item in value) {
+            if (is.nan(item) || is.na(item)) { # if item is NaN return empty string
+                lst <- c(lst, '')
+                next
+            }
+            item <- round(item, 2) # round to two digits
+            if (item == 0) { # if rounding results in 0 clarify
+                item = '<.01'
+            }
+            item <- as.character(item)
+            item <- sub("(^[0])+", "", item)    # remove leading 0: 0.05 -> .05
+            item <- sub("(^-[0])+", "-", item)  # remove leading -0: -0.05 -> -.05
+            lst <- c(lst, paste(prefix, item, sep = ""))
+        }
+        return(lst)
+    } else {
+        return(value)
+    }
+}
+
+#' plot a correlation matrix map
+#' @description a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}
+#' @param df data frame in wide format, should be all numeric
+#' @param corr.type "pearson" or "spearman"
+#' @param sig.level sig.level
+#' @param insig how to treat insig values, one of "pch","p-value","blank", "n"
+#' @param ... see \code{\link[corrplot]{corrplot}} for more parameters
+#' @return
+#' @examples
+#' @export
+z.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
+                     method ="color",tl.col = "black",tl.cex = 0.4,
+                     col=NULL,...){
+
+    corrmatrix = Hmisc::rcorr(as.matrix(df), type=corr.type)
+    M = corrmatrix$r
+    p.mat = corrmatrix$P
+
+    if (is.null(col)){
+        col1 <- colorRampPalette(rev(c("#7F0000", "red", "#FF7F00", "yellow", "white", "cyan",
+                                       "#007FFF", "blue", "#00007F")))
+        col=col1(100)
+    }
+
+    corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
+                       tl.col = tl.col, tl.cex = tl.cex, col = col, ...)
 }
