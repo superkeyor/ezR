@@ -224,7 +224,7 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
 #' @param df data frame in wide format, should be all numeric
 #' @param corr.type "pearson" or "spearman"
 #' @param sig.level sig.level
-#' @param insig how to treat insig values, one of "pch","p-value","blank", "n"
+#' @param insig how to treat insig values, one of "pch"(show x),"p-value","blank", "n"(no change, as is)
 #' @param ... see \code{\link[corrplot]{corrplot}} for more parameters
 #' @return
 #' @examples

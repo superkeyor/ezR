@@ -14,7 +14,7 @@ z.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 
 \item{sig.level}{sig.level}
 
-\item{insig}{how to treat insig values, one of "pch","p-value","blank", "n"}
+\item{insig}{how to treat insig values, one of "pch"(show x),"p-value","blank", "n"(no change, as is)}
 
 \item{...}{see \code{\link[corrplot]{corrplot}} for more parameters}
 }
