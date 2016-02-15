@@ -2,11 +2,19 @@
 % Please edit documentation in R/plot.R
 \name{z.color}
 \alias{z.color}
-\title{show some help info on color}
+\title{show some help info on color
+examples
+RColorBrewer::display.brewer.all()
+cols <- RColorBrewer::brewer.pal(8,"Set3")
+colorRampPalette(brewer.pal(9,"Blues"))(100)}
 \usage{
 z.color()
 }
 \description{
 show some help info on color
+examples
+RColorBrewer::display.brewer.all()
+cols <- RColorBrewer::brewer.pal(8,"Set3")
+colorRampPalette(brewer.pal(9,"Blues"))(100)
 }
 
