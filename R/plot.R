@@ -105,7 +105,7 @@ z.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 }
 
 #' show some help info on color
-#@export
+#' @export
 z.color = function(){
     if (!require("RColorBrewer")) {
         install.packages("RColorBrewer")
