@@ -5,14 +5,14 @@
 \title{draw a radar plot}
 \usage{
 z.radar(df, id, stats = "mean", lwd = 1, angle = 0, fontsize = 0.8,
-  facet = FALSE, color = id, linetype = NULL)
+  facet = FALSE, facetfontsize = 1, color = id, linetype = NULL)
 }
 \arguments{
 \item{df}{a data frame with a single variable as factor and all othere variables being numeric}
 
 \item{id}{column name as id in quotes ""}
 
-\item{stats}{perform stats grouped by id, "mean", "median", "sd", "var", "none"; if "none", assume df already has summary stats}
+\item{stats}{perform stats (with NA removed) grouped by id, "mean", "median", "sd", "var", "none"; if "none", assume df already has summary stats}
 
 \item{lwd}{line width}
 
@@ -21,6 +21,8 @@ z.radar(df, id, stats = "mean", lwd = 1, angle = 0, fontsize = 0.8,
 \item{fontsize}{fontsize of variable names, if 0, no variable names shown}
 
 \item{facet}{if F show each id level separately; if T show all levels in one plot}
+
+\item{facetfontsize}{fontsize of id level names (only valid when facet=T)}
 
 \item{color}{color for different id levels, if NULL, remain the same for different id levels}
 

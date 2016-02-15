@@ -384,11 +384,12 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' \cr best works with multivariates
 #' @param df a data frame with a single variable as factor and all othere variables being numeric
 #' @param id column name as id in quotes ""
-#' @param stats perform stats grouped by id, "mean", "median", "sd", "var", "none"; if "none", assume df already has summary stats
+#' @param stats perform stats (with NA removed) grouped by id, "mean", "median", "sd", "var", "none"; if "none", assume df already has summary stats
 #' @param lwd line width
 #' @param angle angle to show the variable names
 #' @param fontsize fontsize of variable names, if 0, no variable names shown
 #' @param facet if F show each id level separately; if T show all levels in one plot
+#' @param facetfontsize fontsize of id level names (only valid when facet=T)
 #' @param color color for different id levels, if NULL, remain the same for different id levels
 #' @param linetype linetype for different id levels, if NULL, remain the same for different id levels
 #' @return a ggplot object (+theme_apa() to get apa format plot)
@@ -396,7 +397,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
-z.radar = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, color=id, linetype=NULL){
+z.radar = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
 
     df.ori = df
 
@@ -447,7 +448,7 @@ z.radar = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FAL
                       xlab("") + ylab("") +
                       guides(color = "none") +
                       coord_radar()
-                      ', id, id, id, lwd, id, 1.5, fontsize, angle)
+                      ', id, id, id, lwd, id, facetfontsize, fontsize, angle)
 
     }
     eval(parse(text = cmd))
