@@ -116,7 +116,10 @@ z.color = function(){
         library(RColorBrewer)
     }
     RColorBrewer::display.brewer.all()
-    cat('usage: \ncols <- brewer.pal(8,"Set3")\ncolorRampPalette(brewer.pal(9,"Blues"))(100)\n')
+    cat('usage: \n
+    RColorBrewer::display.brewer.all()\n
+    cols <- RColorBrewer::brewer.pal(8,"Set3")\n
+    colorRampPalette(brewer.pal(9,"Blues"))(100)\n')
 }    
 
 #' Open Help Pages for ggplot2
