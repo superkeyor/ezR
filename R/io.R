@@ -82,7 +82,7 @@ z.reads2 = function(..., tolower=FALSE){
 }
 
 #' read spss .sav file with foreign package
-#' @description
+#' @description see more at \code{\link[foreign]{read.spss}}
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples

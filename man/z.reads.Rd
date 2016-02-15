@@ -9,6 +9,9 @@ z.reads(file, valuelabel = TRUE, tolower = FALSE)
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
+\description{
+see more at \code{\link[foreign]{read.spss}}
+}
 \examples{
 (file, valuelabel=TRUE,tolower=FALSE)
 label means variable value label, not variable label
