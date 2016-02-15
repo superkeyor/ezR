@@ -105,7 +105,7 @@ z.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 }
 
 #' show some help info on color
-#' examples
+#' @examples
 #' RColorBrewer::display.brewer.all()
 #' cols <- RColorBrewer::brewer.pal(8,"Set3")
 #' colorRampPalette(brewer.pal(9,"Blues"))(100)
