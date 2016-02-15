@@ -104,6 +104,17 @@ z.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
     return(invisible(tmp.par))
 }
 
+#' show some help info on color
+#@export
+z.color = function(){
+    if (!require("RColorBrewer")) {
+        install.packages("RColorBrewer")
+        library(RColorBrewer)
+    }
+    display.brewer.all()
+    cat('usage: \ncols <- brewer.pal(8,"Set3")\ncolorRampPalette(brewer.pal(9,"Blues"))(100)\n')
+}    
+
 #' Open Help Pages for ggplot2
 #'
 #' \code{gghelp} - Open Hadely Wickham's ggplot2
