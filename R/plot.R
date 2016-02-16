@@ -415,7 +415,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
-z.radar = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
+z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
 
     df.ori = df
 
