@@ -358,7 +358,7 @@ z.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
     p.mat = corrmatrix$P
 
     if (is.null(col)){
-        col1 <- colorRampPalette(rev(c("#7F0000", "red", "#FF7F00", "yellow", "white", "cyan",
+        col1 <- colorRampPalette(rev(c("#7F0000", "red", "#FF7F00", "yellow", "grey", "cyan",
                                        "#007FFF", "blue", "#00007F")))
         col=col1(100)
     }
