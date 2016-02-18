@@ -514,7 +514,7 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
 #' multiplot(plotlist = plots, layout = layout)
 #'
 #' @references \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   # Make a list from the ... arguments and plotlist
   plots <- c(list(...), plotlist)
 

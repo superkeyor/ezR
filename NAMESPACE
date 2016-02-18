@@ -3,7 +3,7 @@
 export(coord_radar)
 export(ggcook)
 export(gghelp)
-export(multiplot)
+export(ggmultiplot)
 export(theme_apa)
 export(z.2factor)
 export(z.2label)
