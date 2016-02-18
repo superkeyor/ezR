@@ -496,13 +496,14 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
 #' \cr 3 will go all the way across the bottom.
 #' @export
 #' @examples
-#' for (i in 1:5) {
+#' plots <- list()  # new empty list
+#' for (i in 1:6) {
 #'     p1 = qplot(1:10, rnorm(10), main = i)
-#'     plots[[i]] <- p1
+#'     plots[[i]] <- p1  # add each plot into plot list
 #' }
-#' layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
-#' multiplot(plotlist = plots, layout = layout)
-#' 
+#' multiplot(plotlist = plots, cols = 3)
+#'
+#'
 #'
 #' plots <- list() 
 #' for (i in 1:5) {
@@ -511,6 +512,7 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
 #' }
 #' layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
 #' multiplot(plotlist = plots, layout = layout)
+#'
 #' @references \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   # Make a list from the ... arguments and plotlist

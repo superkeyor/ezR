@@ -20,12 +20,13 @@ multiplot(..., plotlist = NULL, file, cols = 1, layout = NULL)
 Multiple plot function
 }
 \examples{
-for (i in 1:5) {
+plots <- list()  # new empty list
+for (i in 1:6) {
     p1 = qplot(1:10, rnorm(10), main = i)
-    plots[[i]] <- p1
+    plots[[i]] <- p1  # add each plot into plot list
 }
-layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
-multiplot(plotlist = plots, layout = layout)
+multiplot(plotlist = plots, cols = 3)
+
 
 
 plots <- list() 
@@ -35,6 +36,7 @@ for (i in 1:5) {
 }
 layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
 multiplot(plotlist = plots, layout = layout)
+
 }
 \references{
 \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
