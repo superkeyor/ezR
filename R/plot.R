@@ -494,7 +494,7 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
 #' \cr If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
 #' \cr then plot 1 will go in the upper left, 2 will go in the upper right, and
 #' \cr 3 will go all the way across the bottom.
-#' @return NULL
+#' @return returns nothing (NULL)
 #' @export
 #' @examples
 #' plots <- list()  # new empty list
