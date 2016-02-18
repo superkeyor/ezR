@@ -25,7 +25,7 @@ for (i in 1:6) {
     p1 = qplot(1:10, rnorm(10), main = i)
     plots[[i]] <- p1  # add each plot into plot list
 }
-multiplot(plotlist = plots, cols = 3)
+ggmultiplot(plotlist = plots, cols = 3)
 
 
 
@@ -35,7 +35,7 @@ for (i in 1:5) {
     plots[[i]] <- p1
 }
 layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
-multiplot(plotlist = plots, layout = layout)
+ggmultiplot(plotlist = plots, layout = layout)
 
 }
 \references{
