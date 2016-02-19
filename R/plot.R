@@ -565,6 +565,7 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 #' @param ysize y axis label font relative size
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
+#' @export
 z.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     # logic:
     # change all non-NAs to 0, all NAs to 1 then show on heatmap
