@@ -274,10 +274,13 @@ z.describe = function(df,cmd){
 #' \cr only works when show.value=T
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
 #' @param colors low, middle, high
+#' @param xsize x axis label font size
+#' @param ysize y axis label font size
+#' @param legend.position "bottom", "top", "left", "right", "none"
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red")){
+z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), xsize=1, ysize=1, legend.postion="right"){
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
@@ -292,12 +295,13 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                     geom_text(aes(fill = %s, label = .remove0(%s,%s))) +
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
-                    theme_grey(base_size = 9) +
-                    theme(legend.position = "right",
+                    theme_grey() +
+                    theme(legend.position = %s,
                     axis.ticks = element_blank(),
-                    axis.text.x = element_text(angle = %d, hjust = 0))'
-                    , x, y, z, colors[1], colors[2], colors[3], z, z, remove.zero, angle
-)
+                    axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0),
+                    axis.text.y = element_text(size = rel(%f))'
+                    , x, y, z, colors[1], colors[2], colors[3], z, z, remove.zero, legend.position, angle, xsize, ysize
+        )
     } else {
         t = sprintf('
                     p = ggplot(df, aes(%s, %s)) +
@@ -305,11 +309,12 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                     scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
-                    theme_grey(base_size = 9) +
-                    theme(legend.position = "right",
+                    theme_grey() +
+                    theme(legend.position = %s,
                     axis.ticks = element_blank(),
-                    axis.text.x = element_text(angle = %d, hjust = 0))'
-                    , x, y, z, colors[1], colors[2], colors[3], angle
+                    axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0)
+                    axis.text.y = element_text(size = rel(%f))'
+                    , x, y, z, colors[1], colors[2], colors[3], legend.position, angle, xsize, ysize
         )
     }
     eval(parse(text = t))

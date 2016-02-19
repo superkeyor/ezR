@@ -5,7 +5,8 @@
 \title{plot a heatmap with values shown}
 \usage{
 z.heatmap(df, id, show.values = F, remove.zero = T, angle = 270,
-  colors = c("blue", "white", "red"))
+  colors = c("blue", "white", "red"), xsize = 1, ysize = 1,
+  legend.postion = "right")
 }
 \arguments{
 \item{df}{data frame in wide format, like a correlation matrix}
@@ -20,6 +21,12 @@ z.heatmap(df, id, show.values = F, remove.zero = T, angle = 270,
 \item{angle}{the x axis label angle, default=270 (vertical), suggests 330 if label is not too long}
 
 \item{colors}{low, middle, high}
+
+\item{xsize}{x axis label font size}
+
+\item{ysize}{y axis label font size}
+
+\item{legend.position}{"bottom", "top", "left", "right", "none"}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)
