@@ -6,7 +6,7 @@
 \usage{
 z.heatmap(df, id, show.values = F, remove.zero = T, angle = 270,
   colors = c("blue", "white", "red"), xsize = 1, ysize = 1,
-  legend.postion = "right")
+  legend.position = "right")
 }
 \arguments{
 \item{df}{data frame in wide format, like a correlation matrix}

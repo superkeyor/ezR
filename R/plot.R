@@ -280,7 +280,7 @@ z.describe = function(df,cmd){
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), xsize=1, ysize=1, legend.postion="right"){
+z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), xsize=1, ysize=1, legend.position="right"){
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
