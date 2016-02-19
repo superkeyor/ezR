@@ -296,7 +296,7 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
                     theme_grey() +
-                    theme(legend.position = %s,
+                    theme(legend.position = "%s",
                     axis.ticks = element_blank(),
                     axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0),
                     axis.text.y = element_text(size = rel(%f))'
@@ -310,7 +310,7 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
                     theme_grey() +
-                    theme(legend.position = %s,
+                    theme(legend.position = "%s",
                     axis.ticks = element_blank(),
                     axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0),
                     axis.text.y = element_text(size = rel(%f))'
