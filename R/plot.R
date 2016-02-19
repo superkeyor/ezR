@@ -584,7 +584,7 @@ z.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     eval(parse(text = cmd))
     
     cmd = sprintf('p = z.heatmap(df, "%s", colors=c("blue", "white", "%s"), 
-                  legend.position="none", angle=%d, base_size=%f, xsize=%f, ysize=%f)'
+                  legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
                   , id, color, angle, basesize, xsize, ysize)
     eval(parse(text = cmd))
     
