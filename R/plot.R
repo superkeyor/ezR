@@ -312,7 +312,7 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                     theme_grey() +
                     theme(legend.position = %s,
                     axis.ticks = element_blank(),
-                    axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0)
+                    axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0),
                     axis.text.y = element_text(size = rel(%f))'
                     , x, y, z, colors[1], colors[2], colors[3], legend.position, angle, xsize, ysize
         )
