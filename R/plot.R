@@ -120,7 +120,7 @@ z.color = function(){
     RColorBrewer::display.brewer.all()\n
     cols <- RColorBrewer::brewer.pal(8,"Set3")\n
     colorRampPalette(brewer.pal(9,"Blues"))(100)\n')
-}    
+}
 
 #' Open Help Pages for ggplot2
 #'
@@ -274,13 +274,14 @@ z.describe = function(df,cmd){
 #' \cr only works when show.value=T
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
 #' @param colors low, middle, high
-#' @param xsize x axis label font size
-#' @param ysize y axis label font size
+#' @param basesize base font size
+#' @param xsize x axis label font relative size
+#' @param ysize y axis label font relative size
 #' @param legend.position "bottom", "top", "left", "right", "none"
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), xsize=1, ysize=1, legend.position="right"){
+z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
@@ -295,12 +296,12 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                     geom_text(aes(fill = %s, label = .remove0(%s,%s))) +
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
-                    theme_grey() +
+                    theme_grey(base_size=%f) +
                     theme(legend.position = "%s",
                     axis.ticks = element_blank(),
                     axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0),
-                    axis.text.y = element_text(size = rel(%f))'
-                    , x, y, z, colors[1], colors[2], colors[3], z, z, remove.zero, legend.position, angle, xsize, ysize
+                    axis.text.y = element_text(size = rel(%f)))'
+                    , x, y, z, colors[1], colors[2], colors[3], z, z, remove.zero, basesize, legend.position, angle, xsize, ysize
         )
     } else {
         t = sprintf('
@@ -309,12 +310,12 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                     scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
                     scale_x_discrete("", expand = c(0, 0)) +
                     scale_y_discrete("", expand = c(0, 0)) +
-                    theme_grey() +
+                    theme_grey(base_size=%f) +
                     theme(legend.position = "%s",
                     axis.ticks = element_blank(),
                     axis.text.x = element_text(angle = %d, size = rel(%f), hjust = 0),
-                    axis.text.y = element_text(size = rel(%f))'
-                    , x, y, z, colors[1], colors[2], colors[3], legend.position, angle, xsize, ysize
+                    axis.text.y = element_text(size = rel(%f)))'
+                    , x, y, z, colors[1], colors[2], colors[3], basesize, legend.position, angle, xsize, ysize
         )
     }
     eval(parse(text = t))
@@ -511,7 +512,7 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
 #'
 #'
 #'
-#' plots <- list() 
+#' plots <- list()
 #' for (i in 1:5) {
 #'     p1 = qplot(1:10, rnorm(10), main = i)
 #'     plots[[i]] <- p1

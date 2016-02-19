@@ -32,7 +32,7 @@ ggmultiplot(plotlist = plots, cols = 3)
 
 
 
-plots <- list() 
+plots <- list()
 for (i in 1:5) {
     p1 = qplot(1:10, rnorm(10), main = i)
     plots[[i]] <- p1
