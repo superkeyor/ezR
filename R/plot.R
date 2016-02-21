@@ -91,7 +91,7 @@ z.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
         xyx <- grconvertX(x, to='nfc')
         xyy <- grconvertY(y, to='nfc')
     }
-    
+
     par(pars)
     if(type=='fig'){
         par(fig=c(xyx,xyy), new=TRUE)
@@ -100,7 +100,7 @@ z.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
     }
     fun
     tmp.par <- par(no.readonly=TRUE)
-    
+
     return(invisible(tmp.par))
 }
 
@@ -191,18 +191,18 @@ ggcook <- function() {
 #'     ylab("Total")
 #' }
 theme_apa <- function(plot.box = FALSE){
-    
+
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
     }
-    
+
     if (Sys.info()["sysname"] == "Windows") {
         windowsFonts(RMN=windowsFont("Times New Roman"))
         RMN <- "RMN"
     } else {
         RMN <- "Times New Roman"
     }
-    
+
     out <- theme(
         plot.title=element_text(family=RMN, size=14, face="bold", colour="black"),
         axis.title.x=element_text(family=RMN, size=14, colour="black"),
@@ -210,7 +210,7 @@ theme_apa <- function(plot.box = FALSE){
         axis.text.x=element_text(family=RMN, size=11, colour="black"),
         axis.text.y=element_text(family=RMN, size=11, colour="black"),
         axis.ticks=element_line(colour="black"))
-    
+
     if (!plot.box) {
         out <- out + theme(panel.background = element_rect(fill = "white",
                                                            colour = "black"), panel.border = element_rect(fill = NA,
@@ -221,7 +221,7 @@ theme_apa <- function(plot.box = FALSE){
                                                                                                           colour = "grey50"))
     }
     out
-    
+
 }
 
 #' plot a customized boxplot with jittered stripplot, violin, and mean
@@ -286,7 +286,7 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
     eval(parse(text = cmd))
-    
+
     x = "key"; y = id; z = "value"
     if (show.values) {
         t = sprintf('
@@ -358,17 +358,17 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
 z.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
                      method ="color",tl.col = "black",tl.cex = 0.4,
                      col=NULL,...){
-    
+
     corrmatrix = Hmisc::rcorr(as.matrix(df), type=corr.type)
     M = corrmatrix$r
     p.mat = corrmatrix$P
-    
+
     if (is.null(col)){
         col1 <- colorRampPalette(rev(c("#7F0000", "red", "#FF7F00", "yellow", "grey", "cyan",
                                        "#007FFF", "blue", "#00007F")))
         col=col1(100)
     }
-    
+
     corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
                        tl.col = tl.col, tl.cex = tl.cex, col = col, ...)
 }
@@ -380,8 +380,14 @@ z.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
 #' @export
 z.rescale01 = function (x) {
     if (is.numeric(x)) {
-        rng <- range(x, na.rm = TRUE)
-        result = (x - rng[1])/(rng[2] - rng[1])
+        # rng <- range(x, na.rm = TRUE)
+        # result = (x - rng[1])/(rng[2] - rng[1])
+        
+        # get rid of negative values
+        if (min(x, na.rm=TRUE)<0) {x = x - min(x, na.rm=TRUE)}
+        # scale all postive to max of 1
+        if (max(x, na.rm=TRUE)!=0) {x = x/max(x, na.rm=TRUE)}
+        result = x
     } else {
         result = x
     }
@@ -422,9 +428,9 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
 z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
-    
+
     df.ori = df
-    
+
     # 1) summarise
     if (stats!="none") {
         cmd = sprintf('df.stats = dplyr::summarise_each(dplyr::group_by(df.ori,%s),
@@ -434,15 +440,15 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
     } else {
         df.stats = df.ori
     }
-    
+
     # 2) rescale
     df.stats = as.data.frame(lapply(df.stats, z.rescale01))
-    
+
     # 3) to long format
     cmd = sprintf('tidyr::gather(df.stats, variable,value,-%s,factor_key = T) -> df
                   ',id)
     eval(parse(text = cmd))
-    
+
     # 4) plot
     # geom_polygon connects together, no fill
     # geom_line draw legend (the legend by polygon is hallow)
@@ -458,7 +464,7 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
                       guides(color = guide_legend(ncol=2)) +
                       coord_radar()
                       ', id, id, id, lwd, lwd, fontsize, angle)
-        
+
     } else {
         cmd = sprintf('
                       p=ggplot(df, aes(x = variable, y = value, group = %s, color = %s, linetype = %s)) +
@@ -473,10 +479,10 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
                       guides(color = "none") +
                       coord_radar()
                       ', id, id, id, lwd, id, facetfontsize, fontsize, angle)
-        
+
     }
     eval(parse(text = cmd))
-    
+
     # 5) hack: couldn't pass NULL to color, linetype
     if (is.null(color)) {
         cmd = sprintf('p = p + scale_color_manual(values=rep("black",nlevels(factor(df$%s))))
@@ -488,7 +494,7 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
                       ',id)
         eval(parse(text = cmd))
     }
-    
+
     return(p)
 }
 
@@ -524,9 +530,9 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
 ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
     # Make a list from the ... arguments and plotlist
     plots <- c(list(...), plotlist)
-    
+
     numPlots = length(plots)
-    
+
     # If layout is NULL, then use 'cols' to determine layout
     if (is.null(layout)) {
         # Make the panel
@@ -535,20 +541,20 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
         layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
                          ncol = cols, nrow = ceiling(numPlots/cols))
     }
-    
+
     if (numPlots==1) {
         print(plots[[1]])
-        
+
     } else {
         # Set up the page
         grid::grid.newpage()
         grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
-        
+
         # Make each plot, in the correct location
         for (i in 1:numPlots) {
             # Get the i,j matrix positions of the regions that contain this subplot
             matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-            
+
             print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
                                                   layout.pos.col = matchidx$col))
         }
@@ -569,24 +575,66 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 z.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     # logic:
     # change all non-NAs to 0, all NAs to 1 then show on heatmap
-    
+
     # get information from df before changing df
     cmd = sprintf('theID = df$%s',id)
     eval(parse(text = cmd))
-    
+
     indx.value = !is.na(df)
     indx.na = is.na(df)
     df = as.data.frame(apply(df,2,as.numeric))
     df[indx.value] = 0
     df[indx.na] = 1
-    
+
     cmd = sprintf('df$%s = theID',id)
     eval(parse(text = cmd))
-    
-    cmd = sprintf('p = z.heatmap(df, "%s", colors=c("blue", "white", "%s"), 
+
+    cmd = sprintf('p = z.heatmap(df, "%s", colors=c("blue", "white", "%s"),
                   legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
                   , id, color, angle, basesize, xsize, ysize)
     eval(parse(text = cmd))
-    
+
     return(p)
+}
+
+#' change factor level order in a df
+#' @description does not change factor label; only changes the order of printing out
+#' @param df data frame
+#' @param col a factor column name, quoted "", eg, "group"
+#' @param ord "az","za"--alphabetic;
+#' \cr "as"--as is, appearance;
+#' \cr c("small","medium","large")--specified level order
+#' \cr "col2" --another column in az
+#' \cr "col2:az" --another column in az
+#' \cr "col2:za" --another column in za
+#' @return returns a new df
+#' @examples
+#' @export
+z.factorder = function(df, col, ord="as"){
+    # [[]] is the programmable form of $
+    if (length(ord)==1) {
+        if (ord=="as"){
+            df[[col]] = factor(df[[col]], unique(as.character(df[[col]])))
+        } else if (ord=="az") {
+            df[[col]] = factor(df[[col]], levels(factor(df[[col]])))
+        } else if (ord=="za") {
+            df[[col]] = factor(df[[col]], rev(levels(factor(df[[col]]))))
+        } else if (ord %in% names(df)) {
+            df[[col]] = factor(df[[col]], unique(df[order(df[[ord]]),col]))
+        } else if (grepl(":",ord,fixed=TRUE)) {
+            # remove spaces
+            ord = gsub(" ","",ord,fixed=TRUE)
+            decreasing = strsplit(ord,":")[[1]][2]
+            ord = strsplit(ord,":")[[1]][1]
+            if (decreasing=="az") {
+                decreasing=FALSE
+            } else if (decreasing=="za") {
+                decreasing=TRUE
+            }
+            df[[col]] = factor(df[[col]], unique(df[order(df[[ord]],decreasing=decreasing),col]))
+        }
+    } else {
+        df[[col]]= factor(df[[col]],ord)
+    }
+    return(df)
 }
