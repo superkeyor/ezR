@@ -4,7 +4,7 @@
 #' wrapper of \code{\link{dev.copy2pdf}}
 #' @param
 #' @return
-#' @seealso \code{\link{pdf}}
+#' @seealso \code{\link{pdf}} \code{\link{z.pdfon}} \code{\link{z.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
@@ -13,6 +13,26 @@ z.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ..
     dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
     cat('Image exported.\n')
 }
+
+#' wrapper of \code{\link{pdf}}
+#' @param
+#' @return
+#' @seealso \code{\link{z.export}} \code{\link{z.pdfoff}}
+#' @examples
+#' A4:     width 7(inches) height = 5
+#' Letter: 8.5 x 11
+#' @export
+z.pdfon = pdf
+
+#' wrapper of \code{\link{dev.off}}
+#' @param
+#' @return
+#' @seealso \code{\link{z.export}} \code{\link{z.pdfon}}
+#' @examples
+#' A4:     width 7(inches) height = 5
+#' Letter: 8.5 x 11
+#' @export
+z.pdfoff = dev.off
 
 #' subplot, wrapper of \code{\link{par}}
 #' @param

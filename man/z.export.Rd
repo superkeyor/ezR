@@ -14,6 +14,6 @@ A4:     width 7(inches) height = 5
 Letter: 8.5 x 11
 }
 \seealso{
-\code{\link{pdf}}
+\code{\link{pdf}} \code{\link{z.pdfon}} \code{\link{z.pdfoff}}
 }
 
