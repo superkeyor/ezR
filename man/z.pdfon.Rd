@@ -11,6 +11,9 @@ z.pdfon(file = ifelse(onefile, "Rplots.pdf", "Rplot\%03d.pdf"), width, height,
 \description{
 wrapper of \code{\link{pdf}}
 }
+\note{
+additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
+}
 \examples{
 A4:     width 7(inches) height = 5
 Letter: 8.5 x 11

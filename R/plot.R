@@ -4,6 +4,7 @@
 #' wrapper of \code{\link{dev.copy2pdf}}
 #' @param
 #' @return
+#' @note internally also use \code{\link[extrafont]{embed_fonts}} to embed fonts
 #' @seealso \code{\link{pdf}} \code{\link{z.pdfon}} \code{\link{z.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
@@ -11,12 +12,15 @@
 #' @export
 z.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...) {
     dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
-    cat('Image exported.\n')
+    extrafont::embed_fonts(filename)
+    # If outfile is not specified, it will overwrite the original file
+    cat('Image exported. Font embedded.\n')
 }
 
 #' wrapper of \code{\link{pdf}}
 #' @param
 #' @return
+#' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
 #' @seealso \code{\link{z.export}} \code{\link{z.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
@@ -27,6 +31,7 @@ z.pdfon = pdf
 #' wrapper of \code{\link{dev.off}}
 #' @param
 #' @return
+#' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
 #' @seealso \code{\link{z.export}} \code{\link{z.pdfon}}
 #' @examples
 #' A4:     width 7(inches) height = 5
@@ -183,6 +188,7 @@ ggcook <- function() {
 #'
 #' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
 #' @export
+#' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
 #' @seealso \code{\link[ggplot2]{theme}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect
 #' @examples

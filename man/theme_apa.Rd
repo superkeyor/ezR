@@ -12,6 +12,9 @@ theme_apa(plot.box = FALSE)
 \description{
 A ggplot2 theme with no background and Times New Roman font.
 }
+\note{
+In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
+}
 \author{
 \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 \dontrun{

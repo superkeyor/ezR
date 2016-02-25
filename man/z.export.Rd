@@ -9,6 +9,9 @@ z.export(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...)
 \description{
 wrapper of \code{\link{dev.copy2pdf}}
 }
+\note{
+internally also use \code{\link[extrafont]{embed_fonts}} to embed fonts
+}
 \examples{
 A4:     width 7(inches) height = 5
 Letter: 8.5 x 11
