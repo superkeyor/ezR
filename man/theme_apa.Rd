@@ -16,30 +16,7 @@ A ggplot2 theme with no background and Times New Roman font.
 In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
 }
 \author{
-\href{https://github.com/trinker/plotflow}{trinker/plotflow}
-\dontrun{
-ggplot(reorder_by(cyl, ~-cyl , mtcars, length), aes(x=as.factor(cyl))) +
-    geom_bar()  +
-    theme_apa() +
-    y0(cushion(as.factor(mtcars$cyl))) +
-    xlab("Cylinders") +
-    ylab("Total")
-
-ggplot(reorder_by(cyl, ~-cyl , mtcars, length), aes(x=as.factor(cyl))) +
-    geom_bar()  +
-    theme_apa(plot.box=T) +
-    y0(cushion(as.factor(mtcars$cyl))) +
-    xlab("Cylinders") +
-    ylab("Total")
-
-ggplot(reorder_by(cyl, ~-cyl , mtcars, length), aes(x=as.factor(cyl))) +
-    geom_bar()  +
-    theme_basic() +
-    theme_apa() +
-    y0(cushion(as.factor(mtcars$cyl))) +
-    xlab("Cylinders") +
-    ylab("Total")
-}
+Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 }
 \seealso{
 \code{\link[ggplot2]{theme}}
