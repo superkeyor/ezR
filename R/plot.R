@@ -189,7 +189,7 @@ ggcook <- function() {
 #' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
 #' @export
 #' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
-#' @seealso \code{\link[ggplot2]{theme}}
+#' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa_nosize}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
 #' @examples
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
@@ -216,6 +216,55 @@ theme_apa <- function(plot.box = FALSE){
         axis.title.y=element_text(family=RMN, size=14, angle=90, colour="black"),
         axis.text.x=element_text(family=RMN, size=11, colour="black"),
         axis.text.y=element_text(family=RMN, size=11, colour="black"),
+        axis.ticks=element_line(colour="black"))
+
+    if (!plot.box) {
+        out <- out + theme(panel.background = element_rect(fill = "white",
+                                                           colour = "black"), panel.border = element_rect(fill = NA,
+                                                                                                          colour = "white"), axis.line = element_line())
+    } else {
+        out <- out + theme(panel.background = element_rect(fill = "white",
+                                                           colour = "white"), panel.border = element_rect(fill = NA,
+                                                                                                          colour = "grey50"))
+    }
+    out
+
+}
+
+#' ggplot2 Theme for APA Publications
+#'
+#' A ggplot2 theme with no background and Times New Roman font (do not change font size).
+#'
+#' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
+#' @export
+#' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
+#' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa}}
+#' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
+#' @examples
+#' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
+theme_apa_nosize <- function(plot.box = FALSE){
+
+    if (Sys.info()["sysname"] != "Windows") {
+        windowsFonts <- NULL
+    }
+
+    if (Sys.info()["sysname"] == "Windows") {
+        windowsFonts(RMN=windowsFont("Times New Roman"))
+        RMN <- "RMN"
+    } else {
+        RMN <- "Times New Roman"
+    }
+
+    out <- theme(
+        plot.title=element_text(family=RMN, face="bold", colour="black"),
+        legend.title = element_text(family=RMN, colour="black"),
+        legend.text = element_text(family=RMN, colour="black"),
+        strip.text.x = element_text(family=RMN, colour="black"),
+        strip.text.y = element_text(family=RMN, colour="black"),
+        axis.title.x=element_text(family=RMN, colour="black"),
+        axis.title.y=element_text(family=RMN, angle=90, colour="black"),
+        axis.text.x=element_text(family=RMN, colour="black"),
+        axis.text.y=element_text(family=RMN, colour="black"),
         axis.ticks=element_line(colour="black"))
 
     if (!plot.box) {
