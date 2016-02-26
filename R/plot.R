@@ -190,7 +190,7 @@ ggcook <- function() {
 #' @export
 #' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
 #' @seealso \code{\link[ggplot2]{theme}}
-#' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect
+#' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
 #' @examples
 #' @author \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 #' \dontrun{
@@ -231,6 +231,10 @@ theme_apa <- function(plot.box = FALSE){
 
     out <- theme(
         plot.title=element_text(family=RMN, size=14, face="bold", colour="black"),
+        legend.title = element_text(family=RMN, colour="black"),
+        legend.text = element_text(family=RMN, colour="black"),
+        strip.text.x = element_text(family=RMN, colour="black"),
+        strip.text.y = element_text(family=RMN, colour="black"),
         axis.title.x=element_text(family=RMN, size=14, colour="black"),
         axis.title.y=element_text(family=RMN, size=14, angle=90, colour="black"),
         axis.text.x=element_text(family=RMN, size=11, colour="black"),
