@@ -231,10 +231,10 @@ theme_apa <- function(plot.box = FALSE){
 
     out <- theme(
         plot.title=element_text(family=RMN, size=14, face="bold", colour="black"),
-        legend.title = element_text(family=RMN, colour="black"),
-        legend.text = element_text(family=RMN, colour="black"),
-        strip.text.x = element_text(family=RMN, colour="black"),
-        strip.text.y = element_text(family=RMN, colour="black"),
+        legend.title = element_text(family=RMN, size=14, colour="black"),
+        legend.text = element_text(family=RMN, size=11, colour="black"),
+        strip.text.x = element_text(family=RMN, size=11, colour="black"),
+        strip.text.y = element_text(family=RMN, size=11, colour="black"),
         axis.title.x=element_text(family=RMN, size=14, colour="black"),
         axis.title.y=element_text(family=RMN, size=14, angle=90, colour="black"),
         axis.text.x=element_text(family=RMN, size=11, colour="black"),
