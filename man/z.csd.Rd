@@ -9,4 +9,7 @@ z.csd()
 \description{
 current script dir
 }
+\examples{
+works with source() or in RStudio Run selection
+}
 

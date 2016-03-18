@@ -202,16 +202,16 @@ z.pwd = getwd
 #' @param
 #' @return
 #' @examples
-#' works only if the script was \code{source}d
-#' or run with \code{Rscript} or using the \code{--file} parameter to the
-#' \code{R} executable.
-#' if couldn't determined, return NULL
+#' works with source() or in RStudio Run selection
 #' @export
 z.csd <- function() {
     # http://stackoverflow.com/questions/1815606/rscript-determine-path-of-the-executing-script
+    # must work with source()
     if (!is.null(res <- .thisfile_source())) res
     else if (!is.null(res <- .thisfile_rscript())) dirname(res)
-    else NULL
+    # http://stackoverflow.com/a/35842176/2292993  
+    # RStudio only, can work without source()
+    else dirname(rstudioapi::getActiveDocumentContext()$path)
 }
 # Helper functions
 .thisfile_source <- function() {
