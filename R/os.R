@@ -175,7 +175,7 @@ z.splitpath = function(path){
 #' @return
 #' @examples
 #' @export
-z.parentdir = function(path){dirname(dirname(path))}
+z.parentdir = function(path){dirname(path)}
 
 #' alias of \code{\link{setwd}}
 #' @param
