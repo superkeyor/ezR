@@ -6,7 +6,7 @@
 #' @return
 #' @examples
 #' @export
-z.show = function(...){
+ez.show = function(...){
     # flush otherwise not print large text
     # show(...)
     print(Hmisc::describe(...))
@@ -18,7 +18,7 @@ z.show = function(...){
     str(...)
     flush.console()
     cat('------------------------------\n')
-    z.view(...)
+    ez.view(...)
 }
 
 #' show information about a data frame or other object
@@ -26,7 +26,7 @@ z.show = function(...){
 #' @return
 #' @examples
 #' @export
-z.info = z.show
+ez.info = ez.show
 
 #' show information about a data frame or similar object (like spss variable view)
 #' @description wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
@@ -34,6 +34,6 @@ z.info = z.show
 #' @return
 #' @examples
 #' @export
-z.view = function(x, showFreq = T, showPerc = T, sortByName = F, ...){
+ez.view = function(x, showFreq = T, showPerc = T, sortByName = F, ...){
     sjPlot::view_df(x, showFreq = showFreq, showPerc = showPerc, sortByName = sortByName, ...)
 }

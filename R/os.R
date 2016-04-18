@@ -9,14 +9,14 @@
 #' @return
 #' @examples
 #' @export
-z.error = stop
+ez.error = stop
 
 #' print the version of a package
 #' @param pkg package name in quotes, default is NULL
 #' @return if pkg not provided, prints only R version
 #' @examples
 #' @export
-z.ver = function(pkg=NULL){
+ez.ver = function(pkg=NULL){
     if (!is.null(pkg)) {
         cat(sprintf("%s\n%s: %s", R.version.string, pkg, as.character(packageVersion(pkg))))
     } else {
@@ -29,42 +29,42 @@ z.ver = function(pkg=NULL){
 #' @return
 #' @examples
 #' @export
-z.import = library
+ez.import = library
 
 #' alias of \code{\link{library}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.include = z.import
+ez.include = ez.import
 
 #' alias of \code{\link{install.packages}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.install = install.packages
+ez.install = install.packages
 
 #' alias of \code{\link{devtools::install_github}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.github = devtools::install_github
+ez.github = devtools::install_github
 
 #' alias of \code{\link{remove.packages}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.remove = remove.packages
+ez.remove = remove.packages
 
 #' alias of \code{\link{remove.packages}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.uninstall = remove.packages
+ez.uninstall = remove.packages
 
 #' clear, clean  console, workspace, plot
 #' @param area 0 all, 
@@ -76,7 +76,7 @@ z.uninstall = remove.packages
 #' @return
 #' @examples
 #' @export
-z.clear = function(area=0) {
+ez.clear = function(area=0) {
     # area[1] used, to work around when c('var1','var2') provided
     if (area[1] == 0) {console = TRUE; workspace = TRUE; plot = TRUE}
     else if (area[1] == 1) {console = TRUE; workspace = FALSE; plot = FALSE}
@@ -105,30 +105,30 @@ z.clear = function(area=0) {
 #' @return
 #' @examples
 #' @export
-z.clean = z.clear
+ez.clean = ez.clear
 
 #' alias of \code{\link{find}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.which = find
+ez.which = find
 
-#' alias of \code{\link{sessionInfo}}, \code{\link{z.who}}
+#' alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @param
 #' @return Print version information about R, the OS and attached or loaded packages.
 #' @examples
 #' @export
 #' @seealso \code{\link{objects}}
-z.whos = sessionInfo
+ez.whos = sessionInfo
 
-#' alias of \code{\link{sessionInfo}}, \code{\link{z.whos}}
+#' alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 #' @param
 #' @return Print version information about R, the OS and attached or loaded packages.
 #' @examples
 #' @export
 #' @seealso \code{\link{objects}}
-z.who = z.whos
+ez.who = ez.whos
 
 #' user path like in Matlab
 #' @description alias of \code{\link{search}}
@@ -136,14 +136,14 @@ z.who = z.whos
 #' @return
 #' @examples
 #' @export
-z.path = search
+ez.path = search
 
 #' alias of \code{\link{system}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.execute = system
+ez.execute = system
 
 #' alias of \code{\link{file.path}}
 #' @param
@@ -151,13 +151,13 @@ z.execute = system
 #' @examples
 #' paste(..., sep=.Platform$file.sep)
 #' @export
-z.joinpath = file.path
+ez.joinpath = file.path
 
 #' splitpath
 #' @param
 #' @return
 #' @examples
-#' z.splitpath(path)
+#' ez.splitpath(path)
 #' returns
 #' $dir
 #' [1] "/Users/jerry/Downloads"
@@ -168,7 +168,7 @@ z.joinpath = file.path
 #' $ext
 #' '.pdf
 #' @export
-z.splitpath = function(path){
+ez.splitpath = function(path){
     dir = dirname(path)
     file = basename(path)
     # file = strsplit(file, "\\.")[[1]][1]
@@ -183,28 +183,28 @@ z.splitpath = function(path){
 #' @return
 #' @examples
 #' @export
-z.parentdir = function(path){dirname(path)}
+ez.parentdir = function(path){dirname(path)}
 
 #' alias of \code{\link{setwd}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.cd = setwd;
+ez.cd = setwd;
 
 #' alias of \code{\link{getwd}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.cwd = getwd
+ez.cwd = getwd
 
 #' alias of \code{\link{getwd}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.pwd = getwd
+ez.pwd = getwd
 
 #' current script dir
 #' @param
@@ -212,7 +212,7 @@ z.pwd = getwd
 #' @examples
 #' works with source() or in RStudio Run selection
 #' @export
-z.csd <- function() {
+ez.csd <- function() {
     # http://stackoverflow.com/questions/1815606/rscript-determine-path-of-the-executing-script
     # must work with source()
     if (!is.null(res <- .thisfile_source())) res
@@ -251,7 +251,7 @@ z.csd <- function() {
 #' can also include .folders
 #' all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
 #' @export
-z.lsd = function(path='.', pattern=NULL){
+ez.lsd = function(path='.', pattern=NULL){
     folders = dir(path=path, pattern=pattern, all.files=TRUE, full.name=FALSE,
                   recursive = FALSE, ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
     fullFolders = file.path(path,folders)
@@ -265,7 +265,7 @@ z.lsd = function(path='.', pattern=NULL){
 #' @return
 #' @examples
 #' @export
-z.ls = function(path='.', pattern=NULL){
+ez.ls = function(path='.', pattern=NULL){
     files = list.files(path = path, pattern = pattern, all.files = TRUE,
                        full.names = TRUE, recursive = FALSE,
                        ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
@@ -278,7 +278,7 @@ z.ls = function(path='.', pattern=NULL){
 #' @return
 #' @examples
 #' @export
-z.fls = function(path='.', pattern=NULL){
+ez.fls = function(path='.', pattern=NULL){
     files = list.files(path = path, pattern = pattern, all.files = TRUE,
                        full.names = TRUE, recursive = TRUE,
                        ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
@@ -291,7 +291,7 @@ z.fls = function(path='.', pattern=NULL){
 #' @return
 #' @examples
 #' @export
-z.mkdir = function(path){
+ez.mkdir = function(path){
     result = dir.create(path, showWarnings = FALSE, recursive = TRUE)
 }
 
@@ -300,7 +300,7 @@ z.mkdir = function(path){
 #' @return
 #' @examples
 #' @export
-z.exists = file.exists
+ez.exists = file.exists
 
 #' remove a file, wrapper of \code{\link{unlink}}
 #' @param
@@ -311,7 +311,7 @@ z.exists = file.exists
 #' Wildcards (normally ‘*’ and ‘?’) are allowed.
 #' 0 for success, 1 for failure.
 #' @export
-z.rm = function(x){
+ez.rm = function(x){
     result = unlink(x, recursive = TRUE, force = TRUE)
 }
 
@@ -325,13 +325,13 @@ z.rm = function(x){
 #'       if old and new both folders, move old to new as subfolder
 #'       if old and new both files, overwrite the new file with old file without prompt
 #' @export
-z.rn = function(from,to){
+ez.rn = function(from,to){
     todir <- dirname(to)
     if (!isTRUE(file.info(todir)$isdir)) stop("Destination parent folder does not exist")
     # both from and to are exisiting folders
     if ((nchar(tools::file_ext(from)) == 0) && (nchar(tools::file_ext(to)) == 0)) {
         if ((isTRUE(file.info(from)$isdir)) && (isTRUE(file.info(to)$isdir))) {
-            result = z.mv(from,to)
+            result = ez.mv(from,to)
         }
         else {
             result = file.rename(from,to)
@@ -349,16 +349,16 @@ z.rn = function(from,to){
 #' support c('a.txt','b.txt')
 #' to folder does not have to exist already
 #' e.g.,
-#' 1) both works z.cp('a.txt','folder'), z.cp('a.txt','folder/b.txt')
+#' 1) both works ez.cp('a.txt','folder'), ez.cp('a.txt','folder/b.txt')
 #' the former copy still has the same name 'a.txt', the latter copy new name 'b.txt'
-#' also z.cp(c('a.txt','b.txt'),'folder')
-#' 2) folder: z.cp('a','b')-->if b not exists, cp contents of a to b; if b exist, a becomes subfolder of b
+#' also ez.cp(c('a.txt','b.txt'),'folder')
+#' 2) folder: ez.cp('a','b')-->if b not exists, cp contents of a to b; if b exist, a becomes subfolder of b
 #' kinda combines rn and mv
 #' 3) regular expression
 #' flist <- list.files("patha", "^filea.+[.]csv$", full.names = TRUE)
 #' file.copy(flist, "pathb")
 #' @export
-z.cp = function(from,to){
+ez.cp = function(from,to){
     # if from is file
     if (!(file.info(from)$isdir[1])) {
         # both works file.copy('a.txt','folder'), file.copy('a.txt','folder/b.txt')
@@ -399,11 +399,11 @@ z.cp = function(from,to){
 #' @examples
 #' support c('a.txt','b.txt')
 #' to parent folder does not have to exist already
-#' z.mv('a.txt','folder'), z.mv('a.txt','folder/a.txt'), z.mv('a.txt','folder/b.txt')
-#' z.mv('a','b')-->get b/a, b now has a as subfolder, regardless of b exists or not
-#'                  use z.rn('a','b') to change name a->b
+#' ez.mv('a.txt','folder'), ez.mv('a.txt','folder/a.txt'), ez.mv('a.txt','folder/b.txt')
+#' ez.mv('a','b')-->get b/a, b now has a as subfolder, regardless of b exists or not
+#'                  use ez.rn('a','b') to change name a->b
 #' @export
-z.mv = function(from,to){
+ez.mv = function(from,to){
     # if to is folder-like
     if (nchar(tools::file_ext(to)) == 0) {
         # if to not exist

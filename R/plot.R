@@ -5,12 +5,12 @@
 #' @param
 #' @return
 #' @note internally also use \code{\link[extrafont]{embed_fonts}} to embed fonts
-#' @seealso \code{\link{pdf}} \code{\link{z.pdfon}} \code{\link{z.pdfoff}}
+#' @seealso \code{\link{pdf}} \code{\link{ez.pdfon}} \code{\link{ez.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
 #' @export
-z.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...) {
+ez.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...) {
     dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
     extrafont::embed_fonts(filename)
     # If outfile is not specified, it will overwrite the original file
@@ -21,23 +21,23 @@ z.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ..
 #' @param
 #' @return
 #' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
-#' @seealso \code{\link{z.export}} \code{\link{z.pdfoff}}
+#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
 #' @export
-z.pdfon = pdf
+ez.pdfon = pdf
 
 #' wrapper of \code{\link{dev.off}}
 #' @param
 #' @return
 #' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
-#' @seealso \code{\link{z.export}} \code{\link{z.pdfon}}
+#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfon}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
 #' @export
-z.pdfoff = dev.off
+ez.pdfoff = dev.off
 
 #' subplot, wrapper of \code{\link{par}}
 #' @param
@@ -48,7 +48,7 @@ z.pdfoff = dev.off
 #' by columns (mfcol), or rows (mfrow), respectively.
 #' see more ?par
 #' @export
-z.subplot = function(n, m, ...){
+ez.subplot = function(n, m, ...){
     par(mfrow=c(n,m), ...)
 }
 
@@ -63,16 +63,16 @@ z.subplot = function(n, m, ...){
 #'
 #' plot(1:10, 1:10, main = "Plot 1")
 #' # draw another arbitrary subplot
-#' z.embed(plot(10,10, xlab="", ylab=""), x=2, y=8, size = c(0.5, 0.5) )
+#' ez.embed(plot(10,10, xlab="", ylab=""), x=2, y=8, size = c(0.5, 0.5) )
 #'
 #' # demonstrates mfg usage, draw the third plot before the drawing the second
 #' par(mfg=c(3,1) ); plot(11:20, 11:20, main = "Plot 3")
-#' z.embed(plot(10,10, xlab="", ylab=""), x=12, y=18, size = c(0.5, 0.5))
+#' ez.embed(plot(10,10, xlab="", ylab=""), x=12, y=18, size = c(0.5, 0.5))
 #'
 #' par(mfg=c(2,1)); plot(21:30, 21:30, main = "Plot 2")
-#' z.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))
+#' ez.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))
 #' @export
-z.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
+ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
                    inset=c(0,0), type=c('plt','fig'), pars=NULL){
     type <- match.arg(type)
     old.par <- par( c(type, 'usr', names(pars) ) )
@@ -135,7 +135,7 @@ z.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' cols <- RColorBrewer::brewer.pal(8,"Set3")
 #' colorRampPalette(brewer.pal(9,"Blues"))(100)
 #' @export
-z.color = function(){
+ez.color = function(){
     if (!require("RColorBrewer")) {
         install.packages("RColorBrewer")
         library(RColorBrewer)
@@ -286,7 +286,7 @@ theme_apa_nosize <- function(plot.box = FALSE){
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.describe = function(df,cmd){
+ez.describe = function(df,cmd){
     # yy|xx zz
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     yy = cmd[1]
@@ -337,7 +337,7 @@ z.describe = function(df,cmd){
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
+ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
@@ -411,7 +411,7 @@ z.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("
 #' @return returns a matrix representing the corrmap
 #' @examples
 #' @export
-z.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
+ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
                      method ="color",tl.col = "black",tl.cex = 0.4,
                      col=NULL,...){
 
@@ -434,7 +434,7 @@ z.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
 #' @return if x is not numeric, return original x (unchanged)
 #' @examples
 #' @export
-z.rescale01 = function (x) {
+ez.rescale01 = function (x) {
     if (is.numeric(x)) {
         # rng <- range(x, na.rm = TRUE)
         # result = (x - rng[1])/(rng[2] - rng[1])
@@ -483,7 +483,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
-z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
+ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
 
     df.ori = df
 
@@ -498,7 +498,7 @@ z.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=
     }
 
     # 2) rescale
-    df.stats = as.data.frame(lapply(df.stats, z.rescale01))
+    df.stats = as.data.frame(lapply(df.stats, ez.rescale01))
 
     # 3) to long format
     cmd = sprintf('tidyr::gather(df.stats, variable,value,-%s,factor_key = T) -> df
@@ -628,7 +628,7 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-z.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
+ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     # logic:
     # change all non-NAs to 0, all NAs to 1 then show on heatmap
 
@@ -645,7 +645,7 @@ z.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     cmd = sprintf('df$%s = theID',id)
     eval(parse(text = cmd))
 
-    cmd = sprintf('p = z.heatmap(df, "%s", colors=c("blue", "white", "%s"),
+    cmd = sprintf('p = ez.heatmap(df, "%s", colors=c("blue", "white", "%s"),
                   legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
                   , id, color, angle, basesize, xsize, ysize)
     eval(parse(text = cmd))
@@ -666,7 +666,7 @@ z.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
 #' @return returns a new df
 #' @examples
 #' @export
-z.factorder = function(df, col, ord="as"){
+ez.factorder = function(df, col, ord="as"){
     # [[]] is the programmable form of $
     if (length(ord)==1) {
         if (ord=="as"){

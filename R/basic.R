@@ -13,7 +13,7 @@ False <- FALSE
 
 #' alias of \code{\link{class}}
 #' @export
-z.typeof = class
+ez.typeof = class
 
 #' sort of a wrapper of \code{\link{type.convert}}
 #' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
@@ -21,7 +21,7 @@ z.typeof = class
 #' @return returns a converted vector
 #' @details see \url{http://stackoverflow.com/a/22701462/2292993}
 #' @export
-z.num = function(x, ...){
+ez.num = function(x, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
         result = as.numeric(levels(x))[x]
@@ -35,35 +35,35 @@ z.num = function(x, ...){
 
 #' alias of \code{\link{as.character}}
 #' @export
-z.str = as.character
+ez.str = as.character
 
 #' alias of \code{\link{ceiling}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.ceil = ceiling
+ez.ceil = ceiling
 
 #' alias of \code{\link{floor}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.floor = floor
+ez.floor = floor
 
 #' alias of \code{\link{trunc}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.fix = trunc
+ez.fix = trunc
 
 #' alias of \code{\link{round}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.round = round
+ez.round = round
 
 #' quotient
 #' @param m dividend
@@ -71,8 +71,8 @@ z.round = round
 #' @examples
 #' 11 is given as the dividend and 5 the divider, (ie, 11 divided by 5, or divide 11 by 5), then 2(quotient) and 1(remainder).
 #' @export
-#' @seealso \code{\link{z.remainder}}
-z.quotient = function (m,n) {
+#' @seealso \code{\link{ez.remainder}}
+ez.quotient = function (m,n) {
     return(m%/%n)
 }
 
@@ -82,8 +82,8 @@ z.quotient = function (m,n) {
 #' @examples
 #' 11 is given as the dividend and 5 the divider, (ie, 11 divided by 5, or divide 11 by 5), then 2(quotient) and 1(remainder).
 #' @export
-#' @seealso \code{\link{z.quotient}}
-z.remainder = function (m,n){
+#' @seealso \code{\link{ez.quotient}}
+ez.remainder = function (m,n){
     return(m%%n)
 }
 
@@ -91,16 +91,16 @@ z.remainder = function (m,n){
 #' @param
 #' @return returns a vector (both ends inclusive)
 #' @examples
-#' z.range(1,3) # 1 2 3, equivalent to 1:3
+#' ez.range(1,3) # 1 2 3, equivalent to 1:3
 #' @export
-z.range = function(start, stop, step=1){seq(start, stop, by=step)}
+ez.range = function(start, stop, step=1){seq(start, stop, by=step)}
 
 #' linspace
 #' @param n number of points
 #' @return
 #' @examples
 #' @export
-z.linspace = function(start, stop, n){
+ez.linspace = function(start, stop, n){
     seq(start, stop, length=n)
 }
 
@@ -109,7 +109,7 @@ z.linspace = function(start, stop, n){
 #' @return
 #' @examples
 #' @export
-z.repmat = function(a, n, m = n) {
+ez.repmat = function(a, n, m = n) {
     if (length(a) == 0) return(c())
     if (!is.numeric(a) && !is.complex(a))
         stop("Argument 'a' must be a numeric or complex.")
@@ -139,7 +139,7 @@ z.repmat = function(a, n, m = n) {
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
 #' @examples
 #' @export
-z.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
+ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
     stopifnot(is.character(pat), is.character(s))
     if (length(pat) > 1) {
         warning("Only the first string in argument 'pat' is taken.")
@@ -197,12 +197,12 @@ z.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
 #' @examples
 #' @export
-z.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
+ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
     # A list with components start and end as numeric vectors indicating the start and end positions of the matches.
     # match contains each exact match, and split contains the character vector of splitted strings.
     # If no match is found all components will be NULL, except split that will contain the whole string if split = TRUE.
     # $start, $end, $match, $split
-    z.regexp(s, pat, ignorecase, once, split)
+    ez.regexp(s, pat, ignorecase, once, split)
 }
 
 #' replace string using regular expression (case sensitive)
@@ -210,7 +210,7 @@ z.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 #' @return
 #' @examples
 #' @export
-z.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
+ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
     if (!is.character(s))
         stop("Argument 's' must be a character vector.")
     if (!is.character(expr) || !is.character(repstr) || length(expr) !=
@@ -229,7 +229,7 @@ z.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
 #' @return
 #' @examples
 #' @export
-z.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
+ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
     if (!is.character(s))
         stop("Argument 's' must be a character vector.")
     if (!is.character(expr) || !is.character(repstr) || length(expr) !=
@@ -249,7 +249,7 @@ z.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
 #' \cr An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.
 #' @examples
 #' @export
-z.reshape = function (a, n, m){
+ez.reshape = function (a, n, m){
     if (missing(m))
         m <- length(a)%/%n
     if (length(a) != n * m)
@@ -263,7 +263,7 @@ z.reshape = function (a, n, m){
 #' @return
 #' @examples
 #' @export
-z.arrayfun = function(func, ...){
+ez.arrayfun = function(func, ...){
     dots <- list(...)
     if (length(dots) < 1)
         stop("Empty list of arrays: Rsult cannot be computed.")
@@ -277,9 +277,9 @@ z.arrayfun = function(func, ...){
 #' @param v logical input
 #' @return returns index vector
 #' @examples
-#' z.find(a>1)
+#' ez.find(a>1)
 #' @export
-z.find = function(v){
+ez.find = function(v){
     which( if (is.logical(v)) v else v != 0 )
 }
 
@@ -289,14 +289,14 @@ z.find = function(v){
 #' @examples
 #' runif(n, min = 0, max = 1)
 #' @export
-z.rand = runif
+ez.rand = runif
 
 #' mimic python join, supports vectorization, wrapper of \code{\link{paste}}
 #' @param sep default is nothing
 #' @examples
-#' z.join('','a',' x ','b') # "a x b"
+#' ez.join('','a',' x ','b') # "a x b"
 #' @export
-z.join = function(sep='',...){
+ez.join = function(sep='',...){
     paste(...,sep=sep)
 }
 
@@ -307,6 +307,6 @@ z.join = function(sep='',...){
 #' @details do not use R \code{\link{print}}, not actually printing \\n
 #' @seealso \code{\link{sprintf}}
 #' @export
-z.print = function(...){
+ez.print = function(...){
     cat(..., "\n")
 }

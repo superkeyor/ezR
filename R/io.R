@@ -19,13 +19,13 @@
 #'
 #' read.csv(file, header = TRUE, sep = ",",
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
-z.read = function(..., tolower=FALSE){
+ez.read = function(..., tolower=FALSE){
     result = read.csv(...)
     if (tolower) names(result) = tolower(names(result))
     return(result)
 }
 
-#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.write}}, wrapper of \code{\link{write.csv}}
+#' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @param
 #' @return
 #' @examples
@@ -35,14 +35,14 @@ z.read = function(..., tolower=FALSE){
 #'             fileEncoding = "")
 #' dec: decimal point
 #' @export
-z.save = function(x, file="RData.csv", row.names=FALSE, na = "", ...){
+ez.save = function(x, file="RData.csv", row.names=FALSE, na = "", ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     x = data.frame(x)
     rownames(x) <- NULL
     write.csv(x=x, file=file, row.names=row.names, na=na, ...)
 }
 
-#' wrapper of write.csv, but with row.names removed, alias of \code{\link{z.save}}, wrapper of \code{\link{write.csv}}
+#' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
 #' @param
 #' @return
 #' @examples
@@ -52,7 +52,7 @@ z.save = function(x, file="RData.csv", row.names=FALSE, na = "", ...){
 #'             fileEncoding = "")
 #' dec: decimal point
 #' @export
-z.write = z.save
+ez.write = ez.save
 
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}}
 #' @param tolower whether to convert all column names to lower case
@@ -65,7 +65,7 @@ z.write = z.save
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-z.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
+ez.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     return(result)
@@ -75,7 +75,7 @@ z.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
 #' @description potentially keep variable labels and value labels.
 #' @param tolower whether to convert all column names to lower case
 #' @export
-z.reads2 = function(..., tolower=FALSE){
+ez.reads2 = function(..., tolower=FALSE){
     result = sjmisc::read_spss(...)
     if (tolower) names(result) = tolower(names(result))
     return(result)
@@ -94,7 +94,7 @@ z.reads2 = function(..., tolower=FALSE){
 #'
 #' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
-z.reads = function(file, valuelabel=TRUE, tolower=FALSE){
+ez.reads = function(file, valuelabel=TRUE, tolower=FALSE){
     # can safely ignore the warnings about type 7 and etc; data is not lost
     # # http://stackoverflow.com/questions/3136293/read-spss-file-into-r
 
@@ -109,24 +109,24 @@ z.reads = function(file, valuelabel=TRUE, tolower=FALSE){
     return(result)
 }
 
-#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{z.writes}}
+#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{ez.writes}}
 #' @description potentially keep variable labels and value labels
 #' @export
-z.saves = sjmisc::write_spss
+ez.saves = sjmisc::write_spss
 
-#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{z.saves}}
+#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{ez.saves}}
 #' @description potentially keep variable labels and value labels
 #' @export
-z.writes = sjmisc::write_spss
+ez.writes = sjmisc::write_spss
 
-#' save an xlsx file, alias of \code{\link{z.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
+#' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
 #' @param
 #' @return
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
 #' @export
-z.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, showNA=FALSE, ...){
+ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, showNA=FALSE, ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     # require('xlsx')
     x = data.frame(x)
@@ -135,21 +135,21 @@ z.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, sh
     # detach("package:xlsx", unload=TRUE)
 }
 
-#' save an xlsx file, alias of \code{\link{z.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
+#' save an xlsx file, alias of \code{\link{ez.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
 #' @param
 #' @return
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
 #' @export
-z.writex = z.savex
+ez.writex = ez.savex
 
 #' show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 #' @param
 #' @return
 #' @examples
 #' @export
-z.type = function(path){
+ez.type = function(path){
     result = file.show(path,title='File (read-only)')
 }
 
@@ -158,7 +158,7 @@ z.type = function(path){
 #' @return
 #' @examples
 #' @export
-z.edit = function(path){
+ez.edit = function(path){
     result = file.edit(path)
 }
 
@@ -167,7 +167,7 @@ z.edit = function(path){
 #' @return
 #' @examples
 #' @export
-z.log = function(file='log.txt',mode='a',status=TRUE){
+ez.log = function(file='log.txt',mode='a',status=TRUE){
     append = ifelse(mode=='a',TRUE,FALSE)
     if (status) {
         sink(file,append=append,split=TRUE)

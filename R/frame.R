@@ -8,13 +8,13 @@
 #' ht = c(69, 64, 67, 68, 72, 71)
 #' wt = c(148, 132, 142, 149, 167, 165)
 #' people = data.frame(sx, ht, wt)
-z.frame = data.frame
+ez.frame = data.frame
 
 
 
 #' length of an object
 #' @export
-z.len = function(x) {
+ez.len = function(x) {
     if (class(x) == 'character') {
         # require('stringi')
         # return(stri_length(x))  # in case of stri_length(NA) = NA
@@ -35,7 +35,7 @@ z.len = function(x) {
 #' @param x data.frame
 #' @param dimension 0=both, 1=row, 2=col
 #' @export
-z.size = function(x,dimension=0) {
+ez.size = function(x,dimension=0) {
     if (dimension == 0) {
         return(dim(x))
     } else if (dimension == 1) {
@@ -48,26 +48,26 @@ z.size = function(x,dimension=0) {
 #' all row names, alias of \code{\link{row.names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
 #' @seealso \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
-#' \cr \code{\link{z.len}}, \code{\link{z.size}}
+#' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
-#' \cr \code{\link{z.rnames}}, \code{\link{z.cnames}}, \code{\link{z.names}}
-z.rnames = row.names
+#' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
+ez.rnames = row.names
 
 #' all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
 #' @seealso \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
-#' \cr \code{\link{z.len}}, \code{\link{z.size}}
+#' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
-#' \cr \code{\link{z.rnames}}, \code{\link{z.cnames}}, \code{\link{z.names}}
-z.cnames = names
+#' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
+ez.cnames = names
 
 #' all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
 #' @seealso \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
-#' \cr \code{\link{z.len}}, \code{\link{z.size}}
+#' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
-#' \cr \code{\link{z.rnames}}, \code{\link{z.cnames}}, \code{\link{z.names}}
-z.names = names
+#' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
+ez.names = names
 
 
 
@@ -81,7 +81,7 @@ z.names = names
 #' @param drop variables to drop before reshaping
 #' @details
 #' @note refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
-#' \cr if index=c("Pre","Post"), then the character would not be viewed by z.view; index=1:2 will be int and fine.
+#' \cr if index=c("Pre","Post"), then the character would not be viewed by ez.view; index=1:2 will be int and fine.
 #' @examples
 #' df <- data.frame(
 #'     id = 1:10,
@@ -93,7 +93,7 @@ z.names = names
 #'     Q3.3.2. = rnorm(10, 0, 1),
 #'     Q3.3.3. = rnorm(10, 0, 1)
 #' )
-#'z.2long(df, "id",
+#'ez.2long(df, "id",
 #'        "loop_number",c(1:3),
 #'        c('Q3.2','Q3.3'),
 #'        list(c("Q3.2.1.","Q3.2.2.","Q3.2.3."),c("Q3.3.1.","Q3.3.2.","Q3.3.3.")))
@@ -107,7 +107,7 @@ z.names = names
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, drop=NULL,...){
+ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, drop=NULL,...){
     # 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
     # timevar: variable name for timing/repetition variable, such as "session"
     # times: level name for each timing/repetition point, such as c("1,2"), c("Pre, Post")
@@ -146,7 +146,7 @@ z.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dro
 #'     Score3 = 5 + (Score1 + Score2)/2
 #' )
 #' df = data.frame(df)
-#' z.2wide(df,
+#' ez.2wide(df,
 #'         "Person",
 #'         "Time",
 #'         c("Score1","Score2","Score3"))
@@ -160,7 +160,7 @@ z.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dro
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
+ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
     # 'SUBJID * Time [School] - Measure2'
     # note: v.names not varying
     df = data.frame(df)
@@ -191,7 +191,7 @@ z.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.values.get = function(x, include.values=NULL, attr.only=T, include.non.labelled=F, ...){
+ez.values.get = function(x, include.values=NULL, attr.only=T, include.non.labelled=F, ...){
     result=sjmisc::get_labels(x, include.values=include.values, attr.only=attr.only, include.non.labelled=include.non.labelled, ...)
     return(result)
 }
@@ -217,7 +217,7 @@ z.values.get = function(x, include.values=NULL, attr.only=T, include.non.labelle
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, ...){
+ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, ...){
     result=sjmisc::set_labels(x, valuelabels, force.labels=force.labels, force.values=force.values, ...)
     return(result)
 }
@@ -238,7 +238,7 @@ z.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, 
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.label.get = function(...){
+ez.label.get = function(...){
     result=sjmisc::get_label(list(...))
     return(result)
 }
@@ -261,14 +261,14 @@ z.label.get = function(...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.label.set = function(df,varname,label){
+ez.label.set = function(df,varname,label){
     df[varname] <- sjmisc::set_label(df[varname],label)
     return(df)
 }
 
 #' wrapper of \code{\link[sjmisc]{to_label}}
 #' @description continous/factorial number-->factorial level string, say, gender=0/1-->male/female
-#' \cr more "agressive" than \code{\link{z.2factor}}; opposite of \code{\link{z.2value}}
+#' \cr more "agressive" than \code{\link{ez.2factor}}; opposite of \code{\link{ez.2value}}
 #' @param drop.is_na ignore is_na attr, if yes, treat as NA
 #' @details Both value and variable label attributes will be removed when converting variables to factors.
 #' @examples
@@ -283,7 +283,7 @@ z.label.set = function(df,varname,label){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
+ez.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
     result=sjmisc::to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.is_na)
     return(result)
 }
@@ -291,7 +291,7 @@ z.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
 #' wrapper of \code{\link[sjmisc]{to_factor}}
 #' @description continous number-->categorical number
 #' \cr converts a variable into a factor, but preserves variable and value label attributes.
-#' \cr more "gentle" than \code{\link{z.2label}}; opposite of \code{\link{z.2value}}
+#' \cr more "gentle" than \code{\link{ez.2label}}; opposite of \code{\link{ez.2value}}
 #' @param
 #' @details
 #' @examples
@@ -306,7 +306,7 @@ z.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
+ez.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
     result=sjmisc::to_factor(x, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
     return(result)
 }
@@ -315,7 +315,7 @@ z.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
 #' @description continous number<--categorical string/number
 #' @param x factor or a data frame with factors. May also be a character vector.
 #' @param start.at starting index, i.e. the lowest numeric value of the variable's value range. By default, this argument is NULL, hence the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric) or to 1 (if factor levels are not numeric).
-#' @details opposite of \code{\link{z.2factor}}, \code{\link{z.2label}}
+#' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}
 #' @examples
 #' # starting at 1
 #' dummy <- factor(c("D", "F", "H"))
@@ -334,7 +334,7 @@ z.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
+ez.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
     result=sjmisc::to_value(x, start.at=start.at, keep.labels=keep.labels,...)
     return(result)
 }
@@ -464,8 +464,8 @@ z.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
 }
 #' recode
 #' @description Recodes one single according to a set of rules
-#' \cr\cr z.recode replaces the original var with recoded var;
-#' \cr z.recode2 saves orignal var as var_ori, and then recodes var
+#' \cr\cr ez.recode replaces the original var with recoded var;
+#' \cr ez.recode2 saves orignal var as var_ori, and then recodes var
 #' @param df data.frame to be recoded
 #' @param varName the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
@@ -489,8 +489,8 @@ z.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
 #' @author Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
 #' @examples
 #' data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
-#' z.recode(data[c("a","b")] , "lo:0 = 0;0:hi = 1;")
-#' data[c("male")] <- z.recode(data[c("male")] , "1 = 'Male';0 = 'Female';else = NA;")
+#' ez.recode(data[c("a","b")] , "lo:0 = 0;0:hi = 1;")
+#' data[c("male")] <- ez.recode(data[c("male")] , "1 = 'Male';0 = 'Female';else = NA;")
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -501,7 +501,7 @@ z.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.recode = function(df, varName, recodes){
+ez.recode = function(df, varName, recodes){
     recodes = gsub("min","Lo",recodes,fixed=True)
     recodes = gsub("max","Hi",recodes,fixed=True)
     recodes = gsub("Min","Lo",recodes,fixed=True)
@@ -527,7 +527,7 @@ z.recode = function(df, varName, recodes){
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
     df = eval(parse(text=cmd))
     df = dplyr::bind_cols(df,newVar)
-    cmd = sprintf("z.move(df,'%s before %s')",varName, paste0(varName,'_ori'))
+    cmd = sprintf("ez.move(df,'%s before %s')",varName, paste0(varName,'_ori'))
     df = eval(parse(text=cmd))
 
     cmd = sprintf("dplyr::select(df,-%s)",paste0(varName,'_ori'))
@@ -537,8 +537,8 @@ z.recode = function(df, varName, recodes){
 
 #' recode
 #' @description Recodes one single according to a set of rules
-#' \cr\cr z.recode replaces the original var with recoded var;
-#' \cr z.recode2 saves orignal var as var_ori, and then recodes var
+#' \cr\cr ez.recode replaces the original var with recoded var;
+#' \cr ez.recode2 saves orignal var as var_ori, and then recodes var
 #' @param df data.frame to be recoded
 #' @param varName the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
@@ -562,8 +562,8 @@ z.recode = function(df, varName, recodes){
 #' @author Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
 #' @examples
 #' data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
-#' z.recode(data[c("a","b")] , "lo:0 = 0;0:hi = 1;")
-#' data[c("male")] <- z.recode(data[c("male")] , "1 = 'Male';0 = 'Female';else = NA;")
+#' ez.recode(data[c("a","b")] , "lo:0 = 0;0:hi = 1;")
+#' data[c("male")] <- ez.recode(data[c("male")] , "1 = 'Male';0 = 'Female';else = NA;")
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -574,7 +574,7 @@ z.recode = function(df, varName, recodes){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.recode2 = function(df, varName, recodes){
+ez.recode2 = function(df, varName, recodes){
     recodes = gsub("min","Lo",recodes,fixed=True)
     recodes = gsub("max","Hi",recodes,fixed=True)
     recodes = gsub("Min","Lo",recodes,fixed=True)
@@ -600,7 +600,7 @@ z.recode2 = function(df, varName, recodes){
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
     df = eval(parse(text=cmd))
     df = dplyr::bind_cols(df,newVar)
-    cmd = sprintf("z.move(df,'%s before %s')",varName, paste0(varName,'_ori'))
+    cmd = sprintf("ez.move(df,'%s before %s')",varName, paste0(varName,'_ori'))
     df = eval(parse(text=cmd))
     return(df)
 }
@@ -617,11 +617,11 @@ z.recode2 = function(df, varName, recodes){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.recols = function(df, newColOrder){
+ez.recols = function(df, newColOrder){
     return(df[newColOrder])
 }
 
-#' reorder a single col (sort of, see below), alias of \code{\link{z.move}}
+#' reorder a single col (sort of, see below), alias of \code{\link{ez.move}}
 #' @param movecommand sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first
 #' @family data transformation functions
 #' @export
@@ -632,7 +632,7 @@ z.recols = function(df, newColOrder){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.recol = function(df, movecommand) {
+ez.recol = function(df, movecommand) {
     # modified from http://stackoverflow.com/questions/12544888/
     invec = names(df)
     movecommand <- lapply(strsplit(strsplit(movecommand, ";")[[1]], ",|\\s+"),
@@ -663,7 +663,7 @@ z.recol = function(df, movecommand) {
     df[myVec]
 }
 
-#' reorder a single col (sort of, see below), alias of \code{\link{z.recol}}
+#' reorder a single col (sort of, see below), alias of \code{\link{ez.recol}}
 #' @param movecommand sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first
 #' @family data transformation functions
 #' @export
@@ -674,7 +674,7 @@ z.recol = function(df, movecommand) {
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.move = z.recol
+ez.move = ez.recol
 
 #' rename all cols
 #' @param newColName c('','',''), number of cols must match
@@ -689,7 +689,7 @@ z.move = z.recol
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.rncols = function(df,newColNames){
+ez.rncols = function(df,newColNames){
     names(df) = newColNames
     return(df)
 }
@@ -707,14 +707,14 @@ z.rncols = function(df,newColNames){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.2lower = function(df){
+ez.2lower = function(df){
     result = df
     names(result) = tolower(names(result))
     return(result)
 }
 
 #' rename a single or many col
-#' @description alias of \code{\link[reshape]{rename}} \code{\link{z.rename}}
+#' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rename}}
 #' @param replace c("oldColName"="newColName") or c(oldColName="newColName")
 #' @return returns a new df, old one does not change
 #' @examples
@@ -727,10 +727,10 @@ z.2lower = function(df){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.rncol = reshape::rename
+ez.rncol = reshape::rename
 
 #' rename a single or many col
-#' @description alias of \code{\link[reshape]{rename}} \code{\link{z.rncol}}
+#' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rncol}}
 #' @param replace c("oldColName"="newColName") or c(oldColName="newColName")
 #' @return returns a new df, old one does not change
 #' @examples
@@ -743,7 +743,7 @@ z.rncol = reshape::rename
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.rename = reshape::rename
+ez.rename = reshape::rename
 
 #' create a new col, may use \code{\link[dplyr]{mutate}} instead
 #' @param newColName ''
@@ -759,7 +759,7 @@ z.rename = reshape::rename
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.newcol = function(df, newColName, defaultVal=NA){
+ez.newcol = function(df, newColName, defaultVal=NA){
     df[newColName] = defaultVal
     return(df)
 }
@@ -774,7 +774,7 @@ z.newcol = function(df, newColName, defaultVal=NA){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.compute = dplyr::mutate
+ez.compute = dplyr::mutate
 
 #' alias of \code{\link[dplyr]{filter}}
 #' @family data transformation functions
@@ -786,7 +786,7 @@ z.compute = dplyr::mutate
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.select = dplyr::filter
+ez.select = dplyr::filter
 
 #' alias of \code{\link[dplyr]{arrange}}
 #' @family data transformation functions
@@ -798,7 +798,7 @@ z.select = dplyr::filter
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.sort = dplyr::arrange
+ez.sort = dplyr::arrange
 
 #' alias of \code{\link[dplyr]{distinct}}
 #' @family data transformation functions
@@ -810,7 +810,7 @@ z.sort = dplyr::arrange
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.unique = dplyr::distinct
+ez.unique = dplyr::distinct
 
 #' alias of \code{\link[dplyr]{group_by}}
 #' @family data transformation functions
@@ -822,7 +822,7 @@ z.unique = dplyr::distinct
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.split = dplyr::group_by
+ez.split = dplyr::group_by
 
 #' alias of \code{\link[dplyr]{left_join}}
 #' @family data transformation functions
@@ -834,10 +834,10 @@ z.split = dplyr::group_by
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.leftjoin = dplyr::left_join
+ez.leftjoin = dplyr::left_join
 
 #' delete one or many cols, may use \code{\link[dplyr]{select}} instead
-#' @description alias of \code{\link{z.delete}}
+#' @description alias of \code{\link{ez.delete}}
 #' @param del sth like 'Month' or c('Month','Day')
 #' @return returns a new df, old one does not change
 #' @examples
@@ -850,13 +850,13 @@ z.leftjoin = dplyr::left_join
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.del = function(df,del){
+ez.del = function(df,del){
     df[del] = NULL
     return(df)
 }
 
 #' delete one or many cols, may use \code{\link[dplyr]{select}} instead
-#' @description alias of \code{\link{z.del}}
+#' @description alias of \code{\link{ez.del}}
 #' @param del sth like 'Month' or c('Month','Day')
 #' @return returns a new df, old one does not change
 #' @examples
@@ -869,7 +869,7 @@ z.del = function(df,del){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-z.delete = z.del
+ez.delete = ez.del
 
 #' keep rows that have a certain number of NAs anywhere/somewhere and delete others
 #' @param df a data frame
@@ -880,7 +880,7 @@ z.delete = z.del
 #' \cr Range could be -Inf, Inf
 #' @return returns a new df with rows that have NA(s) removed
 #' @export
-z.na.keep = function(df, col=NULL, n=0){
+ez.na.keep = function(df, col=NULL, n=0){
     if (!is.null(col)) {
         df.temp = df[,col]
     } else {
