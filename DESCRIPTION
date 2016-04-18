@@ -1,6 +1,6 @@
-Package: zmisc
+Package: ezmisc
 Type: Package
-Title: Zhu's miscellaneous functions
+Title: ez Zhu's miscellaneous functions
 Version: 1.22
 Date: 2016-01-28
 Author: Jerry Zhu <jerryzhujian9@gmail.com>
