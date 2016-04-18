@@ -67,15 +67,23 @@ z.remove = remove.packages
 z.uninstall = remove.packages
 
 #' clear, clean  console, workspace, plot
-#' @param area 0 all, 1 console only, 2 workspace only, 3 plot only
+#' @param area 0 all, 
+#'             1 console only
+#'             2 workspace only
+#'             3 plot only
+#'             'var' particular var
+#'             c('var1','var2') particular vars
 #' @return
 #' @examples
 #' @export
 z.clear = function(area=0) {
-    if (area == 0) {console = TRUE; workspace = TRUE; plot = TRUE}
-    if (area == 1) {console = TRUE; workspace = FALSE; plot = FALSE}
-    if (area == 2) {console = FALSE; workspace = TRUE; plot = FALSE}
-    if (area == 3) {console = FALSE; workspace = FALSE; plot = TRUE}
+    # area[1] used, to work around when c('var1','var2') provided
+    if (area[1] == 0) {console = TRUE; workspace = TRUE; plot = TRUE}
+    else if (area[1] == 1) {console = TRUE; workspace = FALSE; plot = FALSE}
+    else if (area[1] == 2) {console = FALSE; workspace = TRUE; plot = FALSE}
+    else if (area[1] == 3) {console = FALSE; workspace = FALSE; plot = TRUE}
+    else {rm(list=area, envir = .GlobalEnv); console = FALSE; workspace = FALSE; plot = FALSE}
+
     if (console) {
         # cat("\014")  # clear console ctrl+l
         cat(rep("\n",50)) # "visually" clear

@@ -7,7 +7,12 @@
 z.clear(area = 0)
 }
 \arguments{
-\item{area}{0 all, 1 console only, 2 workspace only, 3 plot only}
+\item{area}{0 all, 
+1 console only
+2 workspace only
+3 plot only
+'var' particular var
+c('var1','var2') particular vars}
 }
 \description{
 clear, clean  console, workspace, plot
