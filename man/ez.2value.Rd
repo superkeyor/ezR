@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.2value}
 \alias{ez.2value}
-\title{wrapper of \code{\link[sjmisc]{to_value}}}
+\title{wrapper of \code{\link[sjmisc]{to_value}}; see also \code{\link{ez.num}}}
 \usage{
 ez.2value(x, start.at = NULL, keep.labels = TRUE, ...)
 }
@@ -37,9 +37,6 @@ to_value(dummy)
 \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-\cr
-\cr
-\code{\link{ez.num}}
 
 Other data.transformation.functions: \code{\link{ez.2factor}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
