@@ -45,7 +45,7 @@ data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
 ez.recode(data, "a", "lo:0 = 0;0:hi = 1;")
 ez.recode(data, "b", "lo:0 = 0;0:hi = 1;")
 note in the following: both 1 and TRUE = 'Male' work; the ; after NA is not necessary
-data$male <- ez.recode(data,"male", "1 = 'Male';FALSE = 'Female';else = NA;")
+data <- ez.recode(data,"male", "1 = 'Male';FALSE = 'Female';else = NA;")
 }
 \author{
 Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
