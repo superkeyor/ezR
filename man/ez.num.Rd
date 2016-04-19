@@ -18,4 +18,7 @@ Convert a character vector to logical, integer, numeric, complex or factor as ap
 \details{
 see \url{http://stackoverflow.com/a/22701462/2292993}
 }
+\seealso{
+\code{\link{ez.2value}}
+}
 

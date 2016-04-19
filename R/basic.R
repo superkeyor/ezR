@@ -20,6 +20,7 @@ ez.typeof = class
 #' @param x a character vector, or a factor
 #' @return returns a converted vector
 #' @details see \url{http://stackoverflow.com/a/22701462/2292993}
+#' @seealso \code{\link{ez.2value}}
 #' @export
 ez.num = function(x, ...){
     if (is.factor(x)) {

@@ -334,6 +334,9 @@ ez.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...)
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+#' \cr
+#' \cr
+#' \code{\link{ez.num}}
 ez.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
     result=sjmisc::to_value(x, start.at=start.at, keep.labels=keep.labels,...)
     return(result)
