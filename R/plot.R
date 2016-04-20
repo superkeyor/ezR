@@ -282,42 +282,63 @@ theme_apa_nosize <- function(plot.box = FALSE){
 
 #' plot a customized boxplot with jittered stripplot, violin, and mean
 #' @param df data frame in long format
-#' @param cmd like "y|x z" or "y|x" where y is continous, x z are discrete
+#' @param cmd like "y", "y|x z" or "y|x" where y is continous, x z are discrete
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
 ez.describe = function(df,cmd){
-    # yy|xx zz
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
-    yy = cmd[1]
-    xx = strsplit(cmd[2]," ",fixed=TRUE)[[1]]
-    if (length(xx)==1) {
-        xx = xx[1]
+    # yy
+    if (length(cmd)==1) {
+        yy = cmd[1]
+        xx = 'DummyDiscreteVariable'
+        df['DummyDiscreteVariable'] = 1
+        # hide x axis label in this case
         tt = sprintf('
                      pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
                      geom_violin() +
                      geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
                      geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
-                     theme(legend.position="none")'
+                     theme(legend.position="none", axis.ticks.x=element_blank(), axis.text.x=element_blank()) +
+                     xlab("")'
                      , xx, yy
         )
         tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+    # yy|xx or yy|xx zz
     } else {
-        zz = xx[2]
-        xx = xx[1]
-        tt = sprintf('
-                     pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
-                     geom_violin() +
-                     geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
-                     geom_point(position=position_jitter(width=0.2, height=0), size=1) +
-                     stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
-                     facet_grid(~%s) +
-                     theme(legend.position="none")'
-                     , xx, yy, zz, zz
-        )
-        tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
-    }
+        yy = cmd[1]
+        xx = strsplit(cmd[2]," ",fixed=TRUE)[[1]]
+        # yy|xx
+        if (length(xx)==1) {
+            xx = xx[1]
+            tt = sprintf('
+                         pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
+                         geom_violin() +
+                         geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                         geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                         stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
+                         theme(legend.position="none")'
+                         , xx, yy
+            )
+            tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+        # yy|xx zz
+        } else {
+            zz = xx[2]
+            xx = xx[1]
+            tt = sprintf('
+                         pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
+                         geom_violin() +
+                         geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                         geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                         stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
+                         facet_grid(~%s) +
+                         theme(legend.position="none")'
+                         , xx, yy, zz, zz
+            )
+            tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+        }
+    }    
     eval(parse(text = tt))
     return(pp)
 }
