@@ -206,42 +206,46 @@ ez.cwd = getwd
 #' @export
 ez.pwd = getwd
 
-#' current script dir
+#' current script file (in full path)
 #' @param
 #' @return
 #' @examples
-#' works with source() or in RStudio Run selection
+#' works with Rscript, source() or in RStudio Run selection
+#' @export
+ez.csf <- function() {
+    # http://stackoverflow.com/a/32016824/2292993
+    cmdArgs = commandArgs(trailingOnly = FALSE)
+    needle = "--file="
+    match = grep(needle, cmdArgs)
+    if (length(match) > 0) {
+        # Rscript via command line
+        return(normalizePath(sub(needle, "", cmdArgs[match])))
+    } else {
+        ls_vars = ls(sys.frames()[[1]])
+        if ("fileName" %in% ls_vars) {
+            # Source'd via RStudio
+            return(normalizePath(sys.frames()[[1]]$fileName)) 
+        } else {
+            if (!is.null(sys.frames()[[1]]$ofile)) {
+            # Source'd via R console
+            return(normalizePath(sys.frames()[[1]]$ofile))
+            } else {
+                # RStudio Run Selection
+                # http://stackoverflow.com/a/35842176/2292993  
+                return(normalizePath(rstudioapi::getActiveDocumentContext()$path))
+            }
+        }
+    }
+}
+
+#' current script dir (in full path)
+#' @param
+#' @return
+#' @examples
+#' works with Rscript, source() or in RStudio Run selection
 #' @export
 ez.csd <- function() {
-    # http://stackoverflow.com/questions/1815606/rscript-determine-path-of-the-executing-script
-    # must work with source()
-    if (!is.null(res <- .thisfile_source())) res
-    else if (!is.null(res <- .thisfile_rscript())) dirname(res)
-    # http://stackoverflow.com/a/35842176/2292993  
-    # RStudio only, can work without source()
-    else dirname(rstudioapi::getActiveDocumentContext()$path)
-}
-# Helper functions
-.thisfile_source <- function() {
-    for (i in -(1:sys.nframe())) {
-        if (identical(sys.function(i), base::source))
-            return (normalizePath(sys.frame(i)$ofile))
-    }
-
-    NULL
-}
-.thisfile_rscript <- function() {
-    cmdArgs <- commandArgs(trailingOnly = FALSE)
-    cmdArgsTrailing <- commandArgs(trailingOnly = TRUE)
-    cmdArgs <- cmdArgs[seq.int(from=1, length.out=length(cmdArgs) - length(cmdArgsTrailing))]
-    res <- gsub("^(?:--file=(.*)|.*)$", "\\1", cmdArgs)
-
-    # If multiple --file arguments are given, R uses the last one
-    res <- tail(res[res != ""], 1)
-    if (length(res) > 0)
-        return (res)
-
-    NULL
+    return(dirname(ez.csf))
 }
 
 #' lsd
