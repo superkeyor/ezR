@@ -245,7 +245,7 @@ ez.csf <- function() {
 #' works with Rscript, source() or in RStudio Run selection
 #' @export
 ez.csd <- function() {
-    return(dirname(ez.csf))
+    return(dirname(ez.csf()))
 }
 
 #' lsd
