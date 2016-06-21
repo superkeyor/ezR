@@ -4,9 +4,13 @@
 \alias{theme_apa}
 \title{ggplot2 Theme for APA Publications}
 \usage{
-theme_apa(plot.box = FALSE)
+theme_apa(titlesize = 18, textsize = 16, plot.box = FALSE)
 }
 \arguments{
+\item{titlesize}{default 18}
+
+\item{textsize}{default 16}
+
 \item{plot.box}{logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.}
 }
 \description{

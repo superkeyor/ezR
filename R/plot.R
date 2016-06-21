@@ -186,6 +186,8 @@ ggcook <- function() {
 #'
 #' A ggplot2 theme with no background and Times New Roman font.
 #'
+#' @param titlesize default 18
+#' @param textsize default 16
 #' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
 #' @export
 #' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
@@ -193,7 +195,7 @@ ggcook <- function() {
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
 #' @examples
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
-theme_apa <- function(plot.box = FALSE){
+theme_apa <- function(titlesize = 18, textsize = 16, plot.box = FALSE){
 
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
@@ -207,15 +209,15 @@ theme_apa <- function(plot.box = FALSE){
     }
 
     out <- theme(
-        plot.title=element_text(family=RMN, size=14, face="bold", colour="black"),
-        legend.title = element_text(family=RMN, size=11, colour="black"),
-        legend.text = element_text(family=RMN, size=11, colour="black"),
-        strip.text.x = element_text(family=RMN, size=11, colour="black"),
-        strip.text.y = element_text(family=RMN, size=11, colour="black"),
-        axis.title.x=element_text(family=RMN, size=14, colour="black"),
-        axis.title.y=element_text(family=RMN, size=14, angle=90, colour="black"),
-        axis.text.x=element_text(family=RMN, size=11, colour="black"),
-        axis.text.y=element_text(family=RMN, size=11, colour="black"),
+        plot.title=element_text(family=RMN, size=titlesize, face="bold", colour="black"),
+        legend.title = element_text(family=RMN, size=textsize, colour="black"),
+        legend.text = element_text(family=RMN, size=textsize, colour="black"),
+        strip.text.x = element_text(family=RMN, size=textsize, colour="black"),
+        strip.text.y = element_text(family=RMN, size=textsize, colour="black"),
+        axis.title.x=element_text(family=RMN, size=titlesize, face="bold", colour="black"),
+        axis.title.y=element_text(family=RMN, size=titlesize, face="bold", angle=90, colour="black"),
+        axis.text.x=element_text(family=RMN, size=textsize, colour="black"),
+        axis.text.y=element_text(family=RMN, size=textsize, colour="black"),
         axis.ticks=element_line(colour="black"))
 
     if (!plot.box) {
@@ -713,5 +715,20 @@ ez.factorder = function(df, col, ord="as"){
     } else {
         df[[col]]= factor(df[[col]],ord)
     }
+    return(df)
+}
+
+#' change factor level names in a df
+#' @param df data frame
+#' @param col a factor column name, quoted "", eg, "group"
+#' @param newLevelNames new level names coresponding to levels(x), eg, c("one","two","three")
+#' @return returns a new df
+#' @examples
+#' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
+#' @export
+ez.factorname = function(df, col, newLevelNames){
+    levels(df[[col]]) = newLevelNames
+    cat('initial level names: ', levels(df[[col]]), '\n')
+    cat('renamed level names: ', levels(df[[col]]), '\n')
     return(df)
 }
