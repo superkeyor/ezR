@@ -727,8 +727,8 @@ ez.factorder = function(df, col, ord="as"){
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
 #' @export
 ez.factorname = function(df, col, newLevelNames){
-    levels(df[[col]]) = newLevelNames
     cat('initial level names: ', levels(df[[col]]), '\n')
-    cat('renamed level names: ', levels(df[[col]]), '\n')
+    levels(df[[col]]) = newLevelNames
+    cat('renamed level names: ', newLevelNames, '\n')
     return(df)
 }
