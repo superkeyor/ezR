@@ -8,9 +8,9 @@
 #' @seealso \code{\link{pdf}} \code{\link{ez.pdfon}} \code{\link{ez.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
-#' Letter: 8.5 x 11
+#' Letter: 8.5 x 11 (portrait default ie, 11 x 8.5)
 #' @export
-ez.export = function(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...) {
+ez.export = function(filename = "RPlot.pdf", pdf.width = 11, pdf.height = 8.5, ...) {
     dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
     extrafont::embed_fonts(filename)
     # If outfile is not specified, it will overwrite the original file

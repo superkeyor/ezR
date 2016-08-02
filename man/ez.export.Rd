@@ -4,7 +4,7 @@
 \alias{ez.export}
 \title{wrapper of \code{\link{dev.copy2pdf}}}
 \usage{
-ez.export(filename = "RPlot.pdf", pdf.width = 8.5, pdf.height = 11, ...)
+ez.export(filename = "RPlot.pdf", pdf.width = 11, pdf.height = 8.5, ...)
 }
 \description{
 wrapper of \code{\link{dev.copy2pdf}}
@@ -14,7 +14,7 @@ internally also use \code{\link[extrafont]{embed_fonts}} to embed fonts
 }
 \examples{
 A4:     width 7(inches) height = 5
-Letter: 8.5 x 11
+Letter: 8.5 x 11 (portrait default ie, 11 x 8.5)
 }
 \seealso{
 \code{\link{pdf}} \code{\link{ez.pdfon}} \code{\link{ez.pdfoff}}
