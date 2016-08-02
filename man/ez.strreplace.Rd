@@ -4,10 +4,13 @@
 \alias{ez.strreplace}
 \title{replace string or string vectors literally}
 \usage{
-ez.strreplace(s, expr, repstr, ignorecase = FALSE, once = FALSE)
+ez.strreplace(s, expr, repstr, once = FALSE)
 }
 \description{
 support single string, vectors
-\cr case sensitive by default (ignorecase=FALSE), wrapper of sub, gsub
+\cr case sensitive! wrapper of sub, gsub
+}
+\seealso{
+\code{\link{ez.regexprep}} \code{\link{ez.regexprepi}}
 }
 

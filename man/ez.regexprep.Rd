@@ -2,11 +2,14 @@
 % Please edit documentation in R/basic.R
 \name{ez.regexprep}
 \alias{ez.regexprep}
-\title{replace string using regular expression (case sensitive)}
+\title{replace string or string vectors using regular expression (case sensitive)}
 \usage{
 ez.regexprep(s, expr, repstr, ignorecase = FALSE, once = FALSE)
 }
 \description{
-replace string using regular expression (case sensitive)
+replace string or string vectors using regular expression (case sensitive)
+}
+\seealso{
+\code{\link{ez.strreplace}}
 }
 
