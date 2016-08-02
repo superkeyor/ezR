@@ -5,7 +5,7 @@
 \title{alias of data.frame}
 \usage{
 ez.frame(..., row.names = NULL, check.rows = FALSE, check.names = TRUE,
-  stringsAsFactors = default.stringsAsFactors())
+  fix.empty.names = TRUE, stringsAsFactors = default.stringsAsFactors())
 }
 \description{
 alias of data.frame

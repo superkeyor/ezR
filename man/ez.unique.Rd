@@ -4,7 +4,7 @@
 \alias{ez.unique}
 \title{alias of \code{\link[dplyr]{distinct}}}
 \usage{
-ez.unique(.data, ...)
+ez.unique(.data, ..., .keep_all = FALSE)
 }
 \description{
 alias of \code{\link[dplyr]{distinct}}

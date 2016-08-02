@@ -4,7 +4,7 @@
 \alias{ez.leftjoin}
 \title{alias of \code{\link[dplyr]{left_join}}}
 \usage{
-ez.leftjoin(x, y, by = NULL, copy = FALSE, ...)
+ez.leftjoin(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \description{
 alias of \code{\link[dplyr]{left_join}}

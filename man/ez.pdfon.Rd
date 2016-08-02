@@ -4,7 +4,7 @@
 \alias{ez.pdfon}
 \title{wrapper of \code{\link{pdf}}}
 \usage{
-ez.pdfon(file = ifelse(onefile, "Rplots.pdf", "Rplot\%03d.pdf"), width,
+ez.pdfon(file = if (onefile) "Rplots.pdf" else "Rplot\%03d.pdf", width,
   height, onefile, family, title, fonts, version, paper, encoding, bg, fg,
   pointsize, pagecentre, colormodel, useDingbats, useKerning, fillOddEven,
   compress)
