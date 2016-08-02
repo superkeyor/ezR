@@ -287,7 +287,7 @@ theme_apa_nosize <- function(plot.box = FALSE){
 #' @rdname matlabcolor
 #' @examples
 matlabcolor <- function(n=100){
-    out = colorRamps::matlab.like(n)
+    out = scale_fill_gradientn(colorRamps::matlab.like(n))
     return(out)
 }
 
@@ -296,7 +296,7 @@ matlabcolor <- function(n=100){
 #' @rdname matlabcolor
 #' @examples
 matlabcolor2 <- function(n=100){
-    out = colorRamps::matlab.like2(n)
+    out = scale_fill_gradientn(colorRamps::matlab.like2(n))
     return(out)
 }
 
