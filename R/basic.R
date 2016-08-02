@@ -208,30 +208,31 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 
 #' replace string or string vectors literally
 #' @description support single string, vectors
-#' \cr case sensitive by default (ignorecase=FALSE), wrapper of sub, gsub
+#' \cr case sensitive! wrapper of sub, gsub
 #' @param
 #' @return
 #' @examples
+#' @seealso \code{\link{ez.regexprep}} \code{\link{ez.regexprepi}}
 #' @export
-ez.strreplace = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
+ez.strreplace = function (s, expr, repstr, once = FALSE){
     if (once) {
-        sub(expr, repstr, s, ignore.case = ignorecase, fixed = TRUE)
+        sub(expr, repstr, s, fixed = TRUE)
     }
     else {
-        gsub(expr, repstr, s, ignore.case = ignorecase, fixed = TRUE)
+        gsub(expr, repstr, s, fixed = TRUE)
     }
 }
 
-#' replace string using regular expression (case sensitive)
+#' replace string or string vectors using regular expression (case sensitive)
 #' @param
 #' @return
 #' @examples
+#' @seealso \code{\link{ez.strreplace}}
 #' @export
 ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
     if (!is.character(s))
         stop("Argument 's' must be a character vector.")
-    if (!is.character(expr) || !is.character(repstr) || length(expr) !=
-        1 || length(repstr) != 1)
+    if (!is.character(expr) || !is.character(repstr))
         stop("Arguments 'old' and 'new' must be simple character strings.")
     if (once) {
         sub(expr, repstr, s, ignore.case = ignorecase, perl = TRUE)
@@ -241,16 +242,16 @@ ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
     }
 }
 
-#' replace string using regular expression (case insensitive)
+#' replace string or string vectors using regular expression (case insensitive)
 #' @param
 #' @return
 #' @examples
+#' @seealso \code{\link{ez.strreplace}}
 #' @export
 ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
     if (!is.character(s))
         stop("Argument 's' must be a character vector.")
-    if (!is.character(expr) || !is.character(repstr) || length(expr) !=
-        1 || length(repstr) != 1)
+    if (!is.character(expr) || !is.character(repstr))
         stop("Arguments 'old' and 'new' must be simple character strings.")
     if (once) {
         sub(expr, repstr, s, ignore.case = ignorecase, perl = TRUE)
