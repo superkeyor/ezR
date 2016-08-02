@@ -2,16 +2,16 @@
 % Please edit documentation in R/os.R
 \name{ez.require}
 \alias{ez.require}
-\title{require a package, if not exist auto install and load}
+\title{require a package, if not exist auto install and auto load}
 \usage{
-ez.require(pkg, load = TRUE)
+ez.require(pkg, autoload = TRUE)
 }
 \arguments{
-\item{pkg}{pkg name}
+\item{pkg}{pkg name in string}
 
-\item{load}{auto load or not (default=TRUE)}
+\item{autoload}{auto load or not (default=TRUE)}
 }
 \description{
-require a package, if not exist auto install and load
+require a package, if not exist auto install and auto load
 }
 

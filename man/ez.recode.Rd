@@ -20,6 +20,7 @@ returns a new df, old one does not change
 Recodes one single according to a set of rules
 \cr\cr ez.recode replaces the original var with recoded var;
 \cr ez.recode2 saves orignal var as var_ori, and then recodes var
+\cr see also \code{\link{ez.replace}}
 }
 \details{
 recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
@@ -68,10 +69,10 @@ Other data.transformation.functions: \code{\link{ez.2factor}},
   \code{\link{ez.leftjoin}}, \code{\link{ez.move}},
   \code{\link{ez.newcol}}, \code{\link{ez.recode2}},
   \code{\link{ez.recols}}, \code{\link{ez.recol}},
-  \code{\link{ez.rename}}, \code{\link{ez.rncols}},
-  \code{\link{ez.rncol}}, \code{\link{ez.select}},
-  \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
-  \code{\link{ez.values.set}}
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
+  \code{\link{ez.select}}, \code{\link{ez.sort}},
+  \code{\link{ez.split}}, \code{\link{ez.unique}},
+  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
 }
 

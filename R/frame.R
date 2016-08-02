@@ -466,6 +466,7 @@ ez.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
 #' @description Recodes one single according to a set of rules
 #' \cr\cr ez.recode replaces the original var with recoded var;
 #' \cr ez.recode2 saves orignal var as var_ori, and then recodes var
+#' \cr see also \code{\link{ez.replace}}
 #' @param df data.frame to be recoded
 #' @param varName the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
@@ -606,6 +607,22 @@ ez.recode2 = function(df, varName, recodes){
     df = dplyr::bind_cols(df,newVar)
     cmd = sprintf("ez.move(df,'%s before %s')",varName, paste0(varName,'_ori'))
     df = eval(parse(text=cmd))
+    return(df)
+}
+
+#' replace a single value in data frame with another value
+#' @description see also \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} 
+#' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
+#' \cr the "==" syntax within "which()" could be modified 
+#' @param df data frame
+#' @param col column name in string
+#' @param oldval old value (e.g., -Inf)
+#' @param newval new value (e.g., NA)
+#' @return returns a new df, old one does not change
+#' @family data transformation functions
+#' @export
+ez.replace = function(df, col, oldval, newval){
+    df[[col]][which(df[[col]]==oldval)] <- newval
     return(df)
 }
 

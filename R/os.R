@@ -46,17 +46,37 @@ ez.include = ez.import
 ez.install = install.packages
 
 #' require a package, if not exist auto install and auto load
-#' @param pkg pkg name
+#' @param pkg pkg name in string
 #' @param autoload auto load or not (default=TRUE)
 #' @return
 #' @examples
 #' @export
 ez.require = function(pkg, autoload=TRUE){
-    if (!require(pkg)) {
-        install.packages(pkg)
+    tt = sprintf("require('%s')",pkg)
+    if (!eval(parse(text = tt))) {
+        tt = sprintf("install.packages('%s')",pkg)
+        eval(parse(text = tt))
     }
     if (autoload) {
-        library(pkg)
+        tt = sprintf("require('%s')",pkg)
+        eval(parse(text = tt))
+    }
+}
+
+#' unload a package, wrapper of detach(pkg, unload=TRUE, character.only = TRUE)
+#' @param pkg pkg name in string
+#' @return
+#' @examples
+#' @export
+ez.unload = function(pkg){
+    character.only = TRUE
+    if(!character.only){
+        pkg <- deparse(substitute(pkg))
+        }
+    search_item <- paste("package", pkg, sep = ":")
+    while(search_item %in% search()){
+        detach(search_item, unload = TRUE, character.only = TRUE)
+        cat(sprintf('unloaded %s',search_item))
     }
 }
 

@@ -206,6 +206,22 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
     ez.regexp(s, pat, ignorecase, once, split)
 }
 
+#' replace string or string vectors literally
+#' @description support single string, vectors
+#' \cr case sensitive by default (ignorecase=FALSE), wrapper of sub, gsub
+#' @param
+#' @return
+#' @examples
+#' @export
+ez.strreplace = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
+    if (once) {
+        sub(expr, repstr, s, ignore.case = ignorecase, fixed = TRUE)
+    }
+    else {
+        gsub(expr, repstr, s, ignore.case = ignorecase, fixed = TRUE)
+    }
+}
+
 #' replace string using regular expression (case sensitive)
 #' @param
 #' @return
