@@ -138,7 +138,6 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 ez.color = function(){
     if (!require("RColorBrewer")) {
         install.packages("RColorBrewer")
-        library(RColorBrewer)
     }
     RColorBrewer::display.brewer.all()
     cat('usage: \n
@@ -280,6 +279,25 @@ theme_apa_nosize <- function(plot.box = FALSE){
     }
     out
 
+}
+
+#' change plot continous color to matlab like
+#' @param n how many colors, e.g., 100 (default)
+#' @export
+#' @rdname matlabcolor
+#' @examples
+matlabcolor <- function(n=100){
+    out = colorRamps::matlab.like(n)
+    return(out)
+}
+
+#' change plot continous color to matlab like
+#' @export
+#' @rdname matlabcolor
+#' @examples
+matlabcolor2 <- function(n=100){
+    out = colorRamps::matlab.like2(n)
+    return(out)
 }
 
 #' plot a customized boxplot with jittered stripplot, violin, and mean

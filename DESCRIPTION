@@ -11,4 +11,4 @@ LazyData: TRUE
 RoxygenNote: 5.0.1
 URL: https://github.com/hadley/tidyr
 Depends: R (>= 3.2.3)
-Imports: devtools, xlsx, dplyr, tidyr, sjmisc, sjPlot, Hmisc, reshape, ggplot2, corrplot, lme4, extrafont
+Imports: devtools, xlsx, dplyr, tidyr, sjmisc, sjPlot, Hmisc, reshape, ggplot2, corrplot, lme4, extrafont, colorRamps, RColorBrewer
