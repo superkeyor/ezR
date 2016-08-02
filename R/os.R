@@ -45,17 +45,17 @@ ez.include = ez.import
 #' @export
 ez.install = install.packages
 
-#' require a package, if not exist auto install and load
+#' require a package, if not exist auto install and auto load
 #' @param pkg pkg name
-#' @param load auto load or not (default=TRUE)
+#' @param autoload auto load or not (default=TRUE)
 #' @return
 #' @examples
 #' @export
-ez.require = function(pkg, load=TRUE){
+ez.require = function(pkg, autoload=TRUE){
     if (!require(pkg)) {
         install.packages(pkg)
     }
-    if (load) {
+    if (autoload) {
         library(pkg)
     }
 }
