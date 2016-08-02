@@ -45,6 +45,21 @@ ez.include = ez.import
 #' @export
 ez.install = install.packages
 
+#' require a package, if not exist auto install and load
+#' @param pkg pkg name
+#' @param load auto load or not (default=TRUE)
+#' @return
+#' @examples
+#' @export
+ez.require = function(pkg, load=TRUE){
+    if (!require(pkg)) {
+        install.packages(pkg)
+    }
+    if (load) {
+        library(pkg)
+    }
+}
+
 #' alias of \code{\link{devtools::install_github}}
 #' @param
 #' @return
