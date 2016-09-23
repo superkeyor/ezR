@@ -29,17 +29,24 @@ ez.read = function(..., tolower=FALSE){
 #' @param
 #' @return
 #' @examples
-#' (x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
+#' (x, file="RData.csv", row.names=FALSE, col.names=TRUE, append = FALSE, quote = TRUE, sep = ",",
 #'             na = "NA", dec = ".",
 #'             col.names = TRUE, qmethod = c("escape", "double"),
 #'             fileEncoding = "")
 #' dec: decimal point
 #' @export
-ez.save = function(x, file="RData.csv", row.names=FALSE, na = "", ...){
+ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = "", ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     x = data.frame(x)
-    rownames(x) <- NULL
-    write.csv(x=x, file=file, row.names=row.names, na=na, ...)
+    if (row.names==FALSE) {rownames(x) <- NULL}
+    if (col.names==TRUE) {
+        write.csv(x=x, file=file, row.names=row.names, na=na, ...)
+    }else{
+        # hack to not save col names http://stackoverflow.com/a/19227265/2292993
+        # why not write.table for both? 
+        # because write.table can be slow for data frames with large numbers (hundreds or more) of columns
+        write.table(x=x, file=file, row.names=row.names, col.names=col.names, na=na, ...)
+    }
 }
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
@@ -130,7 +137,7 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, s
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     # require('xlsx')
     x = data.frame(x)
-    rownames(x) <- NULL
+    if (row.names=FALSE) {rownames(x) <- NULL}
     xlsx::write.xlsx(x=x, file=file, sheetName=sheetName, ..., row.names=row.names, showNA=showNA)
     # detach("package:xlsx", unload=TRUE)
 }
