@@ -137,7 +137,7 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, s
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     # require('xlsx')
     x = data.frame(x)
-    if (row.names=FALSE) {rownames(x) <- NULL}
+    if (row.names==FALSE) {rownames(x) <- NULL}
     xlsx::write.xlsx(x=x, file=file, sheetName=sheetName, ..., row.names=row.names, showNA=showNA)
     # detach("package:xlsx", unload=TRUE)
 }

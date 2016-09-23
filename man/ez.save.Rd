@@ -4,13 +4,14 @@
 \alias{ez.save}
 \title{wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}}
 \usage{
-ez.save(x, file = "RData.csv", row.names = FALSE, na = "", ...)
+ez.save(x, file = "RData.csv", row.names = FALSE, col.names = TRUE,
+  na = "", ...)
 }
 \description{
 wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 }
 \examples{
-(x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
+(x, file="RData.csv", row.names=FALSE, col.names=TRUE, append = FALSE, quote = TRUE, sep = ",",
             na = "NA", dec = ".",
             col.names = TRUE, qmethod = c("escape", "double"),
             fileEncoding = "")

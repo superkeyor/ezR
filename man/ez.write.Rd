@@ -4,7 +4,8 @@
 \alias{ez.write}
 \title{wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}}
 \usage{
-ez.write(x, file = "RData.csv", row.names = FALSE, na = "", ...)
+ez.write(x, file = "RData.csv", row.names = FALSE, col.names = TRUE,
+  na = "", ...)
 }
 \description{
 wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
