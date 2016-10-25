@@ -7,7 +7,7 @@
 ez.rename(x, replace)
 }
 \arguments{
-\item{replace}{c("oldColName"="newColName") or c(oldColName="newColName")}
+\item{replace}{c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")}
 }
 \value{
 returns a new df, old one does not change

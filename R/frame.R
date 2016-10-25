@@ -697,7 +697,7 @@ ez.recol = function(df, movecommand) {
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.move = ez.recol
 
-#' rename all cols
+#' rename all cols, see also \code{\link{ez.rncol}}
 #' @param newColName c('','',''), number of cols must match
 #' @return returns a new df, old one does not change
 #' @examples
@@ -734,9 +734,9 @@ ez.2lower = function(df){
     return(result)
 }
 
-#' rename a single or many col
+#' rename a single or many col, see also \code{\link{ez.rncols}}
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rename}}
-#' @param replace c("oldColName"="newColName") or c(oldColName="newColName")
+#' @param replace c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions
@@ -752,7 +752,7 @@ ez.rncol = reshape::rename
 
 #' rename a single or many col
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rncol}}
-#' @param replace c("oldColName"="newColName") or c(oldColName="newColName")
+#' @param replace c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions

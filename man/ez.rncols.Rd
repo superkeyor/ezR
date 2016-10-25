@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.rncols}
 \alias{ez.rncols}
-\title{rename all cols}
+\title{rename all cols, see also \code{\link{ez.rncol}}}
 \usage{
 ez.rncols(df, newColNames)
 }
@@ -13,7 +13,7 @@ ez.rncols(df, newColNames)
 returns a new df, old one does not change
 }
 \description{
-rename all cols
+rename all cols, see also \code{\link{ez.rncol}}
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

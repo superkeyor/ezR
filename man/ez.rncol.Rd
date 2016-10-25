@@ -2,12 +2,12 @@
 % Please edit documentation in R/frame.R
 \name{ez.rncol}
 \alias{ez.rncol}
-\title{rename a single or many col}
+\title{rename a single or many col, see also \code{\link{ez.rncols}}}
 \usage{
 ez.rncol(x, replace)
 }
 \arguments{
-\item{replace}{c("oldColName"="newColName") or c(oldColName="newColName")}
+\item{replace}{c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")}
 }
 \value{
 returns a new df, old one does not change
