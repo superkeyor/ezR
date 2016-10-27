@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{ez.readx}
 \alias{ez.readx}
-\title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}}}
+\title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package}
 \usage{
 ez.readx(file, sheetIndex = 1, tolower = FALSE, ...)
 }
@@ -10,7 +10,7 @@ ez.readx(file, sheetIndex = 1, tolower = FALSE, ...)
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}}
+read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package
 }
 \examples{
 read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{ez.readxlist}
 \alias{ez.readxlist}
-\title{read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}}}
+\title{read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package}
 \usage{
 ez.readxlist(file, toprint = TRUE)
 }
@@ -13,7 +13,7 @@ ez.readxlist(file, toprint = TRUE)
 a list of sheet names
 }
 \description{
-read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}}
+read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
 }
 \examples{
 readxlist(file)

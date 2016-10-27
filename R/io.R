@@ -61,7 +61,7 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
 #' @export
 ez.write = ez.save
 
-#' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}}
+#' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
@@ -93,7 +93,7 @@ ez.readx2 = function(file, sheet=1, tolower=FALSE, ...){
     return(result)
 }
 
-#' read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}}
+#' read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
 #' @param toprint print out sheet indices and names, default TRUE
 #' @return a list of sheet names
 #' @examples
@@ -157,7 +157,7 @@ ez.saves = sjmisc::write_spss
 #' @export
 ez.writes = sjmisc::write_spss
 
-#' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
+#' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param
 #' @return
 #' @examples
@@ -173,7 +173,7 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, s
     # detach("package:xlsx", unload=TRUE)
 }
 
-#' save an xlsx file, alias of \code{\link{ez.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}}
+#' save an xlsx file, alias of \code{\link{ez.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param
 #' @return
 #' @examples
