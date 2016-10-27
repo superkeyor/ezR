@@ -78,6 +78,37 @@ ez.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
     return(result)
 }
 
+#' read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}
+#' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
+#' @param tolower whether to convert all column names to lower case
+#' @return
+#' @examples
+#' read.xlsx(xlsxFile, sheet = 1, startRow = 1, colNames = TRUE,
+#'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
+#'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
+#' @export
+ez.readx2 = function(file, sheet=1, tolower=FALSE, ...){
+    result = openxlsx::read.xlsx(file, sheet, ...)
+    if (tolower) names(result) = tolower(names(result))
+    return(result)
+}
+
+#' read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}}
+#' @param toprint print out sheet indices and names, default TRUE
+#' @return a list of sheet names
+#' @examples
+#' readxlist(file)
+#' @export
+ez.readxlist = function(file, toprint=TRUE){
+    sheetnames = openxlsx::getSheetNames(file)
+    if (toprint){
+        for (i in 1:length(sheetnames)){
+            cat(i, '\t', sheetnames[i], '\n')
+        }
+    }
+    return(sheetnames)
+}
+
 #' wrapper of \code{\link[sjmisc]{read_spss}}
 #' @description potentially keep variable labels and value labels.
 #' @param tolower whether to convert all column names to lower case
