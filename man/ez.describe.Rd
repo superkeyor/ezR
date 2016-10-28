@@ -9,7 +9,7 @@ ez.describe(df, cmd)
 \arguments{
 \item{df}{data frame in long format}
 
-\item{cmd}{like "y", "y|x z" or "y|x" where y is continous, x z are discrete}
+\item{cmd}{like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)

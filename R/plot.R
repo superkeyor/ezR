@@ -302,7 +302,7 @@ matlabcolor2 <- function(n=100){
 
 #' plot a customized boxplot with jittered stripplot, violin, and mean
 #' @param df data frame in long format
-#' @param cmd like "y", "y|x z" or "y|x" where y is continous, x z are discrete
+#' @param cmd like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
@@ -344,20 +344,40 @@ ez.describe = function(df,cmd){
             tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
         # yy|xx zz
         } else {
-            zz = xx[2]
-            xx = xx[1]
-            tt = sprintf('
-                         pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
-                         geom_violin() +
-                         geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
-                         geom_point(position=position_jitter(width=0.2, height=0), size=1) +
-                         stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
-                         facet_grid(~%s) +
-                         theme(legend.position="none")'
-                         , xx, yy, zz, zz
-            )
-            tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
-        }
+            if (length(xx)==2) {
+                zz = xx[2]
+                xx = xx[1]
+                tt = sprintf('
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
+                             geom_violin() +
+                             geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                             geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                             stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
+                             facet_grid(~%s) +
+                             theme(legend.position="none")'
+                             , xx, yy, zz, zz
+                )
+                tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+                }
+            # yy|xx zz aa
+            else {
+                aa = xx[3]
+                zz = xx[2]
+                xx = xx[1]
+                tt = sprintf('
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
+                             geom_violin() +
+                             geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                             geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                             stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
+                             facet_grid(%s~%s) +
+                             theme(legend.position="none")'
+                             , xx, yy, zz, zz, aa
+                )
+                tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+
+                }        
+            }
     }    
     eval(parse(text = tt))
     return(pp)
