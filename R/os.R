@@ -101,12 +101,12 @@ ez.remove = remove.packages
 #' @export
 ez.uninstall = remove.packages
 
-#' clear, clean  console, workspace, plot
-#' @param area 0 all, 
-#'             1 console only
-#'             2 workspace only
-#'             3 plot only
-#'             'var' particular var
+#' clear, clean  console, workspace, plot or variable(s)
+#' @param area 0 all, \cr
+#'             1 console only \cr
+#'             2 workspace only \cr
+#'             3 plot only \cr
+#'             'var' particular var \cr
 #'             c('var1','var2') particular vars
 #' @return
 #' @examples
@@ -135,8 +135,13 @@ ez.clear = function(area=0) {
     null = gc()  # call garbage collection
 }
 
-#' clear, clean  console, workspace, plot
-#' @param area 0 all, 1 console only, 2 workspace only, 3 plot only
+#' clear, clean  console, workspace, plot or variable(s)
+#' @param area 0 all, \cr
+#'             1 console only \cr
+#'             2 workspace only \cr
+#'             3 plot only \cr
+#'             'var' particular var \cr
+#'             c('var1','var2') particular vars
 #' @return
 #' @examples
 #' @export

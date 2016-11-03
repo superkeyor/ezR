@@ -2,19 +2,19 @@
 % Please edit documentation in R/os.R
 \name{ez.clear}
 \alias{ez.clear}
-\title{clear, clean  console, workspace, plot}
+\title{clear, clean  console, workspace, plot or variable(s)}
 \usage{
 ez.clear(area = 0)
 }
 \arguments{
-\item{area}{0 all, 
-1 console only
-2 workspace only
-3 plot only
-'var' particular var
+\item{area}{0 all, \cr
+1 console only \cr
+2 workspace only \cr
+3 plot only \cr
+'var' particular var \cr
 c('var1','var2') particular vars}
 }
 \description{
-clear, clean  console, workspace, plot
+clear, clean  console, workspace, plot or variable(s)
 }
 
