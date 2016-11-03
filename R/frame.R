@@ -271,7 +271,7 @@ ez.label.set = function(df,varname,label){
 #' \cr more "agressive" than \code{\link{ez.2factor}}; opposite of \code{\link{ez.2value}}
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
-#' \cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+#' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @param drop.is_na ignore is_na attr, if yes, treat as NA
 #' @details Both value and variable label attributes will be removed when converting variables to factors.
@@ -303,7 +303,7 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.is_na=FALSE,...){
 #' \cr more "gentle" than \code{\link{ez.2label}}; opposite of \code{\link{ez.2value}}
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
-#' \cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+#' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @details
 #' @examples
@@ -332,7 +332,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' @description continous number<--categorical string/number
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
-#' \cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+#' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @param start.at starting index, i.e. the lowest numeric value of the variable's value range. By default, this argument is NULL, hence the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric) or to 1 (if factor levels are not numeric).
 #' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}

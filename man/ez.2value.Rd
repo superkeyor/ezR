@@ -10,7 +10,7 @@ ez.2value(x, col = NULL, start.at = NULL, keep.labels = TRUE, ...)
 \item{x}{a data frame or a vector/col}
 
 \item{col}{if x is a data frame, col is specified (e.g., "cond"), convert that col only
-\cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+\cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 \cr        if x is not a data frame, col is ignored}
 
 \item{start.at}{starting index, i.e. the lowest numeric value of the variable's value range. By default, this argument is NULL, hence the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric) or to 1 (if factor levels are not numeric).}
