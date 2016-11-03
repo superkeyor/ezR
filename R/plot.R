@@ -717,7 +717,7 @@ ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
 #' change factor level order in a df
 #' @description does not change factor label; only changes the order of printing out
 #' @param df data frame
-#' @param col a factor/character column name, quoted "", eg, "group"
+#' @param col a factor column name, quoted "", eg, "group"
 #' @param ord "az","za"--alphabetic;
 #' \cr "as"--as is, appearance;
 #' \cr c("small","medium","large")--specified level order

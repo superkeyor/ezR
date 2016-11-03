@@ -9,7 +9,7 @@ ez.factorder(df, col, ord = "as")
 \arguments{
 \item{df}{data frame}
 
-\item{col}{a factor/character column name, quoted "", eg, "group"}
+\item{col}{a factor column name, quoted "", eg, "group"}
 
 \item{ord}{"az","za"--alphabetic;
 \cr "as"--as is, appearance;

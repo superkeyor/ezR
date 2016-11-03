@@ -269,11 +269,15 @@ ez.label.set = function(df,varname,label){
 #' wrapper of \code{\link[sjmisc]{to_label}}
 #' @description continous/factorial number-->factorial level string, say, gender=0/1-->male/female
 #' \cr more "agressive" than \code{\link{ez.2factor}}; opposite of \code{\link{ez.2value}}
+#' @param x a data frame or a vector/col
+#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
+#' \cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+#' \cr        if x is not a data frame, col is ignored
 #' @param drop.is_na ignore is_na attr, if yes, treat as NA
 #' @details Both value and variable label attributes will be removed when converting variables to factors.
 #' @examples
 #'
-#' @return returns a factor with string as its levels
+#' @return returns a factor with string as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -283,8 +287,13 @@ ez.label.set = function(df,varname,label){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
-    result=sjmisc::to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.is_na)
+ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.is_na=FALSE,...){
+    if (is.data.frame(x) & !is.null(col)){
+        x[col]=sjmisc::to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.is_na)
+        result=x
+    } else {
+        result=sjmisc::to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.is_na)
+    }
     return(result)
 }
 
@@ -292,11 +301,14 @@ ez.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
 #' @description continous number-->categorical number
 #' \cr converts a variable into a factor, but preserves variable and value label attributes.
 #' \cr more "gentle" than \code{\link{ez.2label}}; opposite of \code{\link{ez.2value}}
-#' @param
+#' @param x a data frame or a vector/col
+#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
+#' \cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+#' \cr        if x is not a data frame, col is ignored
 #' @details
 #' @examples
 #'
-#' @return returns a factor with number as its levels
+#' @return returns a factor with number as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -306,14 +318,22 @@ ez.2label = function(x, add.non.labelled=TRUE, drop.is_na=FALSE,...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
-    result=sjmisc::to_factor(x, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
+    if (is.data.frame(x) & !is.null(col)){
+        x[col]=sjmisc::to_factor(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+        result=x
+    } else {
+        result=sjmisc::to_factor(x, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+    }
     return(result)
 }
 
 #' wrapper of \code{\link[sjmisc]{to_value}}; see also \code{\link{ez.num}}
 #' @description continous number<--categorical string/number
-#' @param x factor or a data frame with factors. May also be a character vector.
+#' @param x a data frame or a vector/col
+#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
+#' \cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+#' \cr        if x is not a data frame, col is ignored
 #' @param start.at starting index, i.e. the lowest numeric value of the variable's value range. By default, this argument is NULL, hence the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric) or to 1 (if factor levels are not numeric).
 #' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}
 #' @examples
@@ -324,7 +344,7 @@ ez.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...)
 #' # attr(,"labels")
 #' # D F H
 #' # 1 2 3
-#' @return returns a numeric variable
+#' @return returns a numeric variable or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -334,8 +354,13 @@ ez.2factor = function(x, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...)
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.2value = function(x, start.at=NULL, keep.labels=TRUE,...){
-    result=sjmisc::to_value(x, start.at=start.at, keep.labels=keep.labels,...)
+ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
+    if (is.data.frame(x) & !is.null(col)){
+        x[col]=sjmisc::to_value(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+        result=x
+    } else {    
+        result=sjmisc::to_value(x, start.at=start.at, keep.labels=keep.labels,...)
+    }
     return(result)
 }
 

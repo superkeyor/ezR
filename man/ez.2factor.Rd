@@ -4,11 +4,18 @@
 \alias{ez.2factor}
 \title{wrapper of \code{\link[sjmisc]{to_factor}}}
 \usage{
-ez.2factor(x, add.non.labelled = TRUE, drop.na = FALSE, ref.lvl = NULL,
-  ...)
+ez.2factor(x, col = NULL, add.non.labelled = TRUE, drop.na = FALSE,
+  ref.lvl = NULL, ...)
+}
+\arguments{
+\item{x}{a data frame or a vector/col}
+
+\item{col}{if x is a data frame, col is specified (e.g., "cond"), convert that col only
+\cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+\cr        if x is not a data frame, col is ignored}
 }
 \value{
-returns a factor with number as its levels
+returns a factor with number as its levels or a data frame with changed col(s)
 }
 \description{
 continous number-->categorical number

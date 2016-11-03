@@ -4,13 +4,19 @@
 \alias{ez.2label}
 \title{wrapper of \code{\link[sjmisc]{to_label}}}
 \usage{
-ez.2label(x, add.non.labelled = TRUE, drop.is_na = FALSE, ...)
+ez.2label(x, col = NULL, add.non.labelled = TRUE, drop.is_na = FALSE, ...)
 }
 \arguments{
+\item{x}{a data frame or a vector/col}
+
+\item{col}{if x is a data frame, col is specified (e.g., "cond"), convert that col only
+\cr        if x is a data frame, col is specified (NULL default), convert all possible cols in x
+\cr        if x is not a data frame, col is ignored}
+
 \item{drop.is_na}{ignore is_na attr, if yes, treat as NA}
 }
 \value{
-returns a factor with string as its levels
+returns a factor with string as its levels or a data frame with changed col(s)
 }
 \description{
 continous/factorial number-->factorial level string, say, gender=0/1-->male/female
