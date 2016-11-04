@@ -319,12 +319,13 @@ ez.join = function(sep='',...){
 }
 
 #' wrapper of \code{\link{cat}}
-#' @param
+#' @param ... could be char, num, vector (no need to convert type) e.g., ez.print('a=',3), ez.print('a=',c(3,'b'))
+#' @param sep default empty ''
 #' @return each print generates a new line automatically
 #' @examples
 #' @details do not use R \code{\link{print}}, not actually printing \\n
-#' @seealso \code{\link{sprintf}}
+#' @seealso \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 #' @export
-ez.print = function(...){
-    cat(..., "\n")
+ez.print = function(...,sep=''){
+    cat(..., "\n", sep = sep)
 }

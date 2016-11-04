@@ -200,19 +200,22 @@ ez.edit = function(path){
     result = file.edit(path)
 }
 
-#' Prints output to both terminal and a file (log.txt) globally.
+#' Prints/Directs output to both terminal and a file (log.txt) globally.
 #' @param mode a=append; w=overwrite
-#' @return
+#' @param timestamp T=insert timestamp at the beginning and end, F=otherwise
+#' @param status T=open the redirection/file, F=close the redirection
+#' @return nothing
 #' @examples
+#' @seealso \code{\link{ez.print}}
 #' @export
-ez.log = function(file='log.txt',mode='a',status=TRUE){
+ez.log = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
     append = ifelse(mode=='a',TRUE,FALSE)
     if (status) {
         sink(file,append=append,split=TRUE)
-        print(sprintf('log on at %s...', date()))
+        if (timestamp) {cat(sprintf('log on at %s...', date()))}
     }
     else {
-        cat(sprintf('log off at %s...\n\n', date()))
+        if (timestamp) {cat(sprintf('log off at %s...\n\n', date()))}
         sink()
     }
 }
