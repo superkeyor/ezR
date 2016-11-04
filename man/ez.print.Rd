@@ -4,7 +4,12 @@
 \alias{ez.print}
 \title{wrapper of \code{\link{cat}}}
 \usage{
-ez.print(...)
+ez.print(..., sep = "")
+}
+\arguments{
+\item{...}{could be char, num, vector (no need to convert type) e.g., ez.print('a=',3), ez.print('a=',c(3,'b'))}
+
+\item{sep}{default empty ''}
 }
 \value{
 each print generates a new line automatically
@@ -16,6 +21,6 @@ wrapper of \code{\link{cat}}
 do not use R \code{\link{print}}, not actually printing \\n
 }
 \seealso{
-\code{\link{sprintf}}
+\code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 }
 

@@ -2,14 +2,24 @@
 % Please edit documentation in R/io.R
 \name{ez.log}
 \alias{ez.log}
-\title{Prints output to both terminal and a file (log.txt) globally.}
+\title{Prints/Directs output to both terminal and a file (log.txt) globally.}
 \usage{
-ez.log(file = "log.txt", mode = "a", status = TRUE)
+ez.log(file = "log.txt", mode = "a", status = TRUE, timestamp = TRUE)
 }
 \arguments{
 \item{mode}{a=append; w=overwrite}
+
+\item{status}{T=open the redirection/file, F=close the redirection}
+
+\item{timestamp}{T=insert timestamp at the beginning and end, F=otherwise}
+}
+\value{
+nothing
 }
 \description{
-Prints output to both terminal and a file (log.txt) globally.
+Prints/Directs output to both terminal and a file (log.txt) globally.
+}
+\seealso{
+\code{\link{ez.print}}
 }
 
