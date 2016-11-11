@@ -27,7 +27,7 @@ ez.typeof = class
 #' @export
 ez.num = function(x, asis = TRUE, ...){
     if (is.factor(x)) {
-        if asis {
+        if (asis) {
             # http://stackoverflow.com/a/22701462/2292993
             result = as.numeric(levels(x))[x]
         } else {

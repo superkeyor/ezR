@@ -17,6 +17,8 @@ ez.2value(x, col = NULL, start.at = NULL, keep.labels = TRUE, ...)
 }
 \value{
 returns a numeric variable or a data frame with changed col(s)
+\cr if x is a factor with chars, will be converted to 1 2 3 etc, see the example
+\cr use \code{\link{ez.num}} to convert the same factor to either NA or keep the char
 }
 \description{
 continous number<--categorical string/number
