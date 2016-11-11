@@ -20,7 +20,7 @@ ez.typeof = class
 #' @param x a character vector, or a factor
 #' @return returns a converted vector
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
-#' \cr \code{\link{ez.num}} converts the same char as is
+#' \cr \code{\link{ez.num}} keeps the same char as is
 #' @details see \url{http://stackoverflow.com/a/22701462/2292993}
 #' @seealso \code{\link{ez.2value}}
 #' @export
