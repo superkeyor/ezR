@@ -222,7 +222,7 @@ ez.writex = ez.savex
 #' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 #' @export
-ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, col.names=TRUE, asTable=FALSE...){
+ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, col.names=TRUE, asTable=FALSE, ...){
     x = data.frame(x)
     openxlsx::write.xlsx(x=x, file=file, asTable=asTable, sheetName=sheetName, ..., row.names=row.names, col.names=col.names)
 }

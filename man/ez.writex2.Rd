@@ -5,7 +5,7 @@
 \title{save an xlsx file, alias of \code{\link{ez.savex2}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package}
 \usage{
 ez.writex2(x, file = "RData.xlsx", sheetName = "Sheet1",
-  row.names = FALSE, col.names = TRUE, asTable = FALSE...)
+  row.names = FALSE, col.names = TRUE, asTable = FALSE, ...)
 }
 \arguments{
 \item{sheetName}{Name of the worksheet}
