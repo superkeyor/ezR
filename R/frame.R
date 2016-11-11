@@ -345,6 +345,8 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' # D F H
 #' # 1 2 3
 #' @return returns a numeric variable or a data frame with changed col(s)
+#' \cr if x is a factor with chars, will be converted to 1 2 3 etc, see the example
+#' \cr use \code{\link{ez.num}} to convert the same factor to either NA or keep the char
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

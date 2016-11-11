@@ -18,14 +18,21 @@ ez.typeof = class
 #' sort of a wrapper of \code{\link{type.convert}}
 #' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
 #' @param x a character vector, or a factor
+#' @param asis TRUE (default, only works for factor str), if TRUE, keep the str (eg 'abc') as is, otherwise,to NA
 #' @return returns a converted vector
+#' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
+#' \cr \code{\link{ez.num}} converts the same factor to either NA or keep the char
 #' @details see \url{http://stackoverflow.com/a/22701462/2292993}
 #' @seealso \code{\link{ez.2value}}
 #' @export
-ez.num = function(x, ...){
+ez.num = function(x, asis = TRUE, ...){
     if (is.factor(x)) {
-        # http://stackoverflow.com/a/22701462/2292993
-        result = as.numeric(levels(x))[x]
+        if asis {
+            # http://stackoverflow.com/a/22701462/2292993
+            result = as.numeric(levels(x))[x]
+        } else {
+            result = NA
+        }
     } else if (is.list(x)){
         result = utils::type.convert(as.character(unlist(x)), ...)
     } else {
