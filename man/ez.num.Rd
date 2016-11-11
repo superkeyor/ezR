@@ -4,17 +4,15 @@
 \alias{ez.num}
 \title{sort of a wrapper of \code{\link{type.convert}}}
 \usage{
-ez.num(x, asis = TRUE, ...)
+ez.num(x, ...)
 }
 \arguments{
 \item{x}{a character vector, or a factor}
-
-\item{asis}{TRUE (default, only works for factor str), if TRUE, keep the str (eg 'abc') as is, otherwise,to NA}
 }
 \value{
 returns a converted vector
 \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
-\cr \code{\link{ez.num}} converts the same factor to either NA or keep the char
+\cr \code{\link{ez.num}} converts the same char as is
 }
 \description{
 Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
