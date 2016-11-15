@@ -4,7 +4,7 @@
 \alias{ez.view}
 \title{show information about a data frame or similar object (like spss variable view)}
 \usage{
-ez.view(x, showFreq = T, showPerc = T, sortByName = F, ...)
+ez.view(x, show.frq = T, show.prc = T, sort.by.name = F, ...)
 }
 \description{
 wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser

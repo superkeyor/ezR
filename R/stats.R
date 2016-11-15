@@ -34,6 +34,6 @@ ez.info = ez.show
 #' @return
 #' @examples
 #' @export
-ez.view = function(x, showFreq = T, showPerc = T, sortByName = F, ...){
-    sjPlot::view_df(x, showFreq = showFreq, showPerc = showPerc, sortByName = sortByName, ...)
+ez.view = function(x, show.frq = T, show.prc = T, sort.by.name = F, ...){
+    sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 }
