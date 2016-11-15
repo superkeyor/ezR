@@ -7,9 +7,13 @@
 ez.print(..., sep = "")
 }
 \arguments{
-\item{...}{could be char, num, vector (no need to convert type) e.g., ez.print('a=',3), ez.print('a=',c(3,'b'))}
+\item{...}{could be char, num, vector, or mixed (no need to convert type) e.g., 
+\cr        ez.print('a=',3)
+\cr        ez.print('a=',c(3,'b'))
+\cr        ez.print(var,"\t",p)
+\cr        ez.print(c(var,"\t",p))}
 
-\item{sep}{default empty ''}
+\item{sep}{default empty}
 }
 \value{
 each print generates a new line automatically

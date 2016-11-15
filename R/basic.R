@@ -321,8 +321,12 @@ ez.join = function(sep='',...){
 }
 
 #' wrapper of \code{\link{cat}}
-#' @param ... could be char, num, vector (no need to convert type) e.g., ez.print('a=',3), ez.print('a=',c(3,'b'))
-#' @param sep default empty ''
+#' @param ... could be char, num, vector, or mixed (no need to convert type) e.g., 
+#' \cr        ez.print('a=',3)
+#' \cr        ez.print('a=',c(3,'b'))
+#' \cr        ez.print(var,"\t",p)
+#' \cr        ez.print(c(var,"\t",p))
+#' @param sep default empty
 #' @return each print generates a new line automatically
 #' @examples
 #' @details do not use R \code{\link{print}}, not actually printing \\n
