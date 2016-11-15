@@ -2,11 +2,17 @@
 % Please edit documentation in R/stats.R
 \name{ez.show}
 \alias{ez.show}
-\title{show information about a data frame or other object}
+\title{show information about a data frame or other object, alias of \code{\link{ez.info}}}
 \usage{
-ez.show(...)
+ez.show(x)
+}
+\arguments{
+\item{x}{a data frame or a vector or sth else that can be converted into a data frame}
 }
 \description{
-show information about a data frame or other object
+show information about a data frame or other object, alias of \code{\link{ez.info}}
+}
+\seealso{
+\code{\link{ez.view}}
 }
 

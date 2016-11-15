@@ -9,4 +9,7 @@ ez.view(x, show.frq = T, show.prc = T, sort.by.name = F, ...)
 \description{
 wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 }
+\seealso{
+\code{\link{ez.info}} or \code{\link{ez.show}}
+}
 
