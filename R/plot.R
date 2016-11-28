@@ -770,3 +770,15 @@ ez.factorname = function(df, col, newLevelNames){
     cat('renamed level names: ', newLevelNames, '\n')
     return(df)
 }
+
+#' reset factor levels in a df after its levels have been modified, relevel a factor in order to reflect its new levels
+#' @description does not change factor label (set factor order as is)
+#' @param df data frame
+#' @param col a factor column name, quoted "", eg, "group"
+#' @return returns a new df
+#' @examples
+#' @export
+ez.relevelfactor = function(df, col){
+    df[[col]] = factor(df[[col]], unique(as.character(df[[col]])))
+    return(df)
+}
