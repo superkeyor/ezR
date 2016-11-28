@@ -10,8 +10,8 @@ ez.print(..., sep = "")
 \item{...}{could be char, num, vector, or mixed (no need to convert type) e.g., 
 \cr        ez.print('a=',3)
 \cr        ez.print('a=',c(3,'b'))
-\cr        ez.print(var,"\t",p)
-\cr        ez.print(c(var,"\t",p))}
+\cr        ez.print(var,'\\t',p)
+\cr        ez.print(c(var,'\\t',p))}
 
 \item{sep}{default empty}
 }
