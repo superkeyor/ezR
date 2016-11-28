@@ -358,7 +358,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
     if (is.data.frame(x) & !is.null(col)){
-        x[col]=sjmisc::to_value(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+        x[col]=sjmisc::to_value(x[col], start.at=start.at, keep.labels=keep.labels,...)
         result=x
     } else {    
         result=sjmisc::to_value(x, start.at=start.at, keep.labels=keep.labels,...)
