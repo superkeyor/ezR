@@ -208,6 +208,19 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
     ez.regexp(s, pat, ignorecase, once, split)
 }
 
+#' Merge Multiple spaces to single space, and remove trailing/leading spaces
+#' @description underlying function is \code{\link{gsub}} with regular expression
+#' @param s a string
+#' @return
+#' @examples  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
+#' @seealso \code{\link{trimws}}
+#' @export
+ez.trim = function (s){
+    # http://stackoverflow.com/a/25734388/2292993
+    s = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", s, perl=TRUE)
+    return(s)
+}
+
 #' replace string or string vectors literally
 #' @description support single string, vectors
 #' \cr case sensitive! wrapper of sub, gsub

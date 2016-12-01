@@ -307,6 +307,10 @@ matlabcolor2 <- function(n=100){
 #' @examples
 #' @export
 ez.describe = function(df,cmd){
+    # http://stackoverflow.com/a/25734388/2292993
+    # Merge Multiple spaces to single space, and remove trailing/leading spaces 
+    # also see trimws()--remove trailing/leading spaces
+    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     # yy
     if (length(cmd)==1) {
@@ -328,6 +332,7 @@ ez.describe = function(df,cmd){
     # yy|xx or yy|xx zz
     } else {
         yy = cmd[1]
+        xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
         xx = strsplit(cmd[2]," ",fixed=TRUE)[[1]]
         # yy|xx
         if (length(xx)==1) {
@@ -379,6 +384,57 @@ ez.describe = function(df,cmd){
                 }        
             }
     }    
+    eval(parse(text = tt))
+    return(pp)
+}
+
+
+#' mimic xyplot with ggplot
+#' @param df data frame in long format
+#' @param cmd like "y|x,g" or "y|x z,g" where y is continous, x z are discrete, g is individual/grouping variable
+#' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
+#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @examples 
+#' @export
+ez.xyplot = function(df,cmd){
+    # http://stackoverflow.com/a/25734388/2292993
+    # Merge Multiple spaces to single space, and remove trailing/leading spaces 
+    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+
+    cmd = strsplit(cmd,"[|,]")[[1]]
+    yy = trimws(cmd[1])
+    xx = trimws(cmd[2])
+    gg = trimws(cmd[3])
+
+    xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
+    xx = strsplit(xx," ",fixed=TRUE)[[1]]
+    if (length(xx)==1) {
+        # "y|x,g"
+        xx = trimws(xx[1])
+        tt = sprintf("
+                    pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
+                    geom_point() + 
+                    geom_line(aes(color=%s)) + 
+                    theme(legend.position='none')"
+             , xx,yy,gg,gg
+        )
+    } else {
+        if (length(xx)==2) {
+            # "y|x z,g"
+            # assignment of zz should come first, because xx is going to be overwritten
+            zz = trimws(xx[2])
+            xx = trimws(xx[1])
+            tt = sprintf("
+                        pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
+                        geom_point() + 
+                        geom_line(aes(color=%s)) + 
+                        theme(legend.position='none') +
+                        facet_wrap(~%s)"
+                 , xx,yy,gg,gg,zz
+            )
+        }
+    }
+
     eval(parse(text = tt))
     return(pp)
 }
