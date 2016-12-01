@@ -413,7 +413,7 @@ ez.xyplot = function(df,cmd){
         xx = trimws(xx[1])
         tt = sprintf("
                     pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
-                    geom_point() + 
+                    geom_point(position=position_jitter(width=0.2, height=0), size=1) + 
                     geom_line(aes(color=%s)) + 
                     theme(legend.position='none')"
              , xx,yy,gg,gg
@@ -426,7 +426,7 @@ ez.xyplot = function(df,cmd){
             xx = trimws(xx[1])
             tt = sprintf("
                         pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
-                        geom_point() + 
+                        geom_point(position=position_jitter(width=0.2, height=0), size=1) + 
                         geom_line(aes(color=%s)) + 
                         theme(legend.position='none') +
                         facet_wrap(~%s)"
