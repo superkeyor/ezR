@@ -389,7 +389,7 @@ ez.describe = function(df,cmd){
 }
 
 
-#' mimic xyplot with ggplot (slightly jittered)
+#' mimic xyplot with ggplot (slightly horizontally jittered)
 #' @param df data frame in long format
 #' @param cmd like "y|x,g" or "y|x z,g" where y is continous, x z are discrete, g is individual/grouping variable
 #' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
@@ -411,10 +411,12 @@ ez.xyplot = function(df,cmd){
     if (length(xx)==1) {
         # "y|x,g"
         xx = trimws(xx[1])
+        # jitter solution (horizontal only) see: http://stackoverflow.com/questions/39533456/
         tt = sprintf("
+                    pd = position_dodge(0.2)
                     pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
-                    geom_point(position=position_jitter(width=0.2, height=0), size=1) + 
-                    geom_line(position=position_jitter(width=0.2, height=0), aes(color=%s)) + 
+                    geom_point(position=pd, size=1) + 
+                    geom_line(position=pd, aes(color=%s)) + 
                     theme(legend.position='none')"
              , xx,yy,gg,gg
         )
@@ -425,9 +427,10 @@ ez.xyplot = function(df,cmd){
             zz = trimws(xx[2])
             xx = trimws(xx[1])
             tt = sprintf("
+                        pd = position_dodge(0.2)
                         pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
-                        geom_point(position=position_jitter(width=0.2, height=0), size=1) + 
-                        geom_line(position=position_jitter(width=0.2, height=0), aes(color=%s)) + 
+                        geom_point(position=pd, size=1) + 
+                        geom_line(position=pd, aes(color=%s)) + 
                         theme(legend.position='none') +
                         facet_wrap(~%s)"
                  , xx,yy,gg,gg,zz

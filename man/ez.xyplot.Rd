@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{ez.xyplot}
 \alias{ez.xyplot}
-\title{mimic xyplot with ggplot (slightly jittered)}
+\title{mimic xyplot with ggplot (slightly horizontally jittered)}
 \usage{
 ez.xyplot(df, cmd)
 }
@@ -16,6 +16,6 @@ ez.xyplot(df, cmd)
 a ggplot object (+theme_apa() to get apa format plot)
 }
 \description{
-mimic xyplot with ggplot (slightly jittered)
+mimic xyplot with ggplot (slightly horizontally jittered)
 }
 
