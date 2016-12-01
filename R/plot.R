@@ -332,8 +332,8 @@ ez.describe = function(df,cmd){
     # yy|xx or yy|xx zz
     } else {
         yy = cmd[1]
-        xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
-        xx = strsplit(cmd[2]," ",fixed=TRUE)[[1]]
+        xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
+        xx = strsplit(xx," ",fixed=TRUE)[[1]]
         # yy|xx
         if (length(xx)==1) {
             xx = xx[1]
