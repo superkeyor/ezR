@@ -389,7 +389,7 @@ ez.describe = function(df,cmd){
 }
 
 
-#' mimic xyplot with ggplot
+#' mimic xyplot with ggplot (slightly jittered)
 #' @param df data frame in long format
 #' @param cmd like "y|x,g" or "y|x z,g" where y is continous, x z are discrete, g is individual/grouping variable
 #' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
@@ -414,7 +414,7 @@ ez.xyplot = function(df,cmd){
         tt = sprintf("
                     pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
                     geom_point(position=position_jitter(width=0.2, height=0), size=1) + 
-                    geom_line(aes(color=%s)) + 
+                    geom_line(position=position_jitter(width=0.2, height=0), aes(color=%s)) + 
                     theme(legend.position='none')"
              , xx,yy,gg,gg
         )
@@ -427,7 +427,7 @@ ez.xyplot = function(df,cmd){
             tt = sprintf("
                         pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
                         geom_point(position=position_jitter(width=0.2, height=0), size=1) + 
-                        geom_line(aes(color=%s)) + 
+                        geom_line(position=position_jitter(width=0.2, height=0), aes(color=%s)) + 
                         theme(legend.position='none') +
                         facet_wrap(~%s)"
                  , xx,yy,gg,gg,zz
