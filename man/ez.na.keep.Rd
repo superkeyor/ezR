@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.na.keep}
 \alias{ez.na.keep}
-\title{keep rows that have a certain number of NAs anywhere/somewhere and delete others}
+\title{keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others}
 \usage{
 ez.na.keep(df, col = NULL, n = 0)
 }
@@ -13,6 +13,7 @@ ez.na.keep(df, col = NULL, n = 0)
 \cr default is NULL, search for all columns}
 
 \item{n}{integer or vector, 0, c(3,5), number/range of NAs allowed.
+\cr If a number, the exact number of NAs kept
 \cr Range includes both ends 3<=n<=5
 \cr Range could be -Inf, Inf}
 }
@@ -20,6 +21,6 @@ ez.na.keep(df, col = NULL, n = 0)
 returns a new df with rows that have NA(s) removed
 }
 \description{
-keep rows that have a certain number of NAs anywhere/somewhere and delete others
+keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others
 }
 

@@ -919,11 +919,12 @@ ez.del = function(df,del){
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.delete = ez.del
 
-#' keep rows that have a certain number of NAs anywhere/somewhere and delete others
+#' keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others
 #' @param df a data frame
 #' @param col restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
 #' \cr default is NULL, search for all columns
 #' @param n integer or vector, 0, c(3,5), number/range of NAs allowed.
+#' \cr If a number, the exact number of NAs kept
 #' \cr Range includes both ends 3<=n<=5
 #' \cr Range could be -Inf, Inf
 #' @return returns a new df with rows that have NA(s) removed
