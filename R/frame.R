@@ -931,7 +931,9 @@ ez.delete = ez.del
 #' @export
 ez.na.keep = function(df, col=NULL, n=0){
     if (!is.null(col)) {
-        df.temp = df[,col]
+        # R converts a single row/col to a vector if the parameter col has only one col
+        # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
+        df.temp = df[,col,drop=FALSE]
     } else {
         df.temp = df
     }
