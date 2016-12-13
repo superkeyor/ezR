@@ -391,7 +391,7 @@ ez.describe = function(df,cmd){
 
 #' mimic xyplot with ggplot (slightly horizontally jittered)
 #' @param df data frame in long format
-#' @param cmd like "y|x,g" or "y|x z,g" where y is continous, x z are discrete, g is individual/grouping variable
+#' @param cmd like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous, x z a are discrete, g is individual/grouping variable
 #' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
@@ -432,9 +432,26 @@ ez.xyplot = function(df,cmd){
                         geom_point(position=pd, size=1) + 
                         geom_line(position=pd, aes(color=%s)) + 
                         theme(legend.position='none') +
-                        facet_wrap(~%s)"
+                        facet_grid(.~%s)"
                  , xx,yy,gg,gg,zz
             )
+        } else {
+            if (length(xx)==3) {
+                # "y|x z a,g"
+                # assignment of zz should come first, because xx is going to be overwritten
+                zz = trimws(xx[2])
+                aa = trimws(xx[3])
+                xx = trimws(xx[1])
+                tt = sprintf("
+                            pd = position_dodge(0.2)
+                            pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
+                            geom_point(position=pd, size=1) + 
+                            geom_line(position=pd, aes(color=%s)) + 
+                            theme(legend.position='none') +
+                            facet_grid(%s~%s)"
+                     , xx,yy,gg,gg,aa,zz
+                )
+            }
         }
     }
 
