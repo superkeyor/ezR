@@ -503,6 +503,7 @@ ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
 #'  \item{}{A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1")}
 #'  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA")}
 #' }
+#' \cr\cr seems to work with characters as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 #'
 #' @note Please note following behaviours of the function:
 #'       \itemize{
@@ -578,6 +579,7 @@ ez.recode = function(df, varName, recodes){
 #'  \item{}{A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1")}
 #'  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA")}
 #' }
+#' \cr\cr seems to work with characters as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 #'
 #' @note Please note following behaviours of the function:
 #'       \itemize{
