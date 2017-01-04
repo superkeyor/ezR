@@ -356,8 +356,11 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' show some help info on color
 #' @examples
 #' RColorBrewer::display.brewer.all()
-#' cols <- RColorBrewer::brewer.pal(8,"Set3") <--returns 8 colors from Set3 (which supports up to 12 colors)
-#' colorRampPalette(brewer.pal(9,"Blues"))(100) <--generate 100 colors based on the 9 from the ‘Blues’ palette
+#' # returns 8 colors from Set3 (which supports up to 12 colors)
+#' cols <- RColorBrewer::brewer.pal(8,"Set3")
+#' # generates 100 colors based on the 9 from the Blues palette
+#' colorRampPalette(brewer.pal(9,"Blues"))(100)
+#' scale_colour_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))
 #' @export
 ez.color = function(){
     if (!require("RColorBrewer")) {
@@ -366,8 +369,14 @@ ez.color = function(){
     RColorBrewer::display.brewer.all()
     cat('usage: \n
         RColorBrewer::display.brewer.all()\n
-        cols <- RColorBrewer::brewer.pal(8,"Set3") <--returns 8 colors from Set3 (which supports up to 12 colors) \n
-        colorRampPalette(brewer.pal(9,"Blues"))(100) <--generate 100 colors based on the 9 from the ‘Blues’ palette\n')
+
+        # returns 8 colors from Set3 (which supports up to 12 colors)\n
+        cols <- RColorBrewer::brewer.pal(8,"Set3")\n
+
+        # generates 100 colors based on the 9 from the Blues palette\n
+        colorRampPalette(brewer.pal(9,"Blues"))(100)\n
+
+        # scale_colour_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))\n')
 }
 
 #' plot a customized boxplot with jittered stripplot, violin, and mean
