@@ -1,149 +1,71 @@
 ###**************************************************.
 ###*plot.
 ###**************************************************.
-#' wrapper of \code{\link{dev.copy2pdf}}
-#' @param
-#' @return
-#' @note internally also use \code{\link[extrafont]{embed_fonts}} to embed fonts
-#' @seealso \code{\link{pdf}} \code{\link{ez.pdfon}} \code{\link{ez.pdfoff}}
-#' @examples
-#' A4:     width 7(inches) height = 5
-#' Letter: 8.5 x 11 (portrait default ie, 11 x 8.5)
-#' @export
-ez.export = function(filename = "RPlot.pdf", pdf.width = 11, pdf.height = 8.5, ...) {
-    dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
-    extrafont::embed_fonts(filename)
-    # If outfile is not specified, it will overwrite the original file
-    cat('Image exported. Font embedded.\n')
-}
 
-#' wrapper of \code{\link{pdf}}
-#' @param
-#' @return
-#' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
-#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfoff}}
-#' @examples
-#' A4:     width 7(inches) height = 5
-#' Letter: 8.5 x 11
-#' @export
-ez.pdfon = pdf
-
-#' wrapper of \code{\link{dev.off}}
-#' @param
-#' @return
-#' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
-#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfon}}
-#' @examples
-#' A4:     width 7(inches) height = 5
-#' Letter: 8.5 x 11
-#' @export
-ez.pdfoff = dev.off
-
-#' subplot, wrapper of \code{\link{par}}
-#' @param
-#' @return
-#' @examples
-#' subplot(n,m,...) divides the current figure into an n-by-m grid
-#' A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
-#' by columns (mfcol), or rows (mfrow), respectively.
-#' see more ?par
-#' @export
-ez.subplot = function(n, m, ...){
-    par(mfrow=c(n,m), ...)
-}
-
-#' embed a new plot within an existing plot at the coordinates specified (in user units of the existing plot)
-#' @param
-#' @return
-#' @examples
-#' see from http://cran.r-project.org/web/packages/TeachingDemos/TeachingDemos.pdf
-#' # e.g.,
-#' # 3 rows subplots
-#' par(mfrow=c(3,1) )
+###**************************************************.
+###*without ez. in the function name.
+###**************************************************.
+#' Multiple plot function
 #'
-#' plot(1:10, 1:10, main = "Plot 1")
-#' # draw another arbitrary subplot
-#' ez.embed(plot(10,10, xlab="", ylab=""), x=2, y=8, size = c(0.5, 0.5) )
-#'
-#' # demonstrates mfg usage, draw the third plot before the drawing the second
-#' par(mfg=c(3,1) ); plot(11:20, 11:20, main = "Plot 3")
-#' ez.embed(plot(10,10, xlab="", ylab=""), x=12, y=18, size = c(0.5, 0.5))
-#'
-#' par(mfg=c(2,1)); plot(21:30, 21:30, main = "Plot 2")
-#' ez.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))
+#' @param ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+#' @param cols:   Number of columns in layout
+#' @param layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#' \cr If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+#' \cr then plot 1 will go in the upper left, 2 will go in the upper right, and
+#' \cr 3 will go all the way across the bottom.
+#' @return returns nothing (NULL)
 #' @export
-ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
-                   inset=c(0,0), type=c('plt','fig'), pars=NULL){
-    type <- match.arg(type)
-    old.par <- par( c(type, 'usr', names(pars) ) )
-    on.exit(par(old.par))
-    if(missing(x)) x <- locator(2)
-    if(is.character(x)) {
-        if(length(inset) == 1) inset <- rep(inset,2)
-        x.char <- x
-        tmp <- par('usr')
-        x <- (tmp[1]+tmp[2])/2
-        y <- (tmp[3]+tmp[4])/2
-        if( length(grep('left',x.char, ignore.case=TRUE))) {
-            x <- tmp[1] + inset[1]*(tmp[2]-tmp[1])
-            if(missing(hadj)) hadj <- 0
-        }
-        if( length(grep('right',x.char, ignore.case=TRUE))) {
-            x <- tmp[2] - inset[1]*(tmp[2]-tmp[1])
-            if(missing(hadj)) hadj <- 1
-        }
-        if( length(grep('top',x.char, ignore.case=TRUE))) {
-            y <- tmp[4] - inset[2]*(tmp[4]-tmp[3])
-            if(missing(vadj)) vadj <- 1
-        }
-        if( length(grep('bottom',x.char, ignore.case=TRUE))) {
-            y <- tmp[3] + inset[2]*(tmp[4]-tmp[3])
-            if(missing(vadj)) vadj <- 0
-        }
+#' @examples
+#' plots <- list()  # new empty list
+#' for (i in 1:6) {
+#'     p1 = qplot(1:10, rnorm(10), main = i)
+#'     plots[[i]] <- p1  # add each plot into plot list
+#' }
+#' ggmultiplot(plotlist = plots, cols = 3)
+#'
+#'
+#'
+#' plots <- list()
+#' for (i in 1:5) {
+#'     p1 = qplot(1:10, rnorm(10), main = i)
+#'     plots[[i]] <- p1
+#' }
+#' layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
+#' ggmultiplot(plotlist = plots, layout = layout)
+#'
+#' @references \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
+ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+    # Make a list from the ... arguments and plotlist
+    plots <- c(list(...), plotlist)
+
+    numPlots = length(plots)
+
+    # If layout is NULL, then use 'cols' to determine layout
+    if (is.null(layout)) {
+        # Make the panel
+        # ncol: Number of columns of plots
+        # nrow: Number of rows needed, calculated from # of cols
+        layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                         ncol = cols, nrow = ceiling(numPlots/cols))
     }
-    xy <- xy.coords(x,y)
-    if(length(xy$x) != 2){
-        pin <- par('pin')
-        tmpx <- grconvertX( xy$x[1], to='npc' )
-        tmpy <- grconvertY( xy$y[1], to='npc' )
-        x <- c( tmpx - hadj*size[1]/pin[1],
-                tmpx + (1-hadj)*size[1]/pin[1] )
-        y <- c( tmpy - vadj*size[2]/pin[2],
-                tmpy + (1-vadj)*size[2]/pin[2] )
-        xyx <- grconvertX(x, from='npc', to='nfc')
-        xyy <- grconvertY(y, from='npc', to='nfc')
+
+    if (numPlots==1) {
+        print(plots[[1]])
+
     } else {
-        xyx <- grconvertX(x, to='nfc')
-        xyy <- grconvertY(y, to='nfc')
-    }
+        # Set up the page
+        grid::grid.newpage()
+        grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
 
-    par(pars)
-    if(type=='fig'){
-        par(fig=c(xyx,xyy), new=TRUE)
-    } else {
-        par(plt=c(xyx,xyy), new=TRUE)
-    }
-    fun
-    tmp.par <- par(no.readonly=TRUE)
+        # Make each plot, in the correct location
+        for (i in 1:numPlots) {
+            # Get the i,j matrix positions of the regions that contain this subplot
+            matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
 
-    return(invisible(tmp.par))
-}
-
-#' show some help info on color
-#' @examples
-#' RColorBrewer::display.brewer.all()
-#' cols <- RColorBrewer::brewer.pal(8,"Set3")
-#' colorRampPalette(brewer.pal(9,"Blues"))(100)
-#' @export
-ez.color = function(){
-    if (!require("RColorBrewer")) {
-        install.packages("RColorBrewer")
+            print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
+                                                  layout.pos.col = matchidx$col))
+        }
     }
-    RColorBrewer::display.brewer.all()
-    cat('usage: \n
-        RColorBrewer::display.brewer.all()\n
-        cols <- RColorBrewer::brewer.pal(8,"Set3")\n
-        colorRampPalette(brewer.pal(9,"Blues"))(100)\n')
 }
 
 #' Open Help Pages for ggplot2
@@ -285,7 +207,7 @@ theme_apa_nosize <- function(plot.box = FALSE){
 #' @param n how many colors, e.g., 100 (default)
 #' @export
 #' @rdname matlabcolor
-#' @examples
+#' @examples p + matlabcolor(), p + matlabcolor2()
 matlabcolor <- function(n=100){
     out = scale_fill_gradientn(colors=colorRamps::matlab.like(n))
     return(out)
@@ -298,6 +220,154 @@ matlabcolor <- function(n=100){
 matlabcolor2 <- function(n=100){
     out = scale_fill_gradientn(colors=colorRamps::matlab.like2(n))
     return(out)
+}
+
+###**************************************************.
+###*with ez. in the function name.
+###**************************************************.
+#' wrapper of \code{\link{dev.copy2pdf}}
+#' @param
+#' @return
+#' @note internally also use \code{\link[extrafont]{embed_fonts}} to embed fonts
+#' @seealso \code{\link{pdf}} \code{\link{ez.pdfon}} \code{\link{ez.pdfoff}}
+#' @examples
+#' A4:     width 7(inches) height = 5
+#' Letter: 8.5 x 11 (portrait default ie, 11 x 8.5)
+#' @export
+ez.export = function(filename = "RPlot.pdf", pdf.width = 11, pdf.height = 8.5, ...) {
+    dev.copy2pdf(file=filename, width = pdf.width, height = pdf.height, ...)
+    extrafont::embed_fonts(filename)
+    # If outfile is not specified, it will overwrite the original file
+    cat('Image exported. Font embedded.\n')
+}
+
+#' wrapper of \code{\link{pdf}}
+#' @param
+#' @return
+#' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
+#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfoff}}
+#' @examples
+#' A4:     width 7(inches) height = 5
+#' Letter: 8.5 x 11
+#' @export
+ez.pdfon = pdf
+
+#' wrapper of \code{\link{dev.off}}
+#' @param
+#' @return
+#' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
+#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfon}}
+#' @examples
+#' A4:     width 7(inches) height = 5
+#' Letter: 8.5 x 11
+#' @export
+ez.pdfoff = dev.off
+
+#' subplot, wrapper of \code{\link{par}}
+#' @param
+#' @return
+#' @examples
+#' subplot(n,m,...) divides the current figure into an n-by-m grid
+#' A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
+#' by columns (mfcol), or rows (mfrow), respectively.
+#' see more ?par
+#' @export
+ez.subplot = function(n, m, ...){
+    par(mfrow=c(n,m), ...)
+}
+
+#' embed a new plot within an existing plot at the coordinates specified (in user units of the existing plot)
+#' @param
+#' @return
+#' @examples
+#' see from http://cran.r-project.org/web/packages/TeachingDemos/TeachingDemos.pdf
+#' # e.g.,
+#' # 3 rows subplots
+#' par(mfrow=c(3,1) )
+#'
+#' plot(1:10, 1:10, main = "Plot 1")
+#' # draw another arbitrary subplot
+#' ez.embed(plot(10,10, xlab="", ylab=""), x=2, y=8, size = c(0.5, 0.5) )
+#'
+#' # demonstrates mfg usage, draw the third plot before the drawing the second
+#' par(mfg=c(3,1) ); plot(11:20, 11:20, main = "Plot 3")
+#' ez.embed(plot(10,10, xlab="", ylab=""), x=12, y=18, size = c(0.5, 0.5))
+#'
+#' par(mfg=c(2,1)); plot(21:30, 21:30, main = "Plot 2")
+#' ez.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))
+#' @export
+ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
+                   inset=c(0,0), type=c('plt','fig'), pars=NULL){
+    type <- match.arg(type)
+    old.par <- par( c(type, 'usr', names(pars) ) )
+    on.exit(par(old.par))
+    if(missing(x)) x <- locator(2)
+    if(is.character(x)) {
+        if(length(inset) == 1) inset <- rep(inset,2)
+        x.char <- x
+        tmp <- par('usr')
+        x <- (tmp[1]+tmp[2])/2
+        y <- (tmp[3]+tmp[4])/2
+        if( length(grep('left',x.char, ignore.case=TRUE))) {
+            x <- tmp[1] + inset[1]*(tmp[2]-tmp[1])
+            if(missing(hadj)) hadj <- 0
+        }
+        if( length(grep('right',x.char, ignore.case=TRUE))) {
+            x <- tmp[2] - inset[1]*(tmp[2]-tmp[1])
+            if(missing(hadj)) hadj <- 1
+        }
+        if( length(grep('top',x.char, ignore.case=TRUE))) {
+            y <- tmp[4] - inset[2]*(tmp[4]-tmp[3])
+            if(missing(vadj)) vadj <- 1
+        }
+        if( length(grep('bottom',x.char, ignore.case=TRUE))) {
+            y <- tmp[3] + inset[2]*(tmp[4]-tmp[3])
+            if(missing(vadj)) vadj <- 0
+        }
+    }
+    xy <- xy.coords(x,y)
+    if(length(xy$x) != 2){
+        pin <- par('pin')
+        tmpx <- grconvertX( xy$x[1], to='npc' )
+        tmpy <- grconvertY( xy$y[1], to='npc' )
+        x <- c( tmpx - hadj*size[1]/pin[1],
+                tmpx + (1-hadj)*size[1]/pin[1] )
+        y <- c( tmpy - vadj*size[2]/pin[2],
+                tmpy + (1-vadj)*size[2]/pin[2] )
+        xyx <- grconvertX(x, from='npc', to='nfc')
+        xyy <- grconvertY(y, from='npc', to='nfc')
+    } else {
+        xyx <- grconvertX(x, to='nfc')
+        xyy <- grconvertY(y, to='nfc')
+    }
+
+    par(pars)
+    if(type=='fig'){
+        par(fig=c(xyx,xyy), new=TRUE)
+    } else {
+        par(plt=c(xyx,xyy), new=TRUE)
+    }
+    fun
+    tmp.par <- par(no.readonly=TRUE)
+
+    return(invisible(tmp.par))
+}
+
+#' show some help info on color
+#' @examples
+#' RColorBrewer::display.brewer.all()
+#' cols <- RColorBrewer::brewer.pal(8,"Set3") <--returns 8 colors from Set3 (which supports up to 12 colors)
+#' colorRampPalette(brewer.pal(9,"Blues"))(100) <--generate 100 colors based on the 9 from the ‘Blues’ palette
+#' @export
+ez.color = function(){
+    if (!require("RColorBrewer")) {
+        install.packages("RColorBrewer")
+    }
+    RColorBrewer::display.brewer.all()
+    cat('usage: \n
+        RColorBrewer::display.brewer.all()\n
+        cols <- RColorBrewer::brewer.pal(8,"Set3") <--returns 8 colors from Set3 (which supports up to 12 colors) \n
+        colorRampPalette(brewer.pal(9,"Blues"))(100) <--generate 100 colors based on the 9 from the ‘Blues’ palette\n')
 }
 
 #' plot a customized boxplot with jittered stripplot, violin, and mean
@@ -387,7 +457,6 @@ ez.describe = function(df,cmd){
     eval(parse(text = tt))
     return(pp)
 }
-
 
 #' mimic xyplot with ggplot (slightly horizontally jittered)
 #' @param df data frame in long format
@@ -689,69 +758,6 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     }
 
     return(p)
-}
-
-#' Multiple plot function
-#'
-#' @param ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-#' @param cols:   Number of columns in layout
-#' @param layout: A matrix specifying the layout. If present, 'cols' is ignored.
-#' \cr If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-#' \cr then plot 1 will go in the upper left, 2 will go in the upper right, and
-#' \cr 3 will go all the way across the bottom.
-#' @return returns nothing (NULL)
-#' @export
-#' @examples
-#' plots <- list()  # new empty list
-#' for (i in 1:6) {
-#'     p1 = qplot(1:10, rnorm(10), main = i)
-#'     plots[[i]] <- p1  # add each plot into plot list
-#' }
-#' ggmultiplot(plotlist = plots, cols = 3)
-#'
-#'
-#'
-#' plots <- list()
-#' for (i in 1:5) {
-#'     p1 = qplot(1:10, rnorm(10), main = i)
-#'     plots[[i]] <- p1
-#' }
-#' layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
-#' ggmultiplot(plotlist = plots, layout = layout)
-#'
-#' @references \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
-ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-    # Make a list from the ... arguments and plotlist
-    plots <- c(list(...), plotlist)
-
-    numPlots = length(plots)
-
-    # If layout is NULL, then use 'cols' to determine layout
-    if (is.null(layout)) {
-        # Make the panel
-        # ncol: Number of columns of plots
-        # nrow: Number of rows needed, calculated from # of cols
-        layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                         ncol = cols, nrow = ceiling(numPlots/cols))
-    }
-
-    if (numPlots==1) {
-        print(plots[[1]])
-
-    } else {
-        # Set up the page
-        grid::grid.newpage()
-        grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
-
-        # Make each plot, in the correct location
-        for (i in 1:numPlots) {
-            # Get the i,j matrix positions of the regions that contain this subplot
-            matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-            print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
-                                                  layout.pos.col = matchidx$col))
-        }
-    }
 }
 
 #' visualize where all the NAs of a dataframe are

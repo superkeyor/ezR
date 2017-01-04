@@ -11,7 +11,7 @@ show some help info on color
 }
 \examples{
 RColorBrewer::display.brewer.all()
-cols <- RColorBrewer::brewer.pal(8,"Set3")
-colorRampPalette(brewer.pal(9,"Blues"))(100)
+cols <- RColorBrewer::brewer.pal(8,"Set3") <--returns 8 colors from Set3 (which supports up to 12 colors)
+colorRampPalette(brewer.pal(9,"Blues"))(100) <--generate 100 colors based on the 9 from the ‘Blues’ palette
 }
 
