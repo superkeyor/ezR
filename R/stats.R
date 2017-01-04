@@ -40,3 +40,14 @@ ez.info = ez.show
 ez.view = function(x, show.frq = T, show.prc = T, sort.by.name = F, ...){
     sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 }
+
+#' standard error of mean
+#' @description na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
+#' @param x a vector
+#' @return
+#' @examples
+#' @export
+ez.se = function(x) {
+    # http://stackoverflow.com/a/7220087/2292993
+    sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
+}
