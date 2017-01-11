@@ -334,7 +334,7 @@ ez.join = function(sep='',...){
 }
 
 #' wrapper of \code{\link{cat}}
-#' @param ... could be char, num, vector, or mixed (no need to convert type) e.g., 
+#' @param ... could be char, num, vector, or mixed (no need to convert type, but be careful with factors (in number)) e.g., 
 #' \cr        ez.print('a=',3)
 #' \cr        ez.print('a=',c(3,'b'))
 #' \cr        ez.print(var,'\\t',p)
