@@ -471,9 +471,9 @@ ez.describe = function(df,cmd){
 #' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
 #' @para bar_gap  the gap between bars 0.7
 #' @para bar_width  the width of bar itself 0.7
-#' @para error_size  the thickness of error bar line 1
+#' @para error_size  the thickness of error bar line 0.7
 #' @para error_gap  the location of errorbar, should be equal to bar_width(?) 0.7
-#' @para error_width the width of the bar of error 0.2
+#' @para error_width the width of the bar of error 0.3
 #' @para error_direction  'both', 'max', 'min'
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
@@ -485,7 +485,7 @@ ez.describe = function(df,cmd){
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
 #' @export
-ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=1,error_gap=0.7,error_width=0.2,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,zpos='top',xangle=0,vjust=NULL,hjust=NULL) {
+ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,zpos='top',xangle=0,vjust=NULL,hjust=NULL) {
     
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
