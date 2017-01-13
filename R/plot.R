@@ -556,6 +556,95 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
     return(pp)
 }
 
+#' line plot with ggplot
+#' @param df data frame in long format
+#' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
+#' @para line_size  the thickness of line, only applicable when there is z provided
+#' @para error_size  the thickness of error bar line 
+#' @para error_gap  the location of errorbar, should not be adjusted, 0 (parameter kept for reference)
+#' @para error_width the width of the bar of error 
+#' @para error_direction  'both', 'max', 'min'
+#' @para ylab  y label NULL
+#' @para xlab  x label NULL
+#' @para zlab  z/fill label, only applicable when there is z provided NULL
+#' @para zpos  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
+#' @para xangle  angle of x text 0
+#' @para vjust  vjust of x text NULL
+#' @para hjust  hjust of x text NULL
+#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @examples 
+#' @export
+ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,zpos='top',xangle=0,vjust=NULL,hjust=NULL) {
+    
+    ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+    xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
+    zpos = ifelse(is.character(zpos), sprintf('theme(legend.position="%s")+',zpos), sprintf('theme(legend.position=c(%s))+',paste(zpos,collapse=',')))
+    
+    ymin = ifelse(error_direction %in% c('min','both'),'mean-se','mean')
+    ymax = ifelse(error_direction %in% c('max','both'),'mean+se','mean')
+    
+    vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
+    hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
+
+    # http://stackoverflow.com/a/25734388/2292993
+    # Merge Multiple spaces to single space, and remove trailing/leading spaces 
+    # also see trimws()--remove trailing/leading spaces
+    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+    if (length(cmd)==2) {
+        # yy|xx or yy|xx zz
+        yy = cmd[1]
+        xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
+        xx = strsplit(xx," ",fixed=TRUE)[[1]]
+        # yy|xx
+        if (length(xx)==1) {
+            xx = xx[1]
+            # The width in geom_line controls the bar width in relation to the x-axis 
+            # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
+            # color = outline color of bar
+            
+            tt = sprintf('
+                         pp=group_by(df,%s) %%>%% 
+                         summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
+                         
+                         ggplot2::ggplot(aes(x=%s,y=mean)) +
+                         geom_point() +
+                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+                         
+                         %s %s
+                         theme(axis.text.x=element_text(angle=%f %s %s))'
+                         , xx, xx, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, xangle, vjust, hjust
+                         )
+            # yy|xx zz
+        } else {
+            if (length(xx)==2) {
+                zz = xx[2]
+                xx = xx[1]
+                # The width in geom_line controls the bar width in relation to the x-axis 
+                # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
+                # color = outline color of bar
+                tt = sprintf('
+                            pp=group_by(df,%s,%s) %%>%% 
+                            summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
+
+                            ggplot2::ggplot(aes(x=%s,y=mean,group=%s)) +
+                            geom_point(aes(shape=%s,color=%s)) +
+                            geom_line(aes(linetype=%s,color=%s), size=%f) +
+                            geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+
+                            %s %s %s
+                            %s
+                            theme(axis.text.x=element_text(angle=%f %s %s))'
+                            , xx, zz, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, zpos, xangle, vjust, hjust
+                )
+            }        
+        }
+    }    
+    eval(parse(text = tt))
+    return(pp)
+}
+
 #' mimic xyplot with ggplot (slightly horizontally jittered)
 #' @param df data frame in long format
 #' @param cmd like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous, x z a are discrete, g is individual/grouping variable
