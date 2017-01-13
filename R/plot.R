@@ -116,7 +116,7 @@ ggcook <- function() {
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
 #' @examples
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
-theme_apa <- function(titlesize = 18, textsize = 16, plot.box = FALSE){
+theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
 
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
