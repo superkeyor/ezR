@@ -72,7 +72,7 @@ ez.names = names
 
 
 #' reconstruct to long format, wrapper of \code{\link[stats]{reshape}}
-#' @description can handle one (similar to gather()) or two repetitions
+#' @description can handle one (similar to gather(), which does not require index input) or two repetitions
 #' @param id unique identification variable, or variable combination
 #' @param indexname variable name (column to be created) for timing/repetition/index variable, such as "session"
 #' @param index level name (value labels to be created) for each timing/repetition/index point, such as c("1,2"), c("Pre, Post")
