@@ -10,18 +10,21 @@ ez.2long(df, id, indexname, index, measurename = NULL, measure = NULL,
 \arguments{
 \item{id}{unique identification variable, or variable combination}
 
-\item{indexname}{variable name for timing/repetition/index variable, such as "session"}
+\item{indexname}{variable name (column to be created) for timing/repetition/index variable, such as "session"}
 
-\item{index}{level name for each timing/repetition/index point, such as c("1,2"), c("Pre, Post")}
+\item{index}{level name (value labels to be created) for each timing/repetition/index point, such as c("1,2"), c("Pre, Post")}
 
-\item{measurename}{variable name for the measurement, such as "BDI"}
+\item{measurename}{variable name (column/columns to be created) for the measurement, such as "BDI"}
 
-\item{measure}{column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")}
+\item{measure}{column names (existing) that are the repeated measures, such as c("BDI_Pre","BDI_Post")}
 
 \item{drop}{variables to drop before reshaping}
 }
 \value{
 returns a new df, label attributes seem to be intact.
+}
+\description{
+can handle one (similar to gather(), which does not require index input) or two repetitions
 }
 \note{
 refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'

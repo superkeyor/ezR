@@ -479,6 +479,7 @@ ez.describe = function(df,cmd){
 #' @para xlab  x label NULL
 #' @para zlab  z/fill label, only applicable when there is z provided NULL
 #' @para zpos  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
+#' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
 #' @para xangle  angle of x text 0
 #' @para vjust  vjust of x text NULL
 #' @para hjust  hjust of x text NULL
@@ -568,6 +569,7 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
 #' @para xlab  x label NULL
 #' @para zlab  z/fill label, only applicable when there is z provided NULL
 #' @para zpos  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
+#' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
 #' @para xangle  angle of x text 0
 #' @para vjust  vjust of x text NULL
 #' @para hjust  hjust of x text NULL
