@@ -478,9 +478,9 @@ ez.describe = function(df,cmd){
 #' @para xlab  x label NULL
 #' @para zlab  z/fill label, only applicable when there is z provided NULL
 #' @para zpos  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
-#' @para xangle  angle of x tick 0
-#' @para vjust  vjust of x tick NULL
-#' @para hjust  hjust of x tick NULL
+#' @para xangle  angle of x text 0
+#' @para vjust  vjust of x text NULL
+#' @para hjust  hjust of x text NULL
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
 #' @export
