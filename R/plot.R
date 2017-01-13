@@ -480,13 +480,14 @@ ez.describe = function(df,cmd){
 #' @para zlab  z/fill label, only applicable when there is z provided NULL
 #' @para zpos  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
 #' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
+#' @para zbox  box of legend, T or F
 #' @para xangle  angle of x text 0
 #' @para vjust  vjust of x text NULL
 #' @para hjust  hjust of x text NULL
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
 #' @export
-ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,zpos='top',xangle=0,vjust=NULL,hjust=NULL) {
+ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,zpos='top',zbox=T,xangle=0,vjust=NULL,hjust=NULL) {
     
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -570,19 +571,21 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
 #' @para zlab  z/fill label, only applicable when there is z provided NULL
 #' @para zpos  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
 #' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
+#' @para zbox  box of legend, T or F
 #' @para xangle  angle of x text 0
 #' @para vjust  vjust of x text NULL
 #' @para hjust  hjust of x text NULL
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
 #' @export
-ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,zpos='top',xangle=0,vjust=NULL,hjust=NULL) {
+ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,zpos='top',zbox=T,xangle=0,vjust=NULL,hjust=NULL) {
     
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     zpos = ifelse(is.character(zpos), sprintf('theme(legend.position="%s")+',zpos), sprintf('theme(legend.position=c(%s))+',paste(zpos,collapse=',')))
-    
+    zbox = ifelse(zbox,'theme(legend.background = element_rect(color = "black"))+','')
+
     ymin = ifelse(error_direction %in% c('min','both'),'mean-se','mean')
     ymax = ifelse(error_direction %in% c('max','both'),'mean+se','mean')
     
@@ -614,9 +617,9 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                          geom_point() +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
                          
-                         %s %s
+                         %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s))'
-                         , xx, xx, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, xangle, vjust, hjust
+                         , xx, xx, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zbox, xangle, vjust, hjust
                          )
             # yy|xx zz
         } else {
@@ -636,9 +639,9 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
 
                             %s %s %s
-                            %s
+                            %s %s
                             theme(axis.text.x=element_text(angle=%f %s %s))'
-                            , xx, zz, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, zpos, xangle, vjust, hjust
+                            , xx, zz, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, zpos, zbox, xangle, vjust, hjust
                 )
             }        
         }

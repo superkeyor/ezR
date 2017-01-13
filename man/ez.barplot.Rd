@@ -6,8 +6,8 @@
 \usage{
 ez.barplot(df, cmd, bar_gap = 0.7, bar_width = 0.7, error_size = 0.7,
   error_gap = 0.7, error_width = 0.3, error_direction = "both",
-  ylab = NULL, xlab = NULL, zlab = NULL, zpos = "top", xangle = 0,
-  vjust = NULL, hjust = NULL)
+  ylab = NULL, xlab = NULL, zlab = NULL, zpos = "top", zbox = T,
+  xangle = 0, vjust = NULL, hjust = NULL)
 }
 \arguments{
 \item{df}{data frame in long format}
