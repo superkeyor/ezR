@@ -442,9 +442,8 @@ ez.describe = function(df,cmd){
                              , xx, yy, zz, zz
                 )
                 tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
-                }
             # yy|xx zz aa
-            else {
+            } else {
                 aa = xx[3]
                 zz = xx[2]
                 xx = xx[1]
@@ -460,8 +459,8 @@ ez.describe = function(df,cmd){
                 )
                 tt = paste0(tt, ' + stat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f", ..y..)), alpha=1) # ..y.. internal variable computed mean')
 
-                }        
-            }
+            }        
+        }
     }    
     eval(parse(text = tt))
     return(pp)
