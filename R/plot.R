@@ -493,6 +493,7 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     zpos = ifelse(is.character(zpos), sprintf('theme(legend.position="%s")+',zpos), sprintf('theme(legend.position=c(%s))+',paste(zpos,collapse=',')))
+    zbox = ifelse(zbox,'theme(legend.background = element_rect(color = "black"))+','')
     
     ymin = ifelse(error_direction %in% c('min','both'),'mean-se','mean')
     ymax = ifelse(error_direction %in% c('max','both'),'mean+se','mean')
@@ -525,9 +526,9 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
                          geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
                          
-                         %s %s
+                         %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s))'
-                         , xx, xx, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, xangle, vjust, hjust
+                         , xx, xx, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zbox, xangle, vjust, hjust
                          )
             # yy|xx zz
         } else {
@@ -547,9 +548,9 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
                             scale_fill_grey(start=0,end=1) + 
 
                             %s %s %s
-                            %s
+                            %s %s
                             theme(axis.text.x=element_text(angle=%f %s %s))'
-                            , xx, zz, xx, zz, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, zpos, xangle, vjust, hjust
+                            , xx, zz, xx, zz, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, zpos, zbox, xangle, vjust, hjust
                 )
             }        
         }
