@@ -469,11 +469,11 @@ ez.describe = function(df,cmd){
 #' barplot with ggplot
 #' @param df data frame in long format
 #' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
-#' @para bar_gap  the gap between bars 0.7
-#' @para bar_width  the width of bar itself 0.7
-#' @para error_size  the thickness of error bar line 0.7
-#' @para error_gap  the location of errorbar, should be equal to bar_width(?) 0.7
-#' @para error_width the width of the bar of error 0.3
+#' @para bar_gap  the gap between bars 
+#' @para bar_width  the width of bar itself 
+#' @para error_size  the thickness of error bar line 
+#' @para error_gap  the location of errorbar, should be equal to bar_width(?) 
+#' @para error_width the width of the bar of error
 #' @para error_direction  'both', 'max', 'min'
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
