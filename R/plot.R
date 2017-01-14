@@ -478,7 +478,7 @@ ez.describe = function(df,cmd){
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
 #' @para zlab  z/fill label, only applicable when there is z provided NULL
-#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
+#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
 #' @para legend_box  box of legend, T or F
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
@@ -573,7 +573,7 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
 #' @para zlab  z/fill label, only applicable when there is z provided NULL
-#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(two-element numeric vector)
+#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
 #' @para legend_box  box of legend, T or F
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
