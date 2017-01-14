@@ -463,6 +463,7 @@ ez.describe = function(df,cmd){
         }
     }    
     eval(parse(text = tt))
+    cat(tt,"\n")
     return(pp)
 }
 
@@ -559,6 +560,7 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
         }
     }    
     eval(parse(text = tt))
+    cat(tt,"\n")
     return(pp)
 }
 
@@ -654,6 +656,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
         }
     }    
     eval(parse(text = tt))
+    cat(tt,"\n")
     return(pp)
 }
 
@@ -724,6 +727,7 @@ ez.xyplot = function(df,cmd){
     }
 
     eval(parse(text = tt))
+    cat(tt,"\n")
     return(pp)
 }
 
@@ -747,6 +751,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
     eval(parse(text = cmd))
+    cat(cmd,"\n")
 
     x = "key"; y = id; z = "value"
     if (show.values) {
@@ -780,6 +785,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
         )
     }
     eval(parse(text = t))
+    cat(t,"\n")
     return(p)
 }
 # helper function to remove leading 0 in correlation
@@ -898,6 +904,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
                       funs(%s(.,na.rm=T)))
                       ',id,stats)
         eval(parse(text = cmd))
+        cat(cmd,"\n")
     } else {
         df.stats = df.ori
     }
@@ -909,6 +916,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     cmd = sprintf('tidyr::gather(df.stats, variable,value,-%s,factor_key = T) -> df
                   ',id)
     eval(parse(text = cmd))
+    cat(cmd,"\n")
 
     # 4) plot
     # geom_polygon connects together, no fill
@@ -943,17 +951,20 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 
     }
     eval(parse(text = cmd))
+    cat(cmd,"\n")
 
     # 5) hack: couldn't pass NULL to color, linetype
     if (is.null(color)) {
         cmd = sprintf('p = p + scale_color_manual(values=rep("black",nlevels(factor(df$%s))))
                       ',id)
         eval(parse(text = cmd))
+        cat(cmd,"\n")
     }
     if (is.null(linetype)) {
         cmd = sprintf('p = p + scale_linetype_manual(values=rep("solid",nlevels(factor(df$%s))))
                       ',id)
         eval(parse(text = cmd))
+        cat(cmd,"\n")
     }
 
     return(p)
@@ -977,6 +988,7 @@ ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     # get information from df before changing df
     cmd = sprintf('theID = df$%s',id)
     eval(parse(text = cmd))
+    cat(cmd,"\n")
 
     indx.value = !is.na(df)
     indx.na = is.na(df)
@@ -986,11 +998,13 @@ ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
 
     cmd = sprintf('df$%s = theID',id)
     eval(parse(text = cmd))
+    cat(cmd,"\n")
 
     cmd = sprintf('p = ez.heatmap(df, "%s", colors=c("blue", "white", "%s"),
                   legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
                   , id, color, angle, basesize, xsize, ysize)
     eval(parse(text = cmd))
+    cat(cmd,"\n")
 
     return(p)
 }
