@@ -105,7 +105,7 @@ ggcook <- function() {
 
 #' ggplot2 Theme for APA Publications
 #'
-#' A ggplot2 theme with no background and Times New Roman font.
+#' A ggplot2 theme with no background and Times New Roman font (legend size not affected).
 #'
 #' @param titlesize default 18
 #' @param textsize default 16
@@ -131,8 +131,8 @@ theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
 
     out <- theme(
         plot.title=element_text(family=RMN, size=titlesize, face="bold", colour="black"),
-        legend.title = element_text(family=RMN, size=textsize, colour="black"),
-        legend.text = element_text(family=RMN, size=textsize, colour="black"),
+        legend.title = element_text(family=RMN, colour="black"),
+        legend.text = element_text(family=RMN, colour="black"),
         strip.text.x = element_text(family=RMN, size=textsize, colour="black"),
         strip.text.y = element_text(family=RMN, size=textsize, colour="black"),
         axis.title.x=element_text(family=RMN, size=titlesize, face="bold", colour="black"),
