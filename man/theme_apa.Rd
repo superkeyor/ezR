@@ -14,7 +14,7 @@ theme_apa(plot.box = FALSE, titlesize = 18, textsize = 16)
 \item{textsize}{default 16}
 }
 \description{
-A ggplot2 theme with no background and Times New Roman font.
+A ggplot2 theme with no background and Times New Roman font (legend size not affected).
 }
 \note{
 In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
