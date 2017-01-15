@@ -6,8 +6,9 @@
 \usage{
 ez.lineplot(df, cmd, line_size = 0.7, error_size = 0.7, error_gap = 0,
   error_width = 0.3, error_direction = "both", ylab = NULL, xlab = NULL,
-  zlab = NULL, legend_position = "top", legend_box = T,
-  legend_size = c(0, 10), xangle = 0, vjust = NULL, hjust = NULL)
+  zlab = NULL, legend_position = "top", legend_direction = "horizontal",
+  legend_box = T, legend_size = c(0, 10), xangle = 0, vjust = NULL,
+  hjust = NULL)
 }
 \arguments{
 \item{df}{data frame in long format}
