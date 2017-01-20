@@ -203,6 +203,38 @@ theme_apa_nosize <- function(plot.box = FALSE){
 
 }
 
+#' show some help info on color
+#' @examples
+#' RColorBrewer::display.brewer.all()
+#' # returns 8 colors from Set3 (which supports up to 12 colors)
+#' cols <- RColorBrewer::brewer.pal(8,"Set3")
+#' # generates 100 colors based on the 9 from the Blues palette
+#' colorRampPalette(brewer.pal(9,"Blues"))(100)
+#' scale_colour_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))
+#' @export
+ggcolor = function(){
+    if (!require("RColorBrewer")) {
+        install.packages("RColorBrewer")
+    }
+    RColorBrewer::display.brewer.all()
+    cat('usage: \n
+        RColorBrewer::display.brewer.all()\n
+
+        # returns 8 colors from Set3 (which supports up to 12 colors)\n
+        cols <- RColorBrewer::brewer.pal(8,"Set3")\n
+
+        # generates 100 colors based on the 9 from the Blues palette\n
+        colorRampPalette(brewer.pal(9,"Blues"))(100)\n
+
+        # scale_color_manual (for points, lines, and outlines)\n
+        # scale_fill_manual (for boxes, bars, and ribbons)\n
+        # scale_color_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))\n
+
+        # also visit http://colorbrewer2.org/ for printer friendly color etc\n
+        # scale_color_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",\n
+                                "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))\n')
+}
+
 #' change plot continous color to matlab like
 #' @param n how many colors, e.g., 100 (default)
 #' @export
@@ -353,32 +385,6 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
     return(invisible(tmp.par))
 }
 
-#' show some help info on color
-#' @examples
-#' RColorBrewer::display.brewer.all()
-#' # returns 8 colors from Set3 (which supports up to 12 colors)
-#' cols <- RColorBrewer::brewer.pal(8,"Set3")
-#' # generates 100 colors based on the 9 from the Blues palette
-#' colorRampPalette(brewer.pal(9,"Blues"))(100)
-#' scale_colour_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))
-#' @export
-ez.color = function(){
-    if (!require("RColorBrewer")) {
-        install.packages("RColorBrewer")
-    }
-    RColorBrewer::display.brewer.all()
-    cat('usage: \n
-        RColorBrewer::display.brewer.all()\n
-
-        # returns 8 colors from Set3 (which supports up to 12 colors)\n
-        cols <- RColorBrewer::brewer.pal(8,"Set3")\n
-
-        # generates 100 colors based on the 9 from the Blues palette\n
-        colorRampPalette(brewer.pal(9,"Blues"))(100)\n
-
-        # scale_colour_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))\n')
-}
-
 #' plot a customized boxplot with jittered stripplot, violin, and mean
 #' @param df data frame in long format
 #' @param cmd like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete
@@ -490,8 +496,11 @@ ez.describe = function(df,cmd){
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
 #' @export
-ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     
+    # printer friendly color http://colorbrewer2.org/#type=diverging&scheme=Spectral&n=5
+    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)',"scale_fill_manual(values=c('#d7191c','#fdae61','#ffffbf','#abdda4','#2b83ba'))")
+
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
@@ -550,14 +559,14 @@ ez.barplot = function(df,cmd,bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=
                             ggplot2::ggplot(aes(x=%s,y=mean,fill=%s)) +
                             geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                             geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_fill_grey(start=0,end=1) + 
+                            %s + 
 
                             %s %s %s
                             %s %s
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") + 
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                            , xx, zz, xx, zz, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                            , xx, zz, xx, zz, bar_color, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                 )
             }        
         }
