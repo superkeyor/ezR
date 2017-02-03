@@ -500,7 +500,7 @@ ez.describe = function(df,cmd){
 ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     
     # printer friendly color http://colorbrewer2.org/#type=diverging&scheme=Spectral&n=5
-    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#d7191c","#fdae61","#ffffbf","#abdda4","#2b83ba"))')
+    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#fdae61","#abdda4","#ffffbf","#2b83ba","#d7191c"))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -660,7 +660,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=c("#d7191c","#fdae61","#ffffbf","#abdda4","#2b83ba")) + 
+                            scale_color_manual(values=c("#fdae61","#abdda4","#ffffbf","#2b83ba","#d7191c")) + 
 
                             %s %s %s
                             %s %s
