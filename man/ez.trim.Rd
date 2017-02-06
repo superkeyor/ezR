@@ -2,7 +2,7 @@
 % Please edit documentation in R/basic.R
 \name{ez.trim}
 \alias{ez.trim}
-\title{Merge Multiple spaces to single space, and remove trailing/leading spaces}
+\title{Merge multiple spaces to single space in the middle, and remove trailing/leading spaces}
 \usage{
 ez.trim(s, how = 4)
 }

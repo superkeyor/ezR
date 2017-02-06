@@ -208,7 +208,7 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
     ez.regexp(s, pat, ignorecase, once, split)
 }
 
-#' Merge Multiple spaces to single space, and remove trailing/leading spaces
+#' Merge multiple spaces to single space in the middle, and remove trailing/leading spaces
 #' @description underlying function is \code{\link{gsub}} with regular expression
 #' @param s a string 
 #' @param how a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle
