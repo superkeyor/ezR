@@ -4,16 +4,19 @@
 \alias{ez.trim}
 \title{Merge Multiple spaces to single space, and remove trailing/leading spaces}
 \usage{
-ez.trim(s)
+ez.trim(s, how = 4)
 }
 \arguments{
 \item{s}{a string}
+
+\item{how}{a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle}
 }
 \description{
 underlying function is \code{\link{gsub}} with regular expression
 }
 \examples{
  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
+\\cr For portability, whitespace is taken as the character class [ \\t\\r\\n] (space, horizontal tab, line feed, carriage return).
 }
 \seealso{
 \code{\link{trimws}}

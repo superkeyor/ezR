@@ -210,14 +210,24 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 
 #' Merge Multiple spaces to single space, and remove trailing/leading spaces
 #' @description underlying function is \code{\link{gsub}} with regular expression
-#' @param s a string
+#' @param s a string 
+#' @param how a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle
 #' @return
 #' @examples  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
+#' \cr For portability, whitespace is taken as the character class [ \t\r\n] (space, horizontal tab, line feed, carriage return).
 #' @seealso \code{\link{trimws}}
 #' @export
-ez.trim = function (s){
-    # http://stackoverflow.com/a/25734388/2292993
-    s = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", s, perl=TRUE)
+ez.trim = function (s, how=4){
+    if (how==1) {
+        s = trimws(s,"left")
+    } else if (how==2) {
+        s = trimws(s,"right")
+    } else if (how==3) {
+        s = trimws(s,"both")
+    } else if (how==4) {
+        # http://stackoverflow.com/a/25734388/2292993
+        s = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", s, perl=TRUE)
+    }
     return(s)
 }
 
