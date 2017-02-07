@@ -9,13 +9,13 @@ ez.reads(path, tofactor = TRUE, keepna = FALSE, tolower = FALSE, ...)
 \arguments{
 \item{path}{File path to the data file}
 
-\item{tofactor}{if TRUE, factor variables imported from the dataset (which are imported as atomic) will be converted to factors.}
+\item{tofactor}{if TRUE, atomic/char to factor; if FALSE, keep as atomic/char}
 
 \item{keepna}{if TRUE, user-defined missing values will be left as their original codes. If FALSE (default), corresponding values are converted to NA.}
 
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-potentially keep variable labels and value labels, internally trim string space; but would not convert value labels to factor levels (i.e., gender 1/2->male/female)
+would not convert value labels to factor levels (i.e., gender 1/2->male/female), instead keep variable labels and value labels as attributes; also internally trim string space
 }
 

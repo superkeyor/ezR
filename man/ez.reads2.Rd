@@ -7,6 +7,11 @@
 ez.reads2(file, valuelabel = TRUE, tolower = FALSE)
 }
 \arguments{
+\item{valuelabel}{logic
+if True: gender=Male,Female, gender is a factor with two levels "Male/Female"
+if False: gender=1,2, gender is a number with attributes "Male/Female"
+(char will always be converted to factor regardless of valuelabel)}
+
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
@@ -14,9 +19,6 @@ cannot trim string space (trim.factor.names, trim_values in read.spss not workin
 }
 \examples{
 (file, valuelabel=TRUE,tolower=FALSE)
-if valuelabel True: gender=Male,Female, gender is a factor with two levels "Male/Female"
-if valuelabel False: gender=1,2, gender is a number with attributes "Male/Female"
-tolower, whether convert all variable names to lower case
 
 alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 }

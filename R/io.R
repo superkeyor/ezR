@@ -110,9 +110,9 @@ ez.readxlist = function(file, toprint=TRUE){
 }
 
 #' wrapper of \code{\link[sjmisc]{read_spss}}
-#' @description potentially keep variable labels and value labels, internally trim string space; but would not convert value labels to factor levels (i.e., gender 1/2->male/female)
+#' @description would not convert value labels to factor levels (i.e., gender 1/2->male/female), instead keep variable labels and value labels as attributes; also internally trim string space
 #' @param path File path to the data file
-#' @param tofactor if TRUE, factor variables imported from the dataset (which are imported as atomic) will be converted to factors. 
+#' @param tofactor if TRUE, atomic/char to factor; if FALSE, keep as atomic/char
 #' @param keepna if TRUE, user-defined missing values will be left as their original codes. If FALSE (default), corresponding values are converted to NA.
 #' @param tolower whether to convert all column names to lower case
 #' @export
@@ -127,13 +127,14 @@ ez.reads = function(path, tofactor=TRUE, keepna=FALSE, tolower=FALSE, ...){
 
 #' read spss .sav file with foreign package (maybe for viewing purpose only, instead of processing)
 #' @description cannot trim string space (trim.factor.names, trim_values in read.spss not working??), but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below), see more at \code{\link[foreign]{read.spss}}
+#' @param valuelabel logic
+#'                   if True: gender=Male,Female, gender is a factor with two levels "Male/Female"
+#'                   if False: gender=1,2, gender is a number with attributes "Male/Female"
+#'                   (char will always be converted to factor regardless of valuelabel)
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
 #' (file, valuelabel=TRUE,tolower=FALSE)
-#' if valuelabel True: gender=Male,Female, gender is a factor with two levels "Male/Female"
-#' if valuelabel False: gender=1,2, gender is a number with attributes "Male/Female"
-#' tolower, whether convert all variable names to lower case
 #'
 #' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
