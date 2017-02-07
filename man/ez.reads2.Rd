@@ -10,6 +10,6 @@ ez.reads2(..., tolower = FALSE)
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-potentially keep variable labels and value labels.
+potentially keep variable labels and value labels, but does not have string space-trimming capability
 }
 

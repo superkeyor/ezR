@@ -2,16 +2,67 @@
 % Please edit documentation in R/io.R
 \name{ez.savex}
 \alias{ez.savex}
-\title{save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package}
+\title{save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package}
 \usage{
 ez.savex(x, file = "RData.xlsx", sheetName = "Sheet1", row.names = FALSE,
-  showNA = FALSE, ...)
+  col.names = TRUE, asTable = FALSE, ...)
+}
+\arguments{
+\item{sheetName}{Name of the worksheet}
+
+\item{asTable}{write using writeDataTable as opposed to writeData}
+
+\item{creator}{A string specifying the workbook author}
+
+\item{gridLines}{A logical. If FALSE, the worksheet grid lines will be hidden.}
+
+\item{startCol}{A vector specifiying the starting column(s) to write df}
+
+\item{startRow}{A vector specifiying the starting row(s) to write df}
+
+\item{xy}{An alternative to specifying startCol and startRow individually. A vector of the form c(startCol, startRow)}
+
+\item{colNames}{or col.names If TRUE, column names of x are written.}
+
+\item{rowNames}{or row.names If TRUE, row names of x are written.}
+
+\item{headerStyle}{Custom style to apply to column names.}
+
+\item{borders}{Either "surrounding", "columns" or "rows" or NULL. If "surrounding", a border is drawn around the data. If "rows", a surrounding border is drawn a border around each row. If "columns", a surrounding border is drawn with a border between each column. If "all" all cell borders are drawn.}
+
+\item{borderColour}{Colour of cell border}
+
+\item{borderStyle}{Border line style.}
+
+\item{overwrite}{Overwrite existing file (Defaults to TRUE as with write.table)}
+}
+\value{
+nothing
 }
 \description{
-save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
+uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
 }
 \examples{
 (x, file, sheetName="Sheet1", row.names=FALSE,
-  col.names=TRUE, append=FALSE, showNA=TRUE)
+  col.names=TRUE)
+
+## write to working directory
+options("openxlsx.borderColour" = "#4F80BD") ## set default border colour
+write.xlsx(iris, file = "writeXLSX1.xlsx", colNames = TRUE, borders = "columns")
+write.xlsx(iris, file = "writeXLSX2.xlsx", colNames = TRUE, borders = "surrounding")
+
+
+hs <- createStyle(textDecoration = "BOLD", fontColour = "#FFFFFF", fontSize=12,
+                  fontName="Arial Narrow", fgFill = "#4F80BD")
+
+write.xlsx(iris, file = "writeXLSX3.xlsx", colNames = TRUE, borders = "rows", headerStyle = hs)
+
+## Lists elements are written to individual worksheets, using list names as sheet names if available
+l <- list("IRIS" = iris, "MTCATS" = mtcars, matrix(runif(1000), ncol = 5))
+write.xlsx(l, "writeList1.xlsx")
+
+## different sheets can be given different parameters
+write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
+           asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 }
 

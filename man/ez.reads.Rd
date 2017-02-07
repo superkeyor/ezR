@@ -4,19 +4,18 @@
 \alias{ez.reads}
 \title{read spss .sav file with foreign package}
 \usage{
-ez.reads(file, valuelabel = TRUE, tolower = FALSE)
+ez.reads(file, valuelabel = FALSE, tolower = FALSE)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-see more at \code{\link[foreign]{read.spss}}
+internally also trim string space, see more at \code{\link[foreign]{read.spss}}
 }
 \examples{
 (file, valuelabel=TRUE,tolower=FALSE)
-label means variable value label, not variable label
-if TRUE, varialbe becomes a factor, and its levels becomes character labels
-ie, without label False gender=1,2; with label True gender=Male,Female
+if valuelabel True: gender=Male,Female, gender is a factor with two levels "Male/Female"
+if valuelabel False: gender=1,2, gender is a number with attributes "Male/Female"
 tolower, whether convert all variable names to lower case
 
 alternatively, one can use SPSS R plugin to pass data between SPSS and R.
