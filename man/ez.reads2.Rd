@@ -17,7 +17,7 @@ ez.reads2(file, valuelabel = TRUE, tolower = FALSE)
 \description{
 cannot trim string space (trim.factor.names, trim_values in read.spss not working??), 
              but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below). 
-             therefore, maybe for viewing purpose only, instead of processing
+             therefore, maybe for viewing purpose only, instead of processing. 
              see more at \code{\link[foreign]{read.spss}}
 }
 \examples{

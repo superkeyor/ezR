@@ -128,7 +128,7 @@ ez.reads = function(path, tofactor=TRUE, keepna=FALSE, tolower=FALSE, ...){
 #' read spss .sav file with foreign package
 #' @description cannot trim string space (trim.factor.names, trim_values in read.spss not working??), 
 #'              but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below). 
-#'              therefore, maybe for viewing purpose only, instead of processing
+#'              therefore, maybe for viewing purpose only, instead of processing. 
 #'              see more at \code{\link[foreign]{read.spss}}
 #' @param valuelabel logic
 #' \cr               if True: gender=Male,Female, gender is a factor with two levels "Male/Female"
