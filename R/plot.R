@@ -1005,7 +1005,6 @@ ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     # get information from df before changing df
     cmd = sprintf('theID = df$%s',id)
     eval(parse(text = cmd))
-    cat(cmd,"\n")
 
     indx.value = !is.na(df)
     indx.na = is.na(df)
@@ -1015,13 +1014,12 @@ ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
 
     cmd = sprintf('df$%s = theID',id)
     eval(parse(text = cmd))
-    cat(cmd,"\n")
 
     cmd = sprintf('p = ez.heatmap(df, "%s", colors=c("blue", "white", "%s"),
                   legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
                   , id, color, angle, basesize, xsize, ysize)
     eval(parse(text = cmd))
-    cat(cmd,"\n")
+    # cat(cmd,"\n")
 
     return(p)
 }
