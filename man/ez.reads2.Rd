@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{ez.reads2}
 \alias{ez.reads2}
-\title{read spss .sav file with foreign package (maybe for viewing purpose only, instead of processing)}
+\title{read spss .sav file with foreign package}
 \usage{
 ez.reads2(file, valuelabel = TRUE, tolower = FALSE)
 }
@@ -15,7 +15,10 @@ ez.reads2(file, valuelabel = TRUE, tolower = FALSE)
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-cannot trim string space (trim.factor.names, trim_values in read.spss not working??), but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below), see more at \code{\link[foreign]{read.spss}}
+cannot trim string space (trim.factor.names, trim_values in read.spss not working??), 
+             but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below). 
+             therefore, maybe for viewing purpose only, instead of processing
+             see more at \code{\link[foreign]{read.spss}}
 }
 \examples{
 (file, valuelabel=TRUE,tolower=FALSE)
