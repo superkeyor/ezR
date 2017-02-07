@@ -2,14 +2,22 @@
 % Please edit documentation in R/io.R
 \name{ez.reads2}
 \alias{ez.reads2}
-\title{wrapper of \code{\link[sjmisc]{read_spss}}}
+\title{read spss .sav file with foreign package (maybe for viewing purpose only, instead of processing)}
 \usage{
-ez.reads2(..., tolower = FALSE)
+ez.reads2(file, valuelabel = TRUE, tolower = FALSE)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-potentially keep variable labels and value labels, but does not have string space-trimming capability
+cannot trim string space (trim.factor.names, trim_values in read.spss not working??), but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below), see more at \code{\link[foreign]{read.spss}}
+}
+\examples{
+(file, valuelabel=TRUE,tolower=FALSE)
+if valuelabel True: gender=Male,Female, gender is a factor with two levels "Male/Female"
+if valuelabel False: gender=1,2, gender is a number with attributes "Male/Female"
+tolower, whether convert all variable names to lower case
+
+alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 }
 

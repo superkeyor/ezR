@@ -2,22 +2,20 @@
 % Please edit documentation in R/io.R
 \name{ez.reads}
 \alias{ez.reads}
-\title{read spss .sav file with foreign package}
+\title{wrapper of \code{\link[sjmisc]{read_spss}}}
 \usage{
-ez.reads(file, valuelabel = FALSE, tolower = FALSE)
+ez.reads(path, tofactor = TRUE, keepna = FALSE, tolower = FALSE, ...)
 }
 \arguments{
+\item{path}{File path to the data file}
+
+\item{tofactor}{if TRUE, factor variables imported from the dataset (which are imported as atomic) will be converted to factors.}
+
+\item{keepna}{if TRUE, user-defined missing values will be left as their original codes. If FALSE (default), corresponding values are converted to NA.}
+
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-internally also trim string space, see more at \code{\link[foreign]{read.spss}}
-}
-\examples{
-(file, valuelabel=TRUE,tolower=FALSE)
-if valuelabel True: gender=Male,Female, gender is a factor with two levels "Male/Female"
-if valuelabel False: gender=1,2, gender is a number with attributes "Male/Female"
-tolower, whether convert all variable names to lower case
-
-alternatively, one can use SPSS R plugin to pass data between SPSS and R.
+potentially keep variable labels and value labels, internally trim string space; but would not convert value labels to factor levels (i.e., gender 1/2->male/female)
 }
 
