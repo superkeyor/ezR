@@ -9,7 +9,7 @@ ez.reads(path, tofactor = TRUE, keepna = FALSE, tolower = FALSE, ...)
 \arguments{
 \item{path}{File path to the data file}
 
-\item{tofactor}{if TRUE, atomic/char to factor; if FALSE, keep as atomic/char}
+\item{tofactor}{if TRUE, atomic to factor; if FALSE, keep as atomic (char always to factor regardless)}
 
 \item{keepna}{if TRUE, user-defined missing values will be left as their original codes. If FALSE (default), corresponding values are converted to NA.}
 

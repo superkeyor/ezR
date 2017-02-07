@@ -112,7 +112,7 @@ ez.readxlist = function(file, toprint=TRUE){
 #' wrapper of \code{\link[sjmisc]{read_spss}}
 #' @description would not convert value labels to factor levels (i.e., gender 1/2->male/female), instead keep variable labels and value labels as attributes; also internally trim string space
 #' @param path File path to the data file
-#' @param tofactor if TRUE, atomic/char to factor; if FALSE, keep as atomic/char
+#' @param tofactor if TRUE, atomic to factor; if FALSE, keep as atomic (char always to factor regardless)
 #' @param keepna if TRUE, user-defined missing values will be left as their original codes. If FALSE (default), corresponding values are converted to NA.
 #' @param tolower whether to convert all column names to lower case
 #' @export
@@ -121,7 +121,7 @@ ez.reads = function(path, tofactor=TRUE, keepna=FALSE, tolower=FALSE, ...){
     if (tolower) names(result) = tolower(names(result))
     # the tofactor/atomic.to.fac seems only working for variable with numbers (gender 1/2) not stirng values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
-    if (tofactor) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
+    result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     return(result)
 }
 
