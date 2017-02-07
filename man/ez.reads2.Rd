@@ -8,9 +8,9 @@ ez.reads2(file, valuelabel = TRUE, tolower = FALSE)
 }
 \arguments{
 \item{valuelabel}{logic
-if True: gender=Male,Female, gender is a factor with two levels "Male/Female"
-if False: gender=1,2, gender is a number with attributes "Male/Female"
-(char will always be converted to factor regardless of valuelabel)}
+\cr               if True: gender=Male,Female, gender is a factor with two levels "Male/Female"
+\cr               if False: gender=1,2, gender is a number with attributes "Male/Female"
+\cr               (char will always be converted to factor regardless of valuelabel)}
 
 \item{tolower}{whether to convert all column names to lower case}
 }
