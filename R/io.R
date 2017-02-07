@@ -110,7 +110,7 @@ ez.readxlist = function(file, toprint=TRUE){
 }
 
 #' wrapper of \code{\link[sjmisc]{read_spss}}
-#' @description potentially keep variable labels and value labels.
+#' @description potentially keep variable labels and value labels, but does not have string space-trimming capability
 #' @param tolower whether to convert all column names to lower case
 #' @export
 ez.reads2 = function(..., tolower=FALSE){
@@ -120,19 +120,18 @@ ez.reads2 = function(..., tolower=FALSE){
 }
 
 #' read spss .sav file with foreign package
-#' @description see more at \code{\link[foreign]{read.spss}}
+#' @description internally also trim string space, see more at \code{\link[foreign]{read.spss}}
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
 #' (file, valuelabel=TRUE,tolower=FALSE)
-#' label means variable value label, not variable label
-#' if TRUE, varialbe becomes a factor, and its levels becomes character labels
-#' ie, without label False gender=1,2; with label True gender=Male,Female
+#' if valuelabel True: gender=Male,Female, gender is a factor with two levels "Male/Female"
+#' if valuelabel False: gender=1,2, gender is a number with attributes "Male/Female"
 #' tolower, whether convert all variable names to lower case
 #'
 #' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
-ez.reads = function(file, valuelabel=TRUE, tolower=FALSE){
+ez.reads = function(file, valuelabel=FALSE, tolower=FALSE){
     # can safely ignore the warnings about type 7 and etc; data is not lost
     # # http://stackoverflow.com/questions/3136293/read-spss-file-into-r
 
@@ -157,14 +156,14 @@ ez.saves = sjmisc::write_spss
 #' @export
 ez.writes = sjmisc::write_spss
 
-#' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
+#' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param
 #' @return
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
 #' @export
-ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, showNA=FALSE, ...){
+ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, showNA=FALSE, ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     # require('xlsx')
     x = data.frame(x)
@@ -173,16 +172,16 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, s
     # detach("package:xlsx", unload=TRUE)
 }
 
-#' save an xlsx file, alias of \code{\link{ez.savex}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
+#' save an xlsx file, alias of \code{\link{ez.savex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param
 #' @return
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
 #' @export
-ez.writex = ez.savex
+ez.writex2 = ez.savex2
 
-#' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
+#' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
 #' @param creator A string specifying the workbook author
 #' @param sheetName Name of the worksheet
@@ -222,12 +221,12 @@ ez.writex = ez.savex
 #' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 #' @export
-ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, col.names=TRUE, asTable=FALSE, ...){
+ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, col.names=TRUE, asTable=FALSE, ...){
     x = data.frame(x)
     openxlsx::write.xlsx(x=x, file=file, asTable=asTable, sheetName=sheetName, ..., row.names=row.names, col.names=col.names)
 }
 
-#' save an xlsx file, alias of \code{\link{ez.savex2}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
+#' save an xlsx file, alias of \code{\link{ez.savex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
 #' @param creator A string specifying the workbook author
 #' @param sheetName Name of the worksheet
@@ -267,7 +266,7 @@ ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, 
 #' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 #' @export
-ez.writex2 = ez.savex2
+ez.writex = ez.savex
 
 #' show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 #' @param
