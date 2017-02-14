@@ -72,7 +72,7 @@ ez.write = ez.save
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
+ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     return(result)
@@ -87,7 +87,7 @@ ez.readx = function(file, sheetIndex=1, tolower=FALSE, ...){
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx2 = function(file, sheet=1, tolower=FALSE, ...){
+ez.readx = function(file, sheet=1, tolower=FALSE, ...){
     result = openxlsx::read.xlsx(file, sheet, ...)
     if (tolower) names(result) = tolower(names(result))
     return(result)

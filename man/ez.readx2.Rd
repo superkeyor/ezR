@@ -2,19 +2,22 @@
 % Please edit documentation in R/io.R
 \name{ez.readx2}
 \alias{ez.readx2}
-\title{read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}}
+\title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package}
 \usage{
-ez.readx2(file, sheet = 1, tolower = FALSE, ...)
+ez.readx2(file, sheetIndex = 1, tolower = FALSE, ...)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
+read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package
 }
 \examples{
-read.xlsx(xlsxFile, sheet = 1, startRow = 1, colNames = TRUE,
-         rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
-         rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
+read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
+          startRow=NULL, endRow=NULL, colIndex=NULL,
+          as.data.frame=TRUE, header=TRUE, colClasses=NA,
+          keepFormulas=FALSE, encoding="unknown", ...)
+colClasses: Only numeric, character, Date, POSIXct, column types are accepted
+colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 }
 
