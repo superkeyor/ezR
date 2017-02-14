@@ -369,3 +369,10 @@ ez.eval = function(cmd){
     # envir: 2 back in the stack to arrive at the "real" caller
     eval(parse(text = cmd),envir = parent.frame(2))
 }
+
+#' wrapper of \code{\link{eval}}
+#' @param cmd an R cmd in text, e.g., constructed with sprintf()
+#' @return this function simply evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
+#' @examples
+#' @export
+ez.evaluate = ez.eval
