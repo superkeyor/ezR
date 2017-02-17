@@ -4,13 +4,15 @@
 \alias{ez.evaluate}
 \title{wrapper of \code{\link{eval}}}
 \usage{
-ez.evaluate(cmd, envir)
+ez.evaluate(cmd, env)
 }
 \arguments{
-\item{cmd}{an R cmd in text, e.g., constructed with sprintf()}
+\item{cmd}{caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function}
+
+\item{env}{an R cmd in text, e.g., constructed with sprintf()}
 }
 \value{
-this function simply evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
+this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
 }
 \description{
 wrapper of \code{\link{eval}}

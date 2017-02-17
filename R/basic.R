@@ -361,36 +361,19 @@ ez.print = function(...,sep=''){
 }
 
 #' wrapper of \code{\link{eval}}
-#' @param cmd an R cmd in text, e.g., constructed with sprintf()
-#' @return this function simply evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
+#' @param cmd caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function
+#' @param env an R cmd in text, e.g., constructed with sprintf()
+#' @return this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
 #' @examples
 #' @export
-ez.eval = function(cmd,envir){
-    
-    # failed solutions, for archive
-    # Strictly, sys.parent and parent.frame refer to the context of the parent interpreted function. So internal functions (which may or may not set contexts and so may or may not appear on the call stack) may not be counted, and S3 methods can also do surprising things.
-    # print(pryr::parenvs(all=T))
-    # 1  <environment: 0x10e411a00>       ""                 
-    # 2  <environment: namespace:ezmisc>  ""                 
-    # 3  <environment: 0x10c81b348>       "imports:ezmisc"   
-    # 4  <environment: namespace:base>    ""                 
-    # 5  <environment: R_GlobalEnv>       ""                 
-    # 6  <environment: 0x10e937bc0>       "tools:rstudio"    
-    # note: envir = parent.frame(n) or envir = .GlobalEnv could not consistently find the caller's environment
-    
-    # directly pass in caller's environment
-    print(envir)
-    print(sys.frames())
-    print(pryr::parenvs(all=F))
-    # print(sys.frame(5))  <-if call with source() 
-    eval(parse(text = cmd),envir = envir)
-
-    # eval(parse(text = cmd),envir = )
+ez.eval = function(cmd,env){
+    eval(parse(text = cmd),envir = env)
 }
 
 #' wrapper of \code{\link{eval}}
-#' @param cmd an R cmd in text, e.g., constructed with sprintf()
-#' @return this function simply evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
+#' @param cmd caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function
+#' @param env an R cmd in text, e.g., constructed with sprintf()
+#' @return this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
 #' @examples
 #' @export
 ez.evaluate = ez.eval
