@@ -7,7 +7,7 @@
 ez.eval(cmd, env)
 }
 \arguments{
-\item{cmd}{caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function}
+\item{cmd}{caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function, R does not support call stack well.}
 
 \item{env}{an R cmd in text, e.g., constructed with sprintf()}
 }
@@ -16,5 +16,8 @@ this function evaluates the cmd in the caller's envir, so the actual return depe
 }
 \description{
 wrapper of \code{\link{eval}}
+}
+\examples{
+ez.eval('z=9',environment())
 }
 
