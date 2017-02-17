@@ -368,6 +368,7 @@ ez.print = function(...,sep=''){
 ez.eval = function(cmd,envir){
     
     # failed solutions, for archive
+    # Strictly, sys.parent and parent.frame refer to the context of the parent interpreted function. So internal functions (which may or may not set contexts and so may or may not appear on the call stack) may not be counted, and S3 methods can also do surprising things.
     # print(pryr::parenvs(all=T))
     # 1  <environment: 0x10e411a00>       ""                 
     # 2  <environment: namespace:ezmisc>  ""                 
@@ -379,8 +380,9 @@ ez.eval = function(cmd,envir){
     
     # directly pass in caller's environment
     print(envir)
-    print(sys.status())
-    # print(sys.frame(5))
+    print(sys.frames())
+    print(pryr::parenvs(all=F))
+    # print(sys.frame(5))  <-if call with source() 
     eval(parse(text = cmd),envir = envir)
 
     # eval(parse(text = cmd),envir = )
