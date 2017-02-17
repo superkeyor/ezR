@@ -376,7 +376,7 @@ ez.eval = function(cmd){
     # 5  <environment: R_GlobalEnv>       ""                 
     # 6  <environment: 0x10e937bc0>       "tools:rstudio"    
     # but simply envir = .GlobalEnv does not work properly
-    eval(parse(text = cmd),envir = parent.frame(4))
+    eval(parse(text = cmd),envir = parent.frame(5))
 }
 
 #' wrapper of \code{\link{eval}}
