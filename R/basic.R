@@ -366,17 +366,8 @@ ez.print = function(...,sep=''){
 #' @examples
 #' @export
 ez.eval = function(cmd){
-    # environment() <-- this function
-    # parent.env(environment()) <-- <environment: namespace:ezmisc>
-    # parent.parent <-- "imports:ezmisc"
-    # parent.parent.parent <-- <environment: namespace:base>
-    # parent.parent.parent.parent <--
-    eval(parse(text = cmd),envir = parent.env(parent.env(parent.env(parent.env(environment())))))
-    print(environment())
-    print(parent.env(environment()))
-    print(parent.env(parent.env(environment())))
-    print(parent.env(parent.env(parent.env(environment()))))
-    print(parent.env(parent.env(parent.env(parent.env(environment())))))
+    # envir: n back in the stack to arrive at the "real" caller
+    eval(parse(text = cmd),envir = parent.frame(3))
 }
 
 #' wrapper of \code{\link{eval}}
