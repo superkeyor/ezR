@@ -370,6 +370,11 @@ ez.eval = function(cmd,envir){
     # does not seem to work: envir = parent.frame(5) or envir = .GlobalEnv
     # debug
     print(pryr::parenvs(all=T))
+    print(sys.calls())
+    print('')
+    print(sys.frames())
+    print('')
+    print(sys.status())
     # 1  <environment: 0x10e411a00>       ""                 
     # 2  <environment: namespace:ezmisc>  ""                 
     # 3  <environment: 0x10c81b348>       "imports:ezmisc"   
