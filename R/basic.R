@@ -367,7 +367,9 @@ ez.print = function(...,sep=''){
 #' @export
 ez.eval = function(cmd){
     # envir: 2 back in the stack to arrive at the "real" caller
-    eval(parse(text = cmd),envir = parent.frame(2))
+    eval(parse(text = cmd),envir = parent.env(environment()))
+    print(environment())
+    print(parent.env(environment()))
 }
 
 #' wrapper of \code{\link{eval}}
