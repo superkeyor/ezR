@@ -365,8 +365,9 @@ ez.print = function(...,sep=''){
 #' @return this function simply evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
 #' @examples
 #' @export
-ez.eval = function(cmd){
+ez.eval = function(cmd,envir=environment()){
     # envir: n back in the stack to arrive at the "real" caller
+    # does not seem to work: envir = parent.frame(5) or envir = .GlobalEnv
     # debug
     # print(pryr::parenvs(all=T))
     # 1  <environment: 0x10e411a00>       ""                 
@@ -375,8 +376,8 @@ ez.eval = function(cmd){
     # 4  <environment: namespace:base>    ""                 
     # 5  <environment: R_GlobalEnv>       ""                 
     # 6  <environment: 0x10e937bc0>       "tools:rstudio"    
-    # but simply envir = .GlobalEnv does not work properly
-    eval(parse(text = cmd),envir = parent.frame(5))
+    # but simply  does not work properly
+    eval(parse(text = cmd),envir = envir)
 }
 
 #' wrapper of \code{\link{eval}}
