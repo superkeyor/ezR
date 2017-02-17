@@ -365,11 +365,11 @@ ez.print = function(...,sep=''){
 #' @return this function simply evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
 #' @examples
 #' @export
-ez.eval = function(cmd,envir=environment()){
+ez.eval = function(cmd,envir){
     # envir: n back in the stack to arrive at the "real" caller
     # does not seem to work: envir = parent.frame(5) or envir = .GlobalEnv
     # debug
-    # print(pryr::parenvs(all=T))
+    print(pryr::parenvs(all=T))
     # 1  <environment: 0x10e411a00>       ""                 
     # 2  <environment: namespace:ezmisc>  ""                 
     # 3  <environment: 0x10c81b348>       "imports:ezmisc"   

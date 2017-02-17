@@ -4,7 +4,7 @@
 \alias{ez.evaluate}
 \title{wrapper of \code{\link{eval}}}
 \usage{
-ez.evaluate(cmd, envir = environment())
+ez.evaluate(cmd, envir)
 }
 \arguments{
 \item{cmd}{an R cmd in text, e.g., constructed with sprintf()}
