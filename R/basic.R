@@ -367,11 +367,11 @@ ez.print = function(...,sep=''){
 #' @export
 ez.eval = function(cmd){
     # envir: n back in the stack to arrive at the "real" caller
-    # maybe(?) simply envir = .GlobalEnv
-    # eval(parse(text = cmd),envir = parent.frame(4))
-    eval(parse(text = cmd),envir = .GlobalEnv)
+    # simply envir = .GlobalEnv does not work
+    eval(parse(text = cmd),envir = parent.frame(4))
+    # eval(parse(text = cmd),envir = .GlobalEnv)
     # debug
-    # print(pryr::parenvs(all=T))
+    print(pryr::parenvs(all=T))
 }
 
 #' wrapper of \code{\link{eval}}
