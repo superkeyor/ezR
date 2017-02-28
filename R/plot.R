@@ -416,7 +416,7 @@ ez.describe = function(df,cmd){
                      ggtitle(paste0("N = ",nrow(df)))'
                      , xx, yy
         )
-        tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.7)')
+        tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.7)')
         tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
     # yy|xx or yy|xx zz
     } else {
@@ -437,7 +437,7 @@ ez.describe = function(df,cmd){
                          ggtitle(paste0("N = ",nrow(df)))'
                          , xx, yy
             )
-            tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.7)')
+            tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.7)')
             tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
         # yy|xx zz
         } else {
@@ -456,7 +456,7 @@ ez.describe = function(df,cmd){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, zz, zz
                 )
-                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.7)')
+                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.7)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
             # yy|xx zz aa
             } else {
@@ -475,7 +475,7 @@ ez.describe = function(df,cmd){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, zz, zz, aa
                 )
-                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.7)')
+                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.7)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
 
             }        
