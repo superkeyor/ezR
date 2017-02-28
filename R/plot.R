@@ -405,7 +405,7 @@ ez.describe = function(df,cmd){
         df['DummyDiscreteVariable'] = 1
         # hide x axis label in this case
         tt = sprintf('
-                     fun_length <- function(x){return(data.frame(y=median(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                     fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                      pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
                      geom_violin() +
                      geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
@@ -427,7 +427,7 @@ ez.describe = function(df,cmd){
         if (length(xx)==1) {
             xx = xx[1]
             tt = sprintf('
-                         fun_length <- function(x){return(data.frame(y=median(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                         fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
                          geom_violin() +
                          geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
@@ -445,7 +445,7 @@ ez.describe = function(df,cmd){
                 zz = xx[2]
                 xx = xx[1]
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=median(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
                              geom_violin() +
                              geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
@@ -464,7 +464,7 @@ ez.describe = function(df,cmd){
                 zz = xx[2]
                 xx = xx[1]
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=median(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
                              geom_violin() +
                              geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
