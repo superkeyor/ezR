@@ -405,7 +405,7 @@ ez.describe = function(df,cmd){
         df['DummyDiscreteVariable'] = 1
         # hide x axis label in this case
         tt = sprintf('
-                     fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                     fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                      pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
                      geom_violin() +
                      geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
@@ -416,7 +416,7 @@ ez.describe = function(df,cmd){
                      ggtitle(paste0("N = ",nrow(df)))'
                      , xx, yy
         )
-        tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.0)')
+        tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.0)')
         tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
     # yy|xx or yy|xx zz
     } else {
@@ -427,7 +427,7 @@ ez.describe = function(df,cmd){
         if (length(xx)==1) {
             xx = xx[1]
             tt = sprintf('
-                         fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                         fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
                          geom_violin() +
                          geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
@@ -437,7 +437,7 @@ ez.describe = function(df,cmd){
                          ggtitle(paste0("N = ",nrow(df)))'
                          , xx, yy
             )
-            tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.0)')
+            tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.0)')
             tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
         # yy|xx zz
         } else {
@@ -445,7 +445,7 @@ ez.describe = function(df,cmd){
                 zz = xx[2]
                 xx = xx[1]
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
                              geom_violin() +
                              geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
@@ -456,7 +456,7 @@ ez.describe = function(df,cmd){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, zz, zz
                 )
-                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.0)')
+                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.0)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
             # yy|xx zz aa
             } else {
@@ -464,7 +464,7 @@ ez.describe = function(df,cmd){
                 zz = xx[2]
                 xx = xx[1]
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=max(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
                              geom_violin() +
                              geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
@@ -475,7 +475,7 @@ ez.describe = function(df,cmd){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, zz, zz, aa
                 )
-                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=-1.0)')
+                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.0)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
 
             }        
