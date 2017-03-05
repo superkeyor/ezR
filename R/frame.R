@@ -645,13 +645,17 @@ ez.recode2 = function(df, varName, recodes){
 #' \cr the "==" syntax within "which()" could be modified 
 #' @param df data frame
 #' @param col column name in string
-#' @param oldval old value (e.g., -Inf)
+#' @param oldval old value (e.g., -Inf, NA)
 #' @param newval new value (e.g., NA)
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
 ez.replace = function(df, col, oldval, newval){
-    df[[col]][which(df[[col]]==oldval)] <- newval
+    if (is.na(oldval)) {
+        df[[col]][which(is.na(df[[col]]))] <- newval
+    } else {
+        df[[col]][which(df[[col]]==oldval)] <- newval
+    }
     return(df)
 }
 

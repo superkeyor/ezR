@@ -11,7 +11,7 @@ ez.replace(df, col, oldval, newval)
 
 \item{col}{column name in string}
 
-\item{oldval}{old value (e.g., -Inf)}
+\item{oldval}{old value (e.g., -Inf, NA)}
 
 \item{newval}{new value (e.g., NA)}
 }
