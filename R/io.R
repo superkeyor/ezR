@@ -278,7 +278,7 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, c
 #' @export
 ez.writex = ez.savex
 
-#' Writes .mat files for exporting data to be used with Matlab
+#' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
 #'
 #' Writes .mat files to store R session data using the R.matlab package and
 #' takes care that logicals and atomic vectors are saved properly: currently,
@@ -395,7 +395,7 @@ ez.savem <- function(fn, vars){
    eval(parse(text=f))
 }
 
-#' Writes .mat files for exporting data to be used with Matlab
+#' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
 #'
 #' Writes .mat files to store R session data using the R.matlab package and
 #' takes care that logicals and atomic vectors are saved properly: currently,
