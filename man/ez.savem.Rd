@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{ez.savem}
 \alias{ez.savem}
-\title{Writes .mat files for exporting data to be used with Matlab}
+\title{Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax}
 \usage{
 ez.savem(fn, vars)
 }

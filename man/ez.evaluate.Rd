@@ -4,7 +4,7 @@
 \alias{ez.evaluate}
 \title{wrapper of \code{\link{eval}}}
 \usage{
-ez.evaluate(cmd, env)
+ez.evaluate(cmd)
 }
 \arguments{
 \item{cmd}{caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function}
