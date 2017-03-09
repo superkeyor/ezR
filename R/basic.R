@@ -361,19 +361,23 @@ ez.print = function(...,sep=''){
 }
 
 #' wrapper of \code{\link{eval}}
-#' @param cmd caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function, R does not support call stack well.
-#' @param env an R cmd in text, e.g., constructed with sprintf()
+#' @param cmd an R cmd in text, e.g., constructed with sprintf()
+#' @param env caller's envir, could be environment(), default is parent.frame()
+#'        if default parent.frame() does not work properly, try passing environment()
+#'        tricky/hard to hard-code/default it in this wrapper function, R does not support call stack well.
 #' @return this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
 #' @examples
 #' ez.eval('z=9',environment())
 #' @export
-ez.eval = function(cmd){
-    eval(parse(text = cmd),envir = parent.frame())
+ez.eval = function(cmd,env = parent.frame()){
+    eval(parse(text = cmd),envir = env)
 }
 
 #' wrapper of \code{\link{eval}}
-#' @param cmd caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function
-#' @param env an R cmd in text, e.g., constructed with sprintf()
+#' @param cmd an R cmd in text, e.g., constructed with sprintf()
+#' @param env caller's envir, could be environment(), default is parent.frame()
+#'        if default parent.frame() does not work properly, try passing environment()
+#'        tricky/hard to hard-code/default it in this wrapper function, R does not support call stack well.
 #' @return this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
 #' @examples
 #' ez.eval('z=9',environment())
