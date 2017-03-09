@@ -2,7 +2,17 @@
 % Please edit documentation in R/io.R
 \name{ez.writem}
 \alias{ez.writem}
-\title{Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax}
+\title{Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
+seems column in a data frame should be atomic if factor does not work well.
+Writes .mat files to store R session data using the R.matlab package and
+takes care that logicals and atomic vectors are saved properly: currently,
+R.matlab does not write logicals and atomic vectors (not 1D arrays/ matrices)
+in a way that they can be opened properly in Matlab (logicals will not be
+stored and atomic vectors will be transposed in the Matlab session - but they
+appear untransposed when read back from the .mat file into R using
+R.matlab::readMat()). This function is a convenient wrapper for
+R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
+vectors when saving the matfile.}
 \usage{
 ez.writem(fn, vars)
 }
@@ -14,6 +24,8 @@ variables to be saved in the matfile. The variables have to exist in the
 environment where the function was called from. eg. 'var1,var2,   var3' with or without (extra) space}
 }
 \description{
+Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
+seems column in a data frame should be atomic if factor does not work well.
 Writes .mat files to store R session data using the R.matlab package and
 takes care that logicals and atomic vectors are saved properly: currently,
 R.matlab does not write logicals and atomic vectors (not 1D arrays/ matrices)
