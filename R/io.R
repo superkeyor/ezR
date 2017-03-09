@@ -290,11 +290,11 @@ ez.writex = ez.savex
 #' R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
 #' vectors when saving the matfile.
 #'
-#' @param fn file name, a character string
+#' @param fn file name, a character string, with or without '.mat'
 #'
 #' @param vars character vector containing a comma separated listing of
 #'   variables to be saved in the matfile. The variables have to exist in the
-#'   environment where the function was called from.
+#'   environment where the function was called from. eg. 'var1,var2,   var3' with or without (extra) space
 #'
 #' @export
 #'
@@ -407,11 +407,11 @@ ez.savem <- function(fn, vars){
 #' R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
 #' vectors when saving the matfile.
 #'
-#' @param fn file name, a character string
+#' @param fn file name, a character string, with or without '.mat'
 #'
 #' @param vars character vector containing a comma separated listing of
 #'   variables to be saved in the matfile. The variables have to exist in the
-#'   environment where the function was called from.
+#'   environment where the function was called from. eg. 'var1,var2,   var3' with or without (extra) space
 #'
 #' @export
 #'

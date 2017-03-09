@@ -7,11 +7,11 @@
 ez.savem(fn, vars)
 }
 \arguments{
-\item{fn}{file name, a character string}
+\item{fn}{file name, a character string, with or without '.mat'}
 
 \item{vars}{character vector containing a comma separated listing of
 variables to be saved in the matfile. The variables have to exist in the
-environment where the function was called from.}
+environment where the function was called from. eg. 'var1,var2,   var3' with or without (extra) space}
 }
 \description{
 Writes .mat files to store R session data using the R.matlab package and
