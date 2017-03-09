@@ -367,8 +367,8 @@ ez.print = function(...,sep=''){
 #' @examples
 #' ez.eval('z=9',environment())
 #' @export
-ez.eval = function(cmd){
-    eval(parse(text = cmd),envir = parent.frame())
+ez.eval = function(cmd,env=parent.frame()){
+    eval(parse(text = cmd),envir = env)
 }
 
 #' wrapper of \code{\link{eval}}

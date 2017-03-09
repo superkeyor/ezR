@@ -4,7 +4,7 @@
 \alias{ez.eval}
 \title{wrapper of \code{\link{eval}}}
 \usage{
-ez.eval(cmd)
+ez.eval(cmd, env = parent.frame())
 }
 \arguments{
 \item{cmd}{caller's envir, should be environment()  <-- hard to hard-code/default it in this wrapper function, R does not support call stack well.}
