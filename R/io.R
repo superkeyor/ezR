@@ -279,6 +279,7 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, c
 ez.writex = ez.savex
 
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
+#'
 #' seems column in a data frame should be atomic if factor does not work well.
 #' Writes .mat files to store R session data using the R.matlab package and
 #' takes care that logicals and atomic vectors are saved properly: currently,
@@ -396,6 +397,7 @@ ez.savem <- function(fn, vars){
 }
 
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
+#'
 #' seems column in a data frame should be atomic if factor does not work well.
 #' Writes .mat files to store R session data using the R.matlab package and
 #' takes care that logicals and atomic vectors are saved properly: currently,
