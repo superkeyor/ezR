@@ -965,3 +965,27 @@ ez.na.keep = function(df, col=NULL, n=0){
 
     return(result)
 }
+
+#' create a header for a data frame; also create the data frame
+#' @description wrapper of data.frame()
+#' @param ... e.g., col1=character(n), col2=numeric(n) where n defaults to 0, represents n of rows in the data frame
+#' @param stringsAsFactors defaults to FALSE (data.frame() defaults to TRUE)
+#' @return returns an (empty) df with specified col names
+#' @export
+ez.header = function(..., stringsAsFactors=FALSE){
+    return(data.frame(...,stringsAsFactors=stringsAsFactors))
+}
+
+#' append a row to an exisiting data frame
+#' @description could be slow
+#' @param df df to be appended
+#' @param newrow a vector, e.g.,  c("Ted", 25)
+#' @param print2screen whether to print the new row to string (auto separated by tab), default TRUE
+#' @return returns a new df, old passed df does not change
+#' @export
+ez.append = function(df, newrow, print2screen=TRUE){
+    # http://vitalflux.com/learn-r-append-rows-data-frame/
+    df[nrow(df)+1,] <- newrow
+    if (print2screen) {cat(newrow, '\n', sep='\t')}
+    return(df)
+}
