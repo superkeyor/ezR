@@ -4,10 +4,12 @@
 \alias{ez.header}
 \title{create a header for a data frame; also create the data frame}
 \usage{
-ez.header(..., stringsAsFactors = FALSE)
+ez.header(..., cols = NULL, stringsAsFactors = FALSE)
 }
 \arguments{
 \item{...}{e.g., col1=character(n), 'col2'=numeric(n) where n defaults to 0, represents n of rows in the data frame, '' around col name is optional}
+
+\item{cols}{optional (default=NULL), specify only if massively assign col names (i.e. header), see example}
 
 \item{stringsAsFactors}{defaults to FALSE (data.frame() defaults to TRUE)}
 }
@@ -16,5 +18,9 @@ returns an (empty) df with specified col names
 }
 \description{
 wrapper of data.frame()
+}
+\examples{
+postdoc=ez.header(name=character(),'salary'=numeric())
+postdoc=ez.header(cols=c('name','salary'))  # <--note that 'name','salary' data type is logical in this usage
 }
 

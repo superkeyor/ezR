@@ -969,11 +969,22 @@ ez.na.keep = function(df, col=NULL, n=0){
 #' create a header for a data frame; also create the data frame
 #' @description wrapper of data.frame()
 #' @param ... e.g., col1=character(n), 'col2'=numeric(n) where n defaults to 0, represents n of rows in the data frame, '' around col name is optional
+#' @param cols optional (default=NULL), specify only if massively assign col names (i.e. header), see example
 #' @param stringsAsFactors defaults to FALSE (data.frame() defaults to TRUE)
 #' @return returns an (empty) df with specified col names
+#' @examples
+#' postdoc=ez.header(name=character(),'salary'=numeric())
+#' postdoc=ez.header(cols=c('name','salary'))  # <--note that 'name','salary' data type is logical in this usage
 #' @export
-ez.header = function(..., stringsAsFactors=FALSE){
-    return(data.frame(...,stringsAsFactors=stringsAsFactors))
+ez.header = function(..., cols=NULL, stringsAsFactors=FALSE){
+    if (is.null(cols)) {
+        return(data.frame(...,stringsAsFactors=stringsAsFactors))
+    } else {
+        # http://stackoverflow.com/questions/9917545/r-define-dimensions-of-empty-data-frame
+        df = data.frame(matrix(NA, nrow = 0, ncol = length(cols)))
+        colnames(df) = cols
+        return(df)
+    }
 }
 
 #' append a row to an exisiting data frame
