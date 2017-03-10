@@ -968,7 +968,7 @@ ez.na.keep = function(df, col=NULL, n=0){
 
 #' create a header for a data frame; also create the data frame
 #' @description wrapper of data.frame()
-#' @param ... e.g., col1=character(n), col2=numeric(n) where n defaults to 0, represents n of rows in the data frame
+#' @param ... e.g., col1=character(n), 'col2'=numeric(n) where n defaults to 0, represents n of rows in the data frame, '' around col name is optional
 #' @param stringsAsFactors defaults to FALSE (data.frame() defaults to TRUE)
 #' @return returns an (empty) df with specified col names
 #' @export

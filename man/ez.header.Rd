@@ -7,7 +7,7 @@
 ez.header(..., stringsAsFactors = FALSE)
 }
 \arguments{
-\item{...}{e.g., col1=character(n), col2=numeric(n) where n defaults to 0, represents n of rows in the data frame}
+\item{...}{e.g., col1=character(n), 'col2'=numeric(n) where n defaults to 0, represents n of rows in the data frame, '' around col name is optional}
 
 \item{stringsAsFactors}{defaults to FALSE (data.frame() defaults to TRUE)}
 }
