@@ -409,7 +409,8 @@ ez.describe = function(df,cmd,violin=TRUE){
         tt = sprintf('
                      fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                      pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
-                     %s geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                     stat_boxplot(geom = "errorbar", width = 0.2) +
+                     %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                      geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                      theme(legend.position="none", axis.ticks.x=element_blank(), axis.text.x=element_blank()) +
@@ -430,12 +431,13 @@ ez.describe = function(df,cmd,violin=TRUE){
             tt = sprintf('
                          fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
-                         %s geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                         stat_boxplot(geom = "errorbar", width = 0.2) +
+                         %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                          geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                          stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                          theme(legend.position="none") +
-                         ggtitle(paste0("N = ",nrow(df)))'
-                         , xx, yy, violin
+                         ggtitle(paste0("N = ",nrow(df),sprintf(", p = %.2e", summary(aov(df$%s~df$%s))[[1]][["Pr(>F)"]][[1]])))'
+                         , xx, yy, violin, yy, xx
             )
             tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
             tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
@@ -447,7 +449,8 @@ ez.describe = function(df,cmd,violin=TRUE){
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
-                             %s geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                             stat_boxplot(geom = "errorbar", width = 0.2) +
+                             %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                              facet_grid(~%s) +
@@ -465,7 +468,8 @@ ez.describe = function(df,cmd,violin=TRUE){
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s)) +
-                             %s geom_boxplot(outlier.shape=NA, alpha=0.7) + # avoid plotting outliers twice from geom_jitter
+                             stat_boxplot(geom = "errorbar", width = 0.2) +
+                             %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                              facet_grid(%s~%s) +
