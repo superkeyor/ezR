@@ -426,12 +426,13 @@ ez.describe = function(df,cmd,violin=TRUE){
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx," ",fixed=TRUE)[[1]]
         # yy|xx
-        if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
-        ez.eval(sprintf('pvalue = summary(aov(df$%s ~ df$%s))[[1]][["Pr(>F)"]][[1]]', yy, xx))
-        pvalue = sprintf(", p = %.2e", pvalue)
-
         if (length(xx)==1) {
             xx = xx[1]
+
+            if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
+            ez.eval(sprintf('pvalue = summary(aov(df$%s ~ df$%s))[[1]][["Pr(>F)"]][[1]]', yy, xx))
+            pvalue = sprintf(", p = %.2e", pvalue)
+
             tt = sprintf('
                          fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
@@ -450,8 +451,10 @@ ez.describe = function(df,cmd,violin=TRUE){
             if (length(xx)==2) {
                 zz = xx[2]
                 xx = xx[1]
+
                 if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
                 if (!is.factor(df[[zz]])) {df = ez.2factor(df,col=zz)}
+
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
@@ -471,9 +474,11 @@ ez.describe = function(df,cmd,violin=TRUE){
                 aa = xx[3]
                 zz = xx[2]
                 xx = xx[1]
+
                 if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
                 if (!is.factor(df[[zz]])) {df = ez.2factor(df,col=zz)}
                 if (!is.factor(df[[aa]])) {df = ez.2factor(df,col=aa)}
+                
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
