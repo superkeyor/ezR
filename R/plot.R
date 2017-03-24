@@ -416,7 +416,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                      theme(legend.position="none", axis.ticks.x=element_blank(), axis.text.x=element_blank()) +
                      xlab("") +
                      ggtitle(paste0("N = ",nrow(df)))'
-                     , xx, xx, yy, violin
+                     , xx, yy, xx, violin
         )
         tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
         tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
@@ -440,7 +440,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                          stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                          theme(legend.position="none") +
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
-                         , xx, xx, yy, violin, pvalue
+                         , xx, yy, xx, violin, pvalue
             )
             tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
             tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
@@ -451,7 +451,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                 xx = xx[1]
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
-                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s, fill=%s)) +
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.2) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
@@ -459,7 +459,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              facet_grid(~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
-                             , xx, xx, yy, zz, violin, zz
+                             , xx, yy, xx, zz, violin, zz
                 )
                 tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
@@ -470,7 +470,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                 xx = xx[1]
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
-                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, color=%s, fill=%s)) +
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.2) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
@@ -478,7 +478,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              facet_grid(%s~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
-                             , xx, xx, yy, zz, violin, zz, aa
+                             , xx, yy, xx, zz, violin, zz, aa
                 )
                 tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
