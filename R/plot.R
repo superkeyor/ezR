@@ -451,7 +451,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                 xx = xx[1]
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
-                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=interaction(%s,%s))) +
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
@@ -459,7 +459,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              facet_grid(~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
-                             , xx, yy, xx,zz, violin, zz
+                             , xx, yy, zz, violin, zz
                 )
                 tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
@@ -470,7 +470,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                 xx = xx[1]
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
-                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=interaction(%s,%s,%s))) +
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
@@ -478,7 +478,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              facet_grid(%s~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
-                             , xx, yy, xx,zz,aa, violin, zz, aa
+                             , xx, yy, zz, violin, zz, aa
                 )
                 tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
