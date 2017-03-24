@@ -430,8 +430,14 @@ ez.describe = function(df,cmd,violin=TRUE){
             xx = xx[1]
 
             if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
-            ez.eval(sprintf('pvalue = summary(aov(df$%s ~ df$%s))[[1]][["Pr(>F)"]][[1]]', yy, xx))
-            pvalue = sprintf(", p = %.2e", pvalue)
+            eval(parse(text = sprintf('pvalue = summary(aov(df$%s ~ df$%s))[[1]][["Pr(>F)"]][[1]]', yy, xx)))
+            if (pvalue<.001) {
+                pvalue = sprintf(", p = %.2e", pvalue)
+            } else if (pvalue<.01) {
+                pvalue = sprintf(", p = %.3f", pvalue)
+            } else {
+                pvalue = sprintf(", p = %.2f", pvalue)
+            }
 
             tt = sprintf('
                          fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
