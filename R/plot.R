@@ -465,7 +465,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              facet_grid(~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
-                             , xx, yy, zz, violin, zz
+                             , xx, yy, xx, violin, zz
                 )
                 tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
@@ -478,7 +478,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                 if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
                 if (!is.factor(df[[zz]])) {df = ez.2factor(df,col=zz)}
                 if (!is.factor(df[[aa]])) {df = ez.2factor(df,col=aa)}
-                
+
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
@@ -489,7 +489,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              facet_grid(%s~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
-                             , xx, yy, zz, violin, zz, aa
+                             , xx, yy, xx, violin, zz, aa
                 )
                 tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
