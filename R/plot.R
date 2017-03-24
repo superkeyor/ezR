@@ -409,7 +409,7 @@ ez.describe = function(df,cmd,violin=TRUE){
         tt = sprintf('
                      fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                      pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
-                     stat_boxplot(geom = "errorbar", width = 0.2) +
+                     stat_boxplot(geom = "errorbar", width = 0.5) +
                      %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                      geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
@@ -434,7 +434,7 @@ ez.describe = function(df,cmd,violin=TRUE){
             tt = sprintf('
                          fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
-                         stat_boxplot(geom = "errorbar", width = 0.2) +
+                         stat_boxplot(geom = "errorbar", width = 0.5) +
                          %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                          geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                          stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
@@ -452,7 +452,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
-                             stat_boxplot(geom = "errorbar", width = 0.2) +
+                             stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
@@ -471,7 +471,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                 tt = sprintf('
                              fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
-                             stat_boxplot(geom = "errorbar", width = 0.2) +
+                             stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
