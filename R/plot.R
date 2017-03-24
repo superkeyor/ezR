@@ -439,7 +439,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                          geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                          stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                          theme(legend.position="none") +
-                         ggtitle(paste0("N = ",nrow(df), %s))'
+                         ggtitle(paste0("N = ",nrow(df), "%s"))'
                          , xx, xx, yy, violin, pvalue
             )
             tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
