@@ -4,12 +4,14 @@
 \alias{ez.describe}
 \title{plot a customized boxplot with jittered stripplot, violin, and mean}
 \usage{
-ez.describe(df, cmd)
+ez.describe(df, cmd, violin = TRUE)
 }
 \arguments{
 \item{df}{data frame in long format}
 
 \item{cmd}{like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete}
+
+\item{violin}{plot violin or not, default TRUE}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)
