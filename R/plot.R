@@ -389,10 +389,11 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param df data frame in long format
 #' @param cmd like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete
 #' @param violin plot violin or not, default TRUE
+#' @param shown show n (number of samples for each level)  or not, default TRUE
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.describe = function(df,cmd,violin=TRUE){
+ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces 
     # also see trimws()--remove trailing/leading spaces
@@ -418,7 +419,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                      ggtitle(paste0("N = ",nrow(df)))'
                      , xx, yy, violin
         )
-        tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
+        if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
         tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
     # yy|xx or yy|xx zz
     } else {
@@ -450,7 +451,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
                          , xx, yy, xx, violin, pvalue
             )
-            tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
+            if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
             tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="white", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
         # yy|xx zz
         } else {
@@ -473,7 +474,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz
                 )
-                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
+                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="white", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
             # yy|xx zz aa
             } else {
@@ -497,7 +498,7 @@ ez.describe = function(df,cmd,violin=TRUE){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz, aa
                 )
-                tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')
+                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="white", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
 
             }        
