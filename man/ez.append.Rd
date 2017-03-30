@@ -17,6 +17,6 @@ ez.append(df, newrow, print2screen = TRUE)
 returns a new df, old passed df does not change
 }
 \description{
-could be slow
+could be slow, commonly use together with \code{\link{ez.header}}
 }
 

@@ -17,7 +17,7 @@ ez.header(..., cols = NULL, stringsAsFactors = FALSE)
 returns an (empty) df with specified col names
 }
 \description{
-wrapper of data.frame()
+wrapper of data.frame(), commonly use together with \code{\link{ez.append}}
 }
 \examples{
 postdoc=ez.header(name=character(),'salary'=numeric())

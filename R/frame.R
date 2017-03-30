@@ -967,7 +967,7 @@ ez.na.keep = function(df, col=NULL, n=0){
 }
 
 #' create a header for a data frame; also create the data frame
-#' @description wrapper of data.frame()
+#' @description wrapper of data.frame(), commonly use together with \code{\link{ez.append}}
 #' @param ... e.g., col1=character(n), 'col2'=numeric(n) where n defaults to 0, represents n of rows in the data frame, '' around col name is optional
 #' @param cols optional (default=NULL), specify only if massively assign col names (i.e. header), see example
 #' @param stringsAsFactors defaults to FALSE (data.frame() defaults to TRUE)
@@ -988,7 +988,7 @@ ez.header = function(..., cols=NULL, stringsAsFactors=FALSE){
 }
 
 #' append a row to an exisiting data frame
-#' @description could be slow
+#' @description could be slow, commonly use together with \code{\link{ez.header}}
 #' @param df df to be appended
 #' @param newrow a vector, e.g.,  c("Ted", 25)
 #' @param print2screen whether to print the new row to string (auto separated by tab), default TRUE
