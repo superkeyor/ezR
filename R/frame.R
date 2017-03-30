@@ -993,6 +993,8 @@ ez.header = function(..., cols=NULL, stringsAsFactors=FALSE){
 #' @param newrow a vector, e.g.,  c("Ted", 25)
 #' @param print2screen whether to print the new row to string (auto separated by tab), default TRUE
 #' @return returns a new df, old passed df does not change
+#' @examples
+#' typically within a loop:  results = ez.append(results,c(var,p,R,U))
 #' @export
 ez.append = function(df, newrow, print2screen=TRUE){
     # http://vitalflux.com/learn-r-append-rows-data-frame/

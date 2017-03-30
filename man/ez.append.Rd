@@ -19,4 +19,7 @@ returns a new df, old passed df does not change
 \description{
 could be slow, commonly use together with \code{\link{ez.header}}
 }
+\examples{
+typically within a loop:  results = ez.append(results,c(var,p,R,U))
+}
 
