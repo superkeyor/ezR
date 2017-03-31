@@ -4,13 +4,13 @@
 \alias{ez.lsd}
 \title{lsd}
 \usage{
-ez.lsd(path = ".", pattern = NULL)
+ez.lsd(path = ".", pattern = NULL, hidden = FALSE)
 }
 \description{
 lsd
 }
 \examples{
-can also include .folders
+default: hidden=FALSE, not include .folders
 all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
 }
 

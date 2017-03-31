@@ -4,7 +4,7 @@
 \alias{ez.fls}
 \title{fls}
 \usage{
-ez.fls(path = ".", pattern = NULL)
+ez.fls(path = ".", pattern = NULL, hidden = FALSE)
 }
 \description{
 fls

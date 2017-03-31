@@ -292,11 +292,11 @@ ez.csd <- function() {
 #' @param
 #' @return
 #' @examples
-#' can also include .folders
+#' default: hidden=FALSE, not include .folders
 #' all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
 #' @export
-ez.lsd = function(path='.', pattern=NULL){
-    folders = dir(path=path, pattern=pattern, all.files=TRUE, full.name=FALSE,
+ez.lsd = function(path='.', pattern=NULL, hidden=FALSE){
+    folders = dir(path=path, pattern=pattern, all.files=hidden, full.name=FALSE,
                   recursive = FALSE, ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
     fullFolders = file.path(path,folders)
     infos = file.info(fullFolders)
@@ -309,8 +309,8 @@ ez.lsd = function(path='.', pattern=NULL){
 #' @return
 #' @examples
 #' @export
-ez.ls = function(path='.', pattern=NULL){
-    files = list.files(path = path, pattern = pattern, all.files = TRUE,
+ez.ls = function(path='.', pattern=NULL, hidden=FALSE){
+    files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = FALSE,
                        ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
     isfiles = !(file.info(files)$isdir)
@@ -322,8 +322,8 @@ ez.ls = function(path='.', pattern=NULL){
 #' @return
 #' @examples
 #' @export
-ez.fls = function(path='.', pattern=NULL){
-    files = list.files(path = path, pattern = pattern, all.files = TRUE,
+ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
+    files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = TRUE,
                        ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
     isfiles = !(file.info(files)$isdir)
