@@ -230,9 +230,9 @@ ggcolor = function(){
         # scale_fill_manual (for boxes, bars, and ribbons)\n
         # scale_color_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))\n
 
-        # also visit http://colorbrewer2.org/ for printer friendly color etc\n
-        # scale_color_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",\n
-                                "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))\n')
+        # also visit http://colorbrewer2.org/\n
+        # scale_color_manual(values=c("#fdae61","#2b83ba","#d7191c","#abdda4","#ffffbf")) #printer-friendly\n
+        # scale_color_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73","#F0E442", "#0072B2", "#D55E00", "#CC79A7")) #colorblind-friendly\n')
 }
 
 #' change plot continous color to matlab like
@@ -512,7 +512,7 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' barplot with ggplot
 #' @param df data frame in long format
 #' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
-#' @para bar_color  'bw' or 'color'  black/white or printer-friendly color
+#' @para bar_color  'bw' or 'color'  black/white or colorblind-friendly color
 #' @para bar_gap  the gap between bars 
 #' @para bar_width  the width of bar itself 
 #' @para error_size  the thickness of error bar line 
@@ -521,9 +521,9 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' @para error_direction  'both', 'max', 'min'
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
-#' @para zlab  z/fill label, only applicable when there is z provided NULL
+#' @para zlab  z/fill/legend label, only applicable when there is z provided NULL
 #' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
-#' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
+#' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
 #' @para legend_box  box of legend, T or F
 #' @para legend_direction  horizontal or vertical
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
@@ -535,8 +535,7 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' @export
 ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     
-    # printer friendly color http://colorbrewer2.org/#type=diverging&scheme=Spectral&n=5
-    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#fdae61","#abdda4","#ffffbf","#2b83ba","#d7191c"))')
+    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7"))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -566,7 +565,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
             # The width in geom_bar controls the bar width in relation to the x-axis 
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
             # color = outline color of bar
-            
+            # legend is ignored, but because lab might be empty, better to keep the legend commands here
             tt = sprintf('
                          pp=group_by(df,%s) %%>%% 
                          summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
@@ -575,11 +574,11 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                          geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
                          
-                         %s %s %s
+                         %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, xx, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, xx, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
@@ -623,9 +622,9 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
 #' @para error_direction  'both', 'max', 'min'
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
-#' @para zlab  z/fill label, only applicable when there is z provided NULL
+#' @para zlab  z/fill/legend label, only applicable when there is z provided NULL
 #' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
-#' \cr         c(0,0) corresponds to the “bottom left” and c(1,1) corresponds to the “top right” position.
+#' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
 #' @para legend_box  box of legend, T or F
 #' @para legend_direction  horizontal or vertical
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
@@ -665,7 +664,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
             # The width in geom_line controls the bar width in relation to the x-axis 
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
             # color = outline color of bar
-            
+            # legend is ignored, but because lab might be empty, better to keep the legend commands here
             tt = sprintf('
                          pp=group_by(df,%s) %%>%% 
                          summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
@@ -674,11 +673,11 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                          geom_point() +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
                          
-                         %s %s %s
+                         %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, xx, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, xx, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
@@ -696,7 +695,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=c("#fdae61","#abdda4","#ffffbf","#2b83ba","#d7191c")) + 
+                            scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) + 
 
                             %s %s %s
                             %s %s
