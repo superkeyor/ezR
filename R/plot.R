@@ -1127,3 +1127,148 @@ ez.relevelfactor = function(df, col){
     df[[col]] = factor(df[[col]], unique(as.character(df[[col]])))
     return(df)
 }
+
+#' scatter plot with ggplot
+#' @param df data frame
+#' @param cmd like "y~x", "y~x|z", "y~x||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
+#' @para point.alpha  if overplot for points, reduce alpha 
+#' @para point.size if less point, increase size
+#' @para rug.size rug size
+#' @para rp.size  r p values font size, ignored if rp=FALSE
+#' @para rp.x  r p values x position (relative to max of x value), ignored if rp=FALSE
+#' @para rp.y  r p values y position (relative to min of y value), ignored if rp=FALSE
+#' @para ylab  y label NULL
+#' @para xlab  x label NULL
+#' @para zlab  z/fill/legend label, only applicable when there is z provided NULL
+#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+#' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
+#' @para legend_box  box of legend, T or F
+#' @para legend_direction  horizontal or vertical
+#' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
+#' @param rp show r squared and p values
+#' @param se standard error of linear regression line
+#' @param rug marginal rug indicating univariate distribution
+#' @param ellipse draw confidence ellipses, powered by stat_ellipse()
+#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @examples 
+#' @export
+ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.8,point.size=2,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=TRUE){
+    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    # play a trick
+    cmd = gsub("||","*",cmd,fixed=TRUE)
+
+    ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+    xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
+    legend_position = ifelse(is.character(legend_position), sprintf('theme(legend.position="%s")+',legend_position), sprintf('theme(legend.position=c(%s))+',paste(legend_position,collapse=',')))
+    legend_box = ifelse(legend_box,'theme(legend.background = element_rect(color = "black"))+','')
+
+    # theme() cannot change geom_text(), geom_label(), annotate()
+    # side note: geom_text() seems not to render text well on screen, geom_label() adds a box around text, annote() is based on geom_text but cannot include grouping variable
+    if (Sys.info()["sysname"] != "Windows") {
+        windowsFonts <- NULL
+    }
+
+    if (Sys.info()["sysname"] == "Windows") {
+        windowsFonts(RMN=windowsFont("Times New Roman"))
+        RMN <- "RMN"
+    } else {
+        RMN <- "Times New Roman"
+    }
+    ####################################################### subfunction
+    # https://gist.github.com/kdauria/524eade46135f6348140
+    # http://stackoverflow.com/a/7549819/2292993
+    # http://stackoverflow.com/a/13451587/2292993
+    lmrp = function(m) {
+        rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
+        rvalue = ifelse(rvalue>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
+        pvalue = summary(m)$coefficients[2,4]
+        if (pvalue<.001) {
+            pvalue = sprintf("%.2e", pvalue)
+        } else if (pvalue<.01) {
+            pvalue = sprintf("%.3f", pvalue)
+        } else {
+            pvalue = sprintf("%.2f", pvalue)
+        }
+
+        eq <- substitute(italic(r)~"="~rvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,pvalue = pvalue))
+        as.character(as.expression(eq));                 
+    }
+    ####################################################### subfunction /
+
+    if (grepl("|",cmd,fixed=TRUE)) {
+      cmd = strsplit(cmd,"[~|]")[[1]]
+      # y~x|z
+      yy = trimws(cmd[1])
+      xx = trimws(cmd[2])
+      zz = trimws(cmd[3])
+
+      rp.x = max(df[[xx]])*rp.x
+      rp.y = min(df[[yy]])*rp.y
+      # http://stackoverflow.com/a/27959418/2292993
+      rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
+      se = ifelse(se,'TRUE','FALSE')
+      rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
+      ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
+      tt = sprintf('
+                  pp=ggplot(df, aes(x=%s, y=%s)) +
+                  geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s 
+                  geom_smooth(method=lm,se=%s) + %s %s
+                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) +
+                  %s %s %s %s
+                  theme(legend.direction="%s") + 
+                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
+                  ,xx,yy,point.alpha,point.size,zz,zz,rp,se,rug,ellipse,ylab,xlab,zlab,legend_position,legend_direction,legend_size[1],legend_size[2],legend_size[2]
+      )
+
+    } else {
+      cmd = strsplit(cmd,"[~*]")[[1]]
+      if (length(cmd)==2) {
+      # y~x
+      yy = trimws(cmd[1])
+      xx = trimws(cmd[2])
+      rp.x = max(df[[xx]])*rp.x
+      rp.y = min(df[[yy]])*rp.y
+      # http://stackoverflow.com/a/27959418/2292993
+      rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
+      se = ifelse(se,'TRUE','FALSE')
+      rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f) +',rug.size),'')
+      ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm") +'),'')
+      # legend is ignored, but because lab might be empty, better to keep the legend commands here
+      tt = sprintf('
+                  pp=ggplot(df, aes(x=%s, y=%s)) +
+                  geom_point(alpha=%f,size=%f) + %s 
+                  geom_smooth(method=lm,se=%s) + %s %s
+                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) +
+                  %s %s %s
+                  theme(legend.direction="%s") + 
+                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
+                  ,xx,yy,point.alpha,point.size,rp,se,rug,ellipse,ylab,xlab,legend_position,legend_direction,legend_size[1],legend_size[2],legend_size[2]
+      )
+      } else {
+          # y~x||z
+          yy = trimws(cmd[1])
+          xx = trimws(cmd[2])
+          zz = trimws(cmd[3])
+          rp.x = max(df[[xx]])*rp.x
+          rp.y = min(df[[yy]])*rp.y
+          rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
+          se = ifelse(se,'TRUE','FALSE')
+          rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
+          ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
+          tt = sprintf('
+                      pp=ggplot(df, aes(x=%s, y=%s)) +
+                      geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s 
+                      geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
+                      scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) +
+                      %s %s %s %s
+                      theme(legend.direction="%s") + 
+                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
+                      ,xx,yy,point.alpha,point.size,zz,zz,rp,se,zz,rug,ellipse,ylab,xlab,zlab,legend_position,legend_direction,legend_size[1],legend_size[2],legend_size[2]
+          )
+      }
+    }
+    eval(parse(text = tt))
+    cat(tt,"\n")
+    return(pp)
+}
