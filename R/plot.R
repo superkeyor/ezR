@@ -1163,38 +1163,42 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
     legend_position = ifelse(is.character(legend_position), sprintf('theme(legend.position="%s")+',legend_position), sprintf('theme(legend.position=c(%s))+',paste(legend_position,collapse=',')))
     legend_box = ifelse(legend_box,'theme(legend.background = element_rect(color = "black"))+','')
 
-    # theme() cannot change geom_text(), geom_label(), annotate()
-    # side note: geom_text() seems not to render text well on screen, geom_label() adds a box around text, annote() is based on geom_text but cannot include grouping variable
-    if (Sys.info()["sysname"] != "Windows") {
-        windowsFonts <- NULL
-    }
-
-    if (Sys.info()["sysname"] == "Windows") {
-        windowsFonts(RMN=windowsFont("Times New Roman"))
-        RMN <- "RMN"
-    } else {
-        RMN <- "Times New Roman"
-    }
-    ####################################################### subfunction
-    # https://gist.github.com/kdauria/524eade46135f6348140
-    # http://stackoverflow.com/a/7549819/2292993
-    # http://stackoverflow.com/a/13451587/2292993
-    lmrp = function(m) {
-        rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
-        rvalue = ifelse(rvalue>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
-        pvalue = summary(m)$coefficients[2,4]
-        if (pvalue<.001) {
-            pvalue = sprintf("%.2e", pvalue)
-        } else if (pvalue<.01) {
-            pvalue = sprintf("%.3f", pvalue)
-        } else {
-            pvalue = sprintf("%.2f", pvalue)
+    tt = '
+        # theme() cannot change geom_text(), geom_label(), annotate()
+        # side note: geom_text() seems not to render text well on screen, geom_label() adds a box around text, annote() is based on geom_text but cannot include grouping variable
+        if (Sys.info()["sysname"] != "Windows") {
+            windowsFonts <- NULL
         }
 
-        eq <- substitute(italic(r)~"="~rvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,pvalue = pvalue))
-        as.character(as.expression(eq));                 
-    }
-    ####################################################### subfunction /
+        if (Sys.info()["sysname"] == "Windows") {
+            windowsFonts(RMN=windowsFont("Times New Roman"))
+            RMN <- "RMN"
+        } else {
+            RMN <- "Times New Roman"
+        }
+        ####################################################### subfunction
+        # https://gist.github.com/kdauria/524eade46135f6348140
+        # http://stackoverflow.com/a/7549819/2292993
+        # http://stackoverflow.com/a/13451587/2292993
+        lmrp = function(m) {
+            rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
+            rvalue = ifelse(rvalue>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
+            pvalue = summary(m)$coefficients[2,4]
+            if (pvalue<.001) {
+                pvalue = sprintf("%.2e", pvalue)
+            } else if (pvalue<.01) {
+                pvalue = sprintf("%.3f", pvalue)
+            } else {
+                pvalue = sprintf("%.2f", pvalue)
+            }
+
+            eq <- substitute(italic(r)~"="~rvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,pvalue = pvalue))
+            as.character(as.expression(eq));                 
+        }
+        ####################################################### subfunction /
+        '
+    eval(parse(text = tt))
+    cat(tt,"\n")    
 
     if (grepl("|",cmd,fixed=TRUE)) {
       cmd = strsplit(cmd,"[~|]")[[1]]
