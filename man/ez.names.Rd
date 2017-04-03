@@ -4,7 +4,7 @@
 \alias{ez.names}
 \title{all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()}
 \usage{
-ez.names()
+ez.names(x, do.NULL = TRUE, prefix = "col")
 }
 \description{
 all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()

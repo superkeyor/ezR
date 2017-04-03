@@ -4,7 +4,7 @@
 \alias{ez.rnames}
 \title{all row names, alias of \code{\link{row.names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()}
 \usage{
-ez.rnames(x)
+ez.rnames(x, do.NULL = TRUE, prefix = "row")
 }
 \description{
 all row names, alias of \code{\link{row.names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()

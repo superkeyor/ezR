@@ -51,7 +51,7 @@ ez.size = function(x,dimension=0) {
 #' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
 #' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
-ez.rnames = row.names
+ez.rnames = rownames
 
 #' all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
@@ -59,7 +59,7 @@ ez.rnames = row.names
 #' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
 #' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
-ez.cnames = names
+ez.cnames = colnames
 
 #' all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
@@ -67,7 +67,7 @@ ez.cnames = names
 #' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
 #' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
-ez.names = names
+ez.names = colnames
 
 
 
