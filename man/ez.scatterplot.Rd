@@ -13,9 +13,9 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.95, rp.y = 0.95,
 \arguments{
 \item{df}{data frame}
 
-\item{cmd}{like "y~x", "y~x|z", "y~x||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)}
+\item{cmd}{like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)}
 
-\item{rp}{show r squared and p values}
+\item{rp}{show r squared and p values (auto force to be FALSE, if "y~x||z", because rp cannot be auto calculated separately for each level of z)}
 
 \item{se}{standard error of linear regression line}
 

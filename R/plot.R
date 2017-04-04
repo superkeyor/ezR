@@ -1130,7 +1130,7 @@ ez.relevelfactor = function(df, col){
 
 #' scatter plot with ggplot
 #' @param df data frame
-#' @param cmd like "y~x", "y~x|z", "y~x||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
+#' @param cmd like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
 #' @para point.alpha  if overplot for points, reduce alpha 
 #' @para point.size if less point, increase size
 #' @para rug.size rug size
@@ -1145,7 +1145,7 @@ ez.relevelfactor = function(df, col){
 #' @para legend_box  box of legend, T or F
 #' @para legend_direction  horizontal or vertical
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @param rp show r squared and p values
+#' @param rp show r squared and p values (auto force to be FALSE, if "y~x||z", because rp cannot be auto calculated separately for each level of z)
 #' @param se standard error of linear regression line
 #' @param rug marginal rug indicating univariate distribution
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
@@ -1254,6 +1254,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
           yy = trimws(cmd[1])
           xx = trimws(cmd[2])
           zz = trimws(cmd[3])
+          rp = FALSE  # auto force to be FALSE
           rp.x = max(df[[xx]])*rp.x
           rp.y = min(df[[yy]])*rp.y
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
