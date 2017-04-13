@@ -30,6 +30,8 @@ recodes contains a set of recoding rules separated by ";". There are three diffe
  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA")}
 }
 \cr seems to work with characters as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
+\cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
+\cr but number to character works directly, see the example
 }
 \note{
 Please note following behaviours of the function:
