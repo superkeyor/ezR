@@ -12,7 +12,7 @@ ez.barplot(df, cmd, bar_color = "color", bar_gap = 0.7, bar_width = 0.7,
   hjust = NULL)
 }
 \arguments{
-\item{df}{data frame in long format}
+\item{df}{data frame in WIDE format (otherwise inaccurate standard error)}
 
 \item{cmd}{like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete}
 }

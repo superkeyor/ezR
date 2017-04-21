@@ -11,7 +11,7 @@ ez.lineplot(df, cmd, line_size = 0.7, error_size = 0.7, error_gap = 0,
   hjust = NULL)
 }
 \arguments{
-\item{df}{data frame in long format}
+\item{df}{data frame in WIDE format (otherwise inaccurate standard error)}
 
 \item{cmd}{like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete}
 }

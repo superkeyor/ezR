@@ -510,7 +510,7 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 }
 
 #' barplot with ggplot
-#' @param df data frame in long format
+#' @param df data frame in WIDE format (otherwise inaccurate standard error)
 #' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
 #' @para bar_color  'bw' or 'color'  black/white or colorblind-friendly color
 #' @para bar_gap  the gap between bars 
@@ -570,15 +570,16 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                          pp=group_by(df,%s) %%>%% 
                          summarise(mean=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                          
-                         ggplot2::ggplot(aes(x=%s,y=mean)) +
+                         ggplot2::ggplot(aes(x=%s,y=mean,fill=%s)) +
                          geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
+                         %s +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
                          
                          %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, yy, yy, xx, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, yy, yy, xx, xx, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
@@ -613,7 +614,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
 }
 
 #' line plot with ggplot
-#' @param df data frame in long format
+#' @param df data frame in WIDE format (otherwise inaccurate standard error)
 #' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
 #' @para line_size  the thickness of line, only applicable when there is z provided
 #' @para error_size  the thickness of error bar line 
