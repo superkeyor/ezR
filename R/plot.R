@@ -504,8 +504,8 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
             }        
         }
     }    
-    eval(parse(text = tt))
     cat(tt,"\n")
+    eval(parse(text = tt))
     return(pp)
 }
 
@@ -607,8 +607,8 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
             }        
         }
     }    
-    eval(parse(text = tt))
     cat(tt,"\n")
+    eval(parse(text = tt))
     return(pp)
 }
 
@@ -707,8 +707,8 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
             }        
         }
     }    
-    eval(parse(text = tt))
     cat(tt,"\n")
+    eval(parse(text = tt))
     return(pp)
 }
 
@@ -778,8 +778,8 @@ ez.xyplot = function(df,cmd){
         }
     }
 
-    eval(parse(text = tt))
     cat(tt,"\n")
+    eval(parse(text = tt))
     return(pp)
 }
 
@@ -802,8 +802,8 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
-    eval(parse(text = cmd))
     cat(cmd,"\n")
+    eval(parse(text = cmd))
 
     x = "key"; y = id; z = "value"
     if (show.values) {
@@ -955,8 +955,8 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
         cmd = sprintf('df.stats = dplyr::summarise_each(dplyr::group_by(df.ori,%s),
                       funs(%s(.,na.rm=T)))
                       ',id,stats)
-        eval(parse(text = cmd))
         cat(cmd,"\n")
+        eval(parse(text = cmd))
     } else {
         df.stats = df.ori
     }
@@ -967,8 +967,8 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     # 3) to long format
     cmd = sprintf('tidyr::gather(df.stats, variable,value,-%s,factor_key = T) -> df
                   ',id)
-    eval(parse(text = cmd))
     cat(cmd,"\n")
+    eval(parse(text = cmd))
 
     # 4) plot
     # geom_polygon connects together, no fill
@@ -1002,21 +1002,21 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
                       ', id, id, id, lwd, id, facetfontsize, fontsize, angle)
 
     }
-    eval(parse(text = cmd))
     cat(cmd,"\n")
+    eval(parse(text = cmd))
 
     # 5) hack: couldn't pass NULL to color, linetype
     if (is.null(color)) {
         cmd = sprintf('p = p + scale_color_manual(values=rep("black",nlevels(factor(df$%s))))
                       ',id)
-        eval(parse(text = cmd))
         cat(cmd,"\n")
+        eval(parse(text = cmd))
     }
     if (is.null(linetype)) {
         cmd = sprintf('p = p + scale_linetype_manual(values=rep("solid",nlevels(factor(df$%s))))
                       ',id)
-        eval(parse(text = cmd))
         cat(cmd,"\n")
+        eval(parse(text = cmd))
     }
 
     return(p)
@@ -1053,8 +1053,8 @@ ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     cmd = sprintf('p = ez.heatmap(df, "%s", colors=c("blue", "white", "%s"),
                   legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
                   , id, color, angle, basesize, xsize, ysize)
-    eval(parse(text = cmd))
     # cat(cmd,"\n")
+    eval(parse(text = cmd))
 
     return(p)
 }
@@ -1197,8 +1197,8 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
         }
         ####################################################### subfunction /
         '
-    eval(parse(text = tt))
     cat(tt,"\n")    
+    eval(parse(text = tt))
 
     if (grepl("|",cmd,fixed=TRUE)) {
       cmd = strsplit(cmd,"[~|]")[[1]]
@@ -1273,7 +1273,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
           )
       }
     }
-    eval(parse(text = tt))
     cat(tt,"\n")
+    eval(parse(text = tt))
     return(pp)
 }
