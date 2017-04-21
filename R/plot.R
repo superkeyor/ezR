@@ -672,16 +672,16 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                          pp=group_by(df,%s) %%>%% 
                          summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                          
-                         ggplot2::ggplot(aes(x=%s,y=average)) +
+                         ggplot2::ggplot(aes(x=%s,y=average,group=1)) +
                          geom_point(aes(shape=%s,color=%s)) +
-                         geom_line(aes(linetype=%s,color=%s, group=1), size=%f) +
-                         geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+                         geom_line(size=%f) +
+                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
                          
                          %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, yy, yy, xx, xx, xx, xx, xx, line_size, ymin, ymax, xx, xx, error_size, error_width, error_gap, ylab, xlab, 'theme(legend.position="none")+', legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, yy, yy, xx, line_size, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, 'theme(legend.position="none")+', legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
