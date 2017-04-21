@@ -524,6 +524,7 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' @para zlab  z/fill/legend label, only applicable when there is z provided NULL
 #' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
+#' \cr         if no z (legend) provided, force to 'none'
 #' @para legend_box  box of legend, T or F
 #' @para legend_direction  horizontal or vertical
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
@@ -579,7 +580,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, yy, yy, xx, xx, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, 'theme(legend.position="none")', legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, yy, yy, xx, xx, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, 'theme(legend.position="none")+', legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
