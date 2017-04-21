@@ -568,7 +568,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
             tt = sprintf('
                          pp=group_by(df,%s) %%>%% 
-                         summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
+                         summarise(mean=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                          
                          ggplot2::ggplot(aes(x=%s,y=mean)) +
                          geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
@@ -578,7 +578,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, xx, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, yy, yy, xx, bar_width, bar_gap, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
@@ -590,7 +590,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                 # color = outline color of bar
                 tt = sprintf('
                             pp=group_by(df,%s,%s) %%>%% 
-                            summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
+                            summarise(mean=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
 
                             ggplot2::ggplot(aes(x=%s,y=mean,fill=%s)) +
                             geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
@@ -602,7 +602,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") + 
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                            , xx, zz, xx, zz, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                            , xx, zz, yy, yy, xx, zz, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                 )
             }        
         }
@@ -667,7 +667,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
             tt = sprintf('
                          pp=group_by(df,%s) %%>%% 
-                         summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
+                         summarise(mean=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                          
                          ggplot2::ggplot(aes(x=%s,y=mean)) +
                          geom_point() +
@@ -677,7 +677,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, xx, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, yy, yy, xx, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
@@ -689,7 +689,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                 # color = outline color of bar
                 tt = sprintf('
                             pp=group_by(df,%s,%s) %%>%% 
-                            summarise(mean=mean(value),se=sd(value)/sqrt(n())) %%>%% 
+                            summarise(mean=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
 
                             ggplot2::ggplot(aes(x=%s,y=mean,group=%s)) +
                             geom_point(aes(shape=%s,color=%s)) +
@@ -702,7 +702,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") + 
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                            , xx, zz, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                            , xx, zz, yy, yy, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                 )
             }        
         }
