@@ -673,7 +673,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                          summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                          
                          ggplot2::ggplot(aes(x=%s,y=average,group=1)) +
-                         geom_point(aes(shape=%s,color=%s)) +
+                         geom_point() +
                          geom_line(size=%f) +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
                          
