@@ -11,9 +11,9 @@ ez.lineplot(df, cmd, line_size = 0.7, error_size = 0.7, error_gap = 0,
   hjust = NULL)
 }
 \arguments{
-\item{df}{data frame in WIDE format (otherwise inaccurate standard error)}
+\item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
 
-\item{cmd}{like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete}
+\item{cmd}{like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete, during plot x z a ->x z(za combined)}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)

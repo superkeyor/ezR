@@ -510,8 +510,8 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 }
 
 #' barplot with ggplot
-#' @param df data frame in WIDE format (otherwise inaccurate standard error)
-#' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
+#' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
 #' @para bar_color  'bw' or 'color'  black/white or colorblind-friendly color
 #' @para bar_gap  the gap between bars 
 #' @para bar_width  the width of bar itself 
@@ -521,10 +521,10 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' @para error_direction  'both', 'max', 'min'
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
-#' @para zlab  z/fill/legend label, only applicable when there is z provided NULL
+#' @para zlab  z/a/fill/legend label, only applicable when there is z provided NULL
 #' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
-#' \cr         if no z (legend) provided, auto force to 'none'
+#' \cr         if no z/a (legend) provided, auto force to 'none'
 #' @para legend_box  box of legend, T or F
 #' @para legend_direction  horizontal or vertical
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
@@ -536,10 +536,11 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' @export
 ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     
-    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7"))')
+    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    if ((!is.null(zlab)) && legend_size[1]==0) {legend_size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend_position = ifelse(is.character(legend_position), sprintf('theme(legend.position="%s")+',legend_position), sprintf('theme(legend.position=c(%s))+',paste(legend_position,collapse=',')))
     legend_box = ifelse(legend_box,'theme(legend.background = element_rect(color = "black"))+','')
@@ -606,6 +607,34 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                             , xx, zz, yy, yy, xx, zz, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                 )
+            }
+            else {
+                # yy|xx zz aa
+                if (length(xx)==3) {
+                    aa = xx[3]
+                    zz = xx[2]
+                    xx = xx[1]
+                    # The width in geom_bar controls the bar width in relation to the x-axis 
+                    # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
+                    # color = outline color of bar
+                    tt = sprintf('
+                                pp=group_by(df,%s,%s,%s) %%>%% 
+                                summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                                unite(zzaa,c(%s,%s)) %%>%%
+
+                                ggplot2::ggplot(aes(x=%s,y=average,fill=zzaa)) +
+                                geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
+                                %s + 
+                                geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+
+                                %s %s %s
+                                %s %s
+                                theme(axis.text.x=element_text(angle=%f %s %s)) +
+                                theme(legend.direction="%s") + 
+                                theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
+                                , xx, zz, aa, yy, yy, zz, aa, xx, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                    )
+                }
             }        
         }
     }    
@@ -615,8 +644,8 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
 }
 
 #' line plot with ggplot
-#' @param df data frame in WIDE format (otherwise inaccurate standard error)
-#' @param cmd like "y|x, y|x z" where y (axis) is continous, x (axis) z (legend) are discrete
+#' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete, during plot x z a ->x z(za combined)
 #' @para line_size  the thickness of line, only applicable when there is z provided
 #' @para error_size  the thickness of error bar line 
 #' @para error_gap  the location of errorbar, should not be adjusted, 0 (parameter kept for reference)
@@ -624,10 +653,10 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
 #' @para error_direction  'both', 'max', 'min'
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
-#' @para zlab  z/fill/legend label, only applicable when there is z provided NULL
+#' @para zlab  z/a/fill/legend label, only applicable when there is z provided NULL
 #' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
-#' \cr         if no z (legend) provided, auto force to 'none'
+#' \cr         if no z/a (legend) provided, auto force to 'none'
 #' @para legend_box  box of legend, T or F
 #' @para legend_direction  horizontal or vertical
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
@@ -641,6 +670,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
     
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    if ((!is.null(zlab)) && legend_size[1]==0) {legend_size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend_position = ifelse(is.character(legend_position), sprintf('theme(legend.position="%s")+',legend_position), sprintf('theme(legend.position=c(%s))+',paste(legend_position,collapse=',')))
     legend_box = ifelse(legend_box,'theme(legend.background = element_rect(color = "black"))+','')
@@ -699,7 +729,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) + 
+                            scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) + 
 
                             %s %s %s
                             %s %s
@@ -708,7 +738,32 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                             , xx, zz, yy, yy, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                 )
-            }        
+            } else {
+                # yy|xx zz aa
+                if (length(xx)==3) {
+                    aa = xx[3]
+                    zz = xx[2]
+                    xx = xx[1]
+                    tt = sprintf('
+                            pp=group_by(df,%s,%s,%s) %%>%% 
+                            summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                            unite(%s,c(%s,%s)) %%>%%
+
+                            ggplot2::ggplot(aes(x=%s,y=average,group=%s)) +
+                            geom_point(aes(shape=%s,color=%s)) +
+                            geom_line(aes(linetype=%s,color=%s), size=%f) +
+                            geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+                            scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) + 
+
+                            %s %s %s
+                            %s %s
+                            theme(axis.text.x=element_text(angle=%f %s %s)) +
+                            theme(legend.direction="%s") + 
+                            theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
+                            , xx, zz, aa, yy, yy, zz, zz, aa, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                    )
+                }
+            }
         }
     }    
     cat(tt,"\n")
@@ -1163,6 +1218,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    if ((!is.null(zlab)) && legend_size[1]==0) {legend_size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend_position = ifelse(is.character(legend_position), sprintf('theme(legend.position="%s")+',legend_position), sprintf('theme(legend.position=c(%s))+',paste(legend_position,collapse=',')))
     legend_box = ifelse(legend_box,'theme(legend.background = element_rect(color = "black"))+','')
@@ -1222,7 +1278,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s 
                   geom_smooth(method=lm,se=%s) + %s %s
-                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) +
+                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) +
                   %s %s %s %s
                   theme(legend.direction="%s") + 
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -1247,7 +1303,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f) + %s 
                   geom_smooth(method=lm,se=%s) + %s %s
-                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) +
+                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) +
                   %s %s %s
                   theme(legend.direction="%s") + 
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -1269,7 +1325,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                       pp=ggplot(df, aes(x=%s, y=%s)) +
                       geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s 
                       geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
-                      scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7")) +
+                      scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) +
                       %s %s %s %s
                       theme(legend.direction="%s") + 
                       theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
