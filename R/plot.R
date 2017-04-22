@@ -775,10 +775,15 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
 #' @param df data frame in long format
 #' @param cmd like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous, x z a are discrete, g is individual/grouping variable
 #' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
+#' @para ylab  y label NULL
+#' @para xlab  x label NULL
+#' @para xangle  angle of x text 0
+#' @para vjust  vjust of x text NULL
+#' @para hjust  hjust of x text NULL
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
 #' @export
-ez.xyplot = function(df,cmd){
+ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces 
     cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
@@ -790,6 +795,12 @@ ez.xyplot = function(df,cmd){
 
     xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
     xx = strsplit(xx," ",fixed=TRUE)[[1]]
+
+    ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+    xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
+    hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
+
     if (length(xx)==1) {
         # "y|x,g"
         xx = trimws(xx[1])
@@ -799,8 +810,10 @@ ez.xyplot = function(df,cmd){
                     pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
                     geom_point(position=pd, size=1) + 
                     geom_line(position=pd, aes(color=%s)) + 
+                    %s %s 
+                    theme(axis.text.x=element_text(angle=%f %s %s)) +
                     theme(legend.position='none')"
-             , xx,yy,gg,gg
+             , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust
         )
     } else {
         if (length(xx)==2) {
@@ -813,9 +826,11 @@ ez.xyplot = function(df,cmd){
                         pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
                         geom_point(position=pd, size=1) + 
                         geom_line(position=pd, aes(color=%s)) + 
+                        %s %s 
+                        theme(axis.text.x=element_text(angle=%f %s %s)) +
                         theme(legend.position='none') +
                         facet_grid(.~%s)"
-                 , xx,yy,gg,gg,zz
+                 , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust,zz
             )
         } else {
             if (length(xx)==3) {
@@ -829,9 +844,11 @@ ez.xyplot = function(df,cmd){
                             pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
                             geom_point(position=pd, size=1) + 
                             geom_line(position=pd, aes(color=%s)) + 
+                            %s %s 
+                            theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.position='none') +
                             facet_grid(%s~%s)"
-                     , xx,yy,gg,gg,aa,zz
+                     , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust,aa,zz
                 )
             }
         }
