@@ -19,7 +19,7 @@ ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 \item{...}{see \code{\link[corrplot]{corrplot}} for more parameters}
 }
 \value{
-returns a matrix representing the corrmap (p > sig.level, set to NA/blank)
+returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 }
 \description{
 a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}
