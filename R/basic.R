@@ -323,7 +323,7 @@ ez.arrayfun = function(func, ...){
 #' ez.find(a>1)
 #' @export
 ez.find = function(v){
-    which( if (is.logical(v)) v else v != 0 )
+    which( if (is.logical(v)) v else v != 0, arr.ind = TRUE )
 }
 
 #' random number, alias of \code{\link{runif}}

@@ -947,7 +947,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param sig.level sig.level
 #' @param insig how to treat insig values, one of "pch"(show x),"p-value","blank", "n"(no change, as is)
 #' @param ... see \code{\link[corrplot]{corrplot}} for more parameters
-#' @return returns a matrix representing the corrmap
+#' @return returns a matrix representing the corrmap (p > sig.level, set to NA/blank)
 #' @examples
 #' @export
 ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
@@ -964,8 +964,13 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
         col=col1(100)
     }
 
-    corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
+    corr = corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
                        tl.col = tl.col, tl.cex = tl.cex, col = col, ...)
+
+    ind = which(p.mat > sig.level, arr.ind = TRUE)
+    corr[ind] = NA
+
+    return(invisible(corr))
 }
 
 
