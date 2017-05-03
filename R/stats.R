@@ -66,7 +66,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F) {
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'b'=numeric())
     for (yy in y) {
         # note a new row needs to have the same column numbers defined in header
-        results = ez.append(results,c(yy,'',paste0('n = ',ez.size(df,1)),''))
+        results = ez.append(results,c(yy,paste0('n = ',ez.size(df,1)),'',''))
         for (xx in x) {
             dfdf=ez.2value(df)
             if (showerror) {
@@ -108,7 +108,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F) {
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'means'=numeric())
     for (xx in x) {
         # note a new row needs to have the same column numbers defined in header
-        results = ez.append(results,c(xx,'',paste0('n = ',ez.size(df,1)),''))
+        results = ez.append(results,c(xx,paste0('n = ',ez.size(df,1)),'',''))
         for (yy in y) {
             if (showerror) {
                 # try is implemented using tryCatch
