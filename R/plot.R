@@ -1226,7 +1226,7 @@ ez.relevelfactor = function(df, col){
 #' @para legend_box  box of legend, T or F
 #' @para legend_direction  horizontal or vertical
 #' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @param rp show r squared and p values (auto force to be FALSE, if "y~x||z", because rp cannot be auto calculated separately for each level of z)
+#' @param rp show r squared and p values 
 #' @param se standard error of linear regression line
 #' @param rug marginal rug indicating univariate distribution
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
@@ -1276,6 +1276,39 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 
             eq <- substitute(italic(r)~"="~rvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,pvalue = pvalue))
             as.character(as.expression(eq));                 
+        }
+
+        lmrp2 = function(y,x,z,df) {
+            m = eval(parse(text=sprintf("lme4::lmList(%s ~ %s|%s, df)",y,x,z)))
+            rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
+            rvalue = apply(rvalue,1,function(rval) ifelse(abs(rval)>=.005, sprintf("%.2f",rval), sprintf("%.2e", rval)))
+            
+            # separate p values
+            # pvalue = summary(m)$coefficients[,4,2]
+            # pvalue = sapply(pvalue,function(pval) {
+            #                 if (pval<.001) {
+            #                 sprintf("%.2e", pval)
+            #                 } else if (pval<.01) {
+            #                 sprintf("%.3f", pval)
+            #                 } else {
+            #                 sprintf("%.2f", pval)
+            #                 }
+            #                 })
+            # eq <- substitute(italic(r[levs])~"="~rvalue*","~italic(p)~"="~pvalue,list(levs=paste0("(", paste(names(rvalue),collapse=", "), ")"),rvalue = paste0("(", paste(rvalue,collapse=", "), ")"),pvalue = paste0("(", paste(pvalue,collapse=", "), ")")))
+            
+            # interaction p value
+            mm = eval(parse(text=sprintf("lm(%s ~ %s*%s, df)",y,x,z)))
+            pvalue = summary(mm)$coefficients[4,4]
+            if (pvalue<.001) {
+                pvalue = sprintf("%.2e", pvalue)
+            } else if (pvalue<.01) {
+                pvalue = sprintf("%.3f", pvalue)
+            } else {
+                pvalue = sprintf("%.2f", pvalue)
+            }
+
+            eq <- substitute(italic(r[levs])~"="~rvalue*","~italic(p)~"="~pvalue,list(levs=paste0("(", paste(names(rvalue),collapse=", "), ")"),rvalue = paste0("(", paste(rvalue,collapse=", "), ")"),pvalue = pvalue))
+            as.character(as.expression(eq));
         }
         ####################################################### subfunction /
         '
@@ -1336,10 +1369,9 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
           yy = trimws(cmd[1])
           xx = trimws(cmd[2])
           zz = trimws(cmd[3])
-          rp = FALSE  # auto force to be FALSE
           rp.x = max(df[[xx]])*rp.x
           rp.y = min(df[[yy]])*rp.y
-          rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
+          rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
           se = ifelse(se,'TRUE','FALSE')
           rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
           ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
