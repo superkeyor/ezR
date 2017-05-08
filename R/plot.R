@@ -749,7 +749,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                     tt = sprintf('
                             pp=group_by(df,%s,%s,%s) %%>%% 
                             summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
-                            unite(%s,c(%s,%s)) %%>%%
+                            unite(%s,c(%s,%s)) %%>%% ez.2factor("%s") %%>%% ez.factorder("%s") %%>%%
 
                             ggplot2::ggplot(aes(x=%s,y=average,group=%s)) +
                             geom_point(aes(shape=%s,color=%s)) +
@@ -762,7 +762,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") + 
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                            , xx, zz, aa, yy, yy, zz, zz, aa, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                            , xx, zz, aa, yy, yy, zz, zz, aa, zz, zz, xx, zz, zz, zz, zz, zz, line_size, ymin, ymax, zz, zz, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                     )
                 }
             }
