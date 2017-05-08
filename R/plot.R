@@ -512,13 +512,13 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' barplot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
-#' @para bar_color  'bw' or 'color'  black/white or colorblind-friendly color
+#' @para bar_color  "bw" or "color"  black/white or colorblind-friendly color
 #' @para bar_gap  the gap between bars 
 #' @para bar_width  the width of bar itself 
 #' @para error_size  the thickness of error bar line 
 #' @para error_gap  the location of errorbar, should be equal to bar_width(?) 
 #' @para error_width the width of the bar of error
-#' @para error_direction  'both', 'max', 'min'
+#' @para error_direction  "both", "max", "min"
 #' @para ylab  y label NULL
 #' @para xlab  x label NULL
 #' @para zlab  z/a/fill/legend label, only applicable when there is z provided NULL
