@@ -621,7 +621,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                     tt = sprintf('
                                 pp=group_by(df,%s,%s,%s) %%>%% 
                                 summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
-                                unite(zzaa,c(%s,%s)) %%>%%
+                                unite(zzaa,c(%s,%s)) %%>%% ez.2factor("zzaa") %%>%% ez.factorder("zzaa") %%>%%
 
                                 ggplot2::ggplot(aes(x=%s,y=average,fill=zzaa)) +
                                 geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
