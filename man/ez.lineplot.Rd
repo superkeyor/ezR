@@ -14,6 +14,38 @@ ez.lineplot(df, cmd, line_size = 0.7, error_size = 0.7, error_gap = 0,
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
 
 \item{cmd}{like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete, during plot x z a ->x z(za combined)}
+
+\item{line_size}{the thickness of line, only applicable when there is z provided}
+
+\item{error_size}{the thickness of error bar line}
+
+\item{error_gap}{the location of errorbar, should not be adjusted, 0 (parameter kept for reference)}
+
+\item{error_width}{the width of the bar of error}
+
+\item{error_direction}{'both', 'max', 'min'}
+
+\item{ylab}{y label NULL}
+
+\item{xlab}{x label NULL}
+
+\item{zlab}{z/a/fill/legend label, only applicable when there is z provided NULL}
+
+\item{legend_position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+\cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
+\cr         if no z/a (legend) provided, auto force to 'none'}
+
+\item{legend_direction}{horizontal or vertical}
+
+\item{legend_box}{box of legend, T or F}
+
+\item{legend_size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
+
+\item{xangle}{angle of x text 0}
+
+\item{vjust}{vjust of x text NULL}
+
+\item{hjust}{hjust of x text NULL}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)

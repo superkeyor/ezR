@@ -512,25 +512,25 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' barplot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
-#' @para bar_color  "bw" or "color"  black/white or colorblind-friendly color
-#' @para bar_gap  the gap between bars 
-#' @para bar_width  the width of bar itself 
-#' @para error_size  the thickness of error bar line 
-#' @para error_gap  the location of errorbar, should be equal to bar_width(?) 
-#' @para error_width the width of the bar of error
-#' @para error_direction  "both", "max", "min"
-#' @para ylab  y label NULL
-#' @para xlab  x label NULL
-#' @para zlab  z/a/fill/legend label, only applicable when there is z provided NULL
-#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+#' @param bar_color  "bw" or "color"  black/white or colorblind-friendly color
+#' @param bar_gap  the gap between bars 
+#' @param bar_width  the width of bar itself 
+#' @param error_size  the thickness of error bar line 
+#' @param error_gap  the location of errorbar, should be equal to bar_width(?) 
+#' @param error_width the width of the bar of error
+#' @param error_direction  "both", "max", "min"
+#' @param ylab  y label NULL
+#' @param xlab  x label NULL
+#' @param zlab  z/a/fill/legend label, only applicable when there is z provided NULL
+#' @param legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
 #' \cr         if no z/a (legend) provided, auto force to 'none'
-#' @para legend_box  box of legend, T or F
-#' @para legend_direction  horizontal or vertical
-#' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @para xangle  angle of x text 0
-#' @para vjust  vjust of x text NULL
-#' @para hjust  hjust of x text NULL
+#' @param legend_box  box of legend, T or F
+#' @param legend_direction  horizontal or vertical
+#' @param legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
+#' @param xangle  angle of x text 0
+#' @param vjust  vjust of x text NULL
+#' @param hjust  hjust of x text NULL
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
@@ -647,23 +647,23 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
 #' line plot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete, during plot x z a ->x z(za combined)
-#' @para line_size  the thickness of line, only applicable when there is z provided
-#' @para error_size  the thickness of error bar line 
-#' @para error_gap  the location of errorbar, should not be adjusted, 0 (parameter kept for reference)
-#' @para error_width the width of the bar of error 
-#' @para error_direction  'both', 'max', 'min'
-#' @para ylab  y label NULL
-#' @para xlab  x label NULL
-#' @para zlab  z/a/fill/legend label, only applicable when there is z provided NULL
-#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+#' @param line_size  the thickness of line, only applicable when there is z provided
+#' @param error_size  the thickness of error bar line 
+#' @param error_gap  the location of errorbar, should not be adjusted, 0 (parameter kept for reference)
+#' @param error_width the width of the bar of error 
+#' @param error_direction  'both', 'max', 'min'
+#' @param ylab  y label NULL
+#' @param xlab  x label NULL
+#' @param zlab  z/a/fill/legend label, only applicable when there is z provided NULL
+#' @param legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
 #' \cr         if no z/a (legend) provided, auto force to 'none'
-#' @para legend_box  box of legend, T or F
-#' @para legend_direction  horizontal or vertical
-#' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @para xangle  angle of x text 0
-#' @para vjust  vjust of x text NULL
-#' @para hjust  hjust of x text NULL
+#' @param legend_box  box of legend, T or F
+#' @param legend_direction  horizontal or vertical
+#' @param legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
+#' @param xangle  angle of x text 0
+#' @param vjust  vjust of x text NULL
+#' @param hjust  hjust of x text NULL
 #' @return a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
@@ -777,11 +777,11 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
 #' @param df data frame in long format
 #' @param cmd like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous, x z a are discrete, g is individual/grouping variable
 #' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
-#' @para ylab  y label NULL
-#' @para xlab  x label NULL
-#' @para xangle  angle of x text 0
-#' @para vjust  vjust of x text NULL
-#' @para hjust  hjust of x text NULL
+#' @param ylab  y label NULL
+#' @param xlab  x label NULL
+#' @param xangle  angle of x text 0
+#' @param vjust  vjust of x text NULL
+#' @param hjust  hjust of x text NULL
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
@@ -1215,20 +1215,20 @@ ez.relevelfactor = function(df, col){
 #' scatter plot with ggplot
 #' @param df data frame
 #' @param cmd like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
-#' @para point.alpha  if overplot for points, reduce alpha 
-#' @para point.size if less point, increase size
-#' @para rug.size rug size
-#' @para rp.size  r p values font size, ignored if rp=FALSE
-#' @para rp.x  r p values x position (relative to max of x value), ignored if rp=FALSE
-#' @para rp.y  r p values y position (relative to min of y value), ignored if rp=FALSE
-#' @para ylab  y label NULL
-#' @para xlab  x label NULL
-#' @para zlab  z/fill/legend label, only applicable when there is z provided NULL
-#' @para legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+#' @param point.alpha  if overplot for points, reduce alpha 
+#' @param point.size if less point, increase size
+#' @param rug.size rug size
+#' @param rp.size  r p values font size, ignored if rp=FALSE
+#' @param rp.x  r p values x position (relative to max of x value), ignored if rp=FALSE
+#' @param rp.y  r p values y position (relative to min of y value), ignored if rp=FALSE
+#' @param ylab  y label NULL
+#' @param xlab  x label NULL
+#' @param zlab  z/fill/legend label, only applicable when there is z provided NULL
+#' @param legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
-#' @para legend_box  box of legend, T or F
-#' @para legend_direction  horizontal or vertical
-#' @para legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
+#' @param legend_box  box of legend, T or F
+#' @param legend_direction  horizontal or vertical
+#' @param legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
 #' @param rp show r squared and p values 
 #' @param se standard error of linear regression line
 #' @param rug marginal rug indicating univariate distribution

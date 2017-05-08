@@ -12,6 +12,16 @@ ez.xyplot(df, cmd, ylab = NULL, xlab = NULL, xangle = 0, vjust = NULL,
 
 \item{cmd}{like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous, x z a are discrete, g is individual/grouping variable
 \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'}
+
+\item{ylab}{y label NULL}
+
+\item{xlab}{x label NULL}
+
+\item{xangle}{angle of x text 0}
+
+\item{vjust}{vjust of x text NULL}
+
+\item{hjust}{hjust of x text NULL}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)

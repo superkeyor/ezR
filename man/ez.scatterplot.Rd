@@ -15,6 +15,33 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.95, rp.y = 0.95,
 
 \item{cmd}{like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)}
 
+\item{rp.size}{r p values font size, ignored if rp=FALSE}
+
+\item{rp.x}{r p values x position (relative to max of x value), ignored if rp=FALSE}
+
+\item{rp.y}{r p values y position (relative to min of y value), ignored if rp=FALSE}
+
+\item{point.alpha}{if overplot for points, reduce alpha}
+
+\item{point.size}{if less point, increase size}
+
+\item{rug.size}{rug size}
+
+\item{ylab}{y label NULL}
+
+\item{xlab}{x label NULL}
+
+\item{zlab}{z/fill/legend label, only applicable when there is z provided NULL}
+
+\item{legend_position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+\cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.}
+
+\item{legend_direction}{horizontal or vertical}
+
+\item{legend_box}{box of legend, T or F}
+
+\item{legend_size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
+
 \item{rp}{show r squared and p values}
 
 \item{se}{standard error of linear regression line}
