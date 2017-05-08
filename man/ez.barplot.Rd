@@ -17,7 +17,8 @@ ez.barplot(df, cmd, bar_color = "color", bar_gap = 0.7, bar_width = 0.7,
 \item{cmd}{like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)}
 }
 \value{
-a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(breaks=seq(-5,8,by=2))
+a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+\cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 }
 \description{
 barplot with ggplot
