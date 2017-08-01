@@ -13,15 +13,13 @@ ez.error = stop
 
 #' print the version of a package
 #' @param pkg package name in quotes, default is NULL
-#' @return if pkg not provided, prints R version and installed packages/versions
+#' @return if pkg not provided, prints R version, installed packages/versions and etc
 #' @examples
 #' @export
 ez.ver = function(pkg=NULL){
     if (!is.null(pkg)) {
         cat(sprintf("%s\n%s: %s", R.version.string, pkg, as.character(packageVersion(pkg))))
     } else {
-        cat(R.version.string)
-        cat("\n")
         ip = as.data.frame(installed.packages()[,c(1,3:4)])
         # ip = ip[is.na(ip$Priority),1:2,drop=FALSE]
         ip = ip[,1:2,drop=FALSE]
@@ -29,6 +27,11 @@ ez.ver = function(pkg=NULL){
         rownames(ip) <- NULL 
         print(ip)
         print(paste0(ipnames,collapse = ','))
+
+        cat("\n\n")
+        cat(R.version.string)
+        cat(sprintf("\nRepository: %s\n",getOption("repos")))
+        cat(sprintf("Library: %s\n",paste0(.libPaths(),collapse = '; ')))
     }
 }
 
