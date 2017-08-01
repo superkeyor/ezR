@@ -10,7 +10,7 @@ ez.ver(pkg = NULL)
 \item{pkg}{package name in quotes, default is NULL}
 }
 \value{
-if pkg not provided, prints only R version
+if pkg not provided, prints R version and installed packages/versions
 }
 \description{
 print the version of a package
