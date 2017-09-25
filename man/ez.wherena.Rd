@@ -10,7 +10,7 @@ ez.wherena(df, id = NULL, color = "red", angle = 270, basesize = 9,
 \arguments{
 \item{df}{data frame in wide format}
 
-\item{id}{a column name as id, will be shown as y axis, quoted "", eg, subject ID; if not given, internally add row# as id}
+\item{id}{a column name as id, will be shown as y axis, quoted "", eg, subject ID; if id not given, internally add row# as id}
 
 \item{color}{color of missing values, eg, "red"}
 

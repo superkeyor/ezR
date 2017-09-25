@@ -1108,7 +1108,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 
 #' visualize where all the NAs of a dataframe are
 #' @param df data frame in wide format
-#' @param id a column name as id, will be shown as y axis, quoted "", eg, subject ID; if not given, internally add row# as id
+#' @param id a column name as id, will be shown as y axis, quoted "", eg, subject ID; if id not given, internally add row# as id
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
 #' @param color color of missing values, eg, "red"
 #' @param basesize base font size
