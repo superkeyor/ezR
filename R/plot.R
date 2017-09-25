@@ -1108,7 +1108,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 
 #' visualize where all the NAs of a dataframe are
 #' @param df data frame in wide format
-#' @param id a column name as id, will be shown as y axis, quoted "", eg, subject ID
+#' @param id a column name as id, will be shown as y axis, quoted "", eg, subject ID; if not given, internally add row# as id
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
 #' @param color color of missing values, eg, "red"
 #' @param basesize base font size
@@ -1117,9 +1117,19 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
+ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     # logic:
     # change all non-NAs to 0, all NAs to 1 then show on heatmap
+
+    # https://stackoverflow.com/a/8317303/2292993
+    # print at end as summary
+    NAs = sapply(df, function(x) sum(is.na(x)))
+
+    if (is.null(id)) {
+        AutoRowID = data.frame(AutoRowID=1:nrow(df))
+        df = dplyr::bind_cols(df,AutoRowID)
+        id = 'AutoRowID'
+    }
 
     # get information from df before changing df
     cmd = sprintf('theID = df$%s',id)
@@ -1139,6 +1149,10 @@ ez.wherena = function(df,id,color="red",angle=270,basesize=9,xsize=1,ysize=1){
                   , id, color, angle, basesize, xsize, ysize)
     # cat(cmd,"\n")
     eval(parse(text = cmd))
+
+    cat('\nNumber of NAs in the data frame:\n')
+    print(NAs)
+    cat('\n=====================Done!=====================\n\n')
 
     return(p)
 }
