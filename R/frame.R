@@ -1011,10 +1011,10 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     return(result)
 }
 
-#' alias ez.na.keep, ez.keepna
+#' alias ez.na.keep, ez.dropna
 #' @rdname ez.na.keep
 #' @export
-ez.keepna = ez.na.keep
+ez.dropna = ez.na.keep
 
 #' reset the index of a data frame from 1...N
 #' @description internally call rownames(df) <- NULL
@@ -1022,9 +1022,9 @@ ez.keepna = ez.na.keep
 #' @return returns a new df
 #' @examples
 #' occasionally, the index of a data frame could be broken, eg, after removing a row: 
-#' \cr original rownames() is 1, 2, 3, then drop row 2
-#' \cr if not reindex, new index is 1, 3
-#' \cr if reindex, new index is 1, 2
+#' original rownames() is 1, 2, 3, then drop row 2
+#' if not reindex, new index is 1, 3
+#' if reindex, new index is 1, 2
 #' @export
 ez.reindex = function(df){
     # https://stackoverflow.com/a/7570677/2292993

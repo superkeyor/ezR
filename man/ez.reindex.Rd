@@ -17,8 +17,8 @@ internally call rownames(df) <- NULL
 }
 \examples{
 occasionally, the index of a data frame could be broken, eg, after removing a row: 
-\\cr original rownames() is 1, 2, 3, then drop row 2
-\\cr if not reindex, new index is 1, 3
-\\cr if reindex, new index is 1, 2
+original rownames() is 1, 2, 3, then drop row 2
+if not reindex, new index is 1, 3
+if reindex, new index is 1, 2
 }
 
