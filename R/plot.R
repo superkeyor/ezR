@@ -245,10 +245,8 @@ matlabcolor <- function(n=100){
     return(out)
 }
 
-#' change plot continous color to matlab like
-#' @export
 #' @rdname matlabcolor
-#' @examples
+#' @export
 matlabcolor2 <- function(n=100){
     out = scale_fill_gradientn(colors=colorRamps::matlab.like2(n))
     return(out)

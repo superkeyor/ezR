@@ -879,6 +879,32 @@ ez.sort = dplyr::arrange
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.unique = dplyr::distinct
 
+#' find the duplicated rows in a data frame
+#' @param df a data frame
+#' @param col restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
+#' \cr default is NULL, search for all columns
+#' @param vec TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
+#' \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
+#' @return return depends, see vec above
+#' \cr this is different from the built-in R \code{\link{duplicated}}
+#' \cr x <- c(1, 1, 4, 5, 4, 6)  duplicated(x) returns [1] FALSE TRUE FALSE FALSE TRUE FALSE
+#' \cr but ez.duplicated(x) returns [1] TRUE TRUE TRUE FALSE TRUE FALSE
+#' @export
+ez.duplicated = function(df, col=NULL, vec=TRUE){
+    if (!is.null(col)) {
+        # R converts a single row/col to a vector if the parameter col has only one col
+        # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
+        df = df[,col,drop=FALSE]
+    } else {
+        df = df
+    }
+    
+    # https://stackoverflow.com/a/7854620/2292993
+    result = duplicated(df) | duplicated(df, fromLast=TRUE)
+    if (!vec) {result = data.frame(Duplicated=result)}
+    return(result)
+}
+
 #' alias of \code{\link[dplyr]{group_by}}
 #' @family data transformation functions
 #' @export
@@ -946,9 +972,13 @@ ez.delete = ez.del
 #' \cr If a number, the exact number of NAs kept
 #' \cr Range includes both ends 3<=n<=5
 #' \cr Range could be -Inf, Inf
+#' @param reindex whether to keep original row index or reindex
+#' \cr eg, original rownames() is 1, 2, 3, then drop row 2
+#' \cr if not reindex, new index is 1, 3
+#' \cr if reindex, new index is 1, 2
 #' @return returns a new df with rows that have NA(s) removed
 #' @export
-ez.na.keep = function(df, col=NULL, n=0){
+ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     if (!is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
@@ -960,12 +990,12 @@ ez.na.keep = function(df, col=NULL, n=0){
     if (length(n)==1){
         if (n==0) {
             # simply call complete.cases which might be faster
-            result = df[complete.cases(df.temp),]
+            result = df[complete.cases(df.temp),,drop=FALSE]
         } else {
             # credit: http://stackoverflow.com/a/30461945/2292993
             log <- apply(df.temp, 2, is.na)
             logindex <- apply(log, 1, function(x) sum(x) == n)
-            result = df[logindex, ]
+            result = df[logindex,,drop=FALSE]
         }
     }
 
@@ -973,10 +1003,33 @@ ez.na.keep = function(df, col=NULL, n=0){
         min = n[1]; max = n[2]
         log <- apply(df.temp, 2, is.na)
         logindex <- apply(log, 1, function(x) {sum(x) >= min && sum(x) <= max})
-        result = df[logindex, ]
+        result = df[logindex,,drop=FALSE]
     }
 
+    # https://stackoverflow.com/a/7570677/2292993
+    if (reindex) {rownames(result) <- NULL}
     return(result)
+}
+
+#' alias ez.na.keep, ez.keepna
+#' @rdname ez.na.keep
+#' @export
+ez.keepna = ez.na.keep
+
+#' reset the index of a data frame from 1...N
+#' @description internally call rownames(df) <- NULL
+#' @param df a data frame
+#' @return returns a new df
+#' @examples
+#' occasionally, the index of a data frame could be broken, eg, after removing a row: 
+#' \cr original rownames() is 1, 2, 3, then drop row 2
+#' \cr if not reindex, new index is 1, 3
+#' \cr if reindex, new index is 1, 2
+#' @export
+ez.reindex = function(df){
+    # https://stackoverflow.com/a/7570677/2292993
+    rownames(df) <- NULL
+    return(df)
 }
 
 #' create a header for a data frame; also create the data frame

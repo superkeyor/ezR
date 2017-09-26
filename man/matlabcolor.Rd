@@ -14,8 +14,6 @@ matlabcolor2(n = 100)
 }
 \description{
 change plot continous color to matlab like
-
-change plot continous color to matlab like
 }
 \examples{
 p + matlabcolor(), p + matlabcolor2()
