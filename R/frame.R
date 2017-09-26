@@ -16,6 +16,12 @@ ez.frame = data.frame
 #' \cr data frame, returns the number of rows
 #' \cr NA returns 0
 #' \cr everything else, call length()
+#' @example
+#' # x <- c("Hello", "world!")
+#' # > length(x)
+#' # [1] 2
+#' # > nchar(x)
+#' # [1] 5 6
 #' @export
 ez.len = function(x) {
     if (class(x) == 'character') {
