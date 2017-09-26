@@ -6,6 +6,13 @@
 \usage{
 ez.len(x)
 }
+\value{
+if a character vector with only one element, returns the number of characters in that item
+\cr if a character vector with more than one element, returns the number of elements
+\cr data frame, returns the number of rows
+\cr NA returns 0
+\cr everything else, call length()
+}
 \description{
 length of an object
 }

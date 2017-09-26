@@ -10,15 +10,26 @@
 #' people = data.frame(sx, ht, wt)
 ez.frame = data.frame
 
-
-
 #' length of an object
+#' @return if a character vector with only one element, returns the number of characters in that item
+#' \cr if a character vector with more than one element, returns the number of elements
+#' \cr data frame, returns the number of rows
+#' \cr NA returns 0
+#' \cr everything else, call length()
 #' @export
 ez.len = function(x) {
     if (class(x) == 'character') {
         # require('stringi')
         # return(stri_length(x))  # in case of stri_length(NA) = NA
-        return(nchar(x))  # nchar(NA) = 2
+
+        # if character vector with only one element, returns the number of characters in that item
+        if (length(x)==1) {
+            return(nchar(x))  # nchar(NA) = 2
+        } 
+        # else a character vector with more than one element, returns the number of elements
+        else {
+            return(length(x))
+        }
     }
     else if (class(x) == 'data.frame') {
         return(nrow(x))
@@ -68,8 +79,6 @@ ez.cnames = colnames
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
 #' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
 ez.names = colnames
-
-
 
 #' reconstruct to long format, wrapper of \code{\link[stats]{reshape}}
 #' @description can handle one (similar to gather(), which does not require index input) or two repetitions
