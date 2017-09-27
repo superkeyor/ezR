@@ -992,6 +992,7 @@ ez.delete = ez.del
 #' \cr if not reindex, new index is 1, 3
 #' \cr if reindex, new index is 1, 2
 #' @return returns a new df with rows that have NA(s) removed
+#' @rdname ez.dropna
 #' @export
 ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     if (!is.null(col)) {
@@ -1027,7 +1028,7 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
 }
 
 #' alias ez.na.keep, ez.dropna
-#' @rdname ez.na.keep
+#' @rdname ez.dropna
 #' @export
 ez.dropna = ez.na.keep
 
