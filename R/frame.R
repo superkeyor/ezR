@@ -67,8 +67,8 @@ ez.size = function(x,dimension=0) {
 #' @seealso \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
 #' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 #' \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
-#' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
-ez.rnames = rownames
+#' \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}} \code{\link{ez.reindex}}
+ez.rnames = row.names
 
 #' all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
@@ -988,7 +988,7 @@ ez.delete = ez.del
 #' \cr Range includes both ends 3<=n<=5
 #' \cr Range could be -Inf, Inf
 #' @param reindex whether to keep original row index or reindex
-#' \cr eg, original rownames() is 1, 2, 3, then drop row 2
+#' \cr eg, original row.names() is 1, 2, 3, then drop row 2
 #' \cr if not reindex, new index is 1, 3
 #' \cr if reindex, new index is 1, 2
 #' @return returns a new df with rows that have NA(s) removed
@@ -1022,7 +1022,7 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     }
 
     # https://stackoverflow.com/a/7570677/2292993
-    if (reindex) {rownames(result) <- NULL}
+    if (reindex) {row.names(result) <- NULL}
     return(result)
 }
 
@@ -1037,13 +1037,14 @@ ez.dropna = ez.na.keep
 #' @return returns a new df
 #' @examples
 #' occasionally, the index of a data frame could be broken, eg, after removing a row: 
-#' original rownames() is 1, 2, 3, then drop row 2
+#' original row.names() is 1, 2, 3, then drop row 2
 #' if not reindex, new index is 1, 3
 #' if reindex, new index is 1, 2
+#' @seealso \code{\link{ez.rnames}}
 #' @export
 ez.reindex = function(df){
     # https://stackoverflow.com/a/7570677/2292993
-    rownames(df) <- NULL
+    row.names(df) <- NULL
     return(df)
 }
 
