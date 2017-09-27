@@ -1032,7 +1032,7 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
 ez.dropna = ez.na.keep
 
 #' reset the index of a data frame from 1...N
-#' @description internally call rownames(df) <- NULL
+#' @description internally call row.names(df) <- NULL
 #' @param df a data frame
 #' @return returns a new df
 #' @examples
