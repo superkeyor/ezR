@@ -16,4 +16,11 @@ if a character vector with only one element, returns the number of characters in
 \description{
 length of an object
 }
+\examples{
+# x <- c("Hello", "world!")
+# > length(x)
+# [1] 2
+# > nchar(x)
+# [1] 5 6
+}
 

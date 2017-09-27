@@ -4,7 +4,7 @@
 \alias{ez.rnames}
 \title{all row names, alias of \code{\link{row.names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()}
 \usage{
-ez.rnames(x, do.NULL = TRUE, prefix = "row")
+ez.rnames(x)
 }
 \description{
 all row names, alias of \code{\link{row.names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
@@ -13,6 +13,6 @@ all row names, alias of \code{\link{row.names}}, there are also names(), colname
 \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
 \cr \code{\link{ez.len}}, \code{\link{ez.size}}
 \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
-\cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}}
+\cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}} \code{\link{ez.reindex}}
 }
 

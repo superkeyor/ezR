@@ -13,12 +13,15 @@ ez.reindex(df)
 returns a new df
 }
 \description{
-internally call rownames(df) <- NULL
+internally call row.names(df) <- NULL
 }
 \examples{
 occasionally, the index of a data frame could be broken, eg, after removing a row: 
-original rownames() is 1, 2, 3, then drop row 2
+original row.names() is 1, 2, 3, then drop row 2
 if not reindex, new index is 1, 3
 if reindex, new index is 1, 2
+}
+\seealso{
+\code{\link{ez.rnames}}
 }
 
