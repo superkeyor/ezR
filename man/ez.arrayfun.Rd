@@ -2,11 +2,14 @@
 % Please edit documentation in R/basic.R
 \name{ez.arrayfun}
 \alias{ez.arrayfun}
-\title{apply array function}
+\title{apply array function, wrapper of mapply}
 \usage{
 ez.arrayfun(func, ...)
 }
 \description{
-apply array function
+apply array function, wrapper of mapply
+}
+\seealso{
+consider using \code{\link[dplyr]{mutate}}, eg beta = mutate(beta, Gr=substr(ez.trim(Gr),1,1))
 }
 

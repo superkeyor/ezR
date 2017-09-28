@@ -301,7 +301,8 @@ ez.reshape = function (a, n, m){
     return(a)
 }
 
-#' apply array function
+#' apply array function, wrapper of mapply
+#' @seealso consider using \code{\link[dplyr]{mutate}}, eg beta = mutate(beta, Gr=substr(ez.trim(Gr),1,1))
 #' @param
 #' @return
 #' @examples
