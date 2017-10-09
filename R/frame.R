@@ -381,6 +381,11 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
     if (is.data.frame(x) & !is.null(col)){
+        # reset factor levels in a df after its levels have been modified, relevel a factor in order to reflect its new levels
+        if (length(levels(x[[col]])) > nrow(x)){
+            cat('Seems you have changed the factor levels of the column in data frame, resetting levels...\n')
+            x[[col]] = factor(x[[col]], unique(as.character(x[[col]])))
+        }
         x[col]=sjmisc::to_value(x[col], start.at=start.at, keep.labels=keep.labels,...)
         result=x
     } else {    
