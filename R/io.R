@@ -455,7 +455,7 @@ ez.edit = function(path){
 }
 
 #' Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{sink}}
-#' @description recommend to use logon(), logoff()
+#' @description recommend to use logon(), logoff(), which are convenient shortcuts of log()
 #' @param mode a=append; w=overwrite
 #' @param timestamp T=insert timestamp at the beginning and end, F=otherwise
 #' @param status T=open the redirection/file, F=close the redirection

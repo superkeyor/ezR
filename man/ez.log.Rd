@@ -17,7 +17,7 @@ ez.log(file = "log.txt", mode = "a", status = TRUE, timestamp = TRUE)
 nothing
 }
 \description{
-recommend to use logon(), logoff()
+recommend to use logon(), logoff(), which are convenient shortcuts of log()
 }
 \examples{
 # logging on: log("thelog.txt")
