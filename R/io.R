@@ -466,10 +466,10 @@ ez.log = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
     append = ifelse(mode=='a',TRUE,FALSE)
     if (status) {
         sink(file,append=append,split=TRUE)
-        if (timestamp) {cat(sprintf('log on at %s...', date()))}
+        if (timestamp) {cat(sprintf('...log on at %s...\n', date()))}
     }
     else {
-        if (timestamp) {cat(sprintf('log off at %s...\n\n', date()))}
+        if (timestamp) {cat(sprintf('...log off at %s...\n\n', date()))}
         sink()
     }
 }
