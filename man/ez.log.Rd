@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{ez.log}
 \alias{ez.log}
-\title{Prints/Directs output to both terminal and a file (log.txt) globally.}
+\title{Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{sink}}}
 \usage{
 ez.log(file = "log.txt", mode = "a", status = TRUE, timestamp = TRUE)
 }
@@ -17,7 +17,11 @@ ez.log(file = "log.txt", mode = "a", status = TRUE, timestamp = TRUE)
 nothing
 }
 \description{
-Prints/Directs output to both terminal and a file (log.txt) globally.
+recommend to use logon(), logoff()
+}
+\examples{
+# logging on: log("thelog.txt")
+# logging off: log(status=False)  # no need to pass in the file parameter
 }
 \seealso{
 \code{\link{ez.print}}

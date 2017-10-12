@@ -454,12 +454,15 @@ ez.edit = function(path){
     result = file.edit(path)
 }
 
-#' Prints/Directs output to both terminal and a file (log.txt) globally.
+#' Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{sink}}
+#' @description recommend to use logon(), logoff()
 #' @param mode a=append; w=overwrite
 #' @param timestamp T=insert timestamp at the beginning and end, F=otherwise
 #' @param status T=open the redirection/file, F=close the redirection
 #' @return nothing
 #' @examples
+#' # logging on: log("thelog.txt")
+#' # logging off: log(status=False)  # no need to pass in the file parameter
 #' @seealso \code{\link{ez.print}}
 #' @export
 ez.log = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
@@ -472,4 +475,30 @@ ez.log = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
         if (timestamp) {cat(sprintf('...log off at %s...\n\n', date()))}
         sink()
     }
+}
+
+#' Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{ez.log}}
+#' @param mode a=append; w=overwrite
+#' @param timestamp T=insert timestamp at the beginning and end, F=otherwise
+#' @param status T=open the redirection/file, F=close the redirection
+#' @return nothing
+#' @examples
+#' # logging on: logon()
+#' # logging off: logoff()  # does not accept any parameter
+#' @seealso \code{\link{ez.print}}
+#' @export
+ez.logon = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
+    ez.log(file=file,mode=mode,status=status,timestamp=timestamp)
+}
+
+#' Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{ez.log}}
+#' @description does not accept any parameter
+#' @return nothing
+#' @examples
+#' # logging on: logon()
+#' # logging off: logoff()  # does not accept any parameter
+#' @seealso \code{\link{ez.print}}
+#' @export
+ez.logoff = function(){
+    ez.log(status=FALSE)
 }
