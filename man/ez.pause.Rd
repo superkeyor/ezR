@@ -2,12 +2,12 @@
 % Please edit documentation in R/basic.R
 \name{ez.pause}
 \alias{ez.pause}
-\title{pause the execution of an R script until a user presses the Enter key}
+\title{pause the execution of an R script until a user presses the Enter key, no parameter () needed}
 \usage{
 ez.pause()
 }
 \description{
-pause the execution of an R script until a user presses the Enter key
+pause the execution of an R script until a user presses the Enter key, no parameter () needed
 }
 \seealso{
 \code{\link{ez.sleep}}
