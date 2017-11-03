@@ -15,6 +15,22 @@ False <- FALSE
 #' @export
 ez.typeof = class
 
+#' pause the execution of an R script until a user presses the Enter key
+#' @export
+ez.pause = function(){
+    # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
+    # 
+    if (interactive())
+    {
+        invisible(readline(prompt = "Press <Enter> to continue..."))
+    }
+    else
+    {
+        cat("Press <Enter> to continue...")
+        invisible(readLines(file("stdin"), 1))
+    }
+}
+
 #' sort of a wrapper of \code{\link{type.convert}}
 #' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
 #' @param x a character vector, or a factor
