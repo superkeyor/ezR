@@ -1299,9 +1299,9 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 
     }
 
-    ez.pause()
     missmap(df)
-    cat('\nthe order of the variables along the the x-axis is sorted by the percent missing (from highest to lowest)\n')
+    cat('\nIn "Missingness Map", the order of the variables along the the x-axis is sorted by the percent missing (from highest to lowest)\n')
+    ez.pause()
     ########################################################
 
     cat('\nNumber of NAs in the data frame:\n')
