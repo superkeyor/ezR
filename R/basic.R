@@ -15,7 +15,13 @@ False <- FALSE
 #' @export
 ez.typeof = class
 
+#' alias of \code{\link{Sys.sleep}}, in seconds
+#' @seealso \code{\link{ez.pause}}
+#' @export
+ez.sleep = Sys.sleep
+
 #' pause the execution of an R script until a user presses the Enter key
+#' @seealso \code{\link{ez.sleep}}
 #' @export
 ez.pause = function(){
     # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16

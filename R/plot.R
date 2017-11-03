@@ -1299,8 +1299,8 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 
     }
 
-    missmap(df)
-    cat('\nIn "Missingness Map", the order of the variables along the the x-axis is sorted by the percent missing (from highest to lowest)\n')
+    missmap(df, main='Missingness Map (most-->least')
+    # cat('\nIn "Missingness Map", the order of the variables along the the x-axis is sorted by the percent missing (from highest to lowest)\n')
     # ez.pause()
     cat('See another plot view in a moment...\n')
     Sys.sleep(3) # in seconds

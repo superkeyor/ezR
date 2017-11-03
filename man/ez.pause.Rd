@@ -9,4 +9,7 @@ ez.pause()
 \description{
 pause the execution of an R script until a user presses the Enter key
 }
+\seealso{
+\code{\link{ez.sleep}}
+}
 
