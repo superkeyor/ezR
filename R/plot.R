@@ -1317,7 +1317,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     cat('\nNumber of NAs in the data frame:\n')
     print(NAs)
     cat('\nIf you get warnings concerning "In apply(df, 2, as.numeric) : NAs introduced by coercion", you may safely ignore them. See the func help for more info.\n')
-    cat('\n=====================Done!=====================\n\n')
+    cat('=====================Done!=====================\n\n')
     return(p)
 }
 
