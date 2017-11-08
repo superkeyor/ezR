@@ -1311,7 +1311,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     # cat(cmd,"\n")
     eval(parse(text = cmd))
 
-    cat('\nNumber of NAs in the data frame:\n')
+    cat('\nNumber of NAs in the data frame:')
     print(NAs)
     cat('=====================Done!=====================\n')
     return(p)
