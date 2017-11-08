@@ -1105,9 +1105,6 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 }
 
 #' visualize where all the NAs of a dataframe are
-#' @description you might get In apply(df, 2, as.numeric) : NAs introduced by coercion
-#' \cr but it does not matter, the purpose here is to change everything to numeric
-#' \cr so that 0 or 1 can be assigned for plotting
 #' @param df data frame in wide format
 #' @param id a column name as id, will be shown as y axis, quoted "", eg, subject ID; if id not given, internally add row# as id
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
@@ -1301,7 +1298,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     # you might get In apply(df, 2, as.numeric) : NAs introduced by coercion
     # but it does not matter, the purpose here is to change everything to numeric
     # so that 0 or 1 can be assigned for plotting
-    df = as.data.frame(apply(df,2,as.numeric))
+    df = suppressWarnings(as.data.frame(apply(df,2,as.numeric)))
     df[indx.value] = 0
     df[indx.na] = 1
 
@@ -1316,8 +1313,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 
     cat('\nNumber of NAs in the data frame:\n')
     print(NAs)
-    cat('\nIf you get warnings concerning "In apply(df, 2, as.numeric) : NAs introduced by coercion", you may safely ignore them. See the func help for more info.\n')
-    cat('=====================Done!=====================\n\n')
+    cat('=====================Done!=====================\n')
     return(p)
 }
 

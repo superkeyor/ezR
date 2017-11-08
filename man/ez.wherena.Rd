@@ -26,8 +26,6 @@ ez.wherena(df, id = NULL, color = "red", angle = 270, basesize = 9,
 a ggplot object (+theme_apa() to get apa format plot)
 }
 \description{
-you might get In apply(df, 2, as.numeric) : NAs introduced by coercion
-\cr but it does not matter, the purpose here is to change everything to numeric
-\cr so that 0 or 1 can be assigned for plotting
+visualize where all the NAs of a dataframe are
 }
 
