@@ -258,7 +258,7 @@ ez.trim = function (s, how=4){
 #' @param
 #' @return
 #' @examples
-#' @seealso \code{\link{ez.regexprep}} \code{\link{ez.regexprepi}}
+#' @seealso \code{\link{ez.regexprep}} \code{\link{ez.regexprepi}} \code{\link{ez.replace}} 
 #' @export
 ez.strreplace = function (s, expr, repstr, once = FALSE){
     if (once) {

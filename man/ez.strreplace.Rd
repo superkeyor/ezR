@@ -11,6 +11,6 @@ support single string, vectors
 \cr case sensitive! wrapper of sub, gsub
 }
 \seealso{
-\code{\link{ez.regexprep}} \code{\link{ez.regexprepi}}
+\code{\link{ez.regexprep}} \code{\link{ez.regexprepi}} \code{\link{ez.replace}}
 }
 

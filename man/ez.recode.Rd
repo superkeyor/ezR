@@ -29,9 +29,13 @@ recodes contains a set of recoding rules separated by ";". There are three diffe
  \item{}{A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1")}
  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA")}
 }
-\cr seems to work with characters as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
+\cr Works with characters/factors as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 \cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
-\cr but number to character works directly, see the example
+\cr but number to character works directly, char->char, factor->factor
+\cr for factors, no need to reset levels (auto reset)
+\cr The conclusion is: numeric<->numeric without quote
+\cr but if newval is quoted character, then numeric->char, char->char, factor->factor
+\cr See the example section for more detail.
 }
 \note{
 Please note following behaviours of the function:
@@ -48,8 +52,22 @@ Please note following behaviours of the function:
 data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
 ez.recode(data, "a", "lo:0 = 0;0:hi = 1;")
 ez.recode(data, "b", "lo:0 = 0;0:hi = 1;")
-note in the following: both 1 and TRUE = 'Male' work; the ; after NA is not necessary
+ez.recode(data, "a", "lo:0 = 'low';0:hi = 1;")  
+         #a was numeric type, now is character type 
+         #note: for hi=1, the 1 is not even quoted
+         #can be quoted hi='1', but it does not matter here
 data <- ez.recode(data,"male", "1 = 'Male';FALSE = 'Female';else = NA;")
+         #both 1 and TRUE = 'Male' work
+         #the last semicolon; after NA is not necessary
+         #male was initially a logic type, now is a character type
+
+data=data.frame(a=c('r1','r2'))
+ez.recode(data,'a','"r1"="3"')
+         # a was factor wih level ("r1","r2"), now still a factor, with level ("3","r2")
+ez.recode(data,'a','"r1"=3')
+         # a was factor wih level ("r1","r2"), now still a factor, with level ("3","r2")
+ez.recode(data,'a','"r1"=3;"r2"=4')
+         # a was factor wih level ("r1","r2"), now still a factor, with level ("3","4")
 }
 \author{
 Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)

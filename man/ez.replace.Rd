@@ -19,11 +19,35 @@ ez.replace(df, col, oldval, newval)
 returns a new df, old one does not change
 }
 \description{
-see also \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} 
+smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
 \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 \cr the "==" syntax within "which()" could be modified
 }
+\examples{
+data=data.frame(a=factor(c(1,2)))
+ez.replace(data,'a',1,3) \%>\% .$a
+ez.replace(data,'a',1,'abc') \%>\% .$a
+          # a was factor with level (1,2), now is factor with level (2,3), (2 abc)
+
+data=data.frame(a=c('r1','r2'))
+ez.replace(data,'a','r1',3) \%>\% .$a
+          # a was factor with level ('r1','r2'), now is factor with level ('3','r2')
+
+data=data.frame(a=c('r1','r2'),stringsAsFactors = F)
+ez.replace(data,'a','r1',3) \%>\% .$a
+          # a was char, now is still char
+
+data=data.frame(a=c(1,2))
+ez.replace(data,'a',1,111) \%>\% .$a
+          # a was numeric, now is still numeric
+
+ez.replace(data,'a',1,'111') \%>\% .$a
+ez.replace(data,'a',1,'abc') \%>\% .$a
+          # a was numeric, now is character
+}
 \seealso{
+\code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}}
+
 Other data.transformation.functions: \code{\link{ez.2factor}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
   \code{\link{ez.2lower}}, \code{\link{ez.2value}},
