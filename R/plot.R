@@ -1105,6 +1105,9 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 }
 
 #' visualize where all the NAs of a dataframe are
+#' @description you might get In apply(df, 2, as.numeric) : NAs introduced by coercion
+#' \cr but it does not matter, the purpose here is to change everything to numeric
+#' \cr so that 0 or 1 can be assigned for plotting
 #' @param df data frame in wide format
 #' @param id a column name as id, will be shown as y axis, quoted "", eg, subject ID; if id not given, internally add row# as id
 #' @param angle the x axis label angle, default=270 (vertical), suggests 330 if label is not too long
@@ -1116,38 +1119,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 #' @examples
 #' @export
 ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=1){
-    # logic:
-    # change all non-NAs to 0, all NAs to 1 then show on heatmap
-
-    # https://stackoverflow.com/a/8317303/2292993
-    # print at end as summary
-    NAs = sapply(df, function(x) sum(is.na(x)))
-
-    if (is.null(id)) {
-        AutoRowID = data.frame(AutoRowID=1:nrow(df))
-        df = dplyr::bind_cols(df,AutoRowID)
-        id = 'AutoRowID'
-    }
-
-    # get information from df before changing df
-    cmd = sprintf('theID = df$%s',id)
-    eval(parse(text = cmd))
-
-    indx.value = !is.na(df)
-    indx.na = is.na(df)
-    df = as.data.frame(apply(df,2,as.numeric))
-    df[indx.value] = 0
-    df[indx.na] = 1
-
-    cmd = sprintf('df$%s = theID',id)
-    eval(parse(text = cmd))
-
-    cmd = sprintf('p = ez.heatmap(df, "%s", colors=c("blue", "white", "%s"),
-                  legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
-                  , id, color, angle, basesize, xsize, ysize)
-    # cat(cmd,"\n")
-    eval(parse(text = cmd))
-
+    
     ########################################################
     ## from package amelia
     ## missmap() - draws a missingness heatmap to show patterns. reorders the
@@ -1306,8 +1278,45 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     Sys.sleep(3) # in seconds
     ########################################################
 
+
+    # logic:
+    # change all non-NAs to 0, all NAs to 1 then show on heatmap
+
+    # https://stackoverflow.com/a/8317303/2292993
+    # print at end as summary
+    NAs = sapply(df, function(x) sum(is.na(x)))
+
+    if (is.null(id)) {
+        AutoRowID = data.frame(AutoRowID=1:nrow(df))
+        df = dplyr::bind_cols(df,AutoRowID)
+        id = 'AutoRowID'
+    }
+
+    # get information from df before changing df
+    cmd = sprintf('theID = df$%s',id)
+    eval(parse(text = cmd))
+
+    indx.value = !is.na(df)
+    indx.na = is.na(df)
+    # you might get In apply(df, 2, as.numeric) : NAs introduced by coercion
+    # but it does not matter, the purpose here is to change everything to numeric
+    # so that 0 or 1 can be assigned for plotting
+    df = as.data.frame(apply(df,2,as.numeric))
+    df[indx.value] = 0
+    df[indx.na] = 1
+
+    cmd = sprintf('df$%s = theID',id)
+    eval(parse(text = cmd))
+
+    cmd = sprintf('p = ez.heatmap(df, "%s", colors=c("blue", "white", "%s"),
+                  legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
+                  , id, color, angle, basesize, xsize, ysize)
+    # cat(cmd,"\n")
+    eval(parse(text = cmd))
+
     cat('\nNumber of NAs in the data frame:\n')
     print(NAs)
+    cat('\nIf you get warnings concerning "In apply(df, 2, as.numeric) : NAs introduced by coercion", you may safely ignore them. See the func help for more info.\n')
     cat('\n=====================Done!=====================\n\n')
     return(p)
 }

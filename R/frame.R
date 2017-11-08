@@ -732,11 +732,13 @@ ez.recode2 = function(df, varName, recodes){
 #' 
 #' data=data.frame(a=c('r1','r2'),stringsAsFactors = F)
 #' ez.replace(data,'a','r1',3) %>% .$a
-#'           # a was char, now is still char
+#' ez.replace(data,'a','r1',NA) %>% .$a 
+#'           # a was char, now is still char, (NA counted here as char)
 #' 
 #' data=data.frame(a=c(1,2))
 #' ez.replace(data,'a',1,111) %>% .$a
-#'           # a was numeric, now is still numeric
+#' ez.replace(data,'a',1,NA) %>% .$a
+#'           # a was numeric, now is still numeric, (NA counted here as numeric)
 #' 
 #' ez.replace(data,'a',1,'111') %>% .$a
 #' ez.replace(data,'a',1,'abc') %>% .$a
