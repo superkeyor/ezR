@@ -2,13 +2,17 @@
 ###*functions for simple data type.
 ###**************************************************.
 #' alias of TRUE
+#' @export
 true <- TRUE
 #' alias of TRUE
+#' @export
 True <- TRUE
 
 #' alias of FALSE
+#' @export
 false <- FALSE
 #' alias of FALSE
+#' @export
 False <- FALSE
 
 #' alias of \code{\link{class}}
