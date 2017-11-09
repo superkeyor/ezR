@@ -387,16 +387,16 @@ ez.print = function(...,sep=''){
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number)
 #' @return nothing, only print out. 
 #' \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
-#' \cr now with this function you get "rs171440fwd','rs1800497fwd','rs180043"
+#' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}}
 #' @export
 ez.pprint = function(vec, quote=TRUE){
     if (quote) {
-        print(paste0(vec,collapse = "','"))
+        print(noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'")))
     } else {
-        print(paste0(vec,collapse = ","))
+        print(noquote(paste0(vec,collapse = ",")))
     }
-    cat(sprintf("Total elements: %d\nPlease manually trim the beginning and ending double quote.\n",length(vec)))
+    cat(sprintf("Total elements: %d\n",length(vec)))
 }
 
 #' wrapper of \code{\link{eval}}

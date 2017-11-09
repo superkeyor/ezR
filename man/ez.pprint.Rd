@@ -14,7 +14,7 @@ ez.pprint(vec, quote = TRUE)
 \value{
 nothing, only print out. 
 \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
-\cr now with this function you get "rs171440fwd','rs1800497fwd','rs180043"
+\cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 }
 \description{
 print out a vector for easy manual copy/processing.
