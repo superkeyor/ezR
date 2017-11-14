@@ -1016,9 +1016,8 @@ ez.split = dplyr::group_by
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.leftjoin = dplyr::left_join
 
-#' delete one or many cols, may use \code{\link[dplyr]{select}} instead
-#' @description alias of \code{\link{ez.delete}}
-#' @param del sth like 'Month' or c('Month','Day')
+#' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
+#' @param cols sth like 'Month' or c('Month','Day')
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions
@@ -1030,26 +1029,22 @@ ez.leftjoin = dplyr::left_join
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.del = function(df,del){
-    df[del] = NULL
+ez.del = function(df,cols){
+    df[cols] = NULL
     return(df)
 }
 
-#' delete one or many cols, may use \code{\link[dplyr]{select}} instead
-#' @description alias of \code{\link{ez.del}}
-#' @param del sth like 'Month' or c('Month','Day')
-#' @return returns a new df, old one does not change
-#' @examples
-#' @family data transformation functions
+#' @rdname ez.del
 #' @export
-#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.delete = ez.del
+
+#' @rdname ez.del
+#' @export
+ez.rmcols = ez.del
+
+#' @rdname ez.del
+#' @export
+ez.rmcol = ez.del
 
 #' keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others
 #' @param df a data frame

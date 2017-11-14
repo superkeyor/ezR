@@ -2,18 +2,27 @@
 % Please edit documentation in R/frame.R
 \name{ez.del}
 \alias{ez.del}
-\title{delete one or many cols, may use \code{\link[dplyr]{select}} instead}
+\alias{ez.delete}
+\alias{ez.rmcol}
+\alias{ez.rmcols}
+\title{delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}}
 \usage{
-ez.del(df, del)
+ez.del(df, cols)
+
+ez.delete(df, cols)
+
+ez.rmcols(df, cols)
+
+ez.rmcol(df, cols)
 }
 \arguments{
-\item{del}{sth like 'Month' or c('Month','Day')}
+\item{cols}{sth like 'Month' or c('Month','Day')}
 }
 \value{
 returns a new df, old one does not change
 }
 \description{
-alias of \code{\link{ez.delete}}
+delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -28,15 +37,15 @@ Other data.transformation.functions: \code{\link{ez.2factor}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
   \code{\link{ez.2lower}}, \code{\link{ez.2value}},
   \code{\link{ez.2wide}}, \code{\link{ez.compute}},
-  \code{\link{ez.delete}}, \code{\link{ez.label.get}},
-  \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
-  \code{\link{ez.move}}, \code{\link{ez.newcol}},
-  \code{\link{ez.recode2}}, \code{\link{ez.recode}},
-  \code{\link{ez.recols}}, \code{\link{ez.recol}},
-  \code{\link{ez.rename}}, \code{\link{ez.replace}},
-  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
-  \code{\link{ez.select}}, \code{\link{ez.sort}},
-  \code{\link{ez.split}}, \code{\link{ez.unique}},
-  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
+  \code{\link{ez.label.get}}, \code{\link{ez.label.set}},
+  \code{\link{ez.leftjoin}}, \code{\link{ez.move}},
+  \code{\link{ez.newcol}}, \code{\link{ez.recode2}},
+  \code{\link{ez.recode}}, \code{\link{ez.recols}},
+  \code{\link{ez.recol}}, \code{\link{ez.rename}},
+  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
+  \code{\link{ez.rncol}}, \code{\link{ez.select}},
+  \code{\link{ez.sort}}, \code{\link{ez.split}},
+  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
+  \code{\link{ez.values.set}}
 }
 
