@@ -1062,6 +1062,7 @@ ez.rmcol = ez.del
 #' @rdname ez.dropna
 #' @export
 ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
+    nbefore = nrow(df)
     if (!is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
@@ -1091,6 +1092,10 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
 
     # https://stackoverflow.com/a/7570677/2292993
     if (reindex) {row.names(result) <- NULL}
+
+    nafter=nrow(result)
+    cat(sprintf('%d rows dropped (Before: %d  After: %d).\n', nbefore-nafter, nbefore, nafter))
+
     return(result)
 }
 
