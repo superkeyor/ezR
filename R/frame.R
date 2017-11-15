@@ -1094,7 +1094,7 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     if (reindex) {row.names(result) <- NULL}
 
     nafter=nrow(result)
-    cat(sprintf('%d rows dropped (Before: %d  After: %d).\n', nbefore-nafter, nbefore, nafter))
+    cat(sprintf('%d rows dropped (In: %d -> Out: %d).\n', nbefore-nafter, nbefore, nafter))
 
     return(result)
 }
