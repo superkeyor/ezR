@@ -454,7 +454,7 @@ ez.evaluate = ez.eval
 #' age
 #' age <- age(a, as.Date('2005-09-01'))
 #' age
-age <- function(dob, enddate=Sys.Date(), floorize=FALSE, units='years', precise=TRUE){
+ez.age <- function(dob, enddate=Sys.Date(), floorize=FALSE, units='years', precise=TRUE){
   if (!inherits(dob, "Date") | !inherits(enddate, "Date")){
     stop("Both dob and enddate must be Date class objects")
   }
