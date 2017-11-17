@@ -831,7 +831,7 @@ ez.recol = function(df, movecommand) {
 ez.move = ez.recol
 
 #' clean col names
-#' @description replace certain characters in all column names, using regular expression and gsub()
+#' @description replace certain characters (all occurrence) in all column names, using regular expression and gsub()
 #' @param df df
 #' @param regex_search search
 #' @param regex_replace replacement

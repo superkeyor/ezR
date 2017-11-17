@@ -23,6 +23,6 @@ so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}}
 returns a new df with column names cleaned, old df does not change
 }
 \description{
-replace certain characters in all column names, using regular expression and gsub()
+replace certain characters (all occurrence) in all column names, using regular expression and gsub()
 }
 
