@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{ez.relevelfactor}
 \alias{ez.relevelfactor}
-\title{reset factor levels in a df after its levels have been modified, relevel a factor in order to reflect its new levels}
+\title{reset factor levels in a df}
 \usage{
 ez.relevelfactor(df, col)
 }
@@ -15,6 +15,8 @@ ez.relevelfactor(df, col)
 returns a new df
 }
 \description{
+reset factor levels in a df after its levels have been modified
+relevel a factor in order to reflect its new levels
 does not change factor label (set factor order as is)
 }
 
