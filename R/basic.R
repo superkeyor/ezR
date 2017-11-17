@@ -61,6 +61,13 @@ ez.num = function(x, ...){
 #' @export
 ez.str = as.character
 
+#' rev a str: 'abc'->'cba'
+#' @export
+ez.strrev <- function(x) {
+  nc <- nchar(x)
+  paste(substring(x, nc:1, nc:1), collapse = "")
+}
+
 #' alias of \code{\link{ceiling}}
 #' @param
 #' @return
