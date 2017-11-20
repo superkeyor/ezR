@@ -417,7 +417,7 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
                      ggtitle(paste0("N = ",nrow(df)))'
                      , xx, yy, violin
         )
-        if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
+        if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
         tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
     # yy|xx or yy|xx zz
     } else {
@@ -444,13 +444,13 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
                          stat_boxplot(geom = "errorbar", width = 0.5) +
                          %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                          geom_point(position=position_jitter(width=0.2, height=0), size=1) +
-                         stat_summary(fun.y=mean, color="white", geom="point", shape=18, size=3) +
+                         stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                          theme(legend.position="none") +
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
                          , xx, yy, xx, violin, pvalue
             )
-            if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
-            tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="white", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+            if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
+            tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
         # yy|xx zz
         } else {
             if (length(xx)==2) {
@@ -466,14 +466,14 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
-                             stat_summary(fun.y=mean, color="white", geom="point", shape=18, size=3) +
+                             stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              facet_grid(~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz
                 )
-                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
-                tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="white", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
+                tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
             # yy|xx zz aa
             } else {
                 aa = xx[3]
@@ -490,14 +490,14 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
-                             stat_summary(fun.y=mean, color="white", geom="point", shape=18, size=3) +
+                             stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              facet_grid(%s~%s) +
                              theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz, aa
                 )
-                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="royalblue", geom="text",vjust=1.2)')}
-                tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="white", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
+                tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
 
             }        
         }
