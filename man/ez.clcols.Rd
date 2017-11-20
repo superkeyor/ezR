@@ -4,15 +4,17 @@
 \alias{ez.clcols}
 \title{clean col names}
 \usage{
-ez.clcols(df, regex_search = "[[:space:][:punct:]]", regex_replace = "_",
-  ignore.case = FALSE, perl = TRUE)
+ez.clcols(df, pattern = "[[:space:][:punct:]]", replacement = "_",
+  fixed = FALSE, ignore.case = FALSE, perl = TRUE)
 }
 \arguments{
 \item{df}{df}
 
-\item{regex_search}{search}
+\item{pattern}{search}
 
-\item{regex_replace}{replacement}
+\item{replacement}{replacement}
+
+\item{fixed}{FALSE=regex mode on, TRUE=regex mode off}
 
 \item{ignore.case}{if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.}
 

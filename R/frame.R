@@ -833,15 +833,16 @@ ez.move = ez.recol
 #' clean col names
 #' @description replace certain characters (all occurrence) in all column names, using regular expression and gsub()
 #' @param df df
-#' @param regex_search search
-#' @param regex_replace replacement
+#' @param pattern search
+#' @param replacement replacement
+#' @param fixed FALSE=regex mode on, TRUE=regex mode off
 #' @param ignore.case if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.
 #' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]  
 #' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}
 #' @return returns a new df with column names cleaned, old df does not change
 #' @export
-ez.clcols <- function(df,regex_search='[[:space:][:punct:]]',regex_replace='_',ignore.case=FALSE,perl=TRUE) { 
-    colnames(df) <- gsub(regex_search, regex_replace, colnames(df), ignore.case=ignore.case, perl=perl)
+ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE) { 
+    colnames(df) <- gsub(pattern, replacement, colnames(df), fixed=fixed, ignore.case=ignore.case, perl=perl)
     return(df)
 } 
 
