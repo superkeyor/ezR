@@ -838,10 +838,13 @@ ez.move = ez.recol
 #' @param fixed FALSE=regex mode on, TRUE=regex mode off
 #' @param ignore.case if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.
 #' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]  
-#' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}
+#' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
+#' ignored when fixed=TRUE
 #' @return returns a new df with column names cleaned, old df does not change
 #' @export
 ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE) { 
+    # ignore perl when fixed is true, otherwise issuing a warning
+    if (fixed) perl=FALSE
     colnames(df) <- gsub(pattern, replacement, colnames(df), fixed=fixed, ignore.case=ignore.case, perl=perl)
     return(df)
 } 

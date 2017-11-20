@@ -19,7 +19,8 @@ ez.clcols(df, pattern = "[[:space:][:punct:]]", replacement = "_",
 \item{ignore.case}{if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.}
 
 \item{perl}{Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]
-so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}}
+so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
+ignored when fixed=TRUE}
 }
 \value{
 returns a new df with column names cleaned, old df does not change
