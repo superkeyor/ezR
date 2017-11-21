@@ -7,7 +7,8 @@
 ez.recols(df, newColOrder)
 }
 \arguments{
-\item{newColOrder}{c('','',''), number of cols must match}
+\item{newColOrder}{c('','',''), number of cols must match. 
+or, newColOrder='az' or 'za', sort all cols alphabetically}
 }
 \value{
 returns a new df, old one does not change

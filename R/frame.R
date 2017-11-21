@@ -760,7 +760,8 @@ ez.replace = function(df, col, oldval, newval){
 }
 
 #' reorder all cols
-#' @param newColOrder c('','',''), number of cols must match
+#' @param newColOrder c('','',''), number of cols must match. 
+#' or, newColOrder='az' or 'za', sort all cols alphabetically
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -772,6 +773,10 @@ ez.replace = function(df, col, oldval, newval){
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.recols = function(df, newColOrder){
+    # use all(), because newColOrder might be a vector
+    # na.last=FALSE, makes na appears first, here it does not matter, because col names should not be NA
+    if(all(newColOrder=='az')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = FALSE)
+    if(all(newColOrder=='za')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = TRUE)
     return(df[newColOrder])
 }
 
@@ -1088,6 +1093,7 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     if (!is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
+        # but df[col] will not! 
         df.temp = df[,col,drop=FALSE]
     } else {
         df.temp = df
