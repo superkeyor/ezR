@@ -1091,9 +1091,10 @@ ez.rmcol = ez.del
 ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     nbefore = nrow(df)
     if (!is.null(col)) {
-        # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
-        # but df[col] will not! 
+        # R converts a single col to a vector if the parameter col has only one col, e.g., iris[,'Sepal.Length',drop=F]
+        # but iris['Sepal.Length'] will not! (iris['Sepal.Length',drop=F] actually gives a warning!)
+        # will not convert a single row, but it does not hurt to add drop=F, e.g., iris[1,,drop=F] OK
         df.temp = df[,col,drop=FALSE]
     } else {
         df.temp = df
