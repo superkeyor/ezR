@@ -777,6 +777,7 @@ ez.recols = function(df, newColOrder){
     # na.last=FALSE, makes na appears first, here it does not matter, because col names should not be NA
     if(all(newColOrder=='az')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = FALSE)
     if(all(newColOrder=='za')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = TRUE)
+    if (length(newColOrder)!=length(colnames(df))) stop('new col names length mismatches old one')
     return(df[newColOrder])
 }
 
