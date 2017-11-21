@@ -841,6 +841,9 @@ ez.move = ez.recol
 #' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
 #' ignored when fixed=TRUE
 #' @return returns a new df with column names cleaned, old df does not change
+#' @examples
+#' all upper to lower using regex (ignore.case=FALSE or TRUE does not matter)
+#' ez.clcols(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
 #' @export
 ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE) { 
     # ignore perl when fixed is true, otherwise issuing a warning

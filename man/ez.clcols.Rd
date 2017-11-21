@@ -28,4 +28,8 @@ returns a new df with column names cleaned, old df does not change
 \description{
 replace certain characters (all occurrence) in all column names, using regular expression and gsub()
 }
+\examples{
+all upper to lower using regex (ignore.case=FALSE or TRUE does not matter)
+ez.clcols(iris,pattern='([[:upper:]])', replacement = '\\\\L\\\\1', perl = TRUE, ignore.case=FALSE)
+}
 
