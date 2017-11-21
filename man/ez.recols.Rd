@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.recols}
 \alias{ez.recols}
-\title{reorder all cols}
+\title{reorder all cols, or sort all cols alphabetically}
 \usage{
 ez.recols(df, newColOrder)
 }
@@ -14,7 +14,7 @@ or, newColOrder='az' or 'za', sort all cols alphabetically}
 returns a new df, old one does not change
 }
 \description{
-reorder all cols
+reorder all cols, or sort all cols alphabetically
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

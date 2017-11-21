@@ -759,7 +759,7 @@ ez.replace = function(df, col, oldval, newval){
     return(df)
 }
 
-#' reorder all cols
+#' reorder all cols, or sort all cols alphabetically
 #' @param newColOrder c('','',''), number of cols must match. 
 #' or, newColOrder='az' or 'za', sort all cols alphabetically
 #' @return returns a new df, old one does not change
