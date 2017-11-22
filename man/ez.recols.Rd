@@ -25,19 +25,19 @@ reorder all cols, or sort all cols alphabetically
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
-Other data.transformation.functions: \code{\link{ez.2factor}},
-  \code{\link{ez.2label}}, \code{\link{ez.2long}},
-  \code{\link{ez.2lower}}, \code{\link{ez.2value}},
-  \code{\link{ez.2wide}}, \code{\link{ez.compute}},
-  \code{\link{ez.del}}, \code{\link{ez.label.get}},
-  \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
-  \code{\link{ez.move}}, \code{\link{ez.newcol}},
-  \code{\link{ez.recode2}}, \code{\link{ez.recode}},
-  \code{\link{ez.recol}}, \code{\link{ez.rename}},
-  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
-  \code{\link{ez.rncol}}, \code{\link{ez.select}},
-  \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
-  \code{\link{ez.values.set}}
+Other data.transformation.functions: \code{\link{ez.2character}},
+  \code{\link{ez.2factor}}, \code{\link{ez.2label}},
+  \code{\link{ez.2long}}, \code{\link{ez.2lower}},
+  \code{\link{ez.2value}}, \code{\link{ez.2wide}},
+  \code{\link{ez.compute}}, \code{\link{ez.del}},
+  \code{\link{ez.label.get}}, \code{\link{ez.label.set}},
+  \code{\link{ez.leftjoin}}, \code{\link{ez.move}},
+  \code{\link{ez.newcol}}, \code{\link{ez.recode2}},
+  \code{\link{ez.recode}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
+  \code{\link{ez.select}}, \code{\link{ez.sort}},
+  \code{\link{ez.split}}, \code{\link{ez.unique}},
+  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
 }
 
