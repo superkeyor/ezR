@@ -742,6 +742,8 @@ ez.recode2 = function(df, varName, recodes){
 #' @description smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
 #' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 #' \cr the "==" syntax within "which()" could be modified 
+#' \cr
+#' \cr when col not provided (see param, note, example below), internally calling dplyr::mutate(ifelse()), therefore the change of data type follows mutate()
 #' @param df data frame
 #' @param col column name in string
 #' @param oldval old value (e.g., -Inf, NA)
@@ -749,6 +751,10 @@ ez.recode2 = function(df, varName, recodes){
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
+#' @note
+#' \cr when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
+#' \cr when 3 parameters provided, it is recognized as (df,oldval,newval) 
+#' see example
 #' @seealso \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} 
 #' @examples
 #' data=data.frame(a=factor(c(1,2)))
@@ -773,17 +779,41 @@ ez.recode2 = function(df, varName, recodes){
 #' ez.replace(data,'a',1,'111') %>% .$a
 #' ez.replace(data,'a',1,'abc') %>% .$a
 #'           # a was numeric, now is character
-ez.replace = function(df, col, oldval, newval){
-    if (is.na(oldval)) {
-        df[[col]][which(is.na(df[[col]]))] <- newval
-    } else {
-        if (is.factor(df[[col]])) {
-            # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
-            df[[col]]=as.character(df[[col]])
-            df[[col]][which(df[[col]]==oldval)] <- newval
-            df[[col]]=as.factor(df[[col]])
+#' 
+#' data=iris; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
+#' ez.replace(data,NA,3.1415)
+#'           # Species was factor, now is numeric (factor->numeric)
+#' ez.replace(data,NA,'replaced')
+#'           # Sepal.Width was numeric, now is char
+#'           # Species was factor, now is char (factor->char of num)
+#' ez.replace(data,5.1,3.14)
+#'           # Sepal.Length was numeric, now is still numeric
+#' ez.replace(data,'COBY','Mac')
+#'           # COBY was char, now is still char
+ez.replace = function(df, col, oldval, newval=NULL){
+    # four parameters passed
+    if (!is.null(newval)) {
+        if (is.na(oldval)) {
+            df[[col]][which(is.na(df[[col]]))] <- newval
         } else {
-            df[[col]][which(df[[col]]==oldval)] <- newval
+            if (is.factor(df[[col]])) {
+                # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
+                df[[col]]=as.character(df[[col]])
+                df[[col]][which(df[[col]]==oldval)] <- newval
+                df[[col]]=as.factor(df[[col]])
+            } else {
+                df[[col]][which(df[[col]]==oldval)] <- newval
+            }
+        }
+    # three parameters passed        
+    } else {
+        # trick to recognize parameters
+        newval=oldval;oldval=col
+        if (is.na(oldval)) {
+            # the dot here, I think, refers to each column, not related to . for %>%
+            df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
+        } else {
+            df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
         }
     }
     return(df)
