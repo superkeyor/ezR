@@ -793,17 +793,17 @@ ez.replace = function(df, col, oldval, newval=NULL){
     # four parameters passed
     if (!is.null(newval)) {
         if (is.na(oldval)) {
-            cat(sprintf('%d values replaced in column %s\n', sum(is.na(df[[col]])), col))
+            cat(sprintf('%d \tvalues replaced in column %s\n', sum(is.na(df[[col]])), col))
             df[[col]][which(is.na(df[[col]]))] <- newval
         } else {
             if (is.factor(df[[col]])) {
                 # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
-                cat(sprintf('%d values replaced in column %s\n', length(which(df[[col]]==oldval)), col))
+                cat(sprintf('%d \tvalues replaced in column %s\n', length(which(df[[col]]==oldval)), col))
                 df[[col]]=as.character(df[[col]])
                 df[[col]][which(df[[col]]==oldval)] <- newval
                 df[[col]]=as.factor(df[[col]])
             } else {
-                cat(sprintf('%d values replaced in column %s\n', length(which(df[[col]]==oldval)), col))
+                cat(sprintf('%d \tvalues replaced in column %s\n', length(which(df[[col]]==oldval)), col))
                 df[[col]][which(df[[col]]==oldval)] <- newval
             }
         }
@@ -814,10 +814,10 @@ ez.replace = function(df, col, oldval, newval=NULL){
         if (is.na(oldval)) {
             # the dot here, I think, refers to each column, not related to . for %>%
             # mutate() will somehow auto convert columns of factor
-            cat(sprintf('%d values replaced in data frame\n', sum(colSums(is.na(df)))))
+            cat(sprintf('%d \tvalues replaced in data frame\n', sum(colSums(is.na(df)))))
             df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
         } else {
-            cat(sprintf('%d values replaced in data frame\n', sum(colSums(df==oldval,na.rm=TRUE))))
+            cat(sprintf('%d \tvalues replaced in data frame\n', sum(colSums(df==oldval,na.rm=TRUE))))
             df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
         }
     }
