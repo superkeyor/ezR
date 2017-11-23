@@ -2,15 +2,17 @@
 % Please edit documentation in R/frame.R
 \name{ez.duplicated}
 \alias{ez.duplicated}
-\title{find the duplicated rows in a data frame}
+\title{find the duplicated rows in a data frame or duplicated elements in a vector}
 \usage{
-ez.duplicated(df, col = NULL, vec = TRUE)
+ez.duplicated(x, col = NULL, vec = TRUE)
 }
 \arguments{
-\item{df}{a data frame}
+\item{x}{a data frame or a vector/col}
 
 \item{col}{restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
-\cr default is NULL, search for all columns}
+\cr if x is a data frame, col is specified (e.g., "cond"), check that col only
+\cr if x is a data frame, col is unspecified (i.e., NULL default), check all cols in x
+\cr if x is not a data frame, col is ignored}
 
 \item{vec}{TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
 \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE}
@@ -22,6 +24,6 @@ return depends, see vec above
 \cr but ez.duplicated(x) returns [1] TRUE TRUE TRUE FALSE TRUE FALSE
 }
 \description{
-find the duplicated rows in a data frame
+find the duplicated rows in a data frame or duplicated elements in a vector
 }
 
