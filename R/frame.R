@@ -50,14 +50,14 @@ ez.len = function(x) {
 
 #' size of an object
 #' @param x data.frame
-#' @param dimension 0=both, 1=row, 2=col
+#' @param dim 1=row, 2=col, 3=both
 #' @export
-ez.size = function(x,dimension=0) {
-    if (dimension == 0) {
+ez.size = function(x,dim=3) {
+    if (dim == 3) {
         return(dim(x))
-    } else if (dimension == 1) {
+    } else if (dim == 1) {
         return(nrow(x))
-    } else if (dimension == 2) {
+    } else if (dim == 2) {
         return(ncol(x))
     }
 }
@@ -739,15 +739,16 @@ ez.recode2 = function(df, varName, recodes){
 }
 
 #' replace a single value in data frame with another value
-#' @description smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
+#' @description replace within one or more than one columns, or entire data frame (ie, all columns)
+#' \cr smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
 #' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 #' \cr the "==" syntax within "which()" could be modified 
 #' \cr
-#' \cr when col not provided (see param, note, example below), internally calling dplyr::mutate(ifelse()), therefore the change of data type follows mutate()
+#' \cr when col not provided (see param, note, example below), internally calling dplyr::mutate_all(ifelse()), therefore the change of data type follows mutate()
 #' @param df data frame
-#' @param col column name in string, can only be a single column, not vector
-#' @param oldval old value (e.g., -Inf, NA)
-#' @param newval new value (e.g., NA)
+#' @param col column name in string (not numbers), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used
+#' @param oldval old value (e.g., -Inf, NA), can only be single, not multiple/vector. Note would not differentiate 5.0 and 5
+#' @param newval new value (e.g., NA), can only be single, not multiple/vector
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -780,6 +781,7 @@ ez.recode2 = function(df, varName, recodes){
 #'           # a was numeric, now is character
 #' 
 #' data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
+#' ez.replace(data,c('Sepal.Width','Petal.Length','Petal.Width','Species'),NA,3.1415)
 #' ez.replace(data,NA,3.1415)
 #'           # Species was factor, now is numeric (factor->numeric)
 #' ez.replace(data,NA,'replaced')
@@ -792,21 +794,30 @@ ez.recode2 = function(df, varName, recodes){
 ez.replace = function(df, col, oldval, newval=NULL){
     # four parameters passed
     if (!is.null(newval)) {
-        if (is.na(oldval)) {
-            cat(sprintf('%d \tvalues replaced in column %s\n', sum(is.na(df[[col]])), col))
-            df[[col]][which(is.na(df[[col]]))] <- newval
-        } else {
+        cols = col
+        for (col in cols) {
+            # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
             if (is.factor(df[[col]])) {
-                # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
-                cat(sprintf('%d \tvalues replaced in column %s\n', length(which(df[[col]]==oldval)), col))
                 df[[col]]=as.character(df[[col]])
-                df[[col]][which(df[[col]]==oldval)] <- newval
+                if (is.na(oldval)) {
+                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
+                    df[[col]][which(is.na(df[[col]]))] <- newval
+                } else {
+                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
+                    df[[col]][which(df[[col]]==oldval)] <- newval
+                }
                 df[[col]]=as.factor(df[[col]])
             } else {
-                cat(sprintf('%d \tvalues replaced in column %s\n', length(which(df[[col]]==oldval)), col))
-                df[[col]][which(df[[col]]==oldval)] <- newval
+                if (is.na(oldval)) {
+                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
+                    df[[col]][which(is.na(df[[col]]))] <- newval
+                } else {
+                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
+                    df[[col]][which(df[[col]]==oldval)] <- newval
+                }
             }
         }
+
     # three parameters passed        
     } else {
         # trick to recognize parameters
@@ -814,14 +825,48 @@ ez.replace = function(df, col, oldval, newval=NULL){
         if (is.na(oldval)) {
             # the dot here, I think, refers to each column, not related to . for %>%
             # mutate() will somehow auto convert columns of factor
-            cat(sprintf('%d \tvalues replaced in data frame\n', sum(colSums(is.na(df)))))
+            cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(is.na(df))), as.character(oldval), as.character(newval)))
             df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
         } else {
-            cat(sprintf('%d \tvalues replaced in data frame\n', sum(colSums(df==oldval,na.rm=TRUE))))
+            cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(df==oldval,na.rm=TRUE)), as.character(oldval), as.character(newval)))
             df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
         }
     }
     return(df)
+}
+
+#' Count the occurrence of a single value in data frame columnwise, or rowwise, or both
+#' @description count within one or more than one columns/rows, or entire data frame (ie, all columns/rows)
+#' @param x data frame or vector, if vector, parameters col, dim are ignored
+#' @param val value to be counted, could be NA. Note would not differentiate 5.0 and 5
+#' @param col column in string (not number), single or vector. If NULL, all columns used
+#' @param dim 1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)
+#' @return returns a data frame, if dim=1/2; a single value if dim=3. 
+#' \cr vector input x always outputs a single value.
+#' @examples
+#' sx = c("F", "F", "F", "M", "M", "M")
+#' ht = c(69, 64, 67, 68, 72, 71)
+#' wt = c(148, 132, 142, 149, 167, 165)
+#' people = data.frame(sx, ht, wt)
+#' @export
+ez.count = function(x, val, col=NULL, dim=3) {
+    if (!is.data.frame(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
+
+    df=if (!is.null(col)) x[col] else x
+
+    # https://stackoverflow.com/a/40340152/2292993
+    # do not use the protected list() option as in the link, it returns a list
+    # ifelse would not return a matrix
+    tmpMatrix=if (is.na(val)) is.na(df) else df==val
+    if (dim==3) {
+        return(sum(rowSums(tmpMatrix,na.rm=TRUE)))
+    } else if (dim==1) {
+        sumNamedVector=rowSums(tmpMatrix,na.rm=TRUE)
+        return(data.frame(count=sumNamedVector))
+    } else if (dim==2) {
+        sumNamedVector=colSums(tmpMatrix,na.rm=TRUE)
+        return(data.frame(as.list(sumNamedVector)))
+    }
 }
 
 #' reorder all cols, or sort all cols alphabetically

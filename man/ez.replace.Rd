@@ -9,21 +9,22 @@ ez.replace(df, col, oldval, newval = NULL)
 \arguments{
 \item{df}{data frame}
 
-\item{col}{column name in string, can only be a single column, not vector}
+\item{col}{column name in string (not numbers), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used}
 
-\item{oldval}{old value (e.g., -Inf, NA)}
+\item{oldval}{old value (e.g., -Inf, NA), can only be single, not multiple/vector. Note would not differentiate 5.0 and 5}
 
-\item{newval}{new value (e.g., NA)}
+\item{newval}{new value (e.g., NA), can only be single, not multiple/vector}
 }
 \value{
 returns a new df, old one does not change
 }
 \description{
-smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
+replace within one or more than one columns, or entire data frame (ie, all columns)
+\cr smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
 \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 \cr the "==" syntax within "which()" could be modified 
 \cr
-\cr when col not provided (see param, note, example below), internally calling dplyr::mutate(ifelse()), therefore the change of data type follows mutate()
+\cr when col not provided (see param, note, example below), internally calling dplyr::mutate_all(ifelse()), therefore the change of data type follows mutate()
 }
 \note{
 when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
@@ -55,6 +56,7 @@ ez.replace(data,'a',1,'abc') \%>\% .$a
           # a was numeric, now is character
 
 data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
+ez.replace(data,c('Sepal.Width','Petal.Length','Petal.Width','Species'),NA,3.1415)
 ez.replace(data,NA,3.1415)
           # Species was factor, now is numeric (factor->numeric)
 ez.replace(data,NA,'replaced')

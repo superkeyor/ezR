@@ -4,12 +4,12 @@
 \alias{ez.size}
 \title{size of an object}
 \usage{
-ez.size(x, dimension = 0)
+ez.size(x, dim = 3)
 }
 \arguments{
 \item{x}{data.frame}
 
-\item{dimension}{0=both, 1=row, 2=col}
+\item{dim}{1=row, 2=col, 3=both}
 }
 \description{
 size of an object
