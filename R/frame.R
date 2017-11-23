@@ -745,7 +745,7 @@ ez.recode2 = function(df, varName, recodes){
 #' \cr
 #' \cr when col not provided (see param, note, example below), internally calling dplyr::mutate(ifelse()), therefore the change of data type follows mutate()
 #' @param df data frame
-#' @param col column name in string
+#' @param col column name in string, can only be a single column, not vector
 #' @param oldval old value (e.g., -Inf, NA)
 #' @param newval new value (e.g., NA)
 #' @return returns a new df, old one does not change
@@ -779,7 +779,7 @@ ez.recode2 = function(df, varName, recodes){
 #' ez.replace(data,'a',1,'abc') %>% .$a
 #'           # a was numeric, now is character
 #' 
-#' data=iris; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
+#' data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
 #' ez.replace(data,NA,3.1415)
 #'           # Species was factor, now is numeric (factor->numeric)
 #' ez.replace(data,NA,'replaced')
@@ -794,14 +794,17 @@ ez.replace = function(df, col, oldval, newval=NULL){
     if (!is.null(newval)) {
         if (is.na(oldval)) {
             df[[col]][which(is.na(df[[col]]))] <- newval
+            cat(sprintf('%d values replaced in column %s\n', sum(is.na(df[[col]])), col))
         } else {
             if (is.factor(df[[col]])) {
                 # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
                 df[[col]]=as.character(df[[col]])
                 df[[col]][which(df[[col]]==oldval)] <- newval
                 df[[col]]=as.factor(df[[col]])
+                cat(sprintf('%d values replaced in column %s\n', length(which(df[[col]]==oldval)), col))
             } else {
                 df[[col]][which(df[[col]]==oldval)] <- newval
+                cat(sprintf('%d values replaced in column %s\n', length(which(df[[col]]==oldval)), col))
             }
         }
     # three parameters passed        
@@ -810,9 +813,12 @@ ez.replace = function(df, col, oldval, newval=NULL){
         newval=oldval;oldval=col
         if (is.na(oldval)) {
             # the dot here, I think, refers to each column, not related to . for %>%
+            # mutate() will somehow auto convert columns of factor
             df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
+            cat(sprintf('%d values replaced in data frame\n', sum(colSums(is.na(df)))))
         } else {
             df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
+            cat(sprintf('%d values replaced in data frame\n', sum(colSums(df==oldval,na.rm=TRUE))))
         }
     }
     return(df)

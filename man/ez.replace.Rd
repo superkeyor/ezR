@@ -9,7 +9,7 @@ ez.replace(df, col, oldval, newval = NULL)
 \arguments{
 \item{df}{data frame}
 
-\item{col}{column name in string}
+\item{col}{column name in string, can only be a single column, not vector}
 
 \item{oldval}{old value (e.g., -Inf, NA)}
 
@@ -54,7 +54,7 @@ ez.replace(data,'a',1,'111') \%>\% .$a
 ez.replace(data,'a',1,'abc') \%>\% .$a
           # a was numeric, now is character
 
-data=iris; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
+data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
 ez.replace(data,NA,3.1415)
           # Species was factor, now is numeric (factor->numeric)
 ez.replace(data,NA,'replaced')
