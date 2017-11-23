@@ -751,8 +751,7 @@ ez.recode2 = function(df, varName, recodes){
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
-#' @note
-#' \cr when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
+#' @note when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
 #' \cr when 3 parameters provided, it is recognized as (df,oldval,newval) 
 #' see example
 #' @seealso \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} 
@@ -789,7 +788,7 @@ ez.recode2 = function(df, varName, recodes){
 #' ez.replace(data,5.1,3.14)
 #'           # Sepal.Length was numeric, now is still numeric
 #' ez.replace(data,'COBY','Mac')
-#'           # COBY was char, now is still char
+#'           # TV was char, now is still char
 ez.replace = function(df, col, oldval, newval=NULL){
     # four parameters passed
     if (!is.null(newval)) {

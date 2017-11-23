@@ -26,7 +26,7 @@ smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
 \cr when col not provided (see param, note, example below), internally calling dplyr::mutate(ifelse()), therefore the change of data type follows mutate()
 }
 \note{
-\cr when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
+when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
 \cr when 3 parameters provided, it is recognized as (df,oldval,newval) 
 see example
 }
@@ -63,7 +63,7 @@ ez.replace(data,NA,'replaced')
 ez.replace(data,5.1,3.14)
           # Sepal.Length was numeric, now is still numeric
 ez.replace(data,'COBY','Mac')
-          # COBY was char, now is still char
+          # TV was char, now is still char
 }
 \seealso{
 \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}}
