@@ -838,11 +838,12 @@ ez.replace = function(df, col, oldval, newval=NULL){
 #' Count the occurrence of a single value in data frame columnwise, or rowwise, or both
 #' @description count within one or more than one columns/rows, or entire data frame (ie, all columns/rows)
 #' @param x data frame or vector, if vector, parameters col, dim are ignored
-#' @param val value to be counted, could be NA. Note would not differentiate 5.0 and 5
+#' @param val value to be counted, could be NA. Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE
 #' @param col column in string (not number), single or vector. If NULL, all columns used
 #' @param dim 1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)
 #' @return returns a data frame, if dim=1/2; a single value if dim=3. 
 #' \cr vector input x always outputs a single value.
+#' @seealso \code{\link{ez.countif}}
 #' @examples
 #' sx = c("F", "F", "F", "M", "M", "M")
 #' ht = c(69, 64, 67, 68, 72, 71)
@@ -867,6 +868,56 @@ ez.count = function(x, val, col=NULL, dim=3) {
         return(data.frame(count=sumNamedVector))
     } else if (dim==2) {
         sumNamedVector=colSums(tmpMatrix,na.rm=TRUE)
+        return(data.frame(as.list(sumNamedVector)))
+    }
+}
+
+#' Conditionally count the occurrence of a single value in data frame columnwise, or rowwise, or both
+#' @description count within one or more than one columns/rows, or entire data frame (ie, all columns/rows)
+#' @param x data frame or vector, if vector, parameters col, dim are ignored
+#' @param cond a string like '.>=3', '.=="M"', 'is.na(.)', 'ifelse()'
+#' must use . to refer to each cell of data frame
+#' must be able to be evaluated as TRUE/FALSE (essentially sum up TRUE)
+#' wrapper of mutate_all(funs(cnd)), so the same syntax
+#' Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE
+#' > < etc, not meaningful for factors, return NA
+#' na.rm=FALSE to catch NA returned above
+#' @param col column in string (not number), single or vector. If NULL, all columns used
+#' @param dim 1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)
+#' @return returns a data frame, if dim=1/2; a single value if dim=3. 
+#' \cr vector input x always outputs a single value.
+#' @seealso \code{\link{ez.countif}}
+#' @examples
+#' sx = c("F", "F", "F", "M", "M", "M")
+#' ht = c(69, 64, 67, 68, 72, 71)
+#' wt = c(148, 132, 142, 149, 167, 165)
+#' people = data.frame(sx, ht, wt)
+#' ez.countif(people,'.=="M"','wt', dim=2)  # wt 0
+#' ez.countif(people,'.>150', dim=2)   # sx ht wt   NA  0  2
+#' ez.countif(people$wt, '.==165')
+#' @export
+ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
+
+    # assume a 1d vector, convert to data frame for easy processing
+    if (!is.data.frame(x)) {
+        x=data.frame(x)
+        col=NULL
+        dim=3
+    }
+
+    x=if (!is.null(col)) x[col] else x
+
+    # warning for factor > < etc, not meaningful for factors, return NA
+    # na.rm=FALSE to catch NA returned above
+    cmd=sprintf('tmpMatrix=suppressWarnings(dplyr::mutate_all(x, funs(%s)))',cnd)
+    eval(parse(text = cmd))
+    if (dim==3) {
+        return(sum(rowSums(tmpMatrix,na.rm=na.rm)))
+    } else if (dim==1) {
+        sumNamedVector=rowSums(tmpMatrix,na.rm=na.rm)
+        return(data.frame(count=sumNamedVector))
+    } else if (dim==2) {
+        sumNamedVector=colSums(tmpMatrix,na.rm=na.rm)
         return(data.frame(as.list(sumNamedVector)))
     }
 }
