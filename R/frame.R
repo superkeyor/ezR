@@ -793,18 +793,18 @@ ez.replace = function(df, col, oldval, newval=NULL){
     # four parameters passed
     if (!is.null(newval)) {
         if (is.na(oldval)) {
-            df[[col]][which(is.na(df[[col]]))] <- newval
             cat(sprintf('%d values replaced in column %s\n', sum(is.na(df[[col]])), col))
+            df[[col]][which(is.na(df[[col]]))] <- newval
         } else {
             if (is.factor(df[[col]])) {
                 # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
+                cat(sprintf('%d values replaced in column %s\n', length(which(df[[col]]==oldval)), col))
                 df[[col]]=as.character(df[[col]])
                 df[[col]][which(df[[col]]==oldval)] <- newval
                 df[[col]]=as.factor(df[[col]])
-                cat(sprintf('%d values replaced in column %s\n', length(which(df[[col]]==oldval)), col))
             } else {
-                df[[col]][which(df[[col]]==oldval)] <- newval
                 cat(sprintf('%d values replaced in column %s\n', length(which(df[[col]]==oldval)), col))
+                df[[col]][which(df[[col]]==oldval)] <- newval
             }
         }
     # three parameters passed        
@@ -814,11 +814,11 @@ ez.replace = function(df, col, oldval, newval=NULL){
         if (is.na(oldval)) {
             # the dot here, I think, refers to each column, not related to . for %>%
             # mutate() will somehow auto convert columns of factor
-            df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
             cat(sprintf('%d values replaced in data frame\n', sum(colSums(is.na(df)))))
+            df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
         } else {
-            df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
             cat(sprintf('%d values replaced in data frame\n', sum(colSums(df==oldval,na.rm=TRUE))))
+            df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
         }
     }
     return(df)
