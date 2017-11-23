@@ -11,6 +11,15 @@ false <- FALSE
 #' alias of FALSE
 False <- FALSE
 
+#' @export
+not = magrittr::not
+
+#' @export
+and = magrittr::and
+
+#' @export
+or = magrittr::or
+
 #' alias of \code{\link{class}}
 #' @export
 ez.typeof = class

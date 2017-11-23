@@ -850,6 +850,7 @@ ez.replace = function(df, col, oldval, newval=NULL){
 #' people = data.frame(sx, ht, wt)
 #' @export
 ez.count = function(x, val, col=NULL, dim=3) {
+    # assume a 1d vector
     if (!is.data.frame(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
 
     df=if (!is.null(col)) x[col] else x
