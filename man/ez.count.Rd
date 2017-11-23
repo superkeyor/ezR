@@ -27,5 +27,6 @@ sx = c("F", "F", "F", "M", "M", "M")
 ht = c(69, 64, 67, 68, 72, 71)
 wt = c(148, 132, 142, 149, 167, 165)
 people = data.frame(sx, ht, wt)
+ez.count(people,'M',dim=2)
 }
 

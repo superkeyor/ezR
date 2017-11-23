@@ -848,6 +848,7 @@ ez.replace = function(df, col, oldval, newval=NULL){
 #' ht = c(69, 64, 67, 68, 72, 71)
 #' wt = c(148, 132, 142, 149, 167, 165)
 #' people = data.frame(sx, ht, wt)
+#' ez.count(people,'M',dim=2)
 #' @export
 ez.count = function(x, val, col=NULL, dim=3) {
     # assume a 1d vector
