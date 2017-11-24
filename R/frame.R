@@ -823,7 +823,7 @@ ez.replace = function(df, col, oldval, newval=NULL){
         # trick to recognize parameters
         newval=oldval;oldval=col
         if (is.na(oldval)) {
-            # the dot here, I think, refers to each column, not related to . for %>%
+            # the dot here, I think, refers to each column/cell, not related to . for %>%
             # mutate() will somehow auto convert columns of factor
             cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(is.na(df))), as.character(oldval), as.character(newval)))
             df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
