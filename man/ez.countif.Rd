@@ -14,12 +14,12 @@ ez.countif(x, cnd, col = NULL, dim = 3, na.rm = FALSE)
 \item{dim}{1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)}
 
 \item{cond}{a string like '.>=3', '.=="M"', 'is.na(.)', 'ifelse()'
-must use . to refer to each cell of data frame
-must be able to be evaluated as TRUE/FALSE (essentially sum up TRUE)
-wrapper of mutate_all(funs(cnd)), so the same syntax
-Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE
-> < etc, not meaningful for factors, return NA
-na.rm=FALSE to catch NA returned above}
+\cr must use . to refer to each cell of data frame
+\cr must be able to be evaluated as TRUE/FALSE (essentially sum up TRUE)
+\cr wrapper of mutate_all(funs(cnd)), so the same syntax
+\cr Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE
+\cr > < etc, not meaningful for factors, return NA
+\cr na.rm=FALSE to catch NA returned above}
 }
 \value{
 returns a data frame, if dim=1/2; a single value if dim=3. 
