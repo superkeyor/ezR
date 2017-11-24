@@ -897,7 +897,6 @@ ez.count = function(x, val, col=NULL, dim=3) {
 #' ez.countif(people$wt, '.==165')
 #' @export
 ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
-
     # assume a 1d vector, convert to data frame for easy processing
     if (!is.data.frame(x)) {
         x=data.frame(x)
