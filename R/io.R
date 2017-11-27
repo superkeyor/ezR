@@ -110,30 +110,33 @@ ez.readxlist = function(file, toprint=TRUE){
 }
 
 #' wrapper of \code{\link[sjmisc]{read_spss}}
-#' @description would not convert value labels to factor levels (i.e., gender 1/2->male/female), instead keep variable labels and value labels as attributes; also internally trim string space
+#' @description would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'tofactor' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim trim (leading and trailing) string space (The leading could be user written, the trailing could come from SPSS padding to Width)
 #' @param path File path to the data file
-#' @param tofactor if TRUE, atomic to factor; if FALSE, keep as atomic (char always to factor regardless)
-#' @param keepna if TRUE, user-defined missing values will be left as their original codes. If FALSE (default), corresponding values are converted to NA.
+#' @param tofactor if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)
+#' @param tona if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
 #' @param tolower whether to convert all column names to lower case
 #' @export
-ez.reads = function(path, tofactor=TRUE, keepna=FALSE, tolower=FALSE, ...){
-    result = sjmisc::read_spss(path=path, atomic.to.fac=tofactor, keep.na=keepna, ...)
+ez.reads = function(path, tofactor=TRUE, tona=TRUE, tolower=FALSE, ...){
+    result = sjmisc::read_spss(path=path, atomic.to.fac=tofactor, keep.na=!tona, ...)
     if (tolower) names(result) = tolower(names(result))
-    # the tofactor/atomic.to.fac seems only working for variable with numbers (gender 1/2) not stirng values (group control/patient)
+    # the tofactor/atomic.to.fac seems only working for variable with numbers (gender 1/2) not string values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
+    # another hack to trim both leading and trailing spaces (sjmisc::read_spss only trims trailing)
+    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
     return(result)
 }
 
 #' read spss .sav file with foreign package
-#' @description cannot trim string space (trim.factor.names, trim_values in read.spss not working??), 
-#'              but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below). 
+#' @description internally trim trim (leading and trailing) string space (The leading could be user written, the trailing could come from SPSS padding to Width)
+#'              when valuelabel=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
 #'              therefore, maybe for viewing purpose only, instead of processing. 
 #'              see more at \code{\link[foreign]{read.spss}}
 #' @param valuelabel logic
-#' \cr               if True: gender=Male,Female, gender is a factor with two levels "Male/Female"
-#' \cr               if False: gender=1,2, gender is a number with attributes "Male/Female"
+#' \cr               if True: gender=Male,Female, gender is a Factor with two levels "Male/Female"
+#' \cr               if False: gender=1,2, gender is a Numeric (NOT a factor) with attributes "Male/Female"
 #' \cr               (char will always be converted to factor regardless of valuelabel)
+#' @param tona if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
@@ -141,18 +144,26 @@ ez.reads = function(path, tofactor=TRUE, keepna=FALSE, tolower=FALSE, ...){
 #'
 #' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
-ez.reads2 = function(file, valuelabel=TRUE, tolower=FALSE){
+ez.reads2 = function(file, valuelabel=TRUE, tona=TRUE, tolower=FALSE, ...){
     # can safely ignore the warnings about type 7 and etc; data is not lost
     # # http://stackoverflow.com/questions/3136293/read-spss-file-into-r
 
-    # for variable label, it is possible to hack
+    # for variable label, it is possible to hack to make varialbe label->column name
     # because the function stores read-in info in attributes, see
     # http://www.r-bloggers.com/migrating-from-spss-to-r-rstats/
     # http://stackoverflow.com/questions/19914962/
+    # but I do not wanna bother, because sometimes the variable label could have unusal strings (eg punctuation)
     result = suppressWarnings(foreign::read.spss(file, use.value.labels = valuelabel, to.data.frame = TRUE,
                                                  max.value.labels = Inf, trim.factor.names = TRUE,
-                                                 trim_values = TRUE, reencode = NA, use.missings = to.data.frame))
+                                                 trim_values = TRUE, reencode = NA, use.missings = tona, ...))
     if (tolower) names(result) = tolower(names(result))
+    # Important: cannot trim trailing (and leading) string space 
+    # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working??? 
+    # --Where does the trailing spaces come from --String var padded to Width in SPSS
+    # hack to remove leading and trailing string space
+    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
+    # the following is not neccessary, because presumably, all char is factor till this point
+    # result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
     return(result)
 }
 

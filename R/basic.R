@@ -45,6 +45,25 @@ ez.pause = function(){
     }
 }
 
+#' print out or set the repo
+#' @param repo NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'
+#' @export
+#' @return returns NULL
+ez.repo = function(repo=NULL){
+    if (is.null(repo)) {
+        cat(sprintf('The current repository is: %s\n',unname(getOption("repos"))))
+        return(invisible(NULL))
+    }
+
+    if (repo=='default') {
+        options(repos = c(CRAN = 'https://cran.rstudio.com/'))
+    } else {
+        options(repos = c(CRAN = sprintf('https://mran.revolutionanalytics.com/snapshot/%s',repo)))
+    }
+    cat(sprintf('The repository now set to: %s\n',unname(getOption("repos"))))
+    return(invisible(NULL))
+}
+
 #' sort of a wrapper of \code{\link{type.convert}}
 #' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
 #' @param x a character vector, or a factor
