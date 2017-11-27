@@ -2,15 +2,18 @@
 % Please edit documentation in R/io.R
 \name{ez.readx2}
 \alias{ez.readx2}
-\title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package}
+\title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces}
 \usage{
 ez.readx2(file, sheetIndex = 1, tolower = FALSE, ...)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
+\value{
+in the returned data frame, string always to factor
+}
 \description{
-read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package
+read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 }
 \examples{
 read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,

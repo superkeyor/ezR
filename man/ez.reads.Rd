@@ -4,18 +4,18 @@
 \alias{ez.reads}
 \title{wrapper of \code{\link[sjmisc]{read_spss}}}
 \usage{
-ez.reads(path, tofactor = TRUE, keepna = FALSE, tolower = FALSE, ...)
+ez.reads(path, tofactor = TRUE, tona = TRUE, tolower = FALSE, ...)
 }
 \arguments{
 \item{path}{File path to the data file}
 
-\item{tofactor}{if TRUE, atomic to factor; if FALSE, keep as atomic (char always to factor regardless)}
+\item{tofactor}{if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)}
 
-\item{keepna}{if TRUE, user-defined missing values will be left as their original codes. If FALSE (default), corresponding values are converted to NA.}
+\item{tona}{if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-would not convert value labels to factor levels (i.e., gender 1/2->male/female), instead keep variable labels and value labels as attributes; also internally trim string space
+would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'tofactor' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
 }
 

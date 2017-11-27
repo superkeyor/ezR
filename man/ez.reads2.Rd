@@ -4,19 +4,21 @@
 \alias{ez.reads2}
 \title{read spss .sav file with foreign package}
 \usage{
-ez.reads2(file, valuelabel = TRUE, tolower = FALSE)
+ez.reads2(file, valuelabel = TRUE, tona = TRUE, tolower = FALSE, ...)
 }
 \arguments{
 \item{valuelabel}{logic
-\cr               if True: gender=Male,Female, gender is a factor with two levels "Male/Female"
-\cr               if False: gender=1,2, gender is a number with attributes "Male/Female"
+\cr               if True: gender=Male,Female, gender is a Factor with two levels "Male/Female"
+\cr               if False: gender=1,2, gender is a Numeric (NOT a factor) with attributes "Male/Female"
 \cr               (char will always be converted to factor regardless of valuelabel)}
+
+\item{tona}{if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-cannot trim string space (trim.factor.names, trim_values in read.spss not working??), 
-             but can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female) when valuelabel=TRUE (see below). 
+internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
+             when valuelabel=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
              therefore, maybe for viewing purpose only, instead of processing. 
              see more at \code{\link[foreign]{read.spss}}
 }

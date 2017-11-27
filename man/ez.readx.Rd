@@ -9,8 +9,11 @@ ez.readx(file, sheet = 1, tolower = FALSE, ...)
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 }
+\value{
+in the returned data frame, string always to factor
+}
 \description{
-uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
+uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces
 }
 \examples{
 read.xlsx(xlsxFile, sheet = 1, startRow = 1, colNames = TRUE,

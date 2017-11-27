@@ -61,9 +61,9 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
 #' @export
 ez.write = ez.save
 
-#' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package
+#' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
-#' @return
+#' @return in the returned data frame, string always to factor
 #' @examples
 #' read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
 #'           startRow=NULL, endRow=NULL, colIndex=NULL,
@@ -75,13 +75,17 @@ ez.write = ez.save
 ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
+    # trim spaces
+    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
+    # the following is not necessary, because presumbly, char is factor till this point
+    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
     return(result)
 }
 
 #' read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}
-#' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
+#' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
-#' @return
+#' @return in the returned data frame, string always to factor
 #' @examples
 #' read.xlsx(xlsxFile, sheet = 1, startRow = 1, colNames = TRUE,
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
@@ -90,6 +94,10 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, ...){
 ez.readx = function(file, sheet=1, tolower=FALSE, ...){
     result = openxlsx::read.xlsx(file, sheet, ...)
     if (tolower) names(result) = tolower(names(result))
+    # trim spaces
+    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
+    # the following is not necessary, because presumbly, char is factor till this point
+    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
     return(result)
 }
 
@@ -110,7 +118,7 @@ ez.readxlist = function(file, toprint=TRUE){
 }
 
 #' wrapper of \code{\link[sjmisc]{read_spss}}
-#' @description would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'tofactor' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim trim (leading and trailing) string space (The leading could be user written, the trailing could come from SPSS padding to Width)
+#' @description would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'tofactor' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
 #' @param path File path to the data file
 #' @param tofactor if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)
 #' @param tona if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
@@ -124,11 +132,13 @@ ez.reads = function(path, tofactor=TRUE, tona=TRUE, tolower=FALSE, ...){
     result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # another hack to trim both leading and trailing spaces (sjmisc::read_spss only trims trailing)
     result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
+    # the following is not neccessary, because presumably, all char is factor till this point
+    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
     return(result)
 }
 
 #' read spss .sav file with foreign package
-#' @description internally trim trim (leading and trailing) string space (The leading could be user written, the trailing could come from SPSS padding to Width)
+#' @description internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
 #'              when valuelabel=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
 #'              therefore, maybe for viewing purpose only, instead of processing. 
 #'              see more at \code{\link[foreign]{read.spss}}
@@ -163,7 +173,7 @@ ez.reads2 = function(file, valuelabel=TRUE, tona=TRUE, tolower=FALSE, ...){
     # hack to remove leading and trailing string space
     result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
     # the following is not neccessary, because presumably, all char is factor till this point
-    # result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
+    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
     return(result)
 }
 
