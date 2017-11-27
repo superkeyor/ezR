@@ -76,9 +76,8 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     # trim spaces
-    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
-    # the following is not necessary, because presumbly, char is factor till this point
-    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     return(result)
 }
 
@@ -95,9 +94,8 @@ ez.readx = function(file, sheet=1, tolower=FALSE, ...){
     result = openxlsx::read.xlsx(file, sheet, ...)
     if (tolower) names(result) = tolower(names(result))
     # trim spaces
-    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
-    # the following is not necessary, because presumbly, char is factor till this point
-    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     return(result)
 }
 
@@ -131,9 +129,8 @@ ez.reads = function(path, tofactor=TRUE, tona=TRUE, tolower=FALSE, ...){
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # another hack to trim both leading and trailing spaces (sjmisc::read_spss only trims trailing)
-    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
-    # the following is not neccessary, because presumably, all char is factor till this point
-    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     return(result)
 }
 
@@ -170,10 +167,9 @@ ez.reads2 = function(file, valuelabel=TRUE, tona=TRUE, tolower=FALSE, ...){
     # Important: cannot trim trailing (and leading) string space 
     # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working??? 
     # --Where does the trailing spaces come from --String var padded to Width in SPSS
-    # hack to remove leading and trailing string space
-    result=data.frame(lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x))
-    # the following is not neccessary, because presumably, all char is factor till this point
-    result=data.frame(lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x)), stringsAsFactors=F)
+    # hack to remove leading and trailing string spaces
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     return(result)
 }
 
