@@ -63,6 +63,7 @@ ez.write = ez.save
 
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
+#' @param chr2fac whether to convert char to factor
 #' @return in the returned data frame, string always to factor
 #' @examples
 #' read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
@@ -72,9 +73,10 @@ ez.write = ez.save
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, ...){
+ez.readx2 = function(file, sheetIndex=1, chr2fac=TRUE, tolower=FALSE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
+    if (chr2fac) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
@@ -84,15 +86,17 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, ...){
 #' read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
+#' @param chr2fac whether to convert char to factor
 #' @return in the returned data frame, string always to factor
 #' @examples
 #' read.xlsx(xlsxFile, sheet = 1, startRow = 1, colNames = TRUE,
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx = function(file, sheet=1, tolower=FALSE, ...){
+ez.readx = function(file, sheet=1, chr2fac=TRUE, tolower=FALSE, ...){
     result = openxlsx::read.xlsx(file, sheet, ...)
     if (tolower) names(result) = tolower(names(result))
+    if (chr2fac) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))

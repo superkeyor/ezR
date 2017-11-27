@@ -4,9 +4,11 @@
 \alias{ez.readx}
 \title{read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}}
 \usage{
-ez.readx(file, sheet = 1, tolower = FALSE, ...)
+ez.readx(file, sheet = 1, chr2fac = TRUE, tolower = FALSE, ...)
 }
 \arguments{
+\item{chr2fac}{whether to convert char to factor}
+
 \item{tolower}{whether to convert all column names to lower case}
 }
 \value{
