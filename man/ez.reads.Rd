@@ -4,18 +4,20 @@
 \alias{ez.reads}
 \title{wrapper of \code{\link[sjmisc]{read_spss}}}
 \usage{
-ez.reads(path, tofactor = TRUE, tona = TRUE, tolower = FALSE, ...)
+ez.reads(path, atm2fac = TRUE, tona = TRUE, tolower = FALSE, ...)
 }
 \arguments{
 \item{path}{File path to the data file}
 
-\item{tofactor}{if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)}
+\item{atm2fac}{if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)}
 
 \item{tona}{if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'tofactor' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
+would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'atm2fac' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
+\cr
+\cr difference: reads supports numeric atomic (logic,numeric,integer,character etc) 2 factor, reads2 supports numeric label 2 value
 }
 

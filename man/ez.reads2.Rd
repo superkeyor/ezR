@@ -4,13 +4,13 @@
 \alias{ez.reads2}
 \title{read spss .sav file with foreign package}
 \usage{
-ez.reads2(file, valuelabel = TRUE, tona = TRUE, tolower = FALSE, ...)
+ez.reads2(file, lbl2val = TRUE, tona = TRUE, tolower = FALSE, ...)
 }
 \arguments{
-\item{valuelabel}{logic
+\item{lbl2val}{logic
 \cr               if True: gender=Male,Female, gender is a Factor with two levels "Male/Female"
 \cr               if False: gender=1,2, gender is a Numeric (NOT a factor) with attributes "Male/Female"
-\cr               (char will always be converted to factor regardless of valuelabel)}
+\cr               (char will always be converted to factor regardless of lbl2val)}
 
 \item{tona}{if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
@@ -18,12 +18,14 @@ ez.reads2(file, valuelabel = TRUE, tona = TRUE, tolower = FALSE, ...)
 }
 \description{
 internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
-             when valuelabel=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
+             when lbl2val=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
              therefore, maybe for viewing purpose only, instead of processing. 
              see more at \code{\link[foreign]{read.spss}}
+\cr
+\cr difference: reads supports numeric atomic (logic,numeric,integer,character etc) 2 factor, reads2 supports numeric label 2 value
 }
 \examples{
-(file, valuelabel=TRUE,tolower=FALSE)
+(file, lbl2val=TRUE,tolower=FALSE)
 
 alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 }

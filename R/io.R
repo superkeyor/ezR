@@ -63,7 +63,6 @@ ez.write = ez.save
 
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
-#' @param chr2fac whether to convert char to factor
 #' @return in the returned data frame, string always to factor
 #' @examples
 #' read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
@@ -73,10 +72,11 @@ ez.write = ez.save
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx2 = function(file, sheetIndex=1, chr2fac=TRUE, tolower=FALSE, ...){
+ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
-    if (chr2fac) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
+    # char to factor
+    result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
@@ -86,17 +86,17 @@ ez.readx2 = function(file, sheetIndex=1, chr2fac=TRUE, tolower=FALSE, ...){
 #' read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
-#' @param chr2fac whether to convert char to factor
 #' @return in the returned data frame, string always to factor
 #' @examples
 #' read.xlsx(xlsxFile, sheet = 1, startRow = 1, colNames = TRUE,
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx = function(file, sheet=1, chr2fac=TRUE, tolower=FALSE, ...){
+ez.readx = function(file, sheet=1, tolower=FALSE, ...){
     result = openxlsx::read.xlsx(file, sheet, ...)
     if (tolower) names(result) = tolower(names(result))
-    if (chr2fac) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
+    # char to factor
+    result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
@@ -120,16 +120,18 @@ ez.readxlist = function(file, toprint=TRUE){
 }
 
 #' wrapper of \code{\link[sjmisc]{read_spss}}
-#' @description would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'tofactor' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
+#' @description would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'atm2fac' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
+#' \cr
+#' \cr difference: reads supports numeric atomic (logic,numeric,integer,character etc) 2 factor, reads2 supports numeric label 2 value
 #' @param path File path to the data file
-#' @param tofactor if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)
+#' @param atm2fac if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)
 #' @param tona if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
 #' @param tolower whether to convert all column names to lower case
 #' @export
-ez.reads = function(path, tofactor=TRUE, tona=TRUE, tolower=FALSE, ...){
-    result = sjmisc::read_spss(path=path, atomic.to.fac=tofactor, keep.na=!tona, ...)
+ez.reads = function(path, atm2fac=TRUE, tona=TRUE, tolower=FALSE, ...){
+    result = sjmisc::read_spss(path=path, atomic.to.fac=atm2fac, keep.na=!tona, ...)
     if (tolower) names(result) = tolower(names(result))
-    # the tofactor/atomic.to.fac seems only working for variable with numbers (gender 1/2) not string values (group control/patient)
+    # the atm2fac/atomic.to.fac seems only working for variable with numbers (gender 1/2) not string values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # another hack to trim both leading and trailing spaces (sjmisc::read_spss only trims trailing)
@@ -140,22 +142,24 @@ ez.reads = function(path, tofactor=TRUE, tona=TRUE, tolower=FALSE, ...){
 
 #' read spss .sav file with foreign package
 #' @description internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
-#'              when valuelabel=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
+#'              when lbl2val=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
 #'              therefore, maybe for viewing purpose only, instead of processing. 
 #'              see more at \code{\link[foreign]{read.spss}}
-#' @param valuelabel logic
+#' \cr
+#' \cr difference: reads supports numeric atomic (logic,numeric,integer,character etc) 2 factor, reads2 supports numeric label 2 value
+#' @param lbl2val logic
 #' \cr               if True: gender=Male,Female, gender is a Factor with two levels "Male/Female"
 #' \cr               if False: gender=1,2, gender is a Numeric (NOT a factor) with attributes "Male/Female"
-#' \cr               (char will always be converted to factor regardless of valuelabel)
+#' \cr               (char will always be converted to factor regardless of lbl2val)
 #' @param tona if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
 #' @param tolower whether to convert all column names to lower case
 #' @return
 #' @examples
-#' (file, valuelabel=TRUE,tolower=FALSE)
+#' (file, lbl2val=TRUE,tolower=FALSE)
 #'
 #' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
-ez.reads2 = function(file, valuelabel=TRUE, tona=TRUE, tolower=FALSE, ...){
+ez.reads2 = function(file, lbl2val=TRUE, tona=TRUE, tolower=FALSE, ...){
     # can safely ignore the warnings about type 7 and etc; data is not lost
     # # http://stackoverflow.com/questions/3136293/read-spss-file-into-r
 
@@ -164,7 +168,7 @@ ez.reads2 = function(file, valuelabel=TRUE, tona=TRUE, tolower=FALSE, ...){
     # http://www.r-bloggers.com/migrating-from-spss-to-r-rstats/
     # http://stackoverflow.com/questions/19914962/
     # but I do not wanna bother, because sometimes the variable label could have unusal strings (eg punctuation)
-    result = suppressWarnings(foreign::read.spss(file, use.value.labels = valuelabel, to.data.frame = TRUE,
+    result = suppressWarnings(foreign::read.spss(file, use.value.labels = lbl2val, to.data.frame = TRUE,
                                                  max.value.labels = Inf, trim.factor.names = TRUE,
                                                  trim_values = TRUE, reencode = NA, use.missings = tona, ...))
     if (tolower) names(result) = tolower(names(result))

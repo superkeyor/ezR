@@ -4,11 +4,9 @@
 \alias{ez.readx2}
 \title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces}
 \usage{
-ez.readx2(file, sheetIndex = 1, chr2fac = TRUE, tolower = FALSE, ...)
+ez.readx2(file, sheetIndex = 1, tolower = FALSE, ...)
 }
 \arguments{
-\item{chr2fac}{whether to convert char to factor}
-
 \item{tolower}{whether to convert all column names to lower case}
 }
 \value{
