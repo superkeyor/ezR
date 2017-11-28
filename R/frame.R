@@ -397,7 +397,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' # 2 4 6 
 #' # 2 4 6 
 #' @return returns a numeric variable or a data frame with changed col(s)
-#' \cr if x is a factor with chars, will be converted to 1 2 3 etc, see the example
+#' \cr if x is a factor with normal chars, will be converted to 1 2 3 etc, see the example
 #' \cr if x, however, is a factor with chars of numbers "2","4","6", will be converted to 2 4 6 etc, see the example
 #' \cr \code{\link{ez.num}} keeps the same char as is
 #' @family data transformation functions

@@ -2,6 +2,7 @@
 # stats
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' show information about a data frame or other object, alias of \code{\link{ez.info}}
+#' @description obsoleted, do not use this function, use \code{\link{ez.view}} instead
 #' @param x a data frame or a vector or sth else that can be converted into a data frame
 #' @return
 #' @examples
@@ -22,32 +23,47 @@ ez.show = function(x){
     ez.view(x)
 }
 
-#' show information about a data frame or other object, alias of \code{\link{ez.show}}
-#' @param x a data frame or a vector or sth else that can be converted into a data frame
-#' @return
-#' @examples
-#' @seealso \code{\link{ez.view}}
+#' @rdname ez.show
 #' @export
 ez.info = ez.show
 
-#' show information about a data frame or similar object (like spss variable view)
+#' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
-#' @param
-#' @return
-#' @seealso \code{\link{ez.info}} or \code{\link{ez.show}}
+#' @param x a data frame
+#' @param file a file name, if not NULL, will save more detailed variable information to an excel file
+#' @param print2screen whether to print the new row to string (auto separated by tab)
+#' @return nothing to return (but will also )
+#' @seealso \code{\link{ez.info}} \code{\link{ez.show}}
 #' @examples
 #' @export
-ez.view = function(x, file.name='x.pdf', show.frq = T, show.prc = T, sort.by.name = F, ...){
-    oldOpts = options(warn=1)
-    on.exit(options(oldOpts))
-    ez.pdfon(file.name,width=10,height=10,onefile=T)
+ez.view = function(x, file=NULL, print2screen=TRUE, show.frq = T, show.prc = T, sort.by.name = F, ...){
     sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
-    for (col in colnames(x)) {
-        if (is.numeric(x[[col]])) {
-            print(ez.describe(x,col))
+
+    if (!is.null(file)){
+        results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique=numeric(),
+                            mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
+        vars=colnames(x)
+        for (var in vars) {
+            v.variable=var
+            v.class=class(x[[var]])
+            v.n=length(x[[var]])
+            v.missing=sum(is.na(x[[var]]))
+            v.unique=length(unique(x[[var]]))
+            if (is.numeric(x[[var]])) {
+                v.mean=mean(x[[var]],na.rm=TRUE)
+                v.min=min(x[[var]],na.rm=TRUE)
+                v.max=max(x[[var]],na.rm=TRUE)
+                v.sum=sum(x[[var]],na.rm=TRUE)
+            } else {
+                v.mean=v.min=v.max=v.sum=NA
+            }
+            results = ez.append(results,c(v.variable,v.class,v.n,v.missing,v.unique,v.mean,v.min,v.max,v.sum),print2screen=print2screen)
         }
+        # because c(char,numeric) converted everything to char
+        # now convert back to num for easy viewing in excel
+        results=ez.2num(results)
+        ez.savex(results,file)
     }
-    ez.pdfoff()
 }
 
 #' standard error of mean

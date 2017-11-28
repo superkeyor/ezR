@@ -64,9 +64,9 @@ ez.repo = function(repo=NULL){
     return(invisible(NULL))
 }
 
-#' sort of a wrapper of \code{\link{type.convert}}
+#' sort of a wrapper of \code{\link{type.convert}}, alias ez.2num
 #' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
-#' @param x a character vector, or a factor
+#' @param x a character vector, data frame, list, or a factor
 #' @return returns a converted vector
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
 #' \cr \code{\link{ez.num}} keeps the same char as is
@@ -77,6 +77,11 @@ ez.num = function(x, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
         result = as.numeric(levels(x))[x]
+    } else if (is.data.frame(x)) {
+        # check before is.list, because a data frame is a list, but not the other way
+        # https://stackoverflow.com/a/33050704/2292993
+        x[] = rapply(x, utils::type.convert, classes = "character", how = "replace", as.is = TRUE)
+        result = x
     } else if (is.list(x)){
         result = utils::type.convert(as.character(unlist(x)), ...)
     } else {
@@ -84,6 +89,10 @@ ez.num = function(x, ...){
     }
     return(result)
 }
+
+#' @rdname ez.num
+#' @export
+ez.2num = ez.num
 
 #' alias of \code{\link{as.character}}
 #' @export

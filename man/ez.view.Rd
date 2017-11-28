@@ -2,15 +2,25 @@
 % Please edit documentation in R/stats.R
 \name{ez.view}
 \alias{ez.view}
-\title{show information about a data frame or similar object (like spss variable view)}
+\title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.view(x, file.name = "x.pdf", show.frq = T, show.prc = T,
+ez.view(x, file = NULL, print2screen = TRUE, show.frq = T, show.prc = T,
   sort.by.name = F, ...)
+}
+\arguments{
+\item{x}{a data frame}
+
+\item{file}{a file name, if not NULL, will save more detailed variable information to an excel file}
+
+\item{print2screen}{whether to print the new row to string (auto separated by tab)}
+}
+\value{
+nothing to return (but will also )
 }
 \description{
 wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 }
 \seealso{
-\code{\link{ez.info}} or \code{\link{ez.show}}
+\code{\link{ez.info}} \code{\link{ez.show}}
 }
 
