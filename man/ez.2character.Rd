@@ -41,12 +41,13 @@ Other data.transformation.functions: \code{\link{ez.2factor}},
   \code{\link{ez.del}}, \code{\link{ez.label.get}},
   \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
   \code{\link{ez.move}}, \code{\link{ez.newcol}},
-  \code{\link{ez.recode2}}, \code{\link{ez.recode}},
-  \code{\link{ez.recols}}, \code{\link{ez.recol}},
-  \code{\link{ez.rename}}, \code{\link{ez.replace}},
-  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
-  \code{\link{ez.select}}, \code{\link{ez.sort}},
-  \code{\link{ez.split}}, \code{\link{ez.unique}},
-  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
+  \code{\link{ez.num}}, \code{\link{ez.recode2}},
+  \code{\link{ez.recode}}, \code{\link{ez.recols}},
+  \code{\link{ez.recol}}, \code{\link{ez.rename}},
+  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
+  \code{\link{ez.rncol}}, \code{\link{ez.select}},
+  \code{\link{ez.sort}}, \code{\link{ez.split}},
+  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
+  \code{\link{ez.values.set}}
 }
 

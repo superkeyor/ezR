@@ -4,11 +4,17 @@
 \alias{ez.recols}
 \title{reorder all cols, or sort all cols alphabetically}
 \usage{
-ez.recols(df, newColOrder)
+ez.recols(df, newColOrder, col = NULL)
 }
 \arguments{
-\item{newColOrder}{c('','',''), number of cols must match. 
+\item{newColOrder}{c('','',''), number of cols must match that of all cols (when para col=NULL) or specified by para col. 
 or, newColOrder='az' or 'za', sort all cols alphabetically}
+
+\item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by dplyr::select_() )
+\cr 'c(sample_num,mother_num)' or 'c("sample_num","mother_num")' (quoted)
+\cr '1:4' (quoted)
+\cr 'col1:col3' (quoted)
+\cr '-(ABCB1_c1236t:pgp_rs2032582)' (quoted)}
 }
 \value{
 returns a new df, old one does not change
@@ -32,12 +38,13 @@ Other data.transformation.functions: \code{\link{ez.2character}},
   \code{\link{ez.compute}}, \code{\link{ez.del}},
   \code{\link{ez.label.get}}, \code{\link{ez.label.set}},
   \code{\link{ez.leftjoin}}, \code{\link{ez.move}},
-  \code{\link{ez.newcol}}, \code{\link{ez.recode2}},
-  \code{\link{ez.recode}}, \code{\link{ez.recol}},
-  \code{\link{ez.rename}}, \code{\link{ez.replace}},
-  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
-  \code{\link{ez.select}}, \code{\link{ez.sort}},
-  \code{\link{ez.split}}, \code{\link{ez.unique}},
-  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
+  \code{\link{ez.newcol}}, \code{\link{ez.num}},
+  \code{\link{ez.recode2}}, \code{\link{ez.recode}},
+  \code{\link{ez.recol}}, \code{\link{ez.rename}},
+  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
+  \code{\link{ez.rncol}}, \code{\link{ez.select}},
+  \code{\link{ez.sort}}, \code{\link{ez.split}},
+  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
+  \code{\link{ez.values.set}}
 }
 

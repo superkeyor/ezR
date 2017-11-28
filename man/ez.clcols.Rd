@@ -5,7 +5,7 @@
 \title{clean col names}
 \usage{
 ez.clcols(df, pattern = "[[:space:][:punct:]]", replacement = "_",
-  fixed = FALSE, ignore.case = FALSE, perl = TRUE)
+  fixed = FALSE, ignore.case = FALSE, perl = TRUE, col = NULL)
 }
 \arguments{
 \item{df}{df}
@@ -21,6 +21,12 @@ ez.clcols(df, pattern = "[[:space:][:punct:]]", replacement = "_",
 \item{perl}{Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]
 so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
 ignored when fixed=TRUE}
+
+\item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by dplyr::select_() )
+\cr 'c(sample_num,mother_num)' or 'c("sample_num","mother_num")' (quoted)
+\cr '1:4' (quoted)
+\cr 'col1:col3' (quoted)
+\cr '-(ABCB1_c1236t:pgp_rs2032582)' (quoted)}
 }
 \value{
 returns a new df with column names cleaned, old df does not change

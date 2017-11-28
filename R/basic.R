@@ -72,6 +72,7 @@ ez.repo = function(repo=NULL){
 #' \cr \code{\link{ez.num}} keeps the same char as is
 #' @details see \url{http://stackoverflow.com/a/22701462/2292993}
 #' @seealso \code{\link{ez.2value}}
+#' @family data transformation functions
 #' @export
 #' @examples
 #' ez.num(c(1,'2','a',3))  # -> still factor

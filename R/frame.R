@@ -922,8 +922,13 @@ ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
 }
 
 #' reorder all cols, or sort all cols alphabetically
-#' @param newColOrder c('','',''), number of cols must match. 
+#' @param newColOrder c('','',''), number of cols must match that of all cols (when para col=NULL) or specified by para col. 
 #' or, newColOrder='az' or 'za', sort all cols alphabetically
+#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by dplyr::select_() )
+#' \cr 'c(sample_num,mother_num)' or 'c("sample_num","mother_num")' (quoted)
+#' \cr '1:4' (quoted)
+#' \cr 'col1:col3' (quoted)
+#' \cr '-(ABCB1_c1236t:pgp_rs2032582)' (quoted)
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -934,12 +939,24 @@ ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.recols = function(df, newColOrder){
-    # use all(), because newColOrder might be a vector
-    # na.last=FALSE, makes na appears first, here it does not matter, because col names should not be NA
-    if(all(newColOrder=='az')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = FALSE)
-    if(all(newColOrder=='za')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = TRUE)
-    if (length(newColOrder)!=length(colnames(df))) stop('new col names length mismatches old one')
+ez.recols = function(df, newColOrder,col=NULL){
+    if (is.null(col)) {
+        # use all(), because newColOrder might be a vector
+        # na.last=FALSE, makes na appears first, here it does not matter, because col names should not be NA
+        if(all(newColOrder=='az')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = FALSE)
+        if(all(newColOrder=='za')) newColOrder=order(colnames(df), na.last = FALSE, decreasing = TRUE)
+        if (length(newColOrder)!=length(colnames(df))) stop('new col names length mismatches old one')
+    } else {
+        names_all = colnames(df)
+        names_sel = colnames(dplyr::select_(df,col))
+        selected = is.element(names_all,names_sel)
+        names_not_sel = names_all[!selected]
+
+        if(all(newColOrder=='az')) newColOrder=order(names_sel, na.last = FALSE, decreasing = FALSE)
+        if(all(newColOrder=='za')) newColOrder=order(names_sel, na.last = FALSE, decreasing = TRUE)
+        if (length(newColOrder)!=length(names_sel)) stop('new col names length mismatches old one')
+        newColOrder = c(names_not_sel,newColOrder)
+    }
     return(df[newColOrder])
 }
 
@@ -1008,15 +1025,28 @@ ez.move = ez.recol
 #' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]  
 #' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
 #' ignored when fixed=TRUE
+#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by dplyr::select_() )
+#' \cr 'c(sample_num,mother_num)' or 'c("sample_num","mother_num")' (quoted)
+#' \cr '1:4' (quoted)
+#' \cr 'col1:col3' (quoted)
+#' \cr '-(ABCB1_c1236t:pgp_rs2032582)' (quoted)
 #' @return returns a new df with column names cleaned, old df does not change
 #' @examples
 #' all upper to lower using regex (ignore.case=FALSE or TRUE does not matter)
 #' ez.clcols(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
 #' @export
-ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE) { 
+ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
     # ignore perl when fixed is true, otherwise issuing a warning
     if (fixed) perl=FALSE
-    colnames(df) <- gsub(pattern, replacement, colnames(df), fixed=fixed, ignore.case=ignore.case, perl=perl)
+    if (is.null(col)){
+        colnames(df) <- gsub(pattern, replacement, colnames(df), fixed=fixed, ignore.case=ignore.case, perl=perl)
+    } else {
+        names_all = colnames(df)
+        names_sel = colnames(dplyr::select_(df,col))
+        selected = is.element(names_all,names_sel)
+        names_new = dplyr::if_else(selected,gsub(pattern, replacement, names_all, fixed=fixed, ignore.case=ignore.case, perl=perl),names_all)
+        colnames(df) <- names_new
+    }
     return(df)
 } 
 
