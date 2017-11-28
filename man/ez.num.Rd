@@ -18,7 +18,7 @@ returns a converted vector
 \cr \code{\link{ez.num}} keeps the same char as is
 }
 \description{
-Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
+Convert a character vector, data frame to logical, integer, numeric, complex or factor when appropriate.
 }
 \details{
 see \url{http://stackoverflow.com/a/22701462/2292993}

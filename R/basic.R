@@ -65,7 +65,7 @@ ez.repo = function(repo=NULL){
 }
 
 #' sort of a wrapper of \code{\link{type.convert}}, alias ez.2num
-#' @description Convert a character vector to logical, integer, numeric, complex or factor as appropriate.
+#' @description Convert a character vector, data frame to logical, integer, numeric, complex or factor when appropriate.
 #' @param x a character vector, data frame, list, or a factor
 #' @return returns a converted vector
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
