@@ -23,6 +23,10 @@ Convert a character vector, data frame to logical, integer, numeric, complex or 
 \details{
 see \url{http://stackoverflow.com/a/22701462/2292993}
 }
+\examples{
+ez.num(c(1,'2','a',3))  # -> still factor
+ez.num(c(1,'2',3)) # -> int
+}
 \seealso{
 \code{\link{ez.2value}}
 }

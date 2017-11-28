@@ -11,6 +11,7 @@ ez.readx(file, sheet = 1, tolower = FALSE, ...)
 }
 \value{
 in the returned data frame, string always to factor
+\cr number stored as text in excel (->string) -> factor
 }
 \description{
 uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces

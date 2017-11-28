@@ -11,6 +11,7 @@ ez.readx2(file, sheetIndex = 1, tolower = FALSE, ...)
 }
 \value{
 in the returned data frame, string always to factor
+\cr number stored as text in excel (->string) -> factor
 }
 \description{
 read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces

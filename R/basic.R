@@ -73,6 +73,9 @@ ez.repo = function(repo=NULL){
 #' @details see \url{http://stackoverflow.com/a/22701462/2292993}
 #' @seealso \code{\link{ez.2value}}
 #' @export
+#' @examples
+#' ez.num(c(1,'2','a',3))  # -> still factor
+#' ez.num(c(1,'2',3)) # -> int
 ez.num = function(x, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993

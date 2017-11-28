@@ -61,7 +61,7 @@ ez.view = function(x, file=NULL, print2screen=TRUE, show.frq = T, show.prc = T, 
         }
         # because c(char,numeric) converted everything to char
         # now convert back to num for easy viewing in excel
-        results=ez.2num(results)
+        # results=ez.2num(results)
         ez.savex(results,file)
     }
 }
