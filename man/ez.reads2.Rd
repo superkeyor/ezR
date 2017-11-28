@@ -2,31 +2,21 @@
 % Please edit documentation in R/io.R
 \name{ez.reads2}
 \alias{ez.reads2}
-\title{read spss .sav file with foreign package}
+\title{THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. For a more perfect function, use ez.reads. This function kept as an archive just in case.
+wrapper of \code{\link[sjmisc]{read_spss}}. read spss .sav file with haven package}
 \usage{
-ez.reads2(file, lbl2val = TRUE, tona = TRUE, tolower = FALSE, ...)
+ez.reads2(path, atm2fac = TRUE, usrna = TRUE, tolower = FALSE, ...)
 }
 \arguments{
-\item{lbl2val}{logic
-\cr               if True: gender=Male,Female, gender is a Factor with two levels "Male/Female"
-\cr               if False: gender=1,2, gender is a Numeric (NOT a factor) with attributes "Male/Female"
-\cr               (char will always be converted to factor regardless of lbl2val)}
+\item{path}{File path to the data file}
 
-\item{tona}{if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
+\item{atm2fac}{if TRUE, atomic (with a label/attribute) to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)}
+
+\item{usrna}{if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
-             when lbl2val=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
-             therefore, maybe for viewing purpose only, instead of processing. 
-             see more at \code{\link[foreign]{read.spss}}
-\cr
-\cr difference: reads supports numeric atomic (logic,numeric,integer,character etc) 2 factor, reads2 supports numeric label 2 value
-}
-\examples{
-(file, lbl2val=TRUE,tolower=FALSE)
-
-alternatively, one can use SPSS R plugin to pass data between SPSS and R.
+would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'atm2fac' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
 }
 
