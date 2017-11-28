@@ -141,7 +141,11 @@ ez.reads2 = function(path, atm2fac=TRUE, usrna=TRUE, tolower=FALSE, ...){
 }
 
 #' read spss .sav file with foreign package
-#' @description internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). See param for more other details.
+#' @description internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). 
+#' \cr SPSS numeric -> R numeric
+#' \cr SPSS string (could be string of num) -> R character -> R factor
+#' \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
+#' \cr See param for more other details.
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Regardless, char always to factor.
 #' \cr 1: atomic with a label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
 #' \cr 2: atomic with a label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.

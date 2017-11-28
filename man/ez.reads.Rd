@@ -17,7 +17,11 @@ ez.reads(file, atm2fac = 2, usrna = TRUE, tolower = FALSE, ...)
 \item{tolower}{whether to convert all column names to lower case}
 }
 \description{
-internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). See param for more other details.
+internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). 
+\cr SPSS numeric -> R numeric
+\cr SPSS string (could be string of num) -> R character -> R factor
+\cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
+\cr See param for more other details.
 }
 \note{
 As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R.
