@@ -4,7 +4,7 @@
 \alias{ez.count}
 \title{Count the occurrence of a single value in data frame columnwise, or rowwise, or both}
 \usage{
-ez.count(x, val, col = NULL, dim = 3)
+ez.count(x, val = NA, col = NULL, dim = 3)
 }
 \arguments{
 \item{x}{data frame or vector, if vector, parameters col, dim are ignored}

@@ -851,7 +851,7 @@ ez.replace = function(df, col, oldval, newval=NULL){
 #' people = data.frame(sx, ht, wt)
 #' ez.count(people,'M',dim=2)
 #' @export
-ez.count = function(x, val, col=NULL, dim=3) {
+ez.count = function(x, val=NA, col=NULL, dim=3) {
     # assume a 1d vector
     if (!is.data.frame(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
 
@@ -876,7 +876,7 @@ ez.count = function(x, val, col=NULL, dim=3) {
 #' @description count within one or more than one columns/rows, or entire data frame (ie, all columns/rows)
 #' @param x data frame or vector, if vector, parameters col, dim are ignored
 #' @param cond a string like '.>=3', '.=="M"', 'is.na(.)', 'ifelse()'
-#' \cr must use . to refer to each cell of data frame
+#' \cr must use . to refer to each column of data frame (vectorized)
 #' \cr must be able to be evaluated as TRUE/FALSE (essentially sum up TRUE)
 #' \cr wrapper of mutate_all(funs(cnd)), so the same syntax
 #' \cr Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE

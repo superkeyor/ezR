@@ -392,8 +392,12 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @examples
 #' @export
 ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
-    oldwarn = getOption('warn')
-    options(warn=1)
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces 
     # also see trimws()--remove trailing/leading spaces
@@ -506,7 +510,6 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
     }    
     cat(tt,"\n")
     eval(parse(text = tt))
-    options(warn=oldwarn)
     return(pp)
 }
 
@@ -537,8 +540,12 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
 #' @examples 
 #' @export
 ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_size=0.7,error_gap=0.7,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
-    oldwarn = getOption('warn')
-    options(warn=1)
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
     bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
@@ -643,7 +650,6 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
     }    
     cat(tt,"\n")
     eval(parse(text = tt))
-    options(warn=oldwarn)
     return(pp)
 }
 
@@ -672,8 +678,12 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
 #' @examples 
 #' @export
 ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_width=0.3,error_direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
-    oldwarn = getOption('warn')
-    options(warn=1)    
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))    
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     if ((!is.null(zlab)) && legend_size[1]==0) {legend_size[1]=10}  # change default legend title size 0
@@ -774,7 +784,6 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
     }    
     cat(tt,"\n")
     eval(parse(text = tt))
-    options(warn=oldwarn)
     return(pp)
 }
 
@@ -792,8 +801,12 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
 #' @examples 
 #' @export
 ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
-    oldwarn = getOption('warn')
-    options(warn=1)
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces 
     cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
@@ -866,7 +879,6 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
 
     cat(tt,"\n")
     eval(parse(text = tt))
-    options(warn=oldwarn)
     return(pp)
 }
 
@@ -886,8 +898,12 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
 #' @examples
 #' @export
 ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
-    oldwarn = getOption('warn')
-    options(warn=1) 
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts)) 
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
@@ -966,8 +982,12 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
                      method ="color",tl.col = "black",tl.cex = 0.4,
                      col=NULL,...){
-    oldwarn = getOption('warn')
-    options(warn=1)
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
     corrmatrix = Hmisc::rcorr(as.matrix(df), type=corr.type)
     M = corrmatrix$r
     p.mat = corrmatrix$P
@@ -1042,8 +1062,12 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
 ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
-    oldwarn = getOption('warn')
-    options(warn=1)
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
     df.ori = df
 
     # 1) summarise
@@ -1427,8 +1451,12 @@ ez.relevelfactor = function(df, col){
 #' @examples 
 #' @export
 ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
-    oldwarn = getOption('warn')
-    options(warn=1)
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
     cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
     # play a trick
     cmd = gsub("||","*",cmd,fixed=TRUE)
@@ -1584,6 +1612,5 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
     }
     cat(tt,"\n")
     eval(parse(text = tt))
-    options(warn=oldwarn)
     return(pp)
 }

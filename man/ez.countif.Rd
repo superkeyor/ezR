@@ -14,7 +14,7 @@ ez.countif(x, cnd, col = NULL, dim = 3, na.rm = FALSE)
 \item{dim}{1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)}
 
 \item{cond}{a string like '.>=3', '.=="M"', 'is.na(.)', 'ifelse()'
-\cr must use . to refer to each cell of data frame
+\cr must use . to refer to each column of data frame (vectorized)
 \cr must be able to be evaluated as TRUE/FALSE (essentially sum up TRUE)
 \cr wrapper of mutate_all(funs(cnd)), so the same syntax
 \cr Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE
