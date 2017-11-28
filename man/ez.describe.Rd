@@ -4,7 +4,7 @@
 \alias{ez.describe}
 \title{plot a customized boxplot with jittered stripplot, violin, and mean}
 \usage{
-ez.describe(df, cmd, violin = FALSE, shown = TRUE)
+ez.describe(df, cmd, violin = TRUE, shown = TRUE)
 }
 \arguments{
 \item{df}{data frame in long format}
