@@ -940,6 +940,9 @@ ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.recols = function(df, newColOrder,col=NULL){
+    # http://rrubyperlundich.blogspot.com/2011/06/r-sorting-vectors-sort-vs-order.html
+    # the result of sort() is a vector consisting of elements of the original (unsorted) vector
+    # order(), we get a vector with the ordered indices of the original (unsorted) vector
     if (is.null(col)) {
         # use all(), because newColOrder might be a vector
         # na.last=FALSE, makes na appears first, here it does not matter, because col names should not be NA
@@ -952,8 +955,8 @@ ez.recols = function(df, newColOrder,col=NULL){
         selected = is.element(names_all,names_sel)
         names_not_sel = names_all[!selected]
 
-        if(all(newColOrder=='az')) newColOrder=order(names_sel, na.last = FALSE, decreasing = FALSE)
-        if(all(newColOrder=='za')) newColOrder=order(names_sel, na.last = FALSE, decreasing = TRUE)
+        if(all(newColOrder=='az')) newColOrder=sort(names_sel, na.last = FALSE, decreasing = FALSE)
+        if(all(newColOrder=='za')) newColOrder=sort(names_sel, na.last = FALSE, decreasing = TRUE)
         if (length(newColOrder)!=length(names_sel)) stop('new col names length mismatches old one')
         newColOrder = c(names_not_sel,newColOrder)
     }
