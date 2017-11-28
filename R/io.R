@@ -119,19 +119,19 @@ ez.readxlist = function(file, toprint=TRUE){
     return(sheetnames)
 }
 
-#' wrapper of \code{\link[sjmisc]{read_spss}}
+#' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. For a more perfect function, use ez.reads. This function kept as an archive just in case.
+#' wrapper of \code{\link[sjmisc]{read_spss}}. read spss .sav file with haven package
 #' @description would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'atm2fac' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
-#' \cr
-#' \cr difference: reads supports numeric atomic (logic,numeric,integer,character etc) 2 factor, reads2 supports numeric label 2 value
 #' @param path File path to the data file
-#' @param atm2fac if TRUE, atomic to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)
-#' @param tona if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
+#' @param atm2fac if TRUE, atomic (with a label/attribute) to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)
+#' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
 #' @param tolower whether to convert all column names to lower case
 #' @export
-ez.reads = function(path, atm2fac=TRUE, tona=TRUE, tolower=FALSE, ...){
-    result = sjmisc::read_spss(path=path, atomic.to.fac=atm2fac, keep.na=!tona, ...)
+ez.reads2 = function(path, atm2fac=TRUE, usrna=TRUE, tolower=FALSE, ...){
+    result = sjmisc::read_spss(path=path, atomic.to.fac=atm2fac, keep.na=!usrna, ...)
     if (tolower) names(result) = tolower(names(result))
-    # the atm2fac/atomic.to.fac seems only working for variable with numbers (gender 1/2) not string values (group control/patient)
+    # the atm2fac/atomic.to.fac only works for variable with numbers with labels/attributes (gender 1/2)
+    # not string values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # another hack to trim both leading and trailing spaces (sjmisc::read_spss only trims trailing)
@@ -141,25 +141,30 @@ ez.reads = function(path, atm2fac=TRUE, tona=TRUE, tolower=FALSE, ...){
 }
 
 #' read spss .sav file with foreign package
-#' @description internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
-#'              when lbl2val=TRUE (see below) it can convert value labels to factor levels for easy viewing (i.e., gender 1/2->male/female). 
-#'              therefore, maybe for viewing purpose only, instead of processing. 
-#'              see more at \code{\link[foreign]{read.spss}}
-#' \cr
-#' \cr difference: reads supports numeric atomic (logic,numeric,integer,character etc) 2 factor, reads2 supports numeric label 2 value
-#' @param lbl2val logic
-#' \cr               if True: gender=Male,Female, gender is a Factor with two levels "Male/Female"
-#' \cr               if False: gender=1,2, gender is a Numeric (NOT a factor) with attributes "Male/Female"
-#' \cr               (char will always be converted to factor regardless of lbl2val)
-#' @param tona if TRUE, convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
+#' @description internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). See param for more other details.
+#' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Regardless, char always to factor.
+#' \cr 1: atomic with a label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+#' \cr 2: atomic with a label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
+#' \cr 3: atomic with a label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
+#' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well. 
 #' @param tolower whether to convert all column names to lower case
 #' @return
+#' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R.
 #' @examples
-#' (file, lbl2val=TRUE,tolower=FALSE)
-#'
-#' alternatively, one can use SPSS R plugin to pass data between SPSS and R.
 #' @export
-ez.reads2 = function(file, lbl2val=TRUE, tona=TRUE, tolower=FALSE, ...){
+ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, ...){
+
+    if (atm2fac==1) {
+        atm2fac=FALSE
+        lbl2val=FALSE
+    } else if (atm2fac==2) {
+        atm2fac=TRUE
+        lbl2val=FALSE
+    } else if (atm2fac==3) {
+        atm2fac=TRUE  # T/F does not matter, essentially 'overwritten' by lbl2val
+        lbl2val=TRUE
+    }
+
     # can safely ignore the warnings about type 7 and etc; data is not lost
     # # http://stackoverflow.com/questions/3136293/read-spss-file-into-r
 
@@ -170,7 +175,7 @@ ez.reads2 = function(file, lbl2val=TRUE, tona=TRUE, tolower=FALSE, ...){
     # but I do not wanna bother, because sometimes the variable label could have unusal strings (eg punctuation)
     result = suppressWarnings(foreign::read.spss(file, use.value.labels = lbl2val, to.data.frame = TRUE,
                                                  max.value.labels = Inf, trim.factor.names = TRUE,
-                                                 trim_values = TRUE, reencode = NA, use.missings = tona, ...))
+                                                 trim_values = TRUE, reencode = NA, use.missings = usrna, ...))
     if (tolower) names(result) = tolower(names(result))
     # Important: cannot trim trailing (and leading) string space 
     # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working??? 
@@ -178,6 +183,30 @@ ez.reads2 = function(file, lbl2val=TRUE, tona=TRUE, tolower=FALSE, ...){
     # hack to remove leading and trailing string spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+
+    # hack begin: atomic with attributes to factor, do this before or after trimming spaces
+    if (atm2fac) {
+        atomic_w_attr_to_fac_foreign = function (data.spss) {
+            # foreign packag uses 'value.labels' attr
+            attr.string='value.labels'
+            if (!is.null(attr.string)) {
+                for (i in 1:ncol(data.spss)) {
+                    x <- data.spss[[i]]
+                    labs <- attr(x, attr.string, exact = T)
+                    if (is.atomic(x) && !is.null(labs)) {
+                        x <- as.factor(x)
+                        attr(x, attr.string) <- labs
+                        data.spss[[i]] <- x
+                    }
+                }
+            }
+            return(data.spss)
+        }
+
+        result = atomic_w_attr_to_fac_foreign(result)
+    }
+    # hack end: atomic with attributes to factor
+
     return(result)
 }
 
