@@ -507,7 +507,6 @@ ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
     cat(tt,"\n")
     eval(parse(text = tt))
     options(warn=oldwarn)
-    options(warn=oldwarn)
     return(pp)
 }
 
