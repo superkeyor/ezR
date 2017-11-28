@@ -271,14 +271,18 @@ ez.export = function(filename = "RPlot.pdf", pdf.width = 11, pdf.height = 8.5, .
     cat('Image exported. Font embedded.\n')
 }
 
-#' wrapper of \code{\link{pdf}}
-#' @param
+#' wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)
+#' @param 
 #' @return
 #' @note additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
 #' @seealso \code{\link{ez.export}} \code{\link{ez.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
+#' ez.pdfon("Living_All.pdf",width=10,height=10,onefile=T)
+#' ez.describe(jd.result,"ageout_rural|group")
+#' ez.describe(jd.result,"n_rural|group")
+#' ez.pdfoff()
 #' @export
 ez.pdfon = pdf
 

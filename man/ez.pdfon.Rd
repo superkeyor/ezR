@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{ez.pdfon}
 \alias{ez.pdfon}
-\title{wrapper of \code{\link{pdf}}}
+\title{wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)}
 \usage{
 ez.pdfon(file = if (onefile) "Rplots.pdf" else "Rplot\%03d.pdf", width,
   height, onefile, family, title, fonts, version, paper, encoding, bg, fg,
@@ -10,7 +10,7 @@ ez.pdfon(file = if (onefile) "Rplots.pdf" else "Rplot\%03d.pdf", width,
   compress)
 }
 \description{
-wrapper of \code{\link{pdf}}
+wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)
 }
 \note{
 additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
@@ -18,6 +18,10 @@ additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts aft
 \examples{
 A4:     width 7(inches) height = 5
 Letter: 8.5 x 11
+ez.pdfon("Living_All.pdf",width=10,height=10,onefile=T)
+ez.describe(jd.result,"ageout_rural|group")
+ez.describe(jd.result,"n_rural|group")
+ez.pdfoff()
 }
 \seealso{
 \code{\link{ez.export}} \code{\link{ez.pdfoff}}

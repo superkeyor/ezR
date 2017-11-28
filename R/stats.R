@@ -37,8 +37,17 @@ ez.info = ez.show
 #' @seealso \code{\link{ez.info}} or \code{\link{ez.show}}
 #' @examples
 #' @export
-ez.view = function(x, show.frq = T, show.prc = T, sort.by.name = F, ...){
+ez.view = function(x, file.name='x.pdf', show.frq = T, show.prc = T, sort.by.name = F, ...){
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
+    ez.pdfon(file.name,width=10,height=10,onefile=T)
     sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
+    for (col in colnames(x)) {
+        if (is.numeric(x[[col]])) {
+            print(ez.describe(x,col))
+        }
+    }
+    ez.pdfoff()
 }
 
 #' standard error of mean
