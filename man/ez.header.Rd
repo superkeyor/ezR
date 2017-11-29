@@ -22,5 +22,19 @@ wrapper of data.frame(), commonly use together with \code{\link{ez.append}}
 \examples{
 postdoc=ez.header(name=character(),'salary'=numeric())
 postdoc=ez.header(cols=c('name','salary'))  # <--note that 'name','salary' data type is logical in this usage
+
+# typical use:
+results = ez.header(variable=character(),class=character(),n=numeric())
+vars=colnames(x)
+for (var in vars) {
+    var=
+    cls=
+    n=
+    results = ez.append(results,list(var,cls,n))
+}
+ez.savex(results,'x.xlsx')
+}
+\seealso{
+\code{\link{ez.append}}
 }
 

@@ -9,7 +9,7 @@ ez.append(df, newrow, print2screen = TRUE)
 \arguments{
 \item{df}{df to be appended}
 
-\item{newrow}{a vector, e.g.,  c("Ted", 25)}
+\item{newrow}{a list, e.g.,  list("Ted", 25)  <-- use list can preserve element data type}
 
 \item{print2screen}{whether to print the new row to string (auto separated by tab), default TRUE}
 }
@@ -19,7 +19,22 @@ returns a new df, old passed df does not change
 \description{
 could be slow, commonly use together with \code{\link{ez.header}}
 }
+\note{
+although passing in newrow as a vector is fine, c(char,numeric) converts everything to char, bit when saving in excel, num formated as text
+}
 \examples{
-typically within a loop:  results = ez.append(results,c(var,p,R,U))
+# typical use:
+results = ez.header(variable=character(),class=character(),n=numeric())
+vars=colnames(x)
+for (var in vars) {
+    var=
+    cls=
+    n=
+    results = ez.append(results,list(var,cls,n))
+}
+ez.savex(results,'x.xlsx')
+}
+\seealso{
+\code{\link{ez.header}}
 }
 

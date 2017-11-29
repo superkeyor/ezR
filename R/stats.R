@@ -57,11 +57,8 @@ ez.view = function(x, file=NULL, print2screen=TRUE, show.frq = T, show.prc = T, 
             } else {
                 v.mean=v.min=v.max=v.sum=NA
             }
-            results = ez.append(results,c(v.variable,v.class,v.n,v.missing,v.unique,v.mean,v.min,v.max,v.sum),print2screen=print2screen)
+            results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.mean,v.min,v.max,v.sum),print2screen=print2screen)
         }
-        # because c(char,numeric) converted everything to char
-        # now convert back to num for easy viewing in excel
-        results=ez.2num(results)
         ez.savex(results,file)
     }
 }

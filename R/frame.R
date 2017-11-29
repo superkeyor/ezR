@@ -1354,9 +1354,21 @@ ez.reindex = function(df){
 #' @param cols optional (default=NULL), specify only if massively assign col names (i.e. header), see example
 #' @param stringsAsFactors defaults to FALSE (data.frame() defaults to TRUE)
 #' @return returns an (empty) df with specified col names
+#' @seealso \code{\link{ez.append}}
 #' @examples
 #' postdoc=ez.header(name=character(),'salary'=numeric())
 #' postdoc=ez.header(cols=c('name','salary'))  # <--note that 'name','salary' data type is logical in this usage
+#'
+#' # typical use:
+#' results = ez.header(variable=character(),class=character(),n=numeric())
+#' vars=colnames(x)
+#' for (var in vars) {
+#'     var=
+#'     cls=
+#'     n=
+#'     results = ez.append(results,list(var,cls,n))
+#' }
+#' ez.savex(results,'x.xlsx')
 #' @export
 ez.header = function(..., cols=NULL, stringsAsFactors=FALSE){
     if (is.null(cols)) {
@@ -1372,15 +1384,26 @@ ez.header = function(..., cols=NULL, stringsAsFactors=FALSE){
 #' append a row to an exisiting data frame
 #' @description could be slow, commonly use together with \code{\link{ez.header}}
 #' @param df df to be appended
-#' @param newrow a vector, e.g.,  c("Ted", 25)
+#' @param newrow a list, e.g.,  list("Ted", 25)  <-- use list can preserve element data type
 #' @param print2screen whether to print the new row to string (auto separated by tab), default TRUE
 #' @return returns a new df, old passed df does not change
+#' @seealso \code{\link{ez.header}}
+#' @note although passing in newrow as a vector is fine, c(char,numeric) converts everything to char, bit when saving in excel, num formated as text
 #' @examples
-#' typically within a loop:  results = ez.append(results,c(var,p,R,U))
+#' # typical use:
+#' results = ez.header(variable=character(),class=character(),n=numeric())
+#' vars=colnames(x)
+#' for (var in vars) {
+#'     var=
+#'     cls=
+#'     n=
+#'     results = ez.append(results,list(var,cls,n))
+#' }
+#' ez.savex(results,'x.xlsx')
 #' @export
 ez.append = function(df, newrow, print2screen=TRUE){
     # http://vitalflux.com/learn-r-append-rows-data-frame/
     df[nrow(df)+1,] <- newrow
-    if (print2screen) {cat(newrow, '\n', sep='\t')}
+    if (print2screen) {cat(unlist(newrow), '\n', sep='\t')}
     return(df)
 }
