@@ -1407,3 +1407,29 @@ ez.append = function(df, newrow, print2screen=TRUE){
     if (print2screen) {cat(unlist(newrow), '\n', sep='\t')}
     return(df)
 }
+
+#' coalesce values in a vector
+#' @description see example for more details
+#' @param vec a single vector, c(NA,3,3), c(NA,3,4), c(NA,NA)
+#' @return return depends, see example
+#' @examples
+#' ez.coalesce(c(NA,3,3))  # 3
+#' ez.coalesce(c(NA,NA))  # NA
+#' ez.coalesce(c(NA,3,4))  # c(3,4)  
+#' 
+#' typical use for coalesce by rows, see https://stackoverflow.com/q/45515218/2292993
+#' df <- data.frame(A=c(1,1,2,2,2),B=c(NA,2,NA,4,4),C=c(3,NA,NA,5,NA),D=c(NA,2,3,NA,NA),E=c(5,NA,NA,4,4))
+#' df %>% group_by(A) %>% summarise_all(funs( ez.coalesce(.) ))
+#' df <- data.frame(A=c(1,1,2,2,2),B=c(NA,2,NA,4,5),C=c(3,NA,NA,5,NA),D=c(NA,2,3,NA,NA),E=c(5,NA,NA,4,4))
+#' df %>% group_by(A) %>% summarise_all(funs( ez.coalesce(.) ))  # ->will give summarise_all an error
+#' @seealso \code{\link[dplyr]{coalesce}}
+#' @export
+ez.coalesce = function(vec){
+    uniVals = unique(vec)
+    # if contains only NA
+    if (all(is.na(uniVals))) {
+        return(NA)
+    } else {
+        return(na.omit(uniVals))
+    }
+}
