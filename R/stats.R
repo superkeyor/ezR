@@ -74,7 +74,7 @@ ez.view = function(x, file=NULL, id=NULL, ...){
 
         # col summary
         results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique=numeric(),
-                            levels=character(),
+                            levels_view1=character(),levels_view2=character(),
                             mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
         vars=colnames(x)
         for (var in vars) {
@@ -84,11 +84,16 @@ ez.view = function(x, file=NULL, id=NULL, ...){
             v.missing=sum(is.na(x[[var]]))
             v.unique=length(unique(x[[var]]))
             if (is.factor(x[[var]])) {
-                v.levels=dplyr::count_(x,var) %>% 
+                v.levels1=dplyr::count_(x,var) %>% 
                     format.data.frame() %>% toString(width=300) %>%  # width controls if too many factor levels
                     gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
+
+                freqtable=dplyr::count_(x,var)
+                col1=format.factor(freqtable[[1]])
+                col2=as.character(freqtable[[2]])
+                v.levels2=paste0(col1,'(',col2,')') %>% toString(width=300)
             } else {
-                v.levels=NA
+                v.levels1=v.levels2=NA
             }
             if (is.numeric(x[[var]])) {
                 v.mean=mean(x[[var]],na.rm=TRUE)
@@ -98,7 +103,7 @@ ez.view = function(x, file=NULL, id=NULL, ...){
             } else {
                 v.mean=v.min=v.max=v.sum=NA
             }
-            results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
+            results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
         }
         v.duplicated.varname=ez.duplicated(colnames(x),vec=TRUE,dim=1)
         v.duplicated.varname[which(!v.duplicated.varname)]=NA
