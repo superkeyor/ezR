@@ -32,7 +32,7 @@ ez.info = ez.show
 #' @param x a data frame
 #' @param file a file name, if not NULL, will save more detailed variable information to an excel file
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
-#' @return nothing to return (but will also )
+#' @return returns file path
 #' @seealso \code{\link{ez.info}} \code{\link{ez.show}}
 #' @examples
 #' @export
@@ -128,7 +128,7 @@ ez.view = function(x, file=NULL, id=NULL, ...){
         openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
 
         # browseURL(file)
-        return(invisible(NULL))
+        return(invisible(file))
     }
 }
 

@@ -14,7 +14,7 @@ ez.view(x, file = NULL, id = NULL, ...)
 \item{id}{a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used}
 }
 \value{
-nothing to return (but will also )
+returns file path
 }
 \description{
 Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
