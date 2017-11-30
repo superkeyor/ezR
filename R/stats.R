@@ -28,19 +28,50 @@ ez.show = function(x){
 ez.info = ez.show
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
-#' @description wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
+#' @description Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @param x a data frame
 #' @param file a file name, if not NULL, will save more detailed variable information to an excel file
-#' @param print2screen whether to print the new row to string (auto separated by tab)
+#' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @return nothing to return (but will also )
 #' @seealso \code{\link{ez.info}} \code{\link{ez.show}}
 #' @examples
 #' @export
-ez.view = function(x, file=NULL, print2screen=TRUE, show.frq = T, show.prc = T, sort.by.name = F, ...){
-    sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
+ez.view = function(x, file=NULL, id=NULL, ...){
+    # ez.view = function(x, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
+    # do not need, my own is better
+    # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 
     if (!is.null(file)){
+        # row summary
+        r.rowname=rownames(x)
+        if (is.null(id)) {
+            idname=rownames(x)
+        } else {
+            idname=x[,id]
+        }
+
+        r.duplicated.idname=ez.duplicated(idname,vec=TRUE,dim=1)
+        r.duplicated.idname[which(!r.duplicated.idname)]=NA
+        # check duplicated row except the idname column
+        if (is.null(id)) {
+            r.duplicated.content=ez.duplicated(x,vec=TRUE,dim=1)
+        } else {
+            r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(id)),vec=TRUE,dim=1)
+        }
+        r.duplicated.content[which(!r.duplicated.content)]=NA
+        
+        tmpMatrix = is.na(x)
+        r.ncol = rep(ncol(tmpMatrix), nrow(tmpMatrix))
+        r.missing = rowSums(tmpMatrix,na.rm=TRUE)
+        
+        results0=data.frame(rownames=r.rowname,id=idname,duplicated_id=r.duplicated.idname,
+                            duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
+        
+
+
+        # col summary
         results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique=numeric(),
+                            levels=character(),
                             mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
         vars=colnames(x)
         for (var in vars) {
@@ -49,6 +80,13 @@ ez.view = function(x, file=NULL, print2screen=TRUE, show.frq = T, show.prc = T, 
             v.n=length(x[[var]])
             v.missing=sum(is.na(x[[var]]))
             v.unique=length(unique(x[[var]]))
+            if (is.factor(x[[var]])) {
+                v.levels=dplyr::count_(x,var) %>% 
+                    format.data.frame() %>% toString(width=300) %>%  # width controls if too many factor levels
+                    gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
+            } else {
+                v.levels=NA
+            }
             if (is.numeric(x[[var]])) {
                 v.mean=mean(x[[var]],na.rm=TRUE)
                 v.min=min(x[[var]],na.rm=TRUE)
@@ -57,9 +95,37 @@ ez.view = function(x, file=NULL, print2screen=TRUE, show.frq = T, show.prc = T, 
             } else {
                 v.mean=v.min=v.max=v.sum=NA
             }
-            results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.mean,v.min,v.max,v.sum),print2screen=print2screen)
+            results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
         }
-        ez.savex(results,file)
+        v.duplicated.varname=ez.duplicated(colnames(x),vec=TRUE,dim=1)
+        v.duplicated.varname[which(!v.duplicated.varname)]=NA
+        v.duplicated.content=ez.duplicated(x,vec=TRUE,dim=2)
+        v.duplicated.content[which(!v.duplicated.content)]=NA
+        v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
+        results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
+
+
+
+        # ez.savex(results0,file)
+        wb <- openxlsx::createWorkbook(creator = 'openxlsx')
+        openxlsx::addWorksheet(wb, sheetName = "row")
+        openxlsx::writeData(wb, 'row', results0, startCol = 1, startRow = 1, xy = NULL,
+          colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
+          borders = c("none", "surrounding", "rows", "columns", "all"),
+          borderColour = getOption("openxlsx.borderColour", "black"),
+          borderStyle = getOption("openxlsx.borderStyle", "thin"),
+          withFilter = TRUE, keepNA = FALSE)
+        openxlsx::addWorksheet(wb, sheetName = "col")
+        openxlsx::writeData(wb, 'col', results, startCol = 1, startRow = 1, xy = NULL,
+          colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
+          borders = c("none", "surrounding", "rows", "columns", "all"),
+          borderColour = getOption("openxlsx.borderColour", "black"),
+          borderStyle = getOption("openxlsx.borderStyle", "thin"),
+          withFilter = TRUE, keepNA = FALSE)
+        openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+
+        # browseURL(file)
+        return(invisible(NULL))
     }
 }
 
