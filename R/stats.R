@@ -56,7 +56,10 @@ ez.view = function(x, file=NULL, id=NULL, ...){
         if (is.null(id)) {
             r.duplicated.content=ez.duplicated(x,vec=TRUE,dim=1)
         } else {
-            r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(id)),vec=TRUE,dim=1)
+          # https://github.com/tidyverse/dplyr/issues/2184
+          # to avoid the bug, in case variable name id is the same as one of the column names
+          idididid=id
+            r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(idididid)),vec=TRUE,dim=1)
         }
         r.duplicated.content[which(!r.duplicated.content)]=NA
         
