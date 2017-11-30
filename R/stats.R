@@ -78,6 +78,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
                             levels_view1=character(),levels_view2=character(),
                             mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
         vars=colnames(x)
+        allFactorUniqueValues=character()
         for (var in vars) {
             v.variable=var
             v.class=class(x[[var]])
@@ -93,6 +94,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
                 col1=format.factor(freqtable[[1]])
                 col2=as.character(freqtable[[2]])
                 v.levels2=paste0(col1,'(',col2,')') %>% toString(width=width)
+                allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
             } else {
                 v.levels1=v.levels2=NA
             }
@@ -112,7 +114,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
         v.duplicated.content[which(!v.duplicated.content)]=NA
         v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
         results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
-
+        results=dplyr::add_row(results,levels_view1=allFactorUniqueValues %>% toString(width=width))
 
 
         # ez.savex(results0,file)

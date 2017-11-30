@@ -4,7 +4,7 @@
 \alias{ez.view}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.view(x, file = NULL, id = NULL, ...)
+ez.view(x, file = NULL, id = NULL, width = NULL, ...)
 }
 \arguments{
 \item{x}{a data frame}
@@ -12,6 +12,8 @@ ez.view(x, file = NULL, id = NULL, ...)
 \item{file}{a file name, if not NULL, will save more detailed variable information to an excel file}
 
 \item{id}{a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used}
+
+\item{width}{controls if too many factor levels to print, eg 300. NULL=unlimited}
 }
 \value{
 returns file path
