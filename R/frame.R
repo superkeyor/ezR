@@ -1194,7 +1194,7 @@ ez.sort = dplyr::arrange
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.unique = dplyr::distinct
 
-#' find the duplicated rows in a data frame or duplicated elements in a vector
+#' find the duplicated rows/cols in a data frame or duplicated elements in a vector
 #' @param x a data frame or a vector/col
 #' @param col restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
 #' \cr if x is a data frame, col is specified (e.g., "cond"), check that col only
@@ -1202,18 +1202,24 @@ ez.unique = dplyr::distinct
 #' \cr if x is not a data frame, col is ignored
 #' @param vec TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
 #' \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
+#' \cr This is useful for binding with other data frames
+#' @param dim 1=find duplicated rows, 2=find duplicated cols. When dim=2, para col is ignored. Dim has no effect when x is a vector
 #' @return return depends, see vec above
 #' \cr this is different from the built-in R \code{\link{duplicated}}
 #' \cr x <- c(1, 1, 4, 5, 4, 6)  duplicated(x) returns [1] FALSE TRUE FALSE FALSE TRUE FALSE
 #' \cr but ez.duplicated(x) returns [1] TRUE TRUE TRUE FALSE TRUE FALSE
+#' \cr Also, the function has a trick, so that duplicated cols could be checked, while the native duplicated cannot directly apply to cols. See https://stackoverflow.com/questions/9818125/
 #' @export
-ez.duplicated = function(x, col=NULL, vec=TRUE){
+ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1){
     if (is.data.frame(x) & !is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
         x = x[,col,drop=FALSE]
-    } else {
+    } else if (dim==1){
         x = x
+    } else if (dim==2) {
+        # trick from https://stackoverflow.com/a/33552742/2292993
+        x = as.list(x) # as.list applicable when x input is a vector as well
     }
     
     # https://stackoverflow.com/a/7854620/2292993
