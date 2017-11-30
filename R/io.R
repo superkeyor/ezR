@@ -242,17 +242,13 @@ ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, 
     # detach("package:xlsx", unload=TRUE)
 }
 
-#' save an xlsx file, alias of \code{\link{ez.savex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
-#' @param
-#' @return
-#' @examples
-#' (x, file, sheetName="Sheet1", row.names=FALSE,
-#'   col.names=TRUE, append=FALSE, showNA=TRUE)
+#' @rdname ez.savex2
 #' @export
 ez.writex2 = ez.savex2
 
 #' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
+#' @param withFilter T/F auto add excel filter
 #' @param creator A string specifying the workbook author
 #' @param sheetName Name of the worksheet
 #' @param gridLines A logical. If FALSE, the worksheet grid lines will be hidden.
@@ -291,52 +287,16 @@ ez.writex2 = ez.savex2
 #' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 #' @export
-ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, col.names=TRUE, asTable=FALSE, ...){
+ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, row.names=FALSE, col.names=TRUE, asTable=FALSE, ...){
     x = data.frame(x)
-    openxlsx::write.xlsx(x=x, file=file, asTable=asTable, sheetName=sheetName, ..., row.names=row.names, col.names=col.names)
+    openxlsx::write.xlsx(x=x, file=file, asTable=asTable, sheetName=sheetName, ..., withFilter=withFilter, row.names=row.names, col.names=col.names)
 }
 
-#' save an xlsx file, alias of \code{\link{ez.savex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
-#' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
-#' @param creator A string specifying the workbook author
-#' @param sheetName Name of the worksheet
-#' @param gridLines A logical. If FALSE, the worksheet grid lines will be hidden.
-#' @param startCol A vector specifiying the starting column(s) to write df
-#' @param startRow A vector specifiying the starting row(s) to write df
-#' @param xy An alternative to specifying startCol and startRow individually. A vector of the form c(startCol, startRow)
-#' @param colNames or col.names If TRUE, column names of x are written.
-#' @param rowNames or row.names If TRUE, row names of x are written.
-#' @param headerStyle Custom style to apply to column names.
-#' @param borders Either "surrounding", "columns" or "rows" or NULL. If "surrounding", a border is drawn around the data. If "rows", a surrounding border is drawn a border around each row. If "columns", a surrounding border is drawn with a border between each column. If "all" all cell borders are drawn.
-#' @param borderColour Colour of cell border
-#' @param borderStyle Border line style.
-#' @param overwrite Overwrite existing file (Defaults to TRUE as with write.table)
-#' @param asTable write using writeDataTable as opposed to writeData
-#' @return nothing
-#' @examples
-#' (x, file, sheetName="Sheet1", row.names=FALSE,
-#'   col.names=TRUE)
-#'
-#' ## write to working directory
-#' options("openxlsx.borderColour" = "#4F80BD") ## set default border colour
-#' write.xlsx(iris, file = "writeXLSX1.xlsx", colNames = TRUE, borders = "columns")
-#' write.xlsx(iris, file = "writeXLSX2.xlsx", colNames = TRUE, borders = "surrounding")
-#' 
-#' 
-#' hs <- createStyle(textDecoration = "BOLD", fontColour = "#FFFFFF", fontSize=12,
-#'                   fontName="Arial Narrow", fgFill = "#4F80BD")
-#' 
-#' write.xlsx(iris, file = "writeXLSX3.xlsx", colNames = TRUE, borders = "rows", headerStyle = hs)
-#' 
-#' ## Lists elements are written to individual worksheets, using list names as sheet names if available
-#' l <- list("IRIS" = iris, "MTCATS" = mtcars, matrix(runif(1000), ncol = 5))
-#' write.xlsx(l, "writeList1.xlsx")
-#' 
-#' ## different sheets can be given different parameters
-#' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
-#'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
+#' @rdname ez.savex
 #' @export
 ez.writex = ez.savex
+
+
 
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
 #'
