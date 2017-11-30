@@ -7,16 +7,16 @@
 \alias{ez.rmcols}
 \title{delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}}
 \usage{
-ez.del(df, cols)
+ez.del(df, cols = NULL)
 
-ez.delete(df, cols)
+ez.delete(df, cols = NULL)
 
-ez.rmcols(df, cols)
+ez.rmcols(df, cols = NULL)
 
-ez.rmcol(df, cols)
+ez.rmcol(df, cols = NULL)
 }
 \arguments{
-\item{cols}{sth like 'Month' or c('Month','Day')}
+\item{cols}{sth like 'Month' or c('Month','Day'). If NULL, auto delete/remove cols that are all NAs}
 }
 \value{
 returns a new df, old one does not change

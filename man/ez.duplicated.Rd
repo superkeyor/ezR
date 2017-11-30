@@ -2,9 +2,9 @@
 % Please edit documentation in R/frame.R
 \name{ez.duplicated}
 \alias{ez.duplicated}
-\title{find the duplicated rows in a data frame or duplicated elements in a vector}
+\title{find the duplicated rows/cols in a data frame or duplicated elements in a vector}
 \usage{
-ez.duplicated(x, col = NULL, vec = TRUE)
+ez.duplicated(x, col = NULL, vec = TRUE, dim = 1)
 }
 \arguments{
 \item{x}{a data frame or a vector/col}
@@ -15,15 +15,19 @@ ez.duplicated(x, col = NULL, vec = TRUE)
 \cr if x is not a data frame, col is ignored}
 
 \item{vec}{TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
-\cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE}
+\cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
+\cr This is useful for binding with other data frames}
+
+\item{dim}{1=find duplicated rows, 2=find duplicated cols. When dim=2, para col is ignored. Dim has no effect when x is a vector}
 }
 \value{
 return depends, see vec above
 \cr this is different from the built-in R \code{\link{duplicated}}
 \cr x <- c(1, 1, 4, 5, 4, 6)  duplicated(x) returns [1] FALSE TRUE FALSE FALSE TRUE FALSE
 \cr but ez.duplicated(x) returns [1] TRUE TRUE TRUE FALSE TRUE FALSE
+\cr Also, the function has a trick, so that duplicated cols could be checked, while the native duplicated cannot directly apply to cols. See https://stackoverflow.com/questions/9818125/
 }
 \description{
-find the duplicated rows in a data frame or duplicated elements in a vector
+find the duplicated rows/cols in a data frame or duplicated elements in a vector
 }
 

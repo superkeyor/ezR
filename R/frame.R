@@ -1253,7 +1253,7 @@ ez.split = dplyr::group_by
 ez.leftjoin = dplyr::left_join
 
 #' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
-#' @param cols sth like 'Month' or c('Month','Day')
+#' @param cols sth like 'Month' or c('Month','Day'). If NULL, auto delete/remove cols that are all NAs
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions
@@ -1265,8 +1265,15 @@ ez.leftjoin = dplyr::left_join
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.del = function(df,cols){
-    df[cols] = NULL
+ez.del = function(df,cols=NULL){
+    if (is.null(cols)) {
+        # https://stackoverflow.com/a/29269139/2292993
+        colNumsAllNAs = as.vector(which(colSums(is.na(df)) == nrow(df)))
+        cat(sprintf('%d cols contain all NAs: %s\nThey are auto removed now (if not 0).\n\n', length(colNumsAllNAs), toString(colnames(df)[colNumsAllNAs])))
+        df = dplyr::select(df,-colNumsAllNAs)
+    } else {
+        df[cols] = NULL
+    }
     return(df)
 }
 

@@ -4,21 +4,20 @@
 \alias{ez.view}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.view(x, file = NULL, print2screen = TRUE, show.frq = T, show.prc = T,
-  sort.by.name = F, ...)
+ez.view(x, file = NULL, id = NULL, ...)
 }
 \arguments{
 \item{x}{a data frame}
 
 \item{file}{a file name, if not NULL, will save more detailed variable information to an excel file}
 
-\item{print2screen}{whether to print the new row to string (auto separated by tab)}
+\item{id}{a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used}
 }
 \value{
 nothing to return (but will also )
 }
 \description{
-wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
+Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 }
 \seealso{
 \code{\link{ez.info}} \code{\link{ez.show}}
