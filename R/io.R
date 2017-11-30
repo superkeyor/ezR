@@ -248,6 +248,7 @@ ez.writex2 = ez.savex2
 
 #' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
+#' \cr Other parameters in \code{\link[openxlsx]{writeData}}
 #' @param withFilter T/F auto add excel filter
 #' @param creator A string specifying the workbook author
 #' @param sheetName Name of the worksheet
@@ -296,7 +297,24 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, 
 #' @export
 ez.writex = ez.savex
 
-
+#' Save multiple data frames to multiple sheets individually
+#' @param xlist a list of data frames. eg, list(sheetA=df1,sheetB=df2) where sheetA/B become sheet names; list(df1,df2) where it auto names Sheet1/2
+#' \cr Other parameters in \code{\link[openxlsx]{writeData}}
+#' @return returns index vector
+#' @export
+ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = FALSE, colNames = TRUE, ...) {
+    sheetNames = if (!is.null(names(xlist))) names(xlist) else paste0("Sheet",1:length(xlist))
+    wb <- openxlsx::createWorkbook(creator = 'openxlsx')
+    for (i in 1:length(xlist)) {
+        sheet = data.frame(xlist[[i]])
+        sheetName = sheetNames[i]
+        openxlsx::addWorksheet(wb, sheetName = sheetName)
+        openxlsx::writeData(wb, sheetName, sheet,
+          colNames = colNames, rowNames = rowNames, 
+          withFilter = withFilter, ...)
+    }
+    openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+}
 
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
 #'

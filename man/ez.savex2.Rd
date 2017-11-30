@@ -2,10 +2,14 @@
 % Please edit documentation in R/io.R
 \name{ez.savex2}
 \alias{ez.savex2}
+\alias{ez.writex2}
 \title{save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package}
 \usage{
 ez.savex2(x, file = "RData.xlsx", sheetName = "Sheet1", row.names = FALSE,
   showNA = FALSE, ...)
+
+ez.writex2(x, file = "RData.xlsx", sheetName = "Sheet1",
+  row.names = FALSE, showNA = FALSE, ...)
 }
 \description{
 save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package

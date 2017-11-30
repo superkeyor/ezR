@@ -2,13 +2,20 @@
 % Please edit documentation in R/io.R
 \name{ez.savex}
 \alias{ez.savex}
+\alias{ez.writex}
 \title{save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package}
 \usage{
-ez.savex(x, file = "RData.xlsx", sheetName = "Sheet1", row.names = FALSE,
-  col.names = TRUE, asTable = FALSE, ...)
+ez.savex(x, file = "RData.xlsx", sheetName = "Sheet1", withFilter = FALSE,
+  row.names = FALSE, col.names = TRUE, asTable = FALSE, ...)
+
+ez.writex(x, file = "RData.xlsx", sheetName = "Sheet1",
+  withFilter = FALSE, row.names = FALSE, col.names = TRUE,
+  asTable = FALSE, ...)
 }
 \arguments{
 \item{sheetName}{Name of the worksheet}
+
+\item{withFilter}{T/F auto add excel filter}
 
 \item{asTable}{write using writeDataTable as opposed to writeData}
 
@@ -41,6 +48,7 @@ nothing
 }
 \description{
 uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
+\cr Other parameters in \code{\link[openxlsx]{writeData}}
 }
 \examples{
 (x, file, sheetName="Sheet1", row.names=FALSE,
