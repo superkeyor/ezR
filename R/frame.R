@@ -302,6 +302,11 @@ ez.label.set = function(df,varname,label){
 ez.2character = function(x, col=NULL){
     if (is.data.frame(x) & is.null(col)){
         result = dplyr::mutate_if(x, is.factor, as.character)
+        # convert a column that is all numeric NAs to character NAs, for bind_rows
+        # https://github.com/tidyverse/dplyr/issues/2584
+        # use ifelse, not if_else because we know we are going to deal with different data types
+        # use & not &&, because we are vectorizing
+        result = dplyr::mutate_all(funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
     } else if (is.data.frame(x) & !is.null(col)) {
         x[[col]] = as.character(x[[col]])
         result=x
