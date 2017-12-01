@@ -2,7 +2,7 @@
 % Please edit documentation in R/basic.R
 \name{ez.num}
 \alias{ez.num}
-\title{convert a column (or all columns) in a data frame, or a vector into numeric type}
+\title{convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric}
 \usage{
 ez.num(x, col = NULL, force = FALSE, ...)
 }
@@ -22,7 +22,7 @@ returns a converted vector, data frame
 \cr \code{\link{ez.num}} keeps the same char as is
 }
 \description{
-convert a column (or all columns) in a data frame, or a vector into numeric type
+convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 }
 \details{
 Both value and variable label attributes will be removed when converting variables to characters.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/basic.R
 \name{ez.str}
 \alias{ez.str}
-\title{convert a column (or all columns) in a data frame, or a vector into character type}
+\title{convert a column (or all columns) in a data frame, or a vector into character type, call as.character}
 \usage{
 ez.str(x, col = NULL)
 }
@@ -17,7 +17,7 @@ ez.str(x, col = NULL)
 returns a character vector or a data frame with changed col(s)
 }
 \description{
-convert a column (or all columns) in a data frame, or a vector into character type
+convert a column (or all columns) in a data frame, or a vector into character type, call as.character
 }
 \details{
 Both value and variable label attributes will be removed when converting variables to characters.

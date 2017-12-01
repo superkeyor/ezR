@@ -64,7 +64,7 @@ ez.repo = function(repo=NULL){
     return(invisible(NULL))
 }
 
-#' convert a column (or all columns) in a data frame, or a vector into numeric type
+#' convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @param x a character vector, data frame, list, or a factor
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
@@ -139,7 +139,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
     return(result)
 }
 
-#' convert a column (or all columns) in a data frame, or a vector into character type
+#' convert a column (or all columns) in a data frame, or a vector into character type, call as.character
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
