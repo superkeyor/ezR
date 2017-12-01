@@ -64,10 +64,16 @@ ez.repo = function(repo=NULL){
     return(invisible(NULL))
 }
 
-#' sort of a wrapper of \code{\link{type.convert}}, alias ez.2num
+#' convert a column (or all columns) in a data frame, or a vector into numeric type
 #' @description Convert a character vector, data frame to logical, integer, numeric, complex or factor when appropriate.
 #' @param x a character vector, data frame, list, or a factor
-#' @return returns a converted vector
+#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
+#' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
+#' \cr        if x is not a data frame, col is ignored
+#' @param force T/F, if force, will try to convert everything (factor, etc) to character first then to numeric, (no warning for NA coerce)
+#' \cr else only convert a vec/col that only has string of num, eg '1'->1, see example for "gentle" output 
+#' @details Both value and variable label attributes will be removed when converting variables to characters.
+#' @return returns a converted vector, data frame
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
 #' \cr \code{\link{ez.num}} keeps the same char as is
 #' @details see \url{http://stackoverflow.com/a/22701462/2292993}
@@ -75,32 +81,94 @@ ez.repo = function(repo=NULL){
 #' @family data transformation functions
 #' @export
 #' @examples
-#' ez.num(c(1,'2','a',3))  # -> still factor
-#' ez.num(c(1,'2',3)) # -> int
-ez.num = function(x, ...){
+#' ez.num(c(1,'2','a',3))          # -> same vector
+#' ez.num(c(1,'2',3))              # -> 1 2 3  int vector
+#' ez.num(factor(c(1,'2','a',3)))  # -> 1 2 NA 3 int (warning is suppressed)
+#' 
+#' d <- data.frame(char = letters[1:5], 
+#'                 fake_char = as.character(1:5), 
+#'                 fac = factor(1:5), 
+#'                 char_fac = factor(letters[1:5]), 
+#'                 mixed_char = c(1,2,3,'4','f'),
+#'                 num = 1:5, stringsAsFactors = FALSE)
+#' #   char fake_char fac char_fac mixed_char num
+#' # 1    a         1   1        a          1   1
+#' # 2    b         2   2        b          2   2
+#' # 3    c         3   3        c          3   3
+#' # 4    d         4   4        d          4   4
+#' # 5    e         5   5        e          f   5
+#' sapply(d, class)
+#' #        char   fake_char         fac    char_fac  mixed_char         num 
+#' # "character" "character"    "factor"    "factor" "character"   "integer" 
+#' sapply(ez.num(d), class)
+#'        char   fake_char         fac    char_fac  mixed_char         num 
+#' "character"   "integer"    "factor"    "factor" "character"   "integer" 
+ez.num = function(x, col=NULL, force=FALSE, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
-        result = as.numeric(levels(x))[x]
-    } else if (is.data.frame(x)) {
+        # as.numeric(factor(5:10)) # not what you'd expect
+        # f <- factor(1:5)
+        # ## what you typically meant and want:
+        # as.numeric(as.character(f))
+        # ## the same, considerably (for long factors) more efficient:
+        # as.numeric(levels(f))[f]
+        # you get warning
+       if (force) result = suppressWarnings(as.numeric(levels(x))[x]) else result=x
+    } else if (is.data.frame(x) && is.null(col)) {
         # check before is.list, because a data frame is a list, but not the other way
         # https://stackoverflow.com/a/33050704/2292993
-        x[] = rapply(x, utils::type.convert, classes = "character", how = "replace", as.is = TRUE)
+        if (!force) {
+            x[] = rapply(x, utils::type.convert, classes = "character", how = "replace", as.is = TRUE)
+        } else {
+            x = dplyr::mutate_all(x, funs(suppressWarnings(as.numeric(as.character(.)))))
+        }
         result = x
+    } else if (is.data.frame(x) && !is.null(col)) {
+        # recursive to is.data.frame(x) && is.null(col)
+        x[col] = ez.num(x[col],force=force)
+        result=x
     } else if (is.list(x)){
-        result = utils::type.convert(as.character(unlist(x)), ...)
+        result = utils::type.convert(as.character(unlist(x)), as.is = TRUE, ...)
     } else {
-        result = utils::type.convert(x, ...)
+        # cannot pass factor to type.convert()
+        # utils::type.convert(c(1,2,'3'), as.is = F) -> int
+        # utils::type.convert(c(1,2,'3'), as.is = T) -> int
+        # utils::type.convert(c(1,2,'a'), as.is = F) -> fac  [1 2 a]
+        # utils::type.convert(c(1,2,'a'), as.is = T) -> vec  (1 2 a)
+        if (!force) result = utils::type.convert(x, as.is = TRUE, ...) else result=suppressWarnings(as.numeric(x))
     }
     return(result)
 }
 
-#' @rdname ez.num
+#' convert a column (or all columns) in a data frame, or a vector into character type
+#' @param x a data frame or a vector/col
+#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
+#' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
+#' \cr        if x is not a data frame, col is ignored
+#' @details Both value and variable label attributes will be removed when converting variables to characters.
+#' @examples
+#'
+#' @return returns a character vector or a data frame with changed col(s)
+#' @family data transformation functions
 #' @export
-ez.2num = ez.num
-
-#' alias of \code{\link{as.character}}
-#' @export
-ez.str = as.character
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+ez.str = function(x, col=NULL){
+    if (is.data.frame(x) && is.null(col)){
+        result = dplyr::mutate_all(x, as.character)
+    } else if (is.data.frame(x) && !is.null(col)) {
+        x[[col]] = as.character(x[[col]])
+        result=x
+    } else {
+        result = as.character(x)
+    }
+    return(result)
+}
 
 #' rev a str: 'abc'->'cba'
 #' @export
