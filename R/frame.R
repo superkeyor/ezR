@@ -1302,9 +1302,10 @@ ez.rmcol = ez.del
 #' @rdname ez.dropna
 #' @export
 ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
-    if (is.factor(df)) x=as.character(df)
-    if (is.vector(df)) {
-        x=df[!is.na(df)]
+    x=df
+    if (is.factor(x)) x=as.character(x)
+    if (is.vector(x)) {
+        x=x[!is.na(x)]
         cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
         if (is.factor(df)) x=as.factor(x)
         return(x)
