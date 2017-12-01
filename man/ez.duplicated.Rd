@@ -2,6 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.duplicated}
 \alias{ez.duplicated}
+\title{duplicated}
 \usage{
 ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
   ...)

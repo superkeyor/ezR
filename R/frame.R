@@ -1130,6 +1130,7 @@ ez.sort = dplyr::arrange
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.unique = dplyr::distinct
 
+#' duplicated
 #' @description find the duplicated rows/cols in a data frame or duplicated elements in a vector
 #' @param x a data frame or a vector/col
 #' @param col restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
