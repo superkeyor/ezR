@@ -9,7 +9,7 @@ ez.view(x, file = NULL, id = NULL, width = NULL, ...)
 \arguments{
 \item{x}{a data frame}
 
-\item{file}{a file name, if not NULL, will save more detailed variable information to an excel file}
+\item{file}{a file name, if NULL, a temp generated, will save more detailed variable information to an excel file}
 
 \item{id}{a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used}
 

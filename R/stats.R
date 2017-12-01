@@ -23,7 +23,7 @@ ez.describe = function(x){
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @param x a data frame
-#' @param file a file name, if not NULL, will save more detailed variable information to an excel file
+#' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @return returns file path
@@ -35,8 +35,16 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
     # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 
     # if duplicated col names, the following main codes would crash with weird reasons
+    # duplicated row names are fine
     if ( sum(ez.duplicated(colnames(x),vec=TRUE,dim=1))>0 ) {
         stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(x)[which(ez.duplicated(colnames(x),vec=TRUE,dim=1))] %>% toString))
+    }
+
+    temped=F
+    if(is.null(file)){
+        temped=T
+        file=tempfile(pattern = "view_", tmpdir = tempdir(), fileext = ".xlsx")
+        on.exit(unlink(file))
     }
 
     if (!is.null(file)) {
@@ -141,7 +149,9 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
           withFilter = TRUE, keepNA = FALSE)
         openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
 
-        # browseURL(file)
+        # give some time to open the file and then on.exit will delete it
+        # tempdir() is where it is
+        if (temped) {browseURL(file);ez.sleep(3)}  
         return(invisible(file))
     }
 }
