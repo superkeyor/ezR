@@ -491,15 +491,23 @@ ez.print = function(...,sep=''){
     cat(..., "\n", sep = sep)
 }
 
-#' print out a vector for easy manual copy/processing. 
+#' colorful print
+#' @param color string, eg, bold, italic, underline, strikethrough, black, red, green, yellow, blue, magenta, cyan, white, silver, bgWhite, bgGreen, bgCyan etc
+#' @export
+ez.pprint = function(string,color='green') {
+    cmd = sprintf('cat(crayon::%s("%s\n"))', color, string)
+    eval(parse(text = cmd))
+}
+
+#' format a vector for easy manual copy/processing. 
 #' @param vec a vector
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number)
 #' @return nothing, only print out. 
 #' \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
-#' @seealso \code{\link{ez.print}}
+#' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-ez.pprint = function(vec, quote=TRUE){
+ez.format.vector = function(vec, quote=TRUE){
     if (quote) {
         print(noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'")))
     } else {

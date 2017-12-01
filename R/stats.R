@@ -20,6 +20,19 @@ ez.describe = function(x){
     # flush.console()
 }
 
+#' compare two vectors, two dataframes
+#' @note nrow() for data frame, length() for vector
+#' @export
+ez.compare = function(lh,rh,...) {
+    if (is.data.frame(lh)) len=nrow else len=length
+
+    cat( sprintf('\t\t\t\tUnion: %d\n',len(dplyr::union(lh,rh,...))) )
+    cat( sprintf('\t\tLH: %d\t\t\t\tRH: %d\n',len(lh),len(rh)) )
+    cat( sprintf('\t\t\t\tInter: %d\n',len(dplyr::intersect(lh,rh,...))) )
+    cat('\n')
+    cat( sprintf('\t\tLH>: %d\t\t\t\t<RH: %d\n',len(dplyr::setdiff(lh,rh)),len(dplyr::setdiff(rh,lh))) )
+}
+
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @param x a data frame

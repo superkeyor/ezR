@@ -2,24 +2,14 @@
 % Please edit documentation in R/basic.R
 \name{ez.pprint}
 \alias{ez.pprint}
-\title{print out a vector for easy manual copy/processing.}
+\title{colorful print}
 \usage{
-ez.pprint(vec, quote = TRUE)
+ez.pprint(string, color = "green")
 }
 \arguments{
-\item{vec}{a vector}
-
-\item{quote}{TRUE/FALSE, whether add a quote around each element (switch for string or number)}
-}
-\value{
-nothing, only print out. 
-\cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
-\cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
+\item{color}{string, eg, bold, italic, underline, strikethrough, black, red, green, yellow, blue, magenta, cyan, white, silver, bgWhite, bgGreen, bgCyan etc}
 }
 \description{
-print out a vector for easy manual copy/processing.
-}
-\seealso{
-\code{\link{ez.print}}
+colorful print
 }
 
