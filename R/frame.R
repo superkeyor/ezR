@@ -377,7 +377,6 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 
 #' number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
 #' @description e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
-#' @description continous number<--categorical string/number
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x

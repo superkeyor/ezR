@@ -23,8 +23,6 @@ returns a numeric variable or a data frame with changed col(s)
 }
 \description{
 e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
-
-continous number<--categorical string/number
 }
 \details{
 opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link[sjmisc]{to_value}}
