@@ -27,7 +27,7 @@ ez.read = function(..., tolower=FALSE){
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @param
-#' @return
+#' @return returns file path
 #' @examples
 #' (x, file="RData.csv", row.names=FALSE, col.names=TRUE, append = FALSE, quote = TRUE, sep = ",",
 #'             na = "NA", dec = ".",
@@ -47,6 +47,7 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
         # because write.table can be slow for data frames with large numbers (hundreds or more) of columns
         write.table(x=x, file=file, row.names=row.names, col.names=col.names, na=na, ...)
     }
+    return(invisible(file))
 }
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
@@ -238,7 +239,7 @@ ez.writes = sjmisc::write_spss
 
 #' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param
-#' @return
+#' @return returns file path
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
@@ -250,6 +251,7 @@ ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, 
     if (row.names==FALSE) {rownames(x) <- NULL}
     xlsx::write.xlsx(x=x, file=file, sheetName=sheetName, ..., row.names=row.names, showNA=showNA)
     # detach("package:xlsx", unload=TRUE)
+    return(invisible(file))
 }
 
 #' @rdname ez.savex2
@@ -274,7 +276,7 @@ ez.writex2 = ez.savex2
 #' @param borderStyle Border line style.
 #' @param overwrite Overwrite existing file (Defaults to TRUE as with write.table)
 #' @param asTable write using writeDataTable as opposed to writeData
-#' @return nothing
+#' @return returns file path
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE)
@@ -301,6 +303,7 @@ ez.writex2 = ez.savex2
 ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, row.names=FALSE, col.names=TRUE, asTable=FALSE, ...){
     x = data.frame(x)
     openxlsx::write.xlsx(x=x, file=file, asTable=asTable, sheetName=sheetName, ..., withFilter=withFilter, row.names=row.names, col.names=col.names)
+    return(invisible(file))
 }
 
 #' @rdname ez.savex
@@ -310,7 +313,7 @@ ez.writex = ez.savex
 #' Save multiple data frames to multiple sheets individually
 #' @param xlist a list of data frames. eg, list(sheetA=df1,sheetB=df2) where sheetA/B become sheet names; list(df1,df2) where it auto names Sheet1/2
 #' \cr Other parameters in \code{\link[openxlsx]{writeData}}
-#' @return returns index vector
+#' @return returns file path
 #' @export
 ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = FALSE, colNames = TRUE, ...) {
     sheetNames = if (!is.null(names(xlist))) names(xlist) else paste0("Sheet",1:length(xlist))
@@ -324,6 +327,7 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = FA
           withFilter = withFilter, ...)
     }
     openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+    return(invisible(file))
 }
 
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
@@ -444,43 +448,7 @@ ez.savem <- function(fn, vars){
    eval(parse(text=f))
 }
 
-#' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
-#'
-#' seems column in a data frame should be atomic if factor does not work well.
-#' Writes .mat files to store R session data using the R.matlab package and
-#' takes care that logicals and atomic vectors are saved properly: currently,
-#' R.matlab does not write logicals and atomic vectors (not 1D arrays/ matrices)
-#' in a way that they can be opened properly in Matlab (logicals will not be
-#' stored and atomic vectors will be transposed in the Matlab session - but they
-#' appear untransposed when read back from the .mat file into R using
-#' R.matlab::readMat()). This function is a convenient wrapper for
-#' R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
-#' vectors when saving the matfile.
-#'
-#' @param fn file name, a character string, with or without '.mat'
-#'
-#' @param vars character vector containing a comma separated listing of
-#'   variables to be saved in the matfile. The variables have to exist in the
-#'   environment where the function was called from. eg. 'var1,var2,   var3' with or without (extra) space
-#'
-#' @export
-#'
-#' @examples
-#' A       <- matrix(c(2,3,4,2, 1,1,2,6, 8,3,9,7), 3, 4, byrow = TRUE)
-#' b       <- c(3, 5, 1, 9, 18, 2) # atomic vector 1x6
-#' cc      <- array(b, c(1, length(b))) # array vector 1x6
-#' dd      <- t(cc) # array vector 6x1
-#' myChar  <- c("from", "R", "to", "Matlab")
-#' bool    <- TRUE # logical
-#' k       <- FALSE
-#' l       <- FALSE
-#' fn      <- "mytestmat"
-#' vars    <- "A, b, cc, dd, myChar, bool, k, l"
-#' ez.writem(fn, vars)
-#' unlink(paste(fn, ".mat", sep = ""))
-#'
-#' @author Christoph Schmidt <christoph.schmidt@@med.uni-jena.de>
-# 17.12.15
+#' @rdname ez.savem
 #' @export
 ez.writem = ez.savem
 
