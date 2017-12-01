@@ -115,6 +115,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
         v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
         results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
         results=dplyr::mutate(results,missing_rate=missing/n)
+        results=ez.rncol(results,c('n'='nrow'))
         # no factors in the data frame!
         allFactorUniqueValues = if (length(allFactorUniqueValues)==0) NA else allFactorUniqueValues %>% toString(width=width)
         allFactorCounts = if (length(allFactorCounts)==0) NA else range(allFactorCounts,na.rm =T) %>% toString(width=width)
