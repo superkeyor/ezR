@@ -24,13 +24,21 @@ ez.describe = function(x){
 #' @note nrow() for data frame, length() for vector
 #' @export
 ez.compare = function(lh,rh,...) {
-    if (is.data.frame(lh)) len=nrow else len=length
+    if (is.data.frame(lh)) {
+            len=nrow
+            cat('comparing nrow for two data frames:\n\n')
+        } else {
+            len=length
+            cat('comparing length for two vectors:\n\n')
+        }
 
-    cat( sprintf('\t\t\t\tUnion: %d\n',len(dplyr::union(lh,rh,...))) )
-    cat( sprintf('\t\tLH: %d\t\t\t\tRH: %d\n',len(lh),len(rh)) )
-    cat( sprintf('\t\t\t\tInter: %d\n',len(dplyr::intersect(lh,rh,...))) )
+    cat( sprintf('\t\t\t\tUnion: %4.0f\n',len(dplyr::union(lh,rh,...))) )
+    cat( sprintf('\t\tLH: %4.0f\t\t\t\tRH: %4.0f\n',len(lh),len(rh)) )
+    cat( sprintf('\t\t\t\tInter: %4.0f\n',len(dplyr::intersect(lh,rh,...))) )
     cat('\n')
-    cat( sprintf('\t\tLH>: %d\t\t\t\t<RH: %d\n',len(dplyr::setdiff(lh,rh)),len(dplyr::setdiff(rh,lh))) )
+    cat( sprintf('\t\tLH>: %4.0f\t\t\t\t<RH: %4.0f\n',len(dplyr::setdiff(lh,rh,...)),len(dplyr::setdiff(rh,lh,...))) )
+    cat('set equal?\n')
+    print(setequal(lh,rh,...))
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
