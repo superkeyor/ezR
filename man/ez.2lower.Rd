@@ -24,7 +24,7 @@ convert all column names to lower case
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
-Other data.transformation.functions: \code{\link{ez.2character}},
+Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2value}},
   \code{\link{ez.2wide}}, \code{\link{ez.compute}},
@@ -37,7 +37,7 @@ Other data.transformation.functions: \code{\link{ez.2character}},
   \code{\link{ez.replace}}, \code{\link{ez.rncols}},
   \code{\link{ez.rncol}}, \code{\link{ez.select}},
   \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
-  \code{\link{ez.values.set}}
+  \code{\link{ez.str}}, \code{\link{ez.unique}},
+  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
 }
 

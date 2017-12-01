@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.2factor}
 \alias{ez.2factor}
-\title{wrapper of \code{\link[sjmisc]{to_factor}}}
+\title{number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]}
 \usage{
 ez.2factor(x, col = NULL, add.non.labelled = TRUE, drop.na = FALSE,
   ref.lvl = NULL, ...)
@@ -18,23 +18,24 @@ ez.2factor(x, col = NULL, add.non.labelled = TRUE, drop.na = FALSE,
 returns a factor with number as its levels or a data frame with changed col(s)
 }
 \description{
-continous number-->categorical number
-\cr converts a variable into a factor, but preserves variable and value label attributes.
-\cr more "gentle" than \code{\link{ez.2label}}; opposite of \code{\link{ez.2value}}
+ef->f, g/h->h, i=i, factor[x,y,z]<j/k
+}
+\details{
+wrapper of \code{\link[sjmisc]{to_factor}}
 }
 \examples{
+e=c(1,2); f=factor(1:2) 
+g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
+h=factor(c(0,0,1,1,1,0)); attr(h,'labels') <- c(boy=1,girl=0)
+i=factor(c('girl','girl','boy','boy','boy','girl'))
+j=c('x','y'); k=factor(c('x','y'))
 
+ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
+ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 }
 \seealso{
-\code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-\cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-\cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-\cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-\cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-\cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-\cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-
-Other data.transformation.functions: \code{\link{ez.2character}},
+Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
   \code{\link{ez.2lower}}, \code{\link{ez.2value}},
   \code{\link{ez.2wide}}, \code{\link{ez.compute}},
@@ -47,7 +48,7 @@ Other data.transformation.functions: \code{\link{ez.2character}},
   \code{\link{ez.replace}}, \code{\link{ez.rncols}},
   \code{\link{ez.rncol}}, \code{\link{ez.select}},
   \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
-  \code{\link{ez.values.set}}
+  \code{\link{ez.str}}, \code{\link{ez.unique}},
+  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
 }
 

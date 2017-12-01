@@ -76,7 +76,7 @@ ez.replace(data,'setosa','flower')
 \seealso{
 \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}}
 
-Other data.transformation.functions: \code{\link{ez.2character}},
+Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2lower}},
   \code{\link{ez.2value}}, \code{\link{ez.2wide}},
@@ -89,7 +89,7 @@ Other data.transformation.functions: \code{\link{ez.2character}},
   \code{\link{ez.rename}}, \code{\link{ez.rncols}},
   \code{\link{ez.rncol}}, \code{\link{ez.select}},
   \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
-  \code{\link{ez.values.set}}
+  \code{\link{ez.str}}, \code{\link{ez.unique}},
+  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
 }
 

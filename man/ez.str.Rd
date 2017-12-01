@@ -2,11 +2,46 @@
 % Please edit documentation in R/basic.R
 \name{ez.str}
 \alias{ez.str}
-\title{alias of \code{\link{as.character}}}
+\title{convert a column (or all columns) in a data frame, or a vector into character type}
 \usage{
-ez.str()
+ez.str(x, col = NULL)
+}
+\arguments{
+\item{x}{a data frame or a vector/col}
+
+\item{col}{if x is a data frame, col is specified (e.g., "cond"), convert that col only
+\cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
+\cr        if x is not a data frame, col is ignored}
+}
+\value{
+returns a character vector or a data frame with changed col(s)
 }
 \description{
-alias of \code{\link{as.character}}
+convert a column (or all columns) in a data frame, or a vector into character type
+}
+\details{
+Both value and variable label attributes will be removed when converting variables to characters.
+}
+\examples{
+
+}
+\seealso{
+\code{\link{ez.2char}}
+
+Other data.transformation.functions: \code{\link{ez.2char}},
+  \code{\link{ez.2factor}}, \code{\link{ez.2label}},
+  \code{\link{ez.2long}}, \code{\link{ez.2lower}},
+  \code{\link{ez.2value}}, \code{\link{ez.2wide}},
+  \code{\link{ez.compute}}, \code{\link{ez.del}},
+  \code{\link{ez.label.get}}, \code{\link{ez.label.set}},
+  \code{\link{ez.leftjoin}}, \code{\link{ez.move}},
+  \code{\link{ez.newcol}}, \code{\link{ez.num}},
+  \code{\link{ez.recode2}}, \code{\link{ez.recode}},
+  \code{\link{ez.recols}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
+  \code{\link{ez.select}}, \code{\link{ez.sort}},
+  \code{\link{ez.split}}, \code{\link{ez.unique}},
+  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
 }
 

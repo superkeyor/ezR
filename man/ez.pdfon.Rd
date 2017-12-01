@@ -19,8 +19,8 @@ additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts aft
 A4:     width 7(inches) height = 5
 Letter: 8.5 x 11
 ez.pdfon("Living_All.pdf",width=10,height=10,onefile=T)
-ez.describe(jd.result,"ageout_rural|group")
-ez.describe(jd.result,"n_rural|group")
+ez.plot(jd.result,"ageout_rural|group")
+ez.plot(jd.result,"n_rural|group")
 ez.pdfoff()
 }
 \seealso{

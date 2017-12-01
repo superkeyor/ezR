@@ -21,7 +21,4 @@ returns file path
 \description{
 Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 }
-\seealso{
-\code{\link{ez.info}} \code{\link{ez.show}}
-}
 
