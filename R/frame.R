@@ -1286,9 +1286,10 @@ ez.rmcols = ez.del
 ez.rmcol = ez.del
 
 #' keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others
+#' @description could also accept a vector/factor as input, if so, then col,n,reindex ignored (factor->char->factor)
 #' @param df a data frame
 #' @param col restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
-#' \cr default is NULL, search for all columns
+#' \cr default is NULL, search for all columns.
 #' @param n integer or vector, 0, c(3,5), number/range of NAs allowed.
 #' \cr If a number, the exact number of NAs kept
 #' \cr Range includes both ends 3<=n<=5
@@ -1301,6 +1302,15 @@ ez.rmcol = ez.del
 #' @rdname ez.dropna
 #' @export
 ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
+    if (is.factor(df)) x=as.character(df)
+    if (is.vector(df)) {
+        x=df[!is.na(df)]
+        cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
+        if (is.factor(df)) x=as.factor(x)
+        return(x)
+    }
+
+
     nbefore = nrow(df)
     if (!is.null(col)) {
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments

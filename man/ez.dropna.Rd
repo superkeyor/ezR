@@ -13,7 +13,7 @@ ez.dropna(df, col = NULL, n = 0, reindex = TRUE)
 \item{df}{a data frame}
 
 \item{col}{restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
-\cr default is NULL, search for all columns}
+\cr default is NULL, search for all columns.}
 
 \item{n}{integer or vector, 0, c(3,5), number/range of NAs allowed.
 \cr If a number, the exact number of NAs kept
@@ -29,7 +29,7 @@ ez.dropna(df, col = NULL, n = 0, reindex = TRUE)
 returns a new df with rows that have NA(s) removed
 }
 \description{
-keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others
+could also accept a vector/factor as input, if so, then col,n,reindex ignored (factor->char->factor)
 
 alias ez.na.keep, ez.dropna
 }
