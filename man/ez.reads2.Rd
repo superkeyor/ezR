@@ -5,16 +5,19 @@
 \title{THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. For a more perfect function, use ez.reads. This function kept as an archive just in case.
 wrapper of \code{\link[sjmisc]{read_spss}}. read spss .sav file with haven package}
 \usage{
-ez.reads2(path, atm2fac = TRUE, usrna = TRUE, tolower = FALSE, ...)
+ez.reads2(path, atm2fac = TRUE, usrna = TRUE, tolower = FALSE,
+  stringsAsFactors = TRUE, ...)
 }
 \arguments{
 \item{path}{File path to the data file}
 
-\item{atm2fac}{if TRUE, atomic (with a label/attribute) to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char always to factor regardless)}
+\item{atm2fac}{if TRUE, atomic (with a label/attribute) to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char to factor regardless when stringsAsFactors=T)}
 
 \item{usrna}{if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
 \item{tolower}{whether to convert all column names to lower case}
+
+\item{stringsAsFactors}{T/F}
 }
 \description{
 would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'atm2fac' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)

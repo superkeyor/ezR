@@ -4,13 +4,16 @@
 \alias{ez.readx2}
 \title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces}
 \usage{
-ez.readx2(file, sheetIndex = 1, tolower = FALSE, ...)
+ez.readx2(file, sheetIndex = 1, tolower = FALSE, stringsAsFactors = TRUE,
+  ...)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
+
+\item{stringsAsFactors}{T/F}
 }
 \value{
-in the returned data frame, string always to factor
+when stringsAsFactors=T, in the returned data frame, string to factor
 \cr number stored as text in excel (->string) -> factor
 }
 \description{

@@ -4,6 +4,13 @@
 # options(warn=-1)  # turn off warning
 # options(warn=0)  # turn back on warning
 
+#' open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
+#' @param
+#' @return
+#' @examples
+#' @export
+ez.open = browseURL
+
 #' alias of \code{\link{stop}}
 #' @param
 #' @return

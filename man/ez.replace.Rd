@@ -20,11 +20,13 @@ returns a new df, old one does not change
 }
 \description{
 replace within one or more than one columns, or entire data frame (ie, all columns)
-\cr smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
-\cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
-\cr the "==" syntax within "which()" could be modified 
-\cr
-\cr when col not provided (see param, note, example below), internally calling dplyr::mutate_all(ifelse()), therefore the change of data type follows mutate()
+\cr smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
+\cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval   
+\cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
+\cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        #a changes a to char as well
+\cr a=c(1,2,3); a[which(a==4)] <-3.1; a          #a changes a to double
+\cr bottom line: the new val determines outcome even without match
+\cr But my script protects that; data type remains unchanged if there is no match
 }
 \note{
 when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
@@ -55,7 +57,7 @@ ez.replace(data,'a',1,'111') \%>\% .$a
 ez.replace(data,'a',1,'abc') \%>\% .$a
           # a was numeric, now is character
 
-data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
+data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data[4,'Species']='versicolor'; data[6,'Species']='virginica'; data['TV']='COBY'
 ez.replace(data,c('Sepal.Width','Petal.Length','Petal.Width','Species'),NA,3.1415)
 ez.replace(data,NA,3.1415)
           # Species was factor, now is numeric (factor->numeric)
@@ -64,8 +66,12 @@ ez.replace(data,NA,'replaced')
           # Species was factor, now is char (factor->char of num)
 ez.replace(data,5.1,3.14)
           # Sepal.Length was numeric, now is still numeric
+ez.replace(data,'TV','COBY','Mac')
+          # TV was char, now is still char
 ez.replace(data,'COBY','Mac')
           # TV was char, now is still char
+ez.replace(data,'setosa','flower')
+          # Species was factor, now is still factor (notice, levels changed)
 }
 \seealso{
 \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}}

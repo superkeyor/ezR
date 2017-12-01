@@ -4,7 +4,8 @@
 \alias{ez.reads}
 \title{read spss .sav file with foreign package}
 \usage{
-ez.reads(file, atm2fac = 2, usrna = TRUE, tolower = FALSE, ...)
+ez.reads(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
+  stringsAsFactors = TRUE, ...)
 }
 \arguments{
 \item{atm2fac}{c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Regardless, char always to factor.
@@ -15,11 +16,13 @@ ez.reads(file, atm2fac = 2, usrna = TRUE, tolower = FALSE, ...)
 \item{usrna}{if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well.}
 
 \item{tolower}{whether to convert all column names to lower case}
+
+\item{stringsAsFactors}{T/F}
 }
 \description{
 internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). 
 \cr SPSS numeric -> R numeric
-\cr SPSS string (could be string of num) -> R character -> R factor
+\cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
 \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
 \cr See param for more other details.
 }

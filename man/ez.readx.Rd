@@ -4,13 +4,15 @@
 \alias{ez.readx}
 \title{read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}}
 \usage{
-ez.readx(file, sheet = 1, tolower = FALSE, ...)
+ez.readx(file, sheet = 1, tolower = FALSE, stringsAsFactors = TRUE, ...)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
+
+\item{stringsAsFactors}{T/F}
 }
 \value{
-in the returned data frame, string always to factor
+when stringsAsFactors=T, in the returned data frame, string to factor
 \cr number stored as text in excel (->string) -> factor
 }
 \description{
