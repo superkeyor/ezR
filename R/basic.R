@@ -151,13 +151,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 #' @return returns a character vector or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+#' @seealso \code{\link{ez.2char}}
 ez.str = function(x, col=NULL){
     if (is.data.frame(x) && is.null(col)){
         result = dplyr::mutate_all(x, as.character)
