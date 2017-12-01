@@ -306,7 +306,7 @@ ez.2character = function(x, col=NULL){
         # https://github.com/tidyverse/dplyr/issues/2584
         # use ifelse, not if_else because we know we are going to deal with different data types
         # use & not &&, because we are vectorizing
-        result = dplyr::mutate_all(funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
+        result = dplyr::mutate_all(result,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
     } else if (is.data.frame(x) & !is.null(col)) {
         x[[col]] = as.character(x[[col]])
         result=x
@@ -745,11 +745,13 @@ ez.recode2 = function(df, varName, recodes){
 
 #' replace a single value in data frame with another value
 #' @description replace within one or more than one columns, or entire data frame (ie, all columns)
-#' \cr smilar to \code{\link{ez.recode}} numeric->char, char->char, factor->factor
-#' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
-#' \cr the "==" syntax within "which()" could be modified 
-#' \cr
-#' \cr when col not provided (see param, note, example below), internally calling dplyr::mutate_all(ifelse()), therefore the change of data type follows mutate()
+#' \cr smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
+#' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval   
+#' \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
+#' \cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        #a changes a to char as well
+#' \cr a=c(1,2,3); a[which(a==4)] <-3.1; a          #a changes a to double
+#' \cr bottom line: the new val determines outcome even without match
+#' \cr But my script protects that; data type remains unchanged if there is no match
 #' @param df data frame
 #' @param col column name in string (not numbers), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used
 #' @param oldval old value (e.g., -Inf, NA), can only be single, not multiple/vector. Note would not differentiate 5.0 and 5
@@ -785,7 +787,7 @@ ez.recode2 = function(df, varName, recodes){
 #' ez.replace(data,'a',1,'abc') %>% .$a
 #'           # a was numeric, now is character
 #' 
-#' data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data['TV']='COBY'
+#' data=iris[1:10,]; data[1,2]=NA; data[2,5]=NA; data[4,'Species']='versicolor'; data[6,'Species']='virginica'; data['TV']='COBY'
 #' ez.replace(data,c('Sepal.Width','Petal.Length','Petal.Width','Species'),NA,3.1415)
 #' ez.replace(data,NA,3.1415)
 #'           # Species was factor, now is numeric (factor->numeric)
@@ -794,33 +796,34 @@ ez.recode2 = function(df, varName, recodes){
 #'           # Species was factor, now is char (factor->char of num)
 #' ez.replace(data,5.1,3.14)
 #'           # Sepal.Length was numeric, now is still numeric
+#' ez.replace(data,'TV','COBY','Mac')
+#'           # TV was char, now is still char
 #' ez.replace(data,'COBY','Mac')
 #'           # TV was char, now is still char
+#' ez.replace(data,'setosa','flower')
+#'           # Species was factor, now is still factor (notice, levels changed)
 ez.replace = function(df, col, oldval, newval=NULL){
     # four parameters passed
     if (!is.null(newval)) {
         cols = col
         for (col in cols) {
-            # for factor, you cannot directly assign, otherwise get "invalid factor level, NA generated"
-            if (is.factor(df[[col]])) {
-                df[[col]]=as.character(df[[col]])
-                if (is.na(oldval)) {
+            # for factor, you cannot directly assign if the new val is not alredy in the levels, otherwise get "invalid factor level, NA generated"
+            factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
+            if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
+                
+            if (is.na(oldval)) {
+                if (length(which(is.na(df[[col]]))) > 0) {
                     cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
                     df[[col]][which(is.na(df[[col]]))] <- newval
-                } else {
-                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
-                    df[[col]][which(df[[col]]==oldval)] <- newval
                 }
-                df[[col]]=as.factor(df[[col]])
             } else {
-                if (is.na(oldval)) {
-                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
-                    df[[col]][which(is.na(df[[col]]))] <- newval
-                } else {
+                if (length(which(df[[col]]==oldval)) > 0) {
                     cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
                     df[[col]][which(df[[col]]==oldval)] <- newval
                 }
             }
+
+            if (factored) {df[[col]]=as.factor(df[[col]])}
         }
 
     # three parameters passed        
@@ -828,14 +831,21 @@ ez.replace = function(df, col, oldval, newval=NULL){
         # trick to recognize parameters
         newval=oldval;oldval=col
         if (is.na(oldval)) {
-            # the dot here, I think, refers to each column/cell, not related to . for %>%
-            # mutate() will somehow auto convert columns of factor
             cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(is.na(df))), as.character(oldval), as.character(newval)))
-            df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
+            # the dot here, I think, refers to each column, not related to . for %>%
+            # mutate() will somehow auto convert columns of factor but in a bad way. Use my own function to convert factor to char
+            # df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
         } else {
             cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(df==oldval,na.rm=TRUE)), as.character(oldval), as.character(newval)))
-            df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
+            # df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
         }
+        # recursive call, but suppress output
+        # https://stackoverflow.com/questions/2723034/suppress-one-commands-output-in-r
+        # notice the invisible(capture.output(expr)) does not work within a function which returns some value and you want to use this value
+        allcols=colnames(df)
+        sink("/dev/null")
+        df = ez.replace(df,allcols,oldval,newval)
+        sink()
     }
     return(df)
 }
