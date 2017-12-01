@@ -26,10 +26,10 @@ ez.describe = function(x){
 ez.compare = function(lh,rh,...) {
     if (is.data.frame(lh)) {
             len=nrow
-            cat('comparing nrow for two data frames:\n\n')
+            cat(sprintf('comparing nrow for two data frames: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
         } else {
             len=length
-            cat('comparing length for two vectors:\n\n')
+            cat(sprintf('comparing length for two vectors: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
         }
 
     cat( sprintf('\t\t\t\tUnion: %4.0f\n',len(dplyr::union(lh,rh,...))) )
