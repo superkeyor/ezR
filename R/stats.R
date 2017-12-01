@@ -34,6 +34,11 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
     # do not need, my own is better
     # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 
+    # if duplicated col names, the following main codes would crash with weird reasons
+    if ( sum(ez.duplicated(colnames(x),vec=TRUE,dim=1))>0 ) {
+        stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(x)[which(ez.duplicated(colnames(x),vec=TRUE,dim=1))] %>% toString))
+    }
+
     if (!is.null(file)) {
         # row summary
         r.rowname=rownames(x)

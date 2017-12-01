@@ -44,7 +44,7 @@ ez.writex(x, file = "RData.xlsx", sheetName = "Sheet1",
 \item{overwrite}{Overwrite existing file (Defaults to TRUE as with write.table)}
 }
 \value{
-nothing
+returns file path
 }
 \description{
 uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.

@@ -7,6 +7,9 @@
 ez.save(x, file = "RData.csv", row.names = FALSE, col.names = TRUE,
   na = "", ...)
 }
+\value{
+returns file path
+}
 \description{
 wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 }

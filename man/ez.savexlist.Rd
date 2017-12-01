@@ -12,7 +12,7 @@ ez.savexlist(xlist, file = "RData.xlsx", withFilter = TRUE,
 \cr Other parameters in \code{\link[openxlsx]{writeData}}}
 }
 \value{
-returns index vector
+returns file path
 }
 \description{
 Save multiple data frames to multiple sheets individually
