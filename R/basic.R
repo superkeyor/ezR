@@ -65,7 +65,6 @@ ez.repo = function(repo=NULL){
 }
 
 #' convert a column (or all columns) in a data frame, or a vector into numeric type
-#' @description Convert a character vector, data frame to logical, integer, numeric, complex or factor when appropriate.
 #' @param x a character vector, data frame, list, or a factor
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x

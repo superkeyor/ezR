@@ -22,7 +22,7 @@ returns a converted vector, data frame
 \cr \code{\link{ez.num}} keeps the same char as is
 }
 \description{
-Convert a character vector, data frame to logical, integer, numeric, complex or factor when appropriate.
+convert a column (or all columns) in a data frame, or a vector into numeric type
 }
 \details{
 Both value and variable label attributes will be removed when converting variables to characters.
