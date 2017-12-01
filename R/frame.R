@@ -282,6 +282,7 @@ ez.label.set = function(df,varname,label){
 }
 
 #' convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor
+#' @description factor 2 char
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only.
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible factor cols in x
@@ -635,69 +636,8 @@ ez.recode = function(df, varName, recodes){
     return(df)
 }
 
-#' recode
-#' @description Recodes one single according to a set of rules
-#' \cr\cr ez.recode replaces the original var with recoded var;
-#' \cr ez.recode2 saves orignal var as var_ori, and then recodes var
-#' \cr see also \code{\link{ez.replace}}
-#' @param df data.frame to be recoded
-#' @param varName the name of var to be recoded, must be a string in quotes ""
-#' @param recodes Definition of the recoding rules. See details
-#' @details recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
-#' \itemize{
-#'  \item{}{The simplest codes one value to another. If we wish to recode 1 into 2, we could use the rule "1=2;".}
-#'  \item{}{A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1")}
-#'  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA")}
-#' }
-#' \cr Works with characters/factors as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
-#' \cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
-#' \cr but number to character works directly, char->char, factor->factor
-#' \cr for factors, no need to reset levels (auto reset)
-#' \cr The conclusion is: numeric<->numeric without quote
-#' \cr but if newval is quoted character, then numeric->char, char->char, factor->factor
-#' \cr See the example section for more detail.
-#'
-#' @note Please note following behaviours of the function:
-#'       \itemize{
-#'         \item the \code{"else"}-token should be the last argument in the \code{recodes}-string.
-#'         \item the \code{"else"}-token is optional. if not specified, simply copy over else.
-#'         \item if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
-#'         \item hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well
-#'         \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
-#'         \item the \code{\link[sjmisc]{rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
-#' }
-#'
-#' @author Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
-#' @examples
-#' data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
-#' ez.recode(data, "a", "lo:0 = 0;0:hi = 1;")
-#' ez.recode(data, "b", "lo:0 = 0;0:hi = 1;")
-#' ez.recode(data, "a", "lo:0 = 'low';0:hi = 1;")  
-#'          #a was numeric type, now is character type 
-#'          #note: for hi=1, the 1 is not even quoted
-#'          #can be quoted hi='1', but it does not matter here
-#' data <- ez.recode(data,"male", "1 = 'Male';FALSE = 'Female';else = NA;")
-#'          #both 1 and TRUE = 'Male' work
-#'          #the last semicolon; after NA is not necessary
-#'          #male was initially a logic type, now is a character type
-#'
-#' data=data.frame(a=c('r1','r2'))
-#' ez.recode(data,'a','"r1"="3"')
-#'          # a was factor wih level ("r1","r2"), now still a factor, with level ("3","r2")
-#' ez.recode(data,'a','"r1"=3')
-#'          # a was factor wih level ("r1","r2"), now still a factor, with level ("3","r2")
-#' ez.recode(data,'a','"r1"=3;"r2"=4')
-#'          # a was factor wih level ("r1","r2"), now still a factor, with level ("3","4")
-#' @return returns a new df, old one does not change
-#' @family data transformation functions
+#' @rdname ez.recode
 #' @export
-#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.recode2 = function(df, varName, recodes){
     recodes = gsub("min","Lo",recodes,fixed=True)
     recodes = gsub("max","Hi",recodes,fixed=True)
@@ -1190,7 +1130,7 @@ ez.sort = dplyr::arrange
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.unique = dplyr::distinct
 
-#' find the duplicated rows/cols in a data frame or duplicated elements in a vector
+#' @description find the duplicated rows/cols in a data frame or duplicated elements in a vector
 #' @param x a data frame or a vector/col
 #' @param col restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
 #' \cr if x is a data frame, col is specified (e.g., "cond"), check that col only
@@ -1200,13 +1140,15 @@ ez.unique = dplyr::distinct
 #' \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
 #' \cr This is useful for binding with other data frames
 #' @param dim 1=find duplicated rows, 2=find duplicated cols. When dim=2, para col is ignored. Dim has no effect when x is a vector
-#' @return return depends, see vec above
+#' @param incomparables a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
+#' and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.
+#' @return return depends, see vec above (By default, missing values are regarded as equal, to avoid that, pass incomparables=NA)
 #' \cr this is different from the built-in R \code{\link{duplicated}}
 #' \cr x <- c(1, 1, 4, 5, 4, 6)  duplicated(x) returns [1] FALSE TRUE FALSE FALSE TRUE FALSE
 #' \cr but ez.duplicated(x) returns [1] TRUE TRUE TRUE FALSE TRUE FALSE
 #' \cr Also, the function has a trick, so that duplicated cols could be checked, while the native duplicated cannot directly apply to cols. See https://stackoverflow.com/questions/9818125/
 #' @export
-ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1){
+ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, ...){
     if (is.data.frame(x) & !is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
@@ -1219,7 +1161,7 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1){
     }
     
     # https://stackoverflow.com/a/7854620/2292993
-    result = duplicated(x) | duplicated(x, fromLast=TRUE)
+    result = duplicated(x,incomparables=incomparables, ...) | duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
     if (!vec) {result = data.frame(Duplicated=result)}
     return(result)
 }
@@ -1287,7 +1229,7 @@ ez.rmcol = ez.del
 
 #' keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others
 #' @description could also accept a vector/factor as input, if so, then col,n,reindex ignored (factor->char->factor)
-#' @param df a data frame
+#' @param x a data frame, or a vector
 #' @param col restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
 #' \cr default is NULL, search for all columns.
 #' @param n integer or vector, 0, c(3,5), number/range of NAs allowed.
@@ -1298,11 +1240,11 @@ ez.rmcol = ez.del
 #' \cr eg, original row.names() is 1, 2, 3, then drop row 2
 #' \cr if not reindex, new index is 1, 3
 #' \cr if reindex, new index is 1, 2
-#' @return returns a new df with rows that have NA(s) removed
+#' @return returns a new df with rows that have NA(s) removed, or a new vector/factor without NAs
 #' @rdname ez.dropna
 #' @export
-ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
-    x=df
+ez.na.keep = function(x, col=NULL, n=0, reindex=TRUE){
+    df=x
     if (is.factor(x)) x=as.character(x)
     if (is.vector(x)) {
         x=x[!is.na(x)]
@@ -1311,7 +1253,7 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
         return(x)
     }
 
-
+    df=x
     nbefore = nrow(df)
     if (!is.null(col)) {
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
@@ -1351,7 +1293,6 @@ ez.na.keep = function(df, col=NULL, n=0, reindex=TRUE){
     return(result)
 }
 
-#' alias ez.na.keep, ez.dropna
 #' @rdname ez.dropna
 #' @export
 ez.dropna = ez.na.keep

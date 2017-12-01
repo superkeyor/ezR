@@ -50,15 +50,15 @@ ez.compare = function(lh,rh,...) {
 #' @return returns file path
 #' @examples
 #' @export
-ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
+ez.view = function(x, file=NULL, id=NULL, width=NULL, incomparables=FALSE, ...){
     # ez.view = function(x, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 
     # if duplicated col names, the following main codes would crash with weird reasons
     # duplicated row names are fine
-    if ( sum(ez.duplicated(colnames(x),vec=TRUE,dim=1))>0 ) {
-        stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(x)[which(ez.duplicated(colnames(x),vec=TRUE,dim=1))] %>% toString))
+    if ( sum(ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1))>0 ) {
+        stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(x)[which(ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
     }
 
     temped=F
@@ -77,16 +77,16 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
             idname=x[,id]
         }
 
-        r.duplicated.idname=ez.duplicated(idname,vec=TRUE,dim=1)
+        r.duplicated.idname=ez.duplicated(idname,vec=TRUE,incomparables=incomparables,dim=1)
         r.duplicated.idname[which(!r.duplicated.idname)]=NA
         # check duplicated row except the idname column
         if (is.null(id)) {
-            r.duplicated.content=ez.duplicated(x,vec=TRUE,dim=1)
+            r.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=1)
         } else {
           # https://github.com/tidyverse/dplyr/issues/2184
           # to avoid the bug, in case variable name id is the same as one of the column names
           idididid=id
-            r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(idididid)),vec=TRUE,dim=1)
+            r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1)
         }
         r.duplicated.content[which(!r.duplicated.content)]=NA
         
@@ -137,9 +137,9 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
             }
             results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
         }
-        v.duplicated.varname=ez.duplicated(colnames(x),vec=TRUE,dim=1)
+        v.duplicated.varname=ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1)
         v.duplicated.varname[which(!v.duplicated.varname)]=NA
-        v.duplicated.content=ez.duplicated(x,vec=TRUE,dim=2)
+        v.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=2)
         v.duplicated.content[which(!v.duplicated.content)]=NA
         v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
         results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
