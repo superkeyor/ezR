@@ -1130,8 +1130,8 @@ ez.sort = dplyr::arrange
 ez.unique = dplyr::distinct
 
 #' duplicated
-#' @description find the duplicated rows/cols in a data frame or duplicated elements in a vector
-#' @param x a data frame or a vector/col
+#' @description find the duplicated rows/cols in a data frame or duplicated elements in a vector of any data type (factor, char, numeric)
+#' @param x a data frame or a vector/col of any data type (factor, char, numeric)
 #' @param col restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
 #' \cr if x is a data frame, col is specified (e.g., "cond"), check that col only
 #' \cr if x is a data frame, col is unspecified (i.e., NULL default), check all cols in x
@@ -1139,7 +1139,10 @@ ez.unique = dplyr::distinct
 #' @param vec TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
 #' \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
 #' \cr This is useful for binding with other data frames
-#' @param dim 1=find duplicated rows, 2=find duplicated cols. When dim=2, para col is ignored. Dim has no effect when x is a vector
+#' @param value TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
+#' The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
+#' Ignore/Overwrite vec=T/F. 
+#' @param dim 1=find duplicated rows, 2=find duplicated cols. dim has no effect when x is a vector
 #' @param incomparables a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
 #' and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.
 #' @return return depends, see vec above (By default, missing values are regarded as equal, to avoid that, pass incomparables=NA)
@@ -1148,21 +1151,36 @@ ez.unique = dplyr::distinct
 #' \cr but ez.duplicated(x) returns [1] TRUE TRUE TRUE FALSE TRUE FALSE
 #' \cr Also, the function has a trick, so that duplicated cols could be checked, while the native duplicated cannot directly apply to cols. See https://stackoverflow.com/questions/9818125/
 #' @export
-ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, ...){
+ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, value=FALSE, ...){
     if (is.data.frame(x) & !is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
         x = x[,col,drop=FALSE]
-    } else if (dim==1){
+    }
+
+    if (is.data.frame(x) & dim==1){
         x = x
-    } else if (dim==2) {
+    } else if (is.data.frame(x) & dim==2) {
         # trick from https://stackoverflow.com/a/33552742/2292993
-        x = as.list(x) # as.list applicable when x input is a vector as well
+        xx=x
+        x = as.list(x) # as.list applicable when x input is a vector as well, but vector x will not go through here
     }
     
     # https://stackoverflow.com/a/7854620/2292993
     result = duplicated(x,incomparables=incomparables, ...) | duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
-    if (!vec) {result = data.frame(Duplicated=result)}
+    
+    if (value==TRUE) {
+        if (is.data.frame(x) & dim==2) {
+            result=xx[which(result)]
+        } else if (is.data.frame(x) & dim==1) {
+            result=x[which(result),,drop=FALSE]
+        } else {
+            result=x[which(result)]
+        }
+    } else if (!vec) {
+        result = data.frame(Duplicated=result)
+    }
+
     return(result)
 }
 

@@ -5,10 +5,10 @@
 \title{duplicated}
 \usage{
 ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
-  ...)
+  value = FALSE, ...)
 }
 \arguments{
-\item{x}{a data frame or a vector/col}
+\item{x}{a data frame or a vector/col of any data type (factor, char, numeric)}
 
 \item{col}{restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
 \cr if x is a data frame, col is specified (e.g., "cond"), check that col only
@@ -19,10 +19,14 @@ ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
 \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
 \cr This is useful for binding with other data frames}
 
-\item{dim}{1=find duplicated rows, 2=find duplicated cols. When dim=2, para col is ignored. Dim has no effect when x is a vector}
+\item{dim}{1=find duplicated rows, 2=find duplicated cols. dim has no effect when x is a vector}
 
 \item{incomparables}{a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
 and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.}
+
+\item{value}{TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
+The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
+Ignore/Overwrite vec=T/F.}
 }
 \value{
 return depends, see vec above (By default, missing values are regarded as equal, to avoid that, pass incomparables=NA)
@@ -32,6 +36,6 @@ return depends, see vec above (By default, missing values are regarded as equal,
 \cr Also, the function has a trick, so that duplicated cols could be checked, while the native duplicated cannot directly apply to cols. See https://stackoverflow.com/questions/9818125/
 }
 \description{
-find the duplicated rows/cols in a data frame or duplicated elements in a vector
+find the duplicated rows/cols in a data frame or duplicated elements in a vector of any data type (factor, char, numeric)
 }
 
