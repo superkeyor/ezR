@@ -281,62 +281,59 @@ ez.label.set = function(df,varname,label){
     return(df)
 }
 
-#' convert a factor column (or all factor columns) in a data frame into character type
+#' convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor
 #' @param x a data frame or a vector/col
-#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
-#' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
+#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only.
+#' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible factor cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
 #' @examples
-#'
+#' @seealso \code{\link{ez.str}}
 #' @return returns a character vector or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.2character = function(x, col=NULL){
+ez.2char = function(x, col=NULL){
+    result=x
     if (is.data.frame(x) & is.null(col)){
         result = dplyr::mutate_if(x, is.factor, as.character)
-        # convert a column that is all numeric NAs to character NAs, for bind_rows
-        # https://github.com/tidyverse/dplyr/issues/2584
-        # use ifelse, not if_else because we know we are going to deal with different data types
-        # use & not &&, because we are vectorizing
-        result = dplyr::mutate_all(result,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
+        # # convert a column that is all numeric NAs to character NAs, for bind_rows
+        # # https://github.com/tidyverse/dplyr/issues/2584
+        # # use ifelse, not if_else because we know we are going to deal with different data types
+        # # use & not &&, because we are vectorizing
+        # result = dplyr::mutate_all(result,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
     } else if (is.data.frame(x) & !is.null(col)) {
-        x[[col]] = as.character(x[[col]])
-        result=x
+        if (is.factor(x[[col]])) {
+            x[[col]] = as.character(x[[col]])
+            result=x
+        }
     } else {
-        result = as.character(x)
+        if (is.factor(x)) result = as.character(x)
     }
     return(result)
 }
 
-#' wrapper of \code{\link[sjmisc]{to_label}}
-#' @description continous/factorial number-->factorial level string, say, gender=0/1-->male/female
-#' \cr more "agressive" than \code{\link{ez.2factor}}; opposite of \code{\link{ez.2value}}
+#' number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
+#' @description e=e, f=f, g/h/i->i, j=j, k=k
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @param drop.is_na ignore is_na attr, if yes, treat as NA
 #' @details Both value and variable label attributes will be removed when converting variables to factors.
+#'\cr wrapper of \code{\link[sjmisc]{to_label}}
 #' @examples
-#'
+#' e=c(1,2); f=factor(1:2) 
+#' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
+#' h=factor(c(0,0,1,1,1,0)); attr(h,'labels') <- c(boy=1,girl=0)
+#' i=factor(c('girl','girl','boy','boy','boy','girl'))
+#' j=c('x','y'); k=factor(c('x','y'))
+#' 
+#' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
+#' ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+#' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a factor with string as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.is_na=FALSE,...){
     if (is.data.frame(x) & !is.null(col)){
         x[col]=sjmisc::to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.is_na)
@@ -347,27 +344,26 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.is_na=FALSE,...){
     return(result)
 }
 
-#' wrapper of \code{\link[sjmisc]{to_factor}}
-#' @description continous number-->categorical number
-#' \cr converts a variable into a factor, but preserves variable and value label attributes.
-#' \cr more "gentle" than \code{\link{ez.2label}}; opposite of \code{\link{ez.2value}}
+#' number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]
+#' @description ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
-#' @details
+#' @details wrapper of \code{\link[sjmisc]{to_factor}}
 #' @examples
-#'
+#' e=c(1,2); f=factor(1:2) 
+#' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
+#' h=factor(c(0,0,1,1,1,0)); attr(h,'labels') <- c(boy=1,girl=0)
+#' i=factor(c('girl','girl','boy','boy','boy','girl'))
+#' j=c('x','y'); k=factor(c('x','y'))
+#' 
+#' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
+#' ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+#' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a factor with number as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
     if (is.data.frame(x) & !is.null(col)){
         x[col]=sjmisc::to_factor(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
@@ -378,42 +374,32 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
     return(result)
 }
 
-#' wrapper of \code{\link[sjmisc]{to_value}}; see also \code{\link{ez.num}}
+#' number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
+#' @description e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
 #' @description continous number<--categorical string/number
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @param start.at starting index, i.e. the lowest numeric value of the variable's value range. By default, this argument is NULL, hence the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric) or to 1 (if factor levels are not numeric).
-#' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}
+#' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link[sjmisc]{to_value}}
 #' @examples
-#' # starting at 1
-#' dummy <- factor(c("D", "F", "H"))
-#' to_value(dummy)
-#' # [1] 1 2 3
-#' # attr(,"labels")
-#' # D F H
-#' # 1 2 3
-#'
-#' dummy <- factor(c("6", "4", "2"))
-#' to_value(dummy)
-#' # [1] 6 2 4
-#' # attr(,"labels")
-#' # 2 4 6 
-#' # 2 4 6 
+#' e=c(1,2); f=factor(1:2) 
+#' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
+#' h=factor(c(0,0,1,1,1,0)); attr(h,'labels') <- c(boy=1,girl=0)
+#' i=factor(c('girl','girl','boy','boy','boy','girl'))
+#' j=c('x','y'); k=factor(c('x','y'))
+#' 
+#' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
+#' ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+#' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a numeric variable or a data frame with changed col(s)
 #' \cr if x is a factor with normal chars, will be converted to 1 2 3 etc, see the example
 #' \cr if x, however, is a factor with chars of numbers "2","4","6", will be converted to 2 4 6 etc, see the example
 #' \cr \code{\link{ez.num}} keeps the same char as is
 #' @family data transformation functions
 #' @export
-#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
-#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
-#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
-#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
-#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
-#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
-#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+#' @seealso \code{\link{ez.num}}
 ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
     if (is.data.frame(x) & !is.null(col)){
         # reset factor levels in a df after its levels have been modified, relevel a factor in order to reflect its new levels
