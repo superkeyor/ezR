@@ -1,31 +1,24 @@
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # stats
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#' show information about a data frame or other object, alias of \code{\link{ez.info}}
-#' @description obsoleted, do not use this function, use \code{\link{ez.view}} instead
+#' print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
+#' @description
 #' @param x a data frame or a vector or sth else that can be converted into a data frame
 #' @return
 #' @examples
-#' @seealso \code{\link{ez.view}}
 #' @export
-ez.show = function(x){
+ez.describe = function(x){
     if (!is.data.frame(x)) {(x = data.frame(x))}
     # flush otherwise not print large text
     # show(x)
     print(Hmisc::describe(x))
     flush.console()
-    print(summary(x))
-    flush.console()
-    cat('--------------------------------------------------------------------------------------------\n')
-    str(x)
-    flush.console()
-    cat('--------------------------------------------------------------------------------------------\n')
-    ez.view(x)
+    # print(summary(x))
+    # flush.console()
+    # cat('--------------------------------------------------------------------------------------------\n')
+    # str(x)
+    # flush.console()
 }
-
-#' @rdname ez.show
-#' @export
-ez.info = ez.show
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
@@ -34,7 +27,6 @@ ez.info = ez.show
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @return returns file path
-#' @seealso \code{\link{ez.info}} \code{\link{ez.show}}
 #' @examples
 #' @export
 ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
@@ -42,7 +34,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
     # do not need, my own is better
     # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 
-    if (!is.null(file)){
+    if (!is.null(file)) {
         # row summary
         r.rowname=rownames(x)
         if (is.null(id)) {

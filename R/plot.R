@@ -280,8 +280,8 @@ ez.export = function(filename = "RPlot.pdf", pdf.width = 11, pdf.height = 8.5, .
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
 #' ez.pdfon("Living_All.pdf",width=10,height=10,onefile=T)
-#' ez.describe(jd.result,"ageout_rural|group")
-#' ez.describe(jd.result,"n_rural|group")
+#' ez.plot(jd.result,"ageout_rural|group")
+#' ez.plot(jd.result,"n_rural|group")
 #' ez.pdfoff()
 #' @export
 ez.pdfon = pdf
@@ -395,7 +395,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.describe = function(df,cmd,violin=TRUE,shown=TRUE){
+ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
