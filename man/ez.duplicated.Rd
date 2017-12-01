@@ -2,9 +2,9 @@
 % Please edit documentation in R/frame.R
 \name{ez.duplicated}
 \alias{ez.duplicated}
-\title{find the duplicated rows/cols in a data frame or duplicated elements in a vector}
 \usage{
-ez.duplicated(x, col = NULL, vec = TRUE, dim = 1)
+ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{a data frame or a vector/col}
@@ -19,9 +19,12 @@ ez.duplicated(x, col = NULL, vec = TRUE, dim = 1)
 \cr This is useful for binding with other data frames}
 
 \item{dim}{1=find duplicated rows, 2=find duplicated cols. When dim=2, para col is ignored. Dim has no effect when x is a vector}
+
+\item{incomparables}{a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
+and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.}
 }
 \value{
-return depends, see vec above
+return depends, see vec above (By default, missing values are regarded as equal, to avoid that, pass incomparables=NA)
 \cr this is different from the built-in R \code{\link{duplicated}}
 \cr x <- c(1, 1, 4, 5, 4, 6)  duplicated(x) returns [1] FALSE TRUE FALSE FALSE TRUE FALSE
 \cr but ez.duplicated(x) returns [1] TRUE TRUE TRUE FALSE TRUE FALSE

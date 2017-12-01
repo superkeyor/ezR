@@ -5,12 +5,12 @@
 \alias{ez.na.keep}
 \title{keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others}
 \usage{
-ez.na.keep(df, col = NULL, n = 0, reindex = TRUE)
+ez.na.keep(x, col = NULL, n = 0, reindex = TRUE)
 
-ez.dropna(df, col = NULL, n = 0, reindex = TRUE)
+ez.dropna(x, col = NULL, n = 0, reindex = TRUE)
 }
 \arguments{
-\item{df}{a data frame}
+\item{x}{a data frame, or a vector}
 
 \item{col}{restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
 \cr default is NULL, search for all columns.}
@@ -26,11 +26,9 @@ ez.dropna(df, col = NULL, n = 0, reindex = TRUE)
 \cr if reindex, new index is 1, 2}
 }
 \value{
-returns a new df with rows that have NA(s) removed
+returns a new df with rows that have NA(s) removed, or a new vector/factor without NAs
 }
 \description{
 could also accept a vector/factor as input, if so, then col,n,reindex ignored (factor->char->factor)
-
-alias ez.na.keep, ez.dropna
 }
 

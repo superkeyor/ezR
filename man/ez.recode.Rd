@@ -2,9 +2,12 @@
 % Please edit documentation in R/frame.R
 \name{ez.recode}
 \alias{ez.recode}
+\alias{ez.recode2}
 \title{recode}
 \usage{
 ez.recode(df, varName, recodes)
+
+ez.recode2(df, varName, recodes)
 }
 \arguments{
 \item{df}{data.frame to be recoded}
@@ -89,12 +92,12 @@ Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.label.get}}, \code{\link{ez.label.set}},
   \code{\link{ez.leftjoin}}, \code{\link{ez.move}},
   \code{\link{ez.newcol}}, \code{\link{ez.num}},
-  \code{\link{ez.recode2}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.rename}},
-  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
-  \code{\link{ez.rncol}}, \code{\link{ez.select}},
-  \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.str}}, \code{\link{ez.unique}},
-  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
+  \code{\link{ez.recols}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
+  \code{\link{ez.select}}, \code{\link{ez.sort}},
+  \code{\link{ez.split}}, \code{\link{ez.str}},
+  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
+  \code{\link{ez.values.set}}
 }
 

@@ -17,7 +17,7 @@ ez.2char(x, col = NULL)
 returns a character vector or a data frame with changed col(s)
 }
 \description{
-convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor
+factor 2 char
 }
 \details{
 Both value and variable label attributes will be removed when converting variables to characters.
@@ -32,13 +32,13 @@ Other data.transformation.functions: \code{\link{ez.2factor}},
   \code{\link{ez.del}}, \code{\link{ez.label.get}},
   \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
   \code{\link{ez.move}}, \code{\link{ez.newcol}},
-  \code{\link{ez.num}}, \code{\link{ez.recode2}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.rename}},
-  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
-  \code{\link{ez.rncol}}, \code{\link{ez.select}},
-  \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.str}}, \code{\link{ez.unique}},
-  \code{\link{ez.values.get}}, \code{\link{ez.values.set}}
+  \code{\link{ez.num}}, \code{\link{ez.recode}},
+  \code{\link{ez.recols}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
+  \code{\link{ez.select}}, \code{\link{ez.sort}},
+  \code{\link{ez.split}}, \code{\link{ez.str}},
+  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
+  \code{\link{ez.values.set}}
 }
 
