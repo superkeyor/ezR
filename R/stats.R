@@ -150,6 +150,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, ...){
         openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
 
         # give some time to open the file and then on.exit will delete it
+        # although OS will be able to auto clean temp files later on
         # tempdir() is where it is
         if (temped) {browseURL(file);ez.sleep(3)}  
         return(invisible(file))
