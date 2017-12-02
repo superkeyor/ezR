@@ -5,14 +5,14 @@
 \alias{ez.recode2}
 \title{recode}
 \usage{
-ez.recode(df, varName, recodes)
+ez.recode(df, col, recodes)
 
-ez.recode2(df, varName, recodes)
+ez.recode2(df, col, recodes)
 }
 \arguments{
 \item{df}{data.frame to be recoded}
 
-\item{varName}{the name of var to be recoded, must be a string in quotes ""}
+\item{col}{the name of var to be recoded, must be a string in quotes ""}
 
 \item{recodes}{Definition of the recoding rules. See details}
 }
@@ -54,6 +54,7 @@ Please note following behaviours of the function:
 }
 \examples{
 data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
+ez.recode(data, "a", "hi = 1")
 ez.recode(data, "a", "lo:0 = 0;0:hi = 1;")
 ez.recode(data, "b", "lo:0 = 0;0:hi = 1;")
 ez.recode(data, "a", "lo:0 = 'low';0:hi = 1;")  

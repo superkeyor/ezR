@@ -545,7 +545,7 @@ ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
 #' \cr see also \code{\link{ez.replace}}
 #' \cr keep data type whenever possible, remove all attr (otherwise could be inconsistent)
 #' @param df data.frame to be recoded
-#' @param varName the name of var to be recoded, must be a string in quotes ""
+#' @param col the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
 #' @details recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
 #' \itemize{
@@ -574,6 +574,7 @@ ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
 #' @author Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
 #' @examples
 #' data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
+#' ez.recode(data, "a", "hi = 1")
 #' ez.recode(data, "a", "lo:0 = 0;0:hi = 1;")
 #' ez.recode(data, "b", "lo:0 = 0;0:hi = 1;")
 #' ez.recode(data, "a", "lo:0 = 'low';0:hi = 1;")  
@@ -602,7 +603,9 @@ ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.recode = function(df, varName, recodes){
+ez.recode = function(df, col, recodes){
+    varName=col
+
     recodes = gsub("min","Lo",recodes,fixed=True)
     recodes = gsub("max","Hi",recodes,fixed=True)
     recodes = gsub("Min","Lo",recodes,fixed=True)
@@ -638,7 +641,9 @@ ez.recode = function(df, varName, recodes){
 
 #' @rdname ez.recode
 #' @export
-ez.recode2 = function(df, varName, recodes){
+ez.recode2 = function(df, col, recodes){
+    varName=col
+
     recodes = gsub("min","Lo",recodes,fixed=True)
     recodes = gsub("max","Hi",recodes,fixed=True)
     recodes = gsub("Min","Lo",recodes,fixed=True)
