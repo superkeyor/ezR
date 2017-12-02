@@ -543,6 +543,7 @@ ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
 #' \cr\cr ez.recode replaces the original var with recoded var;
 #' \cr ez.recode2 saves orignal var as var_ori, and then recodes var
 #' \cr see also \code{\link{ez.replace}}
+#' \cr keep data type whenever possible, remove all attr (otherwise could be inconsistent)
 #' @param df data.frame to be recoded
 #' @param varName the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
@@ -670,7 +671,8 @@ ez.recode2 = function(df, varName, recodes){
 
 #' replace a single value in data frame with another value
 #' @description replace within one or more than one columns, or entire data frame (ie, all columns)
-#' \cr smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
+#' \cr keep data type whenever possible, remove all attr (otherwise could be inconsistent)
+#' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval   
 #' \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
 #' \cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        #a changes a to char as well
@@ -749,6 +751,8 @@ ez.replace = function(df, col, oldval, newval=NULL){
             }
 
             if (factored) {df[[col]]=as.factor(df[[col]])}
+            # remove all value labels attr, with graceful failure
+            df[[col]]=tryCatch(sjmisc::set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
         }
 
     # three parameters passed        

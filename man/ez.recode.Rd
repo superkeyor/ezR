@@ -24,6 +24,7 @@ Recodes one single according to a set of rules
 \cr\cr ez.recode replaces the original var with recoded var;
 \cr ez.recode2 saves orignal var as var_ori, and then recodes var
 \cr see also \code{\link{ez.replace}}
+\cr keep data type whenever possible, remove all attr (otherwise could be inconsistent)
 }
 \details{
 recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:

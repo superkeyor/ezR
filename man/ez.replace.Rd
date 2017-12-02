@@ -20,7 +20,10 @@ returns a new df, old one does not change
 }
 \description{
 replace within one or more than one columns, or entire data frame (ie, all columns)
-\cr smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
+\cr keep data type whenever possible, remove all attr (otherwise could be inconsistent)
+}
+\details{
+smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval   
 \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
 \cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        #a changes a to char as well
