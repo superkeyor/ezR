@@ -1170,7 +1170,7 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, valu
     result = duplicated(x,incomparables=incomparables, ...) | duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
     
     if (value==TRUE) {
-        if (is.data.frame(x) & dim==2) {
+        if (is.list(x) & dim==2) {
             result=xx[which(result)]
         } else if (is.data.frame(x) & dim==1) {
             result=x[which(result),,drop=FALSE]
