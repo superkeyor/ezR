@@ -20,7 +20,7 @@ returns a new df, old one does not change
 }
 \description{
 replace within one or more than one columns, or entire data frame (ie, all columns)
-\cr keep data type whenever possible, remove all attr (otherwise could be inconsistent)
+\cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
 }
 \details{
 smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
