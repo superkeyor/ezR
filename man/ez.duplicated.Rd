@@ -23,9 +23,7 @@ ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
 
 \item{incomparables}{a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
 \cr and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.
-\cr not applicable to data.frame x (see https://stackoverflow.com/a/29730485/2292993), but ok for vector x
-\cr c(2,2,3)  data.frame(col=.)  ez.duplicated(incomparables = 4)  # error
-\cr c(2,2,3)  ez.duplicated(incomparables = 4)  # OK  note that 4 is not even an element of the vector}
+\cr not applicable to data.frame x (see https://stackoverflow.com/a/29730485/2292993), but ok for vector x}
 
 \item{value}{TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
 The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
@@ -40,5 +38,9 @@ return depends, see vec above (By default, missing values are regarded as equal,
 }
 \description{
 find the duplicated rows/cols in a data frame or duplicated elements in a vector of any data type (factor, char, numeric)
+}
+\examples{
+c(2,2,3) \%>\% data.frame(col=.) \%>\% ez.duplicated(incomparables = 4)  # error
+c(2,2,3) \%>\% ez.duplicated(incomparables = 4)  # OK  note that 4 is not even an element of the vector
 }
 
