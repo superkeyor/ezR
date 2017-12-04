@@ -143,6 +143,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
+#' \cr        if x is a data frame, col is NA (a special case), convert all numeric NAs to character NAs, for bind_rows. see https://github.com/tidyverse/dplyr/issues/2584
 #' \cr        if x is not a data frame, col is ignored
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
 #' @examples
@@ -154,6 +155,12 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 ez.str = function(x, col=NULL){
     if (is.data.frame(x) && is.null(col)){
         result = dplyr::mutate_all(x, as.character)
+    } else if (is.data.frame(x) && is.na(col)) {
+        # convert all numeric NAs to character NAs, for bind_rows
+        # https://github.com/tidyverse/dplyr/issues/2584
+        # use ifelse, not if_else because we know we are going to deal with different data types
+        # use & not &&, because we are vectorizing
+        result = dplyr::mutate_all(x,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
     } else if (is.data.frame(x) && !is.null(col)) {
         x[[col]] = as.character(x[[col]])
         result=x
