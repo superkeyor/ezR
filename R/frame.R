@@ -1441,3 +1441,22 @@ ez.coalesce = function(vec){
         }
     }
 }
+
+#' ppq
+#' @description Pin Pin Qi, input (named) vectors of different length and output a data frame with NA appended to the same length
+#' @param ... internal for list(...), see example
+#' @return returns a data frame
+#' @examples
+#' ez.ppq(a=1:4,b=2:4)
+#' # a  b
+#' # 1  2
+#' # 2  3
+#' # 3  4
+#' # 4 NA
+#' @export
+ez.ppq = function(...) {
+    # https://stackoverflow.com/questions/35215027/adding-nas-to-a-vector
+    result = list(...)
+    result = data.frame(lapply(result, `length<-`, max(lengths(result))))
+    return(result)
+}
