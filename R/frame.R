@@ -1434,7 +1434,7 @@ ez.coalesce = function(vec){
         uniVal = na.omit(uniVals)
         # https://stackoverflow.com/a/45201734/2292993
         if (length(uniVal)>1) {
-            ez.pprint(sprintf('multiple unique values found: %s...',toString(vec)),color='red')
+            ez.pprint(sprintf('multiple unique values found: %s\t%s...',deparse(substitute(vec)),toString(vec)),color='red')
             return(toString(uniVal))
         } else {
             return(uniVal)
