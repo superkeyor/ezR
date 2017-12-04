@@ -1409,7 +1409,7 @@ ez.append = function(df, newrow, print2screen=TRUE){
 #' @return return depends, see example
 #' @examples
 #' ez.coalesce(c(NA,3,3))  # 3
-#' ez.coalesce(c(NA,NA))  # NA_character_
+#' ez.coalesce(c(NA,NA))  # NA
 #' ez.coalesce(c(NA,3,4))  # c(3,4)  
 #' 
 #' # typical use for coalesce by rows, see https://stackoverflow.com/q/45515218/2292993
@@ -1420,16 +1420,24 @@ ez.append = function(df, newrow, print2screen=TRUE){
 #' df <- data.frame(A=c(1,1,2,2,2),B=c(NA,2,NA,4,5),
 #'                  C=c(3,NA,NA,5,NA),D=c(NA,2,3,NA,NA),E=c(5,NA,NA,4,4))
 #' df %>% group_by(A) %>% summarise_all(funs( ez.coalesce(.) ))  
-#' # ->will give summarise_all an error
+#' # ->default give summarise_all an error, but I hack to give '4, 5' as a string
 #' @seealso \code{\link[dplyr]{coalesce}}
 #' @export
 ez.coalesce = function(vec){
     uniVals = unique(vec)
     # if contains only NA
     if (all(is.na(uniVals))) {
-        return(NA_character_)
+        cmd = sprintf('NAOfSameType=as.%s(NA)',class(vec))
+        eval(parse(text = cmd))
+        return(NAOfSameType)
     } else {
-        if (length(na.omit(uniVals))>1) cat(sprintf('multiple unique values found: %s...\n',toString(vec)))
-        return(na.omit(uniVals))
+        uniVal = na.omit(uniVals)
+        # https://stackoverflow.com/a/45201734/2292993
+        if (length(uniVal)>1) {
+            ez.pprint(sprintf('multiple unique values found: %s...',toString(vec)),color='red')
+            return(toString(uniVal))
+        } else {
+            return(uniVal)
+        }
     }
 }
