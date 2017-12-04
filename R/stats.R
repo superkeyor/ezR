@@ -47,10 +47,11 @@ ez.compare = function(lh,rh,...) {
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
+#' @param characterize T/F count the element freq of character cols or not 
 #' @return returns file path
 #' @examples
 #' @export
-ez.view = function(x, file=NULL, id=NULL, width=NULL, incomparables=FALSE, ...){
+ez.view = function(x, file=NULL, id=NULL, width=NULL, characterize=TRUE, incomparables=FALSE, ...){
     # ez.view = function(x, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
@@ -113,7 +114,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, incomparables=FALSE, ...){
             v.n=length(x[[var]])
             v.missing=sum(is.na(x[[var]]))
             v.unique=length(unique(x[[var]]))
-            if (is.factor(x[[var]]) | is.character(x[[var]])) {
+            if ( is.factor(x[[var]]) | (is.character(x[[var]]) & characterize) ) {
                 v.levels1=dplyr::count_(x,var) %>% 
                     format.data.frame() %>% toString(width=width) %>%  # width controls if too many factor levels
                     gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)

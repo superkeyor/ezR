@@ -4,8 +4,8 @@
 \alias{ez.view}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.view(x, file = NULL, id = NULL, width = NULL, incomparables = FALSE,
-  ...)
+ez.view(x, file = NULL, id = NULL, width = NULL, characterize = TRUE,
+  incomparables = FALSE, ...)
 }
 \arguments{
 \item{x}{a data frame}
@@ -15,6 +15,8 @@ ez.view(x, file = NULL, id = NULL, width = NULL, incomparables = FALSE,
 \item{id}{a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used}
 
 \item{width}{controls if too many factor levels to print, eg 300. NULL=unlimited}
+
+\item{characterize}{T/F count the element freq of character cols or not}
 }
 \value{
 returns file path
