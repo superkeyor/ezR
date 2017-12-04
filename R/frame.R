@@ -1150,8 +1150,8 @@ ez.unique = dplyr::distinct
 #' @param incomparables a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
 #' \cr and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.
 #' \cr not applicable to data.frame x (see https://stackoverflow.com/a/29730485/2292993), but ok for vector x
-#' \cr c(2,2,3) %>% data.frame(col=.) %>% ez.duplicated(incomparables = 4)  <-error
-#' \cr c(2,2,3) %>% ez.duplicated(incomparables = 4)  <- OK  note that 4 is not even an element of the vector
+#' \cr c(2,2,3)  data.frame(col=.)  ez.duplicated(incomparables = 4)  # error
+#' \cr c(2,2,3)  ez.duplicated(incomparables = 4)  # OK  note that 4 is not even an element of the vector
 #' @return return depends, see vec above (By default, missing values are regarded as equal, to avoid that, pass incomparables=NA)
 #' \cr this is different from the built-in R \code{\link{duplicated}}
 #' \cr x <- c(1, 1, 4, 5, 4, 6)  duplicated(x) returns [1] FALSE TRUE FALSE FALSE TRUE FALSE
