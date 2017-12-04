@@ -1427,8 +1427,9 @@ ez.coalesce = function(vec){
     uniVals = unique(vec)
     # if contains only NA
     if (all(is.na(uniVals))) {
-        return(NA)
+        return(NA_character_)
     } else {
+        if (length(na.omit(uniVals))>1) cat(sprintf('multiple unique values found: %s...\n',toString(vec)))
         return(na.omit(uniVals))
     }
 }
