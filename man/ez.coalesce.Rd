@@ -17,7 +17,7 @@ see example for more details
 }
 \examples{
 ez.coalesce(c(NA,3,3))  # 3
-ez.coalesce(c(NA,NA))  # NA
+ez.coalesce(c(NA,NA))  # NA_character_
 ez.coalesce(c(NA,3,4))  # c(3,4)  
 
 # typical use for coalesce by rows, see https://stackoverflow.com/q/45515218/2292993
