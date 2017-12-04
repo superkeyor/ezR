@@ -113,7 +113,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, incomparables=FALSE, ...){
             v.n=length(x[[var]])
             v.missing=sum(is.na(x[[var]]))
             v.unique=length(unique(x[[var]]))
-            if (is.factor(x[[var]])) {
+            if (is.factor(x[[var]]) | is.character(x[[var]])) {
                 v.levels1=dplyr::count_(x,var) %>% 
                     format.data.frame() %>% toString(width=width) %>%  # width controls if too many factor levels
                     gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
