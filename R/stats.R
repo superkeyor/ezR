@@ -257,8 +257,6 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) 
 ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T) {
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character())
     for (xx in x) {
-        # note a new row needs to have the same column numbers defined in header
-        results = ez.append(results,list(xx,paste0('n = ',ez.size(df,1)),NA,''),print2screen=print2screen)
         for (yy in y) {
             if (showerror) {
                 # try is implemented using tryCatch
