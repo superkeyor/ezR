@@ -320,7 +320,8 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = FA
     wb <- openxlsx::createWorkbook(creator = 'openxlsx')
     for (i in 1:length(xlist)) {
         sheet = data.frame(xlist[[i]])
-        sheetName = sheetNames[i]
+        # sheetName too long! Max length is 31 characters., truncate if so
+        sheetName = toString(sheetNames[i],width=31)
         openxlsx::addWorksheet(wb, sheetName = sheetName)
         openxlsx::writeData(wb, sheetName, sheet,
           colNames = colNames, rowNames = rowNames, 
