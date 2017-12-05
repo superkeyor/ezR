@@ -31,7 +31,7 @@ i=factor(c('girl','girl','boy','boy','boy','girl'))
 j=c('x','y'); k=factor(c('x','y'))
 
 ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 }
 \seealso{

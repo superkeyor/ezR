@@ -16,6 +16,8 @@ ez.anovas(df, y, x, pthreshold = 0.05, showerror = F)
 \item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
 
 \item{showerror}{whether show error message when error occurs, default F}
+
+\item{...}{dots passed to ez.2value(df[[yy]],...)}
 }
 \value{
 an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
