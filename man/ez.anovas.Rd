@@ -7,7 +7,8 @@
 ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T)
 }
 \arguments{
-\item{df}{a data frame}
+\item{df}{a data frame
+\cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom}
 
 \item{y}{a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))}
 
@@ -22,6 +23,7 @@ ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T)
 \value{
 an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
+\cr degree_of_freedom: from F-statistic
 }
 \description{
 aov(ez.2value(df[[yy]])~df[[xx]])

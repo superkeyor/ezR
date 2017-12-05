@@ -8,7 +8,8 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
   print2screen = T, ...)
 }
 \arguments{
-\item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))}
+\item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
+\cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom}
 
 \item{y}{a vector of outcome variables c('var1','var2'), or a single variable 'var1'}
 
@@ -21,12 +22,14 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 \item{...}{dots passed to ez.2value(df,...)}
 }
 \value{
-an invisible data frame with y,x,p,b and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
-b: standardized coefficients or beta coefficients are the estimates resulting from a regression analysis that have been standardized 
-so that the variances of dependent and independent variables are 1.
-Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
-per standard deviation increase in the predictor variable. 
-For univariate regression, the value of the standardized coefficient (b) equals the correlation coefficient (r) (b=r).
+an invisible data frame with y,x,p,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+\cr beta: standardized coefficients or beta coefficients are the estimates resulting from a regression analysis that have been standardized 
+\cr so that the variances of dependent and independent variables are 1.
+\cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
+\cr per standard deviation increase in the predictor variable. 
+\cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
+\cr 
+\cr degree_of_freedom: from F-statistic
 }
 \description{
 lm(scale(df[[yy]])~scale(df[[xx]]))
