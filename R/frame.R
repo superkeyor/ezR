@@ -325,7 +325,7 @@ ez.2char = function(x, col=NULL){
 #' j=c('x','y'); k=factor(c('x','y'))
 #' 
 #' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-#' ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+#' ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 #' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a factor with string as its levels or a data frame with changed col(s)
 #' @family data transformation functions
@@ -355,7 +355,7 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.is_na=FALSE,...){
 #' j=c('x','y'); k=factor(c('x','y'))
 #' 
 #' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-#' ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+#' ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 #' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a factor with number as its levels or a data frame with changed col(s)
 #' @family data transformation functions
@@ -371,12 +371,16 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 }
 
 #' number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
-#' @description e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+#' @description e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
-#' @param start.at starting index, i.e. the lowest numeric value of the variable's value range. By default, this argument is NULL, hence the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric) or to 1 (if factor levels are not numeric).
+#' @param start.at starting index, i.e. the lowest numeric value of the variable's value range. 
+#' \cr If NULL, the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric, eg, factor(1:2)->c(1,2)) 
+#' \cr or to 1 (if factor levels are not numeric, factor(c('girl','boy'))->c(2,1)). 
+#' \cr To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0, then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
+#' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept
 #' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link[sjmisc]{to_value}}
 #' @examples
 #' e=c(1,2); f=factor(1:2) 
@@ -386,7 +390,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' j=c('x','y'); k=factor(c('x','y'))
 #' 
 #' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-#' ez.2value: e=e<-f, g<-(0,1+attr)g/(0,1-attr)h//(1,2+attr)i, (1,2+attr)<-j/k
+#' ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 #' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a numeric variable or a data frame with changed col(s)
 #' \cr if x is a factor with normal chars, will be converted to 1 2 3 etc, see the example
@@ -395,7 +399,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link{ez.num}}
-ez.2value = function(x, col=NULL, start.at=NULL, keep.labels=TRUE,...){
+ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE,...){
     if (is.data.frame(x) & !is.null(col)){
         # reset factor levels in a df after its levels have been modified, relevel a factor in order to reflect its new levels
         if (length(levels(x[[col]])) > nrow(x)){
