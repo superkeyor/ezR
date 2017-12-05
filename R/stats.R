@@ -206,11 +206,11 @@ ez.se = function(x) {
 #' @param ... dots passed to ez.2value(df,...)
 #' @examples
 #' @export
-ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,...) {
+ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'b'=numeric())
     for (yy in y) {
         # note a new row needs to have the same column numbers defined in header
-        results = ez.append(results,list(yy,paste0('n = ',ez.size(df,1)),NA,NA))
+        results = ez.append(results,list(yy,paste0('n = ',ez.size(df,1)),NA,NA),print2screen=print2screen)
         for (xx in x) {
             dfdf=ez.2value(df,...)
             if (showerror) {
@@ -220,7 +220,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,...) {
                     lm(scale(dfdf[[yy]])~scale(dfdf[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
                     b = model$coefficients[2,1]
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,b))}
+                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,b),print2screen=print2screen)}
                     })
             } else {
                 # go to next loop item, in case error
@@ -228,11 +228,11 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,...) {
                     lm(scale(dfdf[[yy]])~scale(dfdf[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
                     b = model$coefficients[2,1]
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,b))}
+                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,b),print2screen=print2screen)}
                 }, error = function(e) {})
             }
         }
-        if (length(x)>1) results = ez.append(results,list('','',NA,NA))  # empty line between each y
+        if (length(x)>1) results = ez.append(results,list('','',NA,NA),print2screen=print2screen)  # empty line between each y
     }
     return(invisible(results))
 }
@@ -249,11 +249,11 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,...) {
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' @examples
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F) {
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T) {
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'means'=character())
     for (xx in x) {
         # note a new row needs to have the same column numbers defined in header
-        results = ez.append(results,list(xx,paste0('n = ',ez.size(df,1)),NA,''))
+        results = ez.append(results,list(xx,paste0('n = ',ez.size(df,1)),NA,''),print2screen=print2screen)
         for (yy in y) {
             if (showerror) {
                 # try is implemented using tryCatch
@@ -264,7 +264,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F) {
                     s = aggregate(ez.2value(df[[yy]],...)~df[[xx]],FUN=mean)
                     means = ''
                     for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,means))}
+                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,means),print2screen=print2screen)}
                     })
             } else {
                 # go to next loop item, in case error
@@ -274,11 +274,11 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F) {
                     s = aggregate(ez.2value(df[[yy]],...)~df[[xx]],FUN=mean)
                     means = ''
                     for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,means))}
+                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,means),print2screen=print2screen)}
                 }, error = function(e) {})
             }
         }
-        if (length(y)>1) results = ez.append(results,list('','',NA,''))  # empty line between each x
+        if (length(y)>1) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
     }
     return(invisible(results))
 }
