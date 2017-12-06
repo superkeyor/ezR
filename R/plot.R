@@ -32,7 +32,8 @@
 #' }
 #' layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
 #' ggmultiplot(plotlist = plots, layout = layout)
-#' layout <- matrix(c(1, NA, 2, 3, 4, 5), nrow = 2, byrow = TRUE)  # NA for placeholder
+#' layout <- matrix(c(1, NA, 2, 
+#'                    3, 4, 5), nrow = 2, byrow = TRUE)  # NA for placeholder
 #' ggmultiplot(plotlist = plots, layout = layout)
 #'
 #' @references \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}

@@ -39,7 +39,8 @@ for (i in 1:5) {
 }
 layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
 ggmultiplot(plotlist = plots, layout = layout)
-layout <- matrix(c(1, NA, 2, 3, 4, 5), nrow = 2, byrow = TRUE)  # NA for placeholder
+layout <- matrix(c(1, NA, 2, 
+                   3, 4, 5), nrow = 2, byrow = TRUE)  # NA for placeholder
 ggmultiplot(plotlist = plots, layout = layout)
 
 }
