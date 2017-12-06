@@ -314,7 +314,8 @@ ez.2char = function(x, col=NULL){
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
-#' @param drop.is_na ignore is_na attr, if yes, treat as NA
+#' @param add.non.labelled  logical, if TRUE, values without associated value label (ie, more values than "labels", hence not all values are labelled.) will also be converted to labels (as is). If FALSE, non-labelled values are converted to NA
+#' @param drop.missing.value if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.
 #' @details Both value and variable label attributes will be removed when converting variables to factors.
 #'\cr wrapper of \code{\link[sjmisc]{to_label}}
 #' @examples
@@ -330,12 +331,12 @@ ez.2char = function(x, col=NULL){
 #' @return returns a factor with string as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.is_na=FALSE,...){
+ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALSE,...){
     if (is.data.frame(x) & !is.null(col)){
-        x[col]=sjmisc::to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.is_na)
+        x[col]=sjmisc::to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
         result=x
     } else {
-        result=sjmisc::to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.is_na)
+        result=sjmisc::to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
     }
     return(result)
 }

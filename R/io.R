@@ -124,17 +124,27 @@ ez.readxlist = function(file, toprint=TRUE){
     return(sheetnames)
 }
 
-#' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. For a more perfect function, use ez.reads. This function kept as an archive just in case.
+#' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE and almost the same as ez.reads. For a more perfect function, use ez.reads. This function kept as an archive just in case.
 #' wrapper of \code{\link[sjmisc]{read_spss}}. read spss .sav file with haven package
-#' @description would NOT convert value labels to factor levels (i.e., NOT gender 1/2->male/female, regardless of the seemingly-related-but-unrelated parameter 'atm2fac' value. You always get gender=1/2), instead keep variable labels and value labels as attributes; also internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width)
+#' @description Internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). Will NOT auto replace col names as ez.reads will do (ie, keep them as is, @->@)
 #' @param path File path to the data file
-#' @param atm2fac if TRUE, atomic (with a label/attribute) to factor (gender 1/2 factor); if FALSE, keep as atomic (gender 1/2 numeric) (char to factor regardless when stringsAsFactors=T)
+#' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
+#' \cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+#' \cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
+#' \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
 #' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @export
-ez.reads2 = function(path, atm2fac=TRUE, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
-    result = sjmisc::read_spss(path=path, atomic.to.fac=atm2fac, keep.na=!usrna, ...)
+ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
+    if (atm2fac==1) {
+        result = sjmisc::read_spss(path=path, atomic.to.fac=FALSE, keep.na=!usrna, ...)
+    } else if (atm2fac==2) {
+        result = sjmisc::read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
+    } else if (atm2fac==3) {
+        result = sjmisc::read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
+        result = ez.2label(result)
+    }
     if (tolower) names(result) = tolower(names(result))
     # the atm2fac/atomic.to.fac only works for variable with numbers with labels/attributes (gender 1/2)
     # not string values (group control/patient)
@@ -152,10 +162,11 @@ ez.reads2 = function(path, atm2fac=TRUE, usrna=TRUE, tolower=FALSE, stringsAsFac
 #' \cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
 #' \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
 #' \cr See param for more other details.
-#' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Regardless, char always to factor.
-#' \cr 1: atomic with a label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
-#' \cr 2: atomic with a label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
-#' \cr 3: atomic with a label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
+#' \cr Also somehow auto replace irregular chars in the col names (eg, @-->.)
+#' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
+#' \cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+#' \cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
+#' \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
 #' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well. 
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
