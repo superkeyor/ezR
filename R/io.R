@@ -269,28 +269,25 @@ ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, 
 #' @export
 ez.writex2 = ez.savex2
 
-#' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package
+#' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{writeData}} from the openxlsx package
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
-#' \cr Other parameters in \code{\link[openxlsx]{writeData}}
+#' \cr Other parameters in \code{\link[openxlsx]{writeData}}. Overwrite existing file.
 #' @param withFilter T/F auto add excel filter
-#' @param creator A string specifying the workbook author
 #' @param sheetName Name of the worksheet
 #' @param gridLines A logical. If FALSE, the worksheet grid lines will be hidden.
 #' @param startCol A vector specifiying the starting column(s) to write df
 #' @param startRow A vector specifiying the starting row(s) to write df
 #' @param xy An alternative to specifying startCol and startRow individually. A vector of the form c(startCol, startRow)
-#' @param colNames or col.names If TRUE, column names of x are written.
-#' @param rowNames or row.names If TRUE, row names of x are written.
+#' @param colNames If TRUE, column names of x are written.
+#' @param rowNames If TRUE, row names of x are written.
 #' @param headerStyle Custom style to apply to column names.
 #' @param borders Either "surrounding", "columns" or "rows" or NULL. If "surrounding", a border is drawn around the data. If "rows", a surrounding border is drawn a border around each row. If "columns", a surrounding border is drawn with a border between each column. If "all" all cell borders are drawn.
 #' @param borderColour Colour of cell border
 #' @param borderStyle Border line style.
-#' @param overwrite Overwrite existing file (Defaults to TRUE as with write.table)
-#' @param asTable write using writeDataTable as opposed to writeData
 #' @return returns file path
 #' @examples
-#' (x, file, sheetName="Sheet1", row.names=FALSE,
-#'   col.names=TRUE)
+#' (x, file, sheetName="Sheet1", rowNames=FALSE,
+#'   colNames=TRUE)
 #'
 #' ## write to working directory
 #' options("openxlsx.borderColour" = "#4F80BD") ## set default border colour
@@ -311,9 +308,13 @@ ez.writex2 = ez.savex2
 #' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 #' @export
-ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, row.names=FALSE, col.names=TRUE, asTable=FALSE, ...){
+ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, rowNames=FALSE, colNames=TRUE, ...){
     x = data.frame(x)
-    openxlsx::write.xlsx(x=x, file=file, asTable=asTable, sheetName=sheetName, ..., withFilter=withFilter, row.names=row.names, col.names=col.names)
+    # # openxlsx::write.xlsx does not support (ie, ignore) withFilter, call underlying openxlsx::writeData
+    # openxlsx::write.xlsx(x=x, file=file, asTable=FALSE, sheetName=sheetName, ..., rowNames=rowNames, colNames=colNames)
+    cmd=sprintf('xlist = list("%s"=x)',sheetName)
+    ez.eval(cmd)
+    ez.savexlist(xlist,file=file,withFilter=withFilter,rowNames=rowNames,colNames=colNames,...)
     return(invisible(file))
 }
 
@@ -326,16 +327,23 @@ ez.writex = ez.savex
 #' \cr Other parameters in \code{\link[openxlsx]{writeData}}
 #' @return returns file path
 #' @export
-ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = FALSE, colNames = TRUE, ...) {
+ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TRUE, colNames = TRUE, ...) {
     sheetNames = if (!is.null(names(xlist))) names(xlist) else paste0("Sheet",1:length(xlist))
     wb <- openxlsx::createWorkbook(creator = 'openxlsx')
     for (i in 1:length(xlist)) {
         sheet = data.frame(xlist[[i]])
+        # the default rowNames=T has no col name for rowNames, and rowNames saved as string of numbers (not ideal for sorting, ie, '1', '10', '11', '2')
+        # hack
+        if (rowNames) {
+            rowname=ez.num(rownames(sheet))
+            sheet=dplyr::bind_cols(data.frame('rowname'=rowname),sheet)
+        }
+
         # sheetName too long! Max length is 31 characters., truncate if so
         sheetName = toString(sheetNames[i],width=31)
         openxlsx::addWorksheet(wb, sheetName = sheetName)
         openxlsx::writeData(wb, sheetName, sheet,
-          colNames = colNames, rowNames = rowNames, 
+          colNames = colNames, rowNames = FALSE, 
           withFilter = withFilter, ...)
     }
     openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)

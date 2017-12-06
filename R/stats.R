@@ -26,6 +26,9 @@ ez.describe = function(x){
 ez.compare = function(lh,rh,...) {
     if (is.data.frame(lh)) {
             len=nrow
+            # https://github.com/tidyverse/dplyr/issues/3238
+            rownames(lh) <- NULL
+            rownames(rh) <- NULL
             cat(sprintf('comparing nrow for two data frames: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
         } else {
             len=length
@@ -71,9 +74,9 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, characterize=TRUE, incompa
 
     if (!is.null(file)) {
         # row summary
-        r.rowname=rownames(x)
+        r.rowname=rownames(x) %>% ez.num()
         if (is.null(id)) {
-            idname=rownames(x)
+            idname=rownames(x) %>% ez.num()
         } else {
             idname=x[,id]
         }
@@ -95,7 +98,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, characterize=TRUE, incompa
         r.ncol = rep(ncol(tmpMatrix), nrow(tmpMatrix))
         r.missing = rowSums(tmpMatrix,na.rm=TRUE)
         
-        results0=data.frame(rownames=r.rowname,id=idname,duplicated_id=r.duplicated.idname,
+        results0=data.frame(rowname=r.rowname,id=idname,duplicated_id=r.duplicated.idname,
                             duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
         results0=dplyr::mutate(results0,missing_rate=missing/ncol)
         
