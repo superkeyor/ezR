@@ -391,11 +391,11 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param df data frame in long format
 #' @param cmd like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete
 #' @param violin plot violin or not
-#' @param shown show n (number of samples for each level)  or not, default TRUE
+#' @param show.n show n (number of samples for each level)  or not
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
+ez.plot = function(df,cmd,violin=FALSE,show.n=TRUE){
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -414,6 +414,7 @@ ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
         yy = cmd[1]
         xx = 'DummyDiscreteVariable'
         df['DummyDiscreteVariable'] = 1
+        df=ez.dropna(df,yy)
         # hide x axis label in this case
         tt = sprintf('
                      fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
@@ -427,7 +428,7 @@ ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
                      ggtitle(paste0("N = ",nrow(df)))'
                      , xx, yy, violin
         )
-        if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
+        if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
         tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
     # yy|xx or yy|xx zz
     } else {
@@ -437,6 +438,7 @@ ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
         # yy|xx
         if (length(xx)==1) {
             xx = xx[1]
+            df=ez.dropna(df,c(yy,xx))
 
             if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
             eval(parse(text = sprintf('pvalue = summary(aov(df$%s ~ df$%s))[[1]][["Pr(>F)"]][[1]]', yy, xx)))
@@ -459,14 +461,14 @@ ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
                          , xx, yy, xx, violin, pvalue
             )
-            if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
+            if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
             tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
         # yy|xx zz
         } else {
             if (length(xx)==2) {
                 zz = xx[2]
                 xx = xx[1]
-
+                df=ez.dropna(df,c(yy,xx,zz))
                 if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
                 if (!is.factor(df[[zz]])) {df = ez.2factor(df,col=zz)}
 
@@ -482,14 +484,14 @@ ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz
                 )
-                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
+                if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
             # yy|xx zz aa
             } else {
                 aa = xx[3]
                 zz = xx[2]
                 xx = xx[1]
-
+                df=ez.dropna(df,c(yy,xx,zz,aa))
                 if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
                 if (!is.factor(df[[zz]])) {df = ez.2factor(df,col=zz)}
                 if (!is.factor(df[[aa]])) {df = ez.2factor(df,col=aa)}
@@ -506,7 +508,7 @@ ez.plot = function(df,cmd,violin=TRUE,shown=TRUE){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz, aa
                 )
-                if (shown) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
+                if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
                 tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
 
             }        
@@ -578,6 +580,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
         # yy|xx
         if (length(xx)==1) {
             xx = xx[1]
+            df=ez.dropna(df,c(yy,xx))
             # The width in geom_bar controls the bar width in relation to the x-axis 
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
             # color = outline color of bar
@@ -602,6 +605,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
             if (length(xx)==2) {
                 zz = xx[2]
                 xx = xx[1]
+                df=ez.dropna(df,c(yy,xx,zz))
                 # The width in geom_bar controls the bar width in relation to the x-axis 
                 # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
                 # color = outline color of bar
@@ -628,6 +632,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                     aa = xx[3]
                     zz = xx[2]
                     xx = xx[1]
+                    df=ez.dropna(df,c(yy,xx,zz,aa))
                     # The width in geom_bar controls the bar width in relation to the x-axis 
                     # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
                     # color = outline color of bar
@@ -714,6 +719,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
         # yy|xx
         if (length(xx)==1) {
             xx = xx[1]
+            df=ez.dropna(df,c(yy,xx))
             # The width in geom_line controls the bar width in relation to the x-axis 
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
             # color = outline color of bar
@@ -738,6 +744,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
             if (length(xx)==2) {
                 zz = xx[2]
                 xx = xx[1]
+                df=ez.dropna(df,c(yy,xx,zz))
                 # The width in geom_line controls the bar width in relation to the x-axis 
                 # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
                 # color = outline color of bar
@@ -764,6 +771,7 @@ ez.lineplot = function(df,cmd,line_size=0.7,error_size=0.7,error_gap=0,error_wid
                     aa = xx[3]
                     zz = xx[2]
                     xx = xx[1]
+                    df=ez.dropna(df,c(yy,xx,zz,aa))
                     tt = sprintf('
                             pp=group_by(df,%s,%s,%s) %%>%% 
                             summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
@@ -831,6 +839,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
     if (length(xx)==1) {
         # "y|x,g"
         xx = trimws(xx[1])
+        df=ez.dropna(df,c(yy,xx,gg))
         # jitter solution (horizontal only) see: http://stackoverflow.com/questions/39533456/
         tt = sprintf("
                     pd = position_dodge(0.2)
@@ -848,6 +857,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
             # assignment of zz should come first, because xx is going to be overwritten
             zz = trimws(xx[2])
             xx = trimws(xx[1])
+            df=ez.dropna(df,c(yy,xx,gg,zz))
             tt = sprintf("
                         pd = position_dodge(0.2)
                         pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
@@ -866,6 +876,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
                 zz = trimws(xx[2])
                 aa = trimws(xx[3])
                 xx = trimws(xx[1])
+                df=ez.dropna(df,c(yy,xx,gg,zz,aa))
                 tt = sprintf("
                             pd = position_dodge(0.2)
                             pp = ggplot2::ggplot(df,aes(x=%s,y=%s,group=%s)) + 
@@ -1548,6 +1559,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
       yy = trimws(cmd[1])
       xx = trimws(cmd[2])
       zz = trimws(cmd[3])
+      df=ez.dropna(df,c(yy,xx,zz))
 
       rp.x = max(df[[xx]])*rp.x
       rp.y = min(df[[yy]])*rp.y
@@ -1573,6 +1585,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
       # y~x
       yy = trimws(cmd[1])
       xx = trimws(cmd[2])
+      df=ez.dropna(df,c(yy,xx))
       rp.x = max(df[[xx]])*rp.x
       rp.y = min(df[[yy]])*rp.y
       # http://stackoverflow.com/a/27959418/2292993
@@ -1596,6 +1609,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
           yy = trimws(cmd[1])
           xx = trimws(cmd[2])
           zz = trimws(cmd[3])
+          df=ez.dropna(df,c(yy,xx,zz))
           rp.x = max(df[[xx]])*rp.x
           rp.y = min(df[[yy]])*rp.y
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
