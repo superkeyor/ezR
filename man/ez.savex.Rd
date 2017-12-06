@@ -3,23 +3,22 @@
 \name{ez.savex}
 \alias{ez.savex}
 \alias{ez.writex}
-\title{save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{write.xlsx}} from the openxlsx package}
+\title{save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{writeData}} from the openxlsx package}
 \usage{
 ez.savex(x, file = "RData.xlsx", sheetName = "Sheet1", withFilter = FALSE,
-  row.names = FALSE, col.names = TRUE, asTable = FALSE, ...)
+  rowNames = FALSE, colNames = TRUE, ...)
 
 ez.writex(x, file = "RData.xlsx", sheetName = "Sheet1",
-  withFilter = FALSE, row.names = FALSE, col.names = TRUE,
-  asTable = FALSE, ...)
+  withFilter = FALSE, rowNames = FALSE, colNames = TRUE, ...)
 }
 \arguments{
 \item{sheetName}{Name of the worksheet}
 
 \item{withFilter}{T/F auto add excel filter}
 
-\item{asTable}{write using writeDataTable as opposed to writeData}
+\item{rowNames}{If TRUE, row names of x are written.}
 
-\item{creator}{A string specifying the workbook author}
+\item{colNames}{If TRUE, column names of x are written.}
 
 \item{gridLines}{A logical. If FALSE, the worksheet grid lines will be hidden.}
 
@@ -29,10 +28,6 @@ ez.writex(x, file = "RData.xlsx", sheetName = "Sheet1",
 
 \item{xy}{An alternative to specifying startCol and startRow individually. A vector of the form c(startCol, startRow)}
 
-\item{colNames}{or col.names If TRUE, column names of x are written.}
-
-\item{rowNames}{or row.names If TRUE, row names of x are written.}
-
 \item{headerStyle}{Custom style to apply to column names.}
 
 \item{borders}{Either "surrounding", "columns" or "rows" or NULL. If "surrounding", a border is drawn around the data. If "rows", a surrounding border is drawn a border around each row. If "columns", a surrounding border is drawn with a border between each column. If "all" all cell borders are drawn.}
@@ -40,19 +35,17 @@ ez.writex(x, file = "RData.xlsx", sheetName = "Sheet1",
 \item{borderColour}{Colour of cell border}
 
 \item{borderStyle}{Border line style.}
-
-\item{overwrite}{Overwrite existing file (Defaults to TRUE as with write.table)}
 }
 \value{
 returns file path
 }
 \description{
 uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package.
-\cr Other parameters in \code{\link[openxlsx]{writeData}}
+\cr Other parameters in \code{\link[openxlsx]{writeData}}. Overwrite existing file.
 }
 \examples{
-(x, file, sheetName="Sheet1", row.names=FALSE,
-  col.names=TRUE)
+(x, file, sheetName="Sheet1", rowNames=FALSE,
+  colNames=TRUE)
 
 ## write to working directory
 options("openxlsx.borderColour" = "#4F80BD") ## set default border colour
