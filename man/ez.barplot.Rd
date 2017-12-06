@@ -9,7 +9,7 @@ ez.barplot(df, cmd, bar_color = "color", bar_gap = 0.7, bar_width = 0.7,
   error_direction = "both", ylab = NULL, xlab = NULL, zlab = NULL,
   legend_position = "top", legend_direction = "horizontal",
   legend_box = T, legend_size = c(0, 10), xangle = 0, vjust = NULL,
-  hjust = NULL)
+  hjust = NULL, print.cmd = FALSE)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
@@ -51,6 +51,8 @@ ez.barplot(df, cmd, bar_color = "color", bar_gap = 0.7, bar_width = 0.7,
 \item{vjust}{vjust of x text NULL}
 
 \item{hjust}{hjust of x text NULL}
+
+\item{print.cmd}{T/F}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)

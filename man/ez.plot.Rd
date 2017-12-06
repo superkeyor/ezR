@@ -4,7 +4,7 @@
 \alias{ez.plot}
 \title{plot a customized boxplot with jittered stripplot, violin, and mean}
 \usage{
-ez.plot(df, cmd, violin = FALSE, show.n = TRUE)
+ez.plot(df, cmd, violin = FALSE, show.n = TRUE, print.cmd = FALSE)
 }
 \arguments{
 \item{df}{data frame in long format}
@@ -14,6 +14,8 @@ ez.plot(df, cmd, violin = FALSE, show.n = TRUE)
 \item{violin}{plot violin or not}
 
 \item{show.n}{show n (number of samples for each level)  or not}
+
+\item{print.cmd}{T/F}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)

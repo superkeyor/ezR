@@ -5,7 +5,7 @@
 \title{visualize where all the NAs of a dataframe are}
 \usage{
 ez.wherena(df, id = NULL, color = "red", angle = 270, basesize = 9,
-  xsize = 1, ysize = 1)
+  xsize = 1, ysize = 1, print.cmd = FALSE)
 }
 \arguments{
 \item{df}{data frame in wide format}
@@ -21,6 +21,8 @@ ez.wherena(df, id = NULL, color = "red", angle = 270, basesize = 9,
 \item{xsize}{x axis label font relative size}
 
 \item{ysize}{y axis label font relative size}
+
+\item{print.cmd}{T/F}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)
