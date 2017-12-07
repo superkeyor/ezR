@@ -40,7 +40,7 @@ ez.compare = function(lh,rh,...) {
     cat('\n')
     cat( sprintf('\t\tLH>: %4.0f\t\t\t\t<RH: %4.0f\n',len(dplyr::setdiff(lh,rh,...)),len(dplyr::setdiff(rh,lh,...))) )
     cat('set equal?\n')
-    print(setequal(lh,rh,...))
+    print(dplyr::setequal(lh,rh,...))
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
