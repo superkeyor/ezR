@@ -10,6 +10,6 @@ ez.compare(lh, rh, ...)
 compare two vectors, two dataframes
 }
 \note{
-nrow() for data frame, length() for vector
+nrow() for data frame, length() for vector. union/intersect remove duplication
 }
 

@@ -21,22 +21,21 @@ ez.describe = function(x){
 }
 
 #' compare two vectors, two dataframes
-#' @note nrow() for data frame, length() for vector
+#' @note nrow() for data frame, length() for vector. union/intersect remove duplication
 #' @export
 ez.compare = function(lh,rh,...) {
     if (is.data.frame(lh)) {
             len=nrow
-            # https://github.com/tidyverse/dplyr/issues/3238
-            rownames(lh) <- NULL
-            rownames(rh) <- NULL
-            cat(sprintf('comparing nrow for two data frames: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
+            cat(sprintf('comparing nrow for two data frame uniques: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
         } else {
             len=length
-            cat(sprintf('comparing length for two vectors: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
+            cat(sprintf('comparing length for two vector uniques: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
         }
 
+    # https://github.com/tidyverse/dplyr/issues/3238
+    # union/intersect remove duplication
     cat( sprintf('\t\t\t\tUnion: %4.0f\n',len(dplyr::union(lh,rh,...))) )
-    cat( sprintf('\t\tLH: %4.0f\t\t\t\tRH: %4.0f\n',len(lh),len(rh)) )
+    cat( sprintf('\t\tLH: %4.0f /%4.0f\t\t\t\tRH: %4.0f /%4.0f\n',len(lh),len(unique(lh)),len(rh),len(unique(rh))) )
     cat( sprintf('\t\t\t\tInter: %4.0f\n',len(dplyr::intersect(lh,rh,...))) )
     cat('\n')
     cat( sprintf('\t\tLH>: %4.0f\t\t\t\t<RH: %4.0f\n',len(dplyr::setdiff(lh,rh,...)),len(dplyr::setdiff(rh,lh,...))) )
