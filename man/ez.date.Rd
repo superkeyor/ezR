@@ -12,13 +12,16 @@ ez.date(x, ori = "Excel", format = "\%m/\%d/\%Y", ...)
 
 \item{ori}{one of 'Excel', 'Matlab', 'R'}
 
-\item{format}{specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits}
+\item{format}{specify date format. see examples}
 }
 \value{
 returns a vector
 }
 \description{
 convert to date with friendly ori (no need to remember exact origin date)
+}
+\examples{
+# format one of c("\%d/\%m/\%Y", "\%d-\%m-\%Y", "\%Y/\%m/\%d", "\%m/\%d/\%Y", "\%Y-\%m-\%d"). \%y for two year digits
 }
 \seealso{
 \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}

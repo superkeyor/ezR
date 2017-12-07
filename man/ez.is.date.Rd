@@ -7,7 +7,7 @@
 ez.is.date(x)
 }
 \arguments{
-\item{x}{a vector, no need to specify date formats, eg, c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits}
+\item{x}{a vector, no need to specify date formats}
 }
 \value{
 returns a single T/F (not vectorized). If x is a date, is.numeric(x) is FALSE.
@@ -17,6 +17,7 @@ check if a vector is already stored as a date type
 }
 \examples{
 mydate = c("10/11/2012","10/12/2012")
+# format one of c("\%d/\%m/\%Y", "\%d-\%m-\%Y", "\%Y/\%m/\%d", "\%m/\%d/\%Y", "\%Y-\%m-\%d"). \%y for two year digits
 mydate = as.Date(mydate,format = "\%m/\%d/\%Y")  # "2012-10-11" "2012-10-12"
 ez.is.date(mydate)  # T
 }

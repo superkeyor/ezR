@@ -144,7 +144,9 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 #' @param x a vector of char, num. param format for class 'character' (ignore ori); param ori for class 'numeric' (ignore format)
 #' \cr a string factor treated as char (ie, using param format), a num factor cannot be processed
 #' @param ori one of 'Excel', 'Matlab', 'R'
-#' @param format specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
+#' @param format specify date format. see examples
+#' @examples 
+#' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @return returns a vector
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
 #' @export
@@ -166,10 +168,11 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 
 #' check if a vector is already stored as a date type
 #' @description check if a vector is already stored as a date type
-#' @param x a vector, no need to specify date formats, eg, c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
+#' @param x a vector, no need to specify date formats
 #' @return returns a single T/F (not vectorized). If x is a date, is.numeric(x) is FALSE.
 #' @examples
 #' mydate = c("10/11/2012","10/12/2012")
+#' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' mydate = as.Date(mydate,format = "%m/%d/%Y")  # "2012-10-11" "2012-10-12"
 #' ez.is.date(mydate)  # T
 #' @export
@@ -182,11 +185,12 @@ ez.is.date = function(x) {
 #' check if a vector of char, number is convertiable to date type
 #' @description check if a vector of char, number is convertiable to date type as.Date(as.character(x), format)
 #' @param x a vector of char, number
-#' @param format specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
+#' @param format specify date format. see examples
 #' @param ... other parameters passed to as.Date(...) 
 #' @return returns a vector of T/F (vectorized because of is.na() used).
 #' @examples
 #' mydate = c("10/11/2012","10-12-2012", 345)
+#' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' ez.is.date.convertible(mydate, format = "%m/%d/%Y")  # T F F
 #' @export
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 

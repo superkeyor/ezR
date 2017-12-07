@@ -9,7 +9,7 @@ ez.is.date.convertible(x, format = "\%m/\%d/\%Y", ...)
 \arguments{
 \item{x}{a vector of char, number}
 
-\item{format}{specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits}
+\item{format}{specify date format. see examples}
 
 \item{...}{other parameters passed to as.Date(...)}
 }
@@ -21,6 +21,7 @@ check if a vector of char, number is convertiable to date type as.Date(as.charac
 }
 \examples{
 mydate = c("10/11/2012","10-12-2012", 345)
+# format one of c("\%d/\%m/\%Y", "\%d-\%m-\%Y", "\%Y/\%m/\%d", "\%m/\%d/\%Y", "\%Y-\%m-\%d"). \%y for two year digits
 ez.is.date.convertible(mydate, format = "\%m/\%d/\%Y")  # T F F
 }
 \seealso{
