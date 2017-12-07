@@ -139,6 +139,13 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
     return(result)
 }
 
+#' convert to date
+#' @description convert to date consistent with excel, essentially as.Date(origin="1899-12-30")
+#' @export
+ez.date = function(x,origin="1899-12-30",...) {
+    return(as.Date(x,origin=origin,...))
+}
+
 #' convert a column (or all columns) in a data frame, or a vector into character type, call as.character
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
