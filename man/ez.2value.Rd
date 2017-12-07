@@ -16,8 +16,8 @@ ez.2value(x, col = NULL, start.at = 0, keep.labels = TRUE, ...)
 \item{start.at}{starting index, i.e. the lowest numeric value of the variable's value range. 
 \cr If NULL, the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric, eg, factor(1:2)->c(1,2)) 
 \cr or to 1 (if factor levels are not numeric, factor(c('girl','boy'))->c(2,1)). 
-\cr To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0, then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
-\cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept}
+\cr To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
+\cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)}
 }
 \value{
 returns a numeric variable or a data frame with changed col(s)
