@@ -51,6 +51,6 @@ Jason P. Becker from package eeptools (sligthly modified by Jerry)
 }
 \seealso{
 See also \code{\link{difftime}} which this function uses and mimics 
-some functionality but at higher unit levels.
+some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
 }
 

@@ -117,7 +117,8 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, characterize=TRUE, incompa
             v.n=length(x[[var]])
             v.missing=sum(is.na(x[[var]]))
             v.unique=length(unique(x[[var]]))
-            if ( is.factor(x[[var]]) | (is.character(x[[var]]) & characterize) ) {
+            # countable as levels
+            if ( is.factor(x[[var]]) | (is.character(x[[var]]) & characterize) | is.logical(x[[var]]) ) {
                 v.levels1=dplyr::count_(x,var) %>% 
                     format.data.frame() %>% toString(width=width) %>%  # width controls if too many factor levels
                     gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
@@ -131,11 +132,21 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, characterize=TRUE, incompa
             } else {
                 v.levels1=v.levels2=NA
             }
-            if (is.numeric(x[[var]])) {
+            # calculable 
+            is.date <- function(x) inherits(x, 'Date')
+            # not all NA
+            if ( is.numeric(x[[var]]) & !all(is.na(x[[var]])) ) {
                 v.mean=mean(x[[var]],na.rm=TRUE)
                 v.min=min(x[[var]],na.rm=TRUE)
                 v.max=max(x[[var]],na.rm=TRUE)
                 v.sum=sum(x[[var]],na.rm=TRUE)
+            } else if ( is.date(x[[var]]) & !all(is.na(x[[var]])) ) {
+                # converted to numeric, to convert back to date: ez.date(ori='R')
+                v.mean=mean(x[[var]],na.rm=TRUE)
+                v.min=min(x[[var]],na.rm=TRUE)
+                v.max=max(x[[var]],na.rm=TRUE)
+                # sum not defined for "Date" objects
+                v.sum=NA
             } else {
                 v.mean=v.min=v.max=v.sum=NA
             }

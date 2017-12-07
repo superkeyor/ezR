@@ -140,39 +140,59 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 }
 
 #' convert to date
-#' @description convert to date consistent with excel, essentially as.Date(origin="1899-12-30")
+#' @description convert to date with friendly ori (no need to remember exact origin date)
+#' @param x a vector of char, num. param format for class 'character' (ignore ori); param ori for class 'numeric' (ignore format)
+#' \cr a string factor treated as char (ie, using param format), a num factor cannot be processed
+#' @param ori one of 'Excel', 'Matlab', 'R'
+#' @param format specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
+#' @return returns a vector
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
 #' @export
-ez.date = function(x,origin="1899-12-30",...) {
-    return(as.Date(x,origin=origin,...))
+ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
+    # from R help as.Date()
+    if (is.numeric(x)) {
+        if (ori=='Excel') origin="1899-12-30"
+        # if (ori=='Excel.Mac') origin="1904-01-01"  # tested on my mac, seems the same as Excel.Win
+        if (ori=='Matlab') origin="1970-01-01"
+        if (ori=='R') origin="1970-01-01"
+        result = as.Date(x,origin=origin,...)
+        if (ori=='Matlab') result=result-719529
+    }
+    if (is.character(x) | is.factor(x)) {
+        result=as.Date(x,format=format,...)
+    }
+    return(result)
 }
 
 #' check if a vector is already stored as a date type
 #' @description check if a vector is already stored as a date type
-#' @param x a vector, no need to specify date formats, eg, c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d").
+#' @param x a vector, no need to specify date formats, eg, c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @return returns a single T/F (not vectorized). If x is a date, is.numeric(x) is FALSE.
 #' @examples
 #' mydate = c("10/11/2012","10/12/2012")
 #' mydate = as.Date(mydate,format = "%m/%d/%Y")  # "2012-10-11" "2012-10-12"
 #' ez.is.date(mydate)  # T
 #' @export
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
 ez.is.date = function(x) {
     # https://stackoverflow.com/a/37062951/2292993
     return( inherits(x, 'Date') )
 }
 
 #' check if a vector of char, number is convertiable to date type
-#' @description check if a vector of char, number is convertiable to date type
-#' @param x a vector of string, char, etc
-#' @param format specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d")
+#' @description check if a vector of char, number is convertiable to date type as.Date(as.character(x), format)
+#' @param x a vector of char, number
+#' @param format specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @param ... other parameters passed to as.Date(...) 
 #' @return returns a vector of T/F (vectorized because of is.na() used).
 #' @examples
-#' mydate = c("10/11/2012","10-12-2012")
-#' ez.is.date.convertible(mydate, format = "%m/%d/%Y")  # T F
+#' mydate = c("10/11/2012","10-12-2012", 345)
+#' ez.is.date.convertible(mydate, format = "%m/%d/%Y")  # T F F
 #' @export
-ez.is.date.convertible = function(x,format="%m/%d/%Y",tz = 'UTC',...) {
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
+ez.is.date.convertible = function(x,format="%m/%d/%Y",...) {
     # https://stackoverflow.com/a/37062951/2292993
-    result = !is.na( as.Date(as.character(x), tz = tz, format = format, ...) )
+    result = !is.na( as.Date(as.character(x), format = format, ...) )
     return( result )
 }
 
@@ -599,7 +619,7 @@ ez.evaluate = ez.eval
 #' @return A numeric vector of ages the same length as the dob vector
 #' @source This function was developed in part from this response on the R-Help mailing list.
 #' @seealso See also \code{\link{difftime}} which this function uses and mimics 
-#' some functionality but at higher unit levels.
+#' some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
 #' @author Jason P. Becker from package eeptools (sligthly modified by Jerry)
 #' @export
 #' @examples
