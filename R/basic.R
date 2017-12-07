@@ -146,6 +146,36 @@ ez.date = function(x,origin="1899-12-30",...) {
     return(as.Date(x,origin=origin,...))
 }
 
+#' check if a vector is already stored as a date type
+#' @description check if a vector is already stored as a date type
+#' @param x a vector, no need to specify date formats, eg, c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d").
+#' @return returns a single T/F (not vectorized). If x is a date, is.numeric(x) is FALSE.
+#' @examples
+#' mydate = c("10/11/2012","10/12/2012")
+#' mydate = as.Date(mydate,format = "%m/%d/%Y")  # "2012-10-11" "2012-10-12"
+#' ez.is.date(mydate)  # T
+#' @export
+ez.is.date = function(x) {
+    # https://stackoverflow.com/a/37062951/2292993
+    return( inherits(x, 'Date') )
+}
+
+#' check if a vector of char, number is convertiable to date type
+#' @description check if a vector of char, number is convertiable to date type
+#' @param x a vector of string, char, etc
+#' @param format specify date format, eg, one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d")
+#' @param ... other parameters passed to as.Date(...) 
+#' @return returns a vector of T/F (vectorized because of is.na() used).
+#' @examples
+#' mydate = c("10/11/2012","10-12-2012")
+#' ez.is.date.convertible(mydate, format = "%m/%d/%Y")  # T F
+#' @export
+ez.is.date.convertible = function(x,format="%m/%d/%Y",tz = 'UTC',...) {
+    # https://stackoverflow.com/a/37062951/2292993
+    result = !is.na( as.Date(as.character(x), tz = tz, format = format, ...) )
+    return( result )
+}
+
 #' convert a column (or all columns) in a data frame, or a vector into character type, call as.character
 #' @param x a data frame or a vector/col
 #' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
