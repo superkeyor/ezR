@@ -105,7 +105,7 @@ ez.view = function(x, file=NULL, id=NULL, width=NULL, characterize=TRUE, incompa
 
 
         # col summary
-        results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique=numeric(),
+        results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
                             levels_view1=character(),levels_view2=character(),
                             mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
         vars=colnames(x)
