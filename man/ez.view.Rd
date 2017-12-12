@@ -4,7 +4,7 @@
 \alias{ez.view}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.view(x, file = NULL, id = NULL, width = NULL, characterize = TRUE,
+ez.view(x, file = NULL, id = NULL, width = 300, characterize = TRUE,
   incomparables = FALSE, ...)
 }
 \arguments{

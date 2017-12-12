@@ -54,7 +54,7 @@ ez.compare = function(lh,rh,...) {
 #' @return returns file path
 #' @examples
 #' @export
-ez.view = function(x, file=NULL, id=NULL, width=NULL, characterize=TRUE, incomparables=FALSE, ...){
+ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, ...){
     # ez.view = function(x, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
