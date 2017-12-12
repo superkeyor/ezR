@@ -807,7 +807,7 @@ ez.replacewhen = function(df,...) {
             col=theCols[i]; newval=theList[[i]]; oldval=df[[col]][theRow]
 
             # print
-            theString = sprintf('%d rows matched/replaced when %s=%s in column %s (%s -> %s)',length(theRow),theID,toString(theValue),col,toString(oldval),toString(newval))
+            theString = sprintf('%d rows replaced when %s=%s in column %s (%s -> %s)',length(theRow),theID,toString(theValue),col,toString(oldval),toString(newval))
             if (length(theRow)==1) {
                 ez.print(theString)
             } else if (length(theRow)>1) {
