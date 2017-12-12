@@ -77,7 +77,7 @@ ez.replace(data,'setosa','flower')
           # Species was factor, now is still factor (notice, levels changed)
 }
 \seealso{
-\code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}}
+\code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} \code{\link{ez.replacewhen}}
 
 Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},

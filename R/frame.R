@@ -694,7 +694,7 @@ ez.recode2 = function(df, col, recodes){
 #' @note when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
 #' \cr when 3 parameters provided, it is recognized as (df,oldval,newval) 
 #' see example
-#' @seealso \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} 
+#' @seealso \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} \code{\link{ez.replacewhen}} 
 #' @examples
 #' data=data.frame(a=factor(c(1,2)))
 #' ez.replace(data,'a',1,3) %>% .$a
@@ -780,6 +780,46 @@ ez.replace = function(df, col, oldval, newval=NULL){
         sink("/dev/null")
         df = ez.replace(df,allcols,oldval,newval)
         sink()
+    }
+    return(df)
+}
+
+#' replace when
+#' @description replace a df: eg, when pt_num=1220, let baby_num=3,baby_name='Bennnnnnn'
+#' \cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
+#' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
+#' \cr wrapper of df[[col]][theRow] <- newval
+#' \cr df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
+#' @param df df
+#' @param ... pt_num=1220,baby_num=3,baby_name='Bennnnnnn',the first element is used as condition to pinpoint the row(s), the rest as cols to be replaced. Quotes around col names are optional, 'pt_num'=1220. 
+#' @return returns a new df
+#' @seealso \code{\link{ez.replace}}
+#' @examples df=ez.replacewhen(nicu,pt_num=1220,baby_num=3,baby_name='Ben')
+#' @export
+ez.replacewhen = function(df,...) {
+    theList = list(...)
+    theCols = names(theList)
+    theID = theCols[1]; theValue = theList[[1]]
+    theRow = which(df[theID]==theValue)
+    # print
+    theString = sprintf('%d rows matched/replaced when %s=%s',length(theRow),theID,toString(theValue))
+    if (length(theRow)==1) {
+        ez.print(theString)
+    } else if (length(theRow)>1) {
+        ez.pprint(theString)
+    }
+    # replace
+    if (length(theRow) > 0) {
+        for (i in 2:length(theCols)) {
+            col=theCols[i]; newval=theList[[i]]
+            factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
+            if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
+            # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
+            df[[col]][theRow] <- newval
+            if (factored) {df[[col]]=as.factor(df[[col]])}
+            # remove all value labels attr, with graceful failure
+            df[[col]]=tryCatch(sjmisc::set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
+        }
     }
     return(df)
 }
