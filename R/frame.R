@@ -801,17 +801,19 @@ ez.replacewhen = function(df,...) {
     theCols = names(theList)
     theID = theCols[1]; theValue = theList[[1]]
     theRow = which(df[theID]==theValue)
-    # print
-    theString = sprintf('%d rows matched/replaced when %s=%s',length(theRow),theID,toString(theValue))
-    if (length(theRow)==1) {
-        ez.print(theString)
-    } else if (length(theRow)>1) {
-        ez.pprint(theString)
-    }
     # replace
     if (length(theRow) > 0) {
         for (i in 2:length(theCols)) {
-            col=theCols[i]; newval=theList[[i]]
+            col=theCols[i]; newval=theList[[i]]; oldval=df[[col]][theRow]
+
+            # print
+            theString = sprintf('%d rows matched/replaced when %s=%s in column %s (%s -> %s)',length(theRow),theID,toString(theValue),col,toString(oldval),toString(newval))
+            if (length(theRow)==1) {
+                ez.print(theString)
+            } else if (length(theRow)>1) {
+                ez.pprint(theString)
+            }
+
             factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
             if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
             # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
