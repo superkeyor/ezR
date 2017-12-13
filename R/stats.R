@@ -52,7 +52,7 @@ ez.compare = function(lh,rh,...) {
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
 #' @param auto.open.tempfile T/F valid only if file=NULL
-#' @return returns a list $df (input data frame), $row, $col, $file (file path)
+#' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @examples
 #' @export
 ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, auto.open.tempfile=TRUE, ...){
@@ -170,29 +170,7 @@ ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incompa
     results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
                           levels_view2=allFactorCounts)
 
-    wb <- openxlsx::createWorkbook(creator = 'openxlsx')
-    openxlsx::addWorksheet(wb, sheetName = "row")
-    openxlsx::writeData(wb, 'row', results0, startCol = 1, startRow = 1, xy = NULL,
-      colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
-      borders = c("none", "surrounding", "rows", "columns", "all"),
-      borderColour = getOption("openxlsx.borderColour", "black"),
-      borderStyle = getOption("openxlsx.borderStyle", "thin"),
-      withFilter = TRUE, keepNA = FALSE)
-    openxlsx::addWorksheet(wb, sheetName = "col")
-    openxlsx::writeData(wb, 'col', results, startCol = 1, startRow = 1, xy = NULL,
-      colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
-      borders = c("none", "surrounding", "rows", "columns", "all"),
-      borderColour = getOption("openxlsx.borderColour", "black"),
-      borderStyle = getOption("openxlsx.borderStyle", "thin"),
-      withFilter = TRUE, keepNA = FALSE)
-    openxlsx::addWorksheet(wb, sheetName = "df")
-    openxlsx::writeData(wb, 'df', df, startCol = 1, startRow = 1, xy = NULL,
-      colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
-      borders = c("none", "surrounding", "rows", "columns", "all"),
-      borderColour = getOption("openxlsx.borderColour", "black"),
-      borderStyle = getOption("openxlsx.borderStyle", "thin"),
-      withFilter = TRUE, keepNA = FALSE)
-    openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+    ez.savexlist(list('row'=results0,'col'=results,'dat'=df))
 
     # give some time to open the file and then on.exit will delete it
     # although OS will be able to auto clean temp files later on
@@ -203,7 +181,7 @@ ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incompa
             ez.sleep(3) 
         }
     } 
-    return(invisible(list(df=df,row=results0,col=results,file=file)))
+    return(invisible(list('row'=results0,'col'=results,'dat'=df,'pth'=file)))
 }
 
 #' standard error of mean

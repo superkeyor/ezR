@@ -21,7 +21,7 @@ ez.view(df, file = NULL, id = NULL, width = 300, characterize = TRUE,
 \item{auto.open.tempfile}{T/F valid only if file=NULL}
 }
 \value{
-returns a list $df (input data frame), $row, $col, $file (file path)
+returns a list $row, $col, $dat (input data frame), $pth (file path)
 }
 \description{
 Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
