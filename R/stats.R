@@ -194,7 +194,7 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
                 browseURL(file)
                 ez.sleep(3) 
             }
-            return(list(row=results0,col=results))
+            return(invisible(list(row=results0,col=results)))
         } else {
             return(invisible(file))
         }
