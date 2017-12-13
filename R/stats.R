@@ -46,24 +46,24 @@ ez.compare = function(lh,rh,...) {
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
-#' @param x a data frame
+#' @param df a data frame
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
 #' @param auto.open.tempfile T/F valid only if file=NULL
-#' @return returns a list $row, $col, $file (file path)
+#' @return returns a list $df (input data frame), $row, $col, $file (file path)
 #' @examples
 #' @export
-ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, auto.open.tempfile=TRUE, ...){
-    # ez.view = function(x, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
+ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, auto.open.tempfile=TRUE, ...){
+    # ez.view = function(df, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
-    # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
+    # sjPlot::view_df(df, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
 
     # if duplicated col names, the following main codes would crash with weird reasons
     # duplicated row names are fine
-    if ( sum(ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1))>0 ) {
-        stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(x)[which(ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
+    if ( sum(ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1))>0 ) {
+        stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(df)[which(ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
     }
 
     # id string to tell user which col used as id
@@ -77,27 +77,27 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
     }
 
     # row summary
-    r.rowname=rownames(x) %>% ez.num()
+    r.rowname=rownames(df) %>% ez.num()
     if (is.null(id)) {
-        idname=rownames(x) %>% ez.num()
+        idname=rownames(df) %>% ez.num()
     } else {
-        idname=x[,id]
+        idname=df[,id]
     }
 
     r.duplicated.idname=ez.duplicated(idname,vec=TRUE,incomparables=incomparables,dim=1)
     r.duplicated.idname[which(!r.duplicated.idname)]=NA
     # check duplicated row except the idname column
     if (is.null(id)) {
-        r.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=1)
+        r.duplicated.content=ez.duplicated(df,vec=TRUE,incomparables=incomparables,dim=1)
     } else {
       # https://github.com/tidyverse/dplyr/issues/2184
       # to avoid the bug, in case variable name id is the same as one of the column names
       idididid=id
-        r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1)
+        r.duplicated.content=ez.duplicated(dplyr::select(df,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1)
     }
     r.duplicated.content[which(!r.duplicated.content)]=NA
     
-    tmpMatrix = is.na(x)
+    tmpMatrix = is.na(df)
     r.ncol = rep(ncol(tmpMatrix), nrow(tmpMatrix))
     r.missing = rowSums(tmpMatrix,na.rm=TRUE)
     
@@ -112,22 +112,22 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
     results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
                         levels_view1=character(),levels_view2=character(),
                         mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
-    vars=colnames(x)
+    vars=colnames(df)
     allFactorUniqueValues=character()
     allFactorCounts=integer()
     for (var in vars) {
         v.variable=var
-        v.class=class(x[[var]])
-        v.n=length(x[[var]])
-        v.missing=sum(is.na(x[[var]]))
-        v.unique=length(unique(x[[var]]))
+        v.class=class(df[[var]])
+        v.n=length(df[[var]])
+        v.missing=sum(is.na(df[[var]]))
+        v.unique=length(unique(df[[var]]))
         # countable as levels
-        if ( is.factor(x[[var]]) | (is.character(x[[var]]) & characterize) | is.logical(x[[var]]) ) {
-            v.levels1=dplyr::count_(x,var) %>% 
+        if ( is.factor(df[[var]]) | (is.character(df[[var]]) & characterize) | is.logical(df[[var]]) ) {
+            v.levels1=dplyr::count_(df,var) %>% 
                 format.data.frame() %>% toString(width=width) %>%  # width controls if too many factor levels
                 gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
 
-            freqtable=dplyr::count_(x,var)
+            freqtable=dplyr::count_(df,var)
             col1=format.factor(freqtable[[1]])
             col2=as.character(freqtable[[2]])
             v.levels2=paste0(col1,'(',col2,')') %>% toString(width=width)
@@ -139,16 +139,16 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
         # calculable 
         is.date <- function(x) inherits(x, 'Date')
         # not all NA
-        if ( is.numeric(x[[var]]) & !all(is.na(x[[var]])) ) {
-            v.mean=mean(x[[var]],na.rm=TRUE)
-            v.min=min(x[[var]],na.rm=TRUE)
-            v.max=max(x[[var]],na.rm=TRUE)
-            v.sum=sum(x[[var]],na.rm=TRUE)
-        } else if ( is.date(x[[var]]) & !all(is.na(x[[var]])) ) {
+        if ( is.numeric(df[[var]]) & !all(is.na(df[[var]])) ) {
+            v.mean=mean(df[[var]],na.rm=TRUE)
+            v.min=min(df[[var]],na.rm=TRUE)
+            v.max=max(df[[var]],na.rm=TRUE)
+            v.sum=sum(df[[var]],na.rm=TRUE)
+        } else if ( is.date(df[[var]]) & !all(is.na(df[[var]])) ) {
             # converted to numeric, to convert back to date: ez.date(ori='R')
-            v.mean=mean(x[[var]],na.rm=TRUE)
-            v.min=min(x[[var]],na.rm=TRUE)
-            v.max=max(x[[var]],na.rm=TRUE)
+            v.mean=mean(df[[var]],na.rm=TRUE)
+            v.min=min(df[[var]],na.rm=TRUE)
+            v.max=max(df[[var]],na.rm=TRUE)
             # sum not defined for "Date" objects
             v.sum=NA
         } else {
@@ -156,9 +156,9 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
         }
         results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
     }
-    v.duplicated.varname=ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1)
+    v.duplicated.varname=ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1)
     v.duplicated.varname[which(!v.duplicated.varname)]=NA
-    v.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=2)
+    v.duplicated.content=ez.duplicated(df,vec=TRUE,incomparables=incomparables,dim=2)
     v.duplicated.content[which(!v.duplicated.content)]=NA
     v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
     results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
@@ -170,8 +170,6 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
     results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
                           levels_view2=allFactorCounts)
 
-
-    # ez.savex(results0,file)
     wb <- openxlsx::createWorkbook(creator = 'openxlsx')
     openxlsx::addWorksheet(wb, sheetName = "row")
     openxlsx::writeData(wb, 'row', results0, startCol = 1, startRow = 1, xy = NULL,
@@ -182,6 +180,13 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
       withFilter = TRUE, keepNA = FALSE)
     openxlsx::addWorksheet(wb, sheetName = "col")
     openxlsx::writeData(wb, 'col', results, startCol = 1, startRow = 1, xy = NULL,
+      colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
+      borders = c("none", "surrounding", "rows", "columns", "all"),
+      borderColour = getOption("openxlsx.borderColour", "black"),
+      borderStyle = getOption("openxlsx.borderStyle", "thin"),
+      withFilter = TRUE, keepNA = FALSE)
+    openxlsx::addWorksheet(wb, sheetName = "df")
+    openxlsx::writeData(wb, 'df', df, startCol = 1, startRow = 1, xy = NULL,
       colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
       borders = c("none", "surrounding", "rows", "columns", "all"),
       borderColour = getOption("openxlsx.borderColour", "black"),
@@ -198,7 +203,7 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
             ez.sleep(3) 
         }
     } 
-    return(invisible(list(row=results0,col=results,file=file)))
+    return(invisible(list(df=df,row=results0,col=results,file=file)))
 }
 
 #' standard error of mean

@@ -4,11 +4,11 @@
 \alias{ez.view}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.view(x, file = NULL, id = NULL, width = 300, characterize = TRUE,
+ez.view(df, file = NULL, id = NULL, width = 300, characterize = TRUE,
   incomparables = FALSE, auto.open.tempfile = TRUE, ...)
 }
 \arguments{
-\item{x}{a data frame}
+\item{df}{a data frame}
 
 \item{file}{a file name, if NULL, a temp generated, will save more detailed variable information to an excel file}
 
@@ -21,7 +21,7 @@ ez.view(x, file = NULL, id = NULL, width = 300, characterize = TRUE,
 \item{auto.open.tempfile}{T/F valid only if file=NULL}
 }
 \value{
-returns a list $row, $col, $file (file path)
+returns a list $df (input data frame), $row, $col, $file (file path)
 }
 \description{
 Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser

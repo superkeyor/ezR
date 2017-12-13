@@ -1267,7 +1267,7 @@ ez.split = dplyr::group_by
 ez.leftjoin = dplyr::left_join
 
 #' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
-#' @param cols sth like 'Month' or c('Month','Day'). If NULL, auto delete/remove cols that are all NAs
+#' @param cols sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions
@@ -1286,7 +1286,11 @@ ez.del = function(df,cols=NULL){
         cat(sprintf('%d cols contain all NAs: %s\nThey are auto removed now (if not 0).\n\n', length(colNumsAllNAs), toString(colnames(df)[colNumsAllNAs])))
         df = dplyr::select(df,-colNumsAllNAs)
     } else {
-        df[cols] = NULL
+        existCols = cols[(cols %in% colnames(df))]
+        if (length(existCols)>0) {
+            cat(sprintf('deleted columns: %s',toString(existCols)))
+            df[existCols] = NULL
+        }
     }
     return(df)
 }

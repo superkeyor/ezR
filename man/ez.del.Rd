@@ -16,7 +16,7 @@ ez.rmcols(df, cols = NULL)
 ez.rmcol(df, cols = NULL)
 }
 \arguments{
-\item{cols}{sth like 'Month' or c('Month','Day'). If NULL, auto delete/remove cols that are all NAs}
+\item{cols}{sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs}
 }
 \value{
 returns a new df, old one does not change
