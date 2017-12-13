@@ -1182,6 +1182,7 @@ ez.unique = dplyr::distinct
 
 #' duplicated
 #' @description find the duplicated rows/cols in a data frame or duplicated elements in a vector of any data type (factor, char, numeric)
+#' \cr ez.notduplicated is unique/distinct minus any of the duplicated
 #' @param x a data frame or a vector/col of any data type (factor, char, numeric)
 #' @param col restrict to the columns where you would like to search for duplicates; e.g., 3, c(3), 2:5, "place", c("place","age")
 #' \cr if x is a data frame, col is specified (e.g., "cond"), check that col only
@@ -1237,6 +1238,45 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, valu
         }
     } else if (!vec) {
         result = data.frame(Duplicated=result)
+    }
+
+    return(result)
+}
+
+#' @rdname ez.duplicated
+#' @export
+ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, value=FALSE, ...){
+    if (is.data.frame(x) & !is.null(col)) {
+        # R converts a single row/col to a vector if the parameter col has only one col
+        # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
+        x = x[,col,drop=FALSE]
+    }
+
+    if (is.data.frame(x) & dim==1){
+        x = x
+    } else if (is.data.frame(x) & dim==2) {
+        # trick from https://stackoverflow.com/a/33552742/2292993
+        xx=x
+        x = as.list(x) # as.list applicable when x input is a vector as well, but vector x will not go through here
+    }
+    
+    # # https://stackoverflow.com/a/29730485/2292993  
+    # # potential hack for incomparables for data frame, not gonna use, better to have error
+    # if (is.data.frame(x)) incomparables=FALSE
+    # https://stackoverflow.com/a/7854620/2292993
+    result = duplicated(x,incomparables=incomparables, ...) | duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
+    result = !result
+    
+    if (value==TRUE) {
+        if (is.list(x) & dim==2) {
+            result=xx[which(result)]
+        } else if (is.data.frame(x) & dim==1) {
+            result=x[which(result),,drop=FALSE]
+        } else {
+            result=x[which(result)]
+        }
+    } else if (!vec) {
+        result = data.frame(NotDuplicated=result)
     }
 
     return(result)

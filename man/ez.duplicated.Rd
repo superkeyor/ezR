@@ -2,10 +2,14 @@
 % Please edit documentation in R/frame.R
 \name{ez.duplicated}
 \alias{ez.duplicated}
+\alias{ez.notduplicated}
 \title{duplicated}
 \usage{
 ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
   value = FALSE, ...)
+
+ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
+  incomparables = FALSE, value = FALSE, ...)
 }
 \arguments{
 \item{x}{a data frame or a vector/col of any data type (factor, char, numeric)}
@@ -38,6 +42,7 @@ return depends, see vec above (By default, missing values are regarded as equal,
 }
 \description{
 find the duplicated rows/cols in a data frame or duplicated elements in a vector of any data type (factor, char, numeric)
+\cr ez.notduplicated is unique/distinct minus any of the duplicated
 }
 \examples{
 c(2,2,3) \%>\% data.frame(col=.) \%>\% ez.duplicated(incomparables = 4)  # error
