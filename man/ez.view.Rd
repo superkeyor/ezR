@@ -5,7 +5,7 @@
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
 ez.view(x, file = NULL, id = NULL, width = 300, characterize = TRUE,
-  incomparables = FALSE, ...)
+  incomparables = FALSE, auto.open.tempfile = TRUE, ...)
 }
 \arguments{
 \item{x}{a data frame}
@@ -17,9 +17,11 @@ ez.view(x, file = NULL, id = NULL, width = 300, characterize = TRUE,
 \item{width}{controls if too many factor levels to print, eg 300. NULL=unlimited}
 
 \item{characterize}{T/F count the element freq of character cols or not}
+
+\item{auto.open.tempfile}{T/F valid only if file=NULL}
 }
 \value{
-returns file path
+returns file path (if file=NULL, return a list with the two df row/col)
 }
 \description{
 Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser

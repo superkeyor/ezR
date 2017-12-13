@@ -51,10 +51,11 @@ ez.compare = function(lh,rh,...) {
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
-#' @return returns file path
+#' @param auto.open.tempfile T/F valid only if file=NULL
+#' @return returns file path (if file=NULL, return a list with the two df row/col)
 #' @examples
 #' @export
-ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, ...){
+ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, auto.open.tempfile=TRUE, ...){
     # ez.view = function(x, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(x, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
@@ -188,8 +189,15 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
         # give some time to open the file and then on.exit will delete it
         # although OS will be able to auto clean temp files later on
         # tempdir() is where it is
-        if (temped) {browseURL(file);ez.sleep(3)}  
-        return(invisible(file))
+        if (temped) {
+            if (auto.open.tempfile) {
+                browseURL(file)
+                ez.sleep(3) 
+            }
+            return(list(row=results0,col=results))
+        } else {
+            return(invisible(file))
+        }
     }
 }
 
