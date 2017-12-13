@@ -52,7 +52,7 @@ ez.compare = function(lh,rh,...) {
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
 #' @param auto.open.tempfile T/F valid only if file=NULL
-#' @return returns file path (if file=NULL, return a list with the two df row/col)
+#' @return returns a list $row, $col, $file (file path)
 #' @examples
 #' @export
 ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, auto.open.tempfile=TRUE, ...){
@@ -197,10 +197,8 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
             browseURL(file)
             ez.sleep(3) 
         }
-        return(invisible(list(row=results0,col=results)))
-    } else {
-        return(invisible(file))
-    }
+    } 
+    return(invisible(list(row=results0,col=results,file=file)))
 }
 
 #' standard error of mean
