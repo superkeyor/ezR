@@ -1194,6 +1194,7 @@ ez.unique = dplyr::distinct
 #' @param value TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
 #' The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
 #' Ignore/Overwrite vec=T/F. 
+#' @param keepall TRUE/FALSE, only applicable when value=T (otherwise ignored). When col is specified, value only returns for that col. Use keepall=T to return all cols in input df
 #' @param dim 1=find duplicated rows, 2=find duplicated cols. dim has no effect when x is a vector
 #' @param incomparables a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
 #' \cr and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.
@@ -1207,7 +1208,9 @@ ez.unique = dplyr::distinct
 #' c(2,2,3) %>% data.frame(col=.) %>% ez.duplicated(incomparables = 4)  # error
 #' c(2,2,3) %>% ez.duplicated(incomparables = 4)  # OK  note that 4 is not even an element of the vector
 #' @export
-ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, value=FALSE, ...){
+ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, value=FALSE, keepall=TRUE, ...){
+    xinput = x
+
     if (is.data.frame(x) & !is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
@@ -1229,6 +1232,8 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, valu
     result = duplicated(x,incomparables=incomparables, ...) | duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
     
     if (value==TRUE) {
+        if (keepall) {xx=xinput;x=xinput}
+
         if (is.list(x) & dim==2) {
             result=xx[which(result)]
         } else if (is.data.frame(x) & dim==1) {
@@ -1237,7 +1242,7 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, valu
             result=x[which(result)]
         }
     } else if (!vec) {
-        result = data.frame(Duplicated=result)
+        result = data.frame('Duplicated'=result)
     }
 
     return(result)
@@ -1245,7 +1250,9 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, valu
 
 #' @rdname ez.duplicated
 #' @export
-ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, value=FALSE, ...){
+ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, value=FALSE, keepall=TRUE, ...){
+    xinput = x
+
     if (is.data.frame(x) & !is.null(col)) {
         # R converts a single row/col to a vector if the parameter col has only one col
         # see https://radfordneal.wordpress.com/2008/08/20/design-flaws-in-r-2-%E2%80%94-dropped-dimensions/#comments
@@ -1266,8 +1273,10 @@ ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, v
     # https://stackoverflow.com/a/7854620/2292993
     result = duplicated(x,incomparables=incomparables, ...) | duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
     result = !result
-    
+
     if (value==TRUE) {
+        if (keepall) {xx=xinput;x=xinput}
+
         if (is.list(x) & dim==2) {
             result=xx[which(result)]
         } else if (is.data.frame(x) & dim==1) {
@@ -1276,7 +1285,7 @@ ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, v
             result=x[which(result)]
         }
     } else if (!vec) {
-        result = data.frame(NotDuplicated=result)
+        result = data.frame('NotDuplicated'=result)
     }
 
     return(result)

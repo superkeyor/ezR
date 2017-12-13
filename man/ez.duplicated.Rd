@@ -6,10 +6,10 @@
 \title{duplicated}
 \usage{
 ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
-  value = FALSE, ...)
+  value = FALSE, keepall = TRUE, ...)
 
 ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
-  incomparables = FALSE, value = FALSE, ...)
+  incomparables = FALSE, value = FALSE, keepall = TRUE, ...)
 }
 \arguments{
 \item{x}{a data frame or a vector/col of any data type (factor, char, numeric)}
@@ -32,6 +32,8 @@ ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
 \item{value}{TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
 The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
 Ignore/Overwrite vec=T/F.}
+
+\item{keepall}{TRUE/FALSE, only applicable when value=T (otherwise ignored). When col is specified, value only returns for that col. Use keepall=T to return all cols in input df}
 }
 \value{
 return depends, see vec above (By default, missing values are regarded as equal, to avoid that, pass incomparables=NA)
