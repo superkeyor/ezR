@@ -66,138 +66,140 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
         stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(x)[which(ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
     }
 
+    # id string to tell user which col used as id
+    idString = if (is.null(id)) 'rowname' else id
+
     temped=F
     if(is.null(file)){
         temped=T
-        file=tempfile(pattern = "view_", tmpdir = tempdir(), fileext = ".xlsx")
+        file=tempfile(pattern = paste0('view_id_',idString,'_'), tmpdir = tempdir(), fileext = ".xlsx")
         on.exit(unlink(file))
     }
 
-    if (!is.null(file)) {
-        # row summary
-        r.rowname=rownames(x) %>% ez.num()
-        if (is.null(id)) {
-            idname=rownames(x) %>% ez.num()
+    # row summary
+    r.rowname=rownames(x) %>% ez.num()
+    if (is.null(id)) {
+        idname=rownames(x) %>% ez.num()
+    } else {
+        idname=x[,id]
+    }
+
+    r.duplicated.idname=ez.duplicated(idname,vec=TRUE,incomparables=incomparables,dim=1)
+    r.duplicated.idname[which(!r.duplicated.idname)]=NA
+    # check duplicated row except the idname column
+    if (is.null(id)) {
+        r.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=1)
+    } else {
+      # https://github.com/tidyverse/dplyr/issues/2184
+      # to avoid the bug, in case variable name id is the same as one of the column names
+      idididid=id
+        r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1)
+    }
+    r.duplicated.content[which(!r.duplicated.content)]=NA
+    
+    tmpMatrix = is.na(x)
+    r.ncol = rep(ncol(tmpMatrix), nrow(tmpMatrix))
+    r.missing = rowSums(tmpMatrix,na.rm=TRUE)
+    
+    results0=data.frame(rowname=r.rowname,id=idname,duplicated_id=r.duplicated.idname,
+                        duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
+    results0=dplyr::mutate(results0,missing_rate=missing/ncol)
+    results0=ez.rncol(c('id'=paste0('id_',idString)))
+    
+
+
+    # col summary
+    results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
+                        levels_view1=character(),levels_view2=character(),
+                        mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
+    vars=colnames(x)
+    allFactorUniqueValues=character()
+    allFactorCounts=integer()
+    for (var in vars) {
+        v.variable=var
+        v.class=class(x[[var]])
+        v.n=length(x[[var]])
+        v.missing=sum(is.na(x[[var]]))
+        v.unique=length(unique(x[[var]]))
+        # countable as levels
+        if ( is.factor(x[[var]]) | (is.character(x[[var]]) & characterize) | is.logical(x[[var]]) ) {
+            v.levels1=dplyr::count_(x,var) %>% 
+                format.data.frame() %>% toString(width=width) %>%  # width controls if too many factor levels
+                gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
+
+            freqtable=dplyr::count_(x,var)
+            col1=format.factor(freqtable[[1]])
+            col2=as.character(freqtable[[2]])
+            v.levels2=paste0(col1,'(',col2,')') %>% toString(width=width)
+            allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
+            allFactorCounts=c(allFactorCounts,freqtable[[2]])
         } else {
-            idname=x[,id]
+            v.levels1=v.levels2=NA
         }
-
-        r.duplicated.idname=ez.duplicated(idname,vec=TRUE,incomparables=incomparables,dim=1)
-        r.duplicated.idname[which(!r.duplicated.idname)]=NA
-        # check duplicated row except the idname column
-        if (is.null(id)) {
-            r.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=1)
+        # calculable 
+        is.date <- function(x) inherits(x, 'Date')
+        # not all NA
+        if ( is.numeric(x[[var]]) & !all(is.na(x[[var]])) ) {
+            v.mean=mean(x[[var]],na.rm=TRUE)
+            v.min=min(x[[var]],na.rm=TRUE)
+            v.max=max(x[[var]],na.rm=TRUE)
+            v.sum=sum(x[[var]],na.rm=TRUE)
+        } else if ( is.date(x[[var]]) & !all(is.na(x[[var]])) ) {
+            # converted to numeric, to convert back to date: ez.date(ori='R')
+            v.mean=mean(x[[var]],na.rm=TRUE)
+            v.min=min(x[[var]],na.rm=TRUE)
+            v.max=max(x[[var]],na.rm=TRUE)
+            # sum not defined for "Date" objects
+            v.sum=NA
         } else {
-          # https://github.com/tidyverse/dplyr/issues/2184
-          # to avoid the bug, in case variable name id is the same as one of the column names
-          idididid=id
-            r.duplicated.content=ez.duplicated(dplyr::select(x,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1)
+            v.mean=v.min=v.max=v.sum=NA
         }
-        r.duplicated.content[which(!r.duplicated.content)]=NA
-        
-        tmpMatrix = is.na(x)
-        r.ncol = rep(ncol(tmpMatrix), nrow(tmpMatrix))
-        r.missing = rowSums(tmpMatrix,na.rm=TRUE)
-        
-        results0=data.frame(rowname=r.rowname,id=idname,duplicated_id=r.duplicated.idname,
-                            duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
-        results0=dplyr::mutate(results0,missing_rate=missing/ncol)
-        
+        results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
+    }
+    v.duplicated.varname=ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1)
+    v.duplicated.varname[which(!v.duplicated.varname)]=NA
+    v.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=2)
+    v.duplicated.content[which(!v.duplicated.content)]=NA
+    v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
+    results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
+    results=dplyr::mutate(results,missing_rate=missing/n)
+    results=ez.rncol(results,c('n'='nrow'))
+    # no factors in the data frame!
+    allFactorUniqueValues = if (length(allFactorUniqueValues)==0) NA else allFactorUniqueValues %>% toString(width=width)
+    allFactorCounts = if (length(allFactorCounts)==0) NA else range(allFactorCounts,na.rm =T) %>% toString(width=width)
+    results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
+                          levels_view2=allFactorCounts)
 
 
-        # col summary
-        results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
-                            levels_view1=character(),levels_view2=character(),
-                            mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
-        vars=colnames(x)
-        allFactorUniqueValues=character()
-        allFactorCounts=integer()
-        for (var in vars) {
-            v.variable=var
-            v.class=class(x[[var]])
-            v.n=length(x[[var]])
-            v.missing=sum(is.na(x[[var]]))
-            v.unique=length(unique(x[[var]]))
-            # countable as levels
-            if ( is.factor(x[[var]]) | (is.character(x[[var]]) & characterize) | is.logical(x[[var]]) ) {
-                v.levels1=dplyr::count_(x,var) %>% 
-                    format.data.frame() %>% toString(width=width) %>%  # width controls if too many factor levels
-                    gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
+    # ez.savex(results0,file)
+    wb <- openxlsx::createWorkbook(creator = 'openxlsx')
+    openxlsx::addWorksheet(wb, sheetName = "row")
+    openxlsx::writeData(wb, 'row', results0, startCol = 1, startRow = 1, xy = NULL,
+      colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
+      borders = c("none", "surrounding", "rows", "columns", "all"),
+      borderColour = getOption("openxlsx.borderColour", "black"),
+      borderStyle = getOption("openxlsx.borderStyle", "thin"),
+      withFilter = TRUE, keepNA = FALSE)
+    openxlsx::addWorksheet(wb, sheetName = "col")
+    openxlsx::writeData(wb, 'col', results, startCol = 1, startRow = 1, xy = NULL,
+      colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
+      borders = c("none", "surrounding", "rows", "columns", "all"),
+      borderColour = getOption("openxlsx.borderColour", "black"),
+      borderStyle = getOption("openxlsx.borderStyle", "thin"),
+      withFilter = TRUE, keepNA = FALSE)
+    openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
 
-                freqtable=dplyr::count_(x,var)
-                col1=format.factor(freqtable[[1]])
-                col2=as.character(freqtable[[2]])
-                v.levels2=paste0(col1,'(',col2,')') %>% toString(width=width)
-                allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
-                allFactorCounts=c(allFactorCounts,freqtable[[2]])
-            } else {
-                v.levels1=v.levels2=NA
-            }
-            # calculable 
-            is.date <- function(x) inherits(x, 'Date')
-            # not all NA
-            if ( is.numeric(x[[var]]) & !all(is.na(x[[var]])) ) {
-                v.mean=mean(x[[var]],na.rm=TRUE)
-                v.min=min(x[[var]],na.rm=TRUE)
-                v.max=max(x[[var]],na.rm=TRUE)
-                v.sum=sum(x[[var]],na.rm=TRUE)
-            } else if ( is.date(x[[var]]) & !all(is.na(x[[var]])) ) {
-                # converted to numeric, to convert back to date: ez.date(ori='R')
-                v.mean=mean(x[[var]],na.rm=TRUE)
-                v.min=min(x[[var]],na.rm=TRUE)
-                v.max=max(x[[var]],na.rm=TRUE)
-                # sum not defined for "Date" objects
-                v.sum=NA
-            } else {
-                v.mean=v.min=v.max=v.sum=NA
-            }
-            results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
+    # give some time to open the file and then on.exit will delete it
+    # although OS will be able to auto clean temp files later on
+    # tempdir() is where it is
+    if (temped) {
+        if (auto.open.tempfile) {
+            browseURL(file)
+            ez.sleep(3) 
         }
-        v.duplicated.varname=ez.duplicated(colnames(x),vec=TRUE,incomparables=incomparables,dim=1)
-        v.duplicated.varname[which(!v.duplicated.varname)]=NA
-        v.duplicated.content=ez.duplicated(x,vec=TRUE,incomparables=incomparables,dim=2)
-        v.duplicated.content[which(!v.duplicated.content)]=NA
-        v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
-        results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
-        results=dplyr::mutate(results,missing_rate=missing/n)
-        results=ez.rncol(results,c('n'='nrow'))
-        # no factors in the data frame!
-        allFactorUniqueValues = if (length(allFactorUniqueValues)==0) NA else allFactorUniqueValues %>% toString(width=width)
-        allFactorCounts = if (length(allFactorCounts)==0) NA else range(allFactorCounts,na.rm =T) %>% toString(width=width)
-        results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
-                              levels_view2=allFactorCounts)
-
-
-        # ez.savex(results0,file)
-        wb <- openxlsx::createWorkbook(creator = 'openxlsx')
-        openxlsx::addWorksheet(wb, sheetName = "row")
-        openxlsx::writeData(wb, 'row', results0, startCol = 1, startRow = 1, xy = NULL,
-          colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
-          borders = c("none", "surrounding", "rows", "columns", "all"),
-          borderColour = getOption("openxlsx.borderColour", "black"),
-          borderStyle = getOption("openxlsx.borderStyle", "thin"),
-          withFilter = TRUE, keepNA = FALSE)
-        openxlsx::addWorksheet(wb, sheetName = "col")
-        openxlsx::writeData(wb, 'col', results, startCol = 1, startRow = 1, xy = NULL,
-          colNames = TRUE, rowNames = FALSE, headerStyle = NULL,
-          borders = c("none", "surrounding", "rows", "columns", "all"),
-          borderColour = getOption("openxlsx.borderColour", "black"),
-          borderStyle = getOption("openxlsx.borderStyle", "thin"),
-          withFilter = TRUE, keepNA = FALSE)
-        openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
-
-        # give some time to open the file and then on.exit will delete it
-        # although OS will be able to auto clean temp files later on
-        # tempdir() is where it is
-        if (temped) {
-            if (auto.open.tempfile) {
-                browseURL(file)
-                ez.sleep(3) 
-            }
-            return(invisible(list(row=results0,col=results)))
-        } else {
-            return(invisible(file))
-        }
+        return(invisible(list(row=results0,col=results)))
+    } else {
+        return(invisible(file))
     }
 }
 
