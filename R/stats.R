@@ -170,7 +170,7 @@ ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incompa
     results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
                           levels_view2=allFactorCounts)
 
-    ez.savexlist(list('row'=results0,'col'=results,'dat'=df))
+    ez.savexlist(list('row'=results0,'col'=results,'dat'=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
 
     # give some time to open the file and then on.exit will delete it
     # although OS will be able to auto clean temp files later on
