@@ -104,7 +104,7 @@ ez.view = function(x, file=NULL, id=NULL, width=300, characterize=TRUE, incompar
     results0=data.frame(rowname=r.rowname,id=idname,duplicated_id=r.duplicated.idname,
                         duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
     results0=dplyr::mutate(results0,missing_rate=missing/ncol)
-    results0=ez.rncol(c('id'=paste0('id_',idString)))
+    results0=ez.rncol(results0,c('id'=paste0('id_',idString)))
     
 
 
