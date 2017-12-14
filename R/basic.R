@@ -100,7 +100,8 @@ ez.repo = function(repo=NULL){
 
 #' convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @param x a character vector, data frame, list, or a factor
-#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
+#' @param col internally evaluated by dplyr::select_()
+#' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @param force T/F, if force, will try to convert everything (factor, etc) to character first then to numeric, (no warning for NA coerce)
@@ -157,9 +158,13 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
         }
         result = x
     } else if (is.data.frame(x) && !is.null(col)) {
-        # recursive to is.data.frame(x) && is.null(col)
-        x[col] = ez.num(x[col],force=force)
-        result=x
+        col=colnames(dplyr::select_(x,col))
+        cols=col
+        for (col in cols) {
+            # recursive to is.data.frame(x) && is.null(col)
+            x[col] = ez.num(x[col],force=force)
+            result=x
+        }
     } else if (is.list(x)){
         result = utils::type.convert(as.character(unlist(x)), as.is = TRUE, ...)
     } else {
@@ -236,7 +241,8 @@ ez.is.date.convertible = function(x,format="%m/%d/%Y",...) {
 
 #' convert a column (or all columns) in a data frame, or a vector into character type, call as.character
 #' @param x a data frame or a vector/col
-#' @param col if x is a data frame, col is specified (e.g., "cond"), convert that col only
+#' @param col internally evaluated by dplyr::select_()
+#' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 #' \cr        if x is a data frame, col is NA (a special case), convert all numeric NAs to character NAs, for bind_rows. see https://github.com/tidyverse/dplyr/issues/2584
 #' \cr        if x is not a data frame, col is ignored
@@ -257,8 +263,12 @@ ez.str = function(x, col=NULL){
         # use & not &&, because we are vectorizing
         result = dplyr::mutate_all(x,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
     } else if (is.data.frame(x) && !is.null(col)) {
-        x[[col]] = as.character(x[[col]])
-        result=x
+        col=colnames(dplyr::select_(x,col))
+        cols=col
+        for (col in cols) {
+            x[[col]] = as.character(x[[col]])
+            result=x
+        }
     } else {
         result = as.character(x)
     }
