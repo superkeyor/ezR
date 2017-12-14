@@ -9,7 +9,8 @@ ez.str(x, col = NULL)
 \arguments{
 \item{x}{a data frame or a vector/col}
 
-\item{col}{if x is a data frame, col is specified (e.g., "cond"), convert that col only
+\item{col}{internally evaluated by dplyr::select_()
+\cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 \cr        if x is a data frame, col is NA (a special case), convert all numeric NAs to character NAs, for bind_rows. see https://github.com/tidyverse/dplyr/issues/2584
 \cr        if x is not a data frame, col is ignored}

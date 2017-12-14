@@ -10,9 +10,16 @@ ez.2factor(x, col = NULL, add.non.labelled = TRUE, drop.na = FALSE,
 \arguments{
 \item{x}{a data frame or a vector/col}
 
-\item{col}{if x is a data frame, col is specified (e.g., "cond"), convert that col only
+\item{col}{internally evaluated by dplyr::select_()
+\cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 \cr        if x is not a data frame, col is ignored}
+
+\item{add.non.labelled}{Logical, if TRUE, non-labelled values also get value labels.}
+
+\item{drop.na}{Logical, if TRUE, all types of missing value codes are converted into NA before x is converted as factor. If FALSE, missing values will be left as their original codes. See 'Examples' and get_na.}
+
+\item{ref.lvl}{Numeric, specifies the reference level for the new factor. Use this parameter if a different factor level than the lowest value should be used as reference level. If NULL, lowest value will become the reference level. See ref_lvl for details.}
 }
 \value{
 returns a factor with number as its levels or a data frame with changed col(s)

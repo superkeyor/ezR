@@ -27,6 +27,6 @@ an invisible data frame with x,y,p,means and print results out on screen; result
 \cr degree_of_freedom: from F-statistic
 }
 \description{
-aov(ez.2value(df[[yy]])~df[[xx]])
+aov(ez.2value(df[[yy]],...)~ez.2factor(df[[xx]]))
 }
 
