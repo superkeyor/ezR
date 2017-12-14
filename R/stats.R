@@ -176,7 +176,8 @@ ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incompa
     # although OS will be able to auto clean temp files later on
     # tempdir() is where it is
     if (temped) {
-        if (auto.open.tempfile) {
+        debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
+        if (auto.open.tempfile & debugMode) {
             browseURL(file)
             ez.sleep(3) 
         }
