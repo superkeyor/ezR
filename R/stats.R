@@ -72,7 +72,7 @@ ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incompa
     temped=F
     if(is.null(file)){
         temped=T
-        file=tempfile(pattern = paste0('view_id_',idString,'_'), tmpdir = tempdir(), fileext = ".xlsx")
+        file=tempfile(pattern = paste0('view_id_',idString,'_',ez.moment,'_'), tmpdir = tempdir(), fileext = ".xlsx")
         on.exit(unlink(file))
     }
 
