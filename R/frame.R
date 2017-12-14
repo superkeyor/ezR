@@ -1332,8 +1332,10 @@ ez.del = function(df,cols=NULL){
     if (is.null(cols)) {
         # https://stackoverflow.com/a/29269139/2292993
         colNumsAllNAs = as.vector(which(colSums(is.na(df)) == nrow(df)))
-        cat(sprintf('%d cols contain all NAs: %s\nThey are auto removed now (if not 0).\n\n', length(colNumsAllNAs), toString(colnames(df)[colNumsAllNAs])))
-        df = dplyr::select(df,-colNumsAllNAs)
+        if (length(colNumsAllNAs)>0) {
+            cat(sprintf('%d cols removed that contain all NAs: %s\n', length(colNumsAllNAs), toString(colnames(df)[colNumsAllNAs])))
+            df = dplyr::select(df,-colNumsAllNAs)
+        }
     } else {
         existCols = cols[(cols %in% colnames(df))]
         if (length(existCols)>0) {
