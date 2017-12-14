@@ -51,11 +51,10 @@ ez.compare = function(lh,rh,...) {
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
-#' @param auto.open.tempfile T/F valid only if file=NULL
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @examples
 #' @export
-ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, auto.open.tempfile=TRUE, ...){
+ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, ...){
     # ez.view = function(df, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(df, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
@@ -177,7 +176,7 @@ ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incompa
     # tempdir() is where it is
     if (temped) {
         debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
-        if (auto.open.tempfile & debugMode) {
+        if (debugMode) {
             browseURL(file)
             ez.sleep(3) 
         }

@@ -5,7 +5,7 @@
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
 ez.view(df, file = NULL, id = NULL, width = 300, characterize = TRUE,
-  incomparables = FALSE, auto.open.tempfile = TRUE, ...)
+  incomparables = FALSE, ...)
 }
 \arguments{
 \item{df}{a data frame}
@@ -17,8 +17,6 @@ ez.view(df, file = NULL, id = NULL, width = 300, characterize = TRUE,
 \item{width}{controls if too many factor levels to print, eg 300. NULL=unlimited}
 
 \item{characterize}{T/F count the element freq of character cols or not}
-
-\item{auto.open.tempfile}{T/F valid only if file=NULL}
 }
 \value{
 returns a list $row, $col, $dat (input data frame), $pth (file path)
