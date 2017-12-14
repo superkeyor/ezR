@@ -217,7 +217,7 @@ ez.se = function(x) {
 #' @examples
 #' @export
 ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
-    y=colnames(dplyr::select_(y)); x=colnames(dplyr::select_(x))
+    y=colnames(dplyr::select_(df,y)); x=colnames(dplyr::select_(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     for (yy in y) {
         for (xx in x) {
