@@ -11,9 +11,9 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom}
 
-\item{y}{a vector of outcome variables c('var1','var2'), or a single variable 'var1'}
+\item{y}{internally evaluated by dplyr::select_(), a vector of outcome variables c('var1','var2'), or a single variable 'var1'}
 
-\item{x}{a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)}
+\item{x}{internally evaluated by dplyr::select_(), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)}
 
 \item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
 

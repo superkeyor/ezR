@@ -10,9 +10,9 @@ ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T)
 \item{df}{a data frame
 \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom}
 
-\item{y}{a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))}
+\item{y}{internally evaluated by dplyr::select_(), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))}
 
-\item{x}{a vector of categorical variables, or a single categorical variable}
+\item{x}{internally evaluated by dplyr::select_(), a vector of categorical variables, or a single categorical variable}
 
 \item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
 
