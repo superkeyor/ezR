@@ -47,14 +47,14 @@ ez.compare = function(lh,rh,...) {
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @param df a data frame
-#' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
+#' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @examples
 #' @export
-ez.view = function(df, file=NULL, id=NULL, width=300, characterize=TRUE, incomparables=FALSE, ...){
+ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, ...){
     # ez.view = function(df, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(df, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
