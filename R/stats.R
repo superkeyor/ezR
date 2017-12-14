@@ -203,6 +203,7 @@ ez.se = function(x) {
 #' @param x internally evaluated by dplyr::select_(), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param showerror whether show error message when error occurs, default F
+#' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible data frame with y,x,p,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' \cr beta: standardized coefficients or beta coefficients are the estimates resulting from a regression analysis that have been standardized 
 #' \cr so that the variances of dependent and independent variables are 1.
@@ -213,15 +214,14 @@ ez.se = function(x) {
 #' \cr degree_of_freedom: from F-statistic
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
-#' @param ... dots passed to ez.2value(df,...)
 #' @examples
 #' @export
 ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
     y=colnames(dplyr::select_(df,y)); x=colnames(dplyr::select_(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
+    dfdf=ez.2value(df,...)
     for (yy in y) {
         for (xx in x) {
-            dfdf=ez.2value(df,...)
             if (showerror) {
                 # try is implemented using tryCatch
                 # try(expr, silent = FALSE)
@@ -249,7 +249,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) 
 }
 
 #' a series of one-way anova, for many y and many x
-#' @description aov(ez.2value(df[[yy]])~df[[xx]])
+#' @description aov(ez.2value(df[[yy]],...)~ez.2factor(df[[xx]]))
 #' @param df a data frame
 #' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
 #' @param y internally evaluated by dplyr::select_(), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
@@ -271,7 +271,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
                 # try is implemented using tryCatch
                 # try(expr, silent = FALSE)
                 try({
-                    a = aov(ez.2value(df[[yy]],...)~df[[xx]])
+                    a = aov(ez.2value(df[[yy]],...)~ez.2factor(df[[xx]]))
                     p = summary(a)[[1]][["Pr(>F)"]][[1]]
                     degree_of_freedom = toString(summary(a)[[1]][['Df']])
                     s = aggregate(ez.2value(df[[yy]],...)~df[[xx]],FUN=mean)
@@ -282,7 +282,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
             } else {
                 # go to next loop item, in case error
                 tryCatch({
-                    a = aov(ez.2value(df[[yy]],...)~df[[xx]])
+                    a = aov(ez.2value(df[[yy]],...)~ez.2factor(df[[xx]]))
                     p = summary(a)[[1]][["Pr(>F)"]][[1]]
                     degree_of_freedom = toString(summary(a)[[1]][['Df']])
                     s = aggregate(ez.2value(df[[yy]],...)~df[[xx]],FUN=mean)
@@ -293,6 +293,52 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
             }
         }
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
+    }
+    return(invisible(results))
+}
+
+#' a series of fisher.test, for many y and many x
+#' @description fisher.test(dfdf[[xx]],dfdf[[yy]])
+#' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
+#' \cr NA in df will be auto excluded in fisher.test(), reflected by total
+#' @param y internally evaluated by dplyr::select_(), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
+#' @param x internally evaluated by dplyr::select_(), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
+#' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param showerror whether show error message when error occurs, default F
+#' @param width width for toString(countTable,width=width)
+#' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+#' @examples
+#' @export
+ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,width=300) {
+    y=colnames(dplyr::select_(df,y)); x=colnames(dplyr::select_(df,x))
+    results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
+    dfdf=ez.2factor(df)
+    for (xx in x) {
+        for (yy in y) {
+            if (showerror) {
+                # try is implemented using tryCatch
+                # try(expr, silent = FALSE)
+                try({
+                    fisher.test(dfdf[[xx]],dfdf[[yy]]) -> model # by default, pairwise NA auto removed
+                    p = model$p.value
+                    countTable = table(dfdf[[xx]],dfdf[[yy]])   # by default, pairwise NA auto removed
+                    counts = toString(countTable,width=width)
+                    total = sum(countTable)
+                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,counts,total),print2screen=print2screen)}
+                    })
+            } else {
+                # go to next loop item, in case error
+                tryCatch({
+                    fisher.test(dfdf[[xx]],dfdf[[yy]]) -> model # by default, pairwise NA auto removed
+                    p = model$p.value
+                    countTable = table(dfdf[[xx]],dfdf[[yy]])   # by default, pairwise NA auto removed
+                    counts = toString(countTable,width=width)
+                    total = sum(countTable)
+                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,counts,total),print2screen=print2screen)}
+                }, error = function(e) {})
+            }
+        }
+        if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,'',NA),print2screen=print2screen)  # empty line between each x
     }
     return(invisible(results))
 }
