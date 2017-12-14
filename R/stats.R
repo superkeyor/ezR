@@ -262,7 +262,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) 
 #' \cr degree_of_freedom: from F-statistic
 #' @examples
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T) {
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
     y=colnames(dplyr::select_(df,y)); x=colnames(dplyr::select_(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character())
     for (xx in x) {
