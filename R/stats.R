@@ -243,7 +243,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) 
                 }, error = function(e) {})
             }
         }
-        if (length(x)>1) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
+        if (length(x)>1 & yy!=y[length(y)]) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
     }
     return(invisible(results))
 }
@@ -292,7 +292,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
                 }, error = function(e) {})
             }
         }
-        if (length(y)>1) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
+        if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
     }
     return(invisible(results))
 }
