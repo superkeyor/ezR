@@ -219,7 +219,7 @@ ez.se = function(x) {
 ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
     y=colnames(dplyr::select_(df,y)); x=colnames(dplyr::select_(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
-    dfdf=ez.2value(df,...)
+    dfdf=ez.2value(df,c(x,y),...)
     for (yy in y) {
         for (xx in x) {
             if (showerror) {
@@ -312,7 +312,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
 ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,width=300) {
     y=colnames(dplyr::select_(df,y)); x=colnames(dplyr::select_(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
-    dfdf=ez.2factor(df)
+    dfdf=ez.2factor(df,c(x,y))
     for (xx in x) {
         for (yy in y) {
             if (showerror) {
@@ -341,4 +341,85 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,width=300
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,'',NA),print2screen=print2screen)  # empty line between each x
     }
     return(invisible(results))
+}
+
+#' table xy
+#' @description (df, x, y) or (x, y), \code{\link[gmodels]{CrossTable}},  auto convert to factor
+#' \cr ez.table input could be one, two, or more varibles/cols
+#' @export
+#' @examples
+#' # dnn=c('row','col')
+ez.table2 = function(df, x, y=NULL, digits=2, max.width = 1, expected=FALSE, prop.r=FALSE, prop.c=FALSE,
+                       prop.t=TRUE, prop.chisq=FALSE, chisq = FALSE, fisher=TRUE, mcnemar=FALSE,
+                       resid=FALSE, sresid=FALSE, asresid=FALSE,
+                       missing.include=FALSE,
+                       format="SPSS", dnn = NULL, ...) {
+    # (df, x, y)
+    if (!is.null(y)) {
+        df = ez.2factor(df,c(x,y))
+        if (is.null(dnn)) dnn=ez.eval(sprintf('c("%s","%s")',x,y))
+        result = gmodels::CrossTable(df[[x]], df[[y]], digits=digits, max.width = max.width, expected=expected, prop.r=prop.r, prop.c=prop.c,
+                           prop.t=prop.t, prop.chisq=prop.chisq, chisq=chisq, fisher=fisher, mcnemar=mcnemar,
+                           resid=resid, sresid=sresid, asresid=asresid,
+                           missing.include=missing.include,
+                           format=format, dnn = dnn, ...)
+    # (x, y)
+    } else {
+        if (is.null(dnn)) {
+            dnn = c(deparse(substitute(df)),deparse(substitute(x)))
+            dnn=stringr::str_extract_all(dnn,'\\$[\\w\\.]+') %>% unlist() %>% gsub('\\$','',.)
+        }
+        y=x; x=df
+        result = gmodels::CrossTable(x, y, digits=digits, max.width = max.width, expected=expected, prop.r=prop.r, prop.c=prop.c,
+                           prop.t=prop.t, prop.chisq=prop.chisq, chisq=chisq, fisher=fisher, mcnemar=mcnemar,
+                           resid=resid, sresid=sresid, asresid=asresid,
+                           missing.include=missing.include,
+                           format=format, dnn = dnn, ...)
+    }
+    return(invisible(result))
+}
+
+#' freq table
+#' @description freq table, df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z), auto convert to factor
+#' \cr ez.table2 output is more beautiful, but must be two varibles/cols 
+#' @export
+#' @param x, ... df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z)
+#' @param dnn c('col','row')
+#' @param exclude values to use in the exclude argument of factor when interpreting non-factor objects. could be NULL to include NA
+#' @param row.vars    a vector of integers giving the numbers of the variables, or a character vector giving the names of the variables to be used for the rows of the flat contingency table.
+#' @param col.vars    a vector of integers giving the numbers of the variables, or a character vector giving the names of the variables to be used for the columns of the flat contingency table.
+ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.vars = NULL) {
+    if (is.data.frame(x)) {
+        # input = x[c(...)]  # when pass date frame, dnn not working
+        input = paste('x',c(...),sep='$',collapse=', ')
+        if (is.null(dnn)) dnn=c(...)
+        cmd = sprintf('ftable(%s, exclude=exclude, row.vars=row.vars, col.vars=col.vars, dnn=dnn)', input)
+        theTable = ez.eval(cmd)
+        cmd = sprintf('fisher.test(%s)',input)
+    } else {
+        # alist() function which simply captures all arguments
+        # http://adv-r.had.co.nz/Computing-on-the-language.html
+        if (is.null(dnn)) {
+            dnn=substitute(alist(x,...))
+            # get rid of df$
+            dnn=stringr::str_extract_all(deparse(dnn),'\\$[\\w\\.]+') %>% unlist() %>% gsub('\\$','',.)
+        }
+        theTable = ftable(x, ..., exclude=exclude, row.vars=row.vars, col.vars=col.vars, dnn=dnn)
+    }
+
+    print(theTable)
+
+    if (is.data.frame(x)) {
+        if (length(c(...))>0) {
+            fisher = ez.eval(cmd)
+            cat(sprintf("\nFisher's Exact Test, two-sided p = %f\n",fisher$p.value))
+        }
+    } else {
+        if (length(c(...))>0) {
+            fisher = fisher.test(x,...)
+            cat(sprintf("\nFisher's Exact Test, two-sided p = %f\n",fisher$p.value))
+        }
+    }
+
+    return(invisible(theTable))
 }
