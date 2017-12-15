@@ -25,6 +25,6 @@ ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 }
 \description{
-fisher.test(dfdf[[xx]],dfdf[[yy]])
+df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
 }
 
