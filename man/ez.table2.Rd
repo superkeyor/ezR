@@ -11,7 +11,7 @@ ez.table2(df, x, y = NULL, digits = 2, max.width = 1, expected = FALSE,
   format = "SPSS", dnn = NULL, ...)
 }
 \description{
-(df, x, y) or (x, y), \code{\link[gmodels]{CrossTable}},  auto convert to factor
+(df, x, y) or (x, y), \code{\link[gmodels]{CrossTable}},  auto convert/reset factor
 \cr ez.table input could be one, two, or more varibles/cols
 }
 \examples{

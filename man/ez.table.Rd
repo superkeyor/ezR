@@ -19,7 +19,7 @@ ez.table(x, ..., dnn = NULL, exclude = c(NA, NaN), row.vars = NULL,
 \item{col.vars}{a vector of integers giving the numbers of the variables, or a character vector giving the names of the variables to be used for the columns of the flat contingency table.}
 }
 \description{
-freq table, df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z), auto convert to factor
+freq table, df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z), auto convert/reset factor
 \cr ez.table2 output is more beautiful, but must be two varibles/cols
 }
 
