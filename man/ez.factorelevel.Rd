@@ -9,7 +9,7 @@ ez.factorelevel(x, col = NULL)
 \arguments{
 \item{x}{data frame or vector, factor}
 
-\item{col}{column name(s) to dplyr::select_(); ignored when x is not a data frame}
+\item{col}{column name(s) to eval('dplyr::select()')(); ignored when x is not a data frame}
 }
 \value{
 returns a new df, factor, vector (has not effect on (ie, make no change to) a non-factor object)

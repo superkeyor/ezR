@@ -100,7 +100,7 @@ ez.repo = function(repo=NULL){
 
 #' convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @param x a character vector, data frame, list, or a factor
-#' @param col internally evaluated by dplyr::select_()
+#' @param col internally evaluated by eval('dplyr::select()')()
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 #' \cr        if x is not a data frame, col is ignored
@@ -158,7 +158,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
         }
         result = x
     } else if (is.data.frame(x) && !is.null(col)) {
-        col=colnames(dplyr::select_(x,col))
+        col=(ez.selcol(x,col))
         cols=col
         for (col in cols) {
             # recursive to is.data.frame(x) && is.null(col)
@@ -241,7 +241,7 @@ ez.is.date.convertible = function(x,format="%m/%d/%Y",...) {
 
 #' convert a column (or all columns) in a data frame, or a vector into character type, call as.character
 #' @param x a data frame or a vector/col
-#' @param col internally evaluated by dplyr::select_()
+#' @param col internally evaluated by eval('dplyr::select()')()
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 #' \cr        if x is a data frame, col is NA (a special case), convert all numeric NAs to character NAs, for bind_rows. see https://github.com/tidyverse/dplyr/issues/2584
@@ -263,7 +263,7 @@ ez.str = function(x, col=NULL){
         # use & not &&, because we are vectorizing
         result = dplyr::mutate_all(x,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
     } else if (is.data.frame(x) && !is.null(col)) {
-        col=colnames(dplyr::select_(x,col))
+        col=(ez.selcol(x,col))
         cols=col
         for (col in cols) {
             x[[col]] = as.character(x[[col]])

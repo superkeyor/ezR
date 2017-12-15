@@ -22,11 +22,11 @@ ez.clcols(df, pattern = "[[:space:][:punct:]]", replacement = "_",
 so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
 ignored when fixed=TRUE}
 
-\item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by dplyr::select_() )
-\cr 'c(sample_num,mother_num)' or 'c("sample_num","mother_num")' (quoted)
-\cr '1:4' (quoted)
+\item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()')() )
+\cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
+\cr 1:4 (not quoted)
 \cr 'col1:col3' (quoted)
-\cr '-(ABCB1_c1236t:pgp_rs2032582)' (quoted)}
+\cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)}
 }
 \value{
 returns a new df with column names cleaned, old df does not change

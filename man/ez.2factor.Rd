@@ -10,7 +10,7 @@ ez.2factor(x, col = NULL, add.non.labelled = TRUE, drop.na = FALSE,
 \arguments{
 \item{x}{a data frame or a vector/col}
 
-\item{col}{internally evaluated by dplyr::select_()
+\item{col}{internally evaluated by eval('dplyr::select()')()
 \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 \cr        if x is not a data frame, col is ignored}

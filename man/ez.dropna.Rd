@@ -12,7 +12,7 @@ ez.dropna(x, col = NULL, n = 0, reindex = TRUE)
 \arguments{
 \item{x}{a data frame, or a vector}
 
-\item{col}{internally evaluated by dplyr::select_(), restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
+\item{col}{internally evaluated by eval('dplyr::select()')(), restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
 \cr default is NULL, search for all columns.}
 
 \item{n}{integer or vector, 0, c(3,5), number/range of NAs allowed.
