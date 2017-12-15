@@ -228,7 +228,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) 
                 try({
                     # nlevels(nonfactor)=0
                     if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >2 factor levels, consider dummy coding instead of ez.2value.\n', xx), color='red')
-                    df[[xx]]=ez.2value(df,xx,...)
+                    df[[xx]]=ez.2value(df[[xx]],...)
                     lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
                     beta = model$coefficients[2,1]
@@ -239,7 +239,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) 
                 # go to next loop item, in case error
                 tryCatch({
                     if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >2 factor levels, consider dummy coding instead of ez.2value.\n', xx), color='red')
-                    df[[xx]]=ez.2value(df,xx,...)
+                    df[[xx]]=ez.2value(df[[xx]],...)
                     lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
                     beta = model$coefficients[2,1]
