@@ -196,7 +196,7 @@ ez.se = function(x) {
 }
 
 #' a series of simple regression, for many y and many x
-#' @description lm(scale(df[[yy]])~scale(df[[xx]]))
+#' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()')(), a vector of outcome variables c('var1','var2'), or a single variable 'var1'

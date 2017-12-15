@@ -32,7 +32,7 @@ an invisible data frame with y,x,p,beta,degree_of_freedom and print results out 
 \cr degree_of_freedom: from F-statistic
 }
 \description{
-lm(scale(df[[yy]])~scale(df[[xx]]))
+df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))
 }
 \note{
 To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
