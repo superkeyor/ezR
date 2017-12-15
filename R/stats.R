@@ -400,15 +400,16 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
         theTable = ez.eval(cmd)
         cmd = sprintf('fisher.test(%s)',input)
     } else {
+        dots=sapply(as.list(substitute(list(...)))[-1L], deparse) 
         if (is.null(dnn)) {
-            dots=sapply(as.list(substitute(list(...)))[-1L], deparse) 
             dnn=paste("'",c(deparse(substitute(x)),dots),"'",sep='',collapse = ', ')
             # print(dnn)
             # get rid of df$
             dnn=gsub('[\\w\\.]+\\$','',dnn,perl=T) %>% paste0('c(',.,')')
+            dnn=ez.eval(dnn)
         }
         input = paste('ez.2factor(',c('x',dots),')',sep='',collapse = ', ')
-        cmd = sprintf('ftable(%s, exclude=exclude, row.vars=row.vars, col.vars=col.vars, dnn=%s)', input,dnn)
+        cmd = sprintf('ftable(%s, exclude=exclude, row.vars=row.vars, col.vars=col.vars, dnn=dnn)', input)
         # print(cmd)
         theTable = ez.eval(cmd)
     }
