@@ -1728,7 +1728,7 @@ ez.countplot = function(df,cmd,position=3,bar.color='color',alpha=1,n.size=5.5,n
                 pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                              geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s
-                             ggtitle(paste0("N = ",nrow(df),", p = %s")) +
+                             ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") + 
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
