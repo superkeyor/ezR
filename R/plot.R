@@ -1646,11 +1646,11 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
         legend.position='theme(legend.position="none")+'
         xx = cmd[1]
         df = ez.dropna(df, xx)
-        dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100))
+        dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         # recompute pct without groupby (only 1 factor out there)
         sumn=sum(dfdf$n)
         # n.pct.str draw a pie chart
-        dfdf = dfdf %>% dplyr::mutate(pct=n/sumn,pct.str=sprintf("%0.1f%%",pct*100),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100))
+        dfdf = dfdf %>% dplyr::mutate(pct=n/sumn,pct.str=sprintf("%0.1f%%",pct*100),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         if (position=='stack') {
             if (is.null(ylab)) ylab='Count'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
@@ -1692,7 +1692,7 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
         if (length(zz)==1) {
             zz = zz[1]
             df=ez.dropna(df,c(xx,zz))
-            dfdf = df %>% dplyr::count_(c(xx,zz)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100))
+            dfdf = df %>% dplyr::count_(c(xx,zz)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
             if (position=='stack') {
                 if (is.null(ylab)) ylab='Count'
                 ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
@@ -1718,7 +1718,7 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") + 
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                             geom_text(color="white", size=%f, aes(label=n.pct.str,y=n.pos))+
+                             geom_text(color="white", size=%f, aes(label=pct.n.str,y=n.pos))+
                              scale_y_continuous(labels=scales::percent)+coord_flip()'
                              , xx, zz, position, alpha, bar.width, bar.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size
                 )
@@ -1730,7 +1730,7 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
                 zz = zz[1]
                 df=ez.dropna(df,c(xx,zz,aa))
                 # grouping by aa (facet) then xx, notice group_by_(c(aa,xx)) is equal to group_by_(aa). count_(xx,zz,aa) gives error!
-                dfdf = df %>% dplyr::count_(c(xx,zz,aa)) %>% dplyr::group_by_(aa,xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100))
+                dfdf = df %>% dplyr::count_(c(xx,zz,aa)) %>% dplyr::group_by_(aa,xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
                 if (position=='stack') {
                     if (is.null(ylab)) ylab='Count'
                     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
@@ -1756,7 +1756,7 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") + 
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                                 geom_text(color="white", size=%f, aes(label=n.pct.str,y=n.pos))+facet_grid(.~%s)+
+                                 geom_text(color="white", size=%f, aes(label=pct.n.str,y=n.pos))+facet_grid(.~%s)+
                                  scale_y_continuous(labels=scales::percent)+coord_flip()'
                                  , xx, zz, position, alpha, bar.width, bar.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, aa
                     )
