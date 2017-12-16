@@ -1692,6 +1692,15 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
         if (length(zz)==1) {
             zz = zz[1]
             df=ez.dropna(df,c(xx,zz))
+            # only available for two factors
+            pvalue=fisher.test(ez.2factor(df[[xx]]),ez.2factor(df[[zz]]))$p.value
+            if (pvalue<.001) {
+                pvalue = sprintf("%.2e", pvalue)
+            } else if (pvalue<.01) {
+                pvalue = sprintf("%.3f", pvalue)
+            } else {
+                pvalue = sprintf("%.2f", pvalue)
+            }
             dfdf = df %>% dplyr::count_(c(xx,zz)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
             if (position=='stack') {
                 if (is.null(ylab)) ylab='Count'
@@ -1700,12 +1709,12 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
                 pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                              geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s
-                             ggtitle(paste0("N = ",nrow(df))) +
+                             ggtitle(paste0("N = , p = %s",nrow(df))) +
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") + 
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, aes(label=n.pct.str,y=pct.pos))'
-                             , xx, zz, position, alpha, bar.width, bar.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size
+                             , xx, zz, position, alpha, bar.width, bar.color, ylab, xlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size
                 )
             } else if (position=='fill') {
                 if (is.null(ylab)) ylab='Percentage'
@@ -1714,13 +1723,13 @@ ez.countplot = function(df,cmd,position='stack',bar.color='color',alpha=1,n.size
                 pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                              geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s
-                             ggtitle(paste0("N = ",nrow(df))) +
+                             ggtitle(paste0("N = , p = %s",nrow(df))) +
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") + 
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, aes(label=pct.n.str,y=n.pos))+
                              scale_y_continuous(labels=scales::percent)+coord_flip()'
-                             , xx, zz, position, alpha, bar.width, bar.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size
+                             , xx, zz, position, alpha, bar.width, bar.color, ylab, xlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size
                 )
             }
         # xx|zz aa
