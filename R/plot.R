@@ -435,7 +435,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,print.cmd=FALSE){
     if (length(cmd)==1) {
         yy = cmd[1]
         xx = 'DummyDiscreteVariable'
-        df['DummyDiscreteVariable'] = 1
+        df["DummyDiscreteVariable"] = 1
         df=ez.dropna(df,yy)
         # hide x axis label in this case
         tt = sprintf('
@@ -1639,40 +1639,45 @@ ez.countplot = function(df,cmd,position='stack',bar_color='color',alpha=1,stat_s
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     # xx
     if (length(cmd)==1) {
+        if (bar_width<0.9) bar_width=0.98
+        legend_position='theme(legend.position="none")+'
         xx = cmd[1]
         df = ez.dropna(df, xx)
         dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,n.str=sprintf("(%d)",n))
         # recompute pct without groupby (only 1 factor out there)
         sumn=sum(dfdf$n)
-        dfdf = dfdf %>% dplyr::mutate(pct=n/sumn,pct.str=sprintf("%0.1f%%",pct*100))
+        # n.pct.str draw a pie chart
+        dfdf = dfdf %>% dplyr::mutate(pct=n/sumn,pct.str=sprintf("%0.1f%%",pct*100),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100))
         if (position=='stack') {
             if (is.null(ylab)) ylab='Count'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
             tt = sprintf('
-            pp = ggplot2::ggplot(dfdf, aes(x=%s,n)) +
-                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f,fill="#999999") +
+            pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
+                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                         geom_text(color="white", size=%f, aes(label=pct.str,y=pct.pos))'
-                         , xx, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
+                         geom_text(color="white", size=%f, aes(label=n.pct.str,y=pct.pos))+theme_apa()+
+                         theme(panel.background=element_rect(fill="white",color="white"), axis.title.y=element_blank(), axis.ticks.y=element_blank(), axis.text.y=element_blank())+coord_polar(theta="x")'
+                         , xx, xx, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
             )
         } else if (position=='fill') {
             if (is.null(ylab)) ylab='Percentage'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
             tt = sprintf('
-            pp = ggplot2::ggplot(dfdf, aes(x=%s,n)) +
-                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f,fill="#999999") +
+            pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
+                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                         geom_text(color="white", size=%f, aes(label=n.str,y=n.pos))+
-                         scale_y_continuous(labels=scales::percent)+coord_flip()'
-                         , xx, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
+                         geom_text(color="white", size=%f, aes(label=n.pct.str,y=n.pos))+theme_apa()+
+                         scale_y_continuous(labels=scales::percent)+
+                         theme(panel.background=element_rect(fill="white",color="white"), axis.title.y=element_blank(), axis.ticks.y=element_blank(), axis.text.y=element_blank())+coord_polar(theta="x")'
+                         , xx, xx, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
             )
         }
     # xx|zz or xx|zz aa
