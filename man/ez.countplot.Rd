@@ -4,7 +4,7 @@
 \alias{ez.countplot}
 \title{plot count data}
 \usage{
-ez.countplot(df, cmd, position = "stack", bar.color = "color", alpha = 1,
+ez.countplot(df, cmd, position = 3, bar.color = "color", alpha = 1,
   n.size = 5.5, bar.width = 0.7, ylab = NULL, xlab = NULL,
   zlab = NULL, legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
@@ -15,7 +15,7 @@ ez.countplot(df, cmd, position = "stack", bar.color = "color", alpha = 1,
 
 \item{cmd}{like "x, x|z, x|z a" where x z a are all discrete}
 
-\item{position}{so far can only be "stack" or "fill" ('dodge' not supported yet)}
+\item{position}{so far can only be 1 ("stack"), 2 ("fill"), 3 ("stack+fill"). ('dodge' not supported yet)}
 
 \item{bar.color}{"bw" or "color"  black/white or colorblind-friendly color}
 
