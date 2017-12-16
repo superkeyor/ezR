@@ -575,7 +575,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    bar.color = ifelse(bar.color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    bar.color = ifelse(bar.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -1632,7 +1632,7 @@ ez.countplot = function(df,cmd,position='both',bar.color='color',alpha=1,n.size=
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    bar.color = ifelse(bar.color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    bar.color = ifelse(bar.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
@@ -1649,10 +1649,8 @@ ez.countplot = function(df,cmd,position='both',bar.color='color',alpha=1,n.size=
     if (length(cmd)==1) {
         xx = cmd[1]
         df = ez.dropna(df, xx)
-        dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
-        # recompute pct without groupby (only 1 factor out there)
-        sumn=sum(dfdf$n)
-        dfdf = dfdf %>% dplyr::mutate(pct=n/sumn,pct.str=sprintf("%0.1f%%",pct*100),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+        # compute pct without groupby (only 1 factor out there)
+        dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         if (position=='stack') {
             if (is.null(ylab)) ylab='Count'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
@@ -1773,6 +1771,76 @@ ez.countplot = function(df,cmd,position='both',bar.color='color',alpha=1,n.size=
             }
         }
     }    
+    if (print.cmd) cat(tt,"\n")
+    eval(parse(text = tt))
+    return(pp)
+}
+
+#' pie chart
+#' @description pie chart
+#' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' @param cmd a single col name
+#' @param start   offset of starting point from 12 o'clock in radians eg, pi/3
+#' @param direction   1, clockwise; -1, anticlockwise
+#' @param n.size set to 0 to hide count/percentage
+#' @param n.type 1 = pct; 2 = n; 3 = pct (n); 4 = n (pct)
+#' @param alpha pie alpha value
+#' @param pie.color  "bw" or "color"  black/white or colorblind-friendly color
+#' @param ylab  y label
+#' @param xlab  x label
+#' @param zlab  z/a/fill/legend label, only applicable when there is z provided NULL
+#' @param legend.position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+#' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
+#' \cr         if no z/a (legend) provided, auto force to 'none'
+#' @param legend.box  box of legend, T or F
+#' @param legend.direction  horizontal or vertical
+#' @param legend.size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
+#' @param xangle  angle of x text 0
+#' @param vjust  vjust of x text NULL
+#' @param hjust  hjust of x text NULL
+#' @param print.cmd T/F
+#' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
+#' @examples 
+#' @export
+ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE) {
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
+
+    pie.color = ifelse(pie.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
+    zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
+    legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
+    legend.box = ifelse(legend.box,'theme(legend.background = element_rect(color = "black"))+','')
+    vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
+    hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
+    n.type.fill = c('pct.str','n.str','pct.n.str','n.pct.str')[n.type]
+    
+    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    xx = cmd
+    # note that xylab internally twised because of coord_polar()
+    if (ylab=='') ylab=xx
+    df = ez.dropna(df, xx)
+    dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+    tt = sprintf('
+    pp = ggplot2::ggplot(dfdf, aes(x="",n,fill=%s)) +
+                 geom_bar(position="fill",stat="identity",alpha=%f,width=1) +
+                 %s + xlab("%s")+ylab("%s") + %s %s
+                 ggtitle(paste0("N = ",nrow(df))) +
+                 theme(axis.text.x=element_text(angle=%f %s %s)) +
+                 theme(legend.direction="%s") + 
+                 theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
+                 geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+
+                 coord_polar(theta="y",start=start,direction=direction)+
+                 theme_apa()+
+                 theme(axis.ticks=element_blank(),axis.text=element_blank(),panel.background=element_rect(fill="white",color="white"))'
+                 , xx, alpha, pie.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+    )
+
     if (print.cmd) cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
