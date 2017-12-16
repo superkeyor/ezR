@@ -1690,15 +1690,18 @@ ez.countplot = function(df,cmd,position='both',bar.color='color',alpha=1,n.size=
         if (length(zz)==1) {
             zz = zz[1]
             df=ez.dropna(df,c(xx,zz))
-            # only available for two factors
-            pvalue=fisher.test(ez.2factor(df[[xx]]),ez.2factor(df[[zz]]))$p.value
-            if (pvalue<.001) {
-                pvalue = sprintf("%.2e", pvalue)
-            } else if (pvalue<.01) {
-                pvalue = sprintf("%.3f", pvalue)
-            } else {
-                pvalue = sprintf("%.2f", pvalue)
-            }
+            pvalue='N.A.'
+            tryCatch({
+                    # only available for two factors
+                    pvalue=fisher.test(ez.2factor(df[[xx]]),ez.2factor(df[[zz]]))$p.value
+                    if (pvalue<.001) {
+                        pvalue = sprintf("%.2e", pvalue)
+                    } else if (pvalue<.01) {
+                        pvalue = sprintf("%.3f", pvalue)
+                    } else {
+                        pvalue = sprintf("%.2f", pvalue)
+                    }
+            }, error = function(e) {})
             dfdf = df %>% dplyr::count_(c(xx,zz)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
             if (position=='stack') {
                 if (is.null(ylab)) ylab='Count'
