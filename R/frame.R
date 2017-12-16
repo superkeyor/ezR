@@ -1506,7 +1506,7 @@ ez.na.keep = function(x, col=NULL, n=0, reindex=TRUE){
     if (is.factor(x)) x=as.character(x)
     if (is.vector(x)) {
         x=x[!is.na(x)]
-        cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
+        if (length(df)-length(x)>0) cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
         if (is.factor(df)) x=as.factor(x)
         return(x)
     }
@@ -1547,7 +1547,7 @@ ez.na.keep = function(x, col=NULL, n=0, reindex=TRUE){
     if (reindex) {row.names(result) <- NULL}
 
     nafter=nrow(result)
-    cat(sprintf('%d rows dropped (In: %d -> Out: %d).\n', nbefore-nafter, nbefore, nafter))
+    if (nbefore-nafter>0) cat(sprintf('%d rows containing NAs dropped (In: %d -> Out: %d).\n', nbefore-nafter, nbefore, nafter))
 
     return(result)
 }

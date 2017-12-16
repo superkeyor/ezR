@@ -206,36 +206,53 @@ theme_apa_nosize <- function(plot.box = FALSE){
 
 }
 
-#' show some help info on color
-#' @examples
-#' RColorBrewer::display.brewer.all()
-#' # returns 8 colors from Set3 (which supports up to 12 colors)
-#' cols <- RColorBrewer::brewer.pal(8,"Set3")
-#' # generates 100 colors based on the 9 from the Blues palette
-#' colorRampPalette(brewer.pal(9,"Blues"))(100)
-#' scale_colour_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))
+#' show some help info on color, run ggcolor() for usage
 #' @export
-ggcolor = function(){
+ggcolor = function(n=NULL){
+    if (!is.null(n)) {
+        # default ggplot colors
+        hues=seq(15,375,length=n+1)
+        return(hcl(h=hues,l=65,c=100)[1:n])
+    }
+
     if (!require("RColorBrewer")) {
         install.packages("RColorBrewer")
     }
     RColorBrewer::display.brewer.all()
-    cat('usage: \n
-        RColorBrewer::display.brewer.all()\n
+    cat('usage: 
+        # to see the color in a gg plot
+        ggplot_build(p)$data
 
-        # returns 8 colors from Set3 (which supports up to 12 colors)\n
-        cols <- RColorBrewer::brewer.pal(8,"Set3")\n
+        # default color
+        ggcolor(n)
 
-        # generates 100 colors based on the 9 from the Blues palette\n
-        colorRampPalette(brewer.pal(9,"Blues"))(100)\n
+        # list all color names
+        colors()
 
-        # scale_color_manual (for points, lines, and outlines)\n
-        # scale_fill_manual (for boxes, bars, and ribbons)\n
-        # scale_color_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))\n
+        # rgb 2 hex
+        rgb(r,g,b)
 
-        # also visit http://colorbrewer2.org/\n
-        # scale_color_manual(values=c("#fdae61","#2b83ba","#d7191c","#abdda4","#ffffbf")) #printer-friendly\n
-        # scale_color_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73","#F0E442", "#0072B2", "#D55E00", "#CC79A7")) #colorblind-friendly\n')
+        # hex 2 rgb
+        col2rgb("red"); col2rgb("#000d00")
+
+        # "see" a color
+        showcolor=function(vec){barplot(rep(1,length(vec)),axes=F,col=vec,names.arg=vec)}
+
+        RColorBrewer::display.brewer.all()
+
+        # returns 8 colors from Set3 (which supports up to 12 colors)
+        cols <- RColorBrewer::brewer.pal(8,"Set3")
+
+        # generates 100 colors based on the 9 from the Blues palette
+        colorRampPalette(brewer.pal(9,"Blues"))(100)
+
+        # scale_color_manual (for points, lines, and outlines)
+        # scale_fill_manual (for boxes, bars, and ribbons)
+        # scale_color_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))
+
+        # also visit http://colorbrewer2.org/
+        # scale_color_manual(values=c("#fdae61","#2b83ba","#d7191c","#abdda4","#ffffbf")) #printer-friendly
+        # scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) #colorblind-friendly\n')
 }
 
 #' change plot continous color to matlab like
@@ -394,12 +411,13 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param df data frame in long format
 #' @param cmd like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete
 #' @param violin plot violin or not
-#' @param show.n show n (number of samples for each level)  or not
+#' @param n.size font size of stat n, 0 to hide
+#' @param m.size font size of stat M, 0 to hide
 #' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.plot = function(df,cmd,violin=FALSE,show.n=TRUE,print.cmd=FALSE){
+ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,print.cmd=FALSE){
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -432,8 +450,8 @@ ez.plot = function(df,cmd,violin=FALSE,show.n=TRUE,print.cmd=FALSE){
                      ggtitle(paste0("N = ",nrow(df)))'
                      , xx, yy, violin
         )
-        if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
-        tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
     # yy|xx or yy|xx zz
     } else {
         yy = cmd[1]
@@ -465,8 +483,8 @@ ez.plot = function(df,cmd,violin=FALSE,show.n=TRUE,print.cmd=FALSE){
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
                          , xx, yy, xx, violin, pvalue
             )
-            if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
-            tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
         # yy|xx zz
         } else {
             if (length(xx)==2) {
@@ -488,8 +506,8 @@ ez.plot = function(df,cmd,violin=FALSE,show.n=TRUE,print.cmd=FALSE){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz
                 )
-                if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
-                tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
             # yy|xx zz aa
             } else {
                 aa = xx[3]
@@ -512,8 +530,8 @@ ez.plot = function(df,cmd,violin=FALSE,show.n=TRUE,print.cmd=FALSE){
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz, aa
                 )
-                if (show.n) {tt = paste0(tt, ' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2)')}
-                tt = paste0(tt, ' + \nstat_summary(fun.y=mean, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean')
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
 
             }        
         }
@@ -603,7 +621,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, yy, yy, xx, xx, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, 'theme(legend.position="none")+', legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                         , xx, yy, yy, xx, xx, bar_gap, bar_width, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, 'theme(legend.position="none")+', legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                          )
             # yy|xx zz
         } else {
@@ -628,7 +646,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") + 
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                            , xx, zz, yy, yy, xx, zz, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                            , xx, zz, yy, yy, xx, zz, bar_gap, bar_width, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                 )
             }
             else {
@@ -656,7 +674,7 @@ ez.barplot = function(df,cmd,bar_color='color',bar_gap=0.7,bar_width=0.7,error_s
                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
                                 theme(legend.direction="%s") + 
                                 theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                                , xx, zz, aa, yy, yy, zz, aa, xx, bar_width, bar_gap, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
+                                , xx, zz, aa, yy, yy, zz, aa, xx, bar_gap, bar_width, bar_color, ymin, ymax, error_size, error_width, error_gap, ylab, xlab, zlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2]
                     )
                 }
             }        
@@ -1568,6 +1586,176 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
           )
       }
     }
+    if (print.cmd) cat(tt,"\n")
+    eval(parse(text = tt))
+    return(pp)
+}
+
+#' plot count data
+#' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' @param cmd like "x, x|z, x|z a" where x z a are all discrete
+#' @param position so far can only be "stack" or "fill" ('dodge' not supported yet)
+#' @param stat_size set to 0 to hide count/percentage
+#' @param alpha bar alpha value
+#' @param bar_color  "bw" or "color"  black/white or colorblind-friendly color
+#' @param bar_width  the width of bar itself 
+#' @param ylab  y label NULL
+#' @param xlab  x label NULL
+#' @param zlab  z/a/fill/legend label, only applicable when there is z provided NULL
+#' @param legend_position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+#' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
+#' \cr         if no z/a (legend) provided, auto force to 'none'
+#' @param legend_box  box of legend, T or F
+#' @param legend_direction  horizontal or vertical
+#' @param legend_size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
+#' @param xangle  angle of x text 0
+#' @param vjust  vjust of x text NULL
+#' @param hjust  hjust of x text NULL
+#' @param print.cmd T/F
+#' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
+#' @examples 
+#' @export
+ez.countplot = function(df,cmd,position='stack',bar_color='color',alpha=1,stat_size=5.5,bar_width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend_position='top',legend_direction="horizontal",legend_box=T,legend_size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE) {
+    
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
+
+    bar_color = ifelse(bar_color=='bw','scale_fill_grey(start=0,end=1)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    if ((!is.null(zlab)) && legend_size[1]==0) {legend_size[1]=10}  # change default legend title size 0
+    zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
+    legend_position = ifelse(is.character(legend_position), sprintf('theme(legend.position="%s")+',legend_position), sprintf('theme(legend.position=c(%s))+',paste(legend_position,collapse=',')))
+    legend_box = ifelse(legend_box,'theme(legend.background = element_rect(color = "black"))+','')
+    vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
+    hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
+    # http://stackoverflow.com/a/25734388/2292993
+    # Merge Multiple spaces to single space, and remove trailing/leading spaces 
+    # also see trimws()--remove trailing/leading spaces
+    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+    # xx
+    if (length(cmd)==1) {
+        xx = cmd[1]
+        df = ez.dropna(df, xx)
+        dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,n.str=sprintf("(%d)",n))
+        # recompute pct without groupby (only 1 factor out there)
+        sumn=sum(dfdf$n)
+        dfdf = dfdf %>% dplyr::mutate(pct=n/sumn,pct.str=sprintf("%0.1f%%",pct*100))
+        if (position=='stack') {
+            if (is.null(ylab)) ylab='Count'
+            ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+            tt = sprintf('
+            pp = ggplot2::ggplot(dfdf, aes(x=%s,n)) +
+                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f,fill="#999999") +
+                         %s + %s %s %s %s
+                         ggtitle(paste0("N = ",nrow(df))) +
+                         theme(axis.text.x=element_text(angle=%f %s %s)) +
+                         theme(legend.direction="%s") + 
+                         theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
+                         geom_text(color="white", size=%f, aes(label=pct.str,y=pct.pos))'
+                         , xx, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
+            )
+        } else if (position=='fill') {
+            if (is.null(ylab)) ylab='Percentage'
+            ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+            tt = sprintf('
+            pp = ggplot2::ggplot(dfdf, aes(x=%s,n)) +
+                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f,fill="#999999") +
+                         %s + %s %s %s %s
+                         ggtitle(paste0("N = ",nrow(df))) +
+                         theme(axis.text.x=element_text(angle=%f %s %s)) +
+                         theme(legend.direction="%s") + 
+                         theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
+                         geom_text(color="white", size=%f, aes(label=n.str,y=n.pos))+
+                         scale_y_continuous(labels=scales::percent)+coord_flip()'
+                         , xx, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
+            )
+        }
+    # xx|zz or xx|zz aa
+    } else {
+        xx = cmd[1]
+        zz = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
+        zz = strsplit(zz," ",fixed=TRUE)[[1]]
+        # xx|zz
+        if (length(zz)==1) {
+            zz = zz[1]
+            df=ez.dropna(df,c(xx,zz))
+            dfdf = df %>% dplyr::count_(c(xx,zz)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n))
+            if (position=='stack') {
+                if (is.null(ylab)) ylab='Count'
+                ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+                tt = sprintf('
+                pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
+                             geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                             %s + %s %s %s %s
+                             ggtitle(paste0("N = ",nrow(df))) +
+                             theme(axis.text.x=element_text(angle=%f %s %s)) +
+                             theme(legend.direction="%s") + 
+                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
+                             geom_text(color="white", size=%f, aes(label=pct.str,y=pct.pos))'
+                             , xx, zz, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
+                )
+            } else if (position=='fill') {
+                if (is.null(ylab)) ylab='Percentage'
+                ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+                tt = sprintf('
+                pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
+                             geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                             %s + %s %s %s %s
+                             ggtitle(paste0("N = ",nrow(df))) +
+                             theme(axis.text.x=element_text(angle=%f %s %s)) +
+                             theme(legend.direction="%s") + 
+                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
+                             geom_text(color="white", size=%f, aes(label=n.str,y=n.pos))+
+                             scale_y_continuous(labels=scales::percent)+coord_flip()'
+                             , xx, zz, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size
+                )
+            }
+        # xx|zz aa
+        } else {
+            if (length(zz)==2) {
+                aa = zz[2]
+                zz = zz[1]
+                df=ez.dropna(df,c(xx,zz,aa))
+                # grouping by aa (facet) then xx, notice group_by_(c(aa,xx)) is equal to group_by_(aa). count_(xx,zz,aa) gives error!
+                dfdf = df %>% dplyr::count_(c(xx,zz,aa)) %>% dplyr::group_by_(aa,xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n))
+                if (position=='stack') {
+                    if (is.null(ylab)) ylab='Count'
+                    ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+                    tt = sprintf('
+                    pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
+                                 geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                                 %s + %s %s %s %s
+                                 ggtitle(paste0("N = ",nrow(df))) +
+                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
+                                 theme(legend.direction="%s") + 
+                                 theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
+                                 geom_text(color="white", size=%f, aes(label=pct.str,y=pct.pos))+facet_grid(.~%s)'
+                                 , xx, zz, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size, aa
+                    )
+                } else if (position=='fill') {
+                    if (is.null(ylab)) ylab='Percentage'
+                    ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+                    tt = sprintf('
+                    pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
+                                 geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                                 %s + %s %s %s %s
+                                 ggtitle(paste0("N = ",nrow(df))) +
+                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
+                                 theme(legend.direction="%s") + 
+                                 theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
+                                 geom_text(color="white", size=%f, aes(label=n.str,y=n.pos))+facet_grid(.~%s)+
+                                 scale_y_continuous(labels=scales::percent)+coord_flip()'
+                                 , xx, zz, position, alpha, bar_width, bar_color, ylab, xlab, legend_position, legend_box, xangle, vjust, hjust, legend_direction, legend_size[1], legend_size[2], legend_size[2], stat_size, aa
+                    )
+                }    
+            }
+        }
+    }    
     if (print.cmd) cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
