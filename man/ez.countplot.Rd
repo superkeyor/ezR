@@ -54,6 +54,7 @@ a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limit
 \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 }
 \description{
-plot count data, can also visualize continous data, eg, ez.countplot(iris, 'Sepal.Length|Species',bar_width = 0.1,stat_size = 3)
+plot count data, can also visualize continous data, e.g., 
+\cr ez.countplot(iris, 'Sepal.Length|Species',bar_width = 0.1,stat_size = 3)
 }
 
