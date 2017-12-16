@@ -1592,7 +1592,8 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 }
 
 #' plot count data
-#' @description plot count data, can also visualize continous data, e.g., 
+#' @description plot count data, generate pie chart if one col passed, can also visualize continous data, e.g., 
+#' \cr ez.countplot(iris, 'Species')
 #' \cr ez.countplot(iris, 'Sepal.Length|Species',bar_width = 0.1,stat_size = 3)
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "x, x|z, x|z a" where x z a are all discrete
