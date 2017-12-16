@@ -6,8 +6,8 @@
 \usage{
 ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.95, rp.y = 0.95,
   point.alpha = 0.95, point.size = 3, rug.size = 0.5, ylab = NULL,
-  xlab = NULL, zlab = NULL, legend_position = "top",
-  legend_direction = "horizontal", legend_box = T, legend_size = c(0, 10),
+  xlab = NULL, zlab = NULL, legend.position = "top",
+  legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
   rp = TRUE, se = TRUE, rug = TRUE, ellipse = FALSE,
   print.cmd = FALSE)
 }
@@ -34,14 +34,14 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.95, rp.y = 0.95,
 
 \item{zlab}{z/fill/legend label, only applicable when there is z provided NULL}
 
-\item{legend_position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+\item{legend.position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.}
 
-\item{legend_direction}{horizontal or vertical}
+\item{legend.direction}{horizontal or vertical}
 
-\item{legend_box}{box of legend, T or F}
+\item{legend.box}{box of legend, T or F}
 
-\item{legend_size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
+\item{legend.size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
 \item{rp}{show r squared and p values}
 

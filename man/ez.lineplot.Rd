@@ -4,10 +4,10 @@
 \alias{ez.lineplot}
 \title{line plot with ggplot}
 \usage{
-ez.lineplot(df, cmd, line_size = 0.7, error_size = 0.7, error_gap = 0,
-  error_width = 0.3, error_direction = "both", ylab = NULL, xlab = NULL,
-  zlab = NULL, legend_position = "top", legend_direction = "horizontal",
-  legend_box = T, legend_size = c(0, 10), xangle = 0, vjust = NULL,
+ez.lineplot(df, cmd, line.size = 0.7, error.size = 0.7, error.gap = 0,
+  error.width = 0.3, error.direction = "both", ylab = NULL, xlab = NULL,
+  zlab = NULL, legend.position = "top", legend.direction = "horizontal",
+  legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
   hjust = NULL, print.cmd = FALSE)
 }
 \arguments{
@@ -15,15 +15,15 @@ ez.lineplot(df, cmd, line_size = 0.7, error_size = 0.7, error_gap = 0,
 
 \item{cmd}{like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete, during plot x z a ->x z(za combined)}
 
-\item{line_size}{the thickness of line, only applicable when there is z provided}
+\item{line.size}{the thickness of line, only applicable when there is z provided}
 
-\item{error_size}{the thickness of error bar line}
+\item{error.size}{the thickness of error bar line}
 
-\item{error_gap}{the location of errorbar, should not be adjusted, 0 (parameter kept for reference)}
+\item{error.gap}{the location of errorbar, should not be adjusted, 0 (parameter kept for reference)}
 
-\item{error_width}{the width of the bar of error}
+\item{error.width}{the width of the bar of error}
 
-\item{error_direction}{'both', 'max', 'min'}
+\item{error.direction}{'both', 'max', 'min'}
 
 \item{ylab}{y label NULL}
 
@@ -31,15 +31,15 @@ ez.lineplot(df, cmd, line_size = 0.7, error_size = 0.7, error_gap = 0,
 
 \item{zlab}{z/a/fill/legend label, only applicable when there is z provided NULL}
 
-\item{legend_position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+\item{legend.position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
 \cr         if no z/a (legend) provided, auto force to 'none'}
 
-\item{legend_direction}{horizontal or vertical}
+\item{legend.direction}{horizontal or vertical}
 
-\item{legend_box}{box of legend, T or F}
+\item{legend.box}{box of legend, T or F}
 
-\item{legend_size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
+\item{legend.size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
 \item{xangle}{angle of x text 0}
 

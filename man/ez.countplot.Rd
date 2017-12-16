@@ -4,10 +4,10 @@
 \alias{ez.countplot}
 \title{plot count data}
 \usage{
-ez.countplot(df, cmd, position = "stack", bar_color = "color", alpha = 1,
-  stat_size = 5.5, bar_width = 0.7, ylab = NULL, xlab = NULL,
-  zlab = NULL, legend_position = "top", legend_direction = "horizontal",
-  legend_box = T, legend_size = c(0, 10), xangle = 0, vjust = NULL,
+ez.countplot(df, cmd, position = "stack", bar.color = "color", alpha = 1,
+  n.size = 5.5, bar.width = 0.7, ylab = NULL, xlab = NULL,
+  zlab = NULL, legend.position = "top", legend.direction = "horizontal",
+  legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
   hjust = NULL, print.cmd = FALSE)
 }
 \arguments{
@@ -17,13 +17,13 @@ ez.countplot(df, cmd, position = "stack", bar_color = "color", alpha = 1,
 
 \item{position}{so far can only be "stack" or "fill" ('dodge' not supported yet)}
 
-\item{bar_color}{"bw" or "color"  black/white or colorblind-friendly color}
+\item{bar.color}{"bw" or "color"  black/white or colorblind-friendly color}
 
 \item{alpha}{bar alpha value}
 
-\item{stat_size}{set to 0 to hide count/percentage}
+\item{n.size}{set to 0 to hide count/percentage}
 
-\item{bar_width}{the width of bar itself}
+\item{bar.width}{the width of bar itself}
 
 \item{ylab}{y label NULL}
 
@@ -31,15 +31,15 @@ ez.countplot(df, cmd, position = "stack", bar_color = "color", alpha = 1,
 
 \item{zlab}{z/a/fill/legend label, only applicable when there is z provided NULL}
 
-\item{legend_position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
+\item{legend.position}{legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
 \cr         if no z/a (legend) provided, auto force to 'none'}
 
-\item{legend_direction}{horizontal or vertical}
+\item{legend.direction}{horizontal or vertical}
 
-\item{legend_box}{box of legend, T or F}
+\item{legend.box}{box of legend, T or F}
 
-\item{legend_size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
+\item{legend.size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
 \item{xangle}{angle of x text 0}
 
@@ -56,6 +56,6 @@ a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limit
 \description{
 plot count data, generate pie chart if one col passed, can also visualize continous data, e.g., 
 \cr ez.countplot(iris, 'Species')
-\cr ez.countplot(iris, 'Sepal.Length|Species',bar_width = 0.1,stat_size = 3)
+\cr ez.countplot(iris, 'Sepal.Length|Species',bar.width = 0.1,n.size = 3)
 }
 
