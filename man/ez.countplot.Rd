@@ -54,7 +54,7 @@ a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limit
 \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 }
 \description{
-plot count data, generate pie chart if one col passed, can also visualize continous data, e.g., 
+plot count data, generate sort of pie chart if one col passed, can also visualize continous data, e.g., 
 \cr ez.countplot(iris, 'Species')
 \cr ez.countplot(iris, 'Sepal.Length|Species',bar.width = 0.1,n.size = 3)
 }

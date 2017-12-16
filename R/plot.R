@@ -1592,7 +1592,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 }
 
 #' plot count data
-#' @description plot count data, generate pie chart if one col passed, can also visualize continous data, e.g., 
+#' @description plot count data, generate sort of pie chart if one col passed, can also visualize continous data, e.g., 
 #' \cr ez.countplot(iris, 'Species')
 #' \cr ez.countplot(iris, 'Sepal.Length|Species',bar.width = 0.1,n.size = 3)
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
@@ -1620,16 +1620,16 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 #' @examples 
 #' @export
 ez.countplot = function(df,cmd,position=3,bar.color='color',alpha=1,n.size=5.5,bar.width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE) {
-    # http://stackoverflow.com/a/25734388/2292993
-    # Merge Multiple spaces to single space, and remove trailing/leading spaces 
-    # also see trimws()--remove trailing/leading spaces
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
-    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
-    if (length(cmd)==1 & position==3) position='stack'
+
+    tmpcmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    tmpcmd = strsplit(tmpcmd,"|",fixed=TRUE)[[1]]
+    if (length(tmpcmd)==1 & position==3) position=1
+    if (position==1) position='stack'
+    if (position==2) position='fill'
     if (position==3) {
         p1=ez.countplot(df,cmd,'stack',bar.color, alpha, n.size, bar.width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, print.cmd)
-        p1=ez.countplot(df,cmd,'fill',bar.color, alpha, n.size, bar.width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, print.cmd)
-        return(invisible(ggmultiplot(p1,p2,cols=2)))
+        p2=ez.countplot(df,cmd,'fill',bar.color, alpha, n.size, bar.width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, print.cmd)
+        return(ggmultiplot(p1,p2,cols=1))
     }
     
     # https://stackoverflow.com/a/25215323/2292993
@@ -1646,6 +1646,9 @@ ez.countplot = function(df,cmd,position=3,bar.color='color',alpha=1,n.size=5.5,b
     legend.box = ifelse(legend.box,'theme(legend.background = element_rect(color = "black"))+','')
     vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
+    
+    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     # xx
     if (length(cmd)==1) {
         if (bar.width<0.9) bar.width=0.98
