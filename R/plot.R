@@ -71,6 +71,12 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
     }
 }
 
+#' print out a ggplot object's history, cat(pp$hh)
+#' @export
+hh=function(pp){
+  cat(pp$hh)
+}
+
 #' Open Help Pages for ggplot2
 #'
 #' \code{gghelp} - Open Hadely Wickham's ggplot2
@@ -409,16 +415,16 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 
 #' plot a customized boxplot with jittered stripplot, violin, and mean
 #' @param df data frame in long format
-#' @param cmd like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete
+#' @param cmd like "y", "y|x", "y|x z", "y|x z a" where y is continous, x z a are discrete
 #' @param violin plot violin or not
 #' @param n.size font size of stat n, 0 to hide
 #' @param m.size font size of stat M, 0 to hide
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,print.cmd=FALSE){
-    
+ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
+    hh='df='
+  
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
     # finally on exit the function, set it back to old value
@@ -434,24 +440,25 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,print.cmd=FALSE){
     # yy
     if (length(cmd)==1) {
         yy = cmd[1]
-        xx = 'DummyDiscreteVariable'
-        df["DummyDiscreteVariable"] = 1
         df=ez.dropna(df,yy)
         # hide x axis label in this case
         tt = sprintf('
-                     fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
-                     pp = ggplot2::ggplot(df, aes(x=%s, y=%s)) +
+                     fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                     pp = ggplot2::ggplot(df, aes(x=factor(1), y=%s)) +
                      stat_boxplot(geom = "errorbar", width = 0.5) +
-                     %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
+                     %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
                      geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
-                     theme(legend.position="none", axis.ticks.x=element_blank(), axis.text.x=element_blank()) +
+                     coord_flip() + theme(legend.position="none", axis.ticks.x=element_blank(), axis.text.x=element_blank()) +
                      xlab("") +
                      ggtitle(paste0("N = ",nrow(df)))'
-                     , xx, yy, violin
+                     , yy, violin
         )
-        tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
         tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
+        hh=paste(hh,
+                 sprintf('df=ez.dropna(df,"%s")',yy),
+                 tt,sep='\n')
     # yy|xx or yy|xx zz
     } else {
         yy = cmd[1]
@@ -461,9 +468,9 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,print.cmd=FALSE){
         if (length(xx)==1) {
             xx = xx[1]
             df=ez.dropna(df,c(yy,xx))
+            df=ez.2factor(df,xx)
 
-            if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
-            eval(parse(text = sprintf('pvalue = summary(aov(df$%s ~ df$%s))[[1]][["Pr(>F)"]][[1]]', yy, xx)))
+            pvalue=summary(aov(df[[yy]] ~ df[[xx]]))[[1]][["Pr(>F)"]][[1]]
             if (pvalue<.001) {
                 pvalue = sprintf(", p = %.2e", pvalue)
             } else if (pvalue<.01) {
@@ -473,71 +480,79 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,print.cmd=FALSE){
             }
 
             tt = sprintf('
-                         fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                         fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                          stat_boxplot(geom = "errorbar", width = 0.5) +
-                         %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
+                         %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
                          geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                          stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
-                         theme(legend.position="none") +
+                         coord_flip() + theme(legend.position="none") +
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
                          , xx, yy, xx, violin, pvalue
             )
-            tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
+            hh=paste(hh,
+                     sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
+                     sprintf('df=ez.2factor(df,c("%s"))',xx),
+                     tt,sep='\n')
         # yy|xx zz
         } else {
             if (length(xx)==2) {
                 zz = xx[2]
                 xx = xx[1]
                 df=ez.dropna(df,c(yy,xx,zz))
-                if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
-                if (!is.factor(df[[zz]])) {df = ez.2factor(df,col=zz)}
+                df=ez.2factor(df,c(xx,zz))
 
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
-                             %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
+                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              facet_grid(~%s) +
-                             theme(legend.position="none") +
+                             coord_flip() + theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz
                 )
-                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
+                hh=paste(hh,
+                         sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
+                         sprintf('df=ez.2factor(df,c("%s","%s"))',xx,zz),
+                         tt,sep='\n')
             # yy|xx zz aa
             } else {
                 aa = xx[3]
                 zz = xx[2]
                 xx = xx[1]
                 df=ez.dropna(df,c(yy,xx,zz,aa))
-                if (!is.factor(df[[xx]])) {df = ez.2factor(df,col=xx)}
-                if (!is.factor(df[[zz]])) {df = ez.2factor(df,col=zz)}
-                if (!is.factor(df[[aa]])) {df = ez.2factor(df,col=aa)}
+                df=ez.2factor(df,c(xx,zz,aa))
 
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=min(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
-                             %s geom_boxplot(outlier.shape=NA) + # avoid plotting outliers twice from geom_jitter
+                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              facet_grid(%s~%s) +
-                             theme(legend.position="none") +
+                             coord_flip() + theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz, aa
                 )
-                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.2,size=%f)',n.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
-
+                hh=paste(hh,
+                         sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
+                         sprintf('df=ez.2factor(df,c("%s","%s","%s"))',xx,zz,aa),
+                         tt,sep='\n')
             }        
         }
     }    
-    if (print.cmd) cat(tt,"\n")
     eval(parse(text = tt))
+    pp$hh=paste0(hh,'\nprint(pp)')
     return(pp)
 }
 
@@ -563,12 +578,11 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,print.cmd=FALSE){
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE) {
+ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -680,7 +694,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
             }        
         }
     }    
-    if (print.cmd) cat(tt,"\n")
+    cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
 }
@@ -705,12 +719,11 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE) {
+ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -818,7 +831,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
             }
         }
     }    
-    if (print.cmd) cat(tt,"\n")
+    cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
 }
@@ -832,12 +845,11 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE){
+ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -917,7 +929,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,p
         }
     }
 
-    if (print.cmd) cat(tt,"\n")
+    cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
 }
@@ -934,11 +946,10 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,p
 #' @param xsize x axis label font relative size
 #' @param ysize y axis label font relative size
 #' @param legend.position "bottom", "top", "left", "right", "none"
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right",print.cmd=FALSE){
+ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -948,7 +959,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
     cmd = sprintf('tidyr::gather(df, key,value,-%s,factor_key = T) -> df
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
-    if (print.cmd) cat(cmd,"\n")
+    cat(cmd,"\n")
     eval(parse(text = cmd))
 
     x = "key"; y = id; z = "value"
@@ -983,7 +994,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
         )
     }
     eval(parse(text = t))
-    if (print.cmd) cat(t,"\n")
+    cat(t,"\n")
     return(p)
 }
 # helper function to remove leading 0 in correlation
@@ -1097,13 +1108,12 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @param facetfontsize fontsize of id level names (only valid when facet=T)
 #' @param color color for different id levels, if NULL, remain the same for different id levels
 #' @param linetype linetype for different id levels, if NULL, remain the same for different id levels
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
-ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL,print.cmd=FALSE){
+ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1117,7 +1127,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
         cmd = sprintf('df.stats = dplyr::summarise_each(dplyr::group_by(df.ori,%s),
                       funs(%s(.,na.rm=T)))
                       ',id,stats)
-        if (print.cmd) cat(cmd,"\n")
+        cat(cmd,"\n")
         eval(parse(text = cmd))
     } else {
         df.stats = df.ori
@@ -1129,7 +1139,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     # 3) to long format
     cmd = sprintf('tidyr::gather(df.stats, variable,value,-%s,factor_key = T) -> df
                   ',id)
-    if (print.cmd) cat(cmd,"\n")
+    cat(cmd,"\n")
     eval(parse(text = cmd))
 
     # 4) plot
@@ -1164,20 +1174,20 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
                       ', id, id, id, lwd, id, facetfontsize, fontsize, angle)
 
     }
-    if (print.cmd) cat(cmd,"\n")
+    cat(cmd,"\n")
     eval(parse(text = cmd))
 
     # 5) hack: couldn't pass NULL to color, linetype
     if (is.null(color)) {
         cmd = sprintf('p = p + scale_color_manual(values=rep("black",nlevels(factor(df$%s))))
                       ',id)
-        if (print.cmd) cat(cmd,"\n")
+        cat(cmd,"\n")
         eval(parse(text = cmd))
     }
     if (is.null(linetype)) {
         cmd = sprintf('p = p + scale_linetype_manual(values=rep("solid",nlevels(factor(df$%s))))
                       ',id)
-        if (print.cmd) cat(cmd,"\n")
+        cat(cmd,"\n")
         eval(parse(text = cmd))
     }
 
@@ -1192,11 +1202,10 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 #' @param basesize base font size
 #' @param xsize x axis label font relative size
 #' @param ysize y axis label font relative size
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=1,print.cmd=FALSE){
+ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=1){
     
     ########################################################
     ## from package amelia
@@ -1389,7 +1398,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     cmd = sprintf('p = ez.heatmap(df, "%s", colors=c("blue", "white", "%s"),
                   legend.position="none", angle=%d, basesize=%f, xsize=%f, ysize=%f)'
                   , id, color, angle, basesize, xsize, ysize)
-    if (print.cmd) cat(cmd,"\n")
+    cat(cmd,"\n")
     eval(parse(text = cmd))
 
     cat('\nNumber of NAs in the data frame:')
@@ -1419,11 +1428,10 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param se standard error of linear regression line
 #' @param rug marginal rug indicating univariate distribution
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
 #' @export
-ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE,print.cmd=FALSE){
+ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1508,7 +1516,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
         }
         ####################################################### subfunction /
         '
-    if (print.cmd) cat(tt,"\n")    
+    cat(tt,"\n")    
     eval(parse(text = tt))
 
     if (grepl("|",cmd,fixed=TRUE)) {
@@ -1586,13 +1594,13 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
           )
       }
     }
-    if (print.cmd) cat(tt,"\n")
+    cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
 }
 
 #' plot count data
-#' @description plot count data, eg, ez.countplot(iris, 'Species'). See also \code{\link{ez.piechart}} \code{\link{ez.hist}} 
+#' @description plot count data, eg, ez.countplot(iris, 'Species'). See also \code{\link{ez.piechart}}
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "x, x|z, x|z a" where x z a are all discrete
 #' @param position so far can only be "stack", "fill", "both". ('dodge' not supported yet)
@@ -1613,12 +1621,11 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE) {
+ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
 
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, print.cmd)
@@ -1774,7 +1781,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
             }
         }
     }    
-    if (print.cmd) cat(tt,"\n")
+    cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
 }
@@ -1801,12 +1808,11 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print.cmd=FALSE) {
+ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1844,7 +1850,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
                  , xx, alpha, pie.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
     )
 
-    if (print.cmd) cat(tt,"\n")
+    cat(tt,"\n")
     eval(parse(text = tt))
     return(pp)
 }
