@@ -754,22 +754,3 @@ ez.age <- function(dob, enddate=Sys.Date(), floorize=FALSE, units='years', preci
   if (floorize) result = as.integer(floor(result))
   return(result)
 }
-
-#' arg name
-#' @description arg name
-#' @param x x
-#' @return returns character
-#' @export
-ez.arg = function(x) {
-    return(deparse(substitute(x)))
-}
-
-#' arg names for ...
-#' @description arg names for ...
-#' @param ... ...
-#' @return returns character vector, if no ... passed, returns ''
-#' @export
-ez.args = function(...) {
-    dots=sapply(as.list(substitute(list(...)))[-1L], deparse)
-    return(dots)
-}
