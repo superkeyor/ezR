@@ -8,8 +8,7 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.95, rp.y = 0.95,
   point.alpha = 0.95, point.size = 3, rug.size = 0.5, ylab = NULL,
   xlab = NULL, zlab = NULL, legend.position = "top",
   legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
-  rp = TRUE, se = TRUE, rug = TRUE, ellipse = FALSE,
-  print.cmd = FALSE)
+  rp = TRUE, se = TRUE, rug = TRUE, ellipse = FALSE)
 }
 \arguments{
 \item{df}{data frame}
@@ -50,8 +49,6 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.95, rp.y = 0.95,
 \item{rug}{marginal rug indicating univariate distribution}
 
 \item{ellipse}{draw confidence ellipses, powered by stat_ellipse()}
-
-\item{print.cmd}{T/F}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)

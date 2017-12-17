@@ -5,8 +5,7 @@
 \title{draw a radar plot}
 \usage{
 ez.radarmap(df, id, stats = "mean", lwd = 1, angle = 0, fontsize = 0.8,
-  facet = FALSE, facetfontsize = 1, color = id, linetype = NULL,
-  print.cmd = FALSE)
+  facet = FALSE, facetfontsize = 1, color = id, linetype = NULL)
 }
 \arguments{
 \item{df}{a data frame with a single variable as factor and all othere variables being numeric}
@@ -28,8 +27,6 @@ ez.radarmap(df, id, stats = "mean", lwd = 1, angle = 0, fontsize = 0.8,
 \item{color}{color for different id levels, if NULL, remain the same for different id levels}
 
 \item{linetype}{linetype for different id levels, if NULL, remain the same for different id levels}
-
-\item{print.cmd}{T/F}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)

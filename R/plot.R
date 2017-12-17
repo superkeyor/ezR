@@ -1929,7 +1929,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
 #' @param cmd like "x, x|z, x|z a" where x z a are all discrete
 #' @param alpha bar alpha value
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
-#' @param density when true ignore bins, plot density; when false plot normal histogram
+#' @param density when true ignore bins, plot density (sort of smoothed histogram); when false plot normal histogram
 #' @param bins  number of bins (alternatively pass bidwidth that depends on the scale of variable) 
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL

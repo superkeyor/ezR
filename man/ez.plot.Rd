@@ -5,20 +5,18 @@
 \title{plot a customized boxplot with jittered stripplot, violin, and mean}
 \usage{
 ez.plot(df, cmd, violin = FALSE, n.size = 4.5, m.size = 4.5,
-  print.cmd = FALSE)
+  alpha = 0.7)
 }
 \arguments{
 \item{df}{data frame in long format}
 
-\item{cmd}{like "y", "y|x z a", "y|x z" or "y|x" where y is continous, x z a are discrete}
+\item{cmd}{like "y", "y|x", "y|x z", "y|x z a" where y is continous, x z a are discrete}
 
 \item{violin}{plot violin or not}
 
 \item{n.size}{font size of stat n, 0 to hide}
 
 \item{m.size}{font size of stat M, 0 to hide}
-
-\item{print.cmd}{T/F}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)

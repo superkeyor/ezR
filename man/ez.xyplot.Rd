@@ -5,7 +5,7 @@
 \title{mimic xyplot with ggplot (slightly horizontally jittered)}
 \usage{
 ez.xyplot(df, cmd, ylab = NULL, xlab = NULL, xangle = 0, vjust = NULL,
-  hjust = NULL, print.cmd = FALSE)
+  hjust = NULL)
 }
 \arguments{
 \item{df}{data frame in long format}
@@ -22,8 +22,6 @@ ez.xyplot(df, cmd, ylab = NULL, xlab = NULL, xangle = 0, vjust = NULL,
 \item{vjust}{vjust of x text NULL}
 
 \item{hjust}{hjust of x text NULL}
-
-\item{print.cmd}{T/F}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
