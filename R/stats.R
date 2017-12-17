@@ -199,8 +199,8 @@ ez.se = function(x) {
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
-#' @param y internally evaluated by eval('dplyr::select()')(), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
-#' @param x internally evaluated by eval('dplyr::select()')(), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
+#' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
+#' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
@@ -257,8 +257,8 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) 
 #' @description df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 #' @param df a data frame
 #' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
-#' @param y internally evaluated by eval('dplyr::select()')(), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
-#' @param x internally evaluated by eval('dplyr::select()')(), a vector of categorical variables, or a single categorical variable
+#' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
+#' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df[[yy]],...)
@@ -307,8 +307,8 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,...) {
 #' @description df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
 #' \cr NA in df will be auto excluded in fisher.test(), reflected by total
-#' @param y internally evaluated by eval('dplyr::select()')(), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
-#' @param x internally evaluated by eval('dplyr::select()')(), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
+#' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
+#' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)

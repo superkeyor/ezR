@@ -71,10 +71,10 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
     }
 }
 
-#' print out a ggplot object's history, cat(pp$hh)
+#' print out a ggplot object's history, cat(pp$gghistory)
 #' @export
-hh=function(pp){
-  cat(pp$hh)
+gghistory=function(pp){
+  cat(pp$gghistory)
 }
 
 #' Open Help Pages for ggplot2
@@ -423,7 +423,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @examples
 #' @export
 ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
   
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -456,7 +456,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
         )
         tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
         tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
-        hh=paste(hh,
+        gghistory=paste(gghistory,
                  sprintf('df=ez.dropna(df,"%s")',yy),
                  tt,sep='\n')
     # yy|xx or yy|xx zz
@@ -492,7 +492,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
             )
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
-            hh=paste(hh,
+            gghistory=paste(gghistory,
                      sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                      sprintf('df=ez.2factor(df,c("%s"))',xx),
                      tt,sep='\n')
@@ -518,7 +518,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
-                hh=paste(hh,
+                gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                          sprintf('df=ez.2factor(df,c("%s","%s"))',xx,zz),
                          tt,sep='\n')
@@ -544,7 +544,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
-                hh=paste(hh,
+                gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
                          sprintf('df=ez.2factor(df,c("%s","%s","%s"))',xx,zz,aa),
                          tt,sep='\n')
@@ -552,7 +552,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
         }
     }    
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
 
@@ -583,7 +583,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
 #' @examples 
 #' @export
 ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -638,7 +638,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                          , xx, yy, yy, xx, xx, bar.gap, bar.width, bar.color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                          )
-            hh=paste(hh,
+            gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                          tt,sep='\n')
             # yy|xx zz
@@ -666,7 +666,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                             , xx, zz, yy, yy, xx, zz, bar.gap, bar.width, bar.color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                 )
-                hh=paste(hh,
+                gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                          tt,sep='\n')
             }
@@ -697,7 +697,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
                                 theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                                 , xx, zz, aa, yy, yy, zz, aa, xx, bar.gap, bar.width, bar.color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                     )
-                    hh=paste(hh,
+                    gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
                          tt,sep='\n')
                 }
@@ -705,7 +705,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
         }
     }    
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
 
@@ -734,7 +734,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
 #' @examples 
 #' @export
 ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -787,7 +787,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                          , xx, yy, yy, xx, line.size, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                          )
-            hh=paste(hh,
+            gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                          tt,sep='\n')
             # yy|xx zz
@@ -816,7 +816,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                             , xx, zz, yy, yy, xx, zz, zz, zz, zz, zz, line.size, ymin, ymax, zz, zz, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                 )
-                hh=paste(hh,
+                gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                          tt,sep='\n')
             } else {
@@ -844,7 +844,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                             , xx, zz, aa, yy, yy, zz, zz, aa, zz, zz, xx, zz, zz, zz, zz, zz, line.size, ymin, ymax, zz, zz, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                     )
-                    hh=paste(hh,
+                    gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
                          tt,sep='\n')
                 }
@@ -852,7 +852,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
         }
     }    
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
 
@@ -870,7 +870,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
 #' @examples 
 #' @export
 ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -909,7 +909,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
                     theme(legend.position='none')"
              , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust
         )
-        hh=paste(hh,
+        gghistory=paste(gghistory,
                  sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,gg),
                  tt,sep='\n')
     } else {
@@ -930,7 +930,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
                         facet_grid(.~%s)"
                  , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust,zz
             )
-            hh=paste(hh,
+            gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,gg,zz),
                          tt,sep='\n')
         } else {
@@ -952,7 +952,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
                             facet_grid(%s~%s)"
                      , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust,aa,zz
                 )
-                hh=paste(hh,
+                gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s","%s"))',yy,xx,gg,zz,aa),
                          tt,sep='\n')
             }
@@ -960,7 +960,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
     }
 
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
 
@@ -980,7 +980,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
 #' @examples
 #' @export
 ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -991,7 +991,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
                   df$%s = factor(df$%s,rev(unique(as.character(df$%s))))
                   ',id,id,id,id)
     eval(parse(text = cmd))
-    hh=paste(hh,cmd,sep='\n')
+    gghistory=paste(gghistory,cmd,sep='\n')
 
     x = "key"; y = id; z = "value"
     if (show.values) {
@@ -1049,8 +1049,8 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
         )
     }
     eval(parse(text = t))
-    hh=paste(hh,t,sep='\n')
-    p$hh=paste0(hh,'\nprint(p)')
+    gghistory=paste(gghistory,t,sep='\n')
+    p$gghistory=paste0(gghistory,'\nprint(p)')
     return(p)
 }
 
@@ -1147,7 +1147,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
 ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1155,6 +1155,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
     df.ori = df
+    gghistory=paste(gghistory,'df.ori = df',sep='\n')
 
     # 1) summarise
     if (stats!="none") {
@@ -1162,17 +1163,21 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
                       funs(%s(.,na.rm=T)))
                       ',id,stats)
         eval(parse(text = cmd))
+        gghistory=paste(gghistory,cmd,sep='\n')
     } else {
         df.stats = df.ori
+        gghistory=paste(gghistory,'df.stats = df.ori',sep='\n')
     }
 
     # 2) rescale
     df.stats = as.data.frame(lapply(df.stats, ez.rescale01))
+    gghistory=paste(gghistory,'df.stats = as.data.frame(lapply(df.stats, ez.rescale01))',sep='\n')
 
     # 3) to long format
     cmd = sprintf('tidyr::gather(df.stats, variable,value,-%s,factor_key = T) -> df
                   ',id)
     eval(parse(text = cmd))
+    gghistory=paste(gghistory,cmd,sep='\n')
 
     # 4) plot
     # geom_polygon connects together, no fill
@@ -1207,6 +1212,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 
     }
     eval(parse(text = cmd))
+    gghistory=paste(gghistory,cmd,sep='\n')
 
     # 5) hack: couldn't pass NULL to color, linetype
     if (is.null(color)) {
@@ -1219,8 +1225,9 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
                       ',id)
         eval(parse(text = cmd))
     }
+    gghistory=paste(gghistory,cmd,sep='\n')
 
-    p$hh=paste0(hh,'\nprint(p)')
+    p$gghistory=paste0(gghistory,'\nprint(p)')
     return(p)
 }
 
@@ -1418,6 +1425,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     # you might get In apply(df, 2, as.numeric) : NAs introduced by coercion
     # but it does not matter, the purpose here is to change everything to numeric
     # so that 0 or 1 can be assigned for plotting
+    # alternatively, guess one can also create an empty df with specified cols
     df = suppressWarnings(as.data.frame(apply(df,2,as.numeric)))
     df[indx.value] = 0
     df[indx.na] = 1
@@ -1461,7 +1469,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @examples 
 #' @export
 ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1547,7 +1555,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
         ####################################################### subfunction /
         '
     eval(parse(text = tt))
-    hh=paste(hh,tt,sep='\n')
+    gghistory=paste(gghistory,tt,sep='\n')
 
     if (grepl("|",cmd,fixed=TRUE)) {
       cmd = strsplit(cmd,"[~|]")[[1]]
@@ -1574,7 +1582,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                   ,xx,yy,point.alpha,point.size,zz,zz,rp,se,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
-      hh=paste(hh,
+      gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                tt,sep='\n')
 
@@ -1603,7 +1611,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                   ,xx,yy,point.alpha,point.size,rp,se,rug,ellipse,ylab,xlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
-      hh=paste(hh,
+      gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                tt,sep='\n')
       } else {
@@ -1628,13 +1636,13 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                       theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                       ,xx,yy,point.alpha,point.size,zz,zz,rp,se,zz,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
           )
-          hh=paste(hh,
+          gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                    tt,sep='\n')
       }
     }
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
 
@@ -1671,7 +1679,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
         p2=ez.countplot(df,cmd,'fill',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust)
         return(ggmultiplot(p1,p2,cols=1))
     }
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1730,7 +1738,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                          , xx, xx, position, alpha, width, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
             )
         }
-        hh=paste(hh,
+        gghistory=paste(gghistory,
                  sprintf('df=ez.dropna(df,c("%s"))',xx),
                  sprintf('xx="%s"',xx),
                  '# first compute pos
@@ -1790,7 +1798,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                              , xx, zz, position, alpha, width, color, ylab, xlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
                 )
             }
-            hh=paste(hh,
+            gghistory=paste(gghistory,
                      sprintf('df=ez.dropna(df,c("%s","%s"))',xx,zz),
                      sprintf('xx="%s"',xx),
                      sprintf('zz="%s"',zz),
@@ -1834,7 +1842,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                                  , xx, zz, position, alpha, width, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, aa
                     )
                 }    
-            hh=paste(hh,
+            gghistory=paste(gghistory,
                      sprintf('df=ez.dropna(df,c("%s","%s","%s"))',xx,zz,aa),
                      sprintf('xx="%s"',xx),
                      sprintf('zz="%s"',zz),
@@ -1845,7 +1853,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
         }
     }    
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
 
@@ -1876,7 +1884,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
 #' @examples 
 #' @export
 ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
-    hh=sprintf('df=%s',deparse(substitute(df)))
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1913,13 +1921,13 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
                  theme(axis.ticks=element_blank(),axis.text=element_blank(),panel.background=element_rect(fill="white",color="white"))'
                  , xx, alpha, pie.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
     )
-    hh=paste(hh,
+    gghistory=paste(gghistory,
          sprintf('df=ez.dropna(df,c("%s"))',xx),
          sprintf('xx=%s',xx),
          'dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
          tt,sep='\n')
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
 
@@ -1953,11 +1961,11 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
         var=deparse(substitute(x))
         dfcmd=sprintf('df=data.frame("%s"=x)',var)
         ez.eval(dfcmd)
-        hh=dfcmd
+        gghistory=dfcmd
         cmd=colnames(df)
     } else {
         df=x
-        hh='df=.'
+        gghistory='df=.'
     }
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -1993,7 +2001,7 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                      , xx, hist.type, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
         )
-        hh=paste(hh,
+        gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s"))',xx),
                    tt,sep='\n')
     # xx|zz or xx|zz aa
@@ -2015,7 +2023,7 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
                      , xx, zz, hist.type, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
             )
-            hh=paste(hh,
+            gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s"))',xx,zz),
                    tt,sep='\n')
         # xx|zz aa
@@ -2035,13 +2043,13 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
                      facet_grid(.~%s)'
                      , xx, zz, hist.type, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], aa
                 )
-                hh=paste(hh,
+                gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s","%s"))',xx,zz,aa),
                    tt,sep='\n')
             }
         }
     }    
     eval(parse(text = tt))
-    pp$hh=paste0(hh,'\nprint(pp)')
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
     return(pp)
 }
