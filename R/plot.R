@@ -1649,7 +1649,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 #' plot count data
 #' @description plot count data, eg, ez.countplot(iris, 'Species'). See also \code{\link{ez.piechart}} \code{\link{ez.hist}}
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
-#' @param cmd like "x", "x1 x2 x3", "x|z", "x|z a" where x z a are all discrete. 
+#' @param cmd like "x", c("x1", "x2", "x3"), "x|z", "x|z a" where x z a are all discrete. 
 #' @param position so far can only be "stack", "fill", "both". ('dodge' not supported yet)
 #' @param n.size set to 0 to hide count/percentage
 #' @param n.type 1 = n for stack, pct for fill; 2 = pct for stack, n for fill; 3 = n (pct) for stack, pct (n) for fill; 4 = pct (n) for stack, n (pct) for fill
@@ -1699,12 +1699,14 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
     n.type.fill = c('pct.str','n.str','pct.n.str','n.pct.str')[n.type]
     
     cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    # c("x1", "x2", "x3")
+    if (length(cmd)>1) cmd=paste0(cmd,collapse='/')
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     # xx
     if (length(cmd)==1) {
         xx = cmd[1]
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
-        xx = strsplit(xx," ",fixed=TRUE)[[1]]
+        xx = strsplit(xx,"/",fixed=TRUE)[[1]]
         df = ez.dropna(df, xx)
         df = df %>% tidyr::gather_('theKey','theValue',xx)
         # first compute pos
