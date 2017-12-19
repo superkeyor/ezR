@@ -171,8 +171,8 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
         # cannot pass factor to type.convert()
         # utils::type.convert(c(1,2,'3'), as.is = F) -> int
         # utils::type.convert(c(1,2,'3'), as.is = T) -> int
-        # utils::type.convert(c(1,2,'a'), as.is = F) -> fac  [1 2 a]
-        # utils::type.convert(c(1,2,'a'), as.is = T) -> vec  (1 2 a)
+        # utils::type.convert(c(1,2,'a'), as.is = F) -> fac  ['1' '2' 'a']
+        # utils::type.convert(c(1,2,'a'), as.is = T) -> vec  ('1' '2' 'a')
         if (!force) result = utils::type.convert(x, as.is = TRUE, ...) else result=suppressWarnings(as.numeric(x))
     }
     return(result)

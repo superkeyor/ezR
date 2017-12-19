@@ -284,7 +284,7 @@ ez.label.set = function(df,varname,label){
 #' convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor
 #' @description factor 2 char
 #' @param x a data frame or a vector/col
-#' @param col internally evaluated by eval('dplyr::select()')()
+#' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only.
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible factor cols in x
 #' \cr        if x is not a data frame, col is ignored
@@ -316,7 +316,7 @@ ez.2char = function(x, col=NULL){
 #' number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
 #' @description e=e, f=f, g/h/i->i, j=j, k=k
 #' @param x a data frame or a vector/col
-#' @param col internally evaluated by eval('dplyr::select()')()
+#' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
@@ -356,7 +356,7 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
 #' number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]
 #' @description ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @param x a data frame or a vector/col
-#' @param col internally evaluated by eval('dplyr::select()')()
+#' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
@@ -396,7 +396,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
 #' @description e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 #' @param x a data frame or a vector/col
-#' @param col internally evaluated by eval('dplyr::select()')()
+#' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
@@ -504,22 +504,21 @@ ez.factorname = function(df, col, newLevelNames){
 #' does not change factor label (set factor order as is)
 #' has not effect on (ie, make no change to) a non-factor object
 #' @param x data frame or vector, factor
-#' @param col column name(s) to eval('dplyr::select()')(); ignored when x is not a data frame
+#' @param cols column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols
 #' @return returns a new df, factor, vector (has not effect on (ie, make no change to) a non-factor object)
 #' @examples
 #' @export
-ez.factorelevel = function(x, col=NULL) {
+ez.factorelevel = function(x, cols=NULL) {
     if (is.factor(x)) {
         # for nonfactor, length(levels(x)) returns 0
         if (length(levels(x))!=length(levels(factor(x,unique(as.character(x)))))) {
             # cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
             x = factor(x, unique(as.character(x)))
         }
-    } else if (is.data.frame(x) & !is.null(col)) {
-        col=(ez.selcol(x,col))
-        cols=col
+    } else if (is.data.frame(x) & !is.null(cols)) {
+        cols=ez.selcol(x,cols)
         for (col in cols) { x[[col]] = ez.factorelevel(x[[col]]) }
-    } else if (is.data.frame(x) & is.null(col)) {
+    } else if (is.data.frame(x) & is.null(cols)) {
         x = dplyr::mutate_all(x,ez.factorelevel)
     }
     return(x)
@@ -797,7 +796,7 @@ ez.recode2 = function(df, col, recodes){
 #' \cr bottom line: the new val determines outcome even without match
 #' \cr But my script protects that; data type remains unchanged if there is no match
 #' @param df data frame
-#' @param col column name evaluated by eval('dplyr::select()')(), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used
+#' @param col column name evaluated by eval('dplyr::select()'), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used
 #' @param oldval old value (e.g., -Inf, NA), can only be single, not multiple/vector. Note would not differentiate 5.0 and 5
 #' @param newval new value (e.g., NA), can only be single, not multiple/vector
 #' @return returns a new df, old one does not change
@@ -943,7 +942,7 @@ ez.replacewhen = function(df,...) {
 #' @description count within one or more than one columns/rows, or entire data frame (ie, all columns/rows)
 #' @param x data frame or vector, if vector, parameters col, dim are ignored
 #' @param val value to be counted, could be NA. Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE
-#' @param col column evaluated by eval('dplyr::select()')(), single or vector. If NULL, all columns used
+#' @param col column evaluated by eval('dplyr::select()'), single or vector. If NULL, all columns used
 #' @param dim 1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)
 #' @return returns a data frame, if dim=1/2; a single value if dim=3. 
 #' \cr vector input x always outputs a single value.
@@ -991,7 +990,7 @@ ez.count = function(x, val=NA, col=NULL, dim=3) {
 #' \cr Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE
 #' \cr > < etc, not meaningful for factors, return NA
 #' \cr na.rm=FALSE to catch NA returned above
-#' @param col column evaluated by eval('dplyr::select()')(), single or vector. If NULL, all columns used
+#' @param col column evaluated by eval('dplyr::select()'), single or vector. If NULL, all columns used
 #' @param dim 1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)
 #' @return returns a data frame, if dim=1/2; a single value if dim=3. 
 #' \cr vector input x always outputs a single value.
@@ -1038,7 +1037,7 @@ ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
 #' reorder all cols, or sort all cols alphabetically
 #' @param newColOrder c('','',''), number of cols must match that of all cols (when para col=NULL) or specified by para col. 
 #' or, newColOrder='az' or 'za', sort all cols alphabetically
-#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()')() )
+#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )
 #' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
 #' \cr 1:4 (not quoted)
 #' \cr 'col1:col3' (quoted)
@@ -1142,7 +1141,7 @@ ez.move = ez.recol
 #' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]  
 #' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
 #' ignored when fixed=TRUE
-#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()')() )
+#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )
 #' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
 #' \cr 1:4 (not quoted)
 #' \cr 'col1:col3' (quoted)
@@ -1308,7 +1307,7 @@ ez.unique = dplyr::distinct
 #' @description find the duplicated rows/cols in a data frame or duplicated elements in a vector of any data type (factor, char, numeric)
 #' \cr ez.notduplicated is unique/distinct minus any of the duplicated
 #' @param x a data frame or a vector/col of any data type (factor, char, numeric)
-#' @param col restrict to the columns where you would like to search for duplicates, evaluated by eval('dplyr::select()')(); e.g., 3, c(3), 2:5, "place", c("place","age")
+#' @param col restrict to the columns where you would like to search for duplicates, evaluated by eval('dplyr::select()'); e.g., 3, c(3), 2:5, "place", c("place","age")
 #' \cr if x is a data frame, col is specified (e.g., "cond"), check that col only
 #' \cr if x is a data frame, col is unspecified (i.e., NULL default), check all cols in x
 #' \cr if x is not a data frame, col is ignored
@@ -1442,7 +1441,7 @@ ez.split = dplyr::group_by
 ez.leftjoin = dplyr::left_join
 
 #' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
-#' @param cols evaluated by eval('dplyr::select()')(), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs
+#' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs
 #' @return returns a new df, old one does not change
 #' @examples
 #' @family data transformation functions
@@ -1488,7 +1487,7 @@ ez.rmcol = ez.del
 #' keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others
 #' @description could also accept a vector/factor as input, if so, then col,n,reindex ignored (factor->char->factor)
 #' @param x a data frame, or a vector
-#' @param col internally evaluated by eval('dplyr::select()')(), restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
+#' @param col internally evaluated by eval('dplyr::select()'), restrict to the columns where you would like to search for NA; eg, 3, c(3), 2:5, "place", c("place","age")
 #' \cr default is NULL, search for all columns.
 #' @param n integer or vector, 0, c(3,5), number/range of NAs allowed.
 #' \cr If a number, the exact number of NAs kept
@@ -1695,7 +1694,7 @@ ez.ppq = function(...) {
 #' select cols in a df
 #' @description select cols in a df, evaluated by sprintf('dplyr::select(df,%s,...)',toString(col)
 #' @param df df
-#' @param col a string or a vector
+#' @param col a string or a vector or NULL (NULL=all cols)
 #' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
 #' \cr 1:4 (not quoted)
 #' \cr 'col1:col3' (quoted)
@@ -1703,6 +1702,8 @@ ez.ppq = function(...) {
 #' @return returns vector of col names
 #' @export
 ez.selcol=function(df,col,...) {
+    if (is.null(col)) return(colnames(df))
+
     cmd=sprintf('dplyr::select(df,%s,...)',toString(col))
     cols=ez.eval(cmd)
     return(colnames(cols))
