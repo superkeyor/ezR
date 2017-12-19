@@ -4,7 +4,7 @@
 \alias{ez.format.vector}
 \title{format a vector for easy manual copy/processing.}
 \usage{
-ez.format.vector(vec, quote = TRUE)
+ez.format.vector(vec, quote = TRUE, print2screen = TRUE)
 }
 \arguments{
 \item{vec}{a vector}
