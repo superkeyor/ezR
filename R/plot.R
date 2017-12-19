@@ -449,7 +449,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
                      %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
                      geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
-                     coord_flip() + theme(legend.position="none", axis.ticks.x=element_blank(), axis.text.x=element_blank()) +
+                     coord_flip() + theme(legend.position="none", axis.ticks.y=element_blank(), axis.text.y=element_blank()) +
                      xlab("") +
                      ggtitle(paste0("N = ",nrow(df)))'
                      , yy, violin
