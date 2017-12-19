@@ -11,7 +11,7 @@ ez.count(x, val = NA, col = NULL, dim = 3)
 
 \item{val}{value to be counted, could be NA. Note, may not differentiate 5.0 and 5, ie. 5.0==5 TRUE}
 
-\item{col}{column evaluated by eval('dplyr::select()')(), single or vector. If NULL, all columns used}
+\item{col}{column evaluated by eval('dplyr::select()'), single or vector. If NULL, all columns used}
 
 \item{dim}{1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)}
 }

@@ -4,12 +4,12 @@
 \alias{ez.factorelevel}
 \title{reset factor levels}
 \usage{
-ez.factorelevel(x, col = NULL)
+ez.factorelevel(x, cols = NULL)
 }
 \arguments{
 \item{x}{data frame or vector, factor}
 
-\item{col}{column name(s) to eval('dplyr::select()')(); ignored when x is not a data frame}
+\item{cols}{column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols}
 }
 \value{
 returns a new df, factor, vector (has not effect on (ie, make no change to) a non-factor object)

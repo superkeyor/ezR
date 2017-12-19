@@ -14,7 +14,7 @@ ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
 \arguments{
 \item{x}{a data frame or a vector/col of any data type (factor, char, numeric)}
 
-\item{col}{restrict to the columns where you would like to search for duplicates, evaluated by eval('dplyr::select()')(); e.g., 3, c(3), 2:5, "place", c("place","age")
+\item{col}{restrict to the columns where you would like to search for duplicates, evaluated by eval('dplyr::select()'); e.g., 3, c(3), 2:5, "place", c("place","age")
 \cr if x is a data frame, col is specified (e.g., "cond"), check that col only
 \cr if x is a data frame, col is unspecified (i.e., NULL default), check all cols in x
 \cr if x is not a data frame, col is ignored}

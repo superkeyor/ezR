@@ -9,7 +9,7 @@ ez.countif(x, cnd, col = NULL, dim = 3, na.rm = FALSE)
 \arguments{
 \item{x}{data frame or vector, if vector, parameters col, dim are ignored}
 
-\item{col}{column evaluated by eval('dplyr::select()')(), single or vector. If NULL, all columns used}
+\item{col}{column evaluated by eval('dplyr::select()'), single or vector. If NULL, all columns used}
 
 \item{dim}{1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)}
 

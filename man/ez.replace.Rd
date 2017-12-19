@@ -9,7 +9,7 @@ ez.replace(df, col, oldval, newval = NULL)
 \arguments{
 \item{df}{data frame}
 
-\item{col}{column name evaluated by eval('dplyr::select()')(), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used}
+\item{col}{column name evaluated by eval('dplyr::select()'), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used}
 
 \item{oldval}{old value (e.g., -Inf, NA), can only be single, not multiple/vector. Note would not differentiate 5.0 and 5}
 

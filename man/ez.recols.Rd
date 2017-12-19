@@ -10,7 +10,7 @@ ez.recols(df, newColOrder, col = NULL)
 \item{newColOrder}{c('','',''), number of cols must match that of all cols (when para col=NULL) or specified by para col. 
 or, newColOrder='az' or 'za', sort all cols alphabetically}
 
-\item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()')() )
+\item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )
 \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
 \cr 1:4 (not quoted)
 \cr 'col1:col3' (quoted)

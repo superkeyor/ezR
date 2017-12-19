@@ -9,7 +9,7 @@ ez.selcol(df, col, ...)
 \arguments{
 \item{df}{df}
 
-\item{col}{a string or a vector
+\item{col}{a string or a vector or NULL (NULL=all cols)
 \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
 \cr 1:4 (not quoted)
 \cr 'col1:col3' (quoted)
