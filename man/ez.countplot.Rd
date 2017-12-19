@@ -13,7 +13,7 @@ ez.countplot(df, cmd, position = "both", color = "color", alpha = 1,
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
 
-\item{cmd}{like "x, x|z, x|z a" where x z a are all discrete}
+\item{cmd}{like "x", "x1 x2 x3", "x|z", "x|z a" where x z a are all discrete.}
 
 \item{position}{so far can only be "stack", "fill", "both". ('dodge' not supported yet)}
 
