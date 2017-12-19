@@ -1649,7 +1649,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 #' plot count data
 #' @description plot count data, eg, ez.countplot(iris, 'Species'). See also \code{\link{ez.piechart}} \code{\link{ez.hist}}
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
-#' @param cmd like "x, x|z, x|z a" where x z a are all discrete
+#' @param cmd like "x", "x1 x2 x3", "x|z", "x|z a" where x z a are all discrete. 
 #' @param position so far can only be "stack", "fill", "both". ('dodge' not supported yet)
 #' @param n.size set to 0 to hide count/percentage
 #' @param n.type 1 = n for stack, pct for fill; 2 = pct for stack, n for fill; 3 = n (pct) for stack, pct (n) for fill; 4 = pct (n) for stack, n (pct) for fill
@@ -1703,39 +1703,44 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
     # xx
     if (length(cmd)==1) {
         xx = cmd[1]
+        xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
+        xx = strsplit(xx," ",fixed=TRUE)[[1]]
         df = ez.dropna(df, xx)
+        df = df %>% tidyr::gather_('theKey','theValue',xx)
         # first compute pos
-        dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
+        dfdf = df %>% dplyr::count_(c('theKey','theValue')) %>% dplyr::group_by_('theKey') %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
         # then compute n/pct without groupby (only 1 factor out there)
         dfdf = dfdf %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         if (position=='stack') {
             if (is.null(ylab)) ylab='Count'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+            xlab = ifelse(xlab=='','xlab("")+',xlab)
             tt = sprintf('
             pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                          geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
-                         %s + %s %s %s %s
+                         %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                          geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))'
-                         , xx, xx, position, alpha, width, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack
+                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack
             )
         } else if (position=='fill') {
             if (is.null(ylab)) ylab='Percentage'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+            xlab = ifelse(xlab=='','xlab("")+',xlab)
             tt = sprintf('
             pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                          geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
-                         %s + %s %s %s %s
+                         %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                          geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+
                          scale_y_continuous(labels=scales::percent)+coord_flip()'
-                         , xx, xx, position, alpha, width, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
             )
         }
         gghistory=paste(gghistory,
@@ -1774,13 +1779,13 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                 tt = sprintf('
                 pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                              geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
-                             %s + %s %s %s %s
+                             %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") + 
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))'
-                             , xx, zz, position, alpha, width, color, ylab, xlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack
+                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack
                 )
             } else if (position=='fill') {
                 if (is.null(ylab)) ylab='Percentage'
@@ -1788,14 +1793,14 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                 tt = sprintf('
                 pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                              geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
-                             %s + %s %s %s %s
+                             %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") + 
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+
                              scale_y_continuous(labels=scales::percent)+coord_flip()'
-                             , xx, zz, position, alpha, width, color, ylab, xlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
                 )
             }
             gghistory=paste(gghistory,
@@ -1818,13 +1823,13 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                     tt = sprintf('
                     pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                                  geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
-                                 %s + %s %s %s %s
+                                 %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) +
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") + 
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))+facet_grid(.~%s)'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack, aa
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack, aa
                     )
                 } else if (position=='fill') {
                     if (is.null(ylab)) ylab='Percentage'
@@ -1832,14 +1837,14 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                     tt = sprintf('
                     pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                                  geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
-                                 %s + %s %s %s %s
+                                 %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) +
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") + 
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+facet_grid(.~%s)+
                                  scale_y_continuous(labels=scales::percent)+coord_flip()'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, aa
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, aa
                     )
                 }    
             gghistory=paste(gghistory,
@@ -1910,7 +1915,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
     tt = sprintf('
     pp = ggplot2::ggplot(dfdf, aes(x="",n,fill=%s)) +
                  geom_bar(position="fill",stat="identity",alpha=%f,width=1) +
-                 %s + xlab("%s")+ylab("%s") + %s %s
+                 %s + xlab("%s")+ylab("%s") + %s %s %s
                  ggtitle(paste0("N = ",nrow(df))) +
                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                  theme(legend.direction="%s") + 
@@ -1919,7 +1924,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
                  coord_polar(theta="y",start=start,direction=direction)+
                  theme_apa()+
                  theme(axis.ticks=element_blank(),axis.text=element_blank(),panel.background=element_rect(fill="white",color="white"))'
-                 , xx, alpha, pie.color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+                 , xx, alpha, pie.color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
     )
     gghistory=paste(gghistory,
          sprintf('df=ez.dropna(df,c("%s"))',xx),
@@ -1994,12 +1999,12 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
         tt = sprintf('
             pp = ggplot2::ggplot(df, aes(x=%s)) +
                      %s +
-                     %s + %s %s %s %s
+                     %s + %s %s %s %s %s
                      ggtitle(paste0("N = ",nrow(df))) +
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                     , xx, hist.type, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
         )
         gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s"))',xx),
@@ -2016,12 +2021,12 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
             tt = sprintf('
                 pp = ggplot2::ggplot(df, aes(x=%s,fill=%s)) +
                      %s +
-                     %s + %s %s %s %s
+                     %s + %s %s %s %s %s
                      ggtitle(paste0("N = ",nrow(df))) +
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                     , xx, zz, hist.type, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                     , xx, zz, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
             )
             gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s"))',xx,zz),
@@ -2035,13 +2040,13 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
                 tt = sprintf('
                     pp = ggplot2::ggplot(df, aes(x=%s,fill=%s)) +
                      %s +
-                     %s + %s %s %s %s
+                     %s + %s %s %s %s %s
                      ggtitle(paste0("N = ",nrow(df))) +
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                      facet_grid(.~%s)'
-                     , xx, zz, hist.type, color, ylab, xlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], aa
+                     , xx, zz, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], aa
                 )
                 gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s","%s"))',xx,zz,aa),
