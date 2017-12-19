@@ -619,13 +619,17 @@ ez.pprint = function(string,color='green') {
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-ez.format.vector = function(vec, quote=TRUE){
+ez.format.vector = function(vec, quote=TRUE,print2screen=TRUE){
     if (quote) {
-        print(noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'")))
+        printout=noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'"))
     } else {
-        print(noquote(paste0(vec,collapse = ",")))
+        printout=noquote(paste0(vec,collapse = ","))
     }
-    cat(sprintf("Total elements: %d\n",length(vec)))
+    if (print2screen) {
+        print(printout)
+        cat(sprintf("Total elements: %d\n",length(vec)))
+    }
+    return(invisible(printout))
 }
 
 #' wrapper of \code{\link{eval}}

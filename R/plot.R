@@ -258,7 +258,7 @@ ggcolor = function(n=NULL){
 
         # also visit http://colorbrewer2.org/
         # scale_color_manual(values=c("#fdae61","#2b83ba","#d7191c","#abdda4","#ffffbf")) #printer-friendly
-        # scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) #colorblind-friendly\n')
+        # scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) #colorblind-friendly\n')
 }
 
 #' change plot continous color to matlab like
@@ -590,7 +590,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    bar.color = ifelse(bar.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    bar.color = ifelse(bar.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -807,7 +807,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) + 
+                            scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) + 
 
                             %s %s %s
                             %s %s
@@ -835,7 +835,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) + 
+                            scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) + 
 
                             %s %s %s
                             %s %s
@@ -1576,7 +1576,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s 
                   geom_smooth(method=lm,se=%s) + %s %s
-                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) +
+                  scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) +
                   %s %s %s %s
                   theme(legend.direction="%s") + 
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -1605,7 +1605,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f) + %s 
                   geom_smooth(method=lm,se=%s) + %s %s
-                  scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) +
+                  scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) +
                   %s %s %s
                   theme(legend.direction="%s") + 
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -1630,7 +1630,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                       pp=ggplot(df, aes(x=%s, y=%s)) +
                       geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s 
                       geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
-                      scale_color_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000")) +
+                      scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) +
                       %s %s %s %s
                       theme(legend.direction="%s") + 
                       theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -1687,7 +1687,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
@@ -1708,9 +1708,9 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
         xx = strsplit(xx,"/",fixed=TRUE)[[1]]
         df = ez.dropna(df, xx)
-        df = df %>% tidyr::gather_('theKey','theValue',xx)
+        dfdf = df %>% tidyr::gather_("theKey","theValue",xx)
         # first compute pos
-        dfdf = df %>% dplyr::count_(c('theKey','theValue')) %>% dplyr::group_by_('theKey') %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
+        dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
         # then compute n/pct without groupby (only 1 factor out there)
         dfdf = dfdf %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         if (position=='stack') {
@@ -1746,10 +1746,11 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
             )
         }
         gghistory=paste(gghistory,
-                 sprintf('df=ez.dropna(df,c("%s"))',xx),
-                 sprintf('xx="%s"',xx),
+                 sprintf('xx=c(%s)',ez.format.vector(xx,print2screen=FALSE)),
+                 sprintf('df=ez.dropna(df,xx)'),
+                 'dfdf = df %>% tidyr::gather_("theKey","theValue",xx)',
                  '# first compute pos
-                 dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
+                 dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
                  # then compute n/pct without groupby (only 1 factor out there)
                  dfdf = dfdf %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
                  tt,sep='\n')
@@ -1899,7 +1900,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    pie.color = ifelse(pie.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    pie.color = ifelse(pie.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
@@ -1981,7 +1982,7 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
