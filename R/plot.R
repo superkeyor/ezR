@@ -2003,11 +2003,11 @@ ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL
             pp = ggplot2::ggplot(df, aes(x=%s)) +
                      %s +
                      %s + %s %s %s %s %s
-                     ggtitle(paste0("N = ",nrow(df))) +
+                     ggtitle(paste0("N = ",nrow(df),", M = ",sprintf("%%.2f",mean(df[["%s"]])))) +
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xx, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
         )
         gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s"))',xx),
