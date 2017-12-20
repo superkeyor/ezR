@@ -1722,15 +1722,17 @@ ez.selcol=function(df,col,...) {
 #' @export
 ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
     if (!is.data.frame(x)) {
-        factored = ifelse(is.factor(x), TRUE, FALSE)
-        if (factored) {x=as.character(x)}
-
-        if ('toupper' %in% procedures) x = toupper(x)
-        if ('tolower' %in% procedures) x = tolower(x)
-        if ('removeleading0' %in% procedures) x = sub('^0','',x)
-
-        if (factored) {x=as.factor(x)}
-        x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+        if (!is.numeric(x) | !is.logical(x) | !ez.is.date(x)) {
+            factored = ifelse(is.factor(x), TRUE, FALSE)
+            if (factored) {x=as.character(x)}
+    
+            if ('toupper' %in% procedures) x = toupper(x)
+            if ('tolower' %in% procedures) x = tolower(x)
+            if ('removeleading0' %in% procedures) x = sub('^0+','',x)
+    
+            if (factored) {x=as.factor(x)}
+            x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+        }
     } else if (is.data.frame(x) & is.null(col)) {
         x = dplyr::mutate_all(x, funs(ez.sanitize(.,procedures=procedures)))
     } else if (is.data.frame(x) & !is.null(col)) {
