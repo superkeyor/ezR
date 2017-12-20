@@ -1753,7 +1753,8 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
 #' @export
 ez.attrclean = function(x, col=NULL, ...) {
     if (!is.data.frame(x)) {
-        x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+        # x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+        attributes(x) <- NULL
     } else if (is.data.frame(x) & is.null(col)) {
         x = dplyr::mutate_all(x, funs(ez.attrclean(.)))
     } else if (is.data.frame(x) & !is.null(col)) {
