@@ -168,6 +168,7 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
     allFactorCounts = if (length(allFactorCounts)==0) NA else range(allFactorCounts,na.rm =T) %>% toString(width=width)
     results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
                           levels_view2=allFactorCounts)
+    results=results %>% ez.move('levels_view1 levels_view2 after variable')
 
     ez.savexlist(list('row'=results0,'col'=results,'dat'=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
 

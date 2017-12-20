@@ -1462,10 +1462,13 @@ ez.del = function(df,cols=NULL){
             df = dplyr::select(df,-colNumsAllNAs)
         }
     } else {
-        cols=(ez.selcol(df,cols))
+        # col not exist, cannot be selected, just skip
+        tryCatch({
+            cols=ez.selcol(df,cols)
+        },error = function(e) {})
         existCols = cols[(cols %in% colnames(df))]
         if (length(existCols)>0) {
-            cat(sprintf('deleted columns: %s',toString(existCols)))
+            cat(sprintf('deleted columns: %s\n',toString(existCols)))
             df[existCols] = NULL
         }
     }
