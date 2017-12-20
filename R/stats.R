@@ -54,7 +54,7 @@ ez.compare = function(lh,rh,...) {
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @examples
 #' @export
-ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, ...){
+ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
     # ez.view = function(df, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(df, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
@@ -177,9 +177,17 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
     # tempdir() is where it is
     if (temped) {
         debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
-        if (debugMode) {
-            browseURL(file)
-            ez.sleep(3) 
+        # overwritten by 'debug' passed to function
+        if (is.null(debug)) {
+            if (debugMode) {
+                browseURL(file)
+                ez.sleep(3) 
+            }
+        } else {
+            if (debug) {
+                browseURL(file)
+                ez.sleep(3) 
+            }
         }
     } 
     return(invisible(list('row'=results0,'col'=results,'dat'=df,'pth'=file)))

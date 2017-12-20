@@ -5,7 +5,7 @@
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
 ez.view(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
-  incomparables = FALSE, ...)
+  incomparables = FALSE, debug = NULL, ...)
 }
 \arguments{
 \item{df}{a data frame}
