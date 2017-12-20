@@ -1721,7 +1721,7 @@ ez.selcol=function(df,col,...) {
 #' @seealso \code{\link{ez.clcols}}
 #' @export
 ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
-    if (!is.data.frame(x) {
+    if (!is.data.frame(x)) {
         factored = ifelse(is.factor(x), TRUE, FALSE)
         if (factored) {x=as.character(x)}
 
@@ -1750,7 +1750,7 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
 #' @return returns a new data frame or vector
 #' @export
 ez.attrclean = function(x, col=NULL, ...) {
-    if (!is.data.frame(x) {
+    if (!is.data.frame(x)) {
         x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
     } else if (is.data.frame(x) & is.null(col)) {
         x = dplyr::mutate_all(x, funs(ez.attrclean(.)))
