@@ -1722,7 +1722,7 @@ ez.selcol=function(df,col,...) {
 #' @export
 ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
     if (!is.data.frame(x)) {
-        if (!is.numeric(x) | !is.logical(x) | !ez.is.date(x)) {
+        if (!is.numeric(x) && !is.logical(x) && !ez.is.date(x)) {
             factored = ifelse(is.factor(x), TRUE, FALSE)
             if (factored) {x=as.character(x)}
     
