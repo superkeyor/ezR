@@ -1711,3 +1711,55 @@ ez.selcol=function(df,col,...) {
     cols=ez.eval(cmd)
     return(colnames(cols))
 }
+
+#' sanitize column-wise
+#' @description sanitize column-wise, see also \code{\link{ez.clcols}}
+#' @param x a data frame or a vector
+#' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
+#' @param procedures c('toupper','removeleading0')
+#' @return returns a new data frame or vector
+#' @seealso \code{\link{ez.clcols}}
+#' @export
+ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
+    if (!is.data.frame(x) {
+        factored = ifelse(is.factor(x), TRUE, FALSE)
+        if (factored) {x=as.character(x)}
+
+        if ('toupper' %in% procedures) x = toupper(x)
+        if ('tolower' %in% procedures) x = tolower(x)
+        if ('removeleading0' %in% procedures) x = sub('^0','',x)
+
+        if (factored) {x=as.factor(x)}
+        x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+    } else if (is.data.frame(x) & is.null(col)) {
+        x = dplyr::mutate_all(x, funs(ez.sanitize(.,procedures=procedures)))
+    } else if (is.data.frame(x) & !is.null(col)) {
+        col = ez.selcol(x,col)
+        cols = col
+        for (col in cols) {
+            x[[col]] = ez.sanitize(x[[col]],procedures=procedures)
+        }
+    }
+    return(x)
+}
+
+#' remove all attr
+#' @description remove all attr
+#' @param x a data frame or a vector
+#' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
+#' @return returns a new data frame or vector
+#' @export
+ez.attrclean = function(x, col=NULL, ...) {
+    if (!is.data.frame(x) {
+        x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+    } else if (is.data.frame(x) & is.null(col)) {
+        x = dplyr::mutate_all(x, funs(ez.attrclean(.)))
+    } else if (is.data.frame(x) & !is.null(col)) {
+        col = ez.selcol(x,col)
+        cols = col
+        for (col in cols) {
+            x[[col]] = ez.attrclean(x[[col]])
+        }
+    }
+    return(x)
+}
