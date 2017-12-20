@@ -17,7 +17,7 @@ ez.sanitize(x, col = NULL, procedures = c("toupper", "removeleading0"))
 returns a new data frame or vector
 }
 \description{
-sanitize column-wise, see also \code{\link{ez.clcols}}
+sanitize column-wise (if not numeric,logical,date), see also \code{\link{ez.clcols}}
 }
 \seealso{
 \code{\link{ez.clcols}}

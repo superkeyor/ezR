@@ -1713,7 +1713,7 @@ ez.selcol=function(df,col,...) {
 }
 
 #' sanitize column-wise
-#' @description sanitize column-wise, see also \code{\link{ez.clcols}}
+#' @description sanitize column-wise (if not numeric,logical,date), see also \code{\link{ez.clcols}}
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
 #' @param procedures c('toupper','removeleading0')
