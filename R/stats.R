@@ -55,6 +55,19 @@ ez.compare = function(lh,rh,...) {
 #' @examples
 #' @export
 ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
+    # if temped and not debug, just jump out of the function to save time
+    if (is.null(file)) {
+        debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
+        # overwritten by 'debug' passed to function
+        if (is.null(debug)) {
+            if (!debugMode) {
+                return(invisible(NULL))
+            }
+        } else if (!debug) {
+            return(invisible(NULL))
+        }
+    }     
+
     # ez.view = function(df, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
     # do not need, my own is better
     # sjPlot::view_df(df, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
