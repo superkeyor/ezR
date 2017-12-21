@@ -2009,8 +2009,8 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f)) +
-                     geom_vline(aes(xintercept=%f),color="red"))+theme(legend.position="None")'
-                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xx, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], xline
+                     geom_vline(aes(xintercept=%f,color="red"))+geom_text(x=%f,y=0,label="%.2f")+theme(legend.position="None")'
+                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xx, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], xline, xline, xline
         )
         gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s"))',xx),
