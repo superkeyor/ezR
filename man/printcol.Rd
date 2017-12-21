@@ -2,11 +2,11 @@
 % Please edit documentation in R/basic.R
 \name{printcol}
 \alias{printcol}
-\title{print sorted uniques of a df col or a vector}
+\title{print sorted uniques of a df col or a vector (NA last)}
 \usage{
 printcol(v)
 }
 \description{
-print sorted uniques of a df col or a vector
+print sorted uniques of a df col or a vector (NA last)
 }
 

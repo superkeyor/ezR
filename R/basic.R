@@ -632,10 +632,10 @@ ez.format.vector = function(vec, quote=TRUE,print2screen=TRUE){
     return(invisible(printout))
 }
 
-#' print sorted uniques of a df col or a vector
-#' @description print sorted uniques of a df col or a vector
+#' print sorted uniques of a df col or a vector (NA last)
+#' @description print sorted uniques of a df col or a vector (NA last)
 #' @export
-printcol=function(v){unique(v) %>% sort() %>% ez.format.vector()}
+printcol=function(v){unique(v) %>% sort(na.last=T) %>% ez.format.vector()}
 
 #' wrapper of \code{\link{eval}}
 #' @param cmd an R cmd in text, e.g., constructed with sprintf()
