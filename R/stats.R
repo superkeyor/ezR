@@ -117,6 +117,7 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
                         duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
     results0=dplyr::mutate(results0,missing_rate=missing/ncol)
     results0=ez.rncol(results0,c('id'=paste0('id_',idString)))
+    results0=dplyr::mutate(results0,nonmissing=ncol-missing)
     
 
 
@@ -182,6 +183,7 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
     results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
                           levels_view2=allFactorCounts)
     results=results %>% ez.move('levels_view1 levels_view2 after variable')
+    results=dplyr::mutate(results,nonmissing=nrow-missing)
 
     ez.savexlist(list('row'=results0,'col'=results,'dat'=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
 
@@ -204,6 +206,66 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
         }
     } 
     return(invisible(list('row'=results0,'col'=results,'dat'=df,'pth'=file)))
+}
+
+#' print sorted uniques of a df col or a vector (NA last) and other information
+#' @description print sorted uniques of a df col or a vector (NA last) and other information
+#' @export
+view=function(x) {
+    v = x
+    if (is.data.frame(v)) {
+        if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
+            stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(v)[which(ez.duplicated(colnames(v),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
+        }
+        v.cols = colnames(v) %>% ez.format.vector(print2screen=F)
+        v.nrow = nrow(v)
+        v.ncol = ncol(v)
+        v.missing=ez.count(v,NA,dim=3)
+        v.n.colNumsAllNAs = length(as.vector(which(colSums(is.na(v)) == nrow(v))))
+        
+        classes=character()
+        for (col in colnames(v)) {
+            classes=c(classes,class(v[[col]]))
+        }
+        freq = table(classes)
+        v.classes = paste('#',freq %>% names,': ',freq,sep='',collapse = ', ')
+
+        cat(v.cols)
+        cat(sprintf('\nDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
+
+    } else {
+        v.elements = unique(v) %>% sort(na.last=T) %>% ez.format.vector(print2screen=F)
+        v.class=class(v)
+        v.n=length(v)
+        v.missing=sum(is.na(v))
+        v.unique=length(unique(v))
+
+        # calculable 
+        is.date <- function(x) inherits(x, 'Date')
+        # not all NA
+        if ( is.numeric(v) & !all(is.na(v)) ) {
+            v.mean=mean(v,na.rm=TRUE)
+            v.min=min(v,na.rm=TRUE)
+            v.max=max(v,na.rm=TRUE)
+            v.sum=sum(v,na.rm=TRUE)
+        } else if ( is.date(v) & !all(is.na(v)) ) {
+            # converted to numeric, to convert back to date: ez.date(ori='R')
+            v.mean=mean(v,na.rm=TRUE)
+            v.min=min(v,na.rm=TRUE)
+            v.max=max(v,na.rm=TRUE)
+            # sum not defined for "Date" objects
+            v.sum=NA
+        } else {
+            v.mean=v.min=v.max=v.sum=NA
+        }
+
+        cat(v.elements)
+        cat(sprintf('\n%s\t#Unique: %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
+        if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
+            cat(sprintf('M = %.2f\t(%.2f,%.2f)\t%.2f\n', v.mean, v.min, v.max, v.sum))
+        }
+    }
+    return(invisible(NULL))
 }
 
 #' standard error of mean
