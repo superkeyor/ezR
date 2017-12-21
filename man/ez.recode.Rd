@@ -27,7 +27,7 @@ Recodes one single according to a set of rules
 \cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
 }
 \details{
-recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
+recodes contains a set of recoding rules separated by ";". There are several different types of recoding rules:
 \itemize{
  \item The simplest codes one value to another. If we wish to recode 1 into 2, we could use the rule "1=2;".
  \item A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1"). hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well. if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
