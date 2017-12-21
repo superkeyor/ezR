@@ -638,7 +638,39 @@ ez.format.vector = function(vec, quote=TRUE,print2screen=TRUE){
 #' print sorted uniques of a df col or a vector (NA last)
 #' @description print sorted uniques of a df col or a vector (NA last)
 #' @export
-printcol=function(v){unique(v) %>% sort(na.last=T) %>% ez.format.vector()}
+view=function(v) {
+    v.elements = unique(v) %>% sort(na.last=T) %>% ez.format.vector(print2screen=F)
+    v.class=class(v)
+    v.n=length(v)
+    v.missing=sum(is.na(v))
+    v.unique=length(unique(v))
+
+    # calculable 
+    is.date <- function(x) inherits(x, 'Date')
+    # not all NA
+    if ( is.numeric(v) & !all(is.na(v)) ) {
+        v.mean=mean(v,na.rm=TRUE)
+        v.min=min(v,na.rm=TRUE)
+        v.max=max(v,na.rm=TRUE)
+        v.sum=sum(v,na.rm=TRUE)
+    } else if ( is.date(v) & !all(is.na(v)) ) {
+        # converted to numeric, to convert back to date: ez.date(ori='R')
+        v.mean=mean(v,na.rm=TRUE)
+        v.min=min(v,na.rm=TRUE)
+        v.max=max(v,na.rm=TRUE)
+        # sum not defined for "Date" objects
+        v.sum=NA
+    } else {
+        v.mean=v.min=v.max=v.sum=NA
+    }
+
+    print(v.elements)
+    cat(sprintf('%s\t#Unique: %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
+    if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
+        cat(sprintf('M = %.2f\t(%.2f,%.2f)\t%.2f\n', v.mean, v.min, v.max, v.sum))
+    }
+    return(invisible(NULL))
+}
 
 #' wrapper of \code{\link{eval}}
 #' @param cmd an R cmd in text, e.g., constructed with sprintf()
