@@ -559,7 +559,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
 #' barplot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
-#' @param bar.color  "bw" or "color"  black/white or colorblind-friendly color
+#' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param bar.gap  the gap between bars 
 #' @param bar.width  the width of bar itself 
 #' @param error.size  the thickness of error bar line 
@@ -582,7 +582,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -590,7 +590,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    bar.color = ifelse(bar.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -636,7 +636,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") + 
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, yy, yy, xx, xx, bar.gap, bar.width, bar.color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                         , xx, yy, yy, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                          )
             gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
@@ -664,7 +664,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") + 
                             theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                            , xx, zz, yy, yy, xx, zz, bar.gap, bar.width, bar.color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                            , xx, zz, yy, yy, xx, zz, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                 )
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
@@ -695,7 +695,7 @@ ez.barplot = function(df,cmd,bar.color='color',bar.gap=0.7,bar.width=0.7,error.s
                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
                                 theme(legend.direction="%s") + 
                                 theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                                , xx, zz, aa, yy, yy, zz, aa, xx, bar.gap, bar.width, bar.color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                                , xx, zz, aa, yy, yy, zz, aa, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                     )
                     gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
@@ -1874,7 +1874,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
 #' @param n.size set to 0 to hide count/percentage
 #' @param n.type 1 = pct; 2 = n; 3 = pct (n); 4 = n (pct)
 #' @param alpha pie alpha value
-#' @param pie.color  "bw" or "color"  black/white or colorblind-friendly color
+#' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param ylab  y label
 #' @param xlab  x label
 #' @param zlab  z/a/fill/legend label, only applicable when there is z provided NULL
@@ -1891,7 +1891,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -1900,7 +1900,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    pie.color = ifelse(pie.color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))')
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
@@ -1927,7 +1927,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
                  coord_polar(theta="y",start=start,direction=direction)+
                  theme_apa()+
                  theme(axis.ticks=element_blank(),axis.text=element_blank(),panel.background=element_rect(fill="white",color="white"))'
-                 , xx, alpha, pie.color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+                 , xx, alpha, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
     )
     gghistory=paste(gghistory,
          sprintf('df=ez.dropna(df,c("%s"))',xx),

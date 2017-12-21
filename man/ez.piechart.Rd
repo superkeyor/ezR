@@ -4,7 +4,7 @@
 \alias{ez.piechart}
 \title{pie chart}
 \usage{
-ez.piechart(df, cmd, start = 0, direction = 1, pie.color = "color",
+ez.piechart(df, cmd, start = 0, direction = 1, color = "color",
   alpha = 1, n.size = 5.5, n.type = 3, ylab = "", xlab = "",
   zlab = NULL, legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
@@ -19,7 +19,7 @@ ez.piechart(df, cmd, start = 0, direction = 1, pie.color = "color",
 
 \item{direction}{1, clockwise; -1, anticlockwise}
 
-\item{pie.color}{"bw" or "color"  black/white or colorblind-friendly color}
+\item{color}{"bw" or "color"  black/white or colorblind-friendly color}
 
 \item{alpha}{pie alpha value}
 
