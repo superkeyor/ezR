@@ -31,9 +31,12 @@ Both value and variable label attributes will be removed when converting variabl
 see \url{http://stackoverflow.com/a/22701462/2292993}
 }
 \examples{
-ez.num(c(1,'2','a',3))          # -> same vector
-ez.num(c(1,'2',3))              # -> 1 2 3  int vector
-ez.num(factor(c(1,'2','a',3)))  # -> 1 2 NA 3 int (warning is suppressed)
+ez.num(c(1,'2','a',3,NA))          # -> same chara vector
+ez.num(c(1,'2',3,NA))              # -> 1 2 3 NA int vector
+ez.num(factor(c(1,'2','a',3,NA)),force=T)  # -> 1 2 NA 3 NA int (warning is suppressed)
+ez.num(factor(c(1,'2','a',3, NA)),force=F)  # factor['1','2','a','3', 'NA']
+ez.num(factor(c(1,'2',3, NA)),force=F)  # factor['1','2','3', NA]
+ez.num(factor(c(1,'2',3,NA)),force=T)  # 1 2 3 NA int
 
 d <- data.frame(char = letters[1:5], 
                 fake_char = as.character(1:5), 
