@@ -117,7 +117,7 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
                         duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
     results0=dplyr::mutate(results0,missing_rate=missing/ncol)
     results0=ez.rncol(results0,c('id'=paste0('id_',idString)))
-    results0=dplyr::mutate(results0,nonmissing=ncol-missing)
+    results0=dplyr::mutate(results0,nonmissing=ncol-missing,nonmissing_rate=nonmissing/ncol)
     
 
 
@@ -183,7 +183,8 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
     results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
                           levels_view2=allFactorCounts)
     results=results %>% ez.move('levels_view1 levels_view2 after variable')
-    results=dplyr::mutate(results,nonmissing=nrow-missing)
+    results=dplyr::mutate(results,nonmissing=nrow-missing,nonmissing_rate=nonmissing/nrow)
+    results=results %>% ez.move('missing_rate nonmissing nonmissing_rate before unique_including_na')
 
     ez.savexlist(list('row'=results0,'col'=results,'dat'=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
 
