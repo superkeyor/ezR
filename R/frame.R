@@ -658,9 +658,11 @@ ez.factorelevel = function(x, cols=NULL) {
 #' @param recodes Definition of the recoding rules. See details
 #' @details recodes contains a set of recoding rules separated by ";". There are three different types of recoding rules:
 #' \itemize{
-#'  \item{}{The simplest codes one value to another. If we wish to recode 1 into 2, we could use the rule "1=2;".}
-#'  \item{}{A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1")}
-#'  \item{}{Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA")}
+#'  \item The simplest codes one value to another. If we wish to recode 1 into 2, we could use the rule "1=2;".
+#'  \item A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1"). hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well. if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
+#'  \item Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA"). the \code{"else"}-token should be the last argument in the \code{recodes}-string.
+#'   \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
+#'   \item the \code{\link[sjmisc]{rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 #' }
 #' \cr Works with characters/factors as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 #' \cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
@@ -669,16 +671,6 @@ ez.factorelevel = function(x, cols=NULL) {
 #' \cr The conclusion is: numeric<->numeric without quote
 #' \cr but if newval is quoted character, then numeric->char, char->char, factor->factor
 #' \cr See the example section for more detail.
-#'
-#' @note Please note following behaviours of the function:
-#'       \itemize{
-#'         \item the \code{"else"}-token should be the last argument in the \code{recodes}-string.
-#'         \item the \code{"else"}-token is optional. if not specified, simply copy over else.
-#'         \item if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
-#'         \item hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well
-#'         \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
-#'         \item the \code{\link[sjmisc]{rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
-#' }
 #'
 #' @author Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
 #' @examples
