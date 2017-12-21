@@ -4,8 +4,8 @@
 \alias{ez.hist}
 \title{plot continous data}
 \usage{
-ez.hist(x, cmd, bins = 60, density = FALSE, color = "color",
-  alpha = 0.5, ylab = NULL, xlab = NULL, zlab = NULL,
+ez.hist(x, cmd, bins = 60, density = FALSE, xline = NULL,
+  color = "color", alpha = 0.5, ylab = NULL, xlab = NULL, zlab = NULL,
   legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
   hjust = NULL, ...)
@@ -18,6 +18,8 @@ ez.hist(x, cmd, bins = 60, density = FALSE, color = "color",
 \item{bins}{number of bins (alternatively pass bidwidth that depends on the scale of variable)}
 
 \item{density}{when true ignore bins, plot density (sort of smoothed histogram); when false plot normal histogram}
+
+\item{xline}{draw an red line on x axis, NULL=mean(df[[xx]])}
 
 \item{color}{"bw" or "color"  black/white or colorblind-friendly color}
 

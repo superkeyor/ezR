@@ -1943,6 +1943,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
 #' @description plot continous data
 #' @param x df or vector, if vector cmd ignored
 #' @param cmd like "x, x|z, x|z a" where x z a are all discrete
+#' @param xline draw an red line on x axis, NULL=mean(df[[xx]]) 
 #' @param alpha bar alpha value
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param density when true ignore bins, plot density (sort of smoothed histogram); when false plot normal histogram
@@ -1964,7 +1965,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.hist = function(x,cmd,bins=60,density=FALSE,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,...) {
+ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,...) {
     if (!is.data.frame(x)) {
         var=deparse(substitute(x))
         dfcmd=sprintf('df=data.frame("%s"=x)',var)
@@ -1999,6 +2000,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,color='color',alpha=0.5,ylab=NULL
     if (length(cmd)==1) {
         xx = cmd[1]
         df = ez.dropna(df, xx)
+        if (is.null(xline)) xline=mean(df[[xx]])
         tt = sprintf('
             pp = ggplot2::ggplot(df, aes(x=%s)) +
                      %s +
@@ -2007,8 +2009,8 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,color='color',alpha=0.5,ylab=NULL
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f)) +
-                     geom_vline(aes(xintercept=mean(df[["%s"]]),color="red"))+theme(legend.position="None")'
-                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xx, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], xx
+                     geom_vline(aes(xintercept=%f),color="red"))+theme(legend.position="None")'
+                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xx, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], xline
         )
         gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s"))',xx),
