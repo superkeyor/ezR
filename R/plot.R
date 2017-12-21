@@ -1964,7 +1964,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,pie.color='color',alpha=1,n.si
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.hist = function(x,cmd,bins=30,density=FALSE,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,...) {
+ez.hist = function(x,cmd,bins=60,density=FALSE,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,...) {
     if (!is.data.frame(x)) {
         var=deparse(substitute(x))
         dfcmd=sprintf('df=data.frame("%s"=x)',var)

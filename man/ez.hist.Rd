@@ -4,7 +4,7 @@
 \alias{ez.hist}
 \title{plot continous data}
 \usage{
-ez.hist(x, cmd, bins = 30, density = FALSE, color = "color",
+ez.hist(x, cmd, bins = 60, density = FALSE, color = "color",
   alpha = 0.5, ylab = NULL, xlab = NULL, zlab = NULL,
   legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
