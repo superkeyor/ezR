@@ -632,6 +632,11 @@ ez.format.vector = function(vec, quote=TRUE,print2screen=TRUE){
     return(invisible(printout))
 }
 
+#' print sorted uniques of a df col or a vector
+#' @description print sorted uniques of a df col or a vector
+#' @export
+printcol=function(v){unique(v) %>% sort() %>% ez.format.vector()}
+
 #' wrapper of \code{\link{eval}}
 #' @param cmd an R cmd in text, e.g., constructed with sprintf()
 #' @param env caller's envir, could be environment(), default is parent.frame()
