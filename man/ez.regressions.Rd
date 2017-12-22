@@ -5,7 +5,7 @@
 \title{a series of simple regression, for many y and many x}
 \usage{
 ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
-  print2screen = T, ...)
+  print2screen = T, plot = T, ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))

@@ -5,7 +5,7 @@
 \title{a series of one-way anova, for many y and many x}
 \usage{
 ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  ...)
+  plot = T, ...)
 }
 \arguments{
 \item{df}{a data frame
