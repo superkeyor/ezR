@@ -342,7 +342,8 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
         pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
             geom_bar(stat='identity')+
             geom_hline(yintercept = 0.05,color='black',linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))
+            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+            facet_grid(y~.)
         print(pp)
     }
     return(invisible(results))
@@ -402,7 +403,8 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,...
         pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
             geom_bar(stat='identity')+
             geom_hline(yintercept = 0.05,color='black',linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))
+            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+            facet_grid(y~.)
         print(pp)
     }
     return(invisible(results))
@@ -458,7 +460,8 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,wi
         pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
             geom_bar(stat='identity')+
             geom_hline(yintercept = 0.05,color='black',linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))
+            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+            facet_grid(y~.)
         print(pp)
     }
     return(invisible(results))
