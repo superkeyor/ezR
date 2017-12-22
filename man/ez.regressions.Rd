@@ -19,6 +19,8 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 
 \item{showerror}{whether show error message when error occurs, default F}
 
+\item{plot}{T/F}
+
 \item{...}{dots passed to ez.2value(df,...)}
 }
 \value{

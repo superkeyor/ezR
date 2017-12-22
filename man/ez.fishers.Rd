@@ -19,6 +19,8 @@ ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 
 \item{showerror}{whether show error message when error occurs, default F}
 
+\item{plot}{T/F}
+
 \item{width}{width for toString(countTable,width=width)}
 }
 \value{

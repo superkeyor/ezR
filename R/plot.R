@@ -1943,7 +1943,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
 #' @description plot continous data
 #' @param x df or vector, if vector cmd ignored
 #' @param cmd like "x, x|z, x|z a" where x z a are all discrete
-#' @param xline draw an red line on x axis, NULL=mean(df[[xx]]) 
+#' @param xline draw red line(s) on x axis, eg, 2.5 or c(2.5,4). NULL=mean(df[[xx]]) 
 #' @param alpha bar alpha value
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param density when true ignore bins, plot density (sort of smoothed histogram); when false plot normal histogram
@@ -2001,6 +2001,10 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
         xx = cmd[1]
         df = ez.dropna(df, xx)
         if (is.null(xline)) xline=mean(df[[xx]])
+        vline=''
+        for (xl in xline) {
+            vline=paste0(vline,sprintf('geom_vline(aes(xintercept=%f,color="red"))+geom_text(x=%f,y=0,label="%.2f")+',xl,xl,xl))
+        }
         tt = sprintf('
             pp = ggplot2::ggplot(df, aes(x=%s)) +
                      %s +
@@ -2009,8 +2013,8 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f)) +
-                     geom_vline(aes(xintercept=%f,color="red"))+geom_text(x=%f,y=0,label="%.2f")+theme(legend.position="None")'
-                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xx, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], xline, xline, xline
+                     %s theme(legend.position="None")'
+                     , xx, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xx, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], vline
         )
         gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s"))',xx),

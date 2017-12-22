@@ -17,14 +17,14 @@ ez.2value(x, col = NULL, start.at = 0, keep.labels = TRUE, ...)
 \item{start.at}{starting index, i.e. the lowest numeric value of the variable's value range. 
 \cr If NULL, the lowest value of the returned numeric variable corresponds to the lowest factor level (if factor is numeric, eg, factor(1:2)->c(1,2)) 
 \cr or to 1 (if factor levels are not numeric, factor(c('girl','boy'))->c(2,1)). 
+\cr 
 \cr To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)}
 }
 \value{
 returns a numeric variable or a data frame with changed col(s)
 \cr if x is a factor with normal chars, will be converted to 1 2 3 etc, see the example
-\cr if x, however, is a factor with chars of numbers "2","4","6", will be converted to 2 4 6 etc, see the example
-\cr \code{\link{ez.num}} keeps the same char as is
+\cr if x, however, is a factor with chars of numbers ez.2value(c("2","4","6.3"),start.at=NULL), will be converted to (2 4 6.3) etc, see the example
 }
 \description{
 e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
@@ -42,6 +42,10 @@ j=c('x','y'); k=factor(c('x','y'))
 ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
 ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
+
+ez.2value(c("2","4","6.3"),start.at=NULL)  # -> (2.0 4.0 6.3)
+ez.2value(factor(c("2","4","7.3")),start.at=0)  # -> (0.0 2.0 5.3)
+for consistent and easy convertion, consider to use ez.num(c("2","4","7.3")), ez.num(factor(c("2","4","7.3")), force=T) in this case
 }
 \seealso{
 \code{\link{ez.num}}

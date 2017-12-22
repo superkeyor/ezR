@@ -19,7 +19,7 @@ ez.hist(x, cmd, bins = 60, density = FALSE, xline = NULL,
 
 \item{density}{when true ignore bins, plot density (sort of smoothed histogram); when false plot normal histogram}
 
-\item{xline}{draw an red line on x axis, NULL=mean(df[[xx]])}
+\item{xline}{draw red line(s) on x axis, eg, 2.5 or c(2.5,4). NULL=mean(df[[xx]])}
 
 \item{color}{"bw" or "color"  black/white or colorblind-friendly color}
 

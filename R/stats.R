@@ -287,6 +287,7 @@ ez.se = function(x) {
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible data frame with y,x,p,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
@@ -356,6 +357,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df[[yy]],...)
 #' @return an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
@@ -417,6 +419,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,...
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
