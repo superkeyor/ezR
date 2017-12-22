@@ -339,11 +339,11 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
         if (length(x)>1 & yy!=y[length(y)]) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
     }
     if (plot) {
-        results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
+        pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
             geom_bar(stat='identity')+
             geom_hline(yintercept = 0.05,color='black',linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) %>%
-            print()
+            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))
+        print(pp)
     }
     return(invisible(results))
 }
@@ -399,11 +399,11 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,...
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
     }
     if (plot) {
-        results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
+        pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
             geom_bar(stat='identity')+
             geom_hline(yintercept = 0.05,color='black',linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) %>%
-            print()
+            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))
+        print(pp)
     }
     return(invisible(results))
 }
@@ -455,11 +455,11 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,wi
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,'',NA),print2screen=print2screen)  # empty line between each x
     }
     if (plot) {
-        results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
+        pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
             geom_bar(stat='identity')+
             geom_hline(yintercept = 0.05,color='black',linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) %>%
-            print()
+            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))
+        print(pp)
     }
     return(invisible(results))
 }
