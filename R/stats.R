@@ -323,7 +323,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                     p = model$coefficients[2,4]
                     beta = model$coefficients[2,1]
                     degree_of_freedom = model$df[2]
-                    if (plot) {results4plot = ez.append(results4plot,list(yy,xx,p,beta,degree_of_freedom),print2screen=F)}
+                    results4plot = ez.append(results4plot,list(yy,xx,p,beta,degree_of_freedom),print2screen=F)
                     if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,beta,degree_of_freedom),print2screen=print2screen)}
                     })
             } else {
@@ -335,7 +335,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                     p = model$coefficients[2,4]
                     beta = model$coefficients[2,1]
                     degree_of_freedom = model$df[2]
-                    if (plot) {results4plot = ez.append(results4plot,list(yy,xx,p,beta,degree_of_freedom),print2screen=F)}
+                    results4plot = ez.append(results4plot,list(yy,xx,p,beta,degree_of_freedom),print2screen=F)
                     if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,beta,degree_of_freedom),print2screen=print2screen)}
                 }, error = function(e) {})
             }
@@ -351,8 +351,9 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
         print(pp)
     }
     for (method in pmethods) {
-        results[[method]]=stats::p.adjust(results[['p']],method=method)
+        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
+    results=dplyr::left_join(results,results4plot %>% select(x,y,one_of(p.adjust.methods)),by=c('x','y'))
     return(invisible(results))
 }
 
@@ -389,7 +390,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
                     s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
                     means = ''
                     for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    if (plot) {results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means),print2screen=F)}
+                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means),print2screen=F)
                     if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means),print2screen=print2screen)}
                     })
             } else {
@@ -401,7 +402,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
                     s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
                     means = ''
                     for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    if (plot) {results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means),print2screen=F)}
+                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means),print2screen=F)
                     if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means),print2screen=print2screen)}
                 }, error = function(e) {})
             }
@@ -417,8 +418,9 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
         print(pp)
     }
     for (method in pmethods) {
-        results[[method]]=stats::p.adjust(results[['p']],method=method)
+        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
+    results=dplyr::left_join(results,results4plot %>% select(x,y,one_of(p.adjust.methods)),by=c('x','y'))
     return(invisible(results))
 }
 
@@ -452,7 +454,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pm
                     countTable = table(df[[xx]],df[[yy]])   # by default, pairwise NA auto removed
                     counts = toString(countTable,width=width)
                     total = sum(countTable)
-                    if (plot) {results4plot = ez.append(results4plot,list(xx,yy,p,counts,total),print2screen=F)}
+                    results4plot = ez.append(results4plot,list(xx,yy,p,counts,total),print2screen=F)
                     if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,counts,total),print2screen=print2screen)}
                     })
             } else {
@@ -463,7 +465,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pm
                     countTable = table(df[[xx]],df[[yy]])   # by default, pairwise NA auto removed
                     counts = toString(countTable,width=width)
                     total = sum(countTable)
-                    if (plot) {results4plot = ez.append(results4plot,list(xx,yy,p,counts,total),print2screen=F)}
+                    results4plot = ez.append(results4plot,list(xx,yy,p,counts,total),print2screen=F)
                     if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,counts,total),print2screen=print2screen)}
                 }, error = function(e) {})
             }
@@ -479,8 +481,9 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pm
         print(pp)
     }
     for (method in pmethods) {
-        results[[method]]=stats::p.adjust(results[['p']],method=method)
+        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
+    results=dplyr::left_join(results,results4plot %>% select(x,y,one_of(p.adjust.methods)),by=c('x','y'))
     return(invisible(results))
 }
 
