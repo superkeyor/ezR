@@ -5,7 +5,7 @@
 \title{a series of fisher.test, for many y and many x}
 \usage{
 ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  plot = T, width = 300)
+  plot = T, pmethods = c("bonferroni", "fdr"), width = 300)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
@@ -20,6 +20,8 @@ ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 \item{showerror}{whether show error message when error occurs, default F}
 
 \item{plot}{T/F}
+
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods}
 
 \item{width}{width for toString(countTable,width=width)}
 }

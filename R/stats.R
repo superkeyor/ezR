@@ -289,6 +289,7 @@ ez.se = function(x) {
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods
 #' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
@@ -304,7 +305,7 @@ ez.se = function(x) {
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @examples
 #' @export
-ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,...) {
+ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
@@ -349,6 +350,9 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
             facet_grid(y~.)
         print(pp)
     }
+    for (method in pmethods) {
+        results[[method]]=stats::p.adjust(results[['p']],method=method)
+    }
     return(invisible(results))
 }
 
@@ -359,6 +363,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods
 #' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df[[yy]],...)
@@ -367,7 +372,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' \cr degree_of_freedom: from F-statistic
 #' @examples
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,...) {
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character())
     results4plot = results
@@ -411,6 +416,9 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,...
             facet_grid(y~.)
         print(pp)
     }
+    for (method in pmethods) {
+        results[[method]]=stats::p.adjust(results[['p']],method=method)
+    }
     return(invisible(results))
 }
 
@@ -421,13 +429,14 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,...
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods
 #' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' @examples
 #' @export
-ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,width=300) {
+ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
     results4plot = results
@@ -468,6 +477,9 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,wi
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             facet_grid(y~.)
         print(pp)
+    }
+    for (method in pmethods) {
+        results[[method]]=stats::p.adjust(results[['p']],method=method)
     }
     return(invisible(results))
 }

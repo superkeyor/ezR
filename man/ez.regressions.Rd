@@ -5,7 +5,7 @@
 \title{a series of simple regression, for many y and many x}
 \usage{
 ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
-  print2screen = T, plot = T, ...)
+  print2screen = T, plot = T, pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
@@ -20,6 +20,8 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 \item{showerror}{whether show error message when error occurs, default F}
 
 \item{plot}{T/F}
+
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods}
 
 \item{...}{dots passed to ez.2value(df,...)}
 }

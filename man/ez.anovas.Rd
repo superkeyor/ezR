@@ -5,7 +5,7 @@
 \title{a series of one-way anova, for many y and many x}
 \usage{
 ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  plot = T, ...)
+  plot = T, pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame
@@ -20,6 +20,8 @@ ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 \item{showerror}{whether show error message when error occurs, default F}
 
 \item{plot}{T/F}
+
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods}
 
 \item{...}{dots passed to ez.2value(df[[yy]],...)}
 }
