@@ -4,17 +4,17 @@
 \alias{ez.factorname}
 \title{change factor level names in a df}
 \usage{
-ez.factorname(df, col, newLevelNames)
+ez.factorname(x, col, newLevelNames)
 }
 \arguments{
-\item{df}{data frame}
+\item{x}{data frame or vector, factor or non-factor}
 
-\item{col}{a factor column name, quoted "", eg, "group"}
+\item{col}{a single column name, quoted string, ignored when x is not a data frame}
 
 \item{newLevelNames}{new level names coresponding to levels(x), eg, c("one","two","three")}
 }
 \value{
-returns a new df
+returns a new df, factor (non-factor->factor)
 }
 \description{
 change factor level names in a df

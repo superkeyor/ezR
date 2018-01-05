@@ -12,7 +12,7 @@ ez.factorelevel(x, cols = NULL)
 \item{cols}{column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols}
 }
 \value{
-returns a new df, factor, vector (has not effect on (ie, make no change to) a non-factor object)
+returns a new df, factor, vector (has no effect on (ie, make no change to) a non-factor object)
 }
 \description{
 reset factor levels in a factor, df (all) cols after its levels have been modified (eg, after using dplyr::filter)

@@ -4,22 +4,22 @@
 \alias{ez.factorder}
 \title{change factor level order in a df}
 \usage{
-ez.factorder(df, col, ord = "as")
+ez.factorder(x, col, ord = "as")
 }
 \arguments{
-\item{df}{data frame}
+\item{x}{data frame or vector, factor or non-factor}
 
-\item{col}{a factor column name, quoted "", eg, "group"}
+\item{col}{a single column name, quoted string, ignored when x is not a data frame}
 
 \item{ord}{"az","za"--alphabetic;
 \cr "as"--as is, appearance;
 \cr c("small","medium","large")--specified level order
-\cr "col2" --another column in az
-\cr "col2:az" --another column in az
-\cr "col2:za" --another column in za}
+\cr "col2"    --another column in az    (ignored if x is not a data frame)
+\cr "col2:az" --another column in az    (ignored if x is not a data frame)
+\cr "col2:za" --another column in za    (ignored if x is not a data frame)}
 }
 \value{
-returns a new df
+returns a new df, factor (non-factor->factor)
 }
 \description{
 does not change factor label; only changes the order of printing out

@@ -445,61 +445,91 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE,...){
 
 #' change factor level order in a df
 #' @description does not change factor label; only changes the order of printing out
-#' @param df data frame
-#' @param col a factor column name, quoted "", eg, "group"
+#' @param x data frame or vector, factor or non-factor
+#' @param col a single column name, quoted string, ignored when x is not a data frame
 #' @param ord "az","za"--alphabetic;
 #' \cr "as"--as is, appearance;
 #' \cr c("small","medium","large")--specified level order
-#' \cr "col2" --another column in az
-#' \cr "col2:az" --another column in az
-#' \cr "col2:za" --another column in za
-#' @return returns a new df
+#' \cr "col2"    --another column in az    (ignored if x is not a data frame)
+#' \cr "col2:az" --another column in az    (ignored if x is not a data frame)
+#' \cr "col2:za" --another column in za    (ignored if x is not a data frame)
+#' @return returns a new df, factor (non-factor->factor)
 #' @examples
 #' @export
-ez.factorder = function(df, col, ord="as"){
-    if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col) | !is.factor(df[[col]])) stop('col not valid!')
-    # [[]] is the programmable form of $
-    if (length(ord)==1) {
-        if (ord=="as"){
-            df[[col]] = factor(df[[col]], unique(as.character(df[[col]])))
-        } else if (ord=="az") {
-            df[[col]] = factor(df[[col]], levels(factor(df[[col]])))
-        } else if (ord=="za") {
-            df[[col]] = factor(df[[col]], rev(levels(factor(df[[col]]))))
-        } else if (ord %in% names(df)) {
-            df[[col]] = factor(df[[col]], unique(df[order(df[[ord]]),col]))
-        } else if (grepl(":",ord,fixed=TRUE)) {
-            # remove spaces
-            ord = gsub(" ","",ord,fixed=TRUE)
-            decreasing = strsplit(ord,":")[[1]][2]
-            ord = strsplit(ord,":")[[1]][1]
-            if (decreasing=="az") {
-                decreasing=FALSE
-            } else if (decreasing=="za") {
-                decreasing=TRUE
+ez.factorder = function(x, col, ord="as"){
+    if (is.data.frame(x)) {
+        df = x
+        if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col) | !is.factor(df[[col]])) stop('col not valid!')
+        # [[]] is the programmable form of $
+        if (length(ord)==1) {
+            if (!is.factor(df[[col]])) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])
+            if (ord=="as"){
+                df[[col]] = factor(df[[col]], unique(as.character(df[[col]])))
+            } else if (ord=="az") {
+                df[[col]] = factor(df[[col]], levels(factor(df[[col]])))
+            } else if (ord=="za") {
+                df[[col]] = factor(df[[col]], rev(levels(factor(df[[col]]))))
+            } else if (ord %in% names(df)) {
+                df[[col]] = factor(df[[col]], unique(df[order(df[[ord]]),col]))
+            } else if (grepl(":",ord,fixed=TRUE)) {
+                # remove spaces
+                ord = gsub(" ","",ord,fixed=TRUE)
+                decreasing = strsplit(ord,":")[[1]][2]
+                ord = strsplit(ord,":")[[1]][1]
+                if (decreasing=="az") {
+                    decreasing=FALSE
+                } else if (decreasing=="za") {
+                    decreasing=TRUE
+                }
+                df[[col]] = factor(df[[col]], unique(df[order(df[[ord]],decreasing=decreasing),col]))
             }
-            df[[col]] = factor(df[[col]], unique(df[order(df[[ord]],decreasing=decreasing),col]))
+        } else {
+            df[[col]]= factor(df[[col]],ord)
         }
+        return(df)
+    
     } else {
-        df[[col]]= factor(df[[col]],ord)
+        if (!is.factor(x)) cat(sprintf('converting %s to factor via factor()...\n',class(x))); x = factor(x)
+        if (length(ord)==1) {
+            if (ord=="as"){
+                x = factor(x, unique(as.character(x)))
+            } else if (ord=="az") {
+                x = factor(x, levels(factor(x)))
+            } else if (ord=="za") {
+                x = factor(x, rev(levels(factor(x))))
+            } 
+        } else {
+            x= factor(x,ord)
+        }
+        return(x)
     }
-    return(df)
 }
 
 #' change factor level names in a df
-#' @param df data frame
-#' @param col a factor column name, quoted "", eg, "group"
+#' @param x data frame or vector, factor or non-factor
+#' @param col a single column name, quoted string, ignored when x is not a data frame
 #' @param newLevelNames new level names coresponding to levels(x), eg, c("one","two","three")
-#' @return returns a new df
+#' @return returns a new df, factor (non-factor->factor)
 #' @examples
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
 #' @export
-ez.factorname = function(df, col, newLevelNames){
-    if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col) | !is.factor(df[[col]])) stop('col not valid!')
-    cat('initial level names: ', levels(df[[col]]), '\n')
-    levels(df[[col]]) = newLevelNames
-    cat('renamed level names: ', newLevelNames, '\n')
-    return(df)
+ez.factorname = function(x, col, newLevelNames){
+    if (is.data.frame(x)) {
+        df = x
+        if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col) | !is.factor(df[[col]])) stop('col not valid!')
+        if (!is.factor(df[[col]])) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])
+        cat('initial level names: ', levels(df[[col]]), '\n')
+        levels(df[[col]]) = newLevelNames
+        cat('renamed level names: ', newLevelNames, '\n')
+        return(df)
+    
+    } else {
+        if (!is.factor(x)) cat(sprintf('converting %s to factor via factor()...\n',class(x))); x = factor(x)
+        cat('initial level names: ', levels(x), '\n')
+        levels(x) = newLevelNames
+        cat('renamed level names: ', newLevelNames, '\n')
+        return(x)
+    }
 }
 
 #' reset factor levels
@@ -509,7 +539,7 @@ ez.factorname = function(df, col, newLevelNames){
 #' has not effect on (ie, make no change to) a non-factor object
 #' @param x data frame or vector, factor
 #' @param cols column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols
-#' @return returns a new df, factor, vector (has not effect on (ie, make no change to) a non-factor object)
+#' @return returns a new df, factor, vector (has no effect on (ie, make no change to) a non-factor object)
 #' @examples
 #' @export
 ez.factorelevel = function(x, cols=NULL) {
