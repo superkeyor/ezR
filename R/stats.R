@@ -260,12 +260,25 @@ view=function(x) {
             v.sum=NA
         } else {
             v.mean=v.min=v.max=v.sum=NA
+            # count as factor
+            if ( is.factor(v) | is.character(v) | is.logical(v) ) {
+                vallbl=attr(v,"value.labels")
+                freq = table(v)
+                lbl = character()
+                if (!is.null(vallbl)) {
+                    for (f in names(freq)) {lbl=c(lbl,paste0('(',names(which(vallbl==f)),')'))}
+                }
+                v.levels = paste(freq %>% names,lbl,': ',freq,sep='',collapse = ', ')
+            }
         }
 
         cat(v.elements)
         cat(sprintf('\n%s\t#Unique: %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
             cat(sprintf('M = %.2f\t(%.2f,%.2f)\t%.2f\n', v.mean, v.min, v.max, v.sum))
+        }
+        if ( is.factor(v) | is.character(v) | is.logical(v) ) {
+            cat(sprintf('%s\n',v.levels %>% toString(width=300)))
         }
     }
     return(invisible(NULL))
