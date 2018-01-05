@@ -21,7 +21,7 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 
 \item{plot}{T/F}
 
-\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods}
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.}
 
 \item{...}{dots passed to ez.2value(df,...)}
 }

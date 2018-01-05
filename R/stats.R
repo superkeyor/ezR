@@ -289,7 +289,7 @@ ez.se = function(x) {
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
@@ -353,7 +353,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
     for (method in pmethods) {
         results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
-    results=dplyr::left_join(results,results4plot %>% select(x,y,one_of(p.adjust.methods)),by=c('x','y'))
+    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
     return(invisible(results))
 }
 
@@ -364,7 +364,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df[[yy]],...)
@@ -420,7 +420,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
     for (method in pmethods) {
         results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
-    results=dplyr::left_join(results,results4plot %>% select(x,y,one_of(p.adjust.methods)),by=c('x','y'))
+    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
     return(invisible(results))
 }
 
@@ -431,7 +431,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)
@@ -483,7 +483,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pm
     for (method in pmethods) {
         results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
-    results=dplyr::left_join(results,results4plot %>% select(x,y,one_of(p.adjust.methods)),by=c('x','y'))
+    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
     return(invisible(results))
 }
 
