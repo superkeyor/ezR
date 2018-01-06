@@ -77,6 +77,17 @@ gghistory=function(pp){
   cat(pp$gghistory)
 }
 
+#' df %>% ggplot1() %>% ggpass() %>% ggplot2()
+#' @note Assuming pp has $df (preferred to $data), or $data. Make sure $df/$data is what you intend to plot
+#' @export
+ggpass=function(pp){
+    if ('ggplot' %in% class(pp)) {
+        df=if (is.null(pp[['df']])) pp[['data']] else pp[['df']]
+        print(pp)
+        return(df)
+    }
+}
+
 #' Open Help Pages for ggplot2
 #'
 #' \code{gghelp} - Open Hadely Wickham's ggplot2
@@ -423,6 +434,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @examples
 #' @export
 ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
   
     # https://stackoverflow.com/a/25215323/2292993
@@ -553,6 +565,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
     }    
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }
 
@@ -583,6 +596,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
 #' @examples 
 #' @export
 ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -706,6 +720,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
     }    
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }
 
@@ -734,6 +749,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
 #' @examples 
 #' @export
 ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -853,6 +869,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
     }    
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }
 
@@ -870,6 +887,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
 #' @examples 
 #' @export
 ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -961,6 +979,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
 
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }
 
@@ -980,6 +999,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
 #' @examples
 #' @export
 ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -1050,8 +1070,10 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
     }
     eval(parse(text = t))
     gghistory=paste(gghistory,t,sep='\n')
-    p$gghistory=paste0(gghistory,'\nprint(p)')
-    return(p)
+    pp=p
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
+    return(pp)
 }
 
 #' plot a correlation matrix map
@@ -1067,7 +1089,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
                      method ="color",tl.col = "black",tl.cex = 0.4,
                      col=NULL,...){
-
+    df__copy=df
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
     # finally on exit the function, set it back to old value
@@ -1147,6 +1169,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
 ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -1226,9 +1249,10 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
         eval(parse(text = cmd))
     }
     gghistory=paste(gghistory,cmd,sep='\n')
-
-    p$gghistory=paste0(gghistory,'\nprint(p)')
-    return(p)
+    pp=p
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
+    return(pp)
 }
 
 #' visualize where all the NAs of a dataframe are
@@ -1469,6 +1493,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @examples 
 #' @export
 ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -1643,6 +1668,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
     }
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }
 
@@ -1673,12 +1699,13 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 #' @examples 
 #' @export
 ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
-
+    df__copy=df
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust)
         p2=ez.countplot(df,cmd,'fill',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust)
         return(ggmultiplot(p1,p2,cols=1))
     }
+    
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -1862,6 +1889,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
     }    
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }
 
@@ -1892,6 +1920,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
 #' @examples 
 #' @export
 ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+    df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
     # https://stackoverflow.com/a/25215323/2292993
@@ -1936,6 +1965,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
          tt,sep='\n')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }
 
@@ -1976,7 +2006,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
         df=x
         gghistory='df=.'
     }
-
+    df__copy=df
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
     # finally on exit the function, set it back to old value
@@ -2066,5 +2096,6 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
     }    
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df__copy
     return(pp)
 }

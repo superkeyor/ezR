@@ -216,7 +216,12 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
 #' @export
 view=function(x) {
     v = x
-    if (is.data.frame(v)) {
+    if (is.list(x)) {
+        for (l in names(x)) {
+            cat(sprintf('$%s\t\t%s\n',l,class(x[[l]]) %>% toString))
+        }
+        cat(sprintf('List of %d\n',length(x)))
+    } else if (is.data.frame(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
             stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(v)[which(ez.duplicated(colnames(v),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
         }
