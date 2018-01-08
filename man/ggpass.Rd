@@ -2,14 +2,17 @@
 % Please edit documentation in R/plot.R
 \name{ggpass}
 \alias{ggpass}
-\title{df %>% ggplot1() %>% ggpass() %>% ggplot2()}
+\title{pass through a ggplot object, see examples}
 \usage{
 ggpass(pp)
 }
 \description{
-df %>% ggplot1() %>% ggpass() %>% ggplot2()
+pass through a ggplot object, see examples
 }
 \note{
 Assuming pp has $df (preferred to $data), or $data. Make sure $df/$data is what you intend to plot
+}
+\examples{
+df \%>\% ggplot1() \%>\% ggpass() \%>\% ggplot2()
 }
 
