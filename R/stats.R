@@ -211,6 +211,13 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
     return(invisible(list('row'=results0,'col'=results,'dat'=df,'pth'=file)))
 }
 
+#' @rdname ez.view
+#' @export
+xview=view
+
+#' @export
+yview=View
+
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description print sorted uniques of a df col or a vector (NA last) and other information
 #' @export
