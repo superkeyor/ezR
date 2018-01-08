@@ -14,5 +14,7 @@ Assuming pp has $df (preferred to $data), or $data. Make sure $df/$data is what 
 }
 \examples{
 df \%>\% ggplot1() \%>\% ggpass() \%>\% ggplot2()
+#however, if "+" is used in ggplot, use the following format
+df \%>\% {ggplot1(.,)+xlab('')} \%>\% ggpass() \%>\% {ggplot2(.,)+ylab('')}
 }
 
