@@ -3,6 +3,7 @@
 \name{ez.view}
 \alias{ez.view}
 \alias{xview}
+\alias{yview}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
 ez.view(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
@@ -10,6 +11,8 @@ ez.view(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
 
 xview(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
   incomparables = FALSE, debug = NULL, ...)
+
+yview(x, title)
 }
 \arguments{
 \item{df}{a data frame}
