@@ -213,7 +213,7 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
 
 #' @rdname ez.view
 #' @export
-xview=view
+xview=ez.view
 
 #' @export
 yview=View
