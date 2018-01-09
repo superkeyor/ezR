@@ -186,7 +186,8 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
     results=dplyr::mutate(results,nonmissing=nrow-missing,nonmissing_rate=nonmissing/nrow)
     results=results %>% ez.move('missing_rate nonmissing nonmissing_rate before unique_including_na')
     labels=attr(df,'variable.labels')
-    if (!is.null(labels)) {results['varlbl']=c(labels,''); results=results %>% ez.move('varlbl before class')}
+    # labels' length should match #variables selected
+    if ((!is.null(labels)) & nrow(results)==length(labels)+1) {results['varlbl']=c(labels,''); results=results %>% ez.move('varlbl before class')}
 
     ez.savexlist(list('row'=results0,'col'=results,'dat'=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
 
