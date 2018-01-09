@@ -16,5 +16,6 @@ na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/len
 \code{\link[stats]{sd}}, standard deviation (<U+03C3> or sd, s) is simply the (positive) square root of the variance (<U+03C3>^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations. 
 se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
 \cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{scale}}(x, center = TRUE, scale = TRUE) demean: scale(x,center=TRUE,scale=FALSE). (scale() auto omits NAs)
+\cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way.
 }
 
