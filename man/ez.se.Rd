@@ -10,6 +10,11 @@ ez.se(x)
 \item{x}{a vector}
 }
 \description{
-na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
+na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
+}
+\note{
+\code{\link[stats]{sd}}, standard deviation (<U+03C3> or sd, s) is simply the (positive) square root of the variance (<U+03C3>^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations. 
+se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
+\cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{scale}}(x, center = TRUE, scale = TRUE) demean: scale(x,center=TRUE,scale=FALSE). (scale() auto omits NAs)
 }
 
