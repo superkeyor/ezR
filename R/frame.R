@@ -1771,16 +1771,19 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
     return(x)
 }
 
-#' remove all attr
-#' @description remove all attr
+#' remove specified attributes
+#' @description remove specified attributes
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
+#' @param attrs c('variable.labels'). run names(attributes(x)) to see all attributes
 #' @return returns a new data frame or vector
 #' @export
-ez.attrclean = function(x, col=NULL, ...) {
+ez.attrclean = function(x, col=NULL, attrs=c('variable.labels'), ...) {
     if (!is.data.frame(x)) {
+        # set_labels only for value labels
         # x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
-        attributes(x) <- NULL
+        # attributes(x) <- NULL  # this is not desirable because some attributes are needed, eg, $class, $level, $names
+        for (a in attrs) {attr(x,a) <- NULL}
     } else if (is.data.frame(x) & is.null(col)) {
         x = dplyr::mutate_all(x, funs(ez.attrclean(.)))
     } else if (is.data.frame(x) & !is.null(col)) {

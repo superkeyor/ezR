@@ -2,19 +2,21 @@
 % Please edit documentation in R/frame.R
 \name{ez.attrclean}
 \alias{ez.attrclean}
-\title{remove all attr}
+\title{remove specified attributes}
 \usage{
-ez.attrclean(x, col = NULL, ...)
+ez.attrclean(x, col = NULL, attrs = c("variable.labels"), ...)
 }
 \arguments{
 \item{x}{a data frame or a vector}
 
 \item{col}{evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.}
+
+\item{attrs}{c('variable.labels'). run names(attributes(x)) to see all attributes}
 }
 \value{
 returns a new data frame or vector
 }
 \description{
-remove all attr
+remove specified attributes
 }
 
