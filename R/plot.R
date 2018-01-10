@@ -433,10 +433,11 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param violin plot violin or not
 #' @param n.size font size of stat n, 0 to hide
 #' @param m.size font size of stat M, 0 to hide
+#' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
 #' @export
-ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
+ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='cols'){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
   
@@ -526,10 +527,10 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7){
                              %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
-                             facet_grid(~%s) +
+                             %s +
                              coord_flip() + theme(legend.position="none") +
                              ggtitle(paste0("N = ",nrow(df)))'
-                             , xx, yy, xx, violin, zz
+                             , xx, yy, xx, violin, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),zz)
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
@@ -885,11 +886,12 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
+#' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
+ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,facet='cols'){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -948,8 +950,8 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL){
                         %s %s 
                         theme(axis.text.x=element_text(angle=%f %s %s)) +
                         theme(legend.position='none') +
-                        facet_grid(.~%s)"
-                 , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust,zz
+                        %s"
+                 , xx,yy,gg,gg,xlab,ylab,xangle,vjust,hjust,sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),zz)
             )
             gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,gg,zz),
@@ -1225,7 +1227,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
         cmd = sprintf('
                       p=ggplot(df, aes(x = variable, y = value, group = %s, color = %s, linetype = %s)) +
                       geom_polygon(aes(), fill = NA, size = %f, show.legend = FALSE) +
-                      facet_wrap(~ %s) +
+                      facet_wrap(~%s) +
                       theme(strip.text.x = element_text(size = rel(%f)),
                       axis.ticks.x = element_blank(),
                       axis.text.x = element_text(size = rel(%f), angle = %d),
@@ -1697,11 +1699,12 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
+#' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols') {
     df__copy=df
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust)
@@ -1861,8 +1864,8 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") + 
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                                 geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))+facet_grid(.~%s)'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack, aa
+                                 geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))+%s'
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 } else if (position=='fill') {
                     if (is.null(ylab)) ylab='Percentage'
@@ -1875,9 +1878,9 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") + 
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                                 geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+facet_grid(.~%s)+
+                                 geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+%s+
                                  scale_y_continuous(labels=scales::percent)+coord_flip()'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, aa
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 }    
             gghistory=paste(gghistory,
@@ -1993,12 +1996,13 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
+#' @param facet  one of 'cols', 'rows', 'wrap'
 #' @param print.cmd T/F
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
 #' @export
-ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,...) {
+ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',...) {
     if (!is.data.frame(x)) {
         var=deparse(substitute(x))
         dfcmd=sprintf('df=data.frame("%s"=x)',var)
@@ -2088,8 +2092,8 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
                      theme(axis.text.x=element_text(angle=%f %s %s)) +
                      theme(legend.direction="%s") + 
                      theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                     facet_grid(.~%s)'
-                     , xx, zz, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], aa
+                     %s'
+                     , xx, zz, hist.type, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                 )
                 gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s","%s"))',xx,zz,aa),

@@ -8,7 +8,7 @@ ez.countplot(df, cmd, position = "both", color = "color", alpha = 1,
   n.size = 5.5, n.type = 3, width = 0.7, ylab = NULL, xlab = NULL,
   zlab = NULL, legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
-  hjust = NULL)
+  hjust = NULL, facet = "cols")
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
@@ -48,6 +48,8 @@ ez.countplot(df, cmd, position = "both", color = "color", alpha = 1,
 \item{vjust}{vjust of x text NULL}
 
 \item{hjust}{hjust of x text NULL}
+
+\item{facet}{one of 'cols', 'rows', 'wrap'}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)

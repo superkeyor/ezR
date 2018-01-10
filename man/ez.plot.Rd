@@ -5,7 +5,7 @@
 \title{plot a customized boxplot with jittered stripplot, violin, and mean}
 \usage{
 ez.plot(df, cmd, violin = FALSE, n.size = 4.5, m.size = 4.5,
-  alpha = 0.7)
+  alpha = 0.7, facet = "cols")
 }
 \arguments{
 \item{df}{data frame in long format}
@@ -17,6 +17,8 @@ ez.plot(df, cmd, violin = FALSE, n.size = 4.5, m.size = 4.5,
 \item{n.size}{font size of stat n, 0 to hide}
 
 \item{m.size}{font size of stat M, 0 to hide}
+
+\item{facet}{one of 'cols', 'rows', 'wrap'}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot)
