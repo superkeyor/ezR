@@ -1785,12 +1785,12 @@ ez.attrclean = function(x, col=NULL, attrs=c('variable.labels'), ...) {
         # attributes(x) <- NULL  # this is not desirable because some attributes are needed, eg, $class, $level, $names
         for (a in attrs) {attr(x,a) <- NULL}
     } else if (is.data.frame(x) & is.null(col)) {
-        x = dplyr::mutate_all(x, funs(ez.attrclean(.)))
+        x = dplyr::mutate_all(x, funs(ez.attrclean(.,attrs=attrs)))
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
         for (col in cols) {
-            x[[col]] = ez.attrclean(x[[col]])
+            x[[col]] = ez.attrclean(x[[col]],attrs=attrs)
         }
     }
     return(x)
