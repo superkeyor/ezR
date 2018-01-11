@@ -423,7 +423,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @export
 ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
-    results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character())
+    results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
     results4plot = results
     df = ez.2value(df,y,...); df = ez.2factor(df,x)
     for (xx in x) {
@@ -436,10 +436,12 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
                     p = summary(a)[[1]][["Pr(>F)"]][[1]]
                     degree_of_freedom = toString(summary(a)[[1]][['Df']])
                     s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
-                    means = ''
+                    n = aggregate(df[[yy]]~df[[xx]],FUN=length)
+                    means = ''; counts = ''
                     for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means),print2screen=print2screen)}
+                    for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
+                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=F)
+                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=print2screen)}
                     })
             } else {
                 # go to next loop item, in case error
@@ -448,10 +450,12 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
                     p = summary(a)[[1]][["Pr(>F)"]][[1]]
                     degree_of_freedom = toString(summary(a)[[1]][['Df']])
                     s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
-                    means = ''
+                    n = aggregate(df[[yy]]~df[[xx]],FUN=length)
+                    means = ''; counts = ''
                     for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means),print2screen=print2screen)}
+                    for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
+                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=F)
+                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=print2screen)}
                 }, error = function(e) {})
             }
         }
