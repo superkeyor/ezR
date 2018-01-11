@@ -2,6 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{ez.view}
 \alias{ez.view}
+\alias{viewx}
 \alias{xview}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
@@ -9,6 +10,9 @@ ez.view(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
   incomparables = FALSE, debug = NULL, ...)
 
 xview(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
+  incomparables = FALSE, debug = NULL, ...)
+
+viewx(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
   incomparables = FALSE, debug = NULL, ...)
 }
 \arguments{

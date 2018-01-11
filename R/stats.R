@@ -216,10 +216,19 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
 #' @export
 xview=ez.view
 
+#' @rdname ez.view
+#' @export
+viewx=ez.view
+
 #' View
 #' @description alias of \code{\link[utils]{View}}
 #' @export
 yview=utils::View
+
+#' View
+#' @description alias of \code{\link[utils]{View}}
+#' @export
+viewy=utils::View
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description print sorted uniques of a df col or a vector (NA last) and other information
