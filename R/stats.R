@@ -314,13 +314,20 @@ view=function(x) {
 #' @examples
 #' @note \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations. 
 #' se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
-#' \cr\cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{scale}}(x, center = TRUE, scale = TRUE) demean: scale(x,center=TRUE,scale=FALSE). (scale() auto omits NAs)
+#' \cr\cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{ez.scale}}(x, center = TRUE, scale = TRUE) demean: ez.scale(x,center=TRUE,scale=FALSE). (ez.scale() auto omits NAs)
 #' \cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way. 
 #' see https://www.spss-tutorials.com/z-scores-what-and-why/
 #' @export
 ez.se = function(x) {
     # http://stackoverflow.com/a/7220087/2292993
     sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
+}
+
+#' scale
+#' @description similar to base::scale, but 1d vector in and 1d vector out
+#' @export
+ez.scale = function(x,center = TRUE, scale = TRUE) {
+    as.vector(scale(x,center=center,scale=scale))
 }
 
 #' a series of simple regression, for many y and many x
