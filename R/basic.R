@@ -116,6 +116,8 @@ ez.env=function(env=NULL){
     file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),
         '/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
 
+    # restart r session 
+    # https://stackoverflow.com/questions/6313079/quit-and-restart-a-clean-r-session-from-within-r
     .rs.restartR()
     return(invisible(NULL))
 }
