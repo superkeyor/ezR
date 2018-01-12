@@ -98,13 +98,17 @@ ez.repo = function(repo=NULL){
     return(invisible(NULL))
 }
 
+#' switch env
+#' @param env NULL=print out current env (.libPaths()[1]); file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),'/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
+#' @export
+#' @return returns NULL
 ez.env=function(env=NULL){
     if (is.null(env)) {
         message("Using library: ", .libPaths()[1])
         return(invisible(NULL))
     }
 
-    # existing library is a symlink
+    # if existing library is a symlink
     if (Sys.readlink('/Library/Frameworks/R.framework/Versions/3.3/Resources/library') != '') {
         file.remove('/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
     }
