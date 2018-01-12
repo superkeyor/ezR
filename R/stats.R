@@ -337,6 +337,13 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
     as.vector(scale(x,center=center,scale=scale))
 }
 
+#' z residual
+#' @description z residual, as.vector(scale(resid(model),center=T,scale=T))
+#' @export
+ez.zresid = function(model,center = TRUE, scale = TRUE) {
+    as.vector(scale(resid(model),center=center,scale=scale))
+}
+
 #' a series of simple regression, for many y and many x
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
