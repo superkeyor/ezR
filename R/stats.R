@@ -324,9 +324,16 @@ ez.se = function(x) {
 }
 
 #' scale
-#' @description similar to base::scale, but 1d vector in and 1d vector out
+#' @description similar to base::scale, but 1d vector in and 1d vector out, NA ignored/returned in place
 #' @export
 ez.scale = function(x,center = TRUE, scale = TRUE) {
+    as.vector(scale(x,center=center,scale=scale))
+}
+
+#' z score
+#' @description z score, 1d vector in and 1d vector out, NA ignored/returned in place
+#' @export
+ez.z = function(x,center = TRUE, scale = TRUE) {
     as.vector(scale(x,center=center,scale=scale))
 }
 
