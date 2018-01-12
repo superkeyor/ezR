@@ -98,6 +98,24 @@ ez.repo = function(repo=NULL){
     return(invisible(NULL))
 }
 
+ez.env=function(env=NULL){
+    if (is.null(env)) {
+        message("Using library: ", .libPaths()[1])
+        return(invisible(NULL))
+    }
+
+    # existing library is a symlink
+    if (Sys.readlink('/Library/Frameworks/R.framework/Versions/3.3/Resources/library') != '') {
+        file.remove('/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
+    }
+
+    file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),
+        '/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
+
+    .rs.restartR()
+    return(invisible(NULL))
+}
+
 #' convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @param x a character vector, data frame, list, or a factor
 #' @param col internally evaluated by eval('dplyr::select()')()
