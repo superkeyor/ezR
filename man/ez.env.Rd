@@ -7,7 +7,7 @@
 ez.env(env = NULL)
 }
 \arguments{
-\item{env}{NULL=print out current env (.libPaths()[1]); file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),'/Library/Frameworks/R.framework/Versions/3.3/Resources/library')}
+\item{env}{NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)}
 }
 \value{
 returns NULL

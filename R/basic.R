@@ -99,7 +99,7 @@ ez.repo = function(repo=NULL){
 }
 
 #' switch env
-#' @param env NULL=print out current env (.libPaths()[1]); file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),'/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
+#' @param env NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)
 #' @export
 #' @return returns NULL
 ez.env=function(env=NULL){
