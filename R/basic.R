@@ -85,7 +85,7 @@ ez.pause = function(){
 #' @return returns NULL
 ez.repo = function(repo=NULL){
     if (is.null(repo)) {
-        cat(sprintf('The current repository is: %s\n',unname(getOption("repos"))))
+        message(sprintf('The current repository is: %s\n',unname(getOption("repos"))))
         return(invisible(NULL))
     }
 

@@ -35,10 +35,10 @@ ez.ver = function(pkg=NULL){
         print(ip)
         print(paste0(ipnames,collapse = ','))
 
-        cat("\n\n")
-        cat(R.version.string)
-        cat(sprintf("\nRepository: %s\n",getOption("repos")))
-        cat(sprintf("Library: %s\n",paste0(.libPaths(),collapse = '; ')))
+        cat("\n")
+        message(R.version.string)
+        message(sprintf("Repository: %s",getOption("repos")))
+        message(sprintf("Library: %s",paste0(.libPaths(),collapse = '; ')))
     }
 }
 
