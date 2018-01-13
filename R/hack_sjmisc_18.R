@@ -7095,50 +7095,62 @@ zap_unlabelled_helper <- function(x) {
 
 
 
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_copy_labels=copy_labels
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_get_labels=get_labels
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_get_values=get_values
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_set_labels=set_labels
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_get_label=get_label
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_set_label=set_label
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_to_label=to_label
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_to_factor=to_factor
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_to_value=to_value
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_rec=rec
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_read_spss=read_spss
+
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
