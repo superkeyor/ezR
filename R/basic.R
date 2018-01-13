@@ -118,7 +118,8 @@ ez.env=function(env=NULL){
 
     # restart r session 
     # https://stackoverflow.com/questions/6313079/quit-and-restart-a-clean-r-session-from-within-r
-    .rs.restartR()
+    # .rs.restartR()
+    message('Please restart RStudio to make the change take effect!')
     return(invisible(NULL))
 }
 
