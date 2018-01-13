@@ -129,6 +129,7 @@ ez.install = install.packages
 #' @param pkgs c()
 #' @param repos "https://mran.revolutionanalytics.com/snapshot/2018-01-11"  (if NULL, getOption("repos"))
 #' @param load if T also load pkgs: sapply(pkgs, require, character.only = TRUE)
+#' @export
 ez.installs = function(pkgs,load=FALSE,repos=NULL) {
     if (is.null(repos)) repos=getOption("repos")
     new.pkgs <- pkgs[!(pkgs %in% installed.packages()[, "Package"])]
