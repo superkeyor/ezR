@@ -124,6 +124,20 @@ ez.include = ez.import
 #' @export
 ez.install = install.packages
 
+#' install many packages at the same time
+#' @description install many packages at the same time
+#' @param pkgs c()
+#' @param repos "https://mran.revolutionanalytics.com/snapshot/2018-01-11"  (if NULL, getOption("repos"))
+#' @param load if T also load pkgs: sapply(pkgs, require, character.only = TRUE)
+ez.installs = function(pkgs,load=FALSE,repos=NULL) {
+    if (is.null(repos)) repos=getOption("repos")
+    new.pkgs <- pkgs[!(pkgs %in% installed.packages()[, "Package"])]
+    if (length(new.pkgs)) {
+        install.packages(new.pkgs, dependencies = TRUE, repos=repos)
+    }
+    if (load) sapply(pkgs, require, character.only = TRUE)
+}
+
 #' require a package, if not exist auto install and auto load
 #' @description require a package, if not exist auto install and auto load
 #' @param pkg pkg name in string
