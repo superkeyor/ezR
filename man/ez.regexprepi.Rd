@@ -12,4 +12,3 @@ replace string or string vectors using regular expression (case insensitive)
 \seealso{
 \code{\link{ez.strreplace}}
 }
-

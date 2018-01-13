@@ -9,4 +9,3 @@ gghistory(pp)
 \description{
 print out a ggplot object's history, cat(pp$gghistory)
 }
-

@@ -12,4 +12,3 @@ False
 alias of FALSE
 }
 \keyword{datasets}
-

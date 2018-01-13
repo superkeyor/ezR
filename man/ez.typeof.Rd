@@ -9,4 +9,3 @@ ez.typeof()
 \description{
 alias of \code{\link{class}}
 }
-

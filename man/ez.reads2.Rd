@@ -3,7 +3,7 @@
 \name{ez.reads2}
 \alias{ez.reads2}
 \title{THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE and almost the same as ez.reads. For a more perfect function, use ez.reads. This function kept as an archive just in case.
-wrapper of \code{\link[sjmisc]{read_spss}}. read spss .sav file with haven package}
+wrapper of \code{\link{sjmisc_read_spss}}. read spss .sav file with haven package}
 \usage{
 ez.reads2(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
   stringsAsFactors = TRUE, ...)
@@ -25,4 +25,3 @@ ez.reads2(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \description{
 Internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). Will NOT auto replace col names as ez.reads will do (ie, keep them as is, @->@)
 }
-

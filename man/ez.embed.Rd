@@ -27,4 +27,3 @@ ez.embed(plot(10,10, xlab="", ylab=""), x=12, y=18, size = c(0.5, 0.5))
 par(mfg=c(2,1)); plot(21:30, 21:30, main = "Plot 2")
 ez.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))
 }
-

@@ -15,4 +15,3 @@ A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m arra
 by columns (mfcol), or rows (mfrow), respectively.
 see more ?par
 }
-

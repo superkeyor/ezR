@@ -21,4 +21,3 @@ For portability, whitespace is taken as the character class [ \\t\\r\\n] (space,
 \seealso{
 \code{\link{trimws}}
 }
-

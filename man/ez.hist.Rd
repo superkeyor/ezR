@@ -58,4 +58,3 @@ a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limit
 \description{
 plot continous data
 }
-

@@ -9,4 +9,3 @@ ez.selfupdate()
 \description{
 update ez package itself
 }
-

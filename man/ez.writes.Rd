@@ -2,11 +2,10 @@
 % Please edit documentation in R/io.R
 \name{ez.writes}
 \alias{ez.writes}
-\title{alias of \code{\link[sjmisc]{write_spss}}, \code{\link{ez.saves}}}
+\title{alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.saves}}}
 \usage{
 ez.writes(x, path, enc.to.utf8 = TRUE)
 }
 \description{
 potentially keep variable labels and value labels
 }
-

@@ -22,4 +22,3 @@ format a vector for easy manual copy/processing.
 \seealso{
 \code{\link{ez.print}} \code{\link{ez.pprint}}
 }
-

@@ -12,4 +12,3 @@ True
 alias of TRUE
 }
 \keyword{datasets}
-

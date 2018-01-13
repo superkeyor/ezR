@@ -46,4 +46,3 @@ unlink(paste(fn, ".mat", sep = ""))
 \author{
 Christoph Schmidt <christoph.schmidt@med.uni-jena.de>
 }
-

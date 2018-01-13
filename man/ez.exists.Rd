@@ -9,4 +9,3 @@ ez.exists(...)
 \description{
 alias of \code{\link{file.exists}}
 }
-

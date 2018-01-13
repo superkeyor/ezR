@@ -33,7 +33,7 @@ recodes contains a set of recoding rules separated by ";". There are several dif
  \item A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1"). hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well. if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
  \item Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA"). the \code{"else"}-token should be the last argument in the \code{recodes}-string.
   \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
-  \item the \code{\link[sjmisc]{rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
+  \item the \code{\link{sjmisc_rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 }
 \cr Works with characters/factors as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 \cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
@@ -65,9 +65,6 @@ ez.recode(data,'a','"r1"=3')
 ez.recode(data,'a','"r1"=3;"r2"=4')
          # a was factor wih level ("r1","r2"), now still a factor, with level ("3","4")
 }
-\author{
-Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
-}
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
@@ -77,7 +74,7 @@ Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox 
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
-Other data.transformation.functions: \code{\link{ez.2char}},
+Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2lower}},
   \code{\link{ez.2value}}, \code{\link{ez.2wide}},
@@ -93,4 +90,6 @@ Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
-
+\author{
+Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
+}

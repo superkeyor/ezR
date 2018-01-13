@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.values.get}
 \alias{ez.values.get}
-\title{get value labels, wrapper of \code{\link[sjmisc]{get_labels}}}
+\title{get value labels, wrapper of \code{\link{sjmisc_get_labels}}}
 \usage{
 ez.values.get(x, include.values = NULL, attr.only = T,
   include.non.labelled = F, ...)
@@ -11,7 +11,7 @@ ez.values.get(x, include.values = NULL, attr.only = T,
 returns a list $varname
 }
 \details{
-see also \code{\link[sjmisc]{get_values}}
+see also \code{\link{sjmisc_get_values}}
 }
 \examples{
 
@@ -25,7 +25,7 @@ see also \code{\link[sjmisc]{get_values}}
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
-Other data.transformation.functions: \code{\link{ez.2char}},
+Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2lower}},
   \code{\link{ez.2value}}, \code{\link{ez.2wide}},
@@ -41,4 +41,3 @@ Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.str}}, \code{\link{ez.unique}},
   \code{\link{ez.values.set}}
 }
-

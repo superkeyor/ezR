@@ -31,4 +31,3 @@ an invisible data frame with x,y,p,counts,total and print results out on screen;
 \description{
 df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
 }
-

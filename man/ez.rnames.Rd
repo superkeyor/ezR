@@ -15,4 +15,3 @@ all row names, alias of \code{\link{row.names}}, there are also names(), colname
 \cr \code{\link{names}}, \code{\link{colnames}}, \code{\link{rownames}}, \code{\link{row.names}},
 \cr \code{\link{ez.rnames}}, \code{\link{ez.cnames}}, \code{\link{ez.names}} \code{\link{ez.reindex}}
 }
-

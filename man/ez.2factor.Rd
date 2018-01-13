@@ -28,7 +28,7 @@ returns a factor with number as its levels or a data frame with changed col(s)
 ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 }
 \details{
-wrapper of \code{\link[sjmisc]{to_factor}}
+wrapper of \code{\link{sjmisc_to_factor}}
 }
 \examples{
 e=c(1,2); f=factor(1:2) 
@@ -42,7 +42,7 @@ ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 }
 \seealso{
-Other data.transformation.functions: \code{\link{ez.2char}},
+Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
   \code{\link{ez.2lower}}, \code{\link{ez.2value}},
   \code{\link{ez.2wide}}, \code{\link{ez.compute}},
@@ -58,4 +58,3 @@ Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
-

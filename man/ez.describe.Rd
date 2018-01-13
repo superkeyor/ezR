@@ -9,4 +9,3 @@ ez.describe(x)
 \arguments{
 \item{x}{a data frame or a vector or sth else that can be converted into a data frame}
 }
-

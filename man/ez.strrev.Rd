@@ -9,4 +9,3 @@ ez.strrev(x)
 \description{
 rev a str: 'abc'->'cba'
 }
-

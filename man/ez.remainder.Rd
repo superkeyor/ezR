@@ -20,4 +20,3 @@ remainder
 \seealso{
 \code{\link{ez.quotient}}
 }
-

@@ -39,4 +39,3 @@ current date,time in string
 # \%z  Offset from GMT 
 # \%Z  Time zone (character)
 }
-

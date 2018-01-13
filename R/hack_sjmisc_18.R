@@ -1,39 +1,4 @@
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_copy_labels=copy_labels
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_get_labels=get_labels
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_get_values=get_values
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_set_labels=set_labels
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_get_label=get_label
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_set_label=set_label
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_to_label=to_label
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_to_factor=to_factor
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_to_value=to_value
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_rec=rec
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_read_spss=read_spss
-#' sjmisc 1.8 hack
-#' @export
-sjmisc_write_spss=write_spss
+# exported appended to the end
 
 #' 
 mean.labelled <- function(x, trim = 0, na.rm = FALSE, missing_to_na = FALSE, ...) {
@@ -7972,3 +7937,42 @@ zap_unlabelled_helper <- function(x) {
   if (is_labelled(x)) class(x) <- NULL
   return(x)
 }
+
+
+
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_copy_labels=copy_labels
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_get_labels=get_labels
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_get_values=get_values
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_set_labels=set_labels
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_get_label=get_label
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_set_label=set_label
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_to_label=to_label
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_to_factor=to_factor
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_to_value=to_value
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_rec=rec
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_read_spss=read_spss
+#' sjmisc 1.8 hack
+#' @export
+sjmisc_write_spss=write_spss
