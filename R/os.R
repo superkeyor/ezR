@@ -71,6 +71,7 @@ ez.env=function(env=NULL){
 #' @export
 ez.selfupdate = function() {
     ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezmisc')
+    ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bz')
     cat('Please restart RStudio to make the change take effect!\n')
 }
 
