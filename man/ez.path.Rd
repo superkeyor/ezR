@@ -7,6 +7,8 @@
 ez.path()
 }
 \description{
+user path like in Matlab
+
 alias of \code{\link{search}}
 }
 

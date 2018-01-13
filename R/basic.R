@@ -79,50 +79,6 @@ ez.pause = function(){
     }
 }
 
-#' print out or set the repo
-#' @param repo NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'
-#' @export
-#' @return returns NULL
-ez.repo = function(repo=NULL){
-    if (is.null(repo)) {
-        message(sprintf('The current repository is: %s\n',unname(getOption("repos"))))
-        return(invisible(NULL))
-    }
-
-    if (repo=='default') {
-        options(repos = c(CRAN = 'https://cran.rstudio.com/'))
-    } else {
-        options(repos = c(CRAN = sprintf('https://mran.revolutionanalytics.com/snapshot/%s',repo)))
-    }
-    cat(sprintf('The repository now set to: %s\n',unname(getOption("repos"))))
-    return(invisible(NULL))
-}
-
-#' switch env
-#' @param env NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)
-#' @export
-#' @return returns NULL
-ez.env=function(env=NULL){
-    if (is.null(env)) {
-        message("Using library: ", .libPaths()[1])
-        return(invisible(NULL))
-    }
-
-    # if existing library is a symlink
-    if (Sys.readlink('/Library/Frameworks/R.framework/Versions/3.3/Resources/library') != '') {
-        file.remove('/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
-    }
-
-    file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),
-        '/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
-
-    # restart r session 
-    # https://stackoverflow.com/questions/6313079/quit-and-restart-a-clean-r-session-from-within-r
-    # .rs.restartR()
-    message('Please restart RStudio to make the change take effect!')
-    return(invisible(NULL))
-}
-
 #' convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @param x a character vector, data frame, list, or a factor
 #' @param col internally evaluated by eval('dplyr::select()')()

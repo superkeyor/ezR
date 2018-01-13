@@ -5,6 +5,7 @@
 # options(warn=0)  # turn back on warning
 
 #' open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
+#' @description open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
 #' @param
 #' @return
 #' @examples
@@ -12,6 +13,7 @@
 ez.open = browseURL
 
 #' alias of \code{\link{stop}}
+#' @description alias of \code{\link{stop}}
 #' @param
 #' @return
 #' @examples
@@ -19,6 +21,7 @@ ez.open = browseURL
 ez.error = stop
 
 #' print out or set the repo
+#' @description print out or set the repo
 #' @param repo NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'
 #' @export
 #' @return returns NULL
@@ -38,6 +41,7 @@ ez.repo = function(repo=NULL){
 }
 
 #' switch env
+#' @description switch env
 #' @param env NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)
 #' @export
 #' @return returns NULL
@@ -64,12 +68,14 @@ ez.env=function(env=NULL){
 
 #' update ez package itself
 #' @description update ez package itself
+#' @export
 ez.selfupdate = function() {
     ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezmisc')
     cat('Please restart RStudio to make the change take effect!\n')
 }
 
 #' print the version of a package
+#' @description print the version of a package
 #' @param pkg package name in quotes, default is NULL
 #' @return if pkg not provided, prints R version, installed packages/versions and etc
 #' @examples
@@ -94,6 +100,7 @@ ez.ver = function(pkg=NULL){
 }
 
 #' alias of \code{\link{library}}
+#' @description alias of \code{\link{library}}
 #' @param
 #' @return
 #' @examples
@@ -101,6 +108,7 @@ ez.ver = function(pkg=NULL){
 ez.import = library
 
 #' alias of \code{\link{library}}
+#' @description alias of \code{\link{library}}
 #' @param
 #' @return
 #' @examples
@@ -108,6 +116,7 @@ ez.import = library
 ez.include = ez.import
 
 #' alias of \code{\link{install.packages}}
+#' @description alias of \code{\link{install.packages}}
 #' @param
 #' @return
 #' @examples
@@ -115,6 +124,7 @@ ez.include = ez.import
 ez.install = install.packages
 
 #' require a package, if not exist auto install and auto load
+#' @description require a package, if not exist auto install and auto load
 #' @param pkg pkg name in string
 #' @param autoload auto load or not (default=TRUE)
 #' @return
@@ -133,6 +143,7 @@ ez.require = function(pkg, autoload=TRUE){
 }
 
 #' unload a package, wrapper of detach(pkg, unload=TRUE, character.only = TRUE)
+#' @description unload a package, wrapper of detach(pkg, unload=TRUE, character.only = TRUE)
 #' @param pkg pkg name in string
 #' @return
 #' @examples
@@ -149,7 +160,8 @@ ez.unload = function(pkg){
     }
 }
 
-#' alias of \code{\link{devtools::install_github}}
+#' alias of \code{\link[devtools]{install_github}}
+#' @description alias of \code{\link[devtools]{install_github}}
 #' @param
 #' @return
 #' @examples
@@ -157,6 +169,7 @@ ez.unload = function(pkg){
 ez.github = devtools::install_github
 
 #' alias of \code{\link{remove.packages}}
+#' @description alias of \code{\link{remove.packages}}
 #' @param
 #' @return
 #' @examples
@@ -164,6 +177,7 @@ ez.github = devtools::install_github
 ez.remove = remove.packages
 
 #' alias of \code{\link{remove.packages}}
+#' @description alias of \code{\link{remove.packages}}
 #' @param
 #' @return
 #' @examples
@@ -171,6 +185,7 @@ ez.remove = remove.packages
 ez.uninstall = remove.packages
 
 #' clear, clean  console, workspace, plot or variable(s)
+#' @description clear, clean  console, workspace, plot or variable(s)
 #' @param area 0 all, \cr
 #'             1 console only \cr
 #'             2 workspace only \cr
@@ -205,6 +220,7 @@ ez.clear = function(area=0) {
 }
 
 #' clear, clean  console, workspace, plot or variable(s)
+#' @description clear, clean  console, workspace, plot or variable(s)
 #' @param area 0 all, \cr
 #'             1 console only \cr
 #'             2 workspace only \cr
@@ -217,6 +233,7 @@ ez.clear = function(area=0) {
 ez.clean = ez.clear
 
 #' alias of \code{\link{find}}
+#' @description alias of \code{\link{find}}
 #' @param
 #' @return
 #' @examples
@@ -224,6 +241,7 @@ ez.clean = ez.clear
 ez.which = find
 
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
+#' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @param
 #' @return Print version information about R, the OS and attached or loaded packages.
 #' @examples
@@ -232,6 +250,7 @@ ez.which = find
 ez.whos = sessionInfo
 
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
+#' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 #' @param
 #' @return Print version information about R, the OS and attached or loaded packages.
 #' @examples
@@ -240,6 +259,7 @@ ez.whos = sessionInfo
 ez.who = ez.whos
 
 #' user path like in Matlab
+#' @description user path like in Matlab
 #' @description alias of \code{\link{search}}
 #' @param
 #' @return
@@ -248,6 +268,7 @@ ez.who = ez.whos
 ez.path = search
 
 #' alias of \code{\link{system}}
+#' @description alias of \code{\link{system}}
 #' @param
 #' @return
 #' @examples
@@ -255,6 +276,7 @@ ez.path = search
 ez.execute = system
 
 #' alias of \code{\link{file.path}}
+#' @description alias of \code{\link{file.path}}
 #' @param
 #' @return
 #' @examples
@@ -263,6 +285,7 @@ ez.execute = system
 ez.joinpath = file.path
 
 #' splitpath
+#' @description splitpath
 #' @param
 #' @return
 #' @examples
@@ -288,6 +311,7 @@ ez.splitpath = function(path){
 }
 
 #' parentdir
+#' @description parentdir
 #' @param
 #' @return
 #' @examples
@@ -295,6 +319,7 @@ ez.splitpath = function(path){
 ez.parentdir = function(path){dirname(path)}
 
 #' alias of \code{\link{setwd}}
+#' @description alias of \code{\link{setwd}}
 #' @param
 #' @return
 #' @examples
@@ -302,6 +327,7 @@ ez.parentdir = function(path){dirname(path)}
 ez.cd = setwd;
 
 #' alias of \code{\link{getwd}}
+#' @description alias of \code{\link{getwd}}
 #' @param
 #' @return
 #' @examples
@@ -309,6 +335,7 @@ ez.cd = setwd;
 ez.cwd = getwd
 
 #' alias of \code{\link{getwd}}
+#' @description alias of \code{\link{getwd}}
 #' @param
 #' @return
 #' @examples
@@ -316,6 +343,7 @@ ez.cwd = getwd
 ez.pwd = getwd
 
 #' current script file (in full path)
+#' @description current script file (in full path)
 #' @param
 #' @return
 #' @examples
@@ -348,6 +376,7 @@ ez.csf <- function() {
 }
 
 #' current script dir (in full path)
+#' @description current script dir (in full path)
 #' @param
 #' @return
 #' @examples
@@ -358,6 +387,7 @@ ez.csd <- function() {
 }
 
 #' lsd
+#' @description lsd
 #' @param
 #' @return
 #' @examples
@@ -374,6 +404,7 @@ ez.lsd = function(path='.', pattern=NULL, hidden=FALSE){
 }
 
 #' ls
+#' @description ls
 #' @param
 #' @return
 #' @examples
@@ -387,6 +418,7 @@ ez.ls = function(path='.', pattern=NULL, hidden=FALSE){
 }
 
 #' fls
+#' @description fls
 #' @param
 #' @return
 #' @examples
@@ -400,6 +432,7 @@ ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
 }
 
 #' mkdir, no warning for exisiting folder
+#' @description mkdir, no warning for exisiting folder
 #' @param
 #' @return
 #' @examples
@@ -409,6 +442,7 @@ ez.mkdir = function(path){
 }
 
 #' alias of \code{\link{file.exists}}
+#' @description alias of \code{\link{file.exists}}
 #' @param
 #' @return
 #' @examples
@@ -416,6 +450,7 @@ ez.mkdir = function(path){
 ez.exists = file.exists
 
 #' remove a file, wrapper of \code{\link{unlink}}
+#' @description remove a file, wrapper of \code{\link{unlink}}
 #' @param
 #' @return
 #' @examples
@@ -429,6 +464,7 @@ ez.rm = function(x){
 }
 
 #' rename
+#' @description rename
 #' @param
 #' @return
 #' @examples
@@ -456,6 +492,7 @@ ez.rn = function(from,to){
 }
 
 #' copy
+#' @description copy
 #' @param
 #' @return
 #' @examples
@@ -507,6 +544,7 @@ ez.cp = function(from,to){
 }
 
 #' move
+#' @description move
 #' @param
 #' @return
 #' @examples

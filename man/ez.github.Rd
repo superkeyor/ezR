@@ -2,13 +2,13 @@
 % Please edit documentation in R/os.R
 \name{ez.github}
 \alias{ez.github}
-\title{alias of \code{\link{devtools::install_github}}}
+\title{alias of \code{\link[devtools]{install_github}}}
 \usage{
 ez.github(repo, username = NULL, ref = "master", subdir = NULL,
   auth_token = github_pat(quiet), host = "https://api.github.com",
   quiet = FALSE, ...)
 }
 \description{
-alias of \code{\link{devtools::install_github}}
+alias of \code{\link[devtools]{install_github}}
 }
 
