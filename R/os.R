@@ -55,14 +55,18 @@ ez.env=function(env=NULL){
     file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),
         '/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
 
-    # update ez package itself
-    ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezmisc')
-
     # restart r session (restart does not reset .libPaths, so do not use)
     # https://stackoverflow.com/questions/6313079/quit-and-restart-a-clean-r-session-from-within-r
     # .rs.restartR()
     message('Please restart RStudio to make the change take effect!')
     return(invisible(NULL))
+}
+
+#' update ez package itself
+#' @description update ez package itself
+ez.selfupdate = function() {
+    ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezmisc')
+    cat('Please restart RStudio to make the change take effect!\n')
 }
 
 #' print the version of a package
