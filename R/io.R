@@ -125,7 +125,7 @@ ez.readxlist = function(file, toprint=TRUE){
 }
 
 #' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE and almost the same as ez.reads. For a more perfect function, use ez.reads. This function kept as an archive just in case.
-#' wrapper of \code{\link[sjmisc]{read_spss}}. read spss .sav file with haven package
+#' wrapper of \code{\link{sjmisc_read_spss}}. read spss .sav file with haven package
 #' @description Internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). Will NOT auto replace col names as ez.reads will do (ie, keep them as is, @->@)
 #' @param path File path to the data file
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
@@ -138,11 +138,11 @@ ez.readxlist = function(file, toprint=TRUE){
 #' @export
 ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
     if (atm2fac==1) {
-        result = sjmisc::read_spss(path=path, atomic.to.fac=FALSE, keep.na=!usrna, ...)
+        result = sjmisc_read_spss(path=path, atomic.to.fac=FALSE, keep.na=!usrna, ...)
     } else if (atm2fac==2) {
-        result = sjmisc::read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
+        result = sjmisc_read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
     } else if (atm2fac==3) {
-        result = sjmisc::read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
+        result = sjmisc_read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
         result = ez.2label(result)
     }
     if (tolower) names(result) = tolower(names(result))
@@ -150,7 +150,7 @@ ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # not string values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
-    # another hack to trim both leading and trailing spaces (sjmisc::read_spss only trims trailing)
+    # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     return(result)
@@ -238,15 +238,15 @@ ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     return(result)
 }
 
-#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{ez.writes}}
+#' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.writes}}
 #' @description potentially keep variable labels and value labels
 #' @export
-ez.saves = sjmisc::write_spss
+ez.saves = sjmisc_write_spss
 
-#' alias of \code{\link[sjmisc]{write_spss}}, \code{\link{ez.saves}}
+#' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.saves}}
 #' @description potentially keep variable labels and value labels
 #' @export
-ez.writes = sjmisc::write_spss
+ez.writes = sjmisc_write_spss
 
 #' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param

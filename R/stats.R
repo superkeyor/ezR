@@ -68,10 +68,6 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
         }
     }     
 
-    # ez.view = function(df, file=NULL, id=NULL, show.frq = T, show.prc = T, sort.by.name = F, ...){
-    # do not need, my own is better
-    # sjPlot::view_df(df, show.frq = show.frq, show.prc = show.prc, sort.by.name = sort.by.name, ...)
-
     # if duplicated col names, the following main codes would crash with weird reasons
     # duplicated row names are fine
     if ( sum(ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1))>0 ) {

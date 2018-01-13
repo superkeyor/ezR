@@ -165,7 +165,7 @@ ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dr
 #'         "Person",
 #'         "Time",
 #'         c("Score1","Score2","Score3"))
-#' @return returns a new df. Because of the structural change, lable attributes would be lost and can NOT be copied with \code{\link[sjmisc]{copy_labels}}--not a subset.
+#' @return returns a new df. Because of the structural change, lable attributes would be lost and can NOT be copied with \code{\link{sjmisc_copy_labels}}--not a subset.
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -190,10 +190,10 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
     return(result)
 }
 
-#' get value labels, wrapper of \code{\link[sjmisc]{get_labels}}
+#' get value labels, wrapper of \code{\link{sjmisc_get_labels}}
 #' @description
 #' @param
-#' @details see also \code{\link[sjmisc]{get_values}}
+#' @details see also \code{\link{sjmisc_get_values}}
 #' @examples
 #'
 #' @return returns a list $varname
@@ -207,11 +207,11 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.values.get = function(x, include.values=NULL, attr.only=T, include.non.labelled=F, ...){
-    result=sjmisc::get_labels(x, include.values=include.values, attr.only=attr.only, include.non.labelled=include.non.labelled, ...)
+    result=sjmisc_get_labels(x, include.values=include.values, attr.only=attr.only, include.non.labelled=include.non.labelled, ...)
     return(result)
 }
 
-#' set value labels, wrapper of \code{\link[sjmisc]{set_labels}}
+#' set value labels, wrapper of \code{\link{sjmisc_set_labels}}
 #' @description
 #' @param
 #' @details
@@ -233,11 +233,11 @@ ez.values.get = function(x, include.values=NULL, attr.only=T, include.non.labell
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, ...){
-    result=sjmisc::set_labels(x, valuelabels, force.labels=force.labels, force.values=force.values, ...)
+    result=sjmisc_set_labels(x, valuelabels, force.labels=force.labels, force.values=force.values, ...)
     return(result)
 }
 
-#' get variable label, wrapper of \code{\link[sjmisc]{get_label}}
+#' get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @description
 #' @param ... var1, var2,  one or many
 #' @details
@@ -254,11 +254,11 @@ ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE,
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.label.get = function(...){
-    result=sjmisc::get_label(list(...))
+    result=sjmisc_get_label(list(...))
     return(result)
 }
 
-#' set variable label, wrapper of \code{\link[sjmisc]{set_label}}
+#' set variable label, wrapper of \code{\link{sjmisc_set_label}}
 #' @description
 #' @param df data frame
 #' @param varname variable name with quote ""
@@ -277,7 +277,7 @@ ez.label.get = function(...){
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.label.set = function(df,varname,label){
-    df[varname] <- sjmisc::set_label(df[varname],label)
+    df[varname] <- sjmisc_set_label(df[varname],label)
     return(df)
 }
 
@@ -323,7 +323,7 @@ ez.2char = function(x, col=NULL){
 #' @param add.non.labelled  logical, if TRUE, values without associated value label (ie, more values than "labels", hence not all values are labelled.) will also be converted to labels (as is). If FALSE, non-labelled values are converted to NA
 #' @param drop.missing.value if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.
 #' @details Both value and variable label attributes will be removed when converting variables to factors.
-#'\cr wrapper of \code{\link[sjmisc]{to_label}}
+#'\cr wrapper of \code{\link{sjmisc_to_label}}
 #' @examples
 #' e=c(1,2); f=factor(1:2) 
 #' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
@@ -343,12 +343,12 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
         cols=col
         for (col in cols) { 
             x[[col]] = ez.factorelevel(x[[col]]) 
-            x[col]=sjmisc::to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
+            x[col]=sjmisc_to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
             result=x
         }
     } else {
         x=ez.factorelevel(x)
-        result=sjmisc::to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
+        result=sjmisc_to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
     }
     return(result)
 }
@@ -363,7 +363,7 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
 #' @param add.non.labelled    Logical, if TRUE, non-labelled values also get value labels.
 #' @param drop.na Logical, if TRUE, all types of missing value codes are converted into NA before x is converted as factor. If FALSE, missing values will be left as their original codes. See 'Examples' and get_na.
 #' @param ref.lvl Numeric, specifies the reference level for the new factor. Use this parameter if a different factor level than the lowest value should be used as reference level. If NULL, lowest value will become the reference level. See ref_lvl for details.
-#' @details wrapper of \code{\link[sjmisc]{to_factor}}
+#' @details wrapper of \code{\link{sjmisc_to_factor}}
 #' @examples
 #' e=c(1,2); f=factor(1:2) 
 #' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
@@ -383,12 +383,12 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
         cols=col
         for (col in cols) {
             x[[col]] = ez.factorelevel(x[[col]])
-            x[col]=sjmisc::to_factor(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+            x[col]=sjmisc_to_factor(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
             result=x
         }
     } else {
         x=ez.factorelevel(x)
-        result=sjmisc::to_factor(x, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+        result=sjmisc_to_factor(x, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
     }
     return(result)
 }
@@ -406,7 +406,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' \cr 
 #' \cr To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
-#' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link[sjmisc]{to_value}}
+#' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link{sjmisc_to_value}}
 #' @examples
 #' e=c(1,2); f=factor(1:2) 
 #' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
@@ -433,12 +433,12 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE,...){
         cols=col
         for (col in cols) {
             x[[col]] = ez.factorelevel(x[[col]])
-            x[col]=sjmisc::to_value(x[col], start.at=start.at, keep.labels=keep.labels,...)
+            x[col]=sjmisc_to_value(x[col], start.at=start.at, keep.labels=keep.labels,...)
             result=x
         }
     } else {    
         x=ez.factorelevel(x)
-        result=sjmisc::to_value(x, start.at=start.at, keep.labels=keep.labels,...)
+        result=sjmisc_to_value(x, start.at=start.at, keep.labels=keep.labels,...)
     }
     return(result)
 }
@@ -696,7 +696,7 @@ ez.factorelevel = function(x, cols=NULL) {
 #'  \item A range of values can be coded to a single value using "1:3=4;". This rule would code all values between 1 and 3 inclusive into 4. For factors, a value is between two levels if it is between them in the factor ordering. One sided ranges can be specified using the lo and hi key words (e.g."lo:3=0; 4:hi=1"). hi=Hi=HI=max, lo=Lo=LI=min, :=thru=Thru=THRU (mimic SPSS recode syntax)  -> can replace = as well. if multiple ranges overlap, the latter one prevails. 1:3=1;3:5=2 (3->2 finally).
 #'  \item Default conditions can be coded using "else." For example, if we wish to recode all values >=0 to 1 and all values <0 to missing, we could use ("0:hi=1; else=NA"). the \code{"else"}-token should be the last argument in the \code{recodes}-string.
 #'   \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
-#'   \item the \code{\link[sjmisc]{rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
+#'   \item the \code{\link{sjmisc_rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 #' }
 #' \cr Works with characters/factors as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 #' \cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
@@ -762,7 +762,7 @@ ez.recode = function(df, col, recodes){
     # now change it back
     names(newVar) = varName
     # remove all value labels attr, with graceful failure
-    newVar=tryCatch(sjmisc::set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
+    newVar=tryCatch(sjmisc_set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
     df = eval(parse(text=cmd))
@@ -801,7 +801,7 @@ ez.recode2 = function(df, col, recodes){
     # now change it back
     names(newVar) = varName
     # remove all value labels attr, with graceful failure
-    newVar=tryCatch(sjmisc::set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
+    newVar=tryCatch(sjmisc_set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
     df = eval(parse(text=cmd))
@@ -895,7 +895,7 @@ ez.replace = function(df, col, oldval, newval=NULL){
 
             if (factored) {df[[col]]=as.factor(df[[col]])}
             # remove all value labels attr, with graceful failure
-            df[[col]]=tryCatch(sjmisc::set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
+            df[[col]]=tryCatch(sjmisc_set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
         }
 
     # three parameters passed        
@@ -958,7 +958,7 @@ ez.replacewhen = function(df,...) {
             df[[col]][theRow] <- newval
             if (factored) {df[[col]]=as.factor(df[[col]])}
             # remove all value labels attr, with graceful failure
-            df[[col]]=tryCatch(sjmisc::set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
+            df[[col]]=tryCatch(sjmisc_set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
         }
     }
     return(df)
@@ -1757,7 +1757,7 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
             if ('removeleading0' %in% procedures) x = sub('^0+','',x)
     
             if (factored) {x=as.factor(x)}
-            x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+            x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         }
     } else if (is.data.frame(x) & is.null(col)) {
         x = dplyr::mutate_all(x, funs(ez.sanitize(.,procedures=procedures)))
@@ -1781,7 +1781,7 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
 ez.attrclean = function(x, col=NULL, attrs=c('variable.labels'), ...) {
     if (!is.data.frame(x)) {
         # set_labels only for value labels
-        # x=tryCatch(sjmisc::set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
+        # x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         # attributes(x) <- NULL  # this is not desirable because some attributes are needed, eg, $class, $level, $names
         for (a in attrs) {attr(x,a) <- NULL}
     } else if (is.data.frame(x) & is.null(col)) {
