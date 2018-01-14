@@ -16,8 +16,8 @@ ez.label.set(df, varname, label)
 \value{
 returns a new changed df
 }
-\examples{
-
+\description{
+set variable label, wrapper of \code{\link{sjmisc_set_label}}
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

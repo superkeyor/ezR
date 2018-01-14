@@ -18,6 +18,9 @@ ez.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
 \value{
 returns a new df. Because of the structural change, lable attributes would be lost and can NOT be copied with \code{\link{sjmisc_copy_labels}}--not a subset.
 }
+\description{
+reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}
+}
 \note{
 refer to my spss syntax 'SUBJID * Time [School] - Measure2'
 }

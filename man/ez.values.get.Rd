@@ -10,11 +10,11 @@ ez.values.get(x, include.values = NULL, attr.only = T,
 \value{
 returns a list $varname
 }
+\description{
+get value labels, wrapper of \code{\link{sjmisc_get_labels}}
+}
 \details{
 see also \code{\link{sjmisc_get_values}}
-}
-\examples{
-
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

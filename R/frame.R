@@ -2,6 +2,7 @@
 ###*mainly data frame functions.
 ###**************************************************.
 #' alias of data.frame
+#' @description alias of data.frame
 #' @export
 #' @examples
 #' sx = c("F", "F", "F", "M", "M", "M")
@@ -11,6 +12,7 @@
 ez.frame = data.frame
 
 #' length of an object
+#' @description length of an object
 #' @return if a character vector with only one element, returns the number of characters in that item
 #' \cr if a character vector with more than one element, returns the number of elements
 #' \cr data frame, returns the number of rows
@@ -49,6 +51,7 @@ ez.len = function(x) {
 }
 
 #' size of an object
+#' @description size of an object
 #' @param x data.frame
 #' @param dim 1=row, 2=col, 3=both
 #' @export
@@ -63,6 +66,7 @@ ez.size = function(x,dim=3) {
 }
 
 #' all row names, alias of \code{\link{row.names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
+#' @description all row names, alias of \code{\link{row.names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
 #' @seealso \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
 #' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
@@ -71,6 +75,7 @@ ez.size = function(x,dim=3) {
 ez.rnames = row.names
 
 #' all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
+#' @description all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
 #' @seealso \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
 #' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
@@ -79,6 +84,7 @@ ez.rnames = row.names
 ez.cnames = colnames
 
 #' all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
+#' @description all column names, alias of \code{\link{names}}, there are also names(), colnames(), rownames(), row.names() but no col.names()
 #' @export
 #' @seealso \code{\link{nrow}}, \code{\link{ncol}}, \code{\link{dim}}, \code{\link{length}}
 #' \cr \code{\link{ez.len}}, \code{\link{ez.size}}
@@ -94,7 +100,6 @@ ez.names = colnames
 #' @param measurename variable name (column/columns to be created) for the measurement, such as "BDI"
 #' @param measure column names (existing) that are the repeated measures, such as c("BDI_Pre","BDI_Post")
 #' @param drop variables to drop before reshaping
-#' @details
 #' @note refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
 #' \cr if index=c("Pre","Post"), then the character would not be viewed by ez.view; index=1:2 will be int and fine.
 #' @examples
@@ -144,12 +149,11 @@ ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dr
 }
 
 #' reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}
-#' @description
+#' @description reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}
 #' @param id unique identification variable, or variable combination
 #' @param indexname variable name for timing/repetition/index variable, such as "session"
 #' @param measure column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
 #' @param drop variables to drop before reshaping
-#' @details
 #' @note refer to my spss syntax 'SUBJID * Time [School] - Measure2'
 #' @examples
 #' set.seed(10)
@@ -191,11 +195,8 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
 }
 
 #' get value labels, wrapper of \code{\link{sjmisc_get_labels}}
-#' @description
-#' @param
+#' @description get value labels, wrapper of \code{\link{sjmisc_get_labels}}
 #' @details see also \code{\link{sjmisc_get_values}}
-#' @examples
-#'
 #' @return returns a list $varname
 #' @family data transformation functions
 #' @export
@@ -212,9 +213,7 @@ ez.values.get = function(x, include.values=NULL, attr.only=T, include.non.labell
 }
 
 #' set value labels, wrapper of \code{\link{sjmisc_set_labels}}
-#' @description
-#' @param
-#' @details
+#' @description set value labels, wrapper of \code{\link{sjmisc_set_labels}}
 #' @examples
 #' # 1 4 5 9 do not have to all appear in x
 #' # notice the particular order and symbol: "strongly agree" <- 1
@@ -259,13 +258,10 @@ ez.label.get = function(...){
 }
 
 #' set variable label, wrapper of \code{\link{sjmisc_set_label}}
-#' @description
+#' @description set variable label, wrapper of \code{\link{sjmisc_set_label}}
 #' @param df data frame
 #' @param varname variable name with quote ""
 #' @param label explanatory string
-#' @details
-#' @examples
-#'
 #' @return returns a new changed df
 #' @family data transformation functions
 #' @export
@@ -289,7 +285,6 @@ ez.label.set = function(df,varname,label){
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible factor cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
-#' @examples
 #' @seealso \code{\link{ez.str}}
 #' @return returns a character vector or a data frame with changed col(s)
 #' @family data transformation functions
@@ -454,7 +449,6 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE,...){
 #' \cr "col2:az" --another column in az    (ignored if x is not a data frame)
 #' \cr "col2:za" --another column in za    (ignored if x is not a data frame)
 #' @return returns a new df, factor (non-factor->factor)
-#' @examples
 #' @export
 ez.factorder = function(x, col, ord="as"){
     if (is.data.frame(x)) {
@@ -1061,6 +1055,7 @@ ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
 }
 
 #' reorder all cols, or sort all cols alphabetically
+#' @description reorder all cols, or sort all cols alphabetically
 #' @param newColOrder c('','',''), number of cols must match that of all cols (when para col=NULL) or specified by para col. 
 #' or, newColOrder='az' or 'za', sort all cols alphabetically
 #' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )
@@ -1103,6 +1098,7 @@ ez.recols = function(df, newColOrder,col=NULL){
 }
 
 #' reorder a single col (sort of, see below), alias of \code{\link{ez.move}}
+#' @description reorder a single col (sort of, see below), alias of \code{\link{ez.move}}
 #' @param movecommand sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first
 #' @family data transformation functions
 #' @export
@@ -1145,6 +1141,7 @@ ez.recol = function(df, movecommand) {
 }
 
 #' reorder a single col (sort of, see below), alias of \code{\link{ez.recol}}
+#' @description reorder a single col (sort of, see below), alias of \code{\link{ez.recol}}
 #' @param movecommand sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first
 #' @family data transformation functions
 #' @export
@@ -1193,6 +1190,7 @@ ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FA
 } 
 
 #' rename all cols, see also \code{\link{ez.rncol}}
+#' @description rename all cols, see also \code{\link{ez.rncol}}
 #' @param newColName c('','',''), number of cols must match
 #' @return returns a new df, old one does not change
 #' @examples
@@ -1212,6 +1210,7 @@ ez.rncols = function(df,newColNames){
 }
 
 #' convert all column names to lower case
+#' @description convert all column names to lower case
 #' @param df a data frame
 #' @return returns a new df, old one does not change
 #' @examples
@@ -1282,6 +1281,7 @@ ez.newcol = function(df, newColName, defaultVal=NA){
 }
 
 #' alias of \code{\link[dplyr]{mutate}}
+#' @description alias of \code{\link[dplyr]{mutate}}
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1294,6 +1294,7 @@ ez.newcol = function(df, newColName, defaultVal=NA){
 ez.compute = dplyr::mutate
 
 #' alias of \code{\link[dplyr]{filter}}
+#' @description alias of \code{\link[dplyr]{filter}}
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1306,6 +1307,7 @@ ez.compute = dplyr::mutate
 ez.select = dplyr::filter
 
 #' alias of \code{\link[dplyr]{arrange}}
+#' @description alias of \code{\link[dplyr]{arrange}}
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1318,6 +1320,7 @@ ez.select = dplyr::filter
 ez.sort = dplyr::arrange
 
 #' alias of \code{\link[dplyr]{distinct}}
+#' @description alias of \code{\link[dplyr]{distinct}}
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1443,6 +1446,7 @@ ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, v
 }
 
 #' alias of \code{\link[dplyr]{group_by}}
+#' @description alias of \code{\link[dplyr]{group_by}}
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1455,6 +1459,7 @@ ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, v
 ez.split = dplyr::group_by
 
 #' alias of \code{\link[dplyr]{left_join}}
+#' @description alias of \code{\link[dplyr]{left_join}}
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1467,6 +1472,7 @@ ez.split = dplyr::group_by
 ez.leftjoin = dplyr::left_join
 
 #' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
+#' @description delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
 #' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs
 #' @return returns a new df, old one does not change
 #' @examples

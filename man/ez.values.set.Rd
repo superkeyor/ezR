@@ -10,6 +10,9 @@ ez.values.set(x, valuelabels, force.labels = FALSE, force.values = FALSE,
 \value{
 returns a new changed df
 }
+\description{
+set value labels, wrapper of \code{\link{sjmisc_set_labels}}
+}
 \examples{
 # 1 4 5 9 do not have to all appear in x
 # notice the particular order and symbol: "strongly agree" <- 1
