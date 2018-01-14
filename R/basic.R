@@ -314,7 +314,6 @@ ez.remainder = function (m,n){
 
 #' similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
 #' @description similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
-#' @param
 #' @return returns a vector (both ends inclusive)
 #' @examples
 #' ez.range(1,3) # 1 2 3, equivalent to 1:3
@@ -324,8 +323,6 @@ ez.range = function(start, stop, step=1){seq(start, stop, by=step)}
 #' linspace
 #' @description linspace
 #' @param n number of points
-#' @return
-#' @examples
 #' @export
 ez.linspace = function(start, stop, n){
     seq(start, stop, length=n)
@@ -333,9 +330,6 @@ ez.linspace = function(start, stop, n){
 
 #' replicate a matrix, n * n (if m not provided) or n * m
 #' @description replicate a matrix, n * n (if m not provided) or n * m
-#' @param
-#' @return
-#' @examples
 #' @export
 ez.repmat = function(a, n, m = n) {
     if (length(a) == 0) return(c())
