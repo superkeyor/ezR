@@ -2,7 +2,7 @@
 # stats
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
-#' @description
+#' @description print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
 #' @param x a data frame or a vector or sth else that can be converted into a data frame
 #' @return
 #' @examples
@@ -21,6 +21,7 @@ ez.describe = function(x){
 }
 
 #' compare two vectors, two dataframes
+#' @description compare two vectors, two dataframes
 #' @note nrow() for data frame, length() for vector. union/intersect remove duplication
 #' @export
 ez.compare = function(lh,rh,...) {
@@ -361,7 +362,6 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' \cr degree_of_freedom: from F-statistic
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
-#' @examples
 #' @export
 ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -429,7 +429,6 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @return an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
-#' @examples
 #' @export
 ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -498,7 +497,6 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
-#' @examples
 #' @export
 ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))

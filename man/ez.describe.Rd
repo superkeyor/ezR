@@ -9,3 +9,6 @@ ez.describe(x)
 \arguments{
 \item{x}{a data frame or a vector or sth else that can be converted into a data frame}
 }
+\description{
+print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
+}
