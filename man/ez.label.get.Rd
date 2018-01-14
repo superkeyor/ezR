@@ -12,8 +12,8 @@ ez.label.get(...)
 \value{
 returns character
 }
-\examples{
-
+\description{
+get variable label, wrapper of \code{\link{sjmisc_get_label}}
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

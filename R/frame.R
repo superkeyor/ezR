@@ -237,11 +237,8 @@ ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE,
 }
 
 #' get variable label, wrapper of \code{\link{sjmisc_get_label}}
-#' @description
+#' @description get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @param ... var1, var2,  one or many
-#' @details
-#' @examples
-#'
 #' @return returns character
 #' @family data transformation functions
 #' @export
@@ -504,7 +501,6 @@ ez.factorder = function(x, col, ord="as"){
 #' @param col a single column name, quoted string, ignored when x is not a data frame
 #' @param newLevelNames new level names coresponding to levels(x), eg, c("one","two","three")
 #' @return returns a new df, factor (non-factor->factor)
-#' @examples
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
 #' @export
 ez.factorname = function(x, col, newLevelNames){
@@ -534,7 +530,6 @@ ez.factorname = function(x, col, newLevelNames){
 #' @param x data frame or vector, factor
 #' @param cols column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols
 #' @return returns a new df, factor, vector (has no effect on (ie, make no change to) a non-factor object)
-#' @examples
 #' @export
 ez.factorelevel = function(x, cols=NULL) {
     if (is.factor(x)) {
@@ -1193,7 +1188,6 @@ ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FA
 #' @description rename all cols, see also \code{\link{ez.rncol}}
 #' @param newColName c('','',''), number of cols must match
 #' @return returns a new df, old one does not change
-#' @examples
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1213,7 +1207,6 @@ ez.rncols = function(df,newColNames){
 #' @description convert all column names to lower case
 #' @param df a data frame
 #' @return returns a new df, old one does not change
-#' @examples
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1233,7 +1226,6 @@ ez.2lower = function(df){
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rename}}
 #' @param replace c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
 #' @return returns a new df, old one does not change
-#' @examples
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1249,7 +1241,6 @@ ez.rncol = reshape::rename
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rncol}}
 #' @param replace c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
 #' @return returns a new df, old one does not change
-#' @examples
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1265,7 +1256,6 @@ ez.rename = reshape::rename
 #' @param newColName ''
 #' @param defaultVal NA (default)
 #' @return returns a new df, old one does not change
-#' @examples
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1475,7 +1465,6 @@ ez.leftjoin = dplyr::left_join
 #' @description delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
 #' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs
 #' @return returns a new df, old one does not change
-#' @examples
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
