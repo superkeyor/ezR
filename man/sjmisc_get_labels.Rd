@@ -10,3 +10,4 @@ sjmisc_get_labels(x, attr.only = FALSE, include.values = NULL,
 \description{
 sjmisc 1.8 hack
 }
+

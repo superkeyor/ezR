@@ -12,3 +12,4 @@ ez.unload(pkg)
 \description{
 unload a package, wrapper of detach(pkg, unload=TRUE, character.only = TRUE)
 }
+

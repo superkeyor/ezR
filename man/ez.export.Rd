@@ -19,3 +19,4 @@ Letter: 8.5 x 11 (portrait default ie, 11 x 8.5)
 \seealso{
 \code{\link{pdf}} \code{\link{ez.pdfon}} \code{\link{ez.pdfoff}}
 }
+

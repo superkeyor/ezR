@@ -24,3 +24,4 @@ returns a new df, factor (non-factor->factor)
 \description{
 does not change factor label; only changes the order of printing out
 }
+

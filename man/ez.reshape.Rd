@@ -13,3 +13,4 @@ reshape(a, n, m) returns the n-by-m matrix whose elements are taken column-wise 
 \description{
 reshape matrix
 }
+

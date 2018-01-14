@@ -19,3 +19,4 @@ does not accept any parameter
 \seealso{
 \code{\link{ez.print}}
 }
+

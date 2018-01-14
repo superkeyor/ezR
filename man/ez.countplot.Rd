@@ -58,3 +58,4 @@ a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limit
 \description{
 plot count data, eg, ez.countplot(iris, 'Species'). See also \code{\link{ez.piechart}} \code{\link{ez.hist}}
 }
+

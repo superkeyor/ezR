@@ -2,9 +2,12 @@
 % Please edit documentation in R/os.R
 \name{ez.ver}
 \alias{ez.ver}
+\alias{ez.verr}
 \title{print the version of a package}
 \usage{
 ez.ver(pkg = NULL)
+
+ez.verr(pkg = NULL)
 }
 \arguments{
 \item{pkg}{package name in quotes, default is NULL}
@@ -15,3 +18,4 @@ if pkg not provided, prints R version, installed packages/versions and etc
 \description{
 print the version of a package
 }
+

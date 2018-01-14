@@ -13,3 +13,4 @@ lsd
 default: hidden=FALSE, not include .folders
 all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
 }
+

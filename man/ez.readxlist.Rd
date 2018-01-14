@@ -18,3 +18,4 @@ read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxl
 \examples{
 readxlist(file)
 }
+

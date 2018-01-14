@@ -9,3 +9,4 @@ sjmisc_get_values(x, sort.val = FALSE, drop.na = FALSE)
 \description{
 sjmisc 1.8 hack
 }
+

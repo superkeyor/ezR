@@ -21,3 +21,4 @@ save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xls
 (x, file, sheetName="Sheet1", row.names=FALSE,
   col.names=TRUE, append=FALSE, showNA=TRUE)
 }
+

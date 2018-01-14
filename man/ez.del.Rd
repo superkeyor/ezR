@@ -3,8 +3,8 @@
 \name{ez.del}
 \alias{ez.del}
 \alias{ez.delete}
-\alias{ez.rmcols}
 \alias{ez.rmcol}
+\alias{ez.rmcols}
 \title{delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}}
 \usage{
 ez.del(df, cols = NULL)
@@ -33,7 +33,7 @@ delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, ali
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
-Other data transformation functions: \code{\link{ez.2char}},
+Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2lower}},
   \code{\link{ez.2value}}, \code{\link{ez.2wide}},
@@ -49,3 +49,4 @@ Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
+

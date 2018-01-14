@@ -22,3 +22,4 @@ sanitize column-wise (if not numeric,logical,date), see also \code{\link{ez.clco
 \seealso{
 \code{\link{ez.clcols}}
 }
+

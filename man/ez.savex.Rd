@@ -66,3 +66,4 @@ write.xlsx(l, "writeList1.xlsx")
 write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 }
+

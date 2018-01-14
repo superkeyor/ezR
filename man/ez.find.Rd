@@ -18,3 +18,4 @@ similar to matlab find, find non-zero in a vector
 \examples{
 ez.find(a>1)
 }
+

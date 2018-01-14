@@ -23,3 +23,4 @@ length of an object
 # > nchar(x)
 # [1] 5 6
 }
+

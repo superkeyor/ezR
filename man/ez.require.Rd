@@ -14,3 +14,4 @@ ez.require(pkg, autoload = TRUE)
 \description{
 require a package, if not exist auto install and auto load
 }
+

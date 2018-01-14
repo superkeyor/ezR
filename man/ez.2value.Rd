@@ -50,7 +50,7 @@ for consistent and easy convertion, consider to use ez.num(c("2","4","7.3")), ez
 \seealso{
 \code{\link{ez.num}}
 
-Other data transformation functions: \code{\link{ez.2char}},
+Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2lower}},
   \code{\link{ez.2wide}}, \code{\link{ez.compute}},
@@ -66,3 +66,4 @@ Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
+

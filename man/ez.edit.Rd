@@ -9,3 +9,4 @@ ez.edit(path)
 \description{
 edit a file, wrapper of wrapper of \code{\link{file.edit}}
 }
+

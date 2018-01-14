@@ -28,3 +28,4 @@ a ggplot object (+theme_apa() to get apa format plot)
 \description{
 visualize where all the NAs of a dataframe are
 }
+

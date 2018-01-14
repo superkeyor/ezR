@@ -38,3 +38,4 @@ replace certain characters (all occurrence) in all column names, using regular e
 all upper to lower using regex (ignore.case=FALSE or TRUE does not matter)
 ez.clcols(iris,pattern='([[:upper:]])', replacement = '\\\\L\\\\1', perl = TRUE, ignore.case=FALSE)
 }
+

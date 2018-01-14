@@ -62,6 +62,10 @@ ez.env=function(env=NULL){
     return(invisible(NULL))
 }
 
+#' @rdname ez.env
+#' @export
+ez.envr = ez.env
+
 #' update ez package itself
 #' @description update ez package itself
 #' @export
@@ -96,6 +100,10 @@ ez.ver = function(pkg=NULL){
         message(sprintf("Library: %s",paste0(.libPaths(),collapse = '; ')))
     }
 }
+
+#' @rdname ez.ver
+#' @export
+ez.verr = ez.ver
 
 #' alias of \code{\link{library}}
 #' @description alias of \code{\link{library}}

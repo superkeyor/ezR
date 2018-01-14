@@ -2,9 +2,12 @@
 % Please edit documentation in R/os.R
 \name{ez.env}
 \alias{ez.env}
+\alias{ez.envr}
 \title{switch env}
 \usage{
 ez.env(env = NULL)
+
+ez.envr(env = NULL)
 }
 \arguments{
 \item{env}{NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)}
@@ -15,3 +18,4 @@ returns NULL
 \description{
 switch env
 }
+

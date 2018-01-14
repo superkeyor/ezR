@@ -13,3 +13,4 @@ support single string, vectors
 \seealso{
 \code{\link{ez.regexprep}} \code{\link{ez.regexprepi}} \code{\link{ez.replace}}
 }
+

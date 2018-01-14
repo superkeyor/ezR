@@ -9,3 +9,4 @@ ez.error(..., call. = TRUE, domain = NULL)
 \description{
 alias of \code{\link{stop}}
 }
+

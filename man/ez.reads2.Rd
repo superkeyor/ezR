@@ -25,3 +25,4 @@ ez.reads2(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \description{
 Internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). Will NOT auto replace col names as ez.reads will do (ie, keep them as is, @->@)
 }
+

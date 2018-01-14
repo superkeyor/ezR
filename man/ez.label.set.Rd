@@ -28,7 +28,7 @@ set variable label, wrapper of \code{\link{sjmisc_set_label}}
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
-Other data transformation functions: \code{\link{ez.2char}},
+Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2lower}},
   \code{\link{ez.2value}}, \code{\link{ez.2wide}},
@@ -44,3 +44,4 @@ Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
+

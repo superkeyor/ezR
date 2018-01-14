@@ -26,3 +26,4 @@ Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of
 \seealso{
 \code{\link{ez.print}}
 }
+
