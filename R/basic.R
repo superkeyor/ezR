@@ -360,7 +360,6 @@ ez.repmat = function(a, n, m = n) {
 #' \cr $split contains the character vector of splitted strings (split by the matched pattern, ie, the rest that do not match).
 #' \cr If no match is found and split=FALSE, all components will be NULL
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
-#' @examples
 #' @export
 ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
     stopifnot(is.character(pat), is.character(s))
@@ -419,7 +418,6 @@ ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
 #' \cr $split contains the character vector of splitted strings (split by the matched pattern, ie, the rest that do not match).
 #' \cr If no match is found and split=FALSE, all components will be NULL
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
-#' @examples
 #' @export
 ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
     # A list with components start and end as numeric vectors indicating the start and end positions of the matches.
