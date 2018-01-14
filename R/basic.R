@@ -431,7 +431,6 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 #' @description underlying function is \code{\link{gsub}} with regular expression
 #' @param s a string 
 #' @param how a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle
-#' @return
 #' @examples  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
 #' For portability, whitespace is taken as the character class [ \t\r\n] (space, horizontal tab, line feed, carriage return).
 #' @seealso \code{\link{trimws}}
@@ -502,7 +501,6 @@ ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
 #' @description reshape matrix
 #' @return reshape(a, n, m) returns the n-by-m matrix whose elements are taken column-wise from a.
 #' \cr An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.
-#' @examples
 #' @export
 ez.reshape = function (a, n, m){
     if (missing(m))
@@ -565,7 +563,6 @@ ez.join = function(sep='',...){
 #' \cr        ez.print(c(var,'\\t',p))
 #' @param sep default empty
 #' @return each print generates a new line automatically
-#' @examples
 #' @details do not use R \code{\link{print}}, not actually printing \\n
 #' @seealso \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 #' @export
