@@ -14,6 +14,8 @@ theme_apa(plot.box = FALSE, titlesize = 18, textsize = 16)
 \item{textsize}{default 16}
 }
 \description{
+ggplot2 Theme for APA Publications
+
 A ggplot2 theme with no background and Times New Roman font (legend size not affected).
 }
 \note{

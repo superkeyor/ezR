@@ -4,8 +4,6 @@
 #' print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
 #' @description print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
 #' @param x a data frame or a vector or sth else that can be converted into a data frame
-#' @return
-#' @examples
 #' @export
 ez.describe = function(x){
     if (!is.data.frame(x)) {(x = data.frame(x))}
@@ -53,7 +51,6 @@ ez.compare = function(lh,rh,...) {
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
-#' @examples
 #' @export
 ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
     # if temped and not debug, just jump out of the function to save time
@@ -307,8 +304,6 @@ view=function(x) {
 #' standard error of mean
 #' @description na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
 #' @param x a vector
-#' @return
-#' @examples
 #' @note \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations. 
 #' se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
 #' \cr\cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{ez.scale}}(x, center = TRUE, scale = TRUE) demean: ez.scale(x,center=TRUE,scale=FALSE). (ez.scale() auto omits NAs)
