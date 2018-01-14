@@ -73,7 +73,6 @@ ez.selfupdate = function() {
 #' @description print the version of a package
 #' @param pkg package name in quotes, default is NULL
 #' @return if pkg not provided, prints R version, installed packages/versions and etc
-#' @examples
 #' @export
 ez.ver = function(pkg=NULL){
     if (!is.null(pkg)) {
@@ -255,16 +254,16 @@ ez.joinpath = file.path
 #' splitpath
 #' @description splitpath
 #' @examples
-#' ez.splitpath(path)
-#' returns
-#' $dir
-#' [1] "/Users/jerry/Downloads"
+#' # ez.splitpath(path)
+#' # returns
+#' # $dir
+#' # [1] "/Users/jerry/Downloads"
+#' 
+#' # $file
+#' # [1] "026999397379845a"
 #'
-#' $file
-#' [1] "026999397379845a"
-#'
-#' $ext
-#' '.pdf
+#' # $ext
+#' # '.pdf
 #' @export
 ez.splitpath = function(path){
     dir = dirname(path)
@@ -382,9 +381,6 @@ ez.mkdir = function(path){
 
 #' alias of \code{\link{file.exists}}
 #' @description alias of \code{\link{file.exists}}
-#' @param
-#' @return
-#' @examples
 #' @export
 ez.exists = file.exists
 

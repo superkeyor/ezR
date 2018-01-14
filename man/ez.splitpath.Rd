@@ -9,3 +9,15 @@ ez.splitpath(path)
 \description{
 splitpath
 }
+\examples{
+# ez.splitpath(path)
+# returns
+# $dir
+# [1] "/Users/jerry/Downloads"
+
+# $file
+# [1] "026999397379845a"
+
+# $ext
+# '.pdf
+}
