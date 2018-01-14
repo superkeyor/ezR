@@ -142,7 +142,6 @@ ggcook <- function() {
 #' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
 #' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa_nosize}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
-#' @examples
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
 
@@ -192,7 +191,6 @@ theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
 #' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
 #' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
-#' @examples
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 theme_apa_nosize <- function(plot.box = FALSE){
 
@@ -1144,7 +1142,6 @@ ez.rescale01 = function (x) {
 
 #' define a new coordinate system
 #' @description define a new coordinate system
-#' @return
 #' @export
 coord_radar <- function (theta = "x", start = 0, direction = 1)
 {
@@ -1171,7 +1168,6 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @param color color for different id levels, if NULL, remain the same for different id levels
 #' @param linetype linetype for different id levels, if NULL, remain the same for different id levels
 #' @return a ggplot object (+theme_apa() to get apa format plot)
-#' @examples
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
@@ -1498,7 +1494,6 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param rug marginal rug indicating univariate distribution
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
-#' @examples 
 #' @export
 ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
     df__copy=df
