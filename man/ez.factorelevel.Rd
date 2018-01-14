@@ -20,4 +20,3 @@ relevel a factor in order to reflect its new levels
 does not change factor label (set factor order as is)
 has not effect on (ie, make no change to) a non-factor object
 }
-

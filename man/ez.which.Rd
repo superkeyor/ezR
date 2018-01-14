@@ -9,4 +9,3 @@ ez.which(what, mode = "any", numeric = FALSE, simple.words = TRUE)
 \description{
 alias of \code{\link{find}}
 }
-

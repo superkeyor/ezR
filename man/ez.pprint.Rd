@@ -12,4 +12,3 @@ ez.pprint(string, color = "green")
 \description{
 colorful print
 }
-

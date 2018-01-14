@@ -9,4 +9,3 @@ ez.cd(dir)
 \description{
 alias of \code{\link{setwd}}
 }
-

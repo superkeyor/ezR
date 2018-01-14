@@ -9,4 +9,3 @@ ggcolor(n = NULL)
 \description{
 show some help info on color, run ggcolor() for usage
 }
-

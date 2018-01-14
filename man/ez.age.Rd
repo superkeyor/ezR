@@ -46,11 +46,10 @@ age
 age <- age(a, as.Date('2005-09-01'))
 age
 }
-\author{
-Jason P. Becker from package eeptools (sligthly modified by Jerry)
-}
 \seealso{
 See also \code{\link{difftime}} which this function uses and mimics 
 some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
 }
-
+\author{
+Jason P. Becker from package eeptools (sligthly modified by Jerry)
+}

@@ -41,4 +41,3 @@ As a reminder, the returned ggplot object can be modified post-hoc
 \references{
 \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
 }
-

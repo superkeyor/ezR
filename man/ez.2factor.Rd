@@ -42,7 +42,7 @@ ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 }
 \seealso{
-Other data.transformation.functions: \code{\link{ez.2char}},
+Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
   \code{\link{ez.2lower}}, \code{\link{ez.2value}},
   \code{\link{ez.2wide}}, \code{\link{ez.compute}},
@@ -58,4 +58,3 @@ Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
-

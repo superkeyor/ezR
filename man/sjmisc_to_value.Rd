@@ -9,4 +9,3 @@ sjmisc_to_value(x, start.at = NULL, keep.labels = TRUE)
 \description{
 sjmisc 1.8 hack
 }
-

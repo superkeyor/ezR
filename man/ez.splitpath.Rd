@@ -21,4 +21,3 @@ splitpath
 # $ext
 # '.pdf
 }
-

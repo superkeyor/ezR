@@ -26,4 +26,3 @@ convert to date with friendly ori (no need to remember exact origin date)
 \seealso{
 \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
 }
-

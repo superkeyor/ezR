@@ -22,4 +22,3 @@ wrapper of \code{\link{eval}}
 \examples{
 ez.eval('z=9',environment())
 }
-

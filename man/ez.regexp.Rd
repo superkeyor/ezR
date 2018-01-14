@@ -26,4 +26,3 @@ returns a list ($start, $end, $match, $split)
 \description{
 find with regular expression (case sensitive)
 }
-

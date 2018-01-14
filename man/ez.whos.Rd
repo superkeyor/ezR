@@ -15,4 +15,3 @@ alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 \seealso{
 \code{\link{objects}}
 }
-

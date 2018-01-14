@@ -11,4 +11,3 @@ ez.execute(command, intern = FALSE, ignore.stdout = FALSE,
 \description{
 alias of \code{\link{system}}
 }
-

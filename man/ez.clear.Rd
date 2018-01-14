@@ -17,4 +17,3 @@ c('var1','var2') particular vars}
 \description{
 clear, clean  console, workspace, plot or variable(s)
 }
-

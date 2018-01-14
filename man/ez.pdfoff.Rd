@@ -19,4 +19,3 @@ Letter: 8.5 x 11
 \seealso{
 \code{\link{ez.export}} \code{\link{ez.pdfon}}
 }
-

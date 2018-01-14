@@ -9,4 +9,3 @@ ez.zresid(model, center = TRUE, scale = TRUE)
 \description{
 z residual, as.vector(scale(resid(model),center=T,scale=T))
 }
-

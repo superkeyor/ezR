@@ -9,4 +9,3 @@ ez.remove(pkgs, lib)
 \description{
 alias of \code{\link{remove.packages}}
 }
-

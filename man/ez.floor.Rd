@@ -9,4 +9,3 @@ ez.floor()
 \description{
 alias of \code{\link{floor}}
 }
-

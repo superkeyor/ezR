@@ -15,4 +15,3 @@ similar to python range (python: left inclusive, right exclusive), wrapper of \c
 \examples{
 ez.range(1,3) # 1 2 3, equivalent to 1:3
 }
-

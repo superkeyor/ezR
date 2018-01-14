@@ -9,4 +9,3 @@ ez.type(path)
 \description{
 show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 }
-

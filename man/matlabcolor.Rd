@@ -18,4 +18,3 @@ change plot continous color to matlab like
 \examples{
 p + matlabcolor(), p + matlabcolor2()
 }
-

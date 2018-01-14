@@ -34,4 +34,3 @@ print/show all values, store all unique values
 \seealso{
 \code{\link[dplyr]{coalesce}}
 }
-

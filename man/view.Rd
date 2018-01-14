@@ -9,4 +9,3 @@ view(x)
 \description{
 print sorted uniques of a df col or a vector (NA last) and other information
 }
-

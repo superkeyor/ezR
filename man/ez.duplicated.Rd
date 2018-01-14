@@ -50,4 +50,3 @@ find the duplicated rows/cols in a data frame or duplicated elements in a vector
 c(2,2,3) \%>\% data.frame(col=.) \%>\% ez.duplicated(incomparables = 4)  # error
 c(2,2,3) \%>\% ez.duplicated(incomparables = 4)  # OK  note that 4 is not even an element of the vector
 }
-

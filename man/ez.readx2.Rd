@@ -27,4 +27,3 @@ read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
 colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 }
-
