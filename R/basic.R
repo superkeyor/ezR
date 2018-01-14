@@ -1,20 +1,6 @@
 ###**************************************************.
 ###*functions for simple data type.
 ###**************************************************.
-#' alias of TRUE
-#' @description alias of TRUE
-true <- TRUE
-#' alias of TRUE
-#' @description alias of TRUE
-True <- TRUE
-
-#' alias of FALSE
-#' @description alias of FALSE
-false <- FALSE
-#' alias of FALSE
-#' @description alias of FALSE
-False <- FALSE
-
 #' not
 #' @description not
 #' @export
@@ -284,33 +270,21 @@ ez.strrev <- function(x) {
 
 #' alias of \code{\link{ceiling}}
 #' @description alias of \code{\link{ceiling}}
-#' @param
-#' @return
-#' @examples
 #' @export
 ez.ceil = ceiling
 
 #' alias of \code{\link{floor}}
 #' @description alias of \code{\link{floor}}
-#' @param
-#' @return
-#' @examples
 #' @export
 ez.floor = floor
 
 #' alias of \code{\link{trunc}}
 #' @description alias of \code{\link{trunc}}
-#' @param
-#' @return
-#' @examples
 #' @export
 ez.fix = trunc
 
 #' alias of \code{\link{round}}
 #' @description alias of \code{\link{round}}
-#' @param
-#' @return
-#' @examples
 #' @export
 ez.round = round
 
@@ -487,9 +461,6 @@ ez.trim = function (s, how=4){
 #' replace string or string vectors literally
 #' @description support single string, vectors
 #' \cr case sensitive! wrapper of sub, gsub
-#' @param
-#' @return
-#' @examples
 #' @seealso \code{\link{ez.regexprep}} \code{\link{ez.regexprepi}} \code{\link{ez.replace}} 
 #' @export
 ez.strreplace = function (s, expr, repstr, once = FALSE){
@@ -503,9 +474,6 @@ ez.strreplace = function (s, expr, repstr, once = FALSE){
 
 #' replace string or string vectors using regular expression (case sensitive)
 #' @description replace string or string vectors using regular expression (case sensitive)
-#' @param
-#' @return
-#' @examples
 #' @seealso \code{\link{ez.strreplace}}
 #' @export
 ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
@@ -523,9 +491,6 @@ ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
 
 #' replace string or string vectors using regular expression (case insensitive)
 #' @description replace string or string vectors using regular expression (case insensitive)
-#' @param
-#' @return
-#' @examples
 #' @seealso \code{\link{ez.strreplace}}
 #' @export
 ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
@@ -543,7 +508,6 @@ ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
 
 #' reshape matrix
 #' @description reshape matrix
-#' @param
 #' @return reshape(a, n, m) returns the n-by-m matrix whose elements are taken column-wise from a.
 #' \cr An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.
 #' @examples
@@ -560,9 +524,6 @@ ez.reshape = function (a, n, m){
 #' apply array function, wrapper of mapply
 #' @description apply array function, wrapper of mapply
 #' @seealso consider using \code{\link[dplyr]{mutate}}, eg beta = mutate(beta, Gr=substr(ez.trim(Gr),1,1))
-#' @param
-#' @return
-#' @examples
 #' @export
 ez.arrayfun = function(func, ...){
     dots <- list(...)
@@ -587,8 +548,6 @@ ez.find = function(v){
 
 #' random number, alias of \code{\link{runif}}
 #' @description random number, alias of \code{\link{runif}}
-#' @param
-#' @return
 #' @examples
 #' runif(n, min = 0, max = 1)
 #' @export
