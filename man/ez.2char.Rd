@@ -24,14 +24,19 @@ factor 2 char
 Both value and variable label attributes will be removed when converting variables to characters.
 }
 \seealso{
+\code{\link{ez.str}}
+
 Other data transformation functions: \code{\link{ez.2factor}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
-  \code{\link{ez.2value}}, \code{\link{ez.2wide}},
-  \code{\link{ez.compute}}, \code{\link{ez.label.get}},
+  \code{\link{ez.2lower}}, \code{\link{ez.2value}},
+  \code{\link{ez.2wide}}, \code{\link{ez.compute}},
+  \code{\link{ez.del}}, \code{\link{ez.label.get}},
   \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
-  \code{\link{ez.move}}, \code{\link{ez.num}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.replace}},
+  \code{\link{ez.move}}, \code{\link{ez.newcol}},
+  \code{\link{ez.num}}, \code{\link{ez.recode}},
+  \code{\link{ez.recols}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
   \code{\link{ez.select}}, \code{\link{ez.sort}},
   \code{\link{ez.split}}, \code{\link{ez.str}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},

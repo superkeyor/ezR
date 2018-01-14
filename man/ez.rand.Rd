@@ -6,9 +6,9 @@
 \usage{
 ez.rand(n, min = 0, max = 1)
 }
-\arguments{
-\item{runif(n, }{min = 0, max = 1)}
-}
 \description{
 random number, alias of \code{\link{runif}}
+}
+\examples{
+runif(n, min = 0, max = 1)
 }

@@ -6,10 +6,10 @@
 \usage{
 ez.lsd(path = ".", pattern = NULL, hidden = FALSE)
 }
-\arguments{
-\item{default:}{hidden=FALSE, not include .folders
-all.files--hidden files, include.dirs--subdirs, no..--. and .. folders}
-}
 \description{
 lsd
+}
+\examples{
+default: hidden=FALSE, not include .folders
+all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
 }

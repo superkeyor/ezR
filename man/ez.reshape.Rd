@@ -6,8 +6,9 @@
 \usage{
 ez.reshape(a, n, m)
 }
-\arguments{
-\item{\cr}{An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.}
+\value{
+reshape(a, n, m) returns the n-by-m matrix whose elements are taken column-wise from a.
+\cr An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.
 }
 \description{
 reshape matrix

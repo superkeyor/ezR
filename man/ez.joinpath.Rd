@@ -6,9 +6,9 @@
 \usage{
 ez.joinpath(..., fsep = .Platform$file.sep)
 }
-\arguments{
-\item{paste(..., }{sep=.Platform$file.sep)}
-}
 \description{
 alias of \code{\link{file.path}}
+}
+\examples{
+paste(..., sep=.Platform$file.sep)
 }

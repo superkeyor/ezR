@@ -17,12 +17,8 @@ page.}
 Opens a help web page.
 }
 \description{
-Open Help Pages for ggplot2
-
 \code{gghelp} - Open Hadely Wickham's ggplot2
 \href{http://docs.ggplot2.org/current/}{web page}.
-
-Open Help Pages for ggplot2
 
 \code{ggcook} - Open Winston Chang's ggplot2
 \href{http://www.cookbook-r.com/Graphs/}{Cookbook for R page}.

@@ -12,6 +12,9 @@ ez.pdfon(file = if (onefile) "Rplots.pdf" else "Rplot\%03d.pdf", width,
 \description{
 wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)
 }
+\note{
+additionally one can use \code{\link[extrafont]{embed_fonts}} to embed fonts after dev.off()
+}
 \examples{
 A4:     width 7(inches) height = 5
 Letter: 8.5 x 11

@@ -6,12 +6,12 @@
 \usage{
 ez.subplot(n, m, ...)
 }
-\arguments{
-\item{subplot(n, m, ...)}{divides the current figure into an n-by-m grid
-A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
-by columns (mfcol), or rows (mfrow), respectively.
-see more ?par}
-}
 \description{
 subplot, wrapper of \code{\link{par}}
+}
+\examples{
+subplot(n,m,...) divides the current figure into an n-by-m grid
+A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
+by columns (mfcol), or rows (mfrow), respectively.
+see more ?par
 }

@@ -26,7 +26,8 @@ returns a new df, label attributes seem to be intact.
 \description{
 can handle one (similar to gather(), which does not require index input) or two repetitions
 }
-\details{
+\note{
+refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
 \cr if index=c("Pre","Post"), then the character would not be viewed by ez.view; index=1:2 will be int and fine.
 }
 \examples{
@@ -56,12 +57,15 @@ ez.2long(df, "id",
 
 Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
-  \code{\link{ez.2value}}, \code{\link{ez.2wide}},
-  \code{\link{ez.compute}}, \code{\link{ez.label.get}},
+  \code{\link{ez.2lower}}, \code{\link{ez.2value}},
+  \code{\link{ez.2wide}}, \code{\link{ez.compute}},
+  \code{\link{ez.del}}, \code{\link{ez.label.get}},
   \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
-  \code{\link{ez.move}}, \code{\link{ez.num}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.replace}},
+  \code{\link{ez.move}}, \code{\link{ez.newcol}},
+  \code{\link{ez.num}}, \code{\link{ez.recode}},
+  \code{\link{ez.recols}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
   \code{\link{ez.select}}, \code{\link{ez.sort}},
   \code{\link{ez.split}}, \code{\link{ez.str}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},

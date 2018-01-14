@@ -6,11 +6,14 @@
 \usage{
 ez.label.get(...)
 }
+\arguments{
+\item{...}{var1, var2,  one or many}
+}
 \value{
 returns character
 }
-\description{
-get variable label, wrapper of \code{\link{sjmisc_get_label}}
+\examples{
+
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -23,12 +26,15 @@ get variable label, wrapper of \code{\link{sjmisc_get_label}}
 
 Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
-  \code{\link{ez.2long}}, \code{\link{ez.2value}},
-  \code{\link{ez.2wide}}, \code{\link{ez.compute}},
+  \code{\link{ez.2long}}, \code{\link{ez.2lower}},
+  \code{\link{ez.2value}}, \code{\link{ez.2wide}},
+  \code{\link{ez.compute}}, \code{\link{ez.del}},
   \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
-  \code{\link{ez.move}}, \code{\link{ez.num}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.replace}},
+  \code{\link{ez.move}}, \code{\link{ez.newcol}},
+  \code{\link{ez.num}}, \code{\link{ez.recode}},
+  \code{\link{ez.recols}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
   \code{\link{ez.select}}, \code{\link{ez.sort}},
   \code{\link{ez.split}}, \code{\link{ez.str}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},

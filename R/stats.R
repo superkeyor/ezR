@@ -3,6 +3,11 @@
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
 #' @description
+#' @param x a data frame or a vector or sth else that can be converted into a data frame
+#' @return
+#' @examples
+#' @export
+ez.describe = function(x){
     if (!is.data.frame(x)) {(x = data.frame(x))}
     # flush otherwise not print large text
     # show(x)
@@ -16,7 +21,6 @@
 }
 
 #' compare two vectors, two dataframes
-#' @description compare two vectors, two dataframes
 #' @note nrow() for data frame, length() for vector. union/intersect remove duplication
 #' @export
 ez.compare = function(lh,rh,...) {
@@ -49,6 +53,8 @@ ez.compare = function(lh,rh,...) {
 #' @param characterize T/F count the element freq of character cols or not 
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @examples
+#' @export
+ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
     # if temped and not debug, just jump out of the function to save time
     if (is.null(file)) {
         debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
@@ -301,6 +307,8 @@ view=function(x) {
 #' @description na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
 #' @param x a vector
 #' @return
+#' @examples
+#' @note \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations. 
 #' se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
 #' \cr\cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{ez.scale}}(x, center = TRUE, scale = TRUE) demean: ez.scale(x,center=TRUE,scale=FALSE). (ez.scale() auto omits NAs)
 #' \cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way. 
@@ -354,6 +362,8 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @examples
+#' @export
+ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
@@ -420,6 +430,8 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @examples
+#' @export
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
     results4plot = results
@@ -487,6 +499,8 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' @examples
+#' @export
+ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
     results4plot = results

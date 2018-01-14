@@ -7,6 +7,8 @@
 ez.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
 }
 \arguments{
+\item{id}{unique identification variable, or variable combination}
+
 \item{indexname}{variable name for timing/repetition/index variable, such as "session"}
 
 \item{measure}{column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")}
@@ -16,8 +18,8 @@ ez.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
 \value{
 returns a new df. Because of the structural change, lable attributes would be lost and can NOT be copied with \code{\link{sjmisc_copy_labels}}--not a subset.
 }
-\description{
-reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}
+\note{
+refer to my spss syntax 'SUBJID * Time [School] - Measure2'
 }
 \examples{
 set.seed(10)
@@ -45,12 +47,15 @@ ez.2wide(df,
 
 Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
-  \code{\link{ez.2long}}, \code{\link{ez.2value}},
-  \code{\link{ez.compute}}, \code{\link{ez.label.get}},
+  \code{\link{ez.2long}}, \code{\link{ez.2lower}},
+  \code{\link{ez.2value}}, \code{\link{ez.compute}},
+  \code{\link{ez.del}}, \code{\link{ez.label.get}},
   \code{\link{ez.label.set}}, \code{\link{ez.leftjoin}},
-  \code{\link{ez.move}}, \code{\link{ez.num}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.replace}},
+  \code{\link{ez.move}}, \code{\link{ez.newcol}},
+  \code{\link{ez.num}}, \code{\link{ez.recode}},
+  \code{\link{ez.recols}}, \code{\link{ez.recol}},
+  \code{\link{ez.rename}}, \code{\link{ez.replace}},
+  \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
   \code{\link{ez.select}}, \code{\link{ez.sort}},
   \code{\link{ez.split}}, \code{\link{ez.str}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},

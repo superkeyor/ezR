@@ -10,8 +10,6 @@ theme_apa_nosize(plot.box = FALSE)
 \item{plot.box}{logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.}
 }
 \description{
-ggplot2 Theme for APA Publications
-
 A ggplot2 theme with no background and Times New Roman font (do not change font size).
 }
 \note{
@@ -19,4 +17,7 @@ In order for R (at least on Mac) to recognize Times New Roman font, \href{https:
 }
 \seealso{
 \code{\link[ggplot2]{theme}} \code{\link{theme_apa}}
+}
+\author{
+Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 }

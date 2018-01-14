@@ -6,6 +6,9 @@
 \usage{
 ez.range(start, stop, step = 1)
 }
+\value{
+returns a vector (both ends inclusive)
+}
 \description{
 similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
 }

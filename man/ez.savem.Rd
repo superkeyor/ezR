@@ -17,17 +17,16 @@ variables to be saved in the matfile. The variables have to exist in the
 environment where the function was called from. eg. 'var1,var2,   var3' with or without (extra) space}
 }
 \description{
-Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
-\cr seems column in a data frame should be atomic if factor does not work well.
-\cr Writes .mat files to store R session data using the R.matlab package and
-\cr takes care that logicals and atomic vectors are saved properly: currently,
-\cr R.matlab does not write logicals and atomic vectors (not 1D arrays/ matrices)
-\cr in a way that they can be opened properly in Matlab (logicals will not be
-\cr stored and atomic vectors will be transposed in the Matlab session - but they
-\cr appear untransposed when read back from the .mat file into R using
-\cr R.matlab::readMat()). This function is a convenient wrapper for
-\cr R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
-\cr vectors when saving the matfile.
+seems column in a data frame should be atomic if factor does not work well.
+Writes .mat files to store R session data using the R.matlab package and
+takes care that logicals and atomic vectors are saved properly: currently,
+R.matlab does not write logicals and atomic vectors (not 1D arrays/ matrices)
+in a way that they can be opened properly in Matlab (logicals will not be
+stored and atomic vectors will be transposed in the Matlab session - but they
+appear untransposed when read back from the .mat file into R using
+R.matlab::readMat()). This function is a convenient wrapper for
+R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
+vectors when saving the matfile.
 }
 \examples{
 A       <- matrix(c(2,3,4,2, 1,1,2,6, 8,3,9,7), 3, 4, byrow = TRUE)
