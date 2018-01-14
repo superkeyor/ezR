@@ -6,9 +6,9 @@
 \usage{
 ez.csd()
 }
+\arguments{
+\item{works}{with Rscript, source() or in RStudio Run selection}
+}
 \description{
 current script dir (in full path)
-}
-\examples{
-works with Rscript, source() or in RStudio Run selection
 }

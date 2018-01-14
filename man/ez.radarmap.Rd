@@ -35,9 +35,6 @@ a ggplot object (+theme_apa() to get apa format plot)
 variables/axes arranged in the shape of a radar map, scales are rescaled to 0-1
 \cr best works with multivariates
 }
-\note{
-As a reminder, the returned ggplot object can be modified post-hoc
-}
 \references{
 \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
 }

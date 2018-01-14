@@ -7,11 +7,17 @@
 #' open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
 #' @description open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.open = browseURL
 
 #' alias of \code{\link{stop}}
 #' @description alias of \code{\link{stop}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.error = stop
 
 #' print out or set the repo
@@ -74,6 +80,7 @@ ez.selfupdate = function() {
 #' @param pkg package name in quotes, default is NULL
 #' @return if pkg not provided, prints R version, installed packages/versions and etc
 #' @examples
+#' @export
 ez.ver = function(pkg=NULL){
     if (!is.null(pkg)) {
         cat(sprintf("%s\n%s: %s", R.version.string, pkg, as.character(packageVersion(pkg))))
@@ -96,16 +103,25 @@ ez.ver = function(pkg=NULL){
 #' alias of \code{\link{library}}
 #' @description alias of \code{\link{library}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.import = library
 
 #' alias of \code{\link{library}}
 #' @description alias of \code{\link{library}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.include = ez.import
 
 #' alias of \code{\link{install.packages}}
 #' @description alias of \code{\link{install.packages}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.install = install.packages
 
 #' install many packages at the same time
@@ -128,6 +144,8 @@ ez.installs = function(pkgs,load=FALSE,repos=NULL) {
 #' @param pkg pkg name in string
 #' @param autoload auto load or not (default=TRUE)
 #' @return
+#' @examples
+#' @export
 ez.require = function(pkg, autoload=TRUE){
     tt = sprintf("require('%s')",pkg)
     if (!eval(parse(text = tt))) {
@@ -144,6 +162,8 @@ ez.require = function(pkg, autoload=TRUE){
 #' @description unload a package, wrapper of detach(pkg, unload=TRUE, character.only = TRUE)
 #' @param pkg pkg name in string
 #' @return
+#' @examples
+#' @export
 ez.unload = function(pkg){
     character.only = TRUE
     if(!character.only){
@@ -159,16 +179,25 @@ ez.unload = function(pkg){
 #' alias of \code{\link[devtools]{install_github}}
 #' @description alias of \code{\link[devtools]{install_github}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.github = devtools::install_github
 
 #' alias of \code{\link{remove.packages}}
 #' @description alias of \code{\link{remove.packages}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.remove = remove.packages
 
 #' alias of \code{\link{remove.packages}}
 #' @description alias of \code{\link{remove.packages}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.uninstall = remove.packages
 
 #' clear, clean  console, workspace, plot or variable(s)
@@ -180,6 +209,8 @@ ez.uninstall = remove.packages
 #'             'var' particular var \cr
 #'             c('var1','var2') particular vars
 #' @return
+#' @examples
+#' @export
 ez.clear = function(area=0) {
     # area[1] used, to work around when c('var1','var2') provided
     if (area[1] == 0) {console = TRUE; workspace = TRUE; plot = TRUE}
@@ -213,40 +244,58 @@ ez.clear = function(area=0) {
 #'             'var' particular var \cr
 #'             c('var1','var2') particular vars
 #' @return
+#' @examples
+#' @export
 ez.clean = ez.clear
 
 #' alias of \code{\link{find}}
 #' @description alias of \code{\link{find}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.which = find
 
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @param
+#' @return Print version information about R, the OS and attached or loaded packages.
 #' @examples
+#' @export
 #' @seealso \code{\link{objects}}
 ez.whos = sessionInfo
 
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 #' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 #' @param
+#' @return Print version information about R, the OS and attached or loaded packages.
 #' @examples
+#' @export
 #' @seealso \code{\link{objects}}
 ez.who = ez.whos
 
 #' user path like in Matlab
-#' @description user path like in Matlab, alias of \code{\link{search}}
+#' @description user path like in Matlab
+#' @description alias of \code{\link{search}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.path = search
 
 #' alias of \code{\link{system}}
 #' @description alias of \code{\link{system}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.execute = system
 
 #' alias of \code{\link{file.path}}
 #' @description alias of \code{\link{file.path}}
 #' @param
+#' @return
+#' @examples
 #' paste(..., sep=.Platform$file.sep)
 #' @export
 ez.joinpath = file.path
@@ -254,6 +303,9 @@ ez.joinpath = file.path
 #' splitpath
 #' @description splitpath
 #' @param
+#' @return
+#' @examples
+#' ez.splitpath(path)
 #' returns
 #' $dir
 #' [1] "/Users/jerry/Downloads"
@@ -277,26 +329,40 @@ ez.splitpath = function(path){
 #' parentdir
 #' @description parentdir
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.parentdir = function(path){dirname(path)}
 
 #' alias of \code{\link{setwd}}
 #' @description alias of \code{\link{setwd}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.cd = setwd;
 
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.cwd = getwd
 
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.pwd = getwd
 
 #' current script file (in full path)
 #' @description current script file (in full path)
 #' @param
+#' @return
+#' @examples
 #' works with Rscript, source() or in RStudio Run selection
 #' @export
 ez.csf <- function() {
@@ -328,6 +394,8 @@ ez.csf <- function() {
 #' current script dir (in full path)
 #' @description current script dir (in full path)
 #' @param
+#' @return
+#' @examples
 #' works with Rscript, source() or in RStudio Run selection
 #' @export
 ez.csd <- function() {
@@ -337,6 +405,8 @@ ez.csd <- function() {
 #' lsd
 #' @description lsd
 #' @param
+#' @return
+#' @examples
 #' default: hidden=FALSE, not include .folders
 #' all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
 #' @export
@@ -352,6 +422,9 @@ ez.lsd = function(path='.', pattern=NULL, hidden=FALSE){
 #' ls
 #' @description ls
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.ls = function(path='.', pattern=NULL, hidden=FALSE){
     files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = FALSE,
@@ -363,6 +436,9 @@ ez.ls = function(path='.', pattern=NULL, hidden=FALSE){
 #' fls
 #' @description fls
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
     files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = TRUE,
@@ -374,6 +450,9 @@ ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
 #' mkdir, no warning for exisiting folder
 #' @description mkdir, no warning for exisiting folder
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.mkdir = function(path){
     result = dir.create(path, showWarnings = FALSE, recursive = TRUE)
 }
@@ -381,11 +460,16 @@ ez.mkdir = function(path){
 #' alias of \code{\link{file.exists}}
 #' @description alias of \code{\link{file.exists}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.exists = file.exists
 
 #' remove a file, wrapper of \code{\link{unlink}}
 #' @description remove a file, wrapper of \code{\link{unlink}}
 #' @param
+#' @return
+#' @examples
 #' support c('a.txt','b.txt')
 #' x, a character vector with the names of the file(s) or directories to be deleted.
 #' Wildcards (normally ‘*’ and ‘?’) are allowed.
@@ -398,6 +482,8 @@ ez.rm = function(x){
 #' rename
 #' @description rename
 #' @param
+#' @return
+#' @examples
 #' support c('a.txt','b.txt'), c('d.txt','e.txt')
 #' to parent folder must exist already; otherwise error
 #' in case new name exists
@@ -424,6 +510,8 @@ ez.rn = function(from,to){
 #' copy
 #' @description copy
 #' @param
+#' @return
+#' @examples
 #' support c('a.txt','b.txt')
 #' to folder does not have to exist already
 #' e.g.,
@@ -474,6 +562,8 @@ ez.cp = function(from,to){
 #' move
 #' @description move
 #' @param
+#' @return
+#' @examples
 #' support c('a.txt','b.txt')
 #' to parent folder does not have to exist already
 #' ez.mv('a.txt','folder'), ez.mv('a.txt','folder/a.txt'), ez.mv('a.txt','folder/b.txt')

@@ -22,9 +22,6 @@ each print generates a new line automatically
 \description{
 wrapper of \code{\link{cat}}
 }
-\details{
-do not use R \code{\link{print}}, not actually printing \\n
-}
 \seealso{
 \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 }

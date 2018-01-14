@@ -19,6 +19,3 @@ returns a new df, factor (non-factor->factor)
 \description{
 change factor level names in a df
 }
-\references{
-\href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
-}

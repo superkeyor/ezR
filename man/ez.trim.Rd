@@ -11,12 +11,11 @@ ez.trim(s, how = 4)
 
 \item{how}{a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle}
 }
+\value{
+For portability, whitespace is taken as the character class [ \t\r\n] (space, horizontal tab, line feed, carriage return).
+}
 \description{
 underlying function is \code{\link{gsub}} with regular expression
-}
-\examples{
- "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
-For portability, whitespace is taken as the character class [ \\t\\r\\n] (space, horizontal tab, line feed, carriage return).
 }
 \seealso{
 \code{\link{trimws}}

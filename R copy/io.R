@@ -2,7 +2,6 @@
 # import/export data file
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' read csv table, wrapper of \code{\link{read.csv}}
-#' @description read csv table, wrapper of \code{\link{read.csv}}
 #' @param tolower whether to convert all column names to lower case
 #' @return returns a data frame
 #' @export
@@ -27,8 +26,8 @@ ez.read = function(..., tolower=FALSE){
 }
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
-#' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @param
+#' @return returns file path
 #' @examples
 #' (x, file="RData.csv", row.names=FALSE, col.names=TRUE, append = FALSE, quote = TRUE, sep = ",",
 #'             na = "NA", dec = ".",
@@ -52,8 +51,9 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
 }
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
-#' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
 #' @param
+#' @return
+#' @examples
 #' (x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
 #'             na = "NA", dec = ".",
 #'             col.names = TRUE, qmethod = c("escape", "double"),
@@ -63,7 +63,6 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
 ez.write = ez.save
 
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
-#' @description read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
@@ -110,7 +109,6 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
 }
 
 #' read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
-#' @description read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
 #' @param toprint print out sheet indices and names, default TRUE
 #' @return a list of sheet names
 #' @examples
@@ -173,7 +171,9 @@ ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @return
+#' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R.
 #' @examples
+#' @export
 ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
 
     if (atm2fac==1) {
@@ -249,8 +249,8 @@ ez.saves = sjmisc_write_spss
 ez.writes = sjmisc_write_spss
 
 #' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
-#' @description save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param
+#' @return returns file path
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
@@ -323,7 +323,6 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, 
 ez.writex = ez.savex
 
 #' Save multiple data frames to multiple sheets individually
-#' @description Save multiple data frames to multiple sheets individually
 #' @param xlist a list of data frames. eg, list(sheetA=df1,sheetB=df2) where sheetA/B become sheet names; list(df1,df2) where it auto names Sheet1/2
 #' \cr Other parameters in \code{\link[openxlsx]{writeData}}
 #' @return returns file path
@@ -352,17 +351,17 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
 }
 
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
-#' @description Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
-#' \cr seems column in a data frame should be atomic if factor does not work well.
-#' \cr Writes .mat files to store R session data using the R.matlab package and
-#' \cr takes care that logicals and atomic vectors are saved properly: currently,
-#' \cr R.matlab does not write logicals and atomic vectors (not 1D arrays/ matrices)
-#' \cr in a way that they can be opened properly in Matlab (logicals will not be
-#' \cr stored and atomic vectors will be transposed in the Matlab session - but they
-#' \cr appear untransposed when read back from the .mat file into R using
-#' \cr R.matlab::readMat()). This function is a convenient wrapper for
-#' \cr R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
-#' \cr vectors when saving the matfile.
+#'
+#' seems column in a data frame should be atomic if factor does not work well.
+#' Writes .mat files to store R session data using the R.matlab package and
+#' takes care that logicals and atomic vectors are saved properly: currently,
+#' R.matlab does not write logicals and atomic vectors (not 1D arrays/ matrices)
+#' in a way that they can be opened properly in Matlab (logicals will not be
+#' stored and atomic vectors will be transposed in the Matlab session - but they
+#' appear untransposed when read back from the .mat file into R using
+#' R.matlab::readMat()). This function is a convenient wrapper for
+#' R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
+#' vectors when saving the matfile.
 #'
 #' @param fn file name, a character string, with or without '.mat'
 #'
@@ -475,12 +474,18 @@ ez.writem = ez.savem
 
 #' show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.type = function(path){
     result = file.show(path,title='File (read-only)')
 }
 
 #' edit a file, wrapper of wrapper of \code{\link{file.edit}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.edit = function(path){
     result = file.edit(path)
 }
@@ -509,7 +514,6 @@ ez.log = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
 }
 
 #' Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{ez.log}}
-#' @description Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{ez.log}}
 #' @param mode a=append; w=overwrite
 #' @param timestamp T=insert timestamp at the beginning and end, F=otherwise
 #' @param status T=open the redirection/file, F=close the redirection

@@ -7,13 +7,13 @@
 ez.write(x, file = "RData.csv", row.names = FALSE, col.names = TRUE,
   na = "", ...)
 }
-\description{
-wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
-}
-\examples{
-(x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
+\arguments{
+\item{(x, }{file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
             na = "NA", dec = ".",
             col.names = TRUE, qmethod = c("escape", "double"),
             fileEncoding = "")
-dec: decimal point
+dec: decimal point}
+}
+\description{
+wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
 }

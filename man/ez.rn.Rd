@@ -6,13 +6,13 @@
 \usage{
 ez.rn(from, to)
 }
-\description{
-rename
-}
-\examples{
-support c('a.txt','b.txt'), c('d.txt','e.txt')
+\arguments{
+\item{support}{c('a.txt','b.txt'), c('d.txt','e.txt')
 to parent folder must exist already; otherwise error
 in case new name exists
       if old and new both folders, move old to new as subfolder
-      if old and new both files, overwrite the new file with old file without prompt
+      if old and new both files, overwrite the new file with old file without prompt}
+}
+\description{
+rename
 }

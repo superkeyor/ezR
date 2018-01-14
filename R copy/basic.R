@@ -2,41 +2,29 @@
 ###*functions for simple data type.
 ###**************************************************.
 #' alias of TRUE
-#' @description alias of TRUE
 true <- TRUE
 #' alias of TRUE
-#' @description alias of TRUE
 True <- TRUE
 
 #' alias of FALSE
-#' @description alias of FALSE
 false <- FALSE
 #' alias of FALSE
-#' @description alias of FALSE
 False <- FALSE
 
-#' not
-#' @description not
 #' @export
 not = magrittr::not
 
-#' and
-#' @description and
 #' @export
 and = magrittr::and
 
-#' or
-#' @description or
 #' @export
 or = magrittr::or
 
 #' alias of \code{\link{class}}
-#' @description alias of \code{\link{class}}
 #' @export
 ez.typeof = class
 
 #' alias of \code{\link{Sys.sleep}}, in seconds
-#' @description alias of \code{\link{Sys.sleep}}, in seconds
 #' @seealso \code{\link{ez.pause}}
 #' @export
 ez.sleep = Sys.sleep
@@ -76,7 +64,6 @@ ez.moment = function(format='%Y-%m-%d_%H-%M-%S') {
 }
 
 #' pause the execution of an R script until a user presses the Enter key, no parameter () needed
-#' @description pause the execution of an R script until a user presses the Enter key, no parameter () needed
 #' @seealso \code{\link{ez.sleep}}
 #' @export
 ez.pause = function(){
@@ -93,7 +80,6 @@ ez.pause = function(){
 }
 
 #' convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
-#' @description convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @param x a character vector, data frame, list, or a factor
 #' @param col internally evaluated by eval('dplyr::select()')()
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
@@ -238,7 +224,6 @@ ez.is.date.convertible = function(x,format="%m/%d/%Y",...) {
 }
 
 #' convert a column (or all columns) in a data frame, or a vector into character type, call as.character
-#' @description convert a column (or all columns) in a data frame, or a vector into character type, call as.character
 #' @param x a data frame or a vector/col
 #' @param col internally evaluated by eval('dplyr::select()')()
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
@@ -275,7 +260,6 @@ ez.str = function(x, col=NULL){
 }
 
 #' rev a str: 'abc'->'cba'
-#' @description rev a str: 'abc'->'cba'
 #' @export
 ez.strrev <- function(x) {
   nc <- nchar(x)
@@ -283,27 +267,34 @@ ez.strrev <- function(x) {
 }
 
 #' alias of \code{\link{ceiling}}
-#' @description alias of \code{\link{ceiling}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.ceil = ceiling
 
 #' alias of \code{\link{floor}}
-#' @description alias of \code{\link{floor}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.floor = floor
 
 #' alias of \code{\link{trunc}}
-#' @description alias of \code{\link{trunc}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.fix = trunc
 
 #' alias of \code{\link{round}}
-#' @description alias of \code{\link{round}}
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.round = round
 
 #' quotient
-#' @description quotient
 #' @param m dividend
 #' @param n divider
 #' @examples
@@ -315,7 +306,6 @@ ez.quotient = function (m,n) {
 }
 
 #' remainder
-#' @description remainder
 #' @param m dividend
 #' @param n divider
 #' @examples
@@ -327,24 +317,27 @@ ez.remainder = function (m,n){
 }
 
 #' similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
-#' @description similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
 #' @param
+#' @return returns a vector (both ends inclusive)
 #' @examples
 #' ez.range(1,3) # 1 2 3, equivalent to 1:3
 #' @export
 ez.range = function(start, stop, step=1){seq(start, stop, by=step)}
 
 #' linspace
-#' @description linspace
 #' @param n number of points
 #' @return
+#' @examples
+#' @export
 ez.linspace = function(start, stop, n){
     seq(start, stop, length=n)
 }
 
 #' replicate a matrix, n * n (if m not provided) or n * m
-#' @description replicate a matrix, n * n (if m not provided) or n * m
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.repmat = function(a, n, m = n) {
     if (length(a) == 0) return(c())
     if (!is.numeric(a) && !is.complex(a))
@@ -363,7 +356,6 @@ ez.repmat = function(a, n, m = n) {
 }
 
 #' find with regular expression (case sensitive)
-#' @description find with regular expression (case sensitive)
 #' @param s string
 #' @param pat regular expression pattern
 #' @param once match once or many times
@@ -375,6 +367,7 @@ ez.repmat = function(a, n, m = n) {
 #' \cr If no match is found and split=FALSE, all components will be NULL
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
 #' @examples
+#' @export
 ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
     stopifnot(is.character(pat), is.character(s))
     if (length(pat) > 1) {
@@ -421,7 +414,6 @@ ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
 }
 
 #' find with regular expression (case insensitive)
-#' @description find with regular expression (case insensitive)
 #' @param s string
 #' @param pat regular expression pattern
 #' @param once match once or many times
@@ -433,6 +425,7 @@ ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
 #' \cr If no match is found and split=FALSE, all components will be NULL
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
 #' @examples
+#' @export
 ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
     # A list with components start and end as numeric vectors indicating the start and end positions of the matches.
     # match contains each exact match, and split contains the character vector of splitted strings.
@@ -446,6 +439,7 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 #' @param s a string 
 #' @param how a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle
 #' @return
+#' @examples  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
 #' For portability, whitespace is taken as the character class [ \t\r\n] (space, horizontal tab, line feed, carriage return).
 #' @seealso \code{\link{trimws}}
 #' @export
@@ -467,6 +461,9 @@ ez.trim = function (s, how=4){
 #' @description support single string, vectors
 #' \cr case sensitive! wrapper of sub, gsub
 #' @param
+#' @return
+#' @examples
+#' @seealso \code{\link{ez.regexprep}} \code{\link{ez.regexprepi}} \code{\link{ez.replace}} 
 #' @export
 ez.strreplace = function (s, expr, repstr, once = FALSE){
     if (once) {
@@ -478,8 +475,10 @@ ez.strreplace = function (s, expr, repstr, once = FALSE){
 }
 
 #' replace string or string vectors using regular expression (case sensitive)
-#' @description replace string or string vectors using regular expression (case sensitive)
 #' @param
+#' @return
+#' @examples
+#' @seealso \code{\link{ez.strreplace}}
 #' @export
 ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
     if (!is.character(s))
@@ -495,8 +494,10 @@ ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
 }
 
 #' replace string or string vectors using regular expression (case insensitive)
-#' @description replace string or string vectors using regular expression (case insensitive)
 #' @param
+#' @return
+#' @examples
+#' @seealso \code{\link{ez.strreplace}}
 #' @export
 ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
     if (!is.character(s))
@@ -512,10 +513,11 @@ ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
 }
 
 #' reshape matrix
-#' @description reshape matrix
 #' @param
+#' @return reshape(a, n, m) returns the n-by-m matrix whose elements are taken column-wise from a.
 #' \cr An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.
 #' @examples
+#' @export
 ez.reshape = function (a, n, m){
     if (missing(m))
         m <- length(a)%/%n
@@ -526,9 +528,11 @@ ez.reshape = function (a, n, m){
 }
 
 #' apply array function, wrapper of mapply
-#' @description apply array function, wrapper of mapply
 #' @seealso consider using \code{\link[dplyr]{mutate}}, eg beta = mutate(beta, Gr=substr(ez.trim(Gr),1,1))
 #' @param
+#' @return
+#' @examples
+#' @export
 ez.arrayfun = function(func, ...){
     dots <- list(...)
     if (length(dots) < 1)
@@ -540,7 +544,6 @@ ez.arrayfun = function(func, ...){
 }
 
 #' similar to matlab find, find non-zero in a vector
-#' @description similar to matlab find, find non-zero in a vector
 #' @param v logical input
 #' @return returns index vector
 #' @examples
@@ -551,14 +554,14 @@ ez.find = function(v){
 }
 
 #' random number, alias of \code{\link{runif}}
-#' @description random number, alias of \code{\link{runif}}
 #' @param
+#' @return
+#' @examples
 #' runif(n, min = 0, max = 1)
 #' @export
 ez.rand = runif
 
 #' mimic python join, supports vectorization, wrapper of \code{\link{paste}}
-#' @description mimic python join, supports vectorization, wrapper of \code{\link{paste}}
 #' @param sep default is nothing
 #' @examples
 #' ez.join('','a',' x ','b') # "a x b"
@@ -568,7 +571,6 @@ ez.join = function(sep='',...){
 }
 
 #' wrapper of \code{\link{cat}}
-#' @description wrapper of \code{\link{cat}}
 #' @param ... could be char, num, vector, or mixed (no need to convert type) e.g., 
 #' \cr        but be careful with factors (in number)--convert with as.character(factor variable)
 #' \cr        ez.print('a=',3)
@@ -578,6 +580,7 @@ ez.join = function(sep='',...){
 #' @param sep default empty
 #' @return each print generates a new line automatically
 #' @examples
+#' @details do not use R \code{\link{print}}, not actually printing \\n
 #' @seealso \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 #' @export
 ez.print = function(...,sep=''){
@@ -585,7 +588,6 @@ ez.print = function(...,sep=''){
 }
 
 #' colorful print
-#' @description colorful print
 #' @param color string, eg, bold, italic, underline, strikethrough, black, red, green, yellow, blue, magenta, cyan, white, silver, bgWhite, bgGreen, bgCyan etc
 #' @export
 ez.pprint = function(string,color='green') {
@@ -594,7 +596,6 @@ ez.pprint = function(string,color='green') {
 }
 
 #' format a vector for easy manual copy/processing. 
-#' @description format a vector for easy manual copy/processing. 
 #' @param vec a vector
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number)
 #' @return nothing, only print out. 
@@ -616,7 +617,6 @@ ez.format.vector = function(vec, quote=TRUE,print2screen=TRUE){
 }
 
 #' wrapper of \code{\link{eval}}
-#' @description wrapper of \code{\link{eval}}
 #' @param cmd an R cmd in text, e.g., constructed with sprintf()
 #' @param env caller's envir, could be environment(), default is parent.frame()
 #'        if default parent.frame() does not work properly, try passing environment()
@@ -630,7 +630,6 @@ ez.eval = function(cmd,env = parent.frame()){
 }
 
 #' wrapper of \code{\link{eval}}
-#' @description wrapper of \code{\link{eval}}
 #' @param cmd an R cmd in text, e.g., constructed with sprintf()
 #' @param env caller's envir, could be environment(), default is parent.frame()
 #'        if default parent.frame() does not work properly, try passing environment()

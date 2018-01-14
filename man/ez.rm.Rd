@@ -6,12 +6,12 @@
 \usage{
 ez.rm(x)
 }
-\description{
-remove a file, wrapper of \code{\link{unlink}}
-}
-\examples{
-support c('a.txt','b.txt')
+\arguments{
+\item{support}{c('a.txt','b.txt')
 x, a character vector with the names of the file(s) or directories to be deleted.
 Wildcards (normally ‘*’ and ‘?’) are allowed.
-0 for success, 1 for failure.
+0 for success, 1 for failure.}
+}
+\description{
+remove a file, wrapper of \code{\link{unlink}}
 }

@@ -7,11 +7,8 @@
 ez.embed(fun, x, y = NULL, size = c(1, 1), vadj = 0.5, hadj = 0.5,
   inset = c(0, 0), type = c("plt", "fig"), pars = NULL)
 }
-\description{
-embed a new plot within an existing plot at the coordinates specified (in user units of the existing plot)
-}
-\examples{
-see from http://cran.r-project.org/web/packages/TeachingDemos/TeachingDemos.pdf
+\arguments{
+\item{see}{from http://cran.r-project.org/web/packages/TeachingDemos/TeachingDemos.pdf
 # e.g.,
 # 3 rows subplots
 par(mfrow=c(3,1) )
@@ -25,5 +22,8 @@ par(mfg=c(3,1) ); plot(11:20, 11:20, main = "Plot 3")
 ez.embed(plot(10,10, xlab="", ylab=""), x=12, y=18, size = c(0.5, 0.5))
 
 par(mfg=c(2,1)); plot(21:30, 21:30, main = "Plot 2")
-ez.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))
+ez.embed(plot(10,10, xlab="", ylab=""), x=22, y=28, size = c(0.5, 0.5))}
+}
+\description{
+embed a new plot within an existing plot at the coordinates specified (in user units of the existing plot)
 }

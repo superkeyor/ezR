@@ -6,6 +6,16 @@
 \usage{
 ez.splitpath(path)
 }
+\arguments{
+\item{returns}{$dir
+[1] "/Users/jerry/Downloads"
+
+$file
+[1] "026999397379845a"
+
+$ext
+'.pdf}
+}
 \description{
 splitpath
 }

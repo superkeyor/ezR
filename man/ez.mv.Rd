@@ -6,13 +6,13 @@
 \usage{
 ez.mv(from, to)
 }
-\description{
-move
-}
-\examples{
-support c('a.txt','b.txt')
+\arguments{
+\item{support}{c('a.txt','b.txt')
 to parent folder does not have to exist already
 ez.mv('a.txt','folder'), ez.mv('a.txt','folder/a.txt'), ez.mv('a.txt','folder/b.txt')
 ez.mv('a','b')-->get b/a, b now has a as subfolder, regardless of b exists or not
-                 use ez.rn('a','b') to change name a->b
+                 use ez.rn('a','b') to change name a->b}
+}
+\description{
+move
 }

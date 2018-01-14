@@ -6,9 +6,9 @@
 \usage{
 ez.csf()
 }
+\arguments{
+\item{works}{with Rscript, source() or in RStudio Run selection}
+}
 \description{
 current script file (in full path)
-}
-\examples{
-works with Rscript, source() or in RStudio Run selection
 }

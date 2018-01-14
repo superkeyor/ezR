@@ -9,6 +9,3 @@ ez.regexprep(s, expr, repstr, ignorecase = FALSE, once = FALSE)
 \description{
 replace string or string vectors using regular expression (case sensitive)
 }
-\seealso{
-\code{\link{ez.strreplace}}
-}

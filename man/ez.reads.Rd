@@ -27,6 +27,3 @@ internally trim (leading and trailing) string spaces (The leading could be user 
 \cr See param for more other details.
 \cr Also somehow auto replace irregular chars in the col names (eg, @-->.)
 }
-\note{
-As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R.
-}

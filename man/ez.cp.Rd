@@ -6,11 +6,8 @@
 \usage{
 ez.cp(from, to)
 }
-\description{
-copy
-}
-\examples{
-support c('a.txt','b.txt')
+\arguments{
+\item{support}{c('a.txt','b.txt')
 to folder does not have to exist already
 e.g.,
 1) both works ez.cp('a.txt','folder'), ez.cp('a.txt','folder/b.txt')
@@ -20,5 +17,8 @@ also ez.cp(c('a.txt','b.txt'),'folder')
 kinda combines rn and mv
 3) regular expression
 flist <- list.files("patha", "^filea.+[.]csv$", full.names = TRUE)
-file.copy(flist, "pathb")
+file.copy(flist, "pathb")}
+}
+\description{
+copy
 }

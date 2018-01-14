@@ -11,9 +11,6 @@ ez.savex2(x, file = "RData.xlsx", sheetName = "Sheet1", row.names = FALSE,
 ez.writex2(x, file = "RData.xlsx", sheetName = "Sheet1",
   row.names = FALSE, showNA = FALSE, ...)
 }
-\value{
-returns file path
-}
 \description{
 save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 }
