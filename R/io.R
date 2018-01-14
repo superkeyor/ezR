@@ -2,6 +2,7 @@
 # import/export data file
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' read csv table, wrapper of \code{\link{read.csv}}
+#' @description read csv table, wrapper of \code{\link{read.csv}}
 #' @param tolower whether to convert all column names to lower case
 #' @return returns a data frame
 #' @export
@@ -26,7 +27,7 @@ ez.read = function(..., tolower=FALSE){
 }
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
-#' @param
+#' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @return returns file path
 #' @examples
 #' (x, file="RData.csv", row.names=FALSE, col.names=TRUE, append = FALSE, quote = TRUE, sep = ",",
@@ -51,8 +52,7 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
 }
 
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
-#' @param
-#' @return
+#' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
 #' @examples
 #' (x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
 #'             na = "NA", dec = ".",
@@ -63,6 +63,7 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
 ez.write = ez.save
 
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
+#' @description read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
@@ -109,6 +110,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
 }
 
 #' read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
+#' @description read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
 #' @param toprint print out sheet indices and names, default TRUE
 #' @return a list of sheet names
 #' @examples
@@ -249,7 +251,7 @@ ez.saves = sjmisc_write_spss
 ez.writes = sjmisc_write_spss
 
 #' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
-#' @param
+#' @description save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @return returns file path
 #' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
@@ -323,6 +325,7 @@ ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, 
 ez.writex = ez.savex
 
 #' Save multiple data frames to multiple sheets individually
+#' @description Save multiple data frames to multiple sheets individually
 #' @param xlist a list of data frames. eg, list(sheetA=df1,sheetB=df2) where sheetA/B become sheet names; list(df1,df2) where it auto names Sheet1/2
 #' \cr Other parameters in \code{\link[openxlsx]{writeData}}
 #' @return returns file path
@@ -475,7 +478,6 @@ ez.writem = ez.savem
 
 #' show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 #' @description show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
-#' @param
 #' @export
 ez.type = function(path){
     result = file.show(path,title='File (read-only)')
@@ -512,6 +514,7 @@ ez.log = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
 }
 
 #' Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{ez.log}}
+#' @description Prints/Directs output to both terminal and a file (log.txt) globally, wrapper of \code{\link{ez.log}}
 #' @param mode a=append; w=overwrite
 #' @param timestamp T=insert timestamp at the beginning and end, F=otherwise
 #' @param status T=open the redirection/file, F=close the redirection
