@@ -69,6 +69,8 @@ ez.selfupdate = function() {
     ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezmisc')
     ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bz')
     cat('Please restart RStudio to make the change take effect!\n')
+    system('killall RStudio; open -a RStudio')
+    return(invisible(NULL))
 }
 
 #' print the version of a package
