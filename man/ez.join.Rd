@@ -15,4 +15,3 @@ mimic python join, supports vectorization, wrapper of \code{\link{paste}}
 \examples{
 ez.join('','a',' x ','b') # "a x b"
 }
-

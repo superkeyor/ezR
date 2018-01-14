@@ -19,4 +19,3 @@ se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statisti
 \cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way. 
 see https://www.spss-tutorials.com/z-scores-what-and-why/
 }
-

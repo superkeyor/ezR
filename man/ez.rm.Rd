@@ -15,4 +15,3 @@ x, a character vector with the names of the file(s) or directories to be deleted
 Wildcards (normally ‘*’ and ‘?’) are allowed.
 0 for success, 1 for failure.
 }
-

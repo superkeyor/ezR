@@ -26,4 +26,3 @@ a ggplot object (+theme_apa() to get apa format plot)
 \description{
 plot a customized boxplot with jittered stripplot, violin, and mean
 }
-

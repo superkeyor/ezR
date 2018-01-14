@@ -9,4 +9,3 @@ sjmisc_set_labels(x, labels, force.labels = FALSE, force.values = TRUE)
 \description{
 sjmisc 1.8 hack
 }
-

@@ -21,4 +21,3 @@ returns vector of col names
 \description{
 select cols in a df, evaluated by sprintf('dplyr::select(df,%s,...)',toString(col)
 }
-

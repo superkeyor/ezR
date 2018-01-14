@@ -17,4 +17,3 @@ ez.table2(df, x, y = NULL, digits = 2, max.width = 1, expected = FALSE,
 \examples{
 # dnn=c('row','col')
 }
-

@@ -30,4 +30,3 @@ read.table(file, header = FALSE, sep = "",
 read.csv(file, header = TRUE, sep = ",",
          dec = ".", fill = TRUE, comment.char = "", ...)
 }
-

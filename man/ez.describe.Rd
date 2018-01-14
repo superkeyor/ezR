@@ -12,4 +12,3 @@ ez.describe(x)
 \description{
 print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
 }
-

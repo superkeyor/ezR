@@ -12,4 +12,3 @@ ez.linspace(start, stop, n)
 \description{
 linspace
 }
-

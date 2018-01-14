@@ -9,4 +9,3 @@ ez.ceil()
 \description{
 alias of \code{\link{ceiling}}
 }
-

@@ -10,4 +10,3 @@ sjmisc_rec(x, recodes, as.fac = FALSE, var.label = NULL,
 \description{
 sjmisc 1.8 hack
 }
-

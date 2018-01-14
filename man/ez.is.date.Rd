@@ -24,4 +24,3 @@ ez.is.date(mydate)  # T
 \seealso{
 \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
 }
-

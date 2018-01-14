@@ -27,4 +27,3 @@ ez.is.date.convertible(mydate, format = "\%m/\%d/\%Y")  # T F F
 \seealso{
 \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
 }
-

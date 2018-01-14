@@ -26,7 +26,7 @@ Both value and variable label attributes will be removed when converting variabl
 \seealso{
 \code{\link{ez.str}}
 
-Other data.transformation.functions: \code{\link{ez.2factor}},
+Other data transformation functions: \code{\link{ez.2factor}},
   \code{\link{ez.2label}}, \code{\link{ez.2long}},
   \code{\link{ez.2lower}}, \code{\link{ez.2value}},
   \code{\link{ez.2wide}}, \code{\link{ez.compute}},
@@ -42,4 +42,3 @@ Other data.transformation.functions: \code{\link{ez.2factor}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
-

@@ -40,4 +40,3 @@ ez.countif(people$wt, '.==165')
 \seealso{
 \code{\link{ez.countif}}
 }
-

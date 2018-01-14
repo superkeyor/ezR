@@ -9,4 +9,3 @@ ez.z(x, center = TRUE, scale = TRUE)
 \description{
 z score, 1d vector in and 1d vector out, NA ignored/returned in place
 }
-

@@ -14,4 +14,3 @@ ez.size(x, dim = 3)
 \description{
 size of an object
 }
-

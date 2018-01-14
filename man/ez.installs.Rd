@@ -16,4 +16,3 @@ ez.installs(pkgs, load = FALSE, repos = NULL)
 \description{
 install many packages at the same time
 }
-

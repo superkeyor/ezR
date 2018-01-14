@@ -9,4 +9,3 @@ sjmisc_get_label(x, def.value = NULL)
 \description{
 sjmisc 1.8 hack
 }
-

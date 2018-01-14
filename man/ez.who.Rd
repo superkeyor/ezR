@@ -12,4 +12,3 @@ alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 \seealso{
 \code{\link{objects}}
 }
-

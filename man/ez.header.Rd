@@ -37,4 +37,3 @@ ez.savex(results,'x.xlsx')
 \seealso{
 \code{\link{ez.append}}
 }
-

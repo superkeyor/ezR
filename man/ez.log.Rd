@@ -26,4 +26,3 @@ recommend to use logon(), logoff(), which are convenient shortcuts of log()
 \seealso{
 \code{\link{ez.print}}
 }
-
