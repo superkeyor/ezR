@@ -172,9 +172,7 @@ ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
 #' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well. 
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
-#' @return
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R.
-#' @examples
 #' @export
 ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
 

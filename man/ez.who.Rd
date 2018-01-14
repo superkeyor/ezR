@@ -6,9 +6,6 @@
 \usage{
 ez.who(package = NULL)
 }
-\value{
-Print version information about R, the OS and attached or loaded packages.
-}
 \description{
 alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 }
