@@ -65,6 +65,9 @@ ez.recode(data,'a','"r1"=3')
 ez.recode(data,'a','"r1"=3;"r2"=4')
          # a was factor wih level ("r1","r2"), now still a factor, with level ("3","4")
 }
+\author{
+Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
+}
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
@@ -74,7 +77,7 @@ ez.recode(data,'a','"r1"=3;"r2"=4')
 \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 
-Other data transformation functions: \code{\link{ez.2char}},
+Other data.transformation.functions: \code{\link{ez.2char}},
   \code{\link{ez.2factor}}, \code{\link{ez.2label}},
   \code{\link{ez.2long}}, \code{\link{ez.2lower}},
   \code{\link{ez.2value}}, \code{\link{ez.2wide}},
@@ -90,6 +93,4 @@ Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.unique}}, \code{\link{ez.values.get}},
   \code{\link{ez.values.set}}
 }
-\author{
-Jerry Zhu modified from Ian Fellows (pkg Deducer) adapted from code by John Fox (car)
-}
+

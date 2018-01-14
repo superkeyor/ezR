@@ -17,3 +17,4 @@ wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}
             fileEncoding = "")
 dec: decimal point
 }
+

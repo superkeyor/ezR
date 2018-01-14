@@ -9,3 +9,4 @@ ez.repmat(a, n, m = n)
 \description{
 replicate a matrix, n * n (if m not provided) or n * m
 }
+

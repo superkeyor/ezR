@@ -32,3 +32,4 @@ ez.count(people,'M',dim=2)
 \seealso{
 \code{\link{ez.countif}}
 }
+

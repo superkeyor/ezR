@@ -11,3 +11,4 @@ ez.include(package, help, pos = 2, lib.loc = NULL, character.only = FALSE,
 \description{
 alias of \code{\link{library}}
 }
+

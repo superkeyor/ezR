@@ -20,3 +20,4 @@ wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}
             fileEncoding = "")
 dec: decimal point
 }
+

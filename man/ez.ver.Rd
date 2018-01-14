@@ -15,3 +15,4 @@ if pkg not provided, prints R version, installed packages/versions and etc
 \description{
 print the version of a package
 }
+

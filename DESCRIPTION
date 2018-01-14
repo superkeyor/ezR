@@ -5,10 +5,33 @@ Version: 1.22
 Date: 2016-01-28
 Author: Jerry Zhu <jerryzhujian9@gmail.com>
 Maintainer: Jerry Zhu <jerryzhujian9@gmail.com>
-Description: This package represents an attempt to mimic/port relevant SPSS functions and include/wrap useful R-specific functions Data import/export, wrangle, & stats
+Description: This package represents an attempt to mimic/port relevant SPSS
+    functions and include/wrap useful R-specific functions Data import/export,
+    wrangle, & stats
 License: MIT
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
 URL: https://github.com/hadley/tidyr
-Depends: R (>= 3.2.3)
-Imports: devtools, roxygen2, xlsx, openxlsx, dplyr, tidyr, coin, stringdist (>= 0.9.2), Hmisc, reshape, ggplot2, corrplot, lme4, extrafont, colorRamps, RColorBrewer, R.matlab, crayon, gmodels, scales
+Depends:
+    R (>= 3.2.3)
+Imports:
+    devtools,
+    roxygen2,
+    xlsx,
+    openxlsx,
+    dplyr,
+    tidyr,
+    coin,
+    stringdist (>= 0.9.2),
+    Hmisc,
+    reshape,
+    ggplot2,
+    corrplot,
+    lme4,
+    extrafont,
+    colorRamps,
+    RColorBrewer,
+    R.matlab,
+    crayon,
+    gmodels,
+    scales

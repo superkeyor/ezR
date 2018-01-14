@@ -9,3 +9,4 @@ ez.round()
 \description{
 alias of \code{\link{round}}
 }
+

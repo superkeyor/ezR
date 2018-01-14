@@ -22,3 +22,4 @@ kinda combines rn and mv
 flist <- list.files("patha", "^filea.+[.]csv$", full.names = TRUE)
 file.copy(flist, "pathb")
 }
+

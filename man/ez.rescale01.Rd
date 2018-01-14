@@ -12,3 +12,4 @@ if x is not numeric, return original x (unchanged)
 \description{
 rescale a vector to 0-1
 }
+

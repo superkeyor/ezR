@@ -9,3 +9,4 @@ yview(x, title)
 \description{
 alias of \code{\link[utils]{View}}
 }
+

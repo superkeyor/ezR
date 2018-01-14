@@ -12,3 +12,4 @@ pause the execution of an R script until a user presses the Enter key, no parame
 \seealso{
 \code{\link{ez.sleep}}
 }
+

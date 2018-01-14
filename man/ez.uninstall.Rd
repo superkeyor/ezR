@@ -9,3 +9,4 @@ ez.uninstall(pkgs, lib)
 \description{
 alias of \code{\link{remove.packages}}
 }
+

@@ -12,3 +12,4 @@ alias of \code{\link{Sys.sleep}}, in seconds
 \seealso{
 \code{\link{ez.pause}}
 }
+

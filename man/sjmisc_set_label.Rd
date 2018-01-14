@@ -9,3 +9,4 @@ sjmisc_set_label(x, lab, attr.string = NULL)
 \description{
 sjmisc 1.8 hack
 }
+

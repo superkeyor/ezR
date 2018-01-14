@@ -33,3 +33,4 @@ an invisible data frame with x,y,p,means and print results out on screen; result
 \description{
 df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 }
+

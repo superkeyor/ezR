@@ -9,3 +9,4 @@ ez.open(url, browser = getOption("browser"), encodeIfNeeded = FALSE)
 \description{
 open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
 }
+

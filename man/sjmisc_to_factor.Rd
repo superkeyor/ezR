@@ -10,3 +10,4 @@ sjmisc_to_factor(x, add.non.labelled = FALSE, drop.na = TRUE,
 \description{
 sjmisc 1.8 hack
 }
+

@@ -24,3 +24,4 @@ if reindex, new index is 1, 2
 \seealso{
 \code{\link{ez.rnames}}
 }
+

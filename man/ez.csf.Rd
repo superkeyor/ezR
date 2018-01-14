@@ -12,3 +12,4 @@ current script file (in full path)
 \examples{
 works with Rscript, source() or in RStudio Run selection
 }
+

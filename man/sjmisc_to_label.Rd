@@ -10,3 +10,4 @@ sjmisc_to_label(x, add.non.labelled = FALSE, prefix = FALSE,
 \description{
 sjmisc 1.8 hack
 }
+

@@ -29,3 +29,4 @@ df=ez.replacewhen(nicu,pt_num=1220,baby_num=3,baby_name='Ben')
 \seealso{
 \code{\link{ez.replace}}
 }
+

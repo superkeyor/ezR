@@ -12,3 +12,4 @@ random number, alias of \code{\link{runif}}
 \examples{
 runif(n, min = 0, max = 1)
 }
+

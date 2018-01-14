@@ -54,3 +54,4 @@ a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limi
 \description{
 line plot with ggplot
 }
+

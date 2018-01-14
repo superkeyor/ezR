@@ -10,3 +10,4 @@ sjmisc_read_spss(path, enc = NA, attach.var.labels = FALSE,
 \description{
 sjmisc 1.8 hack
 }
+

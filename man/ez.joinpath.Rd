@@ -12,3 +12,4 @@ alias of \code{\link{file.path}}
 \examples{
 paste(..., sep=.Platform$file.sep)
 }
+

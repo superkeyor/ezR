@@ -11,3 +11,4 @@ ez.github(repo, username = NULL, ref = "master", subdir = NULL,
 \description{
 alias of \code{\link[devtools]{install_github}}
 }
+

@@ -16,3 +16,4 @@ ez.install(pkgs, lib, repos = getOption("repos"),
 \description{
 alias of \code{\link{install.packages}}
 }
+

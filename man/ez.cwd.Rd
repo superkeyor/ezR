@@ -9,3 +9,4 @@ ez.cwd()
 \description{
 alias of \code{\link{getwd}}
 }
+

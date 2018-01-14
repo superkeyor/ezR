@@ -9,3 +9,4 @@ ez.fix()
 \description{
 alias of \code{\link{trunc}}
 }
+
