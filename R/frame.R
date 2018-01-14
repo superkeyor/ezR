@@ -154,7 +154,6 @@ ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dr
 #' @param measure column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
 #' @param drop variables to drop before reshaping
 #' @details
-#' @examples
 #' set.seed(10)
 #' df <- data_frame(
 #'     Person = rep(c("greg", "sally", "sue"), each=2),
@@ -283,7 +282,6 @@ ez.label.set = function(df,varname,label){
 #' \cr        if x is not a data frame, col is ignored
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
 #' @examples
-#' @return returns a character vector or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
 ez.2char = function(x, col=NULL){
@@ -447,7 +445,6 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE,...){
 #' \cr "col2:za" --another column in za    (ignored if x is not a data frame)
 #' @return returns a new df, factor (non-factor->factor)
 #' @examples
-ez.factorder = function(x, col, ord="as"){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col) | !is.factor(df[[col]])) stop('col not valid!')
@@ -503,7 +500,6 @@ ez.factorder = function(x, col, ord="as"){
 #' @param newLevelNames new level names coresponding to levels(x), eg, c("one","two","three")
 #' @return returns a new df, factor (non-factor->factor)
 #' @examples
-#' @export
 ez.factorname = function(x, col, newLevelNames){
     if (is.data.frame(x)) {
         df = x
@@ -532,7 +528,6 @@ ez.factorname = function(x, col, newLevelNames){
 #' @param cols column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols
 #' @return returns a new df, factor, vector (has no effect on (ie, make no change to) a non-factor object)
 #' @examples
-ez.factorelevel = function(x, cols=NULL) {
     if (is.factor(x)) {
         # for nonfactor, length(levels(x)) returns 0
         if (length(levels(x))!=length(levels(factor(x,unique(as.character(x)))))) {
@@ -1189,7 +1184,6 @@ ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FA
 #' @param newColName c('','',''), number of cols must match
 #' @return returns a new df, old one does not change
 #' @examples
-#' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 #' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
 #' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
@@ -1208,7 +1202,6 @@ ez.rncols = function(df,newColNames){
 #' @param df a data frame
 #' @return returns a new df, old one does not change
 #' @examples
-#' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 #' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
 #' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
@@ -1227,7 +1220,6 @@ ez.2lower = function(df){
 #' @param replace c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
 #' @return returns a new df, old one does not change
 #' @examples
-#' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 #' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
 #' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
@@ -1242,7 +1234,6 @@ ez.rncol = reshape::rename
 #' @param replace c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
 #' @return returns a new df, old one does not change
 #' @examples
-#' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 #' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
 #' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
@@ -1258,7 +1249,6 @@ ez.rename = reshape::rename
 #' @param defaultVal NA (default)
 #' @return returns a new df, old one does not change
 #' @examples
-#' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 #' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
 #' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
@@ -1467,7 +1457,6 @@ ez.leftjoin = dplyr::left_join
 #' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs
 #' @return returns a new df, old one does not change
 #' @examples
-#' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 #' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
 #' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}

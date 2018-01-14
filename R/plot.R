@@ -143,7 +143,6 @@ ggcook <- function() {
 #' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa_nosize}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
 #' @examples
-theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
 
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
@@ -192,7 +191,6 @@ theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
 #' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect 
 #' @examples
-theme_apa_nosize <- function(plot.box = FALSE){
 
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
@@ -304,7 +302,6 @@ matlabcolor2 <- function(n=100){
 #' wrapper of \code{\link{dev.copy2pdf}}
 #' @description wrapper of \code{\link{dev.copy2pdf}}
 #' @param
-#' @seealso \code{\link{pdf}} \code{\link{ez.pdfon}} \code{\link{ez.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11 (portrait default ie, 11 x 8.5)
@@ -319,7 +316,6 @@ ez.export = function(filename = "RPlot.pdf", pdf.width = 11, pdf.height = 8.5, .
 #' wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)
 #' @description wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)
 #' @param 
-#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfoff}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
@@ -333,7 +329,6 @@ ez.pdfon = pdf
 #' wrapper of \code{\link{dev.off}}
 #' @description wrapper of \code{\link{dev.off}}
 #' @param
-#' @seealso \code{\link{ez.export}} \code{\link{ez.pdfon}}
 #' @examples
 #' A4:     width 7(inches) height = 5
 #' Letter: 8.5 x 11
@@ -438,7 +433,6 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
-ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='cols'){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
   
@@ -600,7 +594,6 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
-ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -753,7 +746,6 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
 #' @return a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
-ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -892,7 +884,6 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
-ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,facet='cols'){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1004,7 +995,6 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,f
 #' @param legend.position "bottom", "top", "left", "right", "none"
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
-ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1091,7 +1081,6 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param ... see \code{\link[corrplot]{corrplot}} for more parameters
 #' @return returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 #' @examples
-ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
                      method ="color",tl.col = "black",tl.cex = 0.4,
                      col=NULL,...){
     df__copy=df
@@ -1143,7 +1132,6 @@ ez.rescale01 = function (x) {
 #' define a new coordinate system
 #' @description define a new coordinate system
 #' @return
-#' @export
 coord_radar <- function (theta = "x", start = 0, direction = 1)
 {
     theta <- match.arg(theta, c("x", "y"))
@@ -1170,7 +1158,6 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @param linetype linetype for different id levels, if NULL, remain the same for different id levels
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples
-#' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
 ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
     df__copy=df
@@ -1495,7 +1482,6 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @examples 
-ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1701,7 +1687,6 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
-ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols') {
     df__copy=df
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust)
@@ -1921,7 +1906,6 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
-ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1997,7 +1981,6 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @examples 
-ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',...) {
     if (!is.data.frame(x)) {
         var=deparse(substitute(x))
         dfcmd=sprintf('df=data.frame("%s"=x)',var)

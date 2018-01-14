@@ -3,8 +3,6 @@
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' print out summary statistics about a data frame or other object, alias of \code{\link[Hmisc]{describe}}
 #' @description
-#' @return
-ez.describe = function(x){
     if (!is.data.frame(x)) {(x = data.frame(x))}
     # flush otherwise not print large text
     # show(x)
@@ -51,7 +49,6 @@ ez.compare = function(lh,rh,...) {
 #' @param characterize T/F count the element freq of character cols or not 
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @examples
-ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
     # if temped and not debug, just jump out of the function to save time
     if (is.null(file)) {
         debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
@@ -357,7 +354,6 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @examples
-ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
@@ -424,7 +420,6 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @examples
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
     results4plot = results
@@ -492,7 +487,6 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' @examples
-ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
     results4plot = results

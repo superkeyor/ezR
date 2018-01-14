@@ -29,7 +29,6 @@ ez.read = function(..., tolower=FALSE){
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @param
-#' @examples
 #' (x, file="RData.csv", row.names=FALSE, col.names=TRUE, append = FALSE, quote = TRUE, sep = ",",
 #'             na = "NA", dec = ".",
 #'             col.names = TRUE, qmethod = c("escape", "double"),
@@ -173,8 +172,6 @@ ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @return
-#' @examples
-ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
 
     if (atm2fac==1) {
         atm2fac=FALSE
@@ -251,7 +248,6 @@ ez.writes = sjmisc_write_spss
 #' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @description save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @param
-#' @examples
 #' (x, file, sheetName="Sheet1", row.names=FALSE,
 #'   col.names=TRUE, append=FALSE, showNA=TRUE)
 #' @export
@@ -475,13 +471,11 @@ ez.writem = ez.savem
 
 #' show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 #' @param
-ez.type = function(path){
     result = file.show(path,title='File (read-only)')
 }
 
 #' edit a file, wrapper of wrapper of \code{\link{file.edit}}
 #' @param
-ez.edit = function(path){
     result = file.edit(path)
 }
 

@@ -7,12 +7,10 @@
 #' open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
 #' @description open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
 #' @param
-ez.open = browseURL
 
 #' alias of \code{\link{stop}}
 #' @description alias of \code{\link{stop}}
 #' @param
-ez.error = stop
 
 #' print out or set the repo
 #' @description print out or set the repo
@@ -74,7 +72,6 @@ ez.selfupdate = function() {
 #' @param pkg package name in quotes, default is NULL
 #' @return if pkg not provided, prints R version, installed packages/versions and etc
 #' @examples
-ez.ver = function(pkg=NULL){
     if (!is.null(pkg)) {
         cat(sprintf("%s\n%s: %s", R.version.string, pkg, as.character(packageVersion(pkg))))
     } else {
@@ -96,17 +93,14 @@ ez.ver = function(pkg=NULL){
 #' alias of \code{\link{library}}
 #' @description alias of \code{\link{library}}
 #' @param
-ez.import = library
 
 #' alias of \code{\link{library}}
 #' @description alias of \code{\link{library}}
 #' @param
-ez.include = ez.import
 
 #' alias of \code{\link{install.packages}}
 #' @description alias of \code{\link{install.packages}}
 #' @param
-ez.install = install.packages
 
 #' install many packages at the same time
 #' @description install many packages at the same time
@@ -128,7 +122,6 @@ ez.installs = function(pkgs,load=FALSE,repos=NULL) {
 #' @param pkg pkg name in string
 #' @param autoload auto load or not (default=TRUE)
 #' @return
-ez.require = function(pkg, autoload=TRUE){
     tt = sprintf("require('%s')",pkg)
     if (!eval(parse(text = tt))) {
         tt = sprintf("install.packages('%s')",pkg)
@@ -144,7 +137,6 @@ ez.require = function(pkg, autoload=TRUE){
 #' @description unload a package, wrapper of detach(pkg, unload=TRUE, character.only = TRUE)
 #' @param pkg pkg name in string
 #' @return
-ez.unload = function(pkg){
     character.only = TRUE
     if(!character.only){
         pkg <- deparse(substitute(pkg))
@@ -159,17 +151,14 @@ ez.unload = function(pkg){
 #' alias of \code{\link[devtools]{install_github}}
 #' @description alias of \code{\link[devtools]{install_github}}
 #' @param
-ez.github = devtools::install_github
 
 #' alias of \code{\link{remove.packages}}
 #' @description alias of \code{\link{remove.packages}}
 #' @param
-ez.remove = remove.packages
 
 #' alias of \code{\link{remove.packages}}
 #' @description alias of \code{\link{remove.packages}}
 #' @param
-ez.uninstall = remove.packages
 
 #' clear, clean  console, workspace, plot or variable(s)
 #' @description clear, clean  console, workspace, plot or variable(s)
@@ -180,7 +169,6 @@ ez.uninstall = remove.packages
 #'             'var' particular var \cr
 #'             c('var1','var2') particular vars
 #' @return
-ez.clear = function(area=0) {
     # area[1] used, to work around when c('var1','var2') provided
     if (area[1] == 0) {console = TRUE; workspace = TRUE; plot = TRUE}
     else if (area[1] == 1) {console = TRUE; workspace = FALSE; plot = FALSE}
@@ -213,36 +201,28 @@ ez.clear = function(area=0) {
 #'             'var' particular var \cr
 #'             c('var1','var2') particular vars
 #' @return
-ez.clean = ez.clear
 
 #' alias of \code{\link{find}}
 #' @description alias of \code{\link{find}}
 #' @param
-ez.which = find
 
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @param
-#' @examples
-#' @seealso \code{\link{objects}}
 ez.whos = sessionInfo
 
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 #' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 #' @param
-#' @examples
-#' @seealso \code{\link{objects}}
 ez.who = ez.whos
 
 #' user path like in Matlab
 #' @description user path like in Matlab, alias of \code{\link{search}}
 #' @param
-ez.path = search
 
 #' alias of \code{\link{system}}
 #' @description alias of \code{\link{system}}
 #' @param
-ez.execute = system
 
 #' alias of \code{\link{file.path}}
 #' @description alias of \code{\link{file.path}}
@@ -277,22 +257,18 @@ ez.splitpath = function(path){
 #' parentdir
 #' @description parentdir
 #' @param
-ez.parentdir = function(path){dirname(path)}
 
 #' alias of \code{\link{setwd}}
 #' @description alias of \code{\link{setwd}}
 #' @param
-ez.cd = setwd;
 
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
 #' @param
-ez.cwd = getwd
 
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
 #' @param
-ez.pwd = getwd
 
 #' current script file (in full path)
 #' @description current script file (in full path)
@@ -352,7 +328,6 @@ ez.lsd = function(path='.', pattern=NULL, hidden=FALSE){
 #' ls
 #' @description ls
 #' @param
-ez.ls = function(path='.', pattern=NULL, hidden=FALSE){
     files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = FALSE,
                        ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
@@ -363,7 +338,6 @@ ez.ls = function(path='.', pattern=NULL, hidden=FALSE){
 #' fls
 #' @description fls
 #' @param
-ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
     files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = TRUE,
                        ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
@@ -374,14 +348,12 @@ ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
 #' mkdir, no warning for exisiting folder
 #' @description mkdir, no warning for exisiting folder
 #' @param
-ez.mkdir = function(path){
     result = dir.create(path, showWarnings = FALSE, recursive = TRUE)
 }
 
 #' alias of \code{\link{file.exists}}
 #' @description alias of \code{\link{file.exists}}
 #' @param
-ez.exists = file.exists
 
 #' remove a file, wrapper of \code{\link{unlink}}
 #' @description remove a file, wrapper of \code{\link{unlink}}

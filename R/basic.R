@@ -285,22 +285,18 @@ ez.strrev <- function(x) {
 #' alias of \code{\link{ceiling}}
 #' @description alias of \code{\link{ceiling}}
 #' @param
-ez.ceil = ceiling
 
 #' alias of \code{\link{floor}}
 #' @description alias of \code{\link{floor}}
 #' @param
-ez.floor = floor
 
 #' alias of \code{\link{trunc}}
 #' @description alias of \code{\link{trunc}}
 #' @param
-ez.fix = trunc
 
 #' alias of \code{\link{round}}
 #' @description alias of \code{\link{round}}
 #' @param
-ez.round = round
 
 #' quotient
 #' @description quotient
@@ -329,7 +325,6 @@ ez.remainder = function (m,n){
 #' similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
 #' @description similar to python range (python: left inclusive, right exclusive), wrapper of \code{\link{seq}}, may also consider 1:3
 #' @param
-#' @examples
 #' ez.range(1,3) # 1 2 3, equivalent to 1:3
 #' @export
 ez.range = function(start, stop, step=1){seq(start, stop, by=step)}
@@ -338,14 +333,12 @@ ez.range = function(start, stop, step=1){seq(start, stop, by=step)}
 #' @description linspace
 #' @param n number of points
 #' @return
-ez.linspace = function(start, stop, n){
     seq(start, stop, length=n)
 }
 
 #' replicate a matrix, n * n (if m not provided) or n * m
 #' @description replicate a matrix, n * n (if m not provided) or n * m
 #' @param
-ez.repmat = function(a, n, m = n) {
     if (length(a) == 0) return(c())
     if (!is.numeric(a) && !is.complex(a))
         stop("Argument 'a' must be a numeric or complex.")
@@ -375,7 +368,6 @@ ez.repmat = function(a, n, m = n) {
 #' \cr If no match is found and split=FALSE, all components will be NULL
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
 #' @examples
-ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
     stopifnot(is.character(pat), is.character(s))
     if (length(pat) > 1) {
         warning("Only the first string in argument 'pat' is taken.")
@@ -433,7 +425,6 @@ ez.regexp = function (s, pat, ignorecase = FALSE, once = FALSE, split = FALSE) {
 #' \cr If no match is found and split=FALSE, all components will be NULL
 #' \cr If no match is found and split=TRUE, all components will be NULL except that split will contain the whole string
 #' @examples
-ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
     # A list with components start and end as numeric vectors indicating the start and end positions of the matches.
     # match contains each exact match, and split contains the character vector of splitted strings.
     # If no match is found all components will be NULL, except split that will contain the whole string if split = TRUE.
@@ -467,7 +458,6 @@ ez.trim = function (s, how=4){
 #' @description support single string, vectors
 #' \cr case sensitive! wrapper of sub, gsub
 #' @param
-#' @export
 ez.strreplace = function (s, expr, repstr, once = FALSE){
     if (once) {
         sub(expr, repstr, s, fixed = TRUE)
@@ -480,7 +470,6 @@ ez.strreplace = function (s, expr, repstr, once = FALSE){
 #' replace string or string vectors using regular expression (case sensitive)
 #' @description replace string or string vectors using regular expression (case sensitive)
 #' @param
-#' @export
 ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
     if (!is.character(s))
         stop("Argument 's' must be a character vector.")
@@ -497,7 +486,6 @@ ez.regexprep = function (s, expr, repstr, ignorecase = FALSE, once = FALSE){
 #' replace string or string vectors using regular expression (case insensitive)
 #' @description replace string or string vectors using regular expression (case insensitive)
 #' @param
-#' @export
 ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
     if (!is.character(s))
         stop("Argument 's' must be a character vector.")
@@ -516,7 +504,6 @@ ez.regexprepi = function (s, expr, repstr, ignorecase = TRUE, once = FALSE){
 #' @param
 #' \cr An error results if a does not have n*m elements. If m is missing, it will be calculated from n and the size of a.
 #' @examples
-ez.reshape = function (a, n, m){
     if (missing(m))
         m <- length(a)%/%n
     if (length(a) != n * m)
@@ -529,7 +516,6 @@ ez.reshape = function (a, n, m){
 #' @description apply array function, wrapper of mapply
 #' @seealso consider using \code{\link[dplyr]{mutate}}, eg beta = mutate(beta, Gr=substr(ez.trim(Gr),1,1))
 #' @param
-ez.arrayfun = function(func, ...){
     dots <- list(...)
     if (length(dots) < 1)
         stop("Empty list of arrays: Rsult cannot be computed.")
@@ -578,7 +564,6 @@ ez.join = function(sep='',...){
 #' @param sep default empty
 #' @return each print generates a new line automatically
 #' @examples
-#' @seealso \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 #' @export
 ez.print = function(...,sep=''){
     cat(..., "\n", sep = sep)
