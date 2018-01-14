@@ -19,3 +19,6 @@ returns a new data frame or vector
 \description{
 remove specified attributes
 }
+\note{
+sjmisc_set_labels(x,"") only for value labels: haven style ("labels") or foreign style ("value.labels")
+}

@@ -204,7 +204,8 @@ print.labelled <- function(x, ...) {
     cat("  ", note, "\n")
   }
   invisible()
-}# @title Add value labels to variables
+}
+# @title Add value labels to variables
 # @name add_labels
 #
 # @description This function adds additional labels as attribute to a variable
@@ -732,7 +733,9 @@ cv_helper <- function(x) {
     }
   }
   return(NULL)
-}# @title Dichotomize variables
+}
+
+# @title Dichotomize variables
 # @name dicho
 #
 # @description Dichotomizes variables into dummy variables (0/1). Dichotomization is
@@ -2810,7 +2813,9 @@ get_re_var <- function(x, comp = c("tau.00", "tau.01", "tau.11", "rho.01", "sigm
 
   # return results
   return(attr(x, comp, exact = TRUE))
-}# @title Check whether two factors are crossed
+}
+
+# @title Check whether two factors are crossed
 # @name is_crossed
 # @description This function checks whether two factors are crossed,
 #                i.e. if each level of one factor occurs in combination
@@ -3314,7 +3319,9 @@ merge_df_helper <- function(x1, x2) {
   x_final <- cbind(x1_new, tmp)
   # return merged df
   x_final
-}# @title Mean Inter-Item-Correlation
+}
+
+# @title Mean Inter-Item-Correlation
 # @name mic
 # @description This function calculates a mean inter-item-correlation, i.e.
 #                a correlation matrix of \code{data} will be computed (unless
@@ -7298,7 +7305,9 @@ to_long <- function(data, keys, values, ..., labels = NULL, recode.key = FALSE) 
   }
   # return results
   return(mydat)
-}# @title Convert missing values of labelled variables into NA
+}
+
+# @title Convert missing values of labelled variables into NA
 # @name to_na
 #
 # @description This function converts defined missing values that are stored as

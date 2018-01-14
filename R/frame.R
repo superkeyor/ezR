@@ -1772,6 +1772,7 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
 #' @param attrs c('variable.labels'). run names(attributes(x)) to see all attributes
 #' @return returns a new data frame or vector
+#' @note sjmisc_set_labels(x,"") only for value labels: haven style ("labels") or foreign style ("value.labels")
 #' @export
 ez.attrclean = function(x, col=NULL, attrs=c('variable.labels'), ...) {
     if (!is.data.frame(x)) {
