@@ -1,6 +1,7 @@
+# remove #' @export, except #' @importFrom
 # exported appended to the end
 
-#' 
+# 
 mean.labelled <- function(x, trim = 0, na.rm = FALSE, missing_to_na = FALSE, ...) {
   # unclass vector for mean-call
   x <- unclass(x)
@@ -18,7 +19,7 @@ mean.labelled <- function(x, trim = 0, na.rm = FALSE, missing_to_na = FALSE, ...
   mean(x, trim = trim, na.rm = na.rm)
 }
 
-#' 
+# 
 is.na.labelled <- function(x) {
   # unclass vector for is.na-call
   x <- unclass(x)
@@ -30,7 +31,7 @@ is.na.labelled <- function(x) {
 }
 
 #' @importFrom nlme getData getCovariateFormula
-#' 
+# 
 model.matrix.gls <- function(object, ...) {
   mm <- cbind(`(Intercept)` = 1,
               nlme::getData(object)[, all.vars(nlme::getCovariateFormula(object))])
@@ -38,7 +39,7 @@ model.matrix.gls <- function(object, ...) {
 }
 
 #' @importFrom nlme getResponse getData getCovariateFormula
-#' 
+# 
 model.frame.gls <- function(formula, ...) {
   if (all(class(formula) != "gls")) {
     stop("`formula` needs to be an object of class `gls`.", call. = F)
@@ -52,7 +53,7 @@ model.frame.gls <- function(formula, ...) {
 }
 
 #' @importFrom dplyr tbl_df trunc_mat
-#' 
+# 
 print.lbl_df <- function(x, ..., n = NULL, width = NULL) {
   # get labels
   dlab <- get_label(x)
@@ -75,7 +76,7 @@ print.lbl_df <- function(x, ..., n = NULL, width = NULL) {
 }
 
 
-#' 
+# 
 print.sjmisc_r2 <- function(x, ...) {
   if (length(x) > 1) {
     if (identical(names(x[[2]]), "Nagelkerke")) {
@@ -105,7 +106,7 @@ print.sjmisc_r2 <- function(x, ...) {
 }
 
 
-#' 
+# 
 print.icc.lme4 <- function(x, comp, ...) {
   # print model information
   cat(sprintf("%s\n Family: %s (%s)\nFormula: %s\n\n",
@@ -176,7 +177,7 @@ print.icc.lme4 <- function(x, comp, ...) {
 }
 
 
-#'
+#
 print.labelled <- function(x, ...) {
   # code partially taken from haven:::print.labelled
   cat("<Labelled>\n")
@@ -203,54 +204,54 @@ print.labelled <- function(x, ...) {
     cat("  ", note, "\n")
   }
   invisible()
-}#' @title Add value labels to variables
-#' @name add_labels
-#'
-#' @description This function adds additional labels as attribute to a variable
-#'                or vector \code{x}, resp. to a set of variables in a
-#'                \code{data.frame} or \code{list}-object. Unlike \code{\link{set_labels}},
-#'                \code{add_labels} does not replace existing value labels, but adds
-#'                \code{value} to the existing value labels of \code{x}.
-#'
-#' @seealso \code{\link{set_label}} to manually set variable labels or
-#'            \code{\link{get_label}} to get variable labels; \code{\link{set_labels}} to
-#'            add value labels, replacing the existing ones.
-#'
-#' @param x Variable (vector), \code{list} of variables or a \code{data.frame}
-#'          where value label attributes should be added. Does not replaces former
-#'          value labels.
-#' @param value Named character vector of labels that will be added to \code{x} as
-#'          \code{"labels"} or \code{"value.labels"} attribute. If \code{x} is
-#'          a data frame, \code{value} may also be a \code{\link{list}} of
-#'          named character vectors. If \code{value} is a list, it must have
-#'          the same length as number of columns of \code{x}. If \code{value}
-#'          is a vector and \code{x} is a data frame, \code{value} will be applied
-#'          to each column of \code{x}.
-#'
-#' @return \code{x} with additional value labels.
-#'
-#' @note Existing labelled values will be replaced by new labelled values
-#'         in \code{value}. See 'Examples'.
-#'
-#' @examples
-#' data(efc)
-#' get_labels(efc$e42dep)
-#'
-#' x <- add_labels(efc$e42dep, c(`nothing` = 5))
-#' get_labels(x)
-#'
-#' x <- add_labels(efc$e42dep, c(`nothing` = 5, `zero value` = 0))
-#' get_labels(x, include.values = "p")
-#'
-#' # replace old values
-#' x <- add_labels(efc$e42dep, c(`not so dependent` = 4, `lorem ipsum` = 5))
-#' get_labels(x, include.values = "p")
-#'
-#' # replace values, alternative function call
-#' add_labels(x) <- c(`new second` = 2)
-#'
-#'
-#' 
+}# @title Add value labels to variables
+# @name add_labels
+#
+# @description This function adds additional labels as attribute to a variable
+#                or vector \code{x}, resp. to a set of variables in a
+#                \code{data.frame} or \code{list}-object. Unlike \code{\link{set_labels}},
+#                \code{add_labels} does not replace existing value labels, but adds
+#                \code{value} to the existing value labels of \code{x}.
+#
+# @seealso \code{\link{set_label}} to manually set variable labels or
+#            \code{\link{get_label}} to get variable labels; \code{\link{set_labels}} to
+#            add value labels, replacing the existing ones.
+#
+# @param x Variable (vector), \code{list} of variables or a \code{data.frame}
+#          where value label attributes should be added. Does not replaces former
+#          value labels.
+# @param value Named character vector of labels that will be added to \code{x} as
+#          \code{"labels"} or \code{"value.labels"} attribute. If \code{x} is
+#          a data frame, \code{value} may also be a \code{\link{list}} of
+#          named character vectors. If \code{value} is a list, it must have
+#          the same length as number of columns of \code{x}. If \code{value}
+#          is a vector and \code{x} is a data frame, \code{value} will be applied
+#          to each column of \code{x}.
+#
+# @return \code{x} with additional value labels.
+#
+# @note Existing labelled values will be replaced by new labelled values
+#         in \code{value}. See 'Examples'.
+#
+# @examples
+# data(efc)
+# get_labels(efc$e42dep)
+#
+# x <- add_labels(efc$e42dep, c(`nothing` = 5))
+# get_labels(x)
+#
+# x <- add_labels(efc$e42dep, c(`nothing` = 5, `zero value` = 0))
+# get_labels(x, include.values = "p")
+#
+# # replace old values
+# x <- add_labels(efc$e42dep, c(`not so dependent` = 4, `lorem ipsum` = 5))
+# get_labels(x, include.values = "p")
+#
+# # replace values, alternative function call
+# add_labels(x) <- c(`new second` = 2)
+#
+#
+# 
 add_labels <- function(x, value) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -305,67 +306,67 @@ add_labels_helper <- function(x, value) {
   return(x)
 }
 
-#' @rdname add_labels
-#' 
+# @rdname add_labels
+# 
 `add_labels<-` <- function(x, value) {
   UseMethod("add_labels<-")
 }
 
-#' 
+# 
 `add_labels<-.default` <- function(x, value) {
   x <- add_labels(x, value)
   x
 }
-#' @title Convert vector to labelled class
-#' @name as_labelled
-#'
-#' @description Converts a (labelled) vector of any class into a \code{labelled}
-#'                class vector, resp. adds a \code{labelled} class-attribute.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables
-#'          that should be converted to \code{\link[haven]{labelled}}-class
-#'          objects.
-#' @param add.labels Logical, if \code{TRUE}, non-labelled values will be
-#'          labelled with the corresponding value.
-#' @param add.class Logical, if \code{TRUE}, \code{x} preserves its former
-#'          \code{class}-attribute and \code{labelled} is added as additional
-#'          attribute. If \code{FALSE} (default), all former \code{class}-attributes
-#'          will be removed and the class-attribute of \code{x} will only
-#'          be \code{labelled}.
-#' @return \code{x}, as \code{\link[haven]{labelled}}-class object, including
-#'           missing-flags (\code{is_na}-attribute).
-#'
-#' @examples
-#'
-#' data(efc)
-#' str(efc$e42dep)
-#'
-#' x <- as_labelled(efc$e42dep)
-#' str(x)
-#' summary(x)
-#'
-#' x <- as_labelled(efc$e42dep, add.class = TRUE)
-#' str(x)
-#' summary(x)
-#'
-#' a <- c(1, 2, 4)
-#' x <- as_labelled(a, add.class = TRUE)
-#' str(x)
-#' summary(x)
-#'
-#' data(efc)
-#' x <- set_labels(efc$e42dep, c(`1` = "independent", `4` = "severe dependency"))
-#' x1 <- as_labelled(x, add.labels = FALSE)
-#' x2 <- as_labelled(x, add.labels = TRUE)
-#'
-#' str(x1)
-#' str(x2)
-#'
-#' get_values(x1)
-#' get_values(x2)
-#'
+# @title Convert vector to labelled class
+# @name as_labelled
+#
+# @description Converts a (labelled) vector of any class into a \code{labelled}
+#                class vector, resp. adds a \code{labelled} class-attribute.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables
+#          that should be converted to \code{\link[haven]{labelled}}-class
+#          objects.
+# @param add.labels Logical, if \code{TRUE}, non-labelled values will be
+#          labelled with the corresponding value.
+# @param add.class Logical, if \code{TRUE}, \code{x} preserves its former
+#          \code{class}-attribute and \code{labelled} is added as additional
+#          attribute. If \code{FALSE} (default), all former \code{class}-attributes
+#          will be removed and the class-attribute of \code{x} will only
+#          be \code{labelled}.
+# @return \code{x}, as \code{\link[haven]{labelled}}-class object, including
+#           missing-flags (\code{is_na}-attribute).
+#
+# @examples
+#
+# data(efc)
+# str(efc$e42dep)
+#
+# x <- as_labelled(efc$e42dep)
+# str(x)
+# summary(x)
+#
+# x <- as_labelled(efc$e42dep, add.class = TRUE)
+# str(x)
+# summary(x)
+#
+# a <- c(1, 2, 4)
+# x <- as_labelled(a, add.class = TRUE)
+# str(x)
+# summary(x)
+#
+# data(efc)
+# x <- set_labels(efc$e42dep, c(`1` = "independent", `4` = "severe dependency"))
+# x1 <- as_labelled(x, add.labels = FALSE)
+# x2 <- as_labelled(x, add.labels = TRUE)
+#
+# str(x1)
+# str(x2)
+#
+# get_values(x1)
+# get_values(x2)
+#
 #' @importFrom stats na.omit
-#' 
+# 
 as_labelled <- function(x, add.labels = FALSE, add.class = FALSE) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -414,91 +415,91 @@ as_labelled_helper <- function(x, add.labels, add.class) {
 
 
 
-#' @title Create a labelled data frame
-#' @name lbl_df
-#'
-#' @description This method wraps a local data frame and adds a \code{lbl_df} class
-#'                attribute. Printing a \code{lbl_df}-data frame is comparable
-#'                to printing \code{\link[dplyr]{tbl_df}} objects, but the class
-#'                information in the output is replaced by the variable label.
-#'
-#' @param x A data frame.
-#'
-#' @return \code{x}, with \code{lbl_df} class-attribute.
-#'
-#' @examples
-#' data(efc)
-#' library(dplyr)
-#' mydf <- lbl_df(efc %>%
-#'   select(e15relat, e16sex, e17age) %>%
-#'   slice(1:3))
-#'
-#' mydf
-#'
-#' # or...
-#' mydf <- efc %>%
-#'   select(e15relat, e16sex, e17age) %>%
-#'   slice(1:3)
-#'
-#' lbl_df(mydf)
-#'
-#'
-#' mydf <- lbl_df(efc %>%
-#'   select(e15relat, e16sex, e17age) %>%
-#'   to_label() %>%
-#'   set_label(c("Relationship", "Elder's gender", "Elder's age")))
-#'
-#' mydf
-#'
-#' 
+# @title Create a labelled data frame
+# @name lbl_df
+#
+# @description This method wraps a local data frame and adds a \code{lbl_df} class
+#                attribute. Printing a \code{lbl_df}-data frame is comparable
+#                to printing \code{\link[dplyr]{tbl_df}} objects, but the class
+#                information in the output is replaced by the variable label.
+#
+# @param x A data frame.
+#
+# @return \code{x}, with \code{lbl_df} class-attribute.
+#
+# @examples
+# data(efc)
+# library(dplyr)
+# mydf <- lbl_df(efc %>%
+#   select(e15relat, e16sex, e17age) %>%
+#   slice(1:3))
+#
+# mydf
+#
+# # or...
+# mydf <- efc %>%
+#   select(e15relat, e16sex, e17age) %>%
+#   slice(1:3)
+#
+# lbl_df(mydf)
+#
+#
+# mydf <- lbl_df(efc %>%
+#   select(e15relat, e16sex, e17age) %>%
+#   to_label() %>%
+#   set_label(c("Relationship", "Elder's gender", "Elder's age")))
+#
+# mydf
+#
+# 
 lbl_df <- function(x) {
   # add class attribute, if necessary
   if (!"lbl_df" %in% class(x))
     class(x) <- c("lbl_df", class(x))
   x
 }
-#' @title Convergence test for mixed effects models
-#' @name converge_ok
-#'
-#' @description This function provides an alternative convergence test for
-#'                \code{\link[lme4]{merMod}}-objects.
-#'
-#' @param x A \code{\link[lme4]{merMod}}-object.
-#' @param tolerance Indicates up to which value the convergence result is
-#'          accepted. The smaller \code{tolerance} is, the stricter the test
-#'          will be.
-#'
-#' @return Logical vector, \code{TRUE} if convergence is fine, \code{FALSE}
-#'           if convergence is suspicious. Additionally, the convergence
-#'           value is returned as return value's name.
-#'
-#' @details This function provides an alternative convergence test for
-#'                \code{\link[lme4]{merMod}}-objects, as discussed
-#'                \href{https://github.com/lme4/lme4/issues/120}{here}
-#'                and suggested by Ben Bolker in
-#'                \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment}.
-#'
-#' @examples
-#' library(lme4)
-#' data(efc)
-#' # create binary response
-#' efc$hi_qol <- dicho(efc$quol_5)
-#' # prepare group variable
-#' efc$grp = as.factor(efc$e15relat)
-#' # data frame for fitted model
-#' mydf <- data.frame(hi_qol = as.factor(efc$hi_qol),
-#'                    sex = as.factor(efc$c161sex),
-#'                    c12hour = as.numeric(efc$c12hour),
-#'                    neg_c_7 = as.numeric(efc$neg_c_7),
-#'                    grp = efc$grp)
-#' # fit glmer
-#' fit <- glmer(hi_qol ~ sex + c12hour + neg_c_7 + (1|grp),
-#'              data = mydf, family = binomial("logit"))
-#'
-#' converge_ok(fit)
-#'
+# @title Convergence test for mixed effects models
+# @name converge_ok
+#
+# @description This function provides an alternative convergence test for
+#                \code{\link[lme4]{merMod}}-objects.
+#
+# @param x A \code{\link[lme4]{merMod}}-object.
+# @param tolerance Indicates up to which value the convergence result is
+#          accepted. The smaller \code{tolerance} is, the stricter the test
+#          will be.
+#
+# @return Logical vector, \code{TRUE} if convergence is fine, \code{FALSE}
+#           if convergence is suspicious. Additionally, the convergence
+#           value is returned as return value's name.
+#
+# @details This function provides an alternative convergence test for
+#                \code{\link[lme4]{merMod}}-objects, as discussed
+#                \href{https://github.com/lme4/lme4/issues/120}{here}
+#                and suggested by Ben Bolker in
+#                \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment}.
+#
+# @examples
+# library(lme4)
+# data(efc)
+# # create binary response
+# efc$hi_qol <- dicho(efc$quol_5)
+# # prepare group variable
+# efc$grp = as.factor(efc$e15relat)
+# # data frame for fitted model
+# mydf <- data.frame(hi_qol = as.factor(efc$hi_qol),
+#                    sex = as.factor(efc$c161sex),
+#                    c12hour = as.numeric(efc$c12hour),
+#                    neg_c_7 = as.numeric(efc$neg_c_7),
+#                    grp = efc$grp)
+# # fit glmer
+# fit <- glmer(hi_qol ~ sex + c12hour + neg_c_7 + (1|grp),
+#              data = mydf, family = binomial("logit"))
+#
+# converge_ok(fit)
+#
 #' @importFrom Matrix solve
-#' 
+# 
 converge_ok <- function(x, tolerance = 0.001) {
   # check for package availability
   if (!requireNamespace("Matrix", quietly = TRUE)) {
@@ -517,46 +518,46 @@ converge_ok <- function(x, tolerance = 0.001) {
     warning("`x` must be a `merMod` object.", call. = F)
   }
 }
-#' @title Copy value and variable labels to (subsetted) data frames
-#' @name copy_labels
-#'
-#' @description Subsetting-functions usually drop value and variable labels from
-#'                subsetted data frames (if the original data frame has value and variable
-#'                label attributes). This function copies these value and variable
-#'                labels back to subsetted data frames that have been subsetted, for instance,
-#'                with \code{\link{subset}}.
-#'                \cr \cr
-#'                In case \code{df_origin = NULL}, all possible label attributes
-#'                from \code{df_new} are removed.
-#'
-#' @seealso \href{http://www.strengejacke.de/sjPlot/labelleddata/}{sjPlot-manual}
-#'            on working with labelled data, and \code{\link{remove_all_labels}} for
-#'            removing label attributes from data frames.
-#'
-#' @param df_new The new, subsetted data frame.
-#' @param df_origin The original data frame where the subset (\code{df_new}) stems from;
-#'          use \code{NULL}, if value and variable labels from \code{df_new} should be removed.
-#' @return Returns \code{df_new} with either removed value and variable label attributes
-#'           (if \code{df_origin = NULL}) or with copied value and variable label
-#'           attributes (if \code{df_origin} was the original subsetted data frame).
-#'
-#' @note In case \code{df_origin = NULL}, all possible label attributes
-#'         from \code{df_new} are removed. dplyr >= 0.4.2 no longer drops
-#'         vector attributes; you'll only need to copy labels when using
-#'         dplyr up to 0.4.1.
-#'
-#' @examples
-#' data(efc)
-#' efc.sub <- subset(efc, subset = e16sex == 1, select = c(4:8))
-#' str(efc.sub)
-#'
-#' efc.sub <- copy_labels(efc.sub, efc)
-#' str(efc.sub)
-#'
-#' efc.sub <- copy_labels(efc.sub)
-#' str(efc.sub)
-#'
-#' 
+# @title Copy value and variable labels to (subsetted) data frames
+# @name copy_labels
+#
+# @description Subsetting-functions usually drop value and variable labels from
+#                subsetted data frames (if the original data frame has value and variable
+#                label attributes). This function copies these value and variable
+#                labels back to subsetted data frames that have been subsetted, for instance,
+#                with \code{\link{subset}}.
+#                \cr \cr
+#                In case \code{df_origin = NULL}, all possible label attributes
+#                from \code{df_new} are removed.
+#
+# @seealso \href{http://www.strengejacke.de/sjPlot/labelleddata/}{sjPlot-manual}
+#            on working with labelled data, and \code{\link{remove_all_labels}} for
+#            removing label attributes from data frames.
+#
+# @param df_new The new, subsetted data frame.
+# @param df_origin The original data frame where the subset (\code{df_new}) stems from;
+#          use \code{NULL}, if value and variable labels from \code{df_new} should be removed.
+# @return Returns \code{df_new} with either removed value and variable label attributes
+#           (if \code{df_origin = NULL}) or with copied value and variable label
+#           attributes (if \code{df_origin} was the original subsetted data frame).
+#
+# @note In case \code{df_origin = NULL}, all possible label attributes
+#         from \code{df_new} are removed. dplyr >= 0.4.2 no longer drops
+#         vector attributes; you'll only need to copy labels when using
+#         dplyr up to 0.4.1.
+#
+# @examples
+# data(efc)
+# efc.sub <- subset(efc, subset = e16sex == 1, select = c(4:8))
+# str(efc.sub)
+#
+# efc.sub <- copy_labels(efc.sub, efc)
+# str(efc.sub)
+#
+# efc.sub <- copy_labels(efc.sub)
+# str(efc.sub)
+#
+# 
 copy_labels <- function(df_new, df_origin = NULL) {
   # check if old df is NULL. if so, we remove all labels
   # from the data frame.
@@ -590,42 +591,42 @@ copy_labels <- function(df_new, df_origin = NULL) {
   }
   return(df_new)
 }
-#' @title Cramer's V for a contingency table
-#' @name cramer
-#' @description Compute Cramer's V for a table with more than 2x2 fields.
-#'
-#' @seealso \code{\link{phi}}
-#'
-#' @inheritParams phi
-#'
-#' @return The table's Cramer's V.
-#'
-#' @examples
-#' tab <- table(sample(1:2, 30, TRUE), sample(1:3, 30, TRUE))
-#' cramer(tab)
-#'
+# @title Cramer's V for a contingency table
+# @name cramer
+# @description Compute Cramer's V for a table with more than 2x2 fields.
+#
+# @seealso \code{\link{phi}}
+#
+# @inheritParams phi
+#
+# @return The table's Cramer's V.
+#
+# @examples
+# tab <- table(sample(1:2, 30, TRUE), sample(1:3, 30, TRUE))
+# cramer(tab)
+#
 #' @importFrom stats ftable
-#' 
+# 
 cramer <- function(tab) {
   if (all(class(tab) != "ftable")) tab <- stats::ftable(tab)
   phi_val <- phi(tab)
   cramer <- sqrt(phi_val ^ 2 / min(dim(tab) - 1))
   return(cramer)
 }
-#' @title Cronbach's Alpha for a matrix or data frame
-#' @name cronb
-#' @description This function calculates the Cronbach's alpha value
-#'                of a data frame or matrix.
-#'
-#' @seealso \code{\link{reliab_test}}
-#'
-#' @param data \code{data.frame} or matrix with more than 2 columns.
-#' @return The Cronbach's alpha value for \code{data}.
-#'
-#' @note See 'Examples' from \code{\link[sjPlot]{sjp.pca}} and \code{\link[sjPlot]{sjt.pca}}.
-#'
+# @title Cronbach's Alpha for a matrix or data frame
+# @name cronb
+# @description This function calculates the Cronbach's alpha value
+#                of a data frame or matrix.
+#
+# @seealso \code{\link{reliab_test}}
+#
+# @param data \code{data.frame} or matrix with more than 2 columns.
+# @return The Cronbach's alpha value for \code{data}.
+#
+# @note See 'Examples' from \code{\link[sjPlot]{sjp.pca}} and \code{\link[sjPlot]{sjt.pca}}.
+#
 #' @importFrom stats na.omit var
-#' 
+# 
 cronb <- function(data) {
   .data <- stats::na.omit(data)
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
@@ -634,47 +635,47 @@ cronb <- function(data) {
   }
   return(dim(.data)[2] / (dim(.data)[2] - 1) * (1 - sum(apply(.data, 2, var)) / stats::var(rowSums(.data))))
 }
-#' @title Coefficient of Variation
-#' @name cv
-#' @description Compute coefficient of variation for single variables
-#'                (standard deviation divided by mean) or for fitted
-#'                linear (mixed effects) models (root mean squared error
-#'                (RMSE) divided by mean of dependent variable).
-#'
-#' @param x (Numeric) vector or a fitted linear model of class
-#'          \code{\link{lm}}, \code{\link[lme4]{merMod}} (\pkg{lme4}) or
-#'          \code{\link[nlme]{lme}} (\pkg{nlme}).
-#' @param ... More fitted model objects, to compute multiple coefficients of
-#'              variation at once.
-#' @return The coefficient of variation of \code{x}.
-#'
-#' @details The advantage of the cv is that it is unitless. This allows
-#'            coefficient of variation to be compared to each other in ways
-#'            that other measures, like standard deviations or root mean
-#'            squared residuals, cannot be
-#'            (\href{http://www.ats.ucla.edu/stat/mult_pkg/faq/general/coefficient_of_variation.htm}{source: UCLA-FAQ}).
-#'
-#' @seealso \code{\link{rmse}}
-#'
-#' @references \href{http://www.ats.ucla.edu/stat/mult_pkg/faq/general/coefficient_of_variation.htm}{UCLA-FAQ: What is the coefficient of variation?}
-#'
-#' @examples
-#' data(efc)
-#' cv(efc$e17age)
-#'
-#' fit <- lm(neg_c_7 ~ e42dep, data = efc)
-#' cv(fit)
-#'
-#' library(lme4)
-#' fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' cv(fit)
-#'
-#' library(nlme)
-#' fit <- lme(distance ~ age, data = Orthodont)
-#' cv(fit)
-#'
+# @title Coefficient of Variation
+# @name cv
+# @description Compute coefficient of variation for single variables
+#                (standard deviation divided by mean) or for fitted
+#                linear (mixed effects) models (root mean squared error
+#                (RMSE) divided by mean of dependent variable).
+#
+# @param x (Numeric) vector or a fitted linear model of class
+#          \code{\link{lm}}, \code{\link[lme4]{merMod}} (\pkg{lme4}) or
+#          \code{\link[nlme]{lme}} (\pkg{nlme}).
+# @param ... More fitted model objects, to compute multiple coefficients of
+#              variation at once.
+# @return The coefficient of variation of \code{x}.
+#
+# @details The advantage of the cv is that it is unitless. This allows
+#            coefficient of variation to be compared to each other in ways
+#            that other measures, like standard deviations or root mean
+#            squared residuals, cannot be
+#            (\href{http://www.ats.ucla.edu/stat/mult_pkg/faq/general/coefficient_of_variation.htm}{source: UCLA-FAQ}).
+#
+# @seealso \code{\link{rmse}}
+#
+# @references \href{http://www.ats.ucla.edu/stat/mult_pkg/faq/general/coefficient_of_variation.htm}{UCLA-FAQ: What is the coefficient of variation?}
+#
+# @examples
+# data(efc)
+# cv(efc$e17age)
+#
+# fit <- lm(neg_c_7 ~ e42dep, data = efc)
+# cv(fit)
+#
+# library(lme4)
+# fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# cv(fit)
+#
+# library(nlme)
+# fit <- lme(distance ~ age, data = Orthodont)
+# cv(fit)
+#
 #' @importFrom stats sd
-#' 
+# 
 cv <- function(x, ...) {
   # return value
   cv_ <- cv_helper(x)
@@ -731,64 +732,64 @@ cv_helper <- function(x) {
     }
   }
   return(NULL)
-}#' @title Dichotomize variables
-#' @name dicho
-#'
-#' @description Dichotomizes variables into dummy variables (0/1). Dichotomization is
-#'                either done by median, mean or a specific value (see \code{dich.by}).
-#'                Either single vectors, a complete data frame or a list of
-#'                variables can be dichotomized.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables
-#'          that should be dichotomized
-#' @param dich.by Indicates the split criterion where a variable is dichotomized.
-#'          Must be one of the following values (may be abbreviated):
-#'          \describe{
-#'            \item{\code{"median"}}{by default, \code{x} is split into two groups at the median.}
-#'            \item{\code{"mean"}}{splits \code{x} into two groups at the mean of \code{x}.}
-#'            \item{\code{"value"}}{splits \code{x} into two groups at a specific value (see \code{dich.val}).}
-#'            }
-#' @param dich.val Numeric, indicates a value where \code{x} is dichotomized when \code{dich.by = "value"}.
-#'          \strong{Note that \code{dich.val} is inclusive}, i.e. \code{dich.val = 10} will split \code{x}
-#'          into one group with values from lowest to 10 and another group with values greater
-#'          than 10.
-#' @param as.num Logical, if \code{TRUE}, return value will be numeric, not a factor.
-#' @param var.label Optional string, to set variable label attribute for the
-#'          dichotomized variable (see \code{\link{set_label}}). If \code{NULL}
-#'          (default), variable label attribute of \code{x} will be used (if present).
-#' @param val.labels Optional character vector (of length two), to set value label
-#'          attributes of dichotomized variable (see \code{\link{set_labels}}).
-#'          If \code{NULL} (default), no value labels will be set.
-#' @return A dichotomized factor (or numeric, if \code{as.num = TRUE}) variable (0/1-coded),
-#'           respectively a data frame or list of dichotomized factor (or numeric) variables.
-#'
-#' @note Variable label attributes (see, for instance, \code{\link{set_label}}) are preserved
-#'         (unless changes via \code{var.label}-argument).
-#'
-#' @examples
-#' data(efc)
-#' summary(efc$c12hour)
-#' table(dicho(efc$c12hour))
-#' table(dicho(efc$c12hour, "mean"))
-#' table(dicho(efc$c12hour, "value", 30))
-#'
-#' # sample data frame, values from 1-4
-#' head(efc[, 6:10])
-#' # dichtomized values (1 to 2 = 0, 3 to 4 = 1)
-#' head(dicho(efc[, 6:10], "v", 2))
-#'
-#' # dichtomize several variables in a list
-#' dummy <- list(efc$c12hour, efc$e17age, efc$c160age)
-#' dicho(dummy)
-#'
-#' # dichotomize and set labels. requires package
-#' # sjPlot to test
-#' \dontrun{
-#' library(sjPlot)
-#' sjp.frq(dicho(efc$e42dep, var.label = "Dependency (dichotomized)",
-#'               val.labels = c("lower", "higher")))}
-#'
-#' 
+}# @title Dichotomize variables
+# @name dicho
+#
+# @description Dichotomizes variables into dummy variables (0/1). Dichotomization is
+#                either done by median, mean or a specific value (see \code{dich.by}).
+#                Either single vectors, a complete data frame or a list of
+#                variables can be dichotomized.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables
+#          that should be dichotomized
+# @param dich.by Indicates the split criterion where a variable is dichotomized.
+#          Must be one of the following values (may be abbreviated):
+#          \describe{
+#            \item{\code{"median"}}{by default, \code{x} is split into two groups at the median.}
+#            \item{\code{"mean"}}{splits \code{x} into two groups at the mean of \code{x}.}
+#            \item{\code{"value"}}{splits \code{x} into two groups at a specific value (see \code{dich.val}).}
+#            }
+# @param dich.val Numeric, indicates a value where \code{x} is dichotomized when \code{dich.by = "value"}.
+#          \strong{Note that \code{dich.val} is inclusive}, i.e. \code{dich.val = 10} will split \code{x}
+#          into one group with values from lowest to 10 and another group with values greater
+#          than 10.
+# @param as.num Logical, if \code{TRUE}, return value will be numeric, not a factor.
+# @param var.label Optional string, to set variable label attribute for the
+#          dichotomized variable (see \code{\link{set_label}}). If \code{NULL}
+#          (default), variable label attribute of \code{x} will be used (if present).
+# @param val.labels Optional character vector (of length two), to set value label
+#          attributes of dichotomized variable (see \code{\link{set_labels}}).
+#          If \code{NULL} (default), no value labels will be set.
+# @return A dichotomized factor (or numeric, if \code{as.num = TRUE}) variable (0/1-coded),
+#           respectively a data frame or list of dichotomized factor (or numeric) variables.
+#
+# @note Variable label attributes (see, for instance, \code{\link{set_label}}) are preserved
+#         (unless changes via \code{var.label}-argument).
+#
+# @examples
+# data(efc)
+# summary(efc$c12hour)
+# table(dicho(efc$c12hour))
+# table(dicho(efc$c12hour, "mean"))
+# table(dicho(efc$c12hour, "value", 30))
+#
+# # sample data frame, values from 1-4
+# head(efc[, 6:10])
+# # dichtomized values (1 to 2 = 0, 3 to 4 = 1)
+# head(dicho(efc[, 6:10], "v", 2))
+#
+# # dichtomize several variables in a list
+# dummy <- list(efc$c12hour, efc$e17age, efc$c160age)
+# dicho(dummy)
+#
+# # dichotomize and set labels. requires package
+# # sjPlot to test
+# \dontrun{
+# library(sjPlot)
+# sjp.frq(dicho(efc$e42dep, var.label = "Dependency (dichotomized)",
+#               val.labels = c("lower", "higher")))}
+#
+# 
 dicho <- function(x,
                   dich.by = c("median", "mean", "value"),
                   dich.val = -1,
@@ -861,40 +862,40 @@ dicho_helper <- function(x, dich.by, dich.val, as.num, var.label, val.labels) {
   if (!is.null(val.labels)) x <- set_labels(x, val.labels)
   return(x)
 }
-#' @title Drop labels of zero-count values
-#' @name drop_labels
-#'
-#' @description This function drops all value labels for those values that have
-#'                no cases (frequencies) in a vector.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables
-#'          with partially added value labels (see \code{\link[haven]{labelled}}).
-#'
-#' @return \code{x}, where value labels for non-existing values are removed.
-#'
-#' @seealso \code{\link{zap_labels}} and \code{\link{zap_unlabelled}} to convert
-#'            (non-)labelled values into \code{NA}; \code{\link{fill_labels}} to
-#'            add labels to existing, but not yet labelled values. The latter
-#'            function is the counterpart to \code{drop_labels}.
-#'
-#' @examples
-#' rp <- rec_pattern(1, 100)
-#' rp
-#'
-#' # sample data
-#' data(efc)
-#' # recode carers age into groups of width 5
-#' x <- rec(efc$c160age, rp$pattern)
-#' # add value labels to new vector
-#' set_labels(x) <- rp$labels
-#' # watch result. due to recode-pattern, we have age groups with
-#' # no observations (zero-counts)
-#' frq(as_labelled(x))
-#'
-#' # now, let's drop zero's
-#' frq(as_labelled(drop_labels(x)))
-#'
-#' 
+# @title Drop labels of zero-count values
+# @name drop_labels
+#
+# @description This function drops all value labels for those values that have
+#                no cases (frequencies) in a vector.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables
+#          with partially added value labels (see \code{\link[haven]{labelled}}).
+#
+# @return \code{x}, where value labels for non-existing values are removed.
+#
+# @seealso \code{\link{zap_labels}} and \code{\link{zap_unlabelled}} to convert
+#            (non-)labelled values into \code{NA}; \code{\link{fill_labels}} to
+#            add labels to existing, but not yet labelled values. The latter
+#            function is the counterpart to \code{drop_labels}.
+#
+# @examples
+# rp <- rec_pattern(1, 100)
+# rp
+#
+# # sample data
+# data(efc)
+# # recode carers age into groups of width 5
+# x <- rec(efc$c160age, rp$pattern)
+# # add value labels to new vector
+# set_labels(x) <- rp$labels
+# # watch result. due to recode-pattern, we have age groups with
+# # no observations (zero-counts)
+# frq(as_labelled(x))
+#
+# # now, let's drop zero's
+# frq(as_labelled(drop_labels(x)))
+#
+# 
 drop_labels <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -925,73 +926,73 @@ drop_labels_helper <- function(x) {
   # set labels
   set_labels(x, labels = value.labels)
 }
-#' @docType data
-#' @title Sample dataset from the EUROFAMCARE project
-#' @name efc
-#' @keywords data
-#'
-#' @description A SPSS sample data set, read with the \code{\link[haven]{read_spss}}
-#'                function and "converted" with \code{\link{unlabel}}.
-#'
-#' @examples
-#' # Attach EFC-data
-#' data(efc)
-#'
-#' # Show structure
-#' str(efc)
-#'
-#' # show first rows
-#' head(efc)
-#'
-#' # show variables
-#' \dontrun{
-#' library(sjPlot)
-#' view_df(efc)
-#'
-#' # show variable labels
-#' get_label(efc)
-#'
-#' # plot efc-data frame summary
-#' sjt.df(efc, alternateRowColor = TRUE)}
-#'
+# @docType data
+# @title Sample dataset from the EUROFAMCARE project
+# @name efc
+# @keywords data
+#
+# @description A SPSS sample data set, read with the \code{\link[haven]{read_spss}}
+#                function and "converted" with \code{\link{unlabel}}.
+#
+# @examples
+# # Attach EFC-data
+# data(efc)
+#
+# # Show structure
+# str(efc)
+#
+# # show first rows
+# head(efc)
+#
+# # show variables
+# \dontrun{
+# library(sjPlot)
+# view_df(efc)
+#
+# # show variable labels
+# get_label(efc)
+#
+# # plot efc-data frame summary
+# sjt.df(efc, alternateRowColor = TRUE)}
+#
 NULL
 
-#' @title Eta-squared of fitted anova
-#' @name eta_sq
-#' @description Returns the eta-squared value for one-way-anovas.
-#'
-#' @param ... Fitted one-way-anova model or a dependent and grouping variable (see 'Examples').
-#' @return The eta-squared value.
-#'
-#' @note Interpret eta-squared like r-squared or R-squared; a rule of thumb (Cohen):
-#'         \itemize{
-#'          \item .02 ~ small
-#'          \item .13 ~ medium
-#'          \item .26 ~ large
-#'         }
-#'
-#' @references \itemize{
-#'               \item \href{http://stats.stackexchange.com/questions/78808/}{How to compute eta-sq in ANOVA by hand?}
-#'               \item \href{http://stats.stackexchange.com/questions/15958/}{How to interpret and report eta squared?}
-#'               \item \href{http://en.wikiversity.org/wiki/Eta-squared}{Wikipedia: Eta-squared}
-#'               \item Levine TR, Hullett CR (2002): Eta Squared, Partial Eta Squared, and Misreporting of Effect Size in Communication Research (\href{https://www.msu.edu/~levinet/eta\%20squared\%20hcr.pdf}{pdf})
-#'             }
-#'
-#' @examples
-#' # load sample data
-#' data(efc)
-#'
-#' # fit linear model
-#' fit <- aov(c12hour ~ as.factor(e42dep), data = efc)
-#'
-#' # print eta sqaured
-#' eta_sq(fit)
-#'
-#' # grouping variable will be converted to factor autoamtically
-#' eta_sq(efc$c12hour, efc$e42dep)
-#'
+# @title Eta-squared of fitted anova
+# @name eta_sq
+# @description Returns the eta-squared value for one-way-anovas.
+#
+# @param ... Fitted one-way-anova model or a dependent and grouping variable (see 'Examples').
+# @return The eta-squared value.
+#
+# @note Interpret eta-squared like r-squared or R-squared; a rule of thumb (Cohen):
+#         \itemize{
+#          \item .02 ~ small
+#          \item .13 ~ medium
+#          \item .26 ~ large
+#         }
+#
+# @references \itemize{
+#               \item \href{http://stats.stackexchange.com/questions/78808/}{How to compute eta-sq in ANOVA by hand?}
+#               \item \href{http://stats.stackexchange.com/questions/15958/}{How to interpret and report eta squared?}
+#               \item \href{http://en.wikiversity.org/wiki/Eta-squared}{Wikipedia: Eta-squared}
+#               \item Levine TR, Hullett CR (2002): Eta Squared, Partial Eta Squared, and Misreporting of Effect Size in Communication Research (\href{https://www.msu.edu/~levinet/eta\%20squared\%20hcr.pdf}{pdf})
+#             }
+#
+# @examples
+# # load sample data
+# data(efc)
+#
+# # fit linear model
+# fit <- aov(c12hour ~ as.factor(e42dep), data = efc)
+#
+# # print eta sqaured
+# eta_sq(fit)
+#
+# # grouping variable will be converted to factor autoamtically
+# eta_sq(efc$c12hour, efc$e42dep)
+#
 #' @importFrom stats aov summary.lm
-#' 
+# 
 eta_sq <- function(...) {
   # retrieve list of parameters
   input_list <- list(...)
@@ -1013,46 +1014,46 @@ eta_sq <- function(...) {
   return(stats::summary.lm(fit)$r.squared)
   # return (1 - var(fit$residuals, na.rm = T) / var(fit$model[,1], na.rm = T))
 }
-#' @title Add missing value labels to partially labelled vector
-#' @name fill_labels
-#'
-#' @description This function adds value labels to a partially labelled vector,
-#'                i.e. if not all values are labelled, non-labelled values
-#'                get labels.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables
-#'          with partially added value labels (see \code{\link[haven]{labelled}}).
-#'
-#' @return \code{x}, where labels for non-labelled values are added.
-#'
-#' @seealso \code{\link{drop_labels}} is the counterpart to \code{fill_labels}
-#'            and drops labels from zero-count (non-existing) values.
-#'
-#' @examples
-#' # create labelled integer, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1, 5),
-#'               c(Good = 1, Bad = 5))
-#' get_labels(x)
-#' get_labels(x, include.non.labelled = TRUE)
-#'
-#' fill_labels(x)
-#' get_labels(fill_labels(x))
-#'
-#' # create partially labelled vector with missings
-#' x <- labelled(c(1, 2, 1, 3, 4, 1, 5),
-#'               c(Male = 1, Female = 2, Refused = 5),
-#'               c(FALSE, FALSE, TRUE))
-#' x
-#' fill_labels(x)
-#' get_labels(fill_labels(x))
-#'
-#' # get summary
-#' x <- labelled(c(1, 2, 1, 3, 4, 1, NA, 5),
-#'               c(Male = 1, Female = 2, Refused = 5),
-#'               c(FALSE, FALSE, TRUE))
-#' frq(x)
-#'
-#' 
+# @title Add missing value labels to partially labelled vector
+# @name fill_labels
+#
+# @description This function adds value labels to a partially labelled vector,
+#                i.e. if not all values are labelled, non-labelled values
+#                get labels.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables
+#          with partially added value labels (see \code{\link[haven]{labelled}}).
+#
+# @return \code{x}, where labels for non-labelled values are added.
+#
+# @seealso \code{\link{drop_labels}} is the counterpart to \code{fill_labels}
+#            and drops labels from zero-count (non-existing) values.
+#
+# @examples
+# # create labelled integer, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1, 5),
+#               c(Good = 1, Bad = 5))
+# get_labels(x)
+# get_labels(x, include.non.labelled = TRUE)
+#
+# fill_labels(x)
+# get_labels(fill_labels(x))
+#
+# # create partially labelled vector with missings
+# x <- labelled(c(1, 2, 1, 3, 4, 1, 5),
+#               c(Male = 1, Female = 2, Refused = 5),
+#               c(FALSE, FALSE, TRUE))
+# x
+# fill_labels(x)
+# get_labels(fill_labels(x))
+#
+# # get summary
+# x <- labelled(c(1, 2, 1, 3, 4, 1, NA, 5),
+#               c(Male = 1, Female = 2, Refused = 5),
+#               c(FALSE, FALSE, TRUE))
+# frq(x)
+#
+# 
 fill_labels <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -1100,34 +1101,34 @@ fill_labels_helper <- function(x) {
   }
   return(x)
 }
-#' @title Summary of labelled vectors
-#' @name frq
-#' @description This function prints a summary, including frequency table,
-#'                of labelled vectors. Unlike \code{\link{summary}}, the
-#'                \code{frq} method also prints label and missing attributes.
-#'
-#' @param x A labelled vector.
-#' @param print.frq Optional logical, if \code{TRUE} (default), frequency
-#'          table will be printed to the console.
-#'
-#' @return A data frame with the summary information of \code{x}.
-#'
-#' @examples
-#' # create labelled factor, with missing flag
-#' x <- labelled(c("M", "M", "F", "X", "N/A"),
-#'               c(Male = "M", Female = "F",
-#'                 Refused = "X", "Not applicable" = "N/A"),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' frq(x)
-#'
-#' # create labelled numeric vector, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1, NA, 5),
-#'               c(Male = 1, Female = 2, Refused = 5),
-#'               c(FALSE, FALSE, TRUE))
-#' frq(x)
-#'
+# @title Summary of labelled vectors
+# @name frq
+# @description This function prints a summary, including frequency table,
+#                of labelled vectors. Unlike \code{\link{summary}}, the
+#                \code{frq} method also prints label and missing attributes.
+#
+# @param x A labelled vector.
+# @param print.frq Optional logical, if \code{TRUE} (default), frequency
+#          table will be printed to the console.
+#
+# @return A data frame with the summary information of \code{x}.
+#
+# @examples
+# # create labelled factor, with missing flag
+# x <- labelled(c("M", "M", "F", "X", "N/A"),
+#               c(Male = "M", Female = "F",
+#                 Refused = "X", "Not applicable" = "N/A"),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# frq(x)
+#
+# # create labelled numeric vector, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1, NA, 5),
+#               c(Male = 1, Female = 2, Refused = 5),
+#               c(FALSE, FALSE, TRUE))
+# frq(x)
+#
 #' @importFrom stats quantile median na.omit
-#' 
+# 
 frq <- function(x, print.frq = TRUE) {
   # check for labelled class
   if (!is_labelled(x)) {
@@ -1241,97 +1242,97 @@ frq <- function(x, print.frq = TRUE) {
 
 
 
-#' @title Get summary of labelled vectors
-#' @name get_frq
-#' @description This function returns a summary, including frequency table,
-#'                of labelled vectors, as data frame. Unlike \code{\link{summary}}, the
-#'                \code{frq} method also prints label and missing attributes.
-#'
-#' @param x A labelled vector.
-#' @param coerce Logical, if \code{TRUE}, vectors will be coerced to \code{labelled}
-#'          class if necessary.
-#'
-#' @return A data frame with the summary information of \code{x}.
-#'
-#' @examples
-#' # create labelled factor, with missing flag
-#' x <- labelled(c("M", "M", "F", "X", "N/A"),
-#'               c(Male = "M", Female = "F",
-#'                 Refused = "X", "Not applicable" = "N/A"),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#'
-#' get_frq(x)
-#'
+# @title Get summary of labelled vectors
+# @name get_frq
+# @description This function returns a summary, including frequency table,
+#                of labelled vectors, as data frame. Unlike \code{\link{summary}}, the
+#                \code{frq} method also prints label and missing attributes.
+#
+# @param x A labelled vector.
+# @param coerce Logical, if \code{TRUE}, vectors will be coerced to \code{labelled}
+#          class if necessary.
+#
+# @return A data frame with the summary information of \code{x}.
+#
+# @examples
+# # create labelled factor, with missing flag
+# x <- labelled(c("M", "M", "F", "X", "N/A"),
+#               c(Male = "M", Female = "F",
+#                 Refused = "X", "Not applicable" = "N/A"),
+#               c(FALSE, FALSE, TRUE, TRUE))
+#
+# get_frq(x)
+#
 #' @importFrom stats quantile median na.omit
-#' 
+# 
 get_frq <- function(x, coerce = TRUE) {
   if (!is_labelled(x) && TRUE == coerce)
     x <- as_labelled(x, add.class = T)
   .dat <- frq(x, print.frq = FALSE)
   .dat
 }
-#' @title Retrieve variable label(s) of labelled data
-#' @name get_label
-#'
-#' @description This function retrieves the value labels of labelled data, which
-#'                was created with the \pkg{labelled} or \pkg{haven} package, or
-#'                imported from SPSS, SAS or STATA files (via \code{\link{read_spss}},
-#'                \code{\link{read_sas}} or \code{\link{read_stata}}) and
-#'                \itemize{
-#'                  \item if \code{x} is a data frame or a list of variables, returns the all variable labels as names character vector of length \code{ncol(x)}.
-#'                  \item or, if \code{x} is a vector, returns the variable label as string.
-#'                  }
-#'
-#' @seealso See package vignettes or \href{http://www.strengejacke.de/sjPlot/}{online documentation}
-#'            for more details; \code{\link{set_label}} to manually set variable labels or \code{\link{get_labels}}
-#'            to get value labels.
+# @title Retrieve variable label(s) of labelled data
+# @name get_label
+#
+# @description This function retrieves the value labels of labelled data, which
+#                was created with the \pkg{labelled} or \pkg{haven} package, or
+#                imported from SPSS, SAS or STATA files (via \code{\link{read_spss}},
+#                \code{\link{read_sas}} or \code{\link{read_stata}}) and
+#                \itemize{
+#                  \item if \code{x} is a data frame or a list of variables, returns the all variable labels as names character vector of length \code{ncol(x)}.
+#                  \item or, if \code{x} is a vector, returns the variable label as string.
+#                  }
+#
+# @seealso See package vignettes or \href{http://www.strengejacke.de/sjPlot/}{online documentation}
+#            for more details; \code{\link{set_label}} to manually set variable labels or \code{\link{get_labels}}
+#            to get value labels.
 
-#' @param x \code{data.frame} with variables that have label attributes (e.g.
-#'          from an imported SPSS, SAS or STATA data set, via \code{\link{read_spss}},
-#'          \code{\link{read_sas}} or \code{\link{read_stata}}); a variable
-#'          (vector) with variable label attribute; or a \code{list} of variables
-#'          with variable label attributes. See 'Examples'.
-#' @param def.value Optional, a character string which will be returned as label
-#'          if \code{x} has no label attribute. By default, \code{NULL} is returned.
-#'
-#' @return A named char vector with all variable labels from the data frame or list;
-#'           or a simple char vector (of length 1) with the variable label, if \code{x} is a variable.
-#'           If \code{x} is a single vector and has no label attribute, the value
-#'           of \code{def.value} will be returned (which is by default \code{NULL}).
-#'
-#' @details See 'Details' in \code{\link{get_labels}}.
-#'
-#' @note See 'Note' in \code{\link{get_labels}}.
-#'
-#' @examples
-#' # import SPSS data set
-#' # mydat <- read_spss("my_spss_data.sav", enc="UTF-8")
-#'
-#' # retrieve variable labels
-#' # mydat.var <- get_label(mydat)
-#'
-#' # retrieve value labels
-#' # mydat.val <- get_labels(mydat)
-#'
-#' data(efc)
-#'
-#' # get variable lable
-#' get_label(efc$e42dep)
-#'
-#' # alternative way
-#' get_label(efc)["e42dep"]
-#'
-#' # simple barplot
-#' barplot(table(efc$e42dep))
-#' # get value labels to annotate barplot
-#' barplot(table(efc$e42dep),
-#'         names.arg = get_labels(efc$e42dep),
-#'         main = get_label(efc$e42dep))
-#'
-#' # get labels from multiple variables
-#' get_label(list(efc$e42dep, efc$e16sex, efc$e15relat))
-#'
-#' 
+# @param x \code{data.frame} with variables that have label attributes (e.g.
+#          from an imported SPSS, SAS or STATA data set, via \code{\link{read_spss}},
+#          \code{\link{read_sas}} or \code{\link{read_stata}}); a variable
+#          (vector) with variable label attribute; or a \code{list} of variables
+#          with variable label attributes. See 'Examples'.
+# @param def.value Optional, a character string which will be returned as label
+#          if \code{x} has no label attribute. By default, \code{NULL} is returned.
+#
+# @return A named char vector with all variable labels from the data frame or list;
+#           or a simple char vector (of length 1) with the variable label, if \code{x} is a variable.
+#           If \code{x} is a single vector and has no label attribute, the value
+#           of \code{def.value} will be returned (which is by default \code{NULL}).
+#
+# @details See 'Details' in \code{\link{get_labels}}.
+#
+# @note See 'Note' in \code{\link{get_labels}}.
+#
+# @examples
+# # import SPSS data set
+# # mydat <- read_spss("my_spss_data.sav", enc="UTF-8")
+#
+# # retrieve variable labels
+# # mydat.var <- get_label(mydat)
+#
+# # retrieve value labels
+# # mydat.val <- get_labels(mydat)
+#
+# data(efc)
+#
+# # get variable lable
+# get_label(efc$e42dep)
+#
+# # alternative way
+# get_label(efc)["e42dep"]
+#
+# # simple barplot
+# barplot(table(efc$e42dep))
+# # get value labels to annotate barplot
+# barplot(table(efc$e42dep),
+#         names.arg = get_labels(efc$e42dep),
+#         main = get_label(efc$e42dep))
+#
+# # get labels from multiple variables
+# get_label(list(efc$e42dep, efc$e16sex, efc$e15relat))
+#
+# 
 get_label <- function(x, def.value = NULL) {
   # auto-detect variable label attribute
   attr.string <- getVarLabelAttribute(x)
@@ -1377,141 +1378,141 @@ get_label <- function(x, def.value = NULL) {
     return(retat)
   }
 }
-#' @title Retrieve value labels of labelled data
-#' @name get_labels
-#'
-#' @description This function retrieves the value labels of labelled data, which
-#'                was created with the \pkg{labelled} or \pkg{haven} package, or
-#'                imported from SPSS, SAS or STATA files (via \code{\link{read_spss}},
-#'                \code{\link{read_sas}} or \code{\link{read_stata}}) and
-#'                \itemize{
-#'                  \item if \code{x} is a data frame or list of variables, returns all variables' value labels as \code{\link{list}}
-#'                  \item or, if \code{x} is a vector, returns the value labels as string.
-#'                  }
-#'
-#' @seealso See package vignettes or \href{http://www.strengejacke.de/sjPlot/}{online documentation}
-#'            for more details; \code{\link{set_labels}} to manually set value labels, \code{\link{get_label}}
-#'            to get variable labels and \code{\link{get_values}} to retrieve value label associated values.
-#'
-#' @param x \code{data.frame} with variables that have value label attributes (e.g.
-#'          from an imported SPSS, SAS or STATA data set, via \code{\link{read_spss}},
-#'          \code{\link{read_sas}} or \code{\link{read_stata}}); a variable
-#'          (vector) with value label attributes; or a \code{list} of variables
-#'          with values label attributes. If \code{x} has no label attributes,
-#'          factor levels are returned. See 'Examples'.
-#' @param include.values String, indicating whether the values associated with the
-#'          value labels are returned as well. If \code{include.values = "as.name"}
-#'          (or \code{include.values = "n"}), values are set as \code{\link{names}}
-#'          attribute of the returned object. If \code{include.values = "as.prefix"}
-#'          (or \code{include.values = "p"}), values are included as prefix
-#'          to each label. See 'Examples'.
-#' @param attr.only Logical, if \code{TRUE}, labels are only searched for
-#'          in the the vector's \code{\link{attributes}}; else, if \code{x} has no
-#'          label attributes, factor levels or string values are returned. See
-#'          'Examples'.
-#' @param include.non.labelled Logical, if \code{TRUE}, values without labels will
-#'          also be included in the returned labels.
-#' @return Either a list with all value labels from all variables if \code{x}
-#'           is a \code{data.frame} or \code{list}; a string with the value
-#'           labels, if \code{x} is a variable;
-#'           or \code{NULL} if no value label attribute was found.
-#'
-#' @details This package can add (and read) value and variable labels either in \pkg{foreign}
-#'            package style (attributes are named \emph{value.labels} and \emph{variable.label})
-#'            or in \pkg{haven} package style (attributes are named \emph{labels} and
-#'            \emph{label}). By default, the \pkg{haven} package style is used.
-#'            \cr \cr
-#'            Working with labelled data is a key element of the \pkg{sjPlot} package,
-#'            which accesses these attributes to automatically read label attributes
-#'            for labelling axis categories and titles or table rows and columns.
-#'            \cr \cr
-#'            When working with labelled data, you can, e.g., use
-#'            \code{\link{get_label}} or \code{\link{get_labels}}
-#'            to get a vector of value and variable labels, which can then be
-#'            used with other functions like \code{\link{barplot}} etc.
-#'            See 'Examples'.
-#'            \cr \cr
-#'            Furthermore, value and variable labels are used when saving data, e.g. to SPSS
-#'            (see \code{\link{write_spss}}), which means that the written SPSS file
-#'            contains proper labels for each variable.
-#'            \cr \cr
-#'            You can set a default label style (i.e. the names of the label
-#'            attributes, see above) via \code{options(value_labels = "haven")}
-#'            or \code{options(value_labels = "foreign")}.
-#'
-#' @note This function works with vectors that have value and variable
-#'        label attributes (as provided, for instance, by \code{\link[haven]{labelled}}
-#'        objects). Adding label attributes is automatically done when importing data sets
-#'        with the \code{\link{read_spss}}, \code{\link{read_sas}} or \code{\link{read_stata}}
-#'        functions. Labels can also manually be added using the \code{\link{set_labels}}
-#'        and \code{\link{set_label}} functions. If vectors \strong{do not} have
-#'        label attributes, either factor-\code{\link{levels}} or the numeric values
-#'        of the vector are returned as labels.
-#'        \cr \cr
-#'        Most functions of the \pkg{sjPlot} package access value and variable label
-#'        attributes to automatically detect labels in order to set them as axis,
-#'        legend or title labels in plots (\code{sjp.}-functions) respectively as
-#'        column or row headers in table outputs (\code{sjt.}-functions). See
-#'        \href{http://www.strengejacke.de/sjPlot/datainit/}{this} and
-#'        \href{http://www.strengejacke.de/sjPlot/labelleddata/}{this}
-#'        online manuals for more details.
-#'
-#' @examples
-#' # import SPSS data set
-#' # mydat <- read_spss("my_spss_data.sav")
-#'
-#' # retrieve variable labels
-#' # mydat.var <- get_label(mydat)
-#'
-#' # retrieve value labels
-#' # mydat.val <- get_labels(mydat)
-#'
-#' data(efc)
-#' get_labels(efc$e42dep)
-#'
-#' # simple barplot
-#' barplot(table(efc$e42dep))
-#' # get value labels to annotate barplot
-#' barplot(table(efc$e42dep),
-#'         names.arg = get_labels(efc$e42dep),
-#'         main = get_label(efc$e42dep))
-#'
-#' # include associated values
-#' get_labels(efc$e42dep, include.values = "as.name")
-#'
-#' # include associated values
-#' get_labels(efc$e42dep, include.values = "as.prefix")
-#'
-#' # get labels from multiple variables
-#' get_labels(list(efc$e42dep, efc$e16sex, efc$e15relat))
-#'
-#'
-#' # create a dummy factor
-#' f1 <- factor(c("hi", "low", "mid"))
-#' # search for label attributes only
-#' get_labels(f1, attr.only = TRUE)
-#' # search for factor levels as well
-#' get_labels(f1)
-#'
-#' # same for character vectors
-#' c1 <- c("higher", "lower", "mid")
-#' # search for label attributes only
-#' get_labels(c1, attr.only = TRUE)
-#' # search for string values as well
-#' get_labels(c1)
-#'
-#'
-#' # create vector
-#' x <- c(1, 2, 3, 2, 4, NA)
-#' # add less labels than values
-#' x <- set_labels(x, c("yes", "maybe", "no"), force.values = FALSE)
-#' # get labels for labelled values only
-#' get_labels(x)
-#' # get labels for all values
-#' get_labels(x, include.non.labelled = TRUE)
-#'
-#'
-#' 
+# @title Retrieve value labels of labelled data
+# @name get_labels
+#
+# @description This function retrieves the value labels of labelled data, which
+#                was created with the \pkg{labelled} or \pkg{haven} package, or
+#                imported from SPSS, SAS or STATA files (via \code{\link{read_spss}},
+#                \code{\link{read_sas}} or \code{\link{read_stata}}) and
+#                \itemize{
+#                  \item if \code{x} is a data frame or list of variables, returns all variables' value labels as \code{\link{list}}
+#                  \item or, if \code{x} is a vector, returns the value labels as string.
+#                  }
+#
+# @seealso See package vignettes or \href{http://www.strengejacke.de/sjPlot/}{online documentation}
+#            for more details; \code{\link{set_labels}} to manually set value labels, \code{\link{get_label}}
+#            to get variable labels and \code{\link{get_values}} to retrieve value label associated values.
+#
+# @param x \code{data.frame} with variables that have value label attributes (e.g.
+#          from an imported SPSS, SAS or STATA data set, via \code{\link{read_spss}},
+#          \code{\link{read_sas}} or \code{\link{read_stata}}); a variable
+#          (vector) with value label attributes; or a \code{list} of variables
+#          with values label attributes. If \code{x} has no label attributes,
+#          factor levels are returned. See 'Examples'.
+# @param include.values String, indicating whether the values associated with the
+#          value labels are returned as well. If \code{include.values = "as.name"}
+#          (or \code{include.values = "n"}), values are set as \code{\link{names}}
+#          attribute of the returned object. If \code{include.values = "as.prefix"}
+#          (or \code{include.values = "p"}), values are included as prefix
+#          to each label. See 'Examples'.
+# @param attr.only Logical, if \code{TRUE}, labels are only searched for
+#          in the the vector's \code{\link{attributes}}; else, if \code{x} has no
+#          label attributes, factor levels or string values are returned. See
+#          'Examples'.
+# @param include.non.labelled Logical, if \code{TRUE}, values without labels will
+#          also be included in the returned labels.
+# @return Either a list with all value labels from all variables if \code{x}
+#           is a \code{data.frame} or \code{list}; a string with the value
+#           labels, if \code{x} is a variable;
+#           or \code{NULL} if no value label attribute was found.
+#
+# @details This package can add (and read) value and variable labels either in \pkg{foreign}
+#            package style (attributes are named \emph{value.labels} and \emph{variable.label})
+#            or in \pkg{haven} package style (attributes are named \emph{labels} and
+#            \emph{label}). By default, the \pkg{haven} package style is used.
+#            \cr \cr
+#            Working with labelled data is a key element of the \pkg{sjPlot} package,
+#            which accesses these attributes to automatically read label attributes
+#            for labelling axis categories and titles or table rows and columns.
+#            \cr \cr
+#            When working with labelled data, you can, e.g., use
+#            \code{\link{get_label}} or \code{\link{get_labels}}
+#            to get a vector of value and variable labels, which can then be
+#            used with other functions like \code{\link{barplot}} etc.
+#            See 'Examples'.
+#            \cr \cr
+#            Furthermore, value and variable labels are used when saving data, e.g. to SPSS
+#            (see \code{\link{write_spss}}), which means that the written SPSS file
+#            contains proper labels for each variable.
+#            \cr \cr
+#            You can set a default label style (i.e. the names of the label
+#            attributes, see above) via \code{options(value_labels = "haven")}
+#            or \code{options(value_labels = "foreign")}.
+#
+# @note This function works with vectors that have value and variable
+#        label attributes (as provided, for instance, by \code{\link[haven]{labelled}}
+#        objects). Adding label attributes is automatically done when importing data sets
+#        with the \code{\link{read_spss}}, \code{\link{read_sas}} or \code{\link{read_stata}}
+#        functions. Labels can also manually be added using the \code{\link{set_labels}}
+#        and \code{\link{set_label}} functions. If vectors \strong{do not} have
+#        label attributes, either factor-\code{\link{levels}} or the numeric values
+#        of the vector are returned as labels.
+#        \cr \cr
+#        Most functions of the \pkg{sjPlot} package access value and variable label
+#        attributes to automatically detect labels in order to set them as axis,
+#        legend or title labels in plots (\code{sjp.}-functions) respectively as
+#        column or row headers in table outputs (\code{sjt.}-functions). See
+#        \href{http://www.strengejacke.de/sjPlot/datainit/}{this} and
+#        \href{http://www.strengejacke.de/sjPlot/labelleddata/}{this}
+#        online manuals for more details.
+#
+# @examples
+# # import SPSS data set
+# # mydat <- read_spss("my_spss_data.sav")
+#
+# # retrieve variable labels
+# # mydat.var <- get_label(mydat)
+#
+# # retrieve value labels
+# # mydat.val <- get_labels(mydat)
+#
+# data(efc)
+# get_labels(efc$e42dep)
+#
+# # simple barplot
+# barplot(table(efc$e42dep))
+# # get value labels to annotate barplot
+# barplot(table(efc$e42dep),
+#         names.arg = get_labels(efc$e42dep),
+#         main = get_label(efc$e42dep))
+#
+# # include associated values
+# get_labels(efc$e42dep, include.values = "as.name")
+#
+# # include associated values
+# get_labels(efc$e42dep, include.values = "as.prefix")
+#
+# # get labels from multiple variables
+# get_labels(list(efc$e42dep, efc$e16sex, efc$e15relat))
+#
+#
+# # create a dummy factor
+# f1 <- factor(c("hi", "low", "mid"))
+# # search for label attributes only
+# get_labels(f1, attr.only = TRUE)
+# # search for factor levels as well
+# get_labels(f1)
+#
+# # same for character vectors
+# c1 <- c("higher", "lower", "mid")
+# # search for label attributes only
+# get_labels(c1, attr.only = TRUE)
+# # search for string values as well
+# get_labels(c1)
+#
+#
+# # create vector
+# x <- c(1, 2, 3, 2, 4, NA)
+# # add less labels than values
+# x <- set_labels(x, c("yes", "maybe", "no"), force.values = FALSE)
+# # get labels for labelled values only
+# get_labels(x)
+# # get labels for all values
+# get_labels(x, include.non.labelled = TRUE)
+#
+#
+# 
 get_labels <- function(x,
                        attr.only = FALSE,
                        include.values = NULL,
@@ -1617,58 +1618,58 @@ get_labels_helper <- function(x, attr.only, include.values, include.non.labelled
   # return them
   return(labels)
 }
-#' @title Retrieve missing values of labelled variables
-#' @name get_na
-#'
-#' @description This function retrieves the value codes associated with missing values
-#'                of variables of an imported SPSS, SAS or STATA data set (via \code{\link{read_spss}},
-#'                \code{\link{read_sas}} or \code{\link{read_stata}}), where missing
-#'                values have not been replaced with \code{NA}s after import,
-#'                or of \code{\link[haven]{labelled}} vectors.
-#'
-#' @seealso \code{\link{get_labels}} to get value labels, or \code{\link{get_values}}
-#'            to get values associated with labels; see \code{\link{set_na}} to
-#'            replace specific values with \code{NA} and \code{\link{to_na}} to
-#'            convert missing value codes into \code{NA}; see \code{\link{get_na_flags}}
-#'            to get a logical vector of missing flags.
-#'
-#' @param x Variable (vector) with value label attributes, including
-#'          missing value codes (see \code{\link{labelled}}).
-#' @return The missing values associated with value labels from \code{x},
-#'           or \code{NULL} if \code{x} has no missing value attribute.
-#'
-#' @details Other statistical software packages (like 'SPSS') allow to define
-#'            multiple missing values, e.g. \emph{not applicable}, \emph{refused answer}
-#'            or "real" missing. These missing types may be assigned with
-#'            different values, so it is possible to distinguish between these
-#'            missing types. In R, multiple declared missings cannot be represented
-#'            in a similar way. However, \code{\link{labelled}} vectors
-#'            allow to indicate different missings through the
-#'            \code{is_na}-\code{\link{attr}}. Technically, these "missings" are
-#'            stored as normal values. Thus, the \code{\link{table}} command,
-#'            for instance, would include these values by default. The
-#'            \pkg{sjmisc} package offers capabilities to deal with multiple
-#'            declared missings and enhances the possibilities to work with
-#'            labelled data, allowing for easy access of multiple declared
-#'            missings or conversion into \code{NA} etc.
-#'            \cr \cr
-#'            Furthermore, see 'Details' in \code{\link{get_values}}.
-#'
-#' @examples
-#' # create labelled factor, with missing flag
-#' x <- labelled(c("M", "M", "F", "X", "N/A"),
-#'               c(Male = "M", Female = "F",
-#'                 Refused = "X", "Not applicable" = "N/A"),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' get_na(x)
-#'
-#' # create labelled integer, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1),
-#'               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' get_na(x)
-#'
-#' 
+# @title Retrieve missing values of labelled variables
+# @name get_na
+#
+# @description This function retrieves the value codes associated with missing values
+#                of variables of an imported SPSS, SAS or STATA data set (via \code{\link{read_spss}},
+#                \code{\link{read_sas}} or \code{\link{read_stata}}), where missing
+#                values have not been replaced with \code{NA}s after import,
+#                or of \code{\link[haven]{labelled}} vectors.
+#
+# @seealso \code{\link{get_labels}} to get value labels, or \code{\link{get_values}}
+#            to get values associated with labels; see \code{\link{set_na}} to
+#            replace specific values with \code{NA} and \code{\link{to_na}} to
+#            convert missing value codes into \code{NA}; see \code{\link{get_na_flags}}
+#            to get a logical vector of missing flags.
+#
+# @param x Variable (vector) with value label attributes, including
+#          missing value codes (see \code{\link{labelled}}).
+# @return The missing values associated with value labels from \code{x},
+#           or \code{NULL} if \code{x} has no missing value attribute.
+#
+# @details Other statistical software packages (like 'SPSS') allow to define
+#            multiple missing values, e.g. \emph{not applicable}, \emph{refused answer}
+#            or "real" missing. These missing types may be assigned with
+#            different values, so it is possible to distinguish between these
+#            missing types. In R, multiple declared missings cannot be represented
+#            in a similar way. However, \code{\link{labelled}} vectors
+#            allow to indicate different missings through the
+#            \code{is_na}-\code{\link{attr}}. Technically, these "missings" are
+#            stored as normal values. Thus, the \code{\link{table}} command,
+#            for instance, would include these values by default. The
+#            \pkg{sjmisc} package offers capabilities to deal with multiple
+#            declared missings and enhances the possibilities to work with
+#            labelled data, allowing for easy access of multiple declared
+#            missings or conversion into \code{NA} etc.
+#            \cr \cr
+#            Furthermore, see 'Details' in \code{\link{get_values}}.
+#
+# @examples
+# # create labelled factor, with missing flag
+# x <- labelled(c("M", "M", "F", "X", "N/A"),
+#               c(Male = "M", Female = "F",
+#                 Refused = "X", "Not applicable" = "N/A"),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# get_na(x)
+#
+# # create labelled integer, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1),
+#               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# get_na(x)
+#
+# 
 get_na <- function(x) {
   # get values
   values <- get_values(x, sort.val = FALSE, drop.na = FALSE)
@@ -1689,85 +1690,85 @@ get_na <- function(x) {
 
 
 getNaAttribute <- function() return("is_na")
-#' @title Retrieve missing value flags of labelled variables
-#' @name get_na_flags
-#'
-#' @description This function retrieves the logical missing flags for a
-#'                \code{\link{labelled}} variable.
-#'
-#' @seealso \code{\link{get_na}} to get value codes of labelled missing values;
-#'            \code{\link{get_values}} to get values associated with labels;
-#'            see \code{\link{set_na}} to replace specific values with \code{NA}
-#'            and \code{\link{to_na}} to convert missing value codes into \code{NA}.
-#'
-#' @param x Variable (vector) with value label attributes, including
-#'          missing value codes (see \code{\link{labelled}}).
-#' @return Logical vector with missing flags that indicate which labelled value
-#'           is considered as missing.
-#'
-#' @details See 'Details' in \code{\link{get_na}}.
-#'
-#' @examples
-#' # create labelled integer, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1),
-#'               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' get_na_flags(x)
-#'
-#' 
+# @title Retrieve missing value flags of labelled variables
+# @name get_na_flags
+#
+# @description This function retrieves the logical missing flags for a
+#                \code{\link{labelled}} variable.
+#
+# @seealso \code{\link{get_na}} to get value codes of labelled missing values;
+#            \code{\link{get_values}} to get values associated with labels;
+#            see \code{\link{set_na}} to replace specific values with \code{NA}
+#            and \code{\link{to_na}} to convert missing value codes into \code{NA}.
+#
+# @param x Variable (vector) with value label attributes, including
+#          missing value codes (see \code{\link{labelled}}).
+# @return Logical vector with missing flags that indicate which labelled value
+#           is considered as missing.
+#
+# @details See 'Details' in \code{\link{get_na}}.
+#
+# @examples
+# # create labelled integer, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1),
+#               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# get_na_flags(x)
+#
+# 
 get_na_flags <- function(x) return(attr(x, getNaAttribute(), exact = T))
-#' @title Retrieve notes (annotations) from labelled variables
-#' @name get_note
-#'
-#' @description This function retrieves the value of the \code{note}-attribute
-#'                of vectors.
-#'
-#' @param x Variable (vector) with note-attribute.
-#' @return The the value of the \code{note}-attribute of \code{x}.
-#'
-#' @examples
-#' # create labelled factor, with missing flag
-#' x <- labelled(c("M", "M", "F", "X", "N/A"),
-#'               c(Male = "M", Female = "F",
-#'                 Refused = "X", "Not applicable" = "N/A"),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#'
-#' set_label(x) <- "A labelled vector with note"
-#' set_note(x) <- "Test annotation."
-#' get_note(x)
-#' x
-#'
-#' 
+# @title Retrieve notes (annotations) from labelled variables
+# @name get_note
+#
+# @description This function retrieves the value of the \code{note}-attribute
+#                of vectors.
+#
+# @param x Variable (vector) with note-attribute.
+# @return The the value of the \code{note}-attribute of \code{x}.
+#
+# @examples
+# # create labelled factor, with missing flag
+# x <- labelled(c("M", "M", "F", "X", "N/A"),
+#               c(Male = "M", Female = "F",
+#                 Refused = "X", "Not applicable" = "N/A"),
+#               c(FALSE, FALSE, TRUE, TRUE))
+#
+# set_label(x) <- "A labelled vector with note"
+# set_note(x) <- "Test annotation."
+# get_note(x)
+# x
+#
+# 
 get_note <- function(x) {
   return(attr(x, "note", exact = TRUE))
 }
 
 
-#' @title Add notes (annotations) to (labelled) variables
-#' @name set_note
-#'
-#' @description This function adds a note (string) as \code{note}-attribute
-#'                to \code{x}.
-#'
-#' @param x Variable (vector).
-#' @param value The note (annotation) as character string that will be added as
-#'          \code{note}-attribute to \code{x}.
-#'
-#' @return \code{x}, with \code{value} stored as attribute.
-#'
-#' @examples
-#' # create labelled factor, with missing flag
-#' x <- labelled(c("M", "M", "F", "X", "N/A"),
-#'               c(Male = "M", Female = "F",
-#'                 Refused = "X", "Not applicable" = "N/A"),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#'
-#' set_label(x) <- "A labelled vector with note"
-#' set_note(x) <- "Test annotation."
-#' get_note(x)
-#' x
-#'
-#' 
+# @title Add notes (annotations) to (labelled) variables
+# @name set_note
+#
+# @description This function adds a note (string) as \code{note}-attribute
+#                to \code{x}.
+#
+# @param x Variable (vector).
+# @param value The note (annotation) as character string that will be added as
+#          \code{note}-attribute to \code{x}.
+#
+# @return \code{x}, with \code{value} stored as attribute.
+#
+# @examples
+# # create labelled factor, with missing flag
+# x <- labelled(c("M", "M", "F", "X", "N/A"),
+#               c(Male = "M", Female = "F",
+#                 Refused = "X", "Not applicable" = "N/A"),
+#               c(FALSE, FALSE, TRUE, TRUE))
+#
+# set_label(x) <- "A labelled vector with note"
+# set_note(x) <- "Test annotation."
+# get_note(x)
+# x
+#
+# 
 set_note <- function(x, value = NULL) {
   if (is.null(value) || is_empty(value)) {
     attr(x, "note") <- NULL
@@ -1777,60 +1778,60 @@ set_note <- function(x, value = NULL) {
   x
 }
 
-#' @rdname set_note
-#' 
+# @rdname set_note
+# 
 `set_note<-` <- function(x, value) {
   UseMethod("set_note<-")
 }
 
-#' 
+# 
 `set_note<-.default` <- function(x, value) {
   x <- set_note(x = x, value = value)
   x
 }
-#' @title Retrieve values of labelled variables
-#' @name get_values
-#'
-#' @description This function retrieves the values associated with value labels
-#'                of an imported SPSS, SAS or STATA data set (via \code{\link{read_spss}},
-#'                \code{\link{read_sas}} or \code{\link{read_stata}}),
-#'                or of a \code{\link[haven]{labelled}} vector.
-#'
-#' @seealso \code{\link{get_labels}} for getting value labels and \code{\link{get_na}}
-#'            to get values for missing values.
-#'
-#' @param x Variable (vector) with value label attributes.
-#' @param sort.val Logical, if \code{TRUE} (default), values of associated value labels
-#'          are sorted.
-#' @param drop.na Logical, if \code{TRUE}, missing code values are excluded from
-#'          the return value. See 'Examples' and \code{\link{get_na}}.
-#' @return The values associated with value labels from \code{x},
-#'           or \code{NULL} if \code{x} has no label attributes.
-#'
-#' @details \code{\link[haven]{labelled}} vectors are numeric by default (when imported with read-functions
-#'            like \code{\link{read_spss}}) and have variable and value labels attributes.
-#'            The value labels are associated with those values from the labelled vector.
-#'            This function returns the values associated with the vector's value labels,
-#'            which may differ from actual values in the vector (e.g. due to missings)
-#'            or are not represented in sorted order.
-#'
-#' @examples
-#' data(efc)
-#' str(efc$e42dep)
-#' get_values(efc$e42dep)
-#' get_labels(efc$e42dep)
-#'
-#' # create labelled integer, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1),
-#'               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' # get all values
-#' get_values(x)
-#' # drop NA
-#' get_values(x, , TRUE)
-#'
-#'
-#' 
+# @title Retrieve values of labelled variables
+# @name get_values
+#
+# @description This function retrieves the values associated with value labels
+#                of an imported SPSS, SAS or STATA data set (via \code{\link{read_spss}},
+#                \code{\link{read_sas}} or \code{\link{read_stata}}),
+#                or of a \code{\link[haven]{labelled}} vector.
+#
+# @seealso \code{\link{get_labels}} for getting value labels and \code{\link{get_na}}
+#            to get values for missing values.
+#
+# @param x Variable (vector) with value label attributes.
+# @param sort.val Logical, if \code{TRUE} (default), values of associated value labels
+#          are sorted.
+# @param drop.na Logical, if \code{TRUE}, missing code values are excluded from
+#          the return value. See 'Examples' and \code{\link{get_na}}.
+# @return The values associated with value labels from \code{x},
+#           or \code{NULL} if \code{x} has no label attributes.
+#
+# @details \code{\link[haven]{labelled}} vectors are numeric by default (when imported with read-functions
+#            like \code{\link{read_spss}}) and have variable and value labels attributes.
+#            The value labels are associated with those values from the labelled vector.
+#            This function returns the values associated with the vector's value labels,
+#            which may differ from actual values in the vector (e.g. due to missings)
+#            or are not represented in sorted order.
+#
+# @examples
+# data(efc)
+# str(efc$e42dep)
+# get_values(efc$e42dep)
+# get_labels(efc$e42dep)
+#
+# # create labelled integer, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1),
+#               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# # get all values
+# get_values(x)
+# # drop NA
+# get_values(x, , TRUE)
+#
+#
+# 
 get_values <- function(x, sort.val = FALSE, drop.na = FALSE) {
   # haven or sjPlot?
   attr.string <- getValLabelAttribute(x)
@@ -1855,55 +1856,55 @@ get_values <- function(x, sort.val = FALSE, drop.na = FALSE) {
   # return sorted
   return(values)
 }
-#' @title Chi-square goodness-of-fit-test
-#' @name chisq_gof
-#'
-#' @description This method performs a Chi-square goodness-of-fit-test (GOF)
-#'                either on a numeric vector against probabilities, or
-#'                a Goodness-of-fit test for \code{\link{glm}}s for binary data.
-#'
-#' @param x Numeric vector, or a \code{\link{glm}}-object.
-#' @param prob Vector of probabilities (indicating the population probabilities) of the same length
-#'          as \code{x}'s amount of categories / factor levels. Use \code{nrow(table(x))} to
-#'          determine the amount of necessary values for \code{prob}. Only used,
-#'          when \code{x} is a vector, and not a \code{glm}-object.
-#' @param weights Vector with weights, used to weight \code{x}.
-#' @return For vectors, returns the object of the computed \code{\link{chisq.test}}.
-#'           \cr \cr
-#'           For \code{glm}-objects, an object of class \code{chisq_gof} with
-#'           following values:
-#'           \itemize{
-#'            \item \code{p.value}	the p-value for the goodness-of-fit test
-#'            \item \code{z.score} the standardized z-score for the goodness-of-fit test
-#'            \item \code{RSS} the residual sums of squares term
-#'            \item \code{X2} the pearson chi-squared statistic
-#'           }
-#'
-#' @note For vectors, this function is a convenient function for the \code{\link{chisq.test}},
-#'         performing goodness-of-fit test.
-#'         \cr \cr
-#'         For \code{glm}-objects, this function performs a goodness-of-fit test
-#'         based on the \code{X2GOFtest} function of the \pkg{binomTools} package.
-#'         A well-fitting model shows no significant difference between
-#'         the model and the observed data, i.e. the reported p-values should be
-#'         greater than 0.05.
-#'
-#' @examples
-#' data(efc)
-#' # differing from population
-#' chisq_gof(efc$e42dep, c(0.3,0.2,0.22,0.28))
-#' # equal to population
-#' chisq_gof(efc$e42dep, prop.table(table(efc$e42dep)))
-#'
-#' # goodness-of-fit test for logistic regression
-#' efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
-#' fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
-#'            data = efc,
-#'            family = binomial(link = "logit"))
-#' chisq_gof(fit)
-#'
+# @title Chi-square goodness-of-fit-test
+# @name chisq_gof
+#
+# @description This method performs a Chi-square goodness-of-fit-test (GOF)
+#                either on a numeric vector against probabilities, or
+#                a Goodness-of-fit test for \code{\link{glm}}s for binary data.
+#
+# @param x Numeric vector, or a \code{\link{glm}}-object.
+# @param prob Vector of probabilities (indicating the population probabilities) of the same length
+#          as \code{x}'s amount of categories / factor levels. Use \code{nrow(table(x))} to
+#          determine the amount of necessary values for \code{prob}. Only used,
+#          when \code{x} is a vector, and not a \code{glm}-object.
+# @param weights Vector with weights, used to weight \code{x}.
+# @return For vectors, returns the object of the computed \code{\link{chisq.test}}.
+#           \cr \cr
+#           For \code{glm}-objects, an object of class \code{chisq_gof} with
+#           following values:
+#           \itemize{
+#            \item \code{p.value}	the p-value for the goodness-of-fit test
+#            \item \code{z.score} the standardized z-score for the goodness-of-fit test
+#            \item \code{RSS} the residual sums of squares term
+#            \item \code{X2} the pearson chi-squared statistic
+#           }
+#
+# @note For vectors, this function is a convenient function for the \code{\link{chisq.test}},
+#         performing goodness-of-fit test.
+#         \cr \cr
+#         For \code{glm}-objects, this function performs a goodness-of-fit test
+#         based on the \code{X2GOFtest} function of the \pkg{binomTools} package.
+#         A well-fitting model shows no significant difference between
+#         the model and the observed data, i.e. the reported p-values should be
+#         greater than 0.05.
+#
+# @examples
+# data(efc)
+# # differing from population
+# chisq_gof(efc$e42dep, c(0.3,0.2,0.22,0.28))
+# # equal to population
+# chisq_gof(efc$e42dep, prop.table(table(efc$e42dep)))
+#
+# # goodness-of-fit test for logistic regression
+# efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
+# fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
+#            data = efc,
+#            family = binomial(link = "logit"))
+# chisq_gof(fit)
+#
 #' @importFrom stats na.omit fitted resid formula as.formula lm pnorm chisq.test
-#' 
+# 
 chisq_gof <- function(x, prob = NULL, weights = NULL) {
   if (any(class(x) == "glm")) {
 
@@ -1952,41 +1953,41 @@ chisq_gof <- function(x, prob = NULL, weights = NULL) {
 }
 
 
-#' @title Hosmer-Lemeshow Goodness-of-fit-test
-#' @name hoslem_gof
-#'
-#' @description This method performs a Hosmer-Lemeshow goodness-of-fit-test
-#'                for generalized linear (mixed) models for binary data.
-#'
-#' @param x Fitted \code{\link{glm}} or \code{\link[lme4]{glmer}} model.
-#' @param g Number of bins to divide the data. Default is 10.
-#'
-#' @return An object of class \code{hoslem_test} with
-#'           following values:
-#'           \itemize{
-#'            \item \code{chisq} the Hosmer-Lemeshow chi-squared statistic
-#'            \item \code{df} degrees of freedom
-#'            \item \code{p.value} the p-value for the goodness-of-fit test
-#'           }
-#'
-#' @note A well-fitting model shows no significant difference between
-#'         the model and the observed data, i.e. the reported p-value should be
-#'         greater than 0.05.
-#'
-#' @seealso \code{\link{r2}}
-#'
-#' @examples
-#' data(efc)
-#'
-#' # goodness-of-fit test for logistic regression
-#' efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
-#' fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
-#'            data = efc,
-#'            family = binomial(link = "logit"))
-#' hoslem_gof(fit)
-#'
+# @title Hosmer-Lemeshow Goodness-of-fit-test
+# @name hoslem_gof
+#
+# @description This method performs a Hosmer-Lemeshow goodness-of-fit-test
+#                for generalized linear (mixed) models for binary data.
+#
+# @param x Fitted \code{\link{glm}} or \code{\link[lme4]{glmer}} model.
+# @param g Number of bins to divide the data. Default is 10.
+#
+# @return An object of class \code{hoslem_test} with
+#           following values:
+#           \itemize{
+#            \item \code{chisq} the Hosmer-Lemeshow chi-squared statistic
+#            \item \code{df} degrees of freedom
+#            \item \code{p.value} the p-value for the goodness-of-fit test
+#           }
+#
+# @note A well-fitting model shows no significant difference between
+#         the model and the observed data, i.e. the reported p-value should be
+#         greater than 0.05.
+#
+# @seealso \code{\link{r2}}
+#
+# @examples
+# data(efc)
+#
+# # goodness-of-fit test for logistic regression
+# efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
+# fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
+#            data = efc,
+#            family = binomial(link = "logit"))
+# hoslem_gof(fit)
+#
 #' @importFrom stats fitted pchisq quantile xtabs
-#' 
+# 
 hoslem_gof <- function(x, g = 10) {
   # check for valid object class
   if (!any(class(x) == "glmerMod") && !any(class(x) == "glm")) {
@@ -2018,67 +2019,67 @@ hoslem_gof <- function(x, g = 10) {
   class(hoslem) <- "hoslem_test"
   return(hoslem)
 }
-#' @title Group near elements of string vectors
-#' @name group_str
-#'
-#' @seealso \code{\link{str_pos}}
-#'
-#' @description This function groups elements of a string vector (character or string
-#'                variable) according to the element's distance ('similatiry'). The
-#'                more similar two string elements are, the higher is the
-#'                chance to be combined into a group.
-#'
-#' @param strings Character vector with string elements.
-#' @param maxdist Maximum distance between two string elements, which is allowed to treat two
-#'          elements as similar or equal.
-#' @param method Method for distance calculation. The default is \code{"lv"}. See
-#'          \code{\link[stringdist]{stringdist}} for details.
-#' @param strict Logical; if \code{TRUE}, value matching is more strictly. See 'Examples'.
-#' @param trim.whitespace Logical; if \code{TRUE} (default), leading and trailing white spaces will
-#'          be removed from string values.
-#' @param remove.empty Logical; if \code{TRUE} (default), empty string values will be removed from the
-#'          character vector \code{strings}.
-#' @param showProgressBar Logical; if \code{TRUE}, the progress bar is displayed when computing the distance matrix.
-#'          Default in \code{FALSE}, hence the bar is hidden.
-#'
-#' @return A character vector where similar string elements (values) are recoded
-#'           into a new, single value. The return value is of same length as
-#'           \code{strings}, i.e. grouped elements appear multiple times, so
-#'           the count for each grouped string is still avaiable (see 'Examples').
-#'
-#' @examples
-#' oldstring <- c("Hello", "Helo", "Hole", "Apple",
-#'                "Ape", "New", "Old", "System", "Systemic")
-#' newstring <- group_str(oldstring)
-#'
-#' # see result
-#' newstring
-#'
-#' # count for each groups
-#' table(newstring)
-#'
-#' \dontrun{
-#' library(sjPlot)
-#' # print table to compare original and grouped string
-#' sjt.frq(data.frame(oldstring, newstring),
-#'         removeStringVectors = FALSE,
-#'         autoGroupStrings = FALSE)
-#'
-#' # larger groups
-#' newstring <- group_str(oldstring, maxdist = 3)
-#' sjt.frq(data.frame(oldstring, newstring),
-#'         removeStringVectors = FALSE,
-#'         autoGroupStrings = FALSE)
-#'
-#' # be more strict with matching pairs
-#' newstring <- group_str(oldstring, maxdist = 3, strict = TRUE)
-#' sjt.frq(data.frame(oldstring, newstring),
-#'         removeStringVectors = FALSE,
-#'         autoGroupStrings = FALSE)}
-#'
+# @title Group near elements of string vectors
+# @name group_str
+#
+# @seealso \code{\link{str_pos}}
+#
+# @description This function groups elements of a string vector (character or string
+#                variable) according to the element's distance ('similatiry'). The
+#                more similar two string elements are, the higher is the
+#                chance to be combined into a group.
+#
+# @param strings Character vector with string elements.
+# @param maxdist Maximum distance between two string elements, which is allowed to treat two
+#          elements as similar or equal.
+# @param method Method for distance calculation. The default is \code{"lv"}. See
+#          \code{\link[stringdist]{stringdist}} for details.
+# @param strict Logical; if \code{TRUE}, value matching is more strictly. See 'Examples'.
+# @param trim.whitespace Logical; if \code{TRUE} (default), leading and trailing white spaces will
+#          be removed from string values.
+# @param remove.empty Logical; if \code{TRUE} (default), empty string values will be removed from the
+#          character vector \code{strings}.
+# @param showProgressBar Logical; if \code{TRUE}, the progress bar is displayed when computing the distance matrix.
+#          Default in \code{FALSE}, hence the bar is hidden.
+#
+# @return A character vector where similar string elements (values) are recoded
+#           into a new, single value. The return value is of same length as
+#           \code{strings}, i.e. grouped elements appear multiple times, so
+#           the count for each grouped string is still avaiable (see 'Examples').
+#
+# @examples
+# oldstring <- c("Hello", "Helo", "Hole", "Apple",
+#                "Ape", "New", "Old", "System", "Systemic")
+# newstring <- group_str(oldstring)
+#
+# # see result
+# newstring
+#
+# # count for each groups
+# table(newstring)
+#
+# \dontrun{
+# library(sjPlot)
+# # print table to compare original and grouped string
+# sjt.frq(data.frame(oldstring, newstring),
+#         removeStringVectors = FALSE,
+#         autoGroupStrings = FALSE)
+#
+# # larger groups
+# newstring <- group_str(oldstring, maxdist = 3)
+# sjt.frq(data.frame(oldstring, newstring),
+#         removeStringVectors = FALSE,
+#         autoGroupStrings = FALSE)
+#
+# # be more strict with matching pairs
+# newstring <- group_str(oldstring, maxdist = 3, strict = TRUE)
+# sjt.frq(data.frame(oldstring, newstring),
+#         removeStringVectors = FALSE,
+#         autoGroupStrings = FALSE)}
+#
 #' @importFrom utils txtProgressBar
 #' @importFrom stringdist stringdistmatrix
-#' 
+# 
 group_str <- function(strings,
                       maxdist = 2,
                       method = "lv",
@@ -2213,80 +2214,80 @@ group_str <- function(strings,
   # will be "recoded" into on value "hello, holle, hole"
   return(strings.new)
 }
-#' @title Recode numeric variables into equal-ranged groups
-#' @name group_var
-#'
-#' @description Recode numeric variables into \emph{equal spaced} grouped factors,
-#'                i.e. a variable is cut into a smaller number of groups,
-#'                where each group has values of equal range.
-#'
-#' @seealso \code{\link{group_labels}} to create the associated value labels for
-#'          grouped variables, \code{\link{split_var}} to split variables into
-#'          equal sized groups, \code{\link{group_str}} for grouping string vectors
-#'          or \code{\link{rec_pattern}} and \code{\link{rec}} for another
-#'          convenbient way of recoding variables into smaller groups.
-#'
-#' @param var Numeric; variable, which should recoded into groups.
-#' @param groupsize Numeric; group-size, i.e. the range for grouping. By default,
-#'          for each 5 categories of \code{var} a new group is defined, i.e. \code{groupsize=5}.
-#'          Use \code{groupsize = "auto"} to automatically resize a variable into
-#'          a maximum of 30 groups (which is the ggplot-default grouping when
-#'          plotting histograms). Use \code{groupcount} to determine the amount
-#'          of groups.
-#' @param as.num Logical; if \code{TRUE}, the recoded variable will
-#'          be returned as numeric vector. If \code{FALSE}, a factor is returned.
-#' @param right.interval Logical; if \code{TRUE}, grouping starts with the lower
-#'          bound of \code{groupsize}. See 'Details'.
-#' @param groupcount Sets the maximum number of groups that are defined when auto-grouping is on
-#'          (\code{groupsize="auto"}). Default is 30. If \code{groupsize} is not set to \code{"auto"},
-#'          this argument will be ignored.
-#'
-#' @return A grouped variable, either as numeric or as factor (see paramter \code{as.num}).
-#'
-#' @note Variable label attributes (see, for instance, \code{\link{set_label}}) are preserved.
-#'
-#' @details If \code{groupsize} is set to a specific value, the variable is recoded
-#'            into several groups, where each group has a maximum range of \code{groupsize}.
-#'            Hence, the amount of groups differ depending on the range of \code{var}.
-#'            \cr \cr
-#'            If \code{groupsize = "auto"}, the variable is recoded into a maximum of
-#'            \code{groupcount} groups. Hence, independent from the range of
-#'            \code{var}, always the same amount of groups are created, so the range
-#'            within each group differs (depending on \code{var}'s range).
-#'            \cr \cr
-#'            \code{right.interval} determins which boundary values to include when
-#'            grouping is done. If \code{TRUE}, grouping starts with the \strong{lower
-#'            bound} of \code{groupsize}. For example, having a variable ranging from
-#'            50 to 80, groups cover the ranges from  50-54, 55-59, 60-64 etc.
-#'            If \code{FALSE} (default), grouping starts with the \code{upper bound}
-#'            of \code{groupsize}. In this case, groups cover the ranges from
-#'            46-50, 51-55, 56-60, 61-65 etc. \strong{Note:} This will cover
-#'            a range from 46-50 as first group, even if values from 46 to 49
-#'            are not present. See 'Examples' in \code{\link{group_labels}}.
-#'            \cr \cr
-#'            If you want to split a variable into a certain amount of equal
-#'            sized groups (instead of having groups where values have all the same
-#'            range), use the \code{\link{split_var}} function!
-#'
-#' @examples
-#' age <- abs(round(rnorm(100, 65, 20)))
-#' age.grp <- group_var(age, 10)
-#' hist(age)
-#' hist(age.grp)
-#'
-#'
-#' # histogram with EUROFAMCARE sample dataset
-#' # variable not grouped
-#' data(efc)
-#' hist(efc$e17age, main = get_label(efc$e17age))
-#'
-#' # bar plot with EUROFAMCARE sample dataset
-#' # grouped variable
-#' ageGrp <- group_var(efc$e17age)
-#' ageGrpLab <- group_labels(efc$e17age)
-#' barplot(table(ageGrp), main = get_label(efc$e17age), names.arg = ageGrpLab)
-#'
-#' 
+# @title Recode numeric variables into equal-ranged groups
+# @name group_var
+#
+# @description Recode numeric variables into \emph{equal spaced} grouped factors,
+#                i.e. a variable is cut into a smaller number of groups,
+#                where each group has values of equal range.
+#
+# @seealso \code{\link{group_labels}} to create the associated value labels for
+#          grouped variables, \code{\link{split_var}} to split variables into
+#          equal sized groups, \code{\link{group_str}} for grouping string vectors
+#          or \code{\link{rec_pattern}} and \code{\link{rec}} for another
+#          convenbient way of recoding variables into smaller groups.
+#
+# @param var Numeric; variable, which should recoded into groups.
+# @param groupsize Numeric; group-size, i.e. the range for grouping. By default,
+#          for each 5 categories of \code{var} a new group is defined, i.e. \code{groupsize=5}.
+#          Use \code{groupsize = "auto"} to automatically resize a variable into
+#          a maximum of 30 groups (which is the ggplot-default grouping when
+#          plotting histograms). Use \code{groupcount} to determine the amount
+#          of groups.
+# @param as.num Logical; if \code{TRUE}, the recoded variable will
+#          be returned as numeric vector. If \code{FALSE}, a factor is returned.
+# @param right.interval Logical; if \code{TRUE}, grouping starts with the lower
+#          bound of \code{groupsize}. See 'Details'.
+# @param groupcount Sets the maximum number of groups that are defined when auto-grouping is on
+#          (\code{groupsize="auto"}). Default is 30. If \code{groupsize} is not set to \code{"auto"},
+#          this argument will be ignored.
+#
+# @return A grouped variable, either as numeric or as factor (see paramter \code{as.num}).
+#
+# @note Variable label attributes (see, for instance, \code{\link{set_label}}) are preserved.
+#
+# @details If \code{groupsize} is set to a specific value, the variable is recoded
+#            into several groups, where each group has a maximum range of \code{groupsize}.
+#            Hence, the amount of groups differ depending on the range of \code{var}.
+#            \cr \cr
+#            If \code{groupsize = "auto"}, the variable is recoded into a maximum of
+#            \code{groupcount} groups. Hence, independent from the range of
+#            \code{var}, always the same amount of groups are created, so the range
+#            within each group differs (depending on \code{var}'s range).
+#            \cr \cr
+#            \code{right.interval} determins which boundary values to include when
+#            grouping is done. If \code{TRUE}, grouping starts with the \strong{lower
+#            bound} of \code{groupsize}. For example, having a variable ranging from
+#            50 to 80, groups cover the ranges from  50-54, 55-59, 60-64 etc.
+#            If \code{FALSE} (default), grouping starts with the \code{upper bound}
+#            of \code{groupsize}. In this case, groups cover the ranges from
+#            46-50, 51-55, 56-60, 61-65 etc. \strong{Note:} This will cover
+#            a range from 46-50 as first group, even if values from 46 to 49
+#            are not present. See 'Examples' in \code{\link{group_labels}}.
+#            \cr \cr
+#            If you want to split a variable into a certain amount of equal
+#            sized groups (instead of having groups where values have all the same
+#            range), use the \code{\link{split_var}} function!
+#
+# @examples
+# age <- abs(round(rnorm(100, 65, 20)))
+# age.grp <- group_var(age, 10)
+# hist(age)
+# hist(age.grp)
+#
+#
+# # histogram with EUROFAMCARE sample dataset
+# # variable not grouped
+# data(efc)
+# hist(efc$e17age, main = get_label(efc$e17age))
+#
+# # bar plot with EUROFAMCARE sample dataset
+# # grouped variable
+# ageGrp <- group_var(efc$e17age)
+# ageGrpLab <- group_labels(efc$e17age)
+# barplot(table(ageGrp), main = get_label(efc$e17age), names.arg = ageGrpLab)
+#
+# 
 group_var <- function(var,
                       groupsize = 5,
                       as.num = TRUE,
@@ -2306,62 +2307,62 @@ group_var <- function(var,
 }
 
 
-#' @title Create labels for recoded groups
-#' @name group_labels
-#'
-#' @description Creates the related labels for the grouped variable created by
-#'                \code{\link{group_var}}.
-#'
-#' @seealso \itemize{
-#'            \item \code{\link{group_var}}
-#'            \item \code{\link{group_str}}
-#'          }
-#'
-#' @note Usually you should use the same values for \code{groupsize} and
-#'         \code{right.interval} as used in the \code{\link{group_var}} function
-#'         if you want to create labels for the related recoded variable.
-#'
-#' @return A string vector containing labels based on the grouped categories of \code{var},
-#'           formatted as "from lower bound to upper bound", e.g. \code{"10-19"  "20-29"  "30-39"} etc.
-#'           See examples below.
-#'
-#' @inheritParams group_var
-#'
-#' @details See 'Details' in \code{\link{group_var}}.
-#'
-#' @note Variable label attributes (see, for instance, \code{\link{set_label}}) are preserved.
-#'
-#' @examples
-#' age <- abs(round(rnorm(100, 65, 20)))
-#' age.grp <- group_var(age, 10)
-#' hist(age)
-#' hist(age.grp)
-#'
-#' age.grpvar <- group_labels(age, 10)
-#' table(age.grp)
-#' print(age.grpvar)
-#'
-#'
-#' # create vector with values from 50 to 80
-#' dummy <- round(runif(200, 50, 80))
-#' # labels with grouping starting at lower bound
-#' group_labels(dummy)
-#' # labels with grouping startint at upper bound
-#' group_labels(dummy, right.interval = TRUE)
-#'
-#'
-#' # histogram with EUROFAMCARE sample dataset
-#' # variable not grouped
-#' data(efc)
-#' hist(efc$e17age, main = get_label(efc$e17age))
-#'
-#' # bar plot with EUROFAMCARE sample dataset
-#' # grouped variable
-#' ageGrp <- group_var(efc$e17age)
-#' ageGrpLab <- group_labels(efc$e17age)
-#' barplot(table(ageGrp), main = get_label(efc$e17age), names.arg = ageGrpLab)
-#'
-#' 
+# @title Create labels for recoded groups
+# @name group_labels
+#
+# @description Creates the related labels for the grouped variable created by
+#                \code{\link{group_var}}.
+#
+# @seealso \itemize{
+#            \item \code{\link{group_var}}
+#            \item \code{\link{group_str}}
+#          }
+#
+# @note Usually you should use the same values for \code{groupsize} and
+#         \code{right.interval} as used in the \code{\link{group_var}} function
+#         if you want to create labels for the related recoded variable.
+#
+# @return A string vector containing labels based on the grouped categories of \code{var},
+#           formatted as "from lower bound to upper bound", e.g. \code{"10-19"  "20-29"  "30-39"} etc.
+#           See examples below.
+#
+# @inheritParams group_var
+#
+# @details See 'Details' in \code{\link{group_var}}.
+#
+# @note Variable label attributes (see, for instance, \code{\link{set_label}}) are preserved.
+#
+# @examples
+# age <- abs(round(rnorm(100, 65, 20)))
+# age.grp <- group_var(age, 10)
+# hist(age)
+# hist(age.grp)
+#
+# age.grpvar <- group_labels(age, 10)
+# table(age.grp)
+# print(age.grpvar)
+#
+#
+# # create vector with values from 50 to 80
+# dummy <- round(runif(200, 50, 80))
+# # labels with grouping starting at lower bound
+# group_labels(dummy)
+# # labels with grouping startint at upper bound
+# group_labels(dummy, right.interval = TRUE)
+#
+#
+# # histogram with EUROFAMCARE sample dataset
+# # variable not grouped
+# data(efc)
+# hist(efc$e17age, main = get_label(efc$e17age))
+#
+# # bar plot with EUROFAMCARE sample dataset
+# # grouped variable
+# ageGrp <- group_var(efc$e17age)
+# ageGrpLab <- group_labels(efc$e17age)
+# barplot(table(ageGrp), main = get_label(efc$e17age), names.arg = ageGrpLab)
+#
+# 
 group_labels <- function(var,
                          groupsize = 5,
                          right.interval = FALSE,
@@ -2507,102 +2508,102 @@ getValLabelAttribute <- function(x) {
   }
   return(attr.string)
 }
-#' @title Intraclass-Correlation Coefficient
-#' @name icc
-#' @description This function calculates the intraclass-correlation
-#'                (icc) for random intercepts of mixed effects models.
-#'                Currently, only \code{\link[lme4]{merMod}} objects
-#'                are supported.
-#'
-#' @param x Fitted mixed effects model (\code{\link[lme4]{merMod}}-class).
-#' @param ... More fitted model objects, to compute multiple intraclass-correlation
-#'              coefficients at once.
-#'
-#' @return A numeric vector with all random intercept intraclass-correlation-coefficients,
-#'           or a list of numeric vectors, when more than one model were used
-#'           as arguments. Furthermore, between- and within-group variances as well
-#'           as random-slope variance are returned as attributes.
-#'
-#' @references \itemize{
-#'               \item Aguinis H, Gottfredson RK, Culpepper SA. 2013. Best-Practice Recommendations for Estimating Cross-Level Interaction Effects Using Multilevel Modeling. Journal of Management 39(6): 1490–1528 (\doi{10.1177/0149206313478188})
-#'               \item Aly SS, Zhao J, Li B, Jiang J. 2014. Reliability of environmental sampling culture results using the negative binomial intraclass correlation coefficient. Springerplus [Internet] 3. Available from: \url{http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3916583/}
-#'               \item Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
-#'               \item Stryhn H, Sanchez J, Morley P, Booker C, Dohoo IR. 2006. Interpretation of variance parameters in multilevel Poisson regression models. Proceedings of the 11th International Symposium on Veterinary Epidemiology and Economics, 2006 Available at \url{http://www.sciquest.org.nz/node/64294}
-#'               \item Wu S, Crespi CM, Wong WK. 2012. Comparison of methods for estimating the intraclass correlation coefficient for binary responses in cancer prevention cluster randomized trials. Contempory Clinical Trials 33: 869-880 (\doi{10.1016/j.cct.2012.05.004})
-#'               \item \href{http://stats.stackexchange.com/questions/18088/intraclass-correlation-icc-for-an-interaction/28100#28100}{CrossValidated (2012) \emph{Intraclass correlation (ICC) for an interaction?}}
-#'               \item \href{http://stats.stackexchange.com/questions/113577/interpreting-the-random-effect-in-a-mixed-effect-model/113825#113825}{CrossValidated (2014) \emph{Interpreting the random effect in a mixed-effect model}}
-#'               \item \href{http://stats.stackexchange.com/questions/67247/how-to-partition-the-variance-explained-at-group-level-and-individual-level/67356#67356}{CrossValidated (2014) \emph{how to partition the variance explained at group level and individual level}}
-#'             }
-#'
-#'
-#' @note Some notes on why the ICC is useful, based on Grace-Martin K: \emph{The Intraclass Correlation Coefficient in Mixed Models}, \href{http://www.theanalysisfactor.com/the-intraclass-correlation-coefficient-in-mixed-models/}{web}:
-#'       \itemize{
-#'        \item It can help you determine whether or not a linear mixed model is even necessary. If you find that the correlation is zero, that means the observations within clusters are no more similar than observations from different clusters. Go ahead and use a simpler analysis technique.
-#'        \item It can be theoretically meaningful to understand how much of the overall variation in the response is explained simply by clustering. For example, in a repeated measures psychological study you can tell to what extent mood is a trait (varies among people, but not within a person on different occasions) or state (varies little on average among people, but varies a lot across occasions).
-#'        \item It can also be meaningful to see how the ICC (as well as the between and within cluster variances) changes as variable are added to the model.
-#'       }
-#'       In short, the ICC can be interpreted as "the proportion of the variance
-#'       explained by the grouping structure in the population" (Hox 2002: 15).
-#'       \cr \cr
-#'       \strong{Caution:} For three-level-models, depending on the nested structure
-#'       of the model, the ICC only reports the proportion of variance explained
-#'       for each grouping level. However, the proportion of variance for specific
-#'       levels related to each other (e.g., similarity of level-1-units within
-#'       level-2-units or level-2-units within level-3-units) must be computed
-#'       manually. Use \code{\link{get_re_var}} to get the between-group-variances
-#'       and residual variance of the model, and calculate the ICC for the various level
-#'       correlations.
-#'       \cr \cr
-#'       For example, for the ICC between level 1 and 2: \cr
-#'       \code{sum(get_re_var(fit)) / (sum(get_re_var(fit)) + get_re_var(fit, "sigma_2"))}
-#'       \cr \cr
-#'       or for the ICC between level 2 and 3: \cr
-#'       \code{get_re_var(fit)[2] / sum(get_re_var(fit))}
-#'
-#' @details The calculation of the ICC for generalized linear mixed models with binary outcome is based on
-#'       Wu et al. (2012). For Poisson multilevel models, please refere to Stryhn et al. (2006). Aly et al. (2014)
-#'       describe computation of ICC for negative binomial models.
-#'       \cr \cr
-#'       There is a \code{print}-method that prints the variance parameters using
-#'       the \code{comp}-argument set to \code{"var"}: \code{print(x, comp = "var")}
-#'       (see 'Examples'). The \code{\link{re_var}}-function is a convenient wrapper.
-#'       \cr \cr
-#'       The random effect variances indicate the between- and within-group
-#'         variances as well as random-slope variance and random-slope-intercept
-#'         correlation. The components are denoted as following:
-#'         \itemize{
-#'          \item Within-group (residual) variance: sigma_2
-#'          \item Between-group-variance: tau.00 (variation between individual intercepts and average intercept)
-#'          \item Random-slope-variance: tau.11 (variation between individual slopes and average slope)
-#'          \item Random-Intercept-Slope-covariance: tau.01
-#'          \item Random-Intercept-Slope-correlation: rho.01
-#'         }
-#'
-#' @seealso \code{\link{re_var}} to print random effect variances and \code{\link{get_re_var}}
-#'            to get the values from a particular variance component.
-#'
-#' @examples
-#' \dontrun{
-#' library(lme4)
-#' fit1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' icc(fit1)
-#'
-#' sleepstudy$mygrp <- sample(1:45, size = 180, replace = TRUE)
-#' fit2 <- lmer(Reaction ~ Days + (1 | mygrp) + (Days | Subject), sleepstudy)
-#' icc(fit2)
-#'
-#' # return icc for all models at once
-#' icc(fit1, fit2)
-#'
-#' icc1 <- icc(fit1)
-#' icc2 <- icc(fit2)
-#'
-#' print(icc1, comp = "var")
-#' print(icc2, comp = "var")}
-#'
-#'
+# @title Intraclass-Correlation Coefficient
+# @name icc
+# @description This function calculates the intraclass-correlation
+#                (icc) for random intercepts of mixed effects models.
+#                Currently, only \code{\link[lme4]{merMod}} objects
+#                are supported.
+#
+# @param x Fitted mixed effects model (\code{\link[lme4]{merMod}}-class).
+# @param ... More fitted model objects, to compute multiple intraclass-correlation
+#              coefficients at once.
+#
+# @return A numeric vector with all random intercept intraclass-correlation-coefficients,
+#           or a list of numeric vectors, when more than one model were used
+#           as arguments. Furthermore, between- and within-group variances as well
+#           as random-slope variance are returned as attributes.
+#
+# @references \itemize{
+#               \item Aguinis H, Gottfredson RK, Culpepper SA. 2013. Best-Practice Recommendations for Estimating Cross-Level Interaction Effects Using Multilevel Modeling. Journal of Management 39(6): 1490–1528 (\doi{10.1177/0149206313478188})
+#               \item Aly SS, Zhao J, Li B, Jiang J. 2014. Reliability of environmental sampling culture results using the negative binomial intraclass correlation coefficient. Springerplus [Internet] 3. Available from: \url{http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3916583/}
+#               \item Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
+#               \item Stryhn H, Sanchez J, Morley P, Booker C, Dohoo IR. 2006. Interpretation of variance parameters in multilevel Poisson regression models. Proceedings of the 11th International Symposium on Veterinary Epidemiology and Economics, 2006 Available at \url{http://www.sciquest.org.nz/node/64294}
+#               \item Wu S, Crespi CM, Wong WK. 2012. Comparison of methods for estimating the intraclass correlation coefficient for binary responses in cancer prevention cluster randomized trials. Contempory Clinical Trials 33: 869-880 (\doi{10.1016/j.cct.2012.05.004})
+#               \item \href{http://stats.stackexchange.com/questions/18088/intraclass-correlation-icc-for-an-interaction/28100#28100}{CrossValidated (2012) \emph{Intraclass correlation (ICC) for an interaction?}}
+#               \item \href{http://stats.stackexchange.com/questions/113577/interpreting-the-random-effect-in-a-mixed-effect-model/113825#113825}{CrossValidated (2014) \emph{Interpreting the random effect in a mixed-effect model}}
+#               \item \href{http://stats.stackexchange.com/questions/67247/how-to-partition-the-variance-explained-at-group-level-and-individual-level/67356#67356}{CrossValidated (2014) \emph{how to partition the variance explained at group level and individual level}}
+#             }
+#
+#
+# @note Some notes on why the ICC is useful, based on Grace-Martin K: \emph{The Intraclass Correlation Coefficient in Mixed Models}, \href{http://www.theanalysisfactor.com/the-intraclass-correlation-coefficient-in-mixed-models/}{web}:
+#       \itemize{
+#        \item It can help you determine whether or not a linear mixed model is even necessary. If you find that the correlation is zero, that means the observations within clusters are no more similar than observations from different clusters. Go ahead and use a simpler analysis technique.
+#        \item It can be theoretically meaningful to understand how much of the overall variation in the response is explained simply by clustering. For example, in a repeated measures psychological study you can tell to what extent mood is a trait (varies among people, but not within a person on different occasions) or state (varies little on average among people, but varies a lot across occasions).
+#        \item It can also be meaningful to see how the ICC (as well as the between and within cluster variances) changes as variable are added to the model.
+#       }
+#       In short, the ICC can be interpreted as "the proportion of the variance
+#       explained by the grouping structure in the population" (Hox 2002: 15).
+#       \cr \cr
+#       \strong{Caution:} For three-level-models, depending on the nested structure
+#       of the model, the ICC only reports the proportion of variance explained
+#       for each grouping level. However, the proportion of variance for specific
+#       levels related to each other (e.g., similarity of level-1-units within
+#       level-2-units or level-2-units within level-3-units) must be computed
+#       manually. Use \code{\link{get_re_var}} to get the between-group-variances
+#       and residual variance of the model, and calculate the ICC for the various level
+#       correlations.
+#       \cr \cr
+#       For example, for the ICC between level 1 and 2: \cr
+#       \code{sum(get_re_var(fit)) / (sum(get_re_var(fit)) + get_re_var(fit, "sigma_2"))}
+#       \cr \cr
+#       or for the ICC between level 2 and 3: \cr
+#       \code{get_re_var(fit)[2] / sum(get_re_var(fit))}
+#
+# @details The calculation of the ICC for generalized linear mixed models with binary outcome is based on
+#       Wu et al. (2012). For Poisson multilevel models, please refere to Stryhn et al. (2006). Aly et al. (2014)
+#       describe computation of ICC for negative binomial models.
+#       \cr \cr
+#       There is a \code{print}-method that prints the variance parameters using
+#       the \code{comp}-argument set to \code{"var"}: \code{print(x, comp = "var")}
+#       (see 'Examples'). The \code{\link{re_var}}-function is a convenient wrapper.
+#       \cr \cr
+#       The random effect variances indicate the between- and within-group
+#         variances as well as random-slope variance and random-slope-intercept
+#         correlation. The components are denoted as following:
+#         \itemize{
+#          \item Within-group (residual) variance: sigma_2
+#          \item Between-group-variance: tau.00 (variation between individual intercepts and average intercept)
+#          \item Random-slope-variance: tau.11 (variation between individual slopes and average slope)
+#          \item Random-Intercept-Slope-covariance: tau.01
+#          \item Random-Intercept-Slope-correlation: rho.01
+#         }
+#
+# @seealso \code{\link{re_var}} to print random effect variances and \code{\link{get_re_var}}
+#            to get the values from a particular variance component.
+#
+# @examples
+# \dontrun{
+# library(lme4)
+# fit1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# icc(fit1)
+#
+# sleepstudy$mygrp <- sample(1:45, size = 180, replace = TRUE)
+# fit2 <- lmer(Reaction ~ Days + (1 | mygrp) + (Days | Subject), sleepstudy)
+# icc(fit2)
+#
+# # return icc for all models at once
+# icc(fit1, fit2)
+#
+# icc1 <- icc(fit1)
+# icc2 <- icc(fit2)
+#
+# print(icc1, comp = "var")
+# print(icc2, comp = "var")}
+#
+#
 #' @importFrom stats family
-#' 
+# 
 icc <- function(x, ...) {
   # return value
   icc_ <- icc.lme4(x)
@@ -2716,33 +2717,33 @@ icc.lme4 <- function(fit) {
 }
 
 
-#' @title Random effect variances
-#' @name re_var
-#' @description This function extracts the random effect variances as well as
-#'                the random-intercept-slope-correlation of mixed effects models.
-#'                Currently, only \code{\link[lme4]{merMod}} objects
-#'                are supported.
-#'
-#' @param x Fitted mixed effects model (\code{\link[lme4]{merMod}}-class).
-#'
-#' @return \code{NULL}, as this is just a convenient \code{print}-wrapper for
-#'           the variance components returned by the \code{\link{icc}} function.
-#'
-#' @references Aguinis H, Gottfredson RK, Culpepper SA. 2013. Best-Practice Recommendations for Estimating Cross-Level Interaction Effects Using Multilevel Modeling. Journal of Management 39(6): 1490–1528 (\doi{10.1177/0149206313478188})
-#'
-#' @seealso \code{\link{icc}} and \code{\link{get_re_var}}
-#'
-#' @examples
-#' library(lme4)
-#' fit1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' re_var(fit1)
-#'
-#' sleepstudy$mygrp <- sample(1:45, size = 180, replace = TRUE)
-#' fit2 <- lmer(Reaction ~ Days + (1 | mygrp) + (Days | Subject), sleepstudy)
-#' re_var(fit2)
-#'
+# @title Random effect variances
+# @name re_var
+# @description This function extracts the random effect variances as well as
+#                the random-intercept-slope-correlation of mixed effects models.
+#                Currently, only \code{\link[lme4]{merMod}} objects
+#                are supported.
+#
+# @param x Fitted mixed effects model (\code{\link[lme4]{merMod}}-class).
+#
+# @return \code{NULL}, as this is just a convenient \code{print}-wrapper for
+#           the variance components returned by the \code{\link{icc}} function.
+#
+# @references Aguinis H, Gottfredson RK, Culpepper SA. 2013. Best-Practice Recommendations for Estimating Cross-Level Interaction Effects Using Multilevel Modeling. Journal of Management 39(6): 1490–1528 (\doi{10.1177/0149206313478188})
+#
+# @seealso \code{\link{icc}} and \code{\link{get_re_var}}
+#
+# @examples
+# library(lme4)
+# fit1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# re_var(fit1)
+#
+# sleepstudy$mygrp <- sample(1:45, size = 180, replace = TRUE)
+# fit2 <- lmer(Reaction ~ Days + (1 | mygrp) + (Days | Subject), sleepstudy)
+# re_var(fit2)
+#
 #' @importFrom stats family
-#' 
+# 
 re_var <- function(x) {
   # return value
   revar_ <- icc(x)
@@ -2750,51 +2751,51 @@ re_var <- function(x) {
 }
 
 
-#' @title Random effect variances
-#' @name get_re_var
-#' @description This function extracts specific components from the random effect
-#'                variances or the random-intercept-slope-correlation of mixed
-#'                effects models. Currently, only \code{\link[lme4]{merMod}} objects
-#'                are supported.
-#'
-#' @param x An object of class \code{icc.lme4}, as returned by the \code{\link{icc}} function,
-#'          or a fitted mixed effects model (\code{\link[lme4]{merMod}}-class).
-#' @param comp Name of the variance component to be returned. See 'Details'.
-#'
-#' @return The required variance component.
-#'
-#' @seealso \code{\link{icc}} and \code{\link{re_var}}
-#'
-#' @details The random effect variances indicate the between- and within-group
-#'         variances as well as random-slope variance and random-slope-intercept
-#'         correlation. Use following values for \code{comp} to get the particular
-#'         variance component:
-#'         \describe{
-#'          \item{\code{"sigma_2"}}{Within-group (residual) variance}
-#'          \item{\code{"tau.00"}}{Between-group-variance (variation between individual intercepts and average intercept)}
-#'          \item{\code{"tau.11"}}{Random-slope-variance (variation between individual slopes and average slope)}
-#'          \item{\code{"tau.01"}}{Random-Intercept-Slope-covariance}
-#'          \item{\code{"rho.01"}}{Random-Intercept-Slope-correlation}
-#'         }
-#'
-#' @examples
-#' library(lme4)
-#' fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#'
-#' # icc
-#' icc(fit)
-#'
-#' # all random effect variance components
-#' re_var(fit)
-#'
-#' # just the rand. slope-intercept covariance
-#' get_re_var(fit, "tau.01")
-#'
-#' sleepstudy$mygrp <- sample(1:45, size = 180, replace = TRUE)
-#' fit <- lmer(Reaction ~ Days + (1 | mygrp) + (Days | Subject), sleepstudy)
-#' get_re_var(fit, "rho.01")
-#'
-#' 
+# @title Random effect variances
+# @name get_re_var
+# @description This function extracts specific components from the random effect
+#                variances or the random-intercept-slope-correlation of mixed
+#                effects models. Currently, only \code{\link[lme4]{merMod}} objects
+#                are supported.
+#
+# @param x An object of class \code{icc.lme4}, as returned by the \code{\link{icc}} function,
+#          or a fitted mixed effects model (\code{\link[lme4]{merMod}}-class).
+# @param comp Name of the variance component to be returned. See 'Details'.
+#
+# @return The required variance component.
+#
+# @seealso \code{\link{icc}} and \code{\link{re_var}}
+#
+# @details The random effect variances indicate the between- and within-group
+#         variances as well as random-slope variance and random-slope-intercept
+#         correlation. Use following values for \code{comp} to get the particular
+#         variance component:
+#         \describe{
+#          \item{\code{"sigma_2"}}{Within-group (residual) variance}
+#          \item{\code{"tau.00"}}{Between-group-variance (variation between individual intercepts and average intercept)}
+#          \item{\code{"tau.11"}}{Random-slope-variance (variation between individual slopes and average slope)}
+#          \item{\code{"tau.01"}}{Random-Intercept-Slope-covariance}
+#          \item{\code{"rho.01"}}{Random-Intercept-Slope-correlation}
+#         }
+#
+# @examples
+# library(lme4)
+# fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#
+# # icc
+# icc(fit)
+#
+# # all random effect variance components
+# re_var(fit)
+#
+# # just the rand. slope-intercept covariance
+# get_re_var(fit, "tau.01")
+#
+# sleepstudy$mygrp <- sample(1:45, size = 180, replace = TRUE)
+# fit <- lmer(Reaction ~ Days + (1 | mygrp) + (Days | Subject), sleepstudy)
+# get_re_var(fit, "rho.01")
+#
+# 
 get_re_var <- function(x, comp = c("tau.00", "tau.01", "tau.11", "rho.01", "sigma_2")) {
   # check if we have a valid object
   if (!any(class(x) == "icc.lme4") && !is_merMod(x)) {
@@ -2809,85 +2810,85 @@ get_re_var <- function(x, comp = c("tau.00", "tau.01", "tau.11", "rho.01", "sigm
 
   # return results
   return(attr(x, comp, exact = TRUE))
-}#' @title Check whether two factors are crossed
-#' @name is_crossed
-#' @description This function checks whether two factors are crossed,
-#'                i.e. if each level of one factor occurs in combination
-#'                with each level of the other factor.
-#'
-#' @param f1 Numeric vector or \code{\link{factor}}.
-#' @param f2 Numeric vector or \code{\link{factor}}.
-#' @return Logical, \code{TRUE} if factors are crossed, \code{FALSE} otherwise.
-#'
-#' @seealso \code{\link{is_nested}}
-#'
-#' @references Grace, K. The Difference Between Crossed and Nested Factors. \href{http://www.theanalysisfactor.com/the-difference-between-crossed-and-nested-factors/}{(web)}
-#'
-#' @examples
-#' # crossed factors, each category of
-#' # x appears in each category of y
-#' x <- c(1,4,3,2,3,2,1,4)
-#' y <- c(1,1,1,2,2,1,2,2)
-#' # show distribution
-#' table(x, y)
-#' # check if crossed
-#' is_crossed(x, y)
-#'
-#' # not crossed factors
-#' x <- c(1,4,3,2,3,2,1,4)
-#' y <- c(1,1,1,2,1,1,2,2)
-#' # show distribution
-#' table(x, y)
-#' # check if crossed
-#' is_crossed(x, y)
-#'
-#' 
+}# @title Check whether two factors are crossed
+# @name is_crossed
+# @description This function checks whether two factors are crossed,
+#                i.e. if each level of one factor occurs in combination
+#                with each level of the other factor.
+#
+# @param f1 Numeric vector or \code{\link{factor}}.
+# @param f2 Numeric vector or \code{\link{factor}}.
+# @return Logical, \code{TRUE} if factors are crossed, \code{FALSE} otherwise.
+#
+# @seealso \code{\link{is_nested}}
+#
+# @references Grace, K. The Difference Between Crossed and Nested Factors. \href{http://www.theanalysisfactor.com/the-difference-between-crossed-and-nested-factors/}{(web)}
+#
+# @examples
+# # crossed factors, each category of
+# # x appears in each category of y
+# x <- c(1,4,3,2,3,2,1,4)
+# y <- c(1,1,1,2,2,1,2,2)
+# # show distribution
+# table(x, y)
+# # check if crossed
+# is_crossed(x, y)
+#
+# # not crossed factors
+# x <- c(1,4,3,2,3,2,1,4)
+# y <- c(1,1,1,2,1,1,2,2)
+# # show distribution
+# table(x, y)
+# # check if crossed
+# is_crossed(x, y)
+#
+# 
 is_crossed <- function(f1, f2) {
   tab <- table(f1, f2)
   # for crossed factors, we should have no zeros in any rows
   # (i.e. each level of f1 also contains any level of f2)
   return(!any(apply(tab, 1, function(x) any(x == 0)) == TRUE))
 }
-#' @title Check whether string or vector is empty
-#' @name is_empty
-#' @description This function checks whether a string or character vector (of
-#'                length 1) or any vector (numeric, atomic) is empty or not.
-#'
-#'
-#' @param x String, character vector of length 1, or vector.
-#' @return Logical, \code{TRUE} if \code{x} is a character vector or string and
-#'           is empty, \code{TRUE} if \code{x} is any vector and of length 0,
-#'           \code{FALSE} otherwise.
-#'
-#' @note \code{NULL}- or \code{NA}-values are also considered as "empty" (see
-#'         'Examples') and will return \code{TRUE}.
-#'
-#' @examples
-#' x <- "test"
-#' is_empty(x)
-#'
-#' x <- ""
-#' is_empty(x)
-#'
-#' x <- NA
-#' is_empty(x)
-#'
-#' x <- NULL
-#' is_empty(x)
-#'
-#' # string is not empty
-#' is_empty(" ")
-#'
-#' # however, this trimmed string is
-#' is_empty(trim(" "))
-#'
-#' # numeric vector
-#' x <- 1
-#' is_empty(x)
-#' x <- x[-1]
-#' is_empty(x)
-#'
-#' 
+# @title Check whether string or vector is empty
+# @name is_empty
+# @description This function checks whether a string or character vector (of
+#                length 1) or any vector (numeric, atomic) is empty or not.
+#
+#
+# @param x String, character vector of length 1, or vector.
+# @return Logical, \code{TRUE} if \code{x} is a character vector or string and
+#           is empty, \code{TRUE} if \code{x} is any vector and of length 0,
+#           \code{FALSE} otherwise.
+#
+# @note \code{NULL}- or \code{NA}-values are also considered as "empty" (see
+#         'Examples') and will return \code{TRUE}.
+#
+# @examples
+# x <- "test"
+# is_empty(x)
+#
+# x <- ""
+# is_empty(x)
+#
+# x <- NA
+# is_empty(x)
+#
+# x <- NULL
+# is_empty(x)
+#
+# # string is not empty
+# is_empty(" ")
+#
+# # however, this trimmed string is
+# is_empty(trim(" "))
+#
+# # numeric vector
+# x <- 1
+# is_empty(x)
+# x <- x[-1]
+# is_empty(x)
+#
+# 
 is_empty <- function(x) {
   # do we have a valid vector?
   if (!is.null(x)) {
@@ -2903,79 +2904,79 @@ is_empty <- function(x) {
   }
   return(is.null(x) || zero_len || is.na(x))
 }
-#' @title Check whether value is even
-#' @name is_even
-#'
-#' @description Checks whether \code{x} is an even number or not. Only
-#'                accepts numeric vectors.
-#'
-#' @param x Numeric vector or single numeric value.
-#'
-#' @return \code{TRUE} for each even value of \code{x}, \code{FALSE} for
-#'           odd values.
-#'
-#' @seealso \code{\link{is_odd}}
-#'
-#' @examples
-#' is_even(4)
-#' is_even(5)
-#' is_even(1:4)
-#'
-#' 
+# @title Check whether value is even
+# @name is_even
+#
+# @description Checks whether \code{x} is an even number or not. Only
+#                accepts numeric vectors.
+#
+# @param x Numeric vector or single numeric value.
+#
+# @return \code{TRUE} for each even value of \code{x}, \code{FALSE} for
+#           odd values.
+#
+# @seealso \code{\link{is_odd}}
+#
+# @examples
+# is_even(4)
+# is_even(5)
+# is_even(1:4)
+#
+# 
 is_even <- function(x) (x %% 2) == 0
-#' @title Check whether object is of class "labelled"
-#' @name is_labelled
-#' @description This function checks whether \code{x} is of class \code{labelled}.
-#'
-#' @param x An object.
-#' @return Logical, \code{TRUE} if \code{any(class(x))} is \code{labelled},
-#'           \code{FALSE} otherwise.
-#'
-#' 
+# @title Check whether object is of class "labelled"
+# @name is_labelled
+# @description This function checks whether \code{x} is of class \code{labelled}.
+#
+# @param x An object.
+# @return Logical, \code{TRUE} if \code{any(class(x))} is \code{labelled},
+#           \code{FALSE} otherwise.
+#
+# 
 is_labelled <- function(x) {
   # check if object has multiple class attributes
   if (length(class(x)) > 1) return(any(class(x) == "labelled"))
   # return if labelled
   return(class(x) == "labelled")
 }
-#' @title Check whether two factors are nested
-#' @name is_nested
-#' @description This function checks whether two factors are nested,
-#'                i.e. if each category of the first factor co-occurs
-#'                with only one category of the other.
-#'
-#' @param f1 Numeric vector or \code{\link{factor}}.
-#' @param f2 Numeric vector or \code{\link{factor}}.
-#' @return Logical, \code{TRUE} if factors are nested, \code{FALSE} otherwise.
-#'
-#' @note If factors are nested, a message is displayed to tell whether \code{f1}
-#'         is nested within \code{f2} or vice versa.
-#'
-#' @seealso \code{\link{is_crossed}}
-#'
-#' @references Grace, K. The Difference Between Crossed and Nested Factors. \href{http://www.theanalysisfactor.com/the-difference-between-crossed-and-nested-factors/}{(web)}
-#'
-#' @examples
-#' # nested factors, each category of
-#' # x appears in one category of y
-#' x <- c(1,2,3,4,5,6,7,8,9)
-#' y <- c(1,1,1,2,2,2,3,3,3)
-#' # show distribution
-#' table(x, y)
-#' # check if nested
-#' is_nested(x, y)
-#' is_nested(y, x)
-#'
-#' # not nested factors
-#' x <- c(1,2,3,4,5,6,7,8,9,1,2)
-#' y <- c(1,1,1,2,2,2,3,3,3,2,3)
-#' # show distribution
-#' table(x, y)
-#' # check if nested
-#' is_nested(x, y)
-#' is_nested(y, x)
-#'
-#' 
+# @title Check whether two factors are nested
+# @name is_nested
+# @description This function checks whether two factors are nested,
+#                i.e. if each category of the first factor co-occurs
+#                with only one category of the other.
+#
+# @param f1 Numeric vector or \code{\link{factor}}.
+# @param f2 Numeric vector or \code{\link{factor}}.
+# @return Logical, \code{TRUE} if factors are nested, \code{FALSE} otherwise.
+#
+# @note If factors are nested, a message is displayed to tell whether \code{f1}
+#         is nested within \code{f2} or vice versa.
+#
+# @seealso \code{\link{is_crossed}}
+#
+# @references Grace, K. The Difference Between Crossed and Nested Factors. \href{http://www.theanalysisfactor.com/the-difference-between-crossed-and-nested-factors/}{(web)}
+#
+# @examples
+# # nested factors, each category of
+# # x appears in one category of y
+# x <- c(1,2,3,4,5,6,7,8,9)
+# y <- c(1,1,1,2,2,2,3,3,3)
+# # show distribution
+# table(x, y)
+# # check if nested
+# is_nested(x, y)
+# is_nested(y, x)
+#
+# # not nested factors
+# x <- c(1,2,3,4,5,6,7,8,9,1,2)
+# y <- c(1,1,1,2,2,2,3,3,3,2,3)
+# # show distribution
+# table(x, y)
+# # check if nested
+# is_nested(x, y)
+# is_nested(y, x)
+#
+# 
 is_nested <- function(f1, f2) {
   tab <- table(f1, f2)
   # cross tabulation of nested factors should have only 1 value per row
@@ -2992,87 +2993,87 @@ is_nested <- function(f1, f2) {
   }
   return(nested)
 }
-#' @title Check whether a factor has numeric levels only
-#' @name is_num_fac
-#' @description This function checks whether a factor has only numeric or
-#'                any non-numeric factor levels.
-#'
-#' @param x A \code{\link{factor}}.
-#' @return Logical, \code{TRUE} if factor has numeric factor levels only,
-#'           \code{FALSE} otherwise.
-#'
-#' @examples
-#' # numeric factor levels
-#' f1 <- factor(c(NA, 1, 3, NA, 2, 4))
-#' is_num_fac(f1)
-#'
-#' # not completeley numeric factor levels
-#' f2 <- factor(c(NA, "C", 1, 3, "A", NA, 2, 4))
-#' is_num_fac(f2)
-#'
-#' # not completeley numeric factor levels
-#' f3 <- factor(c("Justus", "Bob", "Peter"))
-#' is_num_fac(f3)
-#'
-#' 
+# @title Check whether a factor has numeric levels only
+# @name is_num_fac
+# @description This function checks whether a factor has only numeric or
+#                any non-numeric factor levels.
+#
+# @param x A \code{\link{factor}}.
+# @return Logical, \code{TRUE} if factor has numeric factor levels only,
+#           \code{FALSE} otherwise.
+#
+# @examples
+# # numeric factor levels
+# f1 <- factor(c(NA, 1, 3, NA, 2, 4))
+# is_num_fac(f1)
+#
+# # not completeley numeric factor levels
+# f2 <- factor(c(NA, "C", 1, 3, "A", NA, 2, 4))
+# is_num_fac(f2)
+#
+# # not completeley numeric factor levels
+# f3 <- factor(c("Justus", "Bob", "Peter"))
+# is_num_fac(f3)
+#
+# 
 is_num_fac <- function(x) {
   # check if we have numeric levels
   return(!anyNA(suppressWarnings(as.numeric(levels(x)))))
 }
-#' @title Check whether value is odd
-#' @name is_odd
-#'
-#' @description Checks whether \code{x} is an odd number or not. Only
-#'                accepts numeric vectors.
-#'
-#' @param x Numeric vector or single numeric value.
-#'
-#' @return \code{TRUE} for each odd value of \code{x}, \code{FALSE} for
-#'           even values.
-#'
-#' @seealso \code{\link{is_even}}
-#'
-#' @examples
-#' is_odd(4)
-#' is_odd(5)
-#' is_odd(1:4)
-#'
-#' 
+# @title Check whether value is odd
+# @name is_odd
+#
+# @description Checks whether \code{x} is an odd number or not. Only
+#                accepts numeric vectors.
+#
+# @param x Numeric vector or single numeric value.
+#
+# @return \code{TRUE} for each odd value of \code{x}, \code{FALSE} for
+#           even values.
+#
+# @seealso \code{\link{is_even}}
+#
+# @examples
+# is_odd(4)
+# is_odd(5)
+# is_odd(1:4)
+#
+# 
 is_odd <- function(x) (x %% 2) == 1
-#' @title Create a labelled vector
-#' @name labelled
-#'
-#' @description A labelled vector is a common data structure in other statistical
-#' environments.
-#'
-#' @param x Vector to label. Must be either numeric or character.
-#' @param labels Named vector. The vector should be the same type as
-#'   \code{x}. Unlike factors, labels don't need to be exhaustive: only a fraction
-#'   of the values might be labelled.
-#' @param is_na Optionally, logical vector describing which levels should
-#'   be translated to missing values
-#'
-#' @note This method is derived from the \code{\link[haven]{labelled}} method
-#'         of the \pkg{haven} package. \pkg{haven} up to version 0.2 \emph{does not}
-#'         support the \code{is_na} attribute, however, the current
-#'         \href{github.com/hadley/haven}{dev-version} does. Some of the
-#'         \pkg{sjmisc} functions make use of this feature in advance, assuming
-#'         that the \code{labelled} class supported by the \pkg{haven} package
-#'         will be enhanced accordingly in a forthcoming update. Once the
-#'         \pkg{haven} package is updated and introducing the new \code{labelled}
-#'         class, this method might be removed.
-#'
-#' @examples
-#' # labelled vector with multiple types of missing values
-#' x <- labelled(c("M", "M", "F", "X", "N/A"),
-#'               c(Male = "M", Female = "F", Refused = "X", "Not applicable" = "N/A"),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#'
-#' x <- labelled(c(1, 2, 1, 5, 1, 5, 9),
-#'               c(Male = 1, Female = 2, Refused = 5, Missing = 9),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#'
-#' 
+# @title Create a labelled vector
+# @name labelled
+#
+# @description A labelled vector is a common data structure in other statistical
+# environments.
+#
+# @param x Vector to label. Must be either numeric or character.
+# @param labels Named vector. The vector should be the same type as
+#   \code{x}. Unlike factors, labels don't need to be exhaustive: only a fraction
+#   of the values might be labelled.
+# @param is_na Optionally, logical vector describing which levels should
+#   be translated to missing values
+#
+# @note This method is derived from the \code{\link[haven]{labelled}} method
+#         of the \pkg{haven} package. \pkg{haven} up to version 0.2 \emph{does not}
+#         support the \code{is_na} attribute, however, the current
+#         \href{github.com/hadley/haven}{dev-version} does. Some of the
+#         \pkg{sjmisc} functions make use of this feature in advance, assuming
+#         that the \code{labelled} class supported by the \pkg{haven} package
+#         will be enhanced accordingly in a forthcoming update. Once the
+#         \pkg{haven} package is updated and introducing the new \code{labelled}
+#         class, this method might be removed.
+#
+# @examples
+# # labelled vector with multiple types of missing values
+# x <- labelled(c("M", "M", "F", "X", "N/A"),
+#               c(Male = "M", Female = "F", Refused = "X", "Not applicable" = "N/A"),
+#               c(FALSE, FALSE, TRUE, TRUE))
+#
+# x <- labelled(c(1, 2, 1, 5, 1, 5, 9),
+#               c(Male = 1, Female = 2, Refused = 5, Missing = 9),
+#               c(FALSE, FALSE, TRUE, TRUE))
+#
+# 
 labelled <- function(x, labels, is_na = NULL) {
   if (!is.numeric(x) && !is.character(x)) {
     stop("`x` must be either numeric or a character vector", call. = FALSE)
@@ -3098,62 +3099,62 @@ labelled <- function(x, labels, is_na = NULL) {
             class = "labelled"
   )
 }
-#' @title Row means with min amount of valid values
-#' @name mean_n
-#' @description This function is similar to the SPSS \code{MEAN.n} function and computes
-#'                row means from a \code{\link{data.frame}} or \code{\link{matrix}} if at least \code{n}
-#'                values of a row are valid (and not \code{\link{NA}}).
-#'
-#' @param dat \code{\link{data.frame}} with at least two columns, where row means are applied.
-#' @param n May either be
-#'          \itemize{
-#'            \item a numeric value that indicates the amount of valid values per row to calculate the row mean;
-#'            \item or a value between 0 and 1, indicating a proportion of valid values per row to calculate the row mean (see 'Details').
-#'          }
-#'          If a row's amount of valid values is less than \code{n}, \code{\link{NA}} will be returned as row mean value.
-#' @param digits Numeric value indicating the number of decimal places to be used for rounding mean
-#'          value. Negative values are allowed (see ‘Details’).
-#'
-#' @return A vector with row mean values of \code{df} for those rows with at least \code{n}
-#'           valid values. Else, \code{\link{NA}} is returned.
-#'
-#' @details Rounding to a negative number of \code{digits} means rounding to a power of
-#'            ten, so for example mean_n(df, 3, digits = -2) rounds to the
-#'            nearest hundred. \cr \cr
-#'          For \code{n}, must be a numeric value from \code{0} to \code{ncol(dat)}. If
-#'            a \emph{row} in \code{dat} has at least \code{n} non-missing values, the
-#'            row mean is returned. If \code{n} is a non-integer value from 0 to 1,
-#'            \code{n} is considered to indicate the proportion of necessary non-missing
-#'            values per row. E.g., if \code{n = .75}, a row must have at least \code{ncol(dat) * n}
-#'            non-missing values for the row mean to be calculated. See 'Examples'.
-#'
-#' @references \href{http://r4stats.com/2014/09/03/adding-the-spss-mean-n-function-to-r/}{r4stats.com}
-#'
-#' @examples
-#' dat <- data.frame(c1 = c(1,2,NA,4),
-#'                   c2 = c(NA,2,NA,5),
-#'                   c3 = c(NA,4,NA,NA),
-#'                   c4 = c(2,3,7,8))
-#'
-#' # needs at least 4 non-missing values per row
-#' mean_n(dat, 4) # 1 valid return value
-#'
-#' # needs at least 3 non-missing values per row
-#' mean_n(dat, 3) # 2 valid return values
-#'
-#' # needs at least 2 non-missing values per row
-#' mean_n(dat, 2)
-#'
-#' # needs at least 1 non-missing value per row
-#' mean_n(dat, 1) # all means are shown
-#'
-#' # needs at least 50% of non-missing values per row
-#' mean_n(dat, .5) # 3 valid return values
-#'
-#' # needs at least 75% of non-missing values per row
-#' mean_n(dat, .75) # 2 valid return values
-#'
-#' 
+# @title Row means with min amount of valid values
+# @name mean_n
+# @description This function is similar to the SPSS \code{MEAN.n} function and computes
+#                row means from a \code{\link{data.frame}} or \code{\link{matrix}} if at least \code{n}
+#                values of a row are valid (and not \code{\link{NA}}).
+#
+# @param dat \code{\link{data.frame}} with at least two columns, where row means are applied.
+# @param n May either be
+#          \itemize{
+#            \item a numeric value that indicates the amount of valid values per row to calculate the row mean;
+#            \item or a value between 0 and 1, indicating a proportion of valid values per row to calculate the row mean (see 'Details').
+#          }
+#          If a row's amount of valid values is less than \code{n}, \code{\link{NA}} will be returned as row mean value.
+# @param digits Numeric value indicating the number of decimal places to be used for rounding mean
+#          value. Negative values are allowed (see ‘Details’).
+#
+# @return A vector with row mean values of \code{df} for those rows with at least \code{n}
+#           valid values. Else, \code{\link{NA}} is returned.
+#
+# @details Rounding to a negative number of \code{digits} means rounding to a power of
+#            ten, so for example mean_n(df, 3, digits = -2) rounds to the
+#            nearest hundred. \cr \cr
+#          For \code{n}, must be a numeric value from \code{0} to \code{ncol(dat)}. If
+#            a \emph{row} in \code{dat} has at least \code{n} non-missing values, the
+#            row mean is returned. If \code{n} is a non-integer value from 0 to 1,
+#            \code{n} is considered to indicate the proportion of necessary non-missing
+#            values per row. E.g., if \code{n = .75}, a row must have at least \code{ncol(dat) * n}
+#            non-missing values for the row mean to be calculated. See 'Examples'.
+#
+# @references \href{http://r4stats.com/2014/09/03/adding-the-spss-mean-n-function-to-r/}{r4stats.com}
+#
+# @examples
+# dat <- data.frame(c1 = c(1,2,NA,4),
+#                   c2 = c(NA,2,NA,5),
+#                   c3 = c(NA,4,NA,NA),
+#                   c4 = c(2,3,7,8))
+#
+# # needs at least 4 non-missing values per row
+# mean_n(dat, 4) # 1 valid return value
+#
+# # needs at least 3 non-missing values per row
+# mean_n(dat, 3) # 2 valid return values
+#
+# # needs at least 2 non-missing values per row
+# mean_n(dat, 2)
+#
+# # needs at least 1 non-missing value per row
+# mean_n(dat, 1) # all means are shown
+#
+# # needs at least 50% of non-missing values per row
+# mean_n(dat, .5) # 3 valid return values
+#
+# # needs at least 75% of non-missing values per row
+# mean_n(dat, .75) # 2 valid return values
+#
+# 
 mean_n <- function(dat, n, digits = 2) {
   # is 'n' indicating a proportion?
   digs <- n %% 1
@@ -3175,50 +3176,50 @@ mean_n <- function(dat, n, digits = 2) {
   }
   round(apply(dat, 1, function(x) ifelse(sum(!is.na(x)) >= n, mean(x, na.rm = TRUE), NA)), digits)
 }
-#' @title Merge labelled data frames
-#' @name merge_df
-#'
-#' @description Merges (full join) two (or more) data frames and preserve value and variable labels.
-#'
-#' @param x1 First data frame to be merged.
-#' @param x2 Second data frame to be merged.
-#' @param ... More data frames to be merged.
-#' @param id Optional name for ID column that will be created to indicate the
-#'          source data frames for appended rows.
-#'
-#' @return A full joined data frame.
-#'
-#' @details This function merges two data frames, where equal named columns
-#'            will be joined together. This function is a convenient wrapper for
-#'            \code{merge(x1, x2, all = TRUE)}, however, unlike base
-#'            \code{\link{merge}}, this function preserves value and
-#'            variable labels. If matching columns have different value
-#'            label attributes, attributes from first data frame will be
-#'            used. For more details on the join operation, see
-#'            'Details' in \code{\link{merge}} on \code{all}-argument.
-#'
-#' @examples
-#' library(dplyr)
-#' data(efc)
-#' x1 <- efc %>% select(1:5) %>% slice(1:10)
-#' x2 <- efc %>% select(3:7) %>% slice(1:10)
-#'
-#' mydf <- merge_df(x1, x2)
-#' mydf
-#' str(mydf)
-#'
-#' \dontrun{
-#' library(sjPlot)
-#' view_df(mydf)}
-#'
-#' x3 <- efc %>% select(5:9) %>% slice(1:10)
-#' x4 <- efc %>% select(11:14) %>% slice(1:10)
-#'
-#' mydf <- merge_df(x1, x2, x3, x4, id = "subsets")
-#' mydf
-#' str(mydf)
-#'
-#' 
+# @title Merge labelled data frames
+# @name merge_df
+#
+# @description Merges (full join) two (or more) data frames and preserve value and variable labels.
+#
+# @param x1 First data frame to be merged.
+# @param x2 Second data frame to be merged.
+# @param ... More data frames to be merged.
+# @param id Optional name for ID column that will be created to indicate the
+#          source data frames for appended rows.
+#
+# @return A full joined data frame.
+#
+# @details This function merges two data frames, where equal named columns
+#            will be joined together. This function is a convenient wrapper for
+#            \code{merge(x1, x2, all = TRUE)}, however, unlike base
+#            \code{\link{merge}}, this function preserves value and
+#            variable labels. If matching columns have different value
+#            label attributes, attributes from first data frame will be
+#            used. For more details on the join operation, see
+#            'Details' in \code{\link{merge}} on \code{all}-argument.
+#
+# @examples
+# library(dplyr)
+# data(efc)
+# x1 <- efc %>% select(1:5) %>% slice(1:10)
+# x2 <- efc %>% select(3:7) %>% slice(1:10)
+#
+# mydf <- merge_df(x1, x2)
+# mydf
+# str(mydf)
+#
+# \dontrun{
+# library(sjPlot)
+# view_df(mydf)}
+#
+# x3 <- efc %>% select(5:9) %>% slice(1:10)
+# x4 <- efc %>% select(11:14) %>% slice(1:10)
+#
+# mydf <- merge_df(x1, x2, x3, x4, id = "subsets")
+# mydf
+# str(mydf)
+#
+# 
 merge_df <- function(x1, x2, ..., id = NULL) {
   # retrieve list of parameters
   more_dfs <- list(...)
@@ -3313,51 +3314,51 @@ merge_df_helper <- function(x1, x2) {
   x_final <- cbind(x1_new, tmp)
   # return merged df
   x_final
-}#' @title Mean Inter-Item-Correlation
-#' @name mic
-#' @description This function calculates a mean inter-item-correlation, i.e.
-#'                a correlation matrix of \code{data} will be computed (unless
-#'                \code{data} is already a matrix as returned by the
-#'                \code{\link{cor}}-function) and the mean
-#'                of the sum of all item's correlation values is returned.
-#'                Requires either a data frame or a computed \code{\link{cor}}-object.
-#'
-#' @param data A \code{matrix} as returned by the \code{\link{cor}}-function, or
-#'          a \code{data.frame}, where correlations will be calculated.
-#' @param cor.method Indicates the correlation computation method. May be one of
-#'          \code{"spearman"} (default), \code{"pearson"} or \code{"kendall"}.
-#'          You may use initial letter only.
-#' @return The value of the computed mean inter-item-correlation.
-#'
-#' @note \dQuote{Ideally, the average inter-item correlation for a set of
-#'          items should be between .20 and .40, suggesting that while the
-#'          items are reasonably homogenous, they do contain sufficiently
-#'          unique variance so as to not be isomorphic with each other.
-#'
-#'          When values are lower than .20, then the items may not be
-#'          representative of the same content domain. If values are higher than
-#'          .40, the items may be only capturing a small bandwidth of the construct.}
-#'          \emph{(Piedmont 2014)}
-#'
-#' @references Piedmont RL (2014) Inter-item Correlations. In: Michalos AC (eds)
-#'             Encyclopedia of Quality of Life and Well-Being Research.
-#'             Dordrecht: Springer, 3303-3304
-#'             \doi{10.1007/978-94-007-0753-5_1493}
-#'
-#' @examples
-#' # Data from the EUROFAMCARE sample dataset
-#' data(efc)
-#' # recveive first item of COPE-index scale
-#' start <- which(colnames(efc) == "c82cop1")
-#' # recveive last item of COPE-index scale
-#' end <- which(colnames(efc) == "c90cop9")
-#' # create data frame with COPE-index scale
-#' mydat <- data.frame(efc[, c(start:end)])
-#'
-#' mic(mydat)
-#'
+}# @title Mean Inter-Item-Correlation
+# @name mic
+# @description This function calculates a mean inter-item-correlation, i.e.
+#                a correlation matrix of \code{data} will be computed (unless
+#                \code{data} is already a matrix as returned by the
+#                \code{\link{cor}}-function) and the mean
+#                of the sum of all item's correlation values is returned.
+#                Requires either a data frame or a computed \code{\link{cor}}-object.
+#
+# @param data A \code{matrix} as returned by the \code{\link{cor}}-function, or
+#          a \code{data.frame}, where correlations will be calculated.
+# @param cor.method Indicates the correlation computation method. May be one of
+#          \code{"spearman"} (default), \code{"pearson"} or \code{"kendall"}.
+#          You may use initial letter only.
+# @return The value of the computed mean inter-item-correlation.
+#
+# @note \dQuote{Ideally, the average inter-item correlation for a set of
+#          items should be between .20 and .40, suggesting that while the
+#          items are reasonably homogenous, they do contain sufficiently
+#          unique variance so as to not be isomorphic with each other.
+#
+#          When values are lower than .20, then the items may not be
+#          representative of the same content domain. If values are higher than
+#          .40, the items may be only capturing a small bandwidth of the construct.}
+#          \emph{(Piedmont 2014)}
+#
+# @references Piedmont RL (2014) Inter-item Correlations. In: Michalos AC (eds)
+#             Encyclopedia of Quality of Life and Well-Being Research.
+#             Dordrecht: Springer, 3303-3304
+#             \doi{10.1007/978-94-007-0753-5_1493}
+#
+# @examples
+# # Data from the EUROFAMCARE sample dataset
+# data(efc)
+# # recveive first item of COPE-index scale
+# start <- which(colnames(efc) == "c82cop1")
+# # recveive last item of COPE-index scale
+# end <- which(colnames(efc) == "c90cop9")
+# # create data frame with COPE-index scale
+# mydat <- data.frame(efc[, c(start:end)])
+#
+# mic(mydat)
+#
 #' @importFrom stats cor na.omit
-#' 
+# 
 mic <- function(data, cor.method = c("pearson", "spearman", "kendall")) {
   # Check parameter
   cor.method <- match.arg(cor.method)
@@ -3386,45 +3387,45 @@ mic <- function(data, cor.method = c("pearson", "spearman", "kendall")) {
   }
   return(mean(meanic))
 }
-#' @title Mann-Whitney-U-Test
-#' @name mwu
-#' @description This function performs a Mann-Whitney-U-Test (or \code{Wilcoxon rank sum test},
-#'                see \code{\link{wilcox.test}} and \code{\link[coin]{wilcox_test}})
-#'                for \code{x}, for each group indicated by \code{grp}. If \code{grp}
-#'                has more than two categories, a comparison between each combination of
-#'                two groups is performed. \cr \cr
-#'                The function reports U, p and Z-values as well as effect size r
-#'                and group-rank-means.
-#'
-#' @param x Numeric vector / variable, where the Mann-Whitney-U-Test should be applied to
-#' @param grp Grouping variable indicating the groups that should be used for comparison
-#' @param distribution Indicates how the null distribution of the test statistic should be computed.
-#'          May be one of \code{"exact"}, \code{"approximate"} or \code{"asymptotic"}
-#'          (default). See \code{\link[coin]{wilcox_test}} for details.
-#' @param weights Integer valued weights for the observations. By default,
-#'          this is \code{NULL}.
-#' @return (Invisibly) returns a data frame with U, p and Z-values for each group-comparison
-#'         as well as effect-size r; additionally, group-labels and groups' n's are
-#'         also included.
-#'
-#' @note This function calls the \code{\link[coin]{wilcox_test}} with formula. If \code{grp}
-#'         has more than two groups, additionally a Kruskal-Wallis-Test (see \code{\link{kruskal.test}})
-#'         is performed. \cr \cr
-#'         Interpretation of effect sizes, as a rule-of-thumb:
-#'         \itemize{
-#'          \item small effect >= 0.1
-#'          \item medium effect >= 0.3
-#'          \item large effect >= 0.5
-#'        }
-#'
-#' @examples
-#' data(efc)
-#' # Mann-Whitney-U-Tests for elder's age by elder's dependency.
-#' mwu(efc$e17age, efc$e42dep)
-#'
+# @title Mann-Whitney-U-Test
+# @name mwu
+# @description This function performs a Mann-Whitney-U-Test (or \code{Wilcoxon rank sum test},
+#                see \code{\link{wilcox.test}} and \code{\link[coin]{wilcox_test}})
+#                for \code{x}, for each group indicated by \code{grp}. If \code{grp}
+#                has more than two categories, a comparison between each combination of
+#                two groups is performed. \cr \cr
+#                The function reports U, p and Z-values as well as effect size r
+#                and group-rank-means.
+#
+# @param x Numeric vector / variable, where the Mann-Whitney-U-Test should be applied to
+# @param grp Grouping variable indicating the groups that should be used for comparison
+# @param distribution Indicates how the null distribution of the test statistic should be computed.
+#          May be one of \code{"exact"}, \code{"approximate"} or \code{"asymptotic"}
+#          (default). See \code{\link[coin]{wilcox_test}} for details.
+# @param weights Integer valued weights for the observations. By default,
+#          this is \code{NULL}.
+# @return (Invisibly) returns a data frame with U, p and Z-values for each group-comparison
+#         as well as effect-size r; additionally, group-labels and groups' n's are
+#         also included.
+#
+# @note This function calls the \code{\link[coin]{wilcox_test}} with formula. If \code{grp}
+#         has more than two groups, additionally a Kruskal-Wallis-Test (see \code{\link{kruskal.test}})
+#         is performed. \cr \cr
+#         Interpretation of effect sizes, as a rule-of-thumb:
+#         \itemize{
+#          \item small effect >= 0.1
+#          \item medium effect >= 0.3
+#          \item large effect >= 0.5
+#        }
+#
+# @examples
+# data(efc)
+# # Mann-Whitney-U-Tests for elder's age by elder's dependency.
+# mwu(efc$e17age, efc$e42dep)
+#
 #' @importFrom stats na.omit wilcox.test kruskal.test
 #' @importFrom coin wilcox_test pvalue statistic
-#' 
+# 
 mwu <- function(x, grp, distribution = "asymptotic", weights = NULL) {
   # check if suggested package is available
   if (!requireNamespace("coin", quietly = TRUE)) {
@@ -3536,54 +3537,54 @@ mwu <- function(x, grp, distribution = "asymptotic", weights = NULL) {
   # return both data frames
   invisible(structure(class = "mwu",list(df = df, tab.df = tab.df)))
 }
-#' @title Check overdispersion of GL(M)M's
-#' @name overdisp
-#' @description This function checks generalized linear (mixed) models for
-#'                overdispersion.
-#'
-#' @param x Fitted GLMM (\code{\link[lme4]{merMod}}-class) or \code{glm} model.
-#' @param trafo A specification of the alternative, can be numeric or a
-#'          (positive) function or \code{NULL} (the default). See 'Details'
-#'          in \code{\link[AER]{dispersiontest}} in package \pkg{AER}. Does not
-#'          apply to \code{merMod} objects.
-#'
-#' @return Information on the overdispersion test.
-#'
-#' @note The interpretation of the returned p-value differs between GLM and
-#'         GLMM. For GLMs, a p-value < .05 indicates overdispersion, while
-#'         for GLMMs, a p-value > .05 indicates overdispersion.
-#'
-#' @details For \code{merMod}-objects, this function is based on the code in the
-#'            \href{http://glmm.wikidot.com/faq}{DRAFT r-sig-mixed-models FAQ},
-#'            section \emph{How can I deal with overdispersion in GLMMs?}.
-#'            Note that this function only returns an \emph{approximate} estimate
-#'            of an overdispersion parameter.
-#'            \cr \cr
-#'            For \code{glm}'s, this function simply wraps the \code{dispersiontest}
-#'            from the \pkg{AER}-package.
-#'
-#' @references \href{http://glmm.wikidot.com/faq}{DRAFT r-sig-mixed-models FAQ}
-#'
-#' @examples
-#' data(efc)
-#'
-#' # response has many zero-counts, poisson models
-#' # might be overdispersed
-#' barplot(table(efc$tot_sc_e))
-#'
-#' fit <- glm(tot_sc_e ~ neg_c_7 + e42dep + c160age,
-#'            data = efc, family = poisson)
-#' overdisp(fit)
-#'
-#' library(lme4)
-#' efc$e15relat <- to_factor(efc$e15relat)
-#' fit <- glmer(tot_sc_e ~ neg_c_7 + e42dep + c160age + (1 | e15relat),
-#'              data = efc, family = poisson)
-#' overdisp(fit)
-#'
-#'
+# @title Check overdispersion of GL(M)M's
+# @name overdisp
+# @description This function checks generalized linear (mixed) models for
+#                overdispersion.
+#
+# @param x Fitted GLMM (\code{\link[lme4]{merMod}}-class) or \code{glm} model.
+# @param trafo A specification of the alternative, can be numeric or a
+#          (positive) function or \code{NULL} (the default). See 'Details'
+#          in \code{\link[AER]{dispersiontest}} in package \pkg{AER}. Does not
+#          apply to \code{merMod} objects.
+#
+# @return Information on the overdispersion test.
+#
+# @note The interpretation of the returned p-value differs between GLM and
+#         GLMM. For GLMs, a p-value < .05 indicates overdispersion, while
+#         for GLMMs, a p-value > .05 indicates overdispersion.
+#
+# @details For \code{merMod}-objects, this function is based on the code in the
+#            \href{http://glmm.wikidot.com/faq}{DRAFT r-sig-mixed-models FAQ},
+#            section \emph{How can I deal with overdispersion in GLMMs?}.
+#            Note that this function only returns an \emph{approximate} estimate
+#            of an overdispersion parameter.
+#            \cr \cr
+#            For \code{glm}'s, this function simply wraps the \code{dispersiontest}
+#            from the \pkg{AER}-package.
+#
+# @references \href{http://glmm.wikidot.com/faq}{DRAFT r-sig-mixed-models FAQ}
+#
+# @examples
+# data(efc)
+#
+# # response has many zero-counts, poisson models
+# # might be overdispersed
+# barplot(table(efc$tot_sc_e))
+#
+# fit <- glm(tot_sc_e ~ neg_c_7 + e42dep + c160age,
+#            data = efc, family = poisson)
+# overdisp(fit)
+#
+# library(lme4)
+# efc$e15relat <- to_factor(efc$e15relat)
+# fit <- glmer(tot_sc_e ~ neg_c_7 + e42dep + c160age + (1 | e15relat),
+#              data = efc, family = poisson)
+# overdisp(fit)
+#
+#
 #' @importFrom stats df.residual residuals pchisq
-#' 
+# 
 overdisp <- function(x, trafo = NULL) {
   if (str_contains(class(x), "merMod", ignore.case = TRUE))
     return(overdisp.lme4(x))
@@ -3635,24 +3636,24 @@ overdisp.lme4 <- function(x) {
     warning("This method currently only supports `glmer` fitted models.", call. = F)
   }
 }
-#' @title Phi value for contingency tables
-#' @name phi
-#' @description Compute Phi value for a contingency table.
-#'
-#' @seealso \code{\link{cramer}}
+# @title Phi value for contingency tables
+# @name phi
+# @description Compute Phi value for a contingency table.
+#
+# @seealso \code{\link{cramer}}
 
-#' @param tab A \code{\link{table}} or \code{\link{ftable}}. Tables of class
-#'          \code{\link{xtabs}} and other will be coerced to \code{\link{ftable}}
-#'          objects.
-#'
-#' @return The table's Phi value.
-#'
-#' @examples
-#' tab <- table(sample(1:2, 30, TRUE), sample(1:2, 30, TRUE))
-#' phi(tab)
-#'
+# @param tab A \code{\link{table}} or \code{\link{ftable}}. Tables of class
+#          \code{\link{xtabs}} and other will be coerced to \code{\link{ftable}}
+#          objects.
+#
+# @return The table's Phi value.
+#
+# @examples
+# tab <- table(sample(1:2, 30, TRUE), sample(1:2, 30, TRUE))
+# phi(tab)
+#
 #' @importFrom MASS loglm
-#' 
+# 
 phi <- function(tab) {
   # convert to flat table
   if (all(class(tab) != "ftable")) tab <- ftable(tab)
@@ -3660,40 +3661,40 @@ phi <- function(tab) {
   phi_val <- sqrt(tb[2, 1] / sum(tab))
   return(phi_val)
 }
-#' @title Tjur's Coefficient of Discrimination
-#' @name cod
-#'
-#' @description This method calculates the Coefficient of Discrimination \code{D}
-#'                for generalized linear (mixed) models for binary data. It is
-#'                an alternative to other Pseudo-R-squared values
-#'                like Nakelkerke's R2 or Cox-Snell R2.
-#'
-#' @param x Fitted \code{\link{glm}} or \code{\link[lme4]{glmer}} model.
-#'
-#' @return The \code{D} Coefficient of Discrimination, also known as
-#'           Tjur's R-squared value.
-#'
-#' @note The Coefficient of Discrimination \code{D} can be read like any
-#'         other (Pseudo-)R-squared value.
-#'
-#' @references Tjur T (2009) Coefficients of determination in logistic regression models -
-#'               a new proposal: The coefficient of discrimination. The American Statistician,
-#'               63(4): 366-372
-#'
-#' @seealso \code{\link{r2}} for Nagelkerke's and Cox and Snell's pseudo
-#'            r-squared coefficients.
-#'
-#' @examples
-#' data(efc)
-#'
-#' # Tjur's R-squared value
-#' efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
-#' fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
-#'            data = efc, family = binomial(link = "logit"))
-#' cod(fit)
-#'
+# @title Tjur's Coefficient of Discrimination
+# @name cod
+#
+# @description This method calculates the Coefficient of Discrimination \code{D}
+#                for generalized linear (mixed) models for binary data. It is
+#                an alternative to other Pseudo-R-squared values
+#                like Nakelkerke's R2 or Cox-Snell R2.
+#
+# @param x Fitted \code{\link{glm}} or \code{\link[lme4]{glmer}} model.
+#
+# @return The \code{D} Coefficient of Discrimination, also known as
+#           Tjur's R-squared value.
+#
+# @note The Coefficient of Discrimination \code{D} can be read like any
+#         other (Pseudo-)R-squared value.
+#
+# @references Tjur T (2009) Coefficients of determination in logistic regression models -
+#               a new proposal: The coefficient of discrimination. The American Statistician,
+#               63(4): 366-372
+#
+# @seealso \code{\link{r2}} for Nagelkerke's and Cox and Snell's pseudo
+#            r-squared coefficients.
+#
+# @examples
+# data(efc)
+#
+# # Tjur's R-squared value
+# efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
+# fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
+#            data = efc, family = binomial(link = "logit"))
+# cod(fit)
+#
 #' @importFrom stats predict predict.glm residuals
-#' 
+# 
 cod <- function(x) {
   # check for valid object class
   if (!any(class(x) == "glmerMod") && !any(class(x) == "glm")) {
@@ -3727,80 +3728,80 @@ cod <- function(x) {
 
 
 
-#' @title Compute R-squared of (generalized) linear (mixed) models
-#' @name r2
-#'
-#' @description Compute R-squared values of linear (mixed) models, or
-#'                pseudo-R-squared values for generalized linear (mixed) models.
-#'
-#' @param x Fitted model of class \code{lm}, \code{glm}, \code{lmerMod}/\code{lme}
-#'            or \code{glmerMod}.
-#' @param n Optional, a \code{lmerMod} object, representing the fitted null-model
-#'          to \code{x} (unconditional model). If \code{n} is given, the pseudo-r-squared
-#'          for random intercept and random slope variances are computed (see Kwok et al. 2008;
-#'          see 'Examples' and 'Details').
-#'
-#' @return \itemize{
-#'           \item For linear models, the r-squared and adjusted r-squared values.
-#'           \item For linear mixed models, the r-squared and Omega-squared values.
-#'           \item For \code{glm} objects, Cox & Snell's and Nagelkerke's pseudo r-squared values.
-#'           \item For \code{glmerMod} objects, Tjur's coefficient of determination.
-#'         }
-#'
-#' @details If \code{n} is given, the Pseudo-R2 statistic is the proportion of
-#'          explained variance in the random effect after adding co-variates or
-#'          predictors to the model, or in short: the proportion of the explained
-#'          variance in the random effect of the full (conditional) model \code{x}
-#'          compared to the null (unconditional) model \code{n}.
-#'
-#' @note For linear models, the r-squared and adjusted r-squared value is returned,
-#'         as provided by the \code{summary}-function.
-#'         \cr \cr
-#'         For linear mixed models, an r-squared approximation by computing the
-#'         correlation between the fitted and observed values, as suggested by
-#'         Byrnes (2008), is returned as well as the Omega-squared value as
-#'         suggested by Xu (2003), unless \code{n} is specified. If \code{n}
-#'         is given, pseudo r-squared measures based on the variances of random
-#'         intercept (tau 00, between-group-variance) and random slope (tau 11,
-#'         random-slope-variance) are returned.
-#'         \cr \cr
-#'         For generalized linear models, Cox & Snell's and Nagelkerke's
-#'         pseudo r-squared values are returned.
-#'         \cr \cr
-#'         For generalized linear mixed models, the coefficient of determination
-#'         as suggested by Tjur (2009) (see also \code{\link{cod}}).
-#'
-#' @references \itemize{
-#'               \item \href{http://glmm.wikidot.com/faq}{DRAFT r-sig-mixed-models FAQ}
-#'               \item Byrnes, J. 2008. Re: Coefficient of determination (R^2) when using lme(). \href{http://thread.gmane.org/gmane.comp.lang.r.lme4.devel/684}{gmane.comp.lang.r.lme4.devel}
-#'               \item Kwok OM, Underhill AT, Berry JW, Luo W, Elliott TR, Yoon M. 2008. Analyzing Longitudinal Data with Multilevel Models: An Example with Individuals Living with Lower Extremity Intra-Articular Fractures. Rehabilitation Psychology 53(3): 370–86 (\doi{10.1037/a0012765})
-#'               \item Xu, R. 2003. Measuring explained variation in linear mixed effects models. Statist. Med. 22:3527-3541. \doi{10.1002/sim.1572}
-#'               \item Tjur T. 2009. Coefficients of determination in logistic regression models - a new proposal: The coefficient of discrimination. The American Statistician, 63(4): 366-372
-#'             }
-#'
-#' @examples
-#' library(lme4)
-#' fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' r2(fit)
-#'
-#' data(efc)
-#' fit <- lm(barthtot ~ c160age + c12hour, data = efc)
-#' r2(fit)
-#'
-#' # Pseudo-R-squared values
-#' efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
-#' fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
-#'            data = efc, family = binomial(link = "logit"))
-#' r2(fit)
-#'
-#' # Pseudo-R-squared values for random effect variances
-#' fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' fit.null <- lmer(Reaction ~ 1 + (Days | Subject), sleepstudy)
-#' r2(fit, fit.null)
-#'
-#'
+# @title Compute R-squared of (generalized) linear (mixed) models
+# @name r2
+#
+# @description Compute R-squared values of linear (mixed) models, or
+#                pseudo-R-squared values for generalized linear (mixed) models.
+#
+# @param x Fitted model of class \code{lm}, \code{glm}, \code{lmerMod}/\code{lme}
+#            or \code{glmerMod}.
+# @param n Optional, a \code{lmerMod} object, representing the fitted null-model
+#          to \code{x} (unconditional model). If \code{n} is given, the pseudo-r-squared
+#          for random intercept and random slope variances are computed (see Kwok et al. 2008;
+#          see 'Examples' and 'Details').
+#
+# @return \itemize{
+#           \item For linear models, the r-squared and adjusted r-squared values.
+#           \item For linear mixed models, the r-squared and Omega-squared values.
+#           \item For \code{glm} objects, Cox & Snell's and Nagelkerke's pseudo r-squared values.
+#           \item For \code{glmerMod} objects, Tjur's coefficient of determination.
+#         }
+#
+# @details If \code{n} is given, the Pseudo-R2 statistic is the proportion of
+#          explained variance in the random effect after adding co-variates or
+#          predictors to the model, or in short: the proportion of the explained
+#          variance in the random effect of the full (conditional) model \code{x}
+#          compared to the null (unconditional) model \code{n}.
+#
+# @note For linear models, the r-squared and adjusted r-squared value is returned,
+#         as provided by the \code{summary}-function.
+#         \cr \cr
+#         For linear mixed models, an r-squared approximation by computing the
+#         correlation between the fitted and observed values, as suggested by
+#         Byrnes (2008), is returned as well as the Omega-squared value as
+#         suggested by Xu (2003), unless \code{n} is specified. If \code{n}
+#         is given, pseudo r-squared measures based on the variances of random
+#         intercept (tau 00, between-group-variance) and random slope (tau 11,
+#         random-slope-variance) are returned.
+#         \cr \cr
+#         For generalized linear models, Cox & Snell's and Nagelkerke's
+#         pseudo r-squared values are returned.
+#         \cr \cr
+#         For generalized linear mixed models, the coefficient of determination
+#         as suggested by Tjur (2009) (see also \code{\link{cod}}).
+#
+# @references \itemize{
+#               \item \href{http://glmm.wikidot.com/faq}{DRAFT r-sig-mixed-models FAQ}
+#               \item Byrnes, J. 2008. Re: Coefficient of determination (R^2) when using lme(). \href{http://thread.gmane.org/gmane.comp.lang.r.lme4.devel/684}{gmane.comp.lang.r.lme4.devel}
+#               \item Kwok OM, Underhill AT, Berry JW, Luo W, Elliott TR, Yoon M. 2008. Analyzing Longitudinal Data with Multilevel Models: An Example with Individuals Living with Lower Extremity Intra-Articular Fractures. Rehabilitation Psychology 53(3): 370–86 (\doi{10.1037/a0012765})
+#               \item Xu, R. 2003. Measuring explained variation in linear mixed effects models. Statist. Med. 22:3527-3541. \doi{10.1002/sim.1572}
+#               \item Tjur T. 2009. Coefficients of determination in logistic regression models - a new proposal: The coefficient of discrimination. The American Statistician, 63(4): 366-372
+#             }
+#
+# @examples
+# library(lme4)
+# fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# r2(fit)
+#
+# data(efc)
+# fit <- lm(barthtot ~ c160age + c12hour, data = efc)
+# r2(fit)
+#
+# # Pseudo-R-squared values
+# efc$services <- dicho(efc$tot_sc_e, "v", 0, as.num = TRUE)
+# fit <- glm(services ~ neg_c_7 + c161sex + e42dep,
+#            data = efc, family = binomial(link = "logit"))
+# r2(fit)
+#
+# # Pseudo-R-squared values for random effect variances
+# fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# fit.null <- lmer(Reaction ~ 1 + (Days | Subject), sleepstudy)
+# r2(fit, fit.null)
+#
+#
 #' @importFrom stats model.response model.frame fitted var residuals
-#' 
+# 
 r2 <- function(x, n = NULL) {
   rsq <- NULL
   osq <- NULL
@@ -3868,84 +3869,84 @@ pseudo_ralt <- function(x) {
   names(Nagelkerke) <- "Nagelkerke"
   return(structure(class = "sjmisc_r2", list(CoxSnell = CoxSnell, Nagelkerke = Nagelkerke)))
 }
-#' @title Import SPSS dataset as data frame into R
-#' @name read_spss
-#'
-#' @description Import data from SPSS, including NA's, value and variable labels.
-#'
-#' @seealso \itemize{
-#'            \item \href{http://www.strengejacke.de/sjPlot/datainit/}{sjPlot manual: data initialization}
-#'            \item \href{http://www.strengejacke.de/sjPlot/labelleddata/}{sjPlot-manual: working with labelled data}
-#'            \item \href{http://www.strengejacke.de/sjPlot/view_spss/}{sjPlot manual: inspecting (SPSS imported) data frames}
-#'            \item \code{\link{write_spss}}
-#'            }
-#'
-#' @param path File path to the data file.
-#' @param enc File encoding of the data file. See 'Details'.
-#' @param attach.var.labels Logical, if \code{TRUE}, variable labels will automatically be
-#'          added to each variable as \code{"variable.label"} attribute. Use this
-#'          parameter, if \code{option = "foreign"}, where variable labels are added
-#'          as list-attribute to the imported data frame.
-#'          \emph{Not needed if \code{option = "haven"} (default).}
-#' @param atomic.to.fac Logical, if \code{TRUE}, factor variables imported from
-#'          the dataset (which are imported as \code{\link{atomic}}) will be converted
-#'          to \code{\link{factor}}s.
-#' @param keep.na Logical, if \code{TRUE}, user-defined missing values will be
-#'          left as their original codes. If \code{FALSE} (default), corresponding
-#'          values are converted to \code{NA}.
-#' @param option String, indicating which package will be used to read the SPSS data file.
-#'          By default, \code{option = "haven"}, which means, the \code{read_spss} function
-#'          from the \pkg{haven} package is used. Use \code{option = "foreign"} to
-#'          use foreign's \code{\link[foreign]{read.spss}} function. Use \code{options(read_spss = "foreign")}
-#'          to make this function always use the \pkg{foreign} package \code{\link[foreign]{read.spss}} function.
-#' @return A data frame containing the SPSS data. Retrieve value labels with \code{\link{get_labels}}
-#'   and variable labels with \code{\link{get_label}}.
-#'
-#' @note This is a wrapper function for \code{\link[haven]{read_spss}} of the
-#'         \pkg{haven} package and \code{\link[foreign]{read.spss}} of the
-#'         \pkg{foreign} package. This function adds value and variable
-#'         labels as attributes to the imported variables of the data frame.
-#'         \cr \cr
-#'         Most functions of the \pkg{sjPlot} package access value and variable label
-#'         attributes to automatically detect labels in order to set them as axis,
-#'         legend or title labels in plots (\code{sjp.}-functions) respectively as
-#'         column or row headers in table outputs (\code{sjt.}-functions).  See
-#'         \href{http://www.strengejacke.de/sjPlot/datainit/}{online manual}
-#'         for more details.
-#'         \cr \cr
-#'         When working with labelled data, you can, e.g., use
-#'         \code{\link{get_label}} or \code{\link{get_labels}}
-#'         to get a vector of value and variable labels, which can then be
-#'         used with other functions like \code{\link{barplot}} etc.
-#'         See 'Examples' from \code{\link{get_labels}}.
-#'
-#' @details In some cases, column names of the imported data set are not properly
-#'            encoded. Use the \code{enc}-argument to specify the character
-#'            encoding for the SPSS data set (like \code{enc = "UTF-8"}, see
-#'            \code{\link{Encoding}}).
-#'
-#' @examples
-#' \dontrun{
-#' # import SPSS data set. uses haven's read function
-#' # by default
-#' mydat <- read_spss("my_spss_data.sav")
-#'
-#' # use foreign's read function
-#' mydat <- read_spss("my_spss_data.sav",
-#'                    enc = "UTF-8",
-#'                    option = "foreign")
-#'
-#' # use haven's read function, convert atomic to factor
-#' mydat <- read_spss("my_spss_data.sav", atomic.to.fac = TRUE)
-#'
-#' # retrieve variable labels
-#' mydat.var <- get_label(mydat)
-#'
-#' # retrieve value labels
-#' mydat.val <- get_labels(mydat)}
-#'
+# @title Import SPSS dataset as data frame into R
+# @name read_spss
+#
+# @description Import data from SPSS, including NA's, value and variable labels.
+#
+# @seealso \itemize{
+#            \item \href{http://www.strengejacke.de/sjPlot/datainit/}{sjPlot manual: data initialization}
+#            \item \href{http://www.strengejacke.de/sjPlot/labelleddata/}{sjPlot-manual: working with labelled data}
+#            \item \href{http://www.strengejacke.de/sjPlot/view_spss/}{sjPlot manual: inspecting (SPSS imported) data frames}
+#            \item \code{\link{write_spss}}
+#            }
+#
+# @param path File path to the data file.
+# @param enc File encoding of the data file. See 'Details'.
+# @param attach.var.labels Logical, if \code{TRUE}, variable labels will automatically be
+#          added to each variable as \code{"variable.label"} attribute. Use this
+#          parameter, if \code{option = "foreign"}, where variable labels are added
+#          as list-attribute to the imported data frame.
+#          \emph{Not needed if \code{option = "haven"} (default).}
+# @param atomic.to.fac Logical, if \code{TRUE}, factor variables imported from
+#          the dataset (which are imported as \code{\link{atomic}}) will be converted
+#          to \code{\link{factor}}s.
+# @param keep.na Logical, if \code{TRUE}, user-defined missing values will be
+#          left as their original codes. If \code{FALSE} (default), corresponding
+#          values are converted to \code{NA}.
+# @param option String, indicating which package will be used to read the SPSS data file.
+#          By default, \code{option = "haven"}, which means, the \code{read_spss} function
+#          from the \pkg{haven} package is used. Use \code{option = "foreign"} to
+#          use foreign's \code{\link[foreign]{read.spss}} function. Use \code{options(read_spss = "foreign")}
+#          to make this function always use the \pkg{foreign} package \code{\link[foreign]{read.spss}} function.
+# @return A data frame containing the SPSS data. Retrieve value labels with \code{\link{get_labels}}
+#   and variable labels with \code{\link{get_label}}.
+#
+# @note This is a wrapper function for \code{\link[haven]{read_spss}} of the
+#         \pkg{haven} package and \code{\link[foreign]{read.spss}} of the
+#         \pkg{foreign} package. This function adds value and variable
+#         labels as attributes to the imported variables of the data frame.
+#         \cr \cr
+#         Most functions of the \pkg{sjPlot} package access value and variable label
+#         attributes to automatically detect labels in order to set them as axis,
+#         legend or title labels in plots (\code{sjp.}-functions) respectively as
+#         column or row headers in table outputs (\code{sjt.}-functions).  See
+#         \href{http://www.strengejacke.de/sjPlot/datainit/}{online manual}
+#         for more details.
+#         \cr \cr
+#         When working with labelled data, you can, e.g., use
+#         \code{\link{get_label}} or \code{\link{get_labels}}
+#         to get a vector of value and variable labels, which can then be
+#         used with other functions like \code{\link{barplot}} etc.
+#         See 'Examples' from \code{\link{get_labels}}.
+#
+# @details In some cases, column names of the imported data set are not properly
+#            encoded. Use the \code{enc}-argument to specify the character
+#            encoding for the SPSS data set (like \code{enc = "UTF-8"}, see
+#            \code{\link{Encoding}}).
+#
+# @examples
+# \dontrun{
+# # import SPSS data set. uses haven's read function
+# # by default
+# mydat <- read_spss("my_spss_data.sav")
+#
+# # use foreign's read function
+# mydat <- read_spss("my_spss_data.sav",
+#                    enc = "UTF-8",
+#                    option = "foreign")
+#
+# # use haven's read function, convert atomic to factor
+# mydat <- read_spss("my_spss_data.sav", atomic.to.fac = TRUE)
+#
+# # retrieve variable labels
+# mydat.var <- get_label(mydat)
+#
+# # retrieve value labels
+# mydat.val <- get_labels(mydat)}
+#
 #' @importFrom haven read_spss
-#' 
+# 
 read_spss <- function(path,
                       enc = NA,
                       attach.var.labels = FALSE,
@@ -4049,26 +4050,26 @@ atomic_to_fac <- function(data.spss, attr.string) {
 }
 
 
-#' @title Import SAS dataset as data frame into R
-#' @name read_sas
-#'
-#' @description Imports data from SAS (\code{.sas7bdat}), including NA's,
-#'                value and variable labels.
-#'
-#' @seealso \code{\link{read_spss}}
-#'
-#' @param path.cat Optional, the file path to the SAS catalog file.
-#' @return A data frame containing the SAS data. Retrieve value labels with \code{\link{get_labels}}
-#'   and variable labels with \code{\link{get_label}}.
-#'
-#' @inheritParams read_spss
-#'
-#' @note This is a wrapper function for \code{\link[haven]{read_sas}} function of the
-#'         \pkg{haven} package. This function converts the imported data
-#'         into a common class format (see \code{\link{unlabel}}).
-#'
+# @title Import SAS dataset as data frame into R
+# @name read_sas
+#
+# @description Imports data from SAS (\code{.sas7bdat}), including NA's,
+#                value and variable labels.
+#
+# @seealso \code{\link{read_spss}}
+#
+# @param path.cat Optional, the file path to the SAS catalog file.
+# @return A data frame containing the SAS data. Retrieve value labels with \code{\link{get_labels}}
+#   and variable labels with \code{\link{get_label}}.
+#
+# @inheritParams read_spss
+#
+# @note This is a wrapper function for \code{\link[haven]{read_sas}} function of the
+#         \pkg{haven} package. This function converts the imported data
+#         into a common class format (see \code{\link{unlabel}}).
+#
 #' @importFrom haven read_sas
-#' 
+# 
 read_sas <- function(path, path.cat = NULL, atomic.to.fac = FALSE) {
   # check if suggested package is available
   if (!requireNamespace("haven", quietly = TRUE)) {
@@ -4085,25 +4086,25 @@ read_sas <- function(path, path.cat = NULL, atomic.to.fac = FALSE) {
 }
 
 
-#' @title Import STATA dataset as data frame into R
-#' @name read_stata
-#'
-#' @description Imports data from STATA dta-files, including NA's,
-#'                value and variable labels.
-#'
-#' @seealso \code{\link{read_spss}}
-#'
-#' @inheritParams read_spss
-#'
-#' @return A data frame containing the STATA data. Retrieve value labels with \code{\link{get_labels}}
-#'   and variable labels with \code{\link{get_label}}.
-#'
-#' @note This is a wrapper function for \code{\link[haven]{read_dta}} function of the
-#'         \pkg{haven} package. This function converts the imported data
-#'         into a common class format (see \code{\link{unlabel}}).
-#'
+# @title Import STATA dataset as data frame into R
+# @name read_stata
+#
+# @description Imports data from STATA dta-files, including NA's,
+#                value and variable labels.
+#
+# @seealso \code{\link{read_spss}}
+#
+# @inheritParams read_spss
+#
+# @return A data frame containing the STATA data. Retrieve value labels with \code{\link{get_labels}}
+#   and variable labels with \code{\link{get_label}}.
+#
+# @note This is a wrapper function for \code{\link[haven]{read_dta}} function of the
+#         \pkg{haven} package. This function converts the imported data
+#         into a common class format (see \code{\link{unlabel}}).
+#
 #' @importFrom haven read_dta
-#' 
+# 
 read_stata <- function(path, atomic.to.fac = FALSE) {
   # check if suggested package is available
   if (!requireNamespace("haven", quietly = TRUE)) {
@@ -4120,50 +4121,50 @@ read_stata <- function(path, atomic.to.fac = FALSE) {
 }
 
 
-#' @title Write content of data frame to SPSS sav-file
-#' @name write_spss
-#'
-#' @description This function saves the content of a data frame to an SPSS sav-file.
-#'
-#' @seealso \itemize{
-#'            \item \href{http://www.strengejacke.de/sjPlot/datainit/}{sjPlot manual: data initialization}
-#'            \item \href{http://www.strengejacke.de/sjPlot/view_spss/}{sjPlot manual: inspecting (SPSS imported) data frames}
-#'            \item \code{\link{read_spss}}
-#'            }
-#'
-#' @note You don't need to take care whether variables have been imported with
-#'         the \code{\link{read_spss}} function from this package or from \pkg{haven}
-#'         or even the \pkg{foreign} package, or if you have imported SPSS data and
-#'         created new variables. This function does all necessary data preparation
-#'         to write a properly labelled SPSS sav file.
-#'
-#' @param x \code{data.frame} that should be saved as file.
-#' @param path File path of the output file.
-#' @param enc.to.utf8 Logical, if \code{TRUE}, character encoding of variable and
-#'          value labels will be converted to UTF-8.
-#'
-#' 
+# @title Write content of data frame to SPSS sav-file
+# @name write_spss
+#
+# @description This function saves the content of a data frame to an SPSS sav-file.
+#
+# @seealso \itemize{
+#            \item \href{http://www.strengejacke.de/sjPlot/datainit/}{sjPlot manual: data initialization}
+#            \item \href{http://www.strengejacke.de/sjPlot/view_spss/}{sjPlot manual: inspecting (SPSS imported) data frames}
+#            \item \code{\link{read_spss}}
+#            }
+#
+# @note You don't need to take care whether variables have been imported with
+#         the \code{\link{read_spss}} function from this package or from \pkg{haven}
+#         or even the \pkg{foreign} package, or if you have imported SPSS data and
+#         created new variables. This function does all necessary data preparation
+#         to write a properly labelled SPSS sav file.
+#
+# @param x \code{data.frame} that should be saved as file.
+# @param path File path of the output file.
+# @param enc.to.utf8 Logical, if \code{TRUE}, character encoding of variable and
+#          value labels will be converted to UTF-8.
+#
+# 
 write_spss <- function(x, path, enc.to.utf8 = TRUE) {
   write_data(x = x, path = path, type = "spss", enc.to.utf8 = enc.to.utf8)
 }
 
 
-#' @title Write content of data frame to STATA dta-file
-#' @name write_stata
-#'
-#' @description This function saves the content of a data frame to an STATA dta-file.
-#'
-#' @seealso \code{\link{write_spss}}
-#'
-#' @note You don't need to take care whether variables have been imported with
-#'         the \code{\link{read_stata}} function from this package or from \pkg{haven},
-#'         or if you have imported STATA data and
-#'         created new variables. This function does all necessary data preparation
-#'         to write a properly labelled STATA file.
-#'
-#' @inheritParams write_spss
-#'
-#' 
+# @title Write content of data frame to STATA dta-file
+# @name write_stata
+#
+# @description This function saves the content of a data frame to an STATA dta-file.
+#
+# @seealso \code{\link{write_spss}}
+#
+# @note You don't need to take care whether variables have been imported with
+#         the \code{\link{read_stata}} function from this package or from \pkg{haven},
+#         or if you have imported STATA data and
+#         created new variables. This function does all necessary data preparation
+#         to write a properly labelled STATA file.
+#
+# @inheritParams write_spss
+#
+# 
 write_stata <- function(x, path, enc.to.utf8 = TRUE) {
   write_data(x = x, path = path, type = "stata", enc.to.utf8 = enc.to.utf8)
 }
@@ -4217,58 +4218,58 @@ write_data <- function(x, path, type, enc.to.utf8) {
     haven::write_dta(x, path)
   }
 }
-#' @title Recode variable categories into new values
-#' @name recode_to
-#'
-#' @description Recodes (or "renumbers") the categories of \code{var} into new category values, beginning
-#'                with the lowest value specified by \code{lowest}. Useful if you want
-#'                to recode dummy variables with 1/2 coding to 0/1 coding, or recoding scales from
-#'                1-4 to 0-3 etc.
-#'
-#' @seealso \code{\link{rec}} for general recoding of variables and \code{\link{set_na}}
-#'            for setting \code{\link{NA}} values.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables that should be recoded.
-#' @param lowest Indicating the lowest category value for recoding. Default is 0, so the new
-#'          variable starts with value 0.
-#' @param highest If specified and larger than \code{lowest}, all category values larger than
-#'          \code{highest} will be set to \code{NA}. Default is \code{-1}, i.e. this argument is ignored
-#'          and no NA's will be produced.
-#' @return A new variable with recoded category values, where \code{lowest} indicates the lowest
-#'           value; or a data frame or list of variables where variables have
-#'           been recoded as described.
-#'
-#' @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
-#'         or \code{\link{set_labels}}) are preserved.
-#'
-#' @examples
-#' # recode 1-4 to 0-3
-#' dummy <- sample(1:4, 10, replace = TRUE)
-#' recode_to(dummy)
-#'
-#' # recode 3-6 to 0-3
-#' # note that numeric type is returned
-#' dummy <- as.factor(3:6)
-#' recode_to(dummy)
-#'
-#' # lowest value starting with 1
-#' dummy <- sample(11:15, 10, replace = TRUE)
-#' recode_to(dummy, 1)
-#'
-#' # lowest value starting with 1, highest with 3
-#' # all others set to NA
-#' dummy <- sample(11:15, 10, replace = TRUE)
-#' recode_to(dummy, 1, 3)
-#'
-#' # create list of variables
-#' data(efc)
-#' dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
-#' # check original distribution of categories
-#' lapply(dummy, table)
-#' # renumber from 1 to 0
-#' lapply(recode_to(dummy), table)
-#'
-#' 
+# @title Recode variable categories into new values
+# @name recode_to
+#
+# @description Recodes (or "renumbers") the categories of \code{var} into new category values, beginning
+#                with the lowest value specified by \code{lowest}. Useful if you want
+#                to recode dummy variables with 1/2 coding to 0/1 coding, or recoding scales from
+#                1-4 to 0-3 etc.
+#
+# @seealso \code{\link{rec}} for general recoding of variables and \code{\link{set_na}}
+#            for setting \code{\link{NA}} values.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables that should be recoded.
+# @param lowest Indicating the lowest category value for recoding. Default is 0, so the new
+#          variable starts with value 0.
+# @param highest If specified and larger than \code{lowest}, all category values larger than
+#          \code{highest} will be set to \code{NA}. Default is \code{-1}, i.e. this argument is ignored
+#          and no NA's will be produced.
+# @return A new variable with recoded category values, where \code{lowest} indicates the lowest
+#           value; or a data frame or list of variables where variables have
+#           been recoded as described.
+#
+# @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
+#         or \code{\link{set_labels}}) are preserved.
+#
+# @examples
+# # recode 1-4 to 0-3
+# dummy <- sample(1:4, 10, replace = TRUE)
+# recode_to(dummy)
+#
+# # recode 3-6 to 0-3
+# # note that numeric type is returned
+# dummy <- as.factor(3:6)
+# recode_to(dummy)
+#
+# # lowest value starting with 1
+# dummy <- sample(11:15, 10, replace = TRUE)
+# recode_to(dummy, 1)
+#
+# # lowest value starting with 1, highest with 3
+# # all others set to NA
+# dummy <- sample(11:15, 10, replace = TRUE)
+# recode_to(dummy, 1, 3)
+#
+# # create list of variables
+# data(efc)
+# dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
+# # check original distribution of categories
+# lapply(dummy, table)
+# # renumber from 1 to 0
+# lapply(recode_to(dummy), table)
+#
+# 
 recode_to <- function(x, lowest = 0, highest = -1) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -4316,108 +4317,108 @@ rec_to_helper <- function(x, lowest, highest) {
 }
 
 
-#' @title Recode variables
-#' @name rec
-#'
-#' @description Recodes the categories / values of a variable \code{x} into new
-#'                category values.
-#'
-#' @seealso \code{\link{set_na}} for setting \code{NA} values, \code{\link{replace_na}}
-#'            to replace \code{\link{NA}}'s with specific value, \code{\link{recode_to}}
-#'            for re-shifting value ranges and \code{\link{ref_lvl}} to change the
-#'            reference level of (numeric) factors.
-#'
-#' @param x Numeric, charactor or factor variable that should be recoded;
-#'          or a \code{data.frame} or \code{list} of variables.
-#' @param recodes String with recode pairs of old and new values. See
-#'          'Details' for examples.
-#' @param value See \code{recodes}.
-#' @param as.fac Logical, if \code{TRUE}, recoded variable is returned as factor.
-#'          Default is \code{FALSE}, thus a numeric variable is returned.
-#' @param var.label Optional string, to set variable label attribute for the
-#'          recoded variable (see \code{\link{set_label}}). If \code{NULL}
-#'          (default), variable label attribute of \code{x} will be used (if present).
-#' @param val.labels Optional character vector, to set value label attributes
-#'          of recoded variable (see \code{\link{set_labels}}).
-#'          If \code{NULL} (default), no value labels will be set.
-#' @return A numeric variable (or a factor, if \code{as.fac = TRUE} or if \code{x}
-#'           was a character vector) with recoded category values, or a data
-#'           frame or \code{list}-object with recoded categories for all variables.
-#'
-#' @details  The \code{recodes} string has following syntax:
-#'           \describe{
-#'            \item{recode pairs}{each recode pair has to be separated by a \code{;}, e.g. \code{recodes = "1=1; 2=4; 3=2; 4=3"}}
-#'            \item{multiple values}{multiple old values that should be recoded into a new single value may be separated with comma, e.g. \code{"1,2=1; 3,4=2"}}
-#'            \item{value range}{a value range is indicated by a colon, e.g. \code{"1:4=1; 5:8=2"} (recodes all values from 1 to 4 into 1, and from 5 to 8 into 2)}
-#'            \item{\code{"min"} and \code{"max"}}{minimum and maximum values are indicates by \emph{min} (or \emph{lo}) and \emph{max} (or \emph{hi}), e.g. \code{"min:4=1; 5:max=2"} (recodes all values from minimum values of \code{x} to 4 into 1, and from 5 to maximum values of \code{x} into 2)}
-#'            \item{\code{"else"}}{all other values except specified are indicated by \emph{else}, e.g. \code{"3=1; 1=2; else=3"} (recodes 3 into 1, 1 into 2 and all other values into 3)}
-#'            \item{\code{"copy"}}{the \code{"else"}-token can be combined with \emph{copy}, indicating that all remaining, not yet recoded values should stay the same (are copied from the original value), e.g. \code{"3=1; 1=2; else=copy"} (recodes 3 into 1, 1 into 2 and all other values like 2, 4 or 5 etc. will not be recoded, but copied, see 'Examples')}
-#'            \item{\code{NA}'s}{\code{\link{NA}} values are allowed both as old and new value, e.g. \code{"NA=1; 3:5=NA"} (recodes all NA from old value into 1, and all old values from 3 to 5 into NA in the new variable)}
-#'            \item{\code{"rev"}}{\code{"rev"} is a special token that reverses the value order (see 'Examples')}
-#'           }
-#'
-#' @note Please note following behaviours of the function:
-#'       \itemize{
-#'         \item the \code{"else"}-token should always be the last argument in the \code{recodes}-string.
-#'         \item Non-matching values will be set to \code{\link{NA}}, unless captured by the \code{"else"}-token.
-#'         \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved (unless changes via \code{var.label}-argument), however, value label attributes are removed (except for \code{"rev"}, where present value labels will be automatically reversed as well). Use \code{val.labels}-argument to add labels for recoded values.
-#'         \item If \code{x} is a \code{data.frame} or \code{list} of variables, all variables should have the same categories resp. value range (else, see second bullet, \code{NA}s are produced).
-#'       }
-#'
-#' @examples
-#' data(efc)
-#' table(efc$e42dep, exclude = NULL)
-#'
-#' # replace NA with 5
-#' table(rec(efc$e42dep, "1=1;2=2;3=3;4=4;NA=5"), exclude = NULL)
-#'
-#' # recode 1 to 2 into 1 and 3 to 4 into 2
-#' table(rec(efc$e42dep, "1,2=1; 3,4=2"), exclude = NULL)
-#'
-#' # or:
-#' # rec(efc$e42dep) <- "1,2=1; 3,4=2"
-#' # table(efc$e42dep, exclude = NULL)
-#'
-#' # keep value labels. variable label is automatically preserved
-#' str(rec(efc$e42dep, "1,2=1; 3,4=2",
-#'         val.labels = c("low dependency", "high dependency")))
-#'
-#' # recode 1 to 3 into 4 into 2
-#' table(rec(efc$e42dep, "min:3=1; 4=2"), exclude = NULL)
-#'
-#' # recode 2 to 1 and all others into 2
-#' table(rec(efc$e42dep, "2=1; else=2"), exclude = NULL)
-#'
-#' # reverse value order
-#' table(rec(efc$e42dep, "rev"), exclude = NULL)
-#'
-#' # recode only selected values, copy remaining
-#' table(efc$e15relat)
-#' table(rec(efc$e15relat, "1,2,4=1; else=copy"))
-#'
-#' # recode variables with same categorie in a data frame
-#' head(efc[, 6:9])
-#' head(rec(efc[, 6:9], "1=10;2=20;3=30;4=40"))
-#'
-#' # recode list of variables. create dummy-list of
-#' # variables with same value-range
-#' dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
-#' # show original distribution
-#' lapply(dummy, table, exclude = NULL)
-#' # show recodes
-#' lapply(rec(dummy, "1,2=1; NA=9; else=copy"), table, exclude = NULL)
-#'
-#'
-#' # recode character vector
-#' dummy <- c("M", "F", "F", "X")
-#' rec(dummy, "M=Male; F=Female; X=Refused")
-#'
-#'
-#' # recode non-numeric factors
-#' data(iris)
-#' rec(iris$Species, "setosa=huhu; else=copy")
-#'
-#' 
+# @title Recode variables
+# @name rec
+#
+# @description Recodes the categories / values of a variable \code{x} into new
+#                category values.
+#
+# @seealso \code{\link{set_na}} for setting \code{NA} values, \code{\link{replace_na}}
+#            to replace \code{\link{NA}}'s with specific value, \code{\link{recode_to}}
+#            for re-shifting value ranges and \code{\link{ref_lvl}} to change the
+#            reference level of (numeric) factors.
+#
+# @param x Numeric, charactor or factor variable that should be recoded;
+#          or a \code{data.frame} or \code{list} of variables.
+# @param recodes String with recode pairs of old and new values. See
+#          'Details' for examples.
+# @param value See \code{recodes}.
+# @param as.fac Logical, if \code{TRUE}, recoded variable is returned as factor.
+#          Default is \code{FALSE}, thus a numeric variable is returned.
+# @param var.label Optional string, to set variable label attribute for the
+#          recoded variable (see \code{\link{set_label}}). If \code{NULL}
+#          (default), variable label attribute of \code{x} will be used (if present).
+# @param val.labels Optional character vector, to set value label attributes
+#          of recoded variable (see \code{\link{set_labels}}).
+#          If \code{NULL} (default), no value labels will be set.
+# @return A numeric variable (or a factor, if \code{as.fac = TRUE} or if \code{x}
+#           was a character vector) with recoded category values, or a data
+#           frame or \code{list}-object with recoded categories for all variables.
+#
+# @details  The \code{recodes} string has following syntax:
+#           \describe{
+#            \item{recode pairs}{each recode pair has to be separated by a \code{;}, e.g. \code{recodes = "1=1; 2=4; 3=2; 4=3"}}
+#            \item{multiple values}{multiple old values that should be recoded into a new single value may be separated with comma, e.g. \code{"1,2=1; 3,4=2"}}
+#            \item{value range}{a value range is indicated by a colon, e.g. \code{"1:4=1; 5:8=2"} (recodes all values from 1 to 4 into 1, and from 5 to 8 into 2)}
+#            \item{\code{"min"} and \code{"max"}}{minimum and maximum values are indicates by \emph{min} (or \emph{lo}) and \emph{max} (or \emph{hi}), e.g. \code{"min:4=1; 5:max=2"} (recodes all values from minimum values of \code{x} to 4 into 1, and from 5 to maximum values of \code{x} into 2)}
+#            \item{\code{"else"}}{all other values except specified are indicated by \emph{else}, e.g. \code{"3=1; 1=2; else=3"} (recodes 3 into 1, 1 into 2 and all other values into 3)}
+#            \item{\code{"copy"}}{the \code{"else"}-token can be combined with \emph{copy}, indicating that all remaining, not yet recoded values should stay the same (are copied from the original value), e.g. \code{"3=1; 1=2; else=copy"} (recodes 3 into 1, 1 into 2 and all other values like 2, 4 or 5 etc. will not be recoded, but copied, see 'Examples')}
+#            \item{\code{NA}'s}{\code{\link{NA}} values are allowed both as old and new value, e.g. \code{"NA=1; 3:5=NA"} (recodes all NA from old value into 1, and all old values from 3 to 5 into NA in the new variable)}
+#            \item{\code{"rev"}}{\code{"rev"} is a special token that reverses the value order (see 'Examples')}
+#           }
+#
+# @note Please note following behaviours of the function:
+#       \itemize{
+#         \item the \code{"else"}-token should always be the last argument in the \code{recodes}-string.
+#         \item Non-matching values will be set to \code{\link{NA}}, unless captured by the \code{"else"}-token.
+#         \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved (unless changes via \code{var.label}-argument), however, value label attributes are removed (except for \code{"rev"}, where present value labels will be automatically reversed as well). Use \code{val.labels}-argument to add labels for recoded values.
+#         \item If \code{x} is a \code{data.frame} or \code{list} of variables, all variables should have the same categories resp. value range (else, see second bullet, \code{NA}s are produced).
+#       }
+#
+# @examples
+# data(efc)
+# table(efc$e42dep, exclude = NULL)
+#
+# # replace NA with 5
+# table(rec(efc$e42dep, "1=1;2=2;3=3;4=4;NA=5"), exclude = NULL)
+#
+# # recode 1 to 2 into 1 and 3 to 4 into 2
+# table(rec(efc$e42dep, "1,2=1; 3,4=2"), exclude = NULL)
+#
+# # or:
+# # rec(efc$e42dep) <- "1,2=1; 3,4=2"
+# # table(efc$e42dep, exclude = NULL)
+#
+# # keep value labels. variable label is automatically preserved
+# str(rec(efc$e42dep, "1,2=1; 3,4=2",
+#         val.labels = c("low dependency", "high dependency")))
+#
+# # recode 1 to 3 into 4 into 2
+# table(rec(efc$e42dep, "min:3=1; 4=2"), exclude = NULL)
+#
+# # recode 2 to 1 and all others into 2
+# table(rec(efc$e42dep, "2=1; else=2"), exclude = NULL)
+#
+# # reverse value order
+# table(rec(efc$e42dep, "rev"), exclude = NULL)
+#
+# # recode only selected values, copy remaining
+# table(efc$e15relat)
+# table(rec(efc$e15relat, "1,2,4=1; else=copy"))
+#
+# # recode variables with same categorie in a data frame
+# head(efc[, 6:9])
+# head(rec(efc[, 6:9], "1=10;2=20;3=30;4=40"))
+#
+# # recode list of variables. create dummy-list of
+# # variables with same value-range
+# dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
+# # show original distribution
+# lapply(dummy, table, exclude = NULL)
+# # show recodes
+# lapply(rec(dummy, "1,2=1; NA=9; else=copy"), table, exclude = NULL)
+#
+#
+# # recode character vector
+# dummy <- c("M", "F", "F", "X")
+# rec(dummy, "M=Male; F=Female; X=Refused")
+#
+#
+# # recode non-numeric factors
+# data(iris)
+# rec(iris$Species, "setosa=huhu; else=copy")
+#
+# 
 rec <- function(x,
                 recodes,
                 as.fac = FALSE,
@@ -4637,56 +4638,56 @@ rec_helper <- function(x, recodes, as.fac, var.label, val.labels) {
   return(new_var)
 }
 
-#' @rdname rec
-#' 
+# @rdname rec
+# 
 `rec<-` <- function(x, as.fac = FALSE, var.label = NULL, val.labels = NULL, value) {
   UseMethod("rec<-")
 }
 
-#' 
+# 
 `rec<-.default` <- function(x, as.fac = FALSE, var.label = NULL, val.labels = NULL, value) {
   x <- rec(x = x, recodes = value, as.fac = as.fac, var.label = var.label, val.labels = val.labels)
   x
 }
-#' @title Create recode pattern for 'rec' function
-#' @name rec_pattern
-#'
-#' @description Convenient function to create a recode pattern for the
-#'                \code{\link{rec}} function, which recodes (numeric)
-#'                vectors into smaller groups.
-#'
-#' @param from Minimum value that should be recoded.
-#' @param to Maximum value that should be recoded.
-#' @param width Numeric, indicating the range of each group.
-#' @param other String token, indicating how to deal with all other values
-#'          that have not been captured by the recode pattern. See 'Details'
-#'          on the \code{else}-token in \code{\link{rec}}.
-#' @return A list with two values:
-#'           \describe{
-#'            \item{\code{pattern}}{string pattern that can be used as \code{recodes} argument for the \code{\link{rec}}-function.}
-#'            \item{\code{labels}}{the associated values labels that can be used with \code{\link{set_labels}}.}
-#'           }
-#'
-#' @seealso \code{\link{group_var}} for recoding variables into smaller groups, and
-#'           \code{\link{group_labels}} to create the asssociated value labels.
-#'
-#' @examples
-#' rp <- rec_pattern(1, 100)
-#' rp
-#'
-#' # sample data, inspect age of carers
-#' data(efc)
-#' table(efc$c160age, exclude = NULL)
-#' table(rec(efc$c160age, rp$pattern), exclude = NULL)
-#'
-#' # recode carers age into groups of width 5
-#' x <- rec(efc$c160age, rp$pattern)
-#' # add value labels to new vector
-#' set_labels(x) <- rp$labels
-#' # watch result
-#' frq(as_labelled(x))
-#'
-#' 
+# @title Create recode pattern for 'rec' function
+# @name rec_pattern
+#
+# @description Convenient function to create a recode pattern for the
+#                \code{\link{rec}} function, which recodes (numeric)
+#                vectors into smaller groups.
+#
+# @param from Minimum value that should be recoded.
+# @param to Maximum value that should be recoded.
+# @param width Numeric, indicating the range of each group.
+# @param other String token, indicating how to deal with all other values
+#          that have not been captured by the recode pattern. See 'Details'
+#          on the \code{else}-token in \code{\link{rec}}.
+# @return A list with two values:
+#           \describe{
+#            \item{\code{pattern}}{string pattern that can be used as \code{recodes} argument for the \code{\link{rec}}-function.}
+#            \item{\code{labels}}{the associated values labels that can be used with \code{\link{set_labels}}.}
+#           }
+#
+# @seealso \code{\link{group_var}} for recoding variables into smaller groups, and
+#           \code{\link{group_labels}} to create the asssociated value labels.
+#
+# @examples
+# rp <- rec_pattern(1, 100)
+# rp
+#
+# # sample data, inspect age of carers
+# data(efc)
+# table(efc$c160age, exclude = NULL)
+# table(rec(efc$c160age, rp$pattern), exclude = NULL)
+#
+# # recode carers age into groups of width 5
+# x <- rec(efc$c160age, rp$pattern)
+# # add value labels to new vector
+# set_labels(x) <- rp$labels
+# # watch result
+# frq(as_labelled(x))
+#
+# 
 rec_pattern <- function(from, to, width = 5, other = NULL){
   # init variables
   rec.pat <- c()
@@ -4709,38 +4710,38 @@ rec_pattern <- function(from, to, width = 5, other = NULL){
   # return results
   list(pattern = rec.pat, labels = rec.labels)
 }
-#' @title Change reference level of (numeric) factors
-#' @name ref_lvl
-#'
-#' @description Changes the reference level of numeric factor. See 'Details'.
-#'
-#' @seealso \code{\link{to_factor}} to convert numeric vectors into factors;
-#'            \code{\link{rec}} to recode variables.
-#'
-#' @param x \code{\link{factor}} with numeric levels where a new reference
-#'          level should be set.
-#' @param value Numeric, the new reference level.
-#' @return \code{x} with new reference level. See 'Details'.
-#'
-#' @details Unlike \code{\link[stats]{relevel}}, this function a) only accepts
-#'            numeric factors and b) changes the reference level by recoding
-#'            the factor's values using the \code{\link{rec}} function. Hence,
-#'            all values from lowest up to the reference level indicated by
-#'            \code{value} are recoded, with \code{value} starting as lowest
-#'            factor value. See 'Examples'.
-#'
-#'
-#' @examples
-#' data(efc)
-#' x <- to_factor(efc$e42dep)
-#' str(x)
-#' table(x)
-#'
-#' ref_lvl(x) <- 3
-#' str(x)
-#' table(x)
-#'
-#' 
+# @title Change reference level of (numeric) factors
+# @name ref_lvl
+#
+# @description Changes the reference level of numeric factor. See 'Details'.
+#
+# @seealso \code{\link{to_factor}} to convert numeric vectors into factors;
+#            \code{\link{rec}} to recode variables.
+#
+# @param x \code{\link{factor}} with numeric levels where a new reference
+#          level should be set.
+# @param value Numeric, the new reference level.
+# @return \code{x} with new reference level. See 'Details'.
+#
+# @details Unlike \code{\link[stats]{relevel}}, this function a) only accepts
+#            numeric factors and b) changes the reference level by recoding
+#            the factor's values using the \code{\link{rec}} function. Hence,
+#            all values from lowest up to the reference level indicated by
+#            \code{value} are recoded, with \code{value} starting as lowest
+#            factor value. See 'Examples'.
+#
+#
+# @examples
+# data(efc)
+# x <- to_factor(efc$e42dep)
+# str(x)
+# table(x)
+#
+# ref_lvl(x) <- 3
+# str(x)
+# table(x)
+#
+# 
 ref_lvl <- function(x, value = NULL) {
   # check correct arguments
   if (is.null(x)) {
@@ -4791,78 +4792,78 @@ ref_lvl <- function(x, value = NULL) {
   return(x)
 }
 
-#' @rdname ref_lvl
-#' 
+# @rdname ref_lvl
+# 
 `ref_lvl<-` <- function(x, value) {
   UseMethod("ref_lvl<-")
 }
 
-#' 
+# 
 `ref_lvl<-.default` <- function(x, value) {
   x <- ref_lvl(x = x, value = value)
   x
 }
-#' @title Performs a reliability test on an item scale
-#' @name reliab_test
-#' @description This function calculates the item discriminations (corrected item-total
-#'                correlations for each item of \code{x} with the remaining items) and
-#'                the Cronbach's alpha for each item, if it was deleted from the
-#'                scale.
-#'
-#' @seealso \code{\link{cronb}}
-#'
-#' @param x \code{data.frame} with items (from a scale).
-#' @param scale.items Logical, if \code{TRUE}, the data frame's vectors will be scaled. Recommended,
-#'          when the variables have different measures / scales.
-#' @param digits Amount of digits for Cronbach's Alpha and correlation values in
-#'          returned data frame.
-#' @return A data frame with the corrected item-total correlations (item discrimination)
-#'           and Cronbach's alpha (if item deleted) for each item of the scale, or
-#'           \code{NULL} if data frame had too less columns.
-#'
-#' @note This function is similar to a basic reliability test in SPSS. The correlations in
-#'         the Item-Total-Statistic are a computed correlation of each item against the sum
-#'         of the remaining items (which are thus treated as one item).
-#'
-#' @examples
-#' # Data from the EUROFAMCARE sample dataset
-#' data(efc)
-#'
-#' # retrieve variable and value labels
-#' varlabs <- get_label(efc)
-#'
-#' # recveive first item of COPE-index scale
-#' start <- which(colnames(efc) == "c82cop1")
-#' # recveive last item of COPE-index scale
-#' end <- which(colnames(efc) == "c90cop9")
-#'
-#' # create data frame with COPE-index scale
-#' x <- data.frame(efc[, c(start:end)])
-#' colnames(x) <- varlabs[c(start:end)]
-#'
-#' \dontrun{
-#' library(sjPlot)
-#' sjt.df(reliab_test(x), describe = FALSE, showCommentRow = TRUE,
-#'        commentString = sprintf("Cronbach's &alpha;=%.2f", cronb(x)))}
-#'
-#' # Compute PCA on Cope-Index, and perform a
-#' # reliability check on each extracted factor.
-#' \dontrun{
-#' factors <- sjt.pca(x)$factor.index
-#' findex <- sort(unique(factors))
-#' library(sjPlot)
-#' for (i in 1:length(findex)) {
-#'  rel.df <- subset(x, select = which(factors == findex[i]))
-#'  if (ncol(rel.df) >= 3) {
-#'    sjt.df(reliab_test(rel.df), describe = FALSE, showCommentRow = TRUE,
-#'           useViewer = FALSE, title = "Item-Total-Statistic",
-#'           commentString = sprintf("Scale's overall Cronbach's &alpha;=%.2f",
-#'                                   cronb(rel.df)))
-#'    }
-#'  }}
-#'
+# @title Performs a reliability test on an item scale
+# @name reliab_test
+# @description This function calculates the item discriminations (corrected item-total
+#                correlations for each item of \code{x} with the remaining items) and
+#                the Cronbach's alpha for each item, if it was deleted from the
+#                scale.
+#
+# @seealso \code{\link{cronb}}
+#
+# @param x \code{data.frame} with items (from a scale).
+# @param scale.items Logical, if \code{TRUE}, the data frame's vectors will be scaled. Recommended,
+#          when the variables have different measures / scales.
+# @param digits Amount of digits for Cronbach's Alpha and correlation values in
+#          returned data frame.
+# @return A data frame with the corrected item-total correlations (item discrimination)
+#           and Cronbach's alpha (if item deleted) for each item of the scale, or
+#           \code{NULL} if data frame had too less columns.
+#
+# @note This function is similar to a basic reliability test in SPSS. The correlations in
+#         the Item-Total-Statistic are a computed correlation of each item against the sum
+#         of the remaining items (which are thus treated as one item).
+#
+# @examples
+# # Data from the EUROFAMCARE sample dataset
+# data(efc)
+#
+# # retrieve variable and value labels
+# varlabs <- get_label(efc)
+#
+# # recveive first item of COPE-index scale
+# start <- which(colnames(efc) == "c82cop1")
+# # recveive last item of COPE-index scale
+# end <- which(colnames(efc) == "c90cop9")
+#
+# # create data frame with COPE-index scale
+# x <- data.frame(efc[, c(start:end)])
+# colnames(x) <- varlabs[c(start:end)]
+#
+# \dontrun{
+# library(sjPlot)
+# sjt.df(reliab_test(x), describe = FALSE, showCommentRow = TRUE,
+#        commentString = sprintf("Cronbach's &alpha;=%.2f", cronb(x)))}
+#
+# # Compute PCA on Cope-Index, and perform a
+# # reliability check on each extracted factor.
+# \dontrun{
+# factors <- sjt.pca(x)$factor.index
+# findex <- sort(unique(factors))
+# library(sjPlot)
+# for (i in 1:length(findex)) {
+#  rel.df <- subset(x, select = which(factors == findex[i]))
+#  if (ncol(rel.df) >= 3) {
+#    sjt.df(reliab_test(rel.df), describe = FALSE, showCommentRow = TRUE,
+#           useViewer = FALSE, title = "Item-Total-Statistic",
+#           commentString = sprintf("Scale's overall Cronbach's &alpha;=%.2f",
+#                                   cronb(rel.df)))
+#    }
+#  }}
+#
 #' @importFrom stats cor
-#' 
+# 
 reliab_test <- function(x,
                         scale.items = FALSE,
                         digits = 3) {
@@ -4921,28 +4922,28 @@ reliab_test <- function(x,
   }
   return(ret.df)
 }
-#' @title Remove value and variable labels from vector or data frame
-#' @name remove_all_labels
-#'
-#' @description This function removes value and variable label attributes
-#'                from a vector or data frame. These attributes are typically
-#'                added to variables when importing foreign data (see
-#'                \code{\link{read_spss}}) or manually adding label attributes
-#'                with \code{\link{set_labels}}.
-#'
-#' @seealso \href{http://www.strengejacke.de/sjPlot/labelleddata/}{sjPlot-manual}
-#'            on working with labelled data, and \code{\link{copy_labels}} for
-#'            adding label attributes (subsetted) data frames.
-#'
-#' @param x Vector or \code{data.frame} with variable and/or value label attributes
-#' @return \code{x} with removed value and variable label attributes.
-#'
-#' @examples
-#' data(efc)
-#' str(efc)
-#' str(remove_all_labels(efc))
-#'
-#' 
+# @title Remove value and variable labels from vector or data frame
+# @name remove_all_labels
+#
+# @description This function removes value and variable label attributes
+#                from a vector or data frame. These attributes are typically
+#                added to variables when importing foreign data (see
+#                \code{\link{read_spss}}) or manually adding label attributes
+#                with \code{\link{set_labels}}.
+#
+# @seealso \href{http://www.strengejacke.de/sjPlot/labelleddata/}{sjPlot-manual}
+#            on working with labelled data, and \code{\link{copy_labels}} for
+#            adding label attributes (subsetted) data frames.
+#
+# @param x Vector or \code{data.frame} with variable and/or value label attributes
+# @return \code{x} with removed value and variable label attributes.
+#
+# @examples
+# data(efc)
+# str(efc)
+# str(remove_all_labels(efc))
+#
+# 
 remove_all_labels <- function(x) {
   if (is.data.frame(x)) {
     for (i in 1:ncol(x)) x[[i]] <- remove_all_labels_helper(x[[i]])
@@ -4971,38 +4972,38 @@ remove_all_labels_helper <- function(x) {
   # return var
   return(x)
 }
-#' @title Remove value labels from variables
-#' @name remove_labels
-#'
-#' @description This function removes labels from a label attribute of a
-#'                vector \code{x}, resp. from a set of vectors in a
-#'                \code{data.frame} or \code{list}-object. The counterpart
-#'                to this function is \code{\link{add_labels}}.
-#'
-#' @seealso \code{\link{set_labels}} to add value labels, replacing the existing ones;
-#'            \code{\link{add_labels}} to add new labels to a vector.
-#'
-#' @param x Variable (vector), \code{list} of variables or a \code{data.frame}
-#'          where value label attributes should be removed.
-#' @param value Either a numeric vector, indicating one or more label attributes that
-#'          should be removed (see \code{\link{get_labels}} to retrieve a vector's
-#'          label attributes), or a character vector with names of label attributes
-#'          that should be removed.
-#'
-#' @return \code{x} with removed value labels.
-#'
-#' @examples
-#' data(efc)
-#' get_labels(efc$e42dep)
-#'
-#' x <- remove_labels(efc$e42dep, 2)
-#' get_labels(x, include.values = "p")
-#'
-#' x <- remove_labels(efc$e42dep, "independent")
-#' get_labels(x, include.values = "p")
-#'
-#'
-#' 
+# @title Remove value labels from variables
+# @name remove_labels
+#
+# @description This function removes labels from a label attribute of a
+#                vector \code{x}, resp. from a set of vectors in a
+#                \code{data.frame} or \code{list}-object. The counterpart
+#                to this function is \code{\link{add_labels}}.
+#
+# @seealso \code{\link{set_labels}} to add value labels, replacing the existing ones;
+#            \code{\link{add_labels}} to add new labels to a vector.
+#
+# @param x Variable (vector), \code{list} of variables or a \code{data.frame}
+#          where value label attributes should be removed.
+# @param value Either a numeric vector, indicating one or more label attributes that
+#          should be removed (see \code{\link{get_labels}} to retrieve a vector's
+#          label attributes), or a character vector with names of label attributes
+#          that should be removed.
+#
+# @return \code{x} with removed value labels.
+#
+# @examples
+# data(efc)
+# get_labels(efc$e42dep)
+#
+# x <- remove_labels(efc$e42dep, 2)
+# get_labels(x, include.values = "p")
+#
+# x <- remove_labels(efc$e42dep, "independent")
+# get_labels(x, include.values = "p")
+#
+#
+# 
 remove_labels <- function(x, value) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -5057,50 +5058,50 @@ remove_labels_helper <- function(x, value) {
   return(x)
 }
 
-#' @rdname remove_labels
-#' 
+# @rdname remove_labels
+# 
 `remove_labels<-` <- function(x, value) {
   UseMethod("remove_labels<-")
 }
 
-#' 
+# 
 `remove_labels<-.default` <- function(x, value) {
   x <- remove_labels(x, value)
   x
 }
-#' @title Replace NA with specific values
-#' @name replace_na
-#'
-#' @description This function replaces NA's of a variable, data frame
-#'                or list of variables with \code{value}.
-#'
-#' @seealso \code{\link{set_na}} for setting \code{NA} values, \code{\link{rec}}
-#'            for general recoding of variables and \code{\link{recode_to}}
-#'            for re-shifting value ranges.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables where
-#'          missing values should be replaced with \code{value}.
-#' @param value Value that will replace the \code{\link{NA}}'s.
-#' @param na.label Optional character vector, used to label the NA-value (i.e.
-#'          adding a \code{labels} attribute to \code{x}).
-#'
-#' @return \code{x}, where \code{NA}'s are replaced with \code{value}.
-#'
-#' @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
-#'         or \code{\link{set_labels}}) are preserved.
-#'
-#' @examples
-#' data(efc)
-#' table(efc$e42dep, exclude = NULL)
-#' table(replace_na(efc$e42dep, 99), exclude = NULL)
-#'
-#' dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
-#' # show original distribution
-#' lapply(dummy, table, exclude = NULL)
-#' # show variables, NA's replaced with 99
-#' lapply(replace_na(dummy, 99), table, exclude = NULL)
-#'
-#' 
+# @title Replace NA with specific values
+# @name replace_na
+#
+# @description This function replaces NA's of a variable, data frame
+#                or list of variables with \code{value}.
+#
+# @seealso \code{\link{set_na}} for setting \code{NA} values, \code{\link{rec}}
+#            for general recoding of variables and \code{\link{recode_to}}
+#            for re-shifting value ranges.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables where
+#          missing values should be replaced with \code{value}.
+# @param value Value that will replace the \code{\link{NA}}'s.
+# @param na.label Optional character vector, used to label the NA-value (i.e.
+#          adding a \code{labels} attribute to \code{x}).
+#
+# @return \code{x}, where \code{NA}'s are replaced with \code{value}.
+#
+# @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
+#         or \code{\link{set_labels}}) are preserved.
+#
+# @examples
+# data(efc)
+# table(efc$e42dep, exclude = NULL)
+# table(replace_na(efc$e42dep, 99), exclude = NULL)
+#
+# dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
+# # show original distribution
+# lapply(dummy, table, exclude = NULL)
+# # show variables, NA's replaced with 99
+# lapply(replace_na(dummy, 99), table, exclude = NULL)
+#
+# 
 replace_na <- function(x, value, na.label = NULL) {
   # check for valid value
   if (is.null(value) || is.na(value)) return(x)
@@ -5146,65 +5147,65 @@ replace_na_helper <- function(x, value, na.label) {
 }
 
 
-#' @rdname replace_na
-#' 
+# @rdname replace_na
+# 
 `replace_na<-` <- function(x, na.label = NULL, value) {
   UseMethod("replace_na<-")
 }
 
-#' 
+# 
 `replace_na<-.default` <- function(x, na.label = NULL, value) {
   x <- replace_na(x = x, value = value, na.label = na.label)
   x
 }
-#' @title Root Mean Squared Error (RMSE)
-#' @name rmse
-#' @description Compute root mean squared error  of fitted linear (mixed effects) models.
-#'
-#' @param fit Fitted linear model of class \code{\link{lm}},
-#'          \code{\link[lme4]{merMod}} (lme4) or \code{\link[nlme]{lme}} (nlme).
-#' @param normalized Logical, use \code{TRUE} if normalized rmse should be returned.
-#'
-#' @return The root mean squared error of \code{fit}; or the normalized
-#'           root mean squared error of \code{fit} if \code{normalized = TRUE}.
-#'
-#' @seealso \code{\link{cv}}
-#'
-#' @references \itemize{
-#'              \item \href{http://en.wikipedia.org/wiki/Root-mean-square_deviation}{Wikipedia: RMSD}
-#'              \item \href{http://www.theanalysisfactor.com/assessing-the-fit-of-regression-models/}{Grace-Martin K: Assessing the Fit of Regression Models}
-#'             }
-#'
-#' @note The RMSE is the square root of the variance of the residuals and indicates
-#'         the absolute fit of the model to the data (difference between observed data
-#'         to model's predicted values). "RMSE can be interpreted as the standard
-#'         deviation of the unexplained variance, and has the useful property
-#'         of being in the same units as the response variable. Lower values
-#'         of RMSE indicate better fit. RMSE is a good measure of how accurately
-#'         the model predicts the response, and is the most important criterion
-#'         for fit if the main purpose of the model is prediction."
-#'         (Grace-Martin K: Assessing the Fit of Regression Models).
-#'         \cr \cr
-#'         The normalized RMSE is the proportion of the RMSE related to the
-#'         range of the response variable. Hence, lower values indicate
-#'         less residual variance.
-#'
-#' @examples
-#' data(efc)
-#' fit <- lm(barthtot ~ c160age + c12hour, data = efc)
-#' rmse(fit)
-#'
-#' library(lme4)
-#' fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' rmse(fit)
-#'
-#' # normalized RMSE
-#' library(nlme)
-#' fit <- lme(distance ~ age, data = Orthodont)
-#' rmse(fit, normalized = TRUE)
-#'
+# @title Root Mean Squared Error (RMSE)
+# @name rmse
+# @description Compute root mean squared error  of fitted linear (mixed effects) models.
+#
+# @param fit Fitted linear model of class \code{\link{lm}},
+#          \code{\link[lme4]{merMod}} (lme4) or \code{\link[nlme]{lme}} (nlme).
+# @param normalized Logical, use \code{TRUE} if normalized rmse should be returned.
+#
+# @return The root mean squared error of \code{fit}; or the normalized
+#           root mean squared error of \code{fit} if \code{normalized = TRUE}.
+#
+# @seealso \code{\link{cv}}
+#
+# @references \itemize{
+#              \item \href{http://en.wikipedia.org/wiki/Root-mean-square_deviation}{Wikipedia: RMSD}
+#              \item \href{http://www.theanalysisfactor.com/assessing-the-fit-of-regression-models/}{Grace-Martin K: Assessing the Fit of Regression Models}
+#             }
+#
+# @note The RMSE is the square root of the variance of the residuals and indicates
+#         the absolute fit of the model to the data (difference between observed data
+#         to model's predicted values). "RMSE can be interpreted as the standard
+#         deviation of the unexplained variance, and has the useful property
+#         of being in the same units as the response variable. Lower values
+#         of RMSE indicate better fit. RMSE is a good measure of how accurately
+#         the model predicts the response, and is the most important criterion
+#         for fit if the main purpose of the model is prediction."
+#         (Grace-Martin K: Assessing the Fit of Regression Models).
+#         \cr \cr
+#         The normalized RMSE is the proportion of the RMSE related to the
+#         range of the response variable. Hence, lower values indicate
+#         less residual variance.
+#
+# @examples
+# data(efc)
+# fit <- lm(barthtot ~ c160age + c12hour, data = efc)
+# rmse(fit)
+#
+# library(lme4)
+# fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# rmse(fit)
+#
+# # normalized RMSE
+# library(nlme)
+# fit <- lme(distance ~ age, data = Orthodont)
+# rmse(fit, normalized = TRUE)
+#
 #' @importFrom stats residuals
-#' 
+# 
 rmse <- function(fit, normalized = FALSE) {
   # compute rmse
   rmse_val <- sqrt(mean(stats::residuals(fit) ^ 2, na.rm = TRUE))
@@ -5230,54 +5231,54 @@ rmse <- function(fit, normalized = FALSE) {
   }
   rmse_val
 }
-#' @title Sample size for linear mixed models
-#' @name smpsize_lmm
-#'
-#' @description Compute an approximated sample size for linear mixed models
-#'                (two-level-designs), based on power-calculation for standard
-#'                design and adjusted for design effect for 2-level-designs.
-#'
-#' @param eff.size Effect size.
-#' @param df.n Optional argument for the degrees of freedom for numerator. See 'Details'.
-#' @param power Power of test (1 minus Type II error probability).
-#' @param sig.level Significance level (Type I error probability).
-#' @param k Number of cluster groups (level-2-unit) in multilevel-design.
-#' @param icc Expected intraclass correlation coefficient for multilevel-model.
-#'
-#' @return A list with two values: The number of subjects per cluster, and the
-#'           total sample size for the linear mixed model.
-#'
-#' @references \itemize{
-#'              \item Cohen J. 1988. Statistical power analysis for the behavioral sciences (2nd ed.). Hillsdale,NJ: Lawrence Erlbaum.
-#'              \item Hsieh FY, Lavori PW, Cohen HJ, Feussner JR. 2003. An Overview of Variance Inflation Factors for Sample-Size Calculation. Evaluation & the Health Professions 26: 239–257. \doi{10.1177/0163278703255230}
-#'              \item Snijders TAB. 2005. Power and Sample Size in Multilevel Linear Models. In: Everitt BS, Howell DC (Hrsg.). Encyclopedia of Statistics in Behavioral Science. Chichester, UK: John Wiley & Sons, Ltd. \doi{10.1002/0470013192.bsa492}
-#'             }
-#'
-#' @details The sample size calculation is based on a power-calculation for the
-#'          standard design. If \code{df.n} is not specified, a power-calculation
-#'          for an unpaired two-sample t-test will be computed (using
-#'          \code{\link[pwr]{pwr.t.test}} of the \pkg{pwr}-package).
-#'          If \code{df.n} is given, a power-calculation for general linear models
-#'          will be computed (using \code{\link[pwr]{pwr.f2.test}} of the
-#'          \pkg{pwr}-package). The sample size of the standard design
-#'          is then adjusted for the design effect of two-level-designs (see
-#'          \code{\link{deff}}). Thus, the sample size calculation is appropriate
-#'          in particular for two-level-designs (see Snijders 2005). Models that
-#'          additionally include repeated measures (three-level-designs) may work
-#'          as well, however, the computed sample size may be less accurate.
-#'
-#' @examples
-#' # Sample size for multilevel model with 30 cluster groups and a small to
-#' # medium effect size (Cohen's d) of 0.3. 29 subjects per cluster and
-#' # hence a total sample size of about 859 observations is needed.
-#' smpsize_lmm(eff.size = .3, k = 30)
-#'
-#' # Sample size for multilevel model with 20 cluster groups and a medium
-#' # to large effect size for linear models of 0.2. Nine subjects per cluster and
-#' # hence a total sample size of about 172 observations is needed.
-#' smpsize_lmm(eff.size = .2, df.n = 5, k = 20, power = .9)
-#'
-#' 
+# @title Sample size for linear mixed models
+# @name smpsize_lmm
+#
+# @description Compute an approximated sample size for linear mixed models
+#                (two-level-designs), based on power-calculation for standard
+#                design and adjusted for design effect for 2-level-designs.
+#
+# @param eff.size Effect size.
+# @param df.n Optional argument for the degrees of freedom for numerator. See 'Details'.
+# @param power Power of test (1 minus Type II error probability).
+# @param sig.level Significance level (Type I error probability).
+# @param k Number of cluster groups (level-2-unit) in multilevel-design.
+# @param icc Expected intraclass correlation coefficient for multilevel-model.
+#
+# @return A list with two values: The number of subjects per cluster, and the
+#           total sample size for the linear mixed model.
+#
+# @references \itemize{
+#              \item Cohen J. 1988. Statistical power analysis for the behavioral sciences (2nd ed.). Hillsdale,NJ: Lawrence Erlbaum.
+#              \item Hsieh FY, Lavori PW, Cohen HJ, Feussner JR. 2003. An Overview of Variance Inflation Factors for Sample-Size Calculation. Evaluation & the Health Professions 26: 239–257. \doi{10.1177/0163278703255230}
+#              \item Snijders TAB. 2005. Power and Sample Size in Multilevel Linear Models. In: Everitt BS, Howell DC (Hrsg.). Encyclopedia of Statistics in Behavioral Science. Chichester, UK: John Wiley & Sons, Ltd. \doi{10.1002/0470013192.bsa492}
+#             }
+#
+# @details The sample size calculation is based on a power-calculation for the
+#          standard design. If \code{df.n} is not specified, a power-calculation
+#          for an unpaired two-sample t-test will be computed (using
+#          \code{\link[pwr]{pwr.t.test}} of the \pkg{pwr}-package).
+#          If \code{df.n} is given, a power-calculation for general linear models
+#          will be computed (using \code{\link[pwr]{pwr.f2.test}} of the
+#          \pkg{pwr}-package). The sample size of the standard design
+#          is then adjusted for the design effect of two-level-designs (see
+#          \code{\link{deff}}). Thus, the sample size calculation is appropriate
+#          in particular for two-level-designs (see Snijders 2005). Models that
+#          additionally include repeated measures (three-level-designs) may work
+#          as well, however, the computed sample size may be less accurate.
+#
+# @examples
+# # Sample size for multilevel model with 30 cluster groups and a small to
+# # medium effect size (Cohen's d) of 0.3. 29 subjects per cluster and
+# # hence a total sample size of about 859 observations is needed.
+# smpsize_lmm(eff.size = .3, k = 30)
+#
+# # Sample size for multilevel model with 20 cluster groups and a medium
+# # to large effect size for linear models of 0.2. Nine subjects per cluster and
+# # hence a total sample size of about 172 observations is needed.
+# smpsize_lmm(eff.size = .2, df.n = 5, k = 20, power = .9)
+#
+# 
 smpsize_lmm <- function(eff.size, df.n = NULL, power = .8, sig.level = .05, k, icc = 0.05) {
   if (!requireNamespace("pwr", quietly = TRUE)) {
     stop("Package `pwr` needed for this function to work. Please install it.", call. = FALSE)
@@ -5299,62 +5300,62 @@ smpsize_lmm <- function(eff.size, df.n = NULL, power = .8, sig.level = .05, k, i
 }
 
 
-#' @title Design effects for two-level mixed models
-#' @name deff
-#'
-#' @description Compute the design effect for mixed models with two-level design.
-#'
-#' @param n Average number of observations per grouping cluster (i.e. level-2 unit).
-#' @param icc Assumed intraclass correlation coefficient for multilevel-model.
-#'
-#' @return The design effect for the two-level model.
-#'
-#' @references \itemize{
-#'              \item Hsieh FY, Lavori PW, Cohen HJ, Feussner JR. 2003. An Overview of Variance Inflation Factors for Sample-Size Calculation. Evaluation & the Health Professions 26: 239–257. \doi{10.1177/0163278703255230}
-#'              \item Snijders TAB. 2005. Power and Sample Size in Multilevel Linear Models. In: Everitt BS, Howell DC (Hrsg.). Encyclopedia of Statistics in Behavioral Science. Chichester, UK: John Wiley & Sons, Ltd. \doi{10.1002/0470013192.bsa492}
-#'             }
-#'
-#' @examples
-#' # Design effect for two-level model with 30 cluster groups
-#' # and an assumed intraclass correlation coefficient of 0.05.
-#' deff(n = 30)
-#'
-#' 
+# @title Design effects for two-level mixed models
+# @name deff
+#
+# @description Compute the design effect for mixed models with two-level design.
+#
+# @param n Average number of observations per grouping cluster (i.e. level-2 unit).
+# @param icc Assumed intraclass correlation coefficient for multilevel-model.
+#
+# @return The design effect for the two-level model.
+#
+# @references \itemize{
+#              \item Hsieh FY, Lavori PW, Cohen HJ, Feussner JR. 2003. An Overview of Variance Inflation Factors for Sample-Size Calculation. Evaluation & the Health Professions 26: 239–257. \doi{10.1177/0163278703255230}
+#              \item Snijders TAB. 2005. Power and Sample Size in Multilevel Linear Models. In: Everitt BS, Howell DC (Hrsg.). Encyclopedia of Statistics in Behavioral Science. Chichester, UK: John Wiley & Sons, Ltd. \doi{10.1002/0470013192.bsa492}
+#             }
+#
+# @examples
+# # Design effect for two-level model with 30 cluster groups
+# # and an assumed intraclass correlation coefficient of 0.05.
+# deff(n = 30)
+#
+# 
 deff <- function(n, icc = 0.05) {
   return(1 + (n - 1) * icc)
 }
-#' @title Standard Error for variables
-#' @name se
-#' @description Compute standard error for a variable, for all variables
-#'                of a data frame or for joint random and fixed effects
-#'                coefficients of mixed models.
-#'
-#' @param x (Numeric) vector, a data frame or a \code{merMod}-object
-#'          as returned by the \code{\link[lme4]{lmer}}-method.
-#' @return The standard error of \code{x}, or for each variable
-#'           if \code{x} is a data frame, or for the coefficients
-#'           of a mixed model (see \code{\link[lme4]{coef.merMod}}).
-#'
-#' @note Computation of standard errors for coefficients of mixed models
-#'         is based \href{http://stackoverflow.com/questions/26198958/extracting-coefficients-and-their-standard-error-from-lme}{on this code}.
-#'
-#' @details Unlike \code{\link[arm]{se.coef}}, which returns the standard error
-#'            for fixed and random effects separately, this function computes
-#'            the standard errors for joint (sums of) random and fixed
-#'            effects coefficients. Hence, \code{se} returns the appropriate
-#'            standard errors for \code{\link[lme4]{coef.merMod}}.
-#'
-#' @examples
-#' se(rnorm(n = 100, mean = 3))
-#'
-#' data(efc)
-#' se(efc[, 1:3])
-#'
-#' library(lme4)
-#' fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' se(fit)
-#'
-#' 
+# @title Standard Error for variables
+# @name se
+# @description Compute standard error for a variable, for all variables
+#                of a data frame or for joint random and fixed effects
+#                coefficients of mixed models.
+#
+# @param x (Numeric) vector, a data frame or a \code{merMod}-object
+#          as returned by the \code{\link[lme4]{lmer}}-method.
+# @return The standard error of \code{x}, or for each variable
+#           if \code{x} is a data frame, or for the coefficients
+#           of a mixed model (see \code{\link[lme4]{coef.merMod}}).
+#
+# @note Computation of standard errors for coefficients of mixed models
+#         is based \href{http://stackoverflow.com/questions/26198958/extracting-coefficients-and-their-standard-error-from-lme}{on this code}.
+#
+# @details Unlike \code{\link[arm]{se.coef}}, which returns the standard error
+#            for fixed and random effects separately, this function computes
+#            the standard errors for joint (sums of) random and fixed
+#            effects coefficients. Hence, \code{se} returns the appropriate
+#            standard errors for \code{\link[lme4]{coef.merMod}}.
+#
+# @examples
+# se(rnorm(n = 100, mean = 3))
+#
+# data(efc)
+# se(efc[, 1:3])
+#
+# library(lme4)
+# fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+# se(fit)
+#
+# 
 se <- function(x) {
   if (is_merMod(x)) {
     return(std_merMod(x))
@@ -5409,92 +5410,92 @@ std_merMod <- function(fit) {
   names(se.merMod) <- inames
   return(se.merMod)
 }
-#' @title Add variable label(s) to variables
-#' @name set_label
-#'
-#' @description This function adds variable labels as attribute
-#'                (named \code{"label"} or \code{"variable.label"}) to a variable
-#'                or vector \code{x}, resp. to a set of variables in a
-#'                \code{data.frame} or a \code{list}-object. Most functions of the
-#'                \pkg{sjPlot} package can automatically retrieve the variable
-#'                labels to use it as axis labels or plot title (see 'Details').
-#'
-#' @seealso The sjPlot manual on \href{http://www.strengejacke.de/sjPlot/datainit/}{data initialization} or
-#'            \href{http://www.strengejacke.de/sjPlot/view_spss/}{inspecting (SPSS imported) data frames} for
-#'            more details; \code{\link{set_labels}} to manually set value labels or \code{\link{get_label}}
-#'            to get variable labels.
-#'
-#' @param x Variable (vector), \code{list} of variables or a \code{data.frame}
-#'          where variables labels should be added as attribute
-#' @param lab If \code{x} is a vector (single variable), use a single character string with
-#'          the variable label for \code{x}. If \code{x} is a data frame, use a
-#'          vector with character labels of same length as \code{ncol(x)}.
-#'          Use \code{lab = ""} to remove labels-attribute from \code{x}, resp.
-#'          set any value of vector \code{lab} to \code{""} to remove specific variable
-#'          label attributes from a data frame's variable.
-#' @param value See \code{lab}.
-#' @param attr.string Attribute string for the variable label. \strong{Note:}
-#'          Usually, this argument should be ignored. It is only used internally
-#'          for the \code{\link{write_spss}} and \code{\link{write_stata}} functions.
-#' @return \code{x}, with variable label attribute(s), which contains the
-#'           variable name(s); or with removed label-attribute if
-#'            \code{lab = ""}.
-#'
-#' @details See 'Details' in \code{\link{get_labels}}
-#'
-#' @note See 'Note' in \code{\link{get_labels}}
-#'
-#' @examples
-#' # sample data set, imported from SPSS.
-#' data(efc)
-#'
-#' \dontrun{
-#' library(sjPlot)
-#' sjt.frq(efc$e42dep)
-#' sjt.frq(data.frame(efc$e42dep, efc$e16sex))}
-#'
-#'
-#' # manually set value and variable labels
-#' dummy <- sample(1:4, 40, replace = TRUE)
-#' dummy <- set_labels(dummy, c("very low", "low", "mid", "hi"))
-#' dummy <- set_label(dummy, "Dummy-variable")
-#'
-#' # or use:
-#' # set_label(dummy) <- "Dummy-variable"
-#'
-#' # auto-detection of value labels by default, auto-detection of
-#' # variable labels if argument "title" set to NULL.
-#' \dontrun{
-#' library(sjPlot)
-#' sjp.frq(dummy, title = NULL)}
-#'
-#'
-#' # Set variable labels for data frame
-#' dummy <- data.frame(a = sample(1:4, 10, replace = TRUE),
-#'                     b = sample(1:4, 10, replace = TRUE),
-#'                     c = sample(1:4, 10, replace = TRUE))
-#' dummy <- set_label(dummy, c("Variable A", "Variable B", "Variable C"))
-#' str(dummy)
-#'
-#' # remove one variable label
-#' dummy <- set_label(dummy, c("Variable A", "", "Variable C"))
-#' str(dummy)
-#'
-#'
-#' # setting same variable labels to multiple vectors
-#'
-#' # create a set of dummy variables
-#' dummy1 <- sample(1:4, 40, replace = TRUE)
-#' dummy2 <- sample(1:4, 40, replace = TRUE)
-#' dummy3 <- sample(1:4, 40, replace = TRUE)
-#' # put them in list-object
-#' dummies <- list(dummy1, dummy2, dummy3)
-#' # and set variable labels for all three dummies
-#' dummies <- set_label(dummies, c("First Dummy", "2nd Dummy", "Third dummy"))
-#' # see result...
-#' get_label(dummies)
-#'
-#' 
+# @title Add variable label(s) to variables
+# @name set_label
+#
+# @description This function adds variable labels as attribute
+#                (named \code{"label"} or \code{"variable.label"}) to a variable
+#                or vector \code{x}, resp. to a set of variables in a
+#                \code{data.frame} or a \code{list}-object. Most functions of the
+#                \pkg{sjPlot} package can automatically retrieve the variable
+#                labels to use it as axis labels or plot title (see 'Details').
+#
+# @seealso The sjPlot manual on \href{http://www.strengejacke.de/sjPlot/datainit/}{data initialization} or
+#            \href{http://www.strengejacke.de/sjPlot/view_spss/}{inspecting (SPSS imported) data frames} for
+#            more details; \code{\link{set_labels}} to manually set value labels or \code{\link{get_label}}
+#            to get variable labels.
+#
+# @param x Variable (vector), \code{list} of variables or a \code{data.frame}
+#          where variables labels should be added as attribute
+# @param lab If \code{x} is a vector (single variable), use a single character string with
+#          the variable label for \code{x}. If \code{x} is a data frame, use a
+#          vector with character labels of same length as \code{ncol(x)}.
+#          Use \code{lab = ""} to remove labels-attribute from \code{x}, resp.
+#          set any value of vector \code{lab} to \code{""} to remove specific variable
+#          label attributes from a data frame's variable.
+# @param value See \code{lab}.
+# @param attr.string Attribute string for the variable label. \strong{Note:}
+#          Usually, this argument should be ignored. It is only used internally
+#          for the \code{\link{write_spss}} and \code{\link{write_stata}} functions.
+# @return \code{x}, with variable label attribute(s), which contains the
+#           variable name(s); or with removed label-attribute if
+#            \code{lab = ""}.
+#
+# @details See 'Details' in \code{\link{get_labels}}
+#
+# @note See 'Note' in \code{\link{get_labels}}
+#
+# @examples
+# # sample data set, imported from SPSS.
+# data(efc)
+#
+# \dontrun{
+# library(sjPlot)
+# sjt.frq(efc$e42dep)
+# sjt.frq(data.frame(efc$e42dep, efc$e16sex))}
+#
+#
+# # manually set value and variable labels
+# dummy <- sample(1:4, 40, replace = TRUE)
+# dummy <- set_labels(dummy, c("very low", "low", "mid", "hi"))
+# dummy <- set_label(dummy, "Dummy-variable")
+#
+# # or use:
+# # set_label(dummy) <- "Dummy-variable"
+#
+# # auto-detection of value labels by default, auto-detection of
+# # variable labels if argument "title" set to NULL.
+# \dontrun{
+# library(sjPlot)
+# sjp.frq(dummy, title = NULL)}
+#
+#
+# # Set variable labels for data frame
+# dummy <- data.frame(a = sample(1:4, 10, replace = TRUE),
+#                     b = sample(1:4, 10, replace = TRUE),
+#                     c = sample(1:4, 10, replace = TRUE))
+# dummy <- set_label(dummy, c("Variable A", "Variable B", "Variable C"))
+# str(dummy)
+#
+# # remove one variable label
+# dummy <- set_label(dummy, c("Variable A", "", "Variable C"))
+# str(dummy)
+#
+#
+# # setting same variable labels to multiple vectors
+#
+# # create a set of dummy variables
+# dummy1 <- sample(1:4, 40, replace = TRUE)
+# dummy2 <- sample(1:4, 40, replace = TRUE)
+# dummy3 <- sample(1:4, 40, replace = TRUE)
+# # put them in list-object
+# dummies <- list(dummy1, dummy2, dummy3)
+# # and set variable labels for all three dummies
+# dummies <- set_label(dummies, c("First Dummy", "2nd Dummy", "Third dummy"))
+# # see result...
+# get_label(dummies)
+#
+# 
 set_label <- function(x, lab, attr.string = NULL) {
   # auto-detect variable label attribute
   if (is.null(attr.string)) attr.string <- getVarLabelAttribute(x)
@@ -5547,140 +5548,140 @@ set_label <- function(x, lab, attr.string = NULL) {
 }
 
 
-#' @rdname set_label
-#' 
+# @rdname set_label
+# 
 `set_label<-` <- function(x, attr.string = NULL, value) {
   UseMethod("set_label<-")
 }
 
-#' 
+# 
 `set_label<-.default` <- function(x, attr.string = NULL, value) {
   x <- set_label(x, value, attr.string)
   x
 }
-#' @title Add value labels to variables
-#' @name set_labels
-#'
-#' @description This function adds character \code{labels} as attribute
-#'                (named \code{"labels"} or \code{"value.labels"}) to a variable
-#'                or vector \code{x}, resp. to a set of variables in a
-#'                \code{data.frame} or a \code{list}-object. These value labels will be accessed
-#'                by functions of the \pkg{sjPlot} package, in order to automatically set values
-#'                or legend labels, however, \pkg{sjmisc} provides functions to
-#'                quickly access these attributes for other purposes.
-#'
-#' @seealso See package vignettes or \href{http://www.strengejacke.de/sjPlot/}{online documentation}
-#'            for more details; \code{\link{set_label}} to manually set variable labels or
-#'            \code{\link{get_label}} to get variable labels; \code{\link{add_labels}} to
-#'            add additional value labels without replacing the existing ones.
-#'
-#' @param x Variable (vector), \code{list} of variables or a \code{data.frame}
-#'          where value label attributes should be added. Replaces former value labels.
-#' @param labels (Named) character vector of labels that will be added to \code{x} as
-#'          \code{"labels"} or \code{"value.labels"} attribute.
-#'          \itemize{
-#'            \item if \code{labels} is \strong{not} a \emph{named vector}, its length must equal the value range of \code{x}, i.e. if \code{x} has values from 1 to 3, \code{labels} should have a length of 3;
-#'            \item if length of \code{labels} is intended to differ from length of unique values of \code{x}, a warning is given. You can still add missing labels with the \code{force.labels} or \code{force.values} arguments; see 'Note'.
-#'            \item if \code{labels} \strong{is} a \emph{named vector}, value labels will be set accordingly, even if \code{x} has a different length of unique values. See 'Note' and 'Examples'.
-#'            \item if \code{x} is a data frame, \code{labels} may also be a \code{\link{list}} of (named) character vectors;
-#'            \item if \code{labels} is a \code{list}, it must have the same length as number of columns of \code{x};
-#'            \item if \code{labels} is a vector and \code{x} is a data frame, \code{labels} will be applied to each column of \code{x}.
-#'            }
-#'          Use \code{labels = ""} to remove labels-attribute from \code{x}.
-#' @param value See \code{labels},
-#' @param force.labels Logical; if \code{TRUE}, all \code{labels} are added as value label
-#'          attribute, even if \code{x} has less unique values then length of \code{labels}
-#'          or if \code{x} has a smaller range then length of \code{labels}. See 'Examples'.
-#'          This parameter will be ignored, if \code{labels} is a named vector.
-#' @param force.values Logical, if \code{TRUE} (default) and \code{labels} has less
-#'          elements than unique values of \code{x}, additional values not covered
-#'          by \code{labels} will be added as label as well. See 'Examples'.
-#'          This parameter will be ignored, if \code{labels} is a named vector.
-#' @return \code{x} with value label attributes; or with removed label-attributes if
-#'            \code{labels = ""}.
-#'
-#' @details See 'Details' in \code{\link{get_labels}}.
-#'
-#' @note \itemize{
-#'         \item if \code{labels} is a named vector, \code{force.labels} and \code{force.values} will be ignored, and only values defined in \code{labels} will be labelled;
-#'         \item if \code{x} has less unique values than \code{labels}, redundant labels will be dropped, see \code{force.labels};
-#'         \item if \code{x} has more unique values than \code{labels}, only matching values will be labelled, other values remain unlabelled, see \code{force.values};
-#'         }
-#'         If you only want to change partial value labels, use \code{\link{add_labels}} instead.
-#'         Furthermore, see 'Note' in \code{\link{get_labels}}.
-#'
-#' @examples
-#' \dontrun{
-#' library(sjPlot)
-#' dummy <- sample(1:4, 40, replace = TRUE)
-#' sjp.frq(dummy)
-#'
-#' dummy <- set_labels(dummy, c("very low", "low", "mid", "hi"))
-#' sjp.frq(dummy)}
-#'
-#' # force using all labels, even if not all labels
-#' # have associated values in vector
-#' x <- c(2, 2, 3, 3, 2)
-#' # only two value labels
-#' x <- set_labels(x, c("1", "2", "3"))
-#' x
-#'
-#' # or use:
-#' # set_labels(x) <- c("1", "2", "3")
-#'
-#' \dontrun{
-#' sjp.frq(x)}
-#' # all three value labels
-#' x <- set_labels(x, c("1", "2", "3"), force.labels = TRUE)
-#' x
-#' \dontrun{
-#' sjp.frq(x)}
-#'
-#' # create vector
-#' x <- c(1, 2, 3, 2, 4, NA)
-#' # add less labels than values
-#' x <- set_labels(x, c("yes", "maybe", "no"), force.values = FALSE)
-#' x
-#' # add all necessary labels
-#' x <- set_labels(x, c("yes", "maybe", "no"), force.values = TRUE)
-#' x
-#'
-#' # set labels and missings
-#' x <- c(1, 1, 1, 2, 2, -2, 3, 3, 3, 3, 3, 9)
-#' x <- set_labels(x, c("Refused", "One", "Two", "Three", "Missing"))
-#' x
-#'
-#' x <- set_na(x, c(-2, 9), as.attr = TRUE)
-#' x
-#' frq(as_labelled(x))
-#'
-#'
-#' # set labels via named vector,
-#' # not using all possible values
-#' data(efc)
-#' get_labels(efc$e42dep)
-#'
-#'x <- set_labels(efc$e42dep, c(`independent` = 1,
-#'                              `severe dependency` = 2,
-#'                              `missing value` = 9))
-#' get_labels(x, include.values = "p")
-#'
-#' get_labels(x, include.values = "p", include.non.labelled = TRUE)
-#'
-#'
-#' # setting same value labels to multiple vectors
-#' # create a set of dummy variables
-#' dummy1 <- sample(1:4, 40, replace = TRUE)
-#' dummy2 <- sample(1:4, 40, replace = TRUE)
-#' dummy3 <- sample(1:4, 40, replace = TRUE)
-#' # put them in list-object
-#' dummies <- list(dummy1, dummy2, dummy3)
-#' # and set same value labels for all three dummies
-#' dummies <- set_labels(dummies, c("very low", "low", "mid", "hi"))
-#' # see result...
-#' get_labels(dummies)
-#'
-#' 
+# @title Add value labels to variables
+# @name set_labels
+#
+# @description This function adds character \code{labels} as attribute
+#                (named \code{"labels"} or \code{"value.labels"}) to a variable
+#                or vector \code{x}, resp. to a set of variables in a
+#                \code{data.frame} or a \code{list}-object. These value labels will be accessed
+#                by functions of the \pkg{sjPlot} package, in order to automatically set values
+#                or legend labels, however, \pkg{sjmisc} provides functions to
+#                quickly access these attributes for other purposes.
+#
+# @seealso See package vignettes or \href{http://www.strengejacke.de/sjPlot/}{online documentation}
+#            for more details; \code{\link{set_label}} to manually set variable labels or
+#            \code{\link{get_label}} to get variable labels; \code{\link{add_labels}} to
+#            add additional value labels without replacing the existing ones.
+#
+# @param x Variable (vector), \code{list} of variables or a \code{data.frame}
+#          where value label attributes should be added. Replaces former value labels.
+# @param labels (Named) character vector of labels that will be added to \code{x} as
+#          \code{"labels"} or \code{"value.labels"} attribute.
+#          \itemize{
+#            \item if \code{labels} is \strong{not} a \emph{named vector}, its length must equal the value range of \code{x}, i.e. if \code{x} has values from 1 to 3, \code{labels} should have a length of 3;
+#            \item if length of \code{labels} is intended to differ from length of unique values of \code{x}, a warning is given. You can still add missing labels with the \code{force.labels} or \code{force.values} arguments; see 'Note'.
+#            \item if \code{labels} \strong{is} a \emph{named vector}, value labels will be set accordingly, even if \code{x} has a different length of unique values. See 'Note' and 'Examples'.
+#            \item if \code{x} is a data frame, \code{labels} may also be a \code{\link{list}} of (named) character vectors;
+#            \item if \code{labels} is a \code{list}, it must have the same length as number of columns of \code{x};
+#            \item if \code{labels} is a vector and \code{x} is a data frame, \code{labels} will be applied to each column of \code{x}.
+#            }
+#          Use \code{labels = ""} to remove labels-attribute from \code{x}.
+# @param value See \code{labels},
+# @param force.labels Logical; if \code{TRUE}, all \code{labels} are added as value label
+#          attribute, even if \code{x} has less unique values then length of \code{labels}
+#          or if \code{x} has a smaller range then length of \code{labels}. See 'Examples'.
+#          This parameter will be ignored, if \code{labels} is a named vector.
+# @param force.values Logical, if \code{TRUE} (default) and \code{labels} has less
+#          elements than unique values of \code{x}, additional values not covered
+#          by \code{labels} will be added as label as well. See 'Examples'.
+#          This parameter will be ignored, if \code{labels} is a named vector.
+# @return \code{x} with value label attributes; or with removed label-attributes if
+#            \code{labels = ""}.
+#
+# @details See 'Details' in \code{\link{get_labels}}.
+#
+# @note \itemize{
+#         \item if \code{labels} is a named vector, \code{force.labels} and \code{force.values} will be ignored, and only values defined in \code{labels} will be labelled;
+#         \item if \code{x} has less unique values than \code{labels}, redundant labels will be dropped, see \code{force.labels};
+#         \item if \code{x} has more unique values than \code{labels}, only matching values will be labelled, other values remain unlabelled, see \code{force.values};
+#         }
+#         If you only want to change partial value labels, use \code{\link{add_labels}} instead.
+#         Furthermore, see 'Note' in \code{\link{get_labels}}.
+#
+# @examples
+# \dontrun{
+# library(sjPlot)
+# dummy <- sample(1:4, 40, replace = TRUE)
+# sjp.frq(dummy)
+#
+# dummy <- set_labels(dummy, c("very low", "low", "mid", "hi"))
+# sjp.frq(dummy)}
+#
+# # force using all labels, even if not all labels
+# # have associated values in vector
+# x <- c(2, 2, 3, 3, 2)
+# # only two value labels
+# x <- set_labels(x, c("1", "2", "3"))
+# x
+#
+# # or use:
+# # set_labels(x) <- c("1", "2", "3")
+#
+# \dontrun{
+# sjp.frq(x)}
+# # all three value labels
+# x <- set_labels(x, c("1", "2", "3"), force.labels = TRUE)
+# x
+# \dontrun{
+# sjp.frq(x)}
+#
+# # create vector
+# x <- c(1, 2, 3, 2, 4, NA)
+# # add less labels than values
+# x <- set_labels(x, c("yes", "maybe", "no"), force.values = FALSE)
+# x
+# # add all necessary labels
+# x <- set_labels(x, c("yes", "maybe", "no"), force.values = TRUE)
+# x
+#
+# # set labels and missings
+# x <- c(1, 1, 1, 2, 2, -2, 3, 3, 3, 3, 3, 9)
+# x <- set_labels(x, c("Refused", "One", "Two", "Three", "Missing"))
+# x
+#
+# x <- set_na(x, c(-2, 9), as.attr = TRUE)
+# x
+# frq(as_labelled(x))
+#
+#
+# # set labels via named vector,
+# # not using all possible values
+# data(efc)
+# get_labels(efc$e42dep)
+#
+#x <- set_labels(efc$e42dep, c(`independent` = 1,
+#                              `severe dependency` = 2,
+#                              `missing value` = 9))
+# get_labels(x, include.values = "p")
+#
+# get_labels(x, include.values = "p", include.non.labelled = TRUE)
+#
+#
+# # setting same value labels to multiple vectors
+# # create a set of dummy variables
+# dummy1 <- sample(1:4, 40, replace = TRUE)
+# dummy2 <- sample(1:4, 40, replace = TRUE)
+# dummy3 <- sample(1:4, 40, replace = TRUE)
+# # put them in list-object
+# dummies <- list(dummy1, dummy2, dummy3)
+# # and set same value labels for all three dummies
+# dummies <- set_labels(dummies, c("very low", "low", "mid", "hi"))
+# # see result...
+# get_labels(dummies)
+#
+# 
 set_labels <- function(x,
                        labels,
                        force.labels = FALSE,
@@ -5929,113 +5930,113 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
   return(x)
 }
 
-#' @rdname set_labels
-#' 
+# @rdname set_labels
+# 
 `set_labels<-` <- function(x, force.labels = FALSE, force.values = TRUE, value) {
   UseMethod("set_labels<-")
 }
 
-#' 
+# 
 `set_labels<-.default` <- function(x, force.labels = FALSE, force.values = TRUE, value) {
   x <- set_labels(x, value, force.labels, force.values)
   x
 }
-#' @title Set NA for specific variable values
-#' @name set_na
-#'
-#' @description This function sets specific values of a variable, data frame
-#'                or list of variables as missings (\code{NA}).
-#'
-#' @seealso \code{\link{replace_na}} to replace \code{\link{NA}}'s with specific
-#'            values, \code{\link{rec}} for general recoding of variables and
-#'            \code{\link{recode_to}} for re-shifting value ranges. See
-#'            \code{\link{get_na}} to get values of missing values in
-#'            labelled vectors and \code{\link{to_na}} to convert missing value
-#'            codes into \code{NA}.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables where new
-#'          missing values should be defined. If \code{x} is a \code{data.frame}, each
-#'          column is assumed to be a new variable, where missings should be defined.
-#' @param value Numeric vector with values that should be replaced with \code{\link{NA}}'s.
-#'          Thus, for each variable in \code{x}, \code{value} are replaced by \code{NA}'s.
-#'          Or: a logical vector describing which values should be translated
-#'          to missing values. See 'Details' and 'Examples'.
-#' @param as.attr Logical, if \code{TRUE}, \code{value} of \code{x} will \strong{not}
-#'          be converted to \code{NA}. Rather, the missing code values of \code{value}
-#'          will be added as missing-attribute \code{is_na} to the vector. See
-#'          \code{\link{labelled}} for more details, and 'Examples'.
-#'
-#' @return \code{x}, where each value of \code{value} is replaced by an \code{NA}.
-#'
-#' @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
-#'         or \code{\link{set_labels}}) are preserved.
-#'
-#' @details \code{set_na} converts those values to \code{NA} that are
-#'            specified in the function's \code{value} argument; hence,
-#'            by default, \code{set_na} ignores any missing code attributes
-#'            like \code{is_na}. \code{\link{to_na}}, by contrast, converts
-#'            values to \code{NA}, which are defined as missing through the
-#'            \code{is_na}-attribute of a vector (see \code{\link{labelled}}).
-#'            \cr \cr
-#'            If \code{as.attr = TRUE}, \code{value} in \code{x} will \strong{not}
-#'            be converted to \code{NA}. Instead, the attribute \code{is_na}
-#'            will be added to \code{x}, indicating which values should be coded
-#'            as missing. \code{value} may either be numeric, with each number
-#'            indicating a value that should be defined as missing; or a vector
-#'            of logicals, describing which values should be translated to
-#'            missing values (see 'Examples').
-#'            \cr \cr
-#'            Furthermore, see 'Details' in \code{\link{get_na}}.
-#'
-#' @examples
-#' # create random variable
-#' dummy <- sample(1:8, 100, replace = TRUE)
-#' # show value distribution
-#' table(dummy)
-#' # set value 1 and 8 as missings
-#' dummy <- set_na(dummy, c(1, 8))
-#' # show value distribution, including missings
-#' table(dummy, exclude = NULL)
-#'
-#' # create sample data frame
-#' dummy <- data.frame(var1 = sample(1:8, 100, replace = TRUE),
-#'                     var2 = sample(1:10, 100, replace = TRUE),
-#'                     var3 = sample(1:6, 100, replace = TRUE))
-#' # show head of data frame
-#' head(dummy)
-#' # set value 2 and 4 as missings
-#' dummy <- set_na(dummy, c(2, 4))
-#' # show head of new data frame
-#' head(dummy)
-#'
-#' # create list of variables
-#' data(efc)
-#' dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
-#' # check original distribution of categories
-#' lapply(dummy, table, exclude = NULL)
-#' # set 3 to NA
-#' lapply(set_na(dummy, 3), table, exclude = NULL)
-#'
-#' # create random variable
-#' dummy <- sample(1:5, 100, replace = TRUE)
-#' # declare missing values, but only as attribute
-#' dummy <- set_na(dummy, c(3, 5), as.attr = TRUE)
-#'
-#' str(dummy)
-#' table(dummy)
-#' get_na(dummy)
-#'
-#' # create random variable
-#' dummy <- sample(1:5, 100, replace = TRUE)
-#' # declare missing values, but only as attribute
-#' # missing code definition may be logical indices
-#' dummy <- set_na(dummy, c(FALSE, FALSE, FALSE, TRUE, TRUE), as.attr = TRUE)
-#'
-#' str(dummy)
-#' table(dummy)
-#' get_na(dummy)
-#'
-#' 
+# @title Set NA for specific variable values
+# @name set_na
+#
+# @description This function sets specific values of a variable, data frame
+#                or list of variables as missings (\code{NA}).
+#
+# @seealso \code{\link{replace_na}} to replace \code{\link{NA}}'s with specific
+#            values, \code{\link{rec}} for general recoding of variables and
+#            \code{\link{recode_to}} for re-shifting value ranges. See
+#            \code{\link{get_na}} to get values of missing values in
+#            labelled vectors and \code{\link{to_na}} to convert missing value
+#            codes into \code{NA}.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables where new
+#          missing values should be defined. If \code{x} is a \code{data.frame}, each
+#          column is assumed to be a new variable, where missings should be defined.
+# @param value Numeric vector with values that should be replaced with \code{\link{NA}}'s.
+#          Thus, for each variable in \code{x}, \code{value} are replaced by \code{NA}'s.
+#          Or: a logical vector describing which values should be translated
+#          to missing values. See 'Details' and 'Examples'.
+# @param as.attr Logical, if \code{TRUE}, \code{value} of \code{x} will \strong{not}
+#          be converted to \code{NA}. Rather, the missing code values of \code{value}
+#          will be added as missing-attribute \code{is_na} to the vector. See
+#          \code{\link{labelled}} for more details, and 'Examples'.
+#
+# @return \code{x}, where each value of \code{value} is replaced by an \code{NA}.
+#
+# @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
+#         or \code{\link{set_labels}}) are preserved.
+#
+# @details \code{set_na} converts those values to \code{NA} that are
+#            specified in the function's \code{value} argument; hence,
+#            by default, \code{set_na} ignores any missing code attributes
+#            like \code{is_na}. \code{\link{to_na}}, by contrast, converts
+#            values to \code{NA}, which are defined as missing through the
+#            \code{is_na}-attribute of a vector (see \code{\link{labelled}}).
+#            \cr \cr
+#            If \code{as.attr = TRUE}, \code{value} in \code{x} will \strong{not}
+#            be converted to \code{NA}. Instead, the attribute \code{is_na}
+#            will be added to \code{x}, indicating which values should be coded
+#            as missing. \code{value} may either be numeric, with each number
+#            indicating a value that should be defined as missing; or a vector
+#            of logicals, describing which values should be translated to
+#            missing values (see 'Examples').
+#            \cr \cr
+#            Furthermore, see 'Details' in \code{\link{get_na}}.
+#
+# @examples
+# # create random variable
+# dummy <- sample(1:8, 100, replace = TRUE)
+# # show value distribution
+# table(dummy)
+# # set value 1 and 8 as missings
+# dummy <- set_na(dummy, c(1, 8))
+# # show value distribution, including missings
+# table(dummy, exclude = NULL)
+#
+# # create sample data frame
+# dummy <- data.frame(var1 = sample(1:8, 100, replace = TRUE),
+#                     var2 = sample(1:10, 100, replace = TRUE),
+#                     var3 = sample(1:6, 100, replace = TRUE))
+# # show head of data frame
+# head(dummy)
+# # set value 2 and 4 as missings
+# dummy <- set_na(dummy, c(2, 4))
+# # show head of new data frame
+# head(dummy)
+#
+# # create list of variables
+# data(efc)
+# dummy <- list(efc$c82cop1, efc$c83cop2, efc$c84cop3)
+# # check original distribution of categories
+# lapply(dummy, table, exclude = NULL)
+# # set 3 to NA
+# lapply(set_na(dummy, 3), table, exclude = NULL)
+#
+# # create random variable
+# dummy <- sample(1:5, 100, replace = TRUE)
+# # declare missing values, but only as attribute
+# dummy <- set_na(dummy, c(3, 5), as.attr = TRUE)
+#
+# str(dummy)
+# table(dummy)
+# get_na(dummy)
+#
+# # create random variable
+# dummy <- sample(1:5, 100, replace = TRUE)
+# # declare missing values, but only as attribute
+# # missing code definition may be logical indices
+# dummy <- set_na(dummy, c(FALSE, FALSE, FALSE, TRUE, TRUE), as.attr = TRUE)
+#
+# str(dummy)
+# table(dummy)
+# get_na(dummy)
+#
+# 
 set_na <- function(x, value, as.attr = FALSE) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -6155,43 +6156,43 @@ set_na_attr <- function(x, na.values) {
   return(x)
 }
 
-#' @rdname set_na
-#' 
+# @rdname set_na
+# 
 `set_na<-` <- function(x, as.attr = FALSE, value) {
   UseMethod("set_na<-")
 }
 
-#' 
+# 
 `set_na<-.default` <- function(x, as.attr = FALSE, value) {
   x <- set_na(x, value, as.attr)
   x
 }
-#' @title Expected and relative table values
-#' @name table_values
-#' @description This function calculates a table's cell, row and column percentages as
-#'                well as expected values and returns all results as lists of tables.
-#'
-#' @param tab Simple \code{\link{table}} or \code{\link{ftable}} of which cell, row and column percentages
-#'          as well as expected values are calculated. Tables of class \code{\link{xtabs}} and other will
-#'          be coerced to \code{\link{ftable}} objects.
-#' @param digits Amount of digits for the table percentage values.
-#'
-#' @return (Invisibly) returns a list with four tables:
-#'         \enumerate{
-#'          \item \code{cell} a table with cell percentages of \code{tab}
-#'          \item \code{row} a table with row percentages of \code{tab}
-#'          \item \code{col} a table with column percentages of \code{tab}
-#'          \item \code{expected} a table with expected values of \code{tab}
-#'         }
-#'
-#' @examples
-#' tab <- table(sample(1:2, 30, TRUE), sample(1:3, 30, TRUE))
-#' # show expected values
-#' table_values(tab)$expected
-#' # show cell percentages
-#' table_values(tab)$cell
-#'
-#' 
+# @title Expected and relative table values
+# @name table_values
+# @description This function calculates a table's cell, row and column percentages as
+#                well as expected values and returns all results as lists of tables.
+#
+# @param tab Simple \code{\link{table}} or \code{\link{ftable}} of which cell, row and column percentages
+#          as well as expected values are calculated. Tables of class \code{\link{xtabs}} and other will
+#          be coerced to \code{\link{ftable}} objects.
+# @param digits Amount of digits for the table percentage values.
+#
+# @return (Invisibly) returns a list with four tables:
+#         \enumerate{
+#          \item \code{cell} a table with cell percentages of \code{tab}
+#          \item \code{row} a table with row percentages of \code{tab}
+#          \item \code{col} a table with column percentages of \code{tab}
+#          \item \code{expected} a table with expected values of \code{tab}
+#         }
+#
+# @examples
+# tab <- table(sample(1:2, 30, TRUE), sample(1:3, 30, TRUE))
+# # show expected values
+# table_values(tab)$expected
+# # show cell percentages
+# table_values(tab)$cell
+#
+# 
 table_values <- function(tab, digits = 2) {
   # convert to ftable object
   if (all(class(tab) != "ftable")) tab <- ftable(tab)
@@ -6209,19 +6210,19 @@ table_values <- function(tab, digits = 2) {
 }
 
 
-#' @title Plot Levene-Test for One-Way-Anova
-#' @name levene_test
-#'
-#' @description Plot results of Levene's Test for Equality of Variances for One-Way-Anova.
-#'
-#' @param depVar Dependent variable.
-#' @param grpVar Grouping (independent) variable, as unordered factor.
-#'
-#' @examples
-#' data(efc)
-#' levene_test(efc$c12hour, efc$e42dep)
-#'
-#' 
+# @title Plot Levene-Test for One-Way-Anova
+# @name levene_test
+#
+# @description Plot results of Levene's Test for Equality of Variances for One-Way-Anova.
+#
+# @param depVar Dependent variable.
+# @param grpVar Grouping (independent) variable, as unordered factor.
+#
+# @examples
+# data(efc)
+# levene_test(efc$c12hour, efc$e42dep)
+#
+# 
 levene_test <- function(depVar, grpVar) {
   # check if grpVar is factor
   if (!is.factor(grpVar)) grpVar <- factor(grpVar)
@@ -6272,67 +6273,67 @@ lm_pval_fstat <- function(x) {
   p <- stats::pf(f[1], f[2], f[3], lower.tail = F)
   return(as.vector(p))
 }
-#' @title Split numeric variables into smaller groups
-#' @name split_var
-#'
-#' @description Recode numeric variables into equal sized groups, i.e. a
-#'                variable is cut into a smaller number of groups at
-#'                specific cut points.
-#'
-#' @seealso \itemize{
-#'            \item \code{\link{group_var}}
-#'            \item \code{\link{rec}}
-#'          }
-#'
-#' @param x Numeric vector, data frame or list of numeric vectors,
-#'            which should split into groups.
-#' @param groupcount The new number of groups that \code{x} should be split into.
-#' @param inclusive Logical; if \code{TRUE}, cut point value are included in
-#'          the preceeding group. This may be necessary if cutting a vector into
-#'          groups does not define proper ("equal sized") group sizes.
-#'          See 'Note' and 'Examples'.
-#'
-#' @inheritParams group_var
-#' @inheritParams rec
-#'
-#' @return A grouped variable with equal sized groups.
-#'
-#' @details \code{split_var} splits a variable into equal sized groups, where the
-#'            amount of groups depends on the \code{groupcount}-argument. Thus,
-#'            this functions \code{\link{cut}s} a variable into groups at the
-#'            specified \code{\link[stats]{quantile}s}.
-#'            \cr \cr
-#'            By contrast, \code{\link{group_var}} recodes a variable into
-#'            groups, where all values within a group have the same range
-#'            (e.g., from 1-5, 6-10, 11-15 etc.).
-#'
-#' @note In case a vector has only few different unique values, splitting into
-#'         equal sized groups may fail. In this case, use the \code{inclusive}-argument
-#'         to shift a value at the cut point into the lower, preceeding group to
-#'         get equal sized groups. See 'Examples'.
-#'
-#' @examples
-#' data(efc)
-#' # non-grouped
-#' table(efc$neg_c_7)
-#'
-#' # split into 3 groups
-#' table(split_var(efc$neg_c_7, 3))
-#'
-#'
-#' # original
-#' table(efc$e42dep)
-#'
-#' # two groups, non-inclusive cut-point
-#' # vector split leads to unequal group sizes
-#' table(split_var(efc$e42dep, 2))
-#'
-#' # two groups, inclusive cut-point
-#' # group sizes are equal
-#' table(split_var(efc$e42dep, 2, inclusive = TRUE))
-#'
+# @title Split numeric variables into smaller groups
+# @name split_var
+#
+# @description Recode numeric variables into equal sized groups, i.e. a
+#                variable is cut into a smaller number of groups at
+#                specific cut points.
+#
+# @seealso \itemize{
+#            \item \code{\link{group_var}}
+#            \item \code{\link{rec}}
+#          }
+#
+# @param x Numeric vector, data frame or list of numeric vectors,
+#            which should split into groups.
+# @param groupcount The new number of groups that \code{x} should be split into.
+# @param inclusive Logical; if \code{TRUE}, cut point value are included in
+#          the preceeding group. This may be necessary if cutting a vector into
+#          groups does not define proper ("equal sized") group sizes.
+#          See 'Note' and 'Examples'.
+#
+# @inheritParams group_var
+# @inheritParams rec
+#
+# @return A grouped variable with equal sized groups.
+#
+# @details \code{split_var} splits a variable into equal sized groups, where the
+#            amount of groups depends on the \code{groupcount}-argument. Thus,
+#            this functions \code{\link{cut}s} a variable into groups at the
+#            specified \code{\link[stats]{quantile}s}.
+#            \cr \cr
+#            By contrast, \code{\link{group_var}} recodes a variable into
+#            groups, where all values within a group have the same range
+#            (e.g., from 1-5, 6-10, 11-15 etc.).
+#
+# @note In case a vector has only few different unique values, splitting into
+#         equal sized groups may fail. In this case, use the \code{inclusive}-argument
+#         to shift a value at the cut point into the lower, preceeding group to
+#         get equal sized groups. See 'Examples'.
+#
+# @examples
+# data(efc)
+# # non-grouped
+# table(efc$neg_c_7)
+#
+# # split into 3 groups
+# table(split_var(efc$neg_c_7, 3))
+#
+#
+# # original
+# table(efc$e42dep)
+#
+# # two groups, non-inclusive cut-point
+# # vector split leads to unequal group sizes
+# table(split_var(efc$e42dep, 2))
+#
+# # two groups, inclusive cut-point
+# # group sizes are equal
+# table(split_var(efc$e42dep, 2, inclusive = TRUE))
+#
 #' @importFrom stats quantile
-#' 
+# 
 split_var <- function(x, groupcount, as.num = FALSE, val.labels = NULL, var.label = NULL, inclusive = FALSE) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -6390,69 +6391,69 @@ split_var_helper <- function(x, groupcount, as.num, val.labels, var.label, inclu
   # return value
   return(retval)
 }
-#' @title Standardized Beta coefficients and CI of lm and mixed models
-#' @name std_beta
-#' @description Returns the standardized beta coefficients and confidence intervals
-#'                of a fitted linear (mixed) models, i.e. \code{fit} must either
-#'                be of class \code{lm} or \code{\link[lme4]{merMod}}.
-#'
-#' @param fit Fitted linear (mixed) model of class \code{\link{lm}} or
-#'          \code{\link[lme4]{merMod}} (\pkg{lme4} package).
-#' @param include.ci Logical, if \code{TRUE}, a data frame with confidence
-#'          intervals will be returned, when \code{fit} is of class \code{lm}.
-#'          If \code{fit} is a \code{lmerMod} object (\pkg{lme4} package),
-#'          always returns standard error instead of confidence intervals
-#'          (hence, this parameter will be ignored when \code{fit} is a
-#'          \code{lmerMod} object).
-#' @param type If \code{fit} is of class \code{lm}, normal standardized coefficients
-#'          are computed by default. Use \code{type = "std2"} to follow
-#'          \href{http://www.stat.columbia.edu/~gelman/research/published/standardizing7.pdf}{Gelman's (2008)}
-#'          suggestion, rescaling the estimates by deviding them by two standard
-#'          deviations, so resulting coefficients are directly comparable for
-#'          untransformed binary predictors.
-#' @return A vector with standardized beta coefficients of the fitted linear model, or a data frame
-#'           with standardized beta coefficients and confidence intervals, if
-#'           \code{include.ci = TRUE}.
-#'
-#' @details  "Standardized coefficients refer to how many standard deviations a dependent variable will change,
-#'         per standard deviation increase in the predictor variable. Standardization of the coefficient is
-#'         usually done to answer the question of which of the independent variables have a greater effect
-#'         on the dependent variable in a multiple regression analysis, when the variables are measured
-#'         in different units of measurement (for example, income measured in dollars and family size
-#'         measured in number of individuals)." (Source: Wikipedia)
-#'
-#' @note For \code{\link[nlme]{gls}}-objects, standardized beta coefficients may be wrong
-#'         for categorical variables (\code{factors}), because the \code{model.matrix} for
-#'         \code{gls} objects returns the original data of the categorical vector,
-#'         and not the 'dummy' coded vectors as for other classes. See, as example: \cr \cr
-#'         \code{head(model.matrix(lm(neg_c_7 ~ as.factor(e42dep), data = efc, na.action = na.omit)))}
-#'         \cr \cr and \cr \cr
-#'         \code{head(model.matrix(nlme::gls(neg_c_7 ~ as.factor(e42dep), data = efc, na.action = na.omit)))}.
-#'         \cr \cr
-#'         In such cases, use \code{\link{to_dummy}} to create dummies from
-#'         factors.
-#'
-#' @references \itemize{
-#'              \item \href{http://en.wikipedia.org/wiki/Standardized_coefficient}{Wikipedia: Standardized coefficient}
-#'              \item Gelman A (2008) "Scaling regression inputs by dividing by two standard deviations." \emph{Statistics in Medicine 27: 2865–2873.} \url{http://www.stat.columbia.edu/~gelman/research/published/standardizing7.pdf}
-#'              }
-#'
-#' @examples
-#' # fit linear model
-#' fit <- lm(Ozone ~ Wind + Temp + Solar.R, data = airquality)
-#' # print std. beta coefficients
-#' std_beta(fit)
-#'
-#' # print std. beta coefficients and ci
-#' std_beta(fit, include.ci = TRUE)
-#'
-#' # print std. beta coefficients and ci, using
-#' # 2 sd and center binary predictors
-#' std_beta(fit, include.ci = TRUE, type = "std2")
-#'
+# @title Standardized Beta coefficients and CI of lm and mixed models
+# @name std_beta
+# @description Returns the standardized beta coefficients and confidence intervals
+#                of a fitted linear (mixed) models, i.e. \code{fit} must either
+#                be of class \code{lm} or \code{\link[lme4]{merMod}}.
+#
+# @param fit Fitted linear (mixed) model of class \code{\link{lm}} or
+#          \code{\link[lme4]{merMod}} (\pkg{lme4} package).
+# @param include.ci Logical, if \code{TRUE}, a data frame with confidence
+#          intervals will be returned, when \code{fit} is of class \code{lm}.
+#          If \code{fit} is a \code{lmerMod} object (\pkg{lme4} package),
+#          always returns standard error instead of confidence intervals
+#          (hence, this parameter will be ignored when \code{fit} is a
+#          \code{lmerMod} object).
+# @param type If \code{fit} is of class \code{lm}, normal standardized coefficients
+#          are computed by default. Use \code{type = "std2"} to follow
+#          \href{http://www.stat.columbia.edu/~gelman/research/published/standardizing7.pdf}{Gelman's (2008)}
+#          suggestion, rescaling the estimates by deviding them by two standard
+#          deviations, so resulting coefficients are directly comparable for
+#          untransformed binary predictors.
+# @return A vector with standardized beta coefficients of the fitted linear model, or a data frame
+#           with standardized beta coefficients and confidence intervals, if
+#           \code{include.ci = TRUE}.
+#
+# @details  "Standardized coefficients refer to how many standard deviations a dependent variable will change,
+#         per standard deviation increase in the predictor variable. Standardization of the coefficient is
+#         usually done to answer the question of which of the independent variables have a greater effect
+#         on the dependent variable in a multiple regression analysis, when the variables are measured
+#         in different units of measurement (for example, income measured in dollars and family size
+#         measured in number of individuals)." (Source: Wikipedia)
+#
+# @note For \code{\link[nlme]{gls}}-objects, standardized beta coefficients may be wrong
+#         for categorical variables (\code{factors}), because the \code{model.matrix} for
+#         \code{gls} objects returns the original data of the categorical vector,
+#         and not the 'dummy' coded vectors as for other classes. See, as example: \cr \cr
+#         \code{head(model.matrix(lm(neg_c_7 ~ as.factor(e42dep), data = efc, na.action = na.omit)))}
+#         \cr \cr and \cr \cr
+#         \code{head(model.matrix(nlme::gls(neg_c_7 ~ as.factor(e42dep), data = efc, na.action = na.omit)))}.
+#         \cr \cr
+#         In such cases, use \code{\link{to_dummy}} to create dummies from
+#         factors.
+#
+# @references \itemize{
+#              \item \href{http://en.wikipedia.org/wiki/Standardized_coefficient}{Wikipedia: Standardized coefficient}
+#              \item Gelman A (2008) "Scaling regression inputs by dividing by two standard deviations." \emph{Statistics in Medicine 27: 2865–2873.} \url{http://www.stat.columbia.edu/~gelman/research/published/standardizing7.pdf}
+#              }
+#
+# @examples
+# # fit linear model
+# fit <- lm(Ozone ~ Wind + Temp + Solar.R, data = airquality)
+# # print std. beta coefficients
+# std_beta(fit)
+#
+# # print std. beta coefficients and ci
+# std_beta(fit, include.ci = TRUE)
+#
+# # print std. beta coefficients and ci, using
+# # 2 sd and center binary predictors
+# std_beta(fit, include.ci = TRUE, type = "std2")
+#
 #' @importFrom stats model.matrix coef terms
 #' @importFrom nlme getResponse
-#' 
+# 
 std_beta <- function(fit,
                      include.ci = FALSE,
                      type = "std") {
@@ -6553,49 +6554,49 @@ sjs.stdmm <- function(fit) {
   rownames(mydf) <- names(lme4::fixef(fit))
   return(mydf)
 }
-#' @title Check if string contains pattern
-#' @name str_contains
-#' @description This functions checks whether a string \code{x} contains
-#'                the string \code{pattern}. By default, this function is
-#'                case sensitive.
-#'
-#' @param x Character string where matches are sought.
-#' @param pattern Character string to be matched in \code{x}. May also be a
-#'          character vector of length > 1 (see 'Examples').
-#' @param ignore.case Logical, whether matching should be case sensitive or not.
-#' @param logic Indicates whether a logical combination of multiple search pattern
-#'          should be made.
-#'          \itemize{
-#'            \item Use \code{"or"}, \code{"OR"} or \code{"|"} for a logical or-combination, i.e. at least one element of \code{pattern} is in \code{x}.
-#'            \item Use \code{"and"}, \code{"AND"} or \code{"&"} for a logical AND-combination, i.e. all elements of \code{pattern} are in \code{x}.
-#'            \item Use \code{"not"}, \code{"NOT"} or \code{"!"} for a logical NOT-combination, i.e. no element of \code{pattern} is in \code{x}.
-#'            \item By default, \code{logic = NULL}, which means that \code{TRUE} or \code{FALSE} is returned for each element of \code{pattern} separately.
-#'          }
-#'
-#' @return \code{TRUE} if \code{x} contains \code{pattern}.
-#'
-#' @examples
-#' str_contains("hello", "hel")
-#' str_contains("hello", "hal")
-#'
-#' str_contains("hello", "Hel")
-#' str_contains("hello", "Hel", ignore.case = TRUE)
-#'
-#' # which patterns are in "abc"?
-#' str_contains("abc", c("a", "b", "e"))
-#'
-#' # any pattern in "abc"?
-#' str_contains("abc", c("a", "b", "e"), logic = "or")
-#'
-#' # all patterns in "abc"?
-#' str_contains("abc", c("a", "b", "e"), logic = "and")
-#' str_contains("abc", c("a", "b"), logic = "and")
-#'
-#' # no patterns in "abc"?
-#' str_contains("abc", c("a", "b", "e"), logic = "not")
-#' str_contains("abc", c("d", "e", "f"), logic = "not")
-#'
-#' 
+# @title Check if string contains pattern
+# @name str_contains
+# @description This functions checks whether a string \code{x} contains
+#                the string \code{pattern}. By default, this function is
+#                case sensitive.
+#
+# @param x Character string where matches are sought.
+# @param pattern Character string to be matched in \code{x}. May also be a
+#          character vector of length > 1 (see 'Examples').
+# @param ignore.case Logical, whether matching should be case sensitive or not.
+# @param logic Indicates whether a logical combination of multiple search pattern
+#          should be made.
+#          \itemize{
+#            \item Use \code{"or"}, \code{"OR"} or \code{"|"} for a logical or-combination, i.e. at least one element of \code{pattern} is in \code{x}.
+#            \item Use \code{"and"}, \code{"AND"} or \code{"&"} for a logical AND-combination, i.e. all elements of \code{pattern} are in \code{x}.
+#            \item Use \code{"not"}, \code{"NOT"} or \code{"!"} for a logical NOT-combination, i.e. no element of \code{pattern} is in \code{x}.
+#            \item By default, \code{logic = NULL}, which means that \code{TRUE} or \code{FALSE} is returned for each element of \code{pattern} separately.
+#          }
+#
+# @return \code{TRUE} if \code{x} contains \code{pattern}.
+#
+# @examples
+# str_contains("hello", "hel")
+# str_contains("hello", "hal")
+#
+# str_contains("hello", "Hel")
+# str_contains("hello", "Hel", ignore.case = TRUE)
+#
+# # which patterns are in "abc"?
+# str_contains("abc", c("a", "b", "e"))
+#
+# # any pattern in "abc"?
+# str_contains("abc", c("a", "b", "e"), logic = "or")
+#
+# # all patterns in "abc"?
+# str_contains("abc", c("a", "b", "e"), logic = "and")
+# str_contains("abc", c("a", "b"), logic = "and")
+#
+# # no patterns in "abc"?
+# str_contains("abc", c("a", "b", "e"), logic = "not")
+# str_contains("abc", c("d", "e", "f"), logic = "not")
+#
+# 
 str_contains <- function(x, pattern, ignore.case = FALSE, logic = NULL) {
   # ignore case in search term
   if (ignore.case) x <- tolower(x)
@@ -6619,69 +6620,69 @@ str_contains <- function(x, pattern, ignore.case = FALSE, logic = NULL) {
     return(!any(cnt))
   return(cnt)
 }
-#' @title Find partial matching and close distance elements in strings
-#' @name str_pos
-#' @description This function finds the element indices of partial matching or similar strings
-#'                in a character vector. Can be used to find exact or slightly mistyped elements
-#'                in a string vector.
-#'
-#' @seealso \code{\link{group_str}}
-#'
-#' @param searchString Character vector with string elements.
-#' @param findTerm String that should be matched against the elements of \code{searchString}.
-#' @param maxdist Maximum distance between two string elements, which is allowed to treat them
-#'          as similar or equal.
-#' @param part.dist.match Activates similar matching (close distance strings) for parts (substrings)
-#'          of the \code{searchString}. Following values are accepted:
-#'          \itemize{
-#'            \item 0 for no partial distance matching
-#'            \item 1 for one-step matching, which means, only substrings of same length as \code{findTerm} are extracted from \code{searchString} matching
-#'            \item 2 for two-step matching, which means, substrings of same length as \code{findTerm} as well as strings with a slightly wider range are extracted from \code{searchString} matching
-#'          }
-#'          Default value is 0. See 'Details' for more information.
-#' @param showProgressBar Logical; f \code{TRUE}, the progress bar is displayed when computing the distance matrix.
-#'          Default in \code{FALSE}, hence the bar is hidden.
-#'
-#' @return A numeric vector with index position of elements in \code{searchString} that
-#'           partially match or are similar to \code{findTerm}. Returns \code{-1} if no
-#'           match was found.
-#'
-#' @note This function does \emph{not} return the position of a matching string \emph{inside}
-#'         another string, but the element's index of the \code{searchString} vector, where
-#'         a (partial) match with \code{findTerm} was found. Thus, searching for "abc" in
-#'         a string "this is abc" will not return 9 (the start position of the substring),
-#'         but 1 (the element index, which is always 1 if \code{searchString} only has one element).
-#'
-#' @details For \code{part.dist.match = 1}, a substring of \code{length(findTerm)} is extracted
-#'            from \code{searchString}, starting at position 0 in \code{searchString} until
-#'            the end of \code{searchString} is reached. Each substring is matched against
-#'            \code{findTerm}, and results with a maximum distance of \code{maxdist}
-#'            are considered as "matching". If \code{part.dist.match = 2}, the range
-#'            of the extracted substring is increased by 2, i.e. the extracted substring
-#'            is two chars longer and so on.
-#'
-#' @examples
-#' \dontrun{
-#' string <- c("Hello", "Helo", "Hole", "Apple", "Ape", "New", "Old", "System", "Systemic")
-#' str_pos(string, "hel")   # partial match
-#' str_pos(string, "stem")  # partial match
-#' str_pos(string, "R")     # no match
-#' str_pos(string, "saste") # similarity to "System"
-#'
-#' # finds two indices, because partial matching now
-#' # also applies to "Systemic"
-#' str_pos(string,
-#'         "sytsme",
-#'         part.dist.match = 1)
-#'
-#' # finds nothing
-#' str_pos("We are Sex Pistols!", "postils")
-#' # finds partial matching of similarity
-#' str_pos("We are Sex Pistols!", "postils", part.dist.match = 1)}
-#'
+# @title Find partial matching and close distance elements in strings
+# @name str_pos
+# @description This function finds the element indices of partial matching or similar strings
+#                in a character vector. Can be used to find exact or slightly mistyped elements
+#                in a string vector.
+#
+# @seealso \code{\link{group_str}}
+#
+# @param searchString Character vector with string elements.
+# @param findTerm String that should be matched against the elements of \code{searchString}.
+# @param maxdist Maximum distance between two string elements, which is allowed to treat them
+#          as similar or equal.
+# @param part.dist.match Activates similar matching (close distance strings) for parts (substrings)
+#          of the \code{searchString}. Following values are accepted:
+#          \itemize{
+#            \item 0 for no partial distance matching
+#            \item 1 for one-step matching, which means, only substrings of same length as \code{findTerm} are extracted from \code{searchString} matching
+#            \item 2 for two-step matching, which means, substrings of same length as \code{findTerm} as well as strings with a slightly wider range are extracted from \code{searchString} matching
+#          }
+#          Default value is 0. See 'Details' for more information.
+# @param showProgressBar Logical; f \code{TRUE}, the progress bar is displayed when computing the distance matrix.
+#          Default in \code{FALSE}, hence the bar is hidden.
+#
+# @return A numeric vector with index position of elements in \code{searchString} that
+#           partially match or are similar to \code{findTerm}. Returns \code{-1} if no
+#           match was found.
+#
+# @note This function does \emph{not} return the position of a matching string \emph{inside}
+#         another string, but the element's index of the \code{searchString} vector, where
+#         a (partial) match with \code{findTerm} was found. Thus, searching for "abc" in
+#         a string "this is abc" will not return 9 (the start position of the substring),
+#         but 1 (the element index, which is always 1 if \code{searchString} only has one element).
+#
+# @details For \code{part.dist.match = 1}, a substring of \code{length(findTerm)} is extracted
+#            from \code{searchString}, starting at position 0 in \code{searchString} until
+#            the end of \code{searchString} is reached. Each substring is matched against
+#            \code{findTerm}, and results with a maximum distance of \code{maxdist}
+#            are considered as "matching". If \code{part.dist.match = 2}, the range
+#            of the extracted substring is increased by 2, i.e. the extracted substring
+#            is two chars longer and so on.
+#
+# @examples
+# \dontrun{
+# string <- c("Hello", "Helo", "Hole", "Apple", "Ape", "New", "Old", "System", "Systemic")
+# str_pos(string, "hel")   # partial match
+# str_pos(string, "stem")  # partial match
+# str_pos(string, "R")     # no match
+# str_pos(string, "saste") # similarity to "System"
+#
+# # finds two indices, because partial matching now
+# # also applies to "Systemic"
+# str_pos(string,
+#         "sytsme",
+#         part.dist.match = 1)
+#
+# # finds nothing
+# str_pos("We are Sex Pistols!", "postils")
+# # finds partial matching of similarity
+# str_pos("We are Sex Pistols!", "postils", part.dist.match = 1)}
+#
 #' @importFrom stringdist stringdist
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' 
+# 
 str_pos <- function(searchString,
                     findTerm,
                     maxdist = 2,
@@ -6759,40 +6760,40 @@ str_pos <- function(searchString,
   if (length(indices) > 0) return(sort(unique(indices)))
   return(-1)
 }
-#' @title Split (categorical) vectors into dummy variables
-#' @name to_dummy
-#'
-#' @description This function splits categorical or numeric vectors with
-#'                more than two categories into 0/1-coded dummy variables.
-#'
-#' @param x a \code{\link{vector}} (variable).
-#' @param var.name indicates how the new dummy variables are named. Use
-#'          \code{"name"} to use the variable name or any other string that will
-#'          be used as is. See 'Examples'.
-#' @param suffix indicates which suffix will be added to each dummy variable.
-#'          Use \code{"numeric"} to number dummy variables, e.g. \emph{x_1},
-#'          \emph{x_2}, \emph{x_3} etc. Use \code{"label"} to add value label,
-#'          e.g. \emph{x_low}, \emph{x_mid}, \emph{x_high}. May be abbreviated.
-#' @param data optional, a data frame where the new dummy variables are appended
-#'          as additional columns.
-#' @return A data frame with dummy variables for each category of \code{x}, or
-#'           \code{data} where new dummy variables are appended as additional
-#'           columns. The dummy coded variables are of type \code{\link{atomic}}.
-#'
-#' @note \code{NA} values will be copied from \code{x}, so each dummy variable
-#'         has the same amount of \code{NA}'s at the same position as \code{x}.
-#'
-#' @examples
-#' data(efc)
-#' head(to_dummy(efc$e42dep))
-#'
-#' # add value label as suffix to new variable name
-#' head(to_dummy(efc$e42dep, suffix = "label"))
-#'
-#' # use "dummy" as new variable name
-#' head(to_dummy(efc$e42dep, var.name = "dummy"))
-#'
-#' 
+# @title Split (categorical) vectors into dummy variables
+# @name to_dummy
+#
+# @description This function splits categorical or numeric vectors with
+#                more than two categories into 0/1-coded dummy variables.
+#
+# @param x a \code{\link{vector}} (variable).
+# @param var.name indicates how the new dummy variables are named. Use
+#          \code{"name"} to use the variable name or any other string that will
+#          be used as is. See 'Examples'.
+# @param suffix indicates which suffix will be added to each dummy variable.
+#          Use \code{"numeric"} to number dummy variables, e.g. \emph{x_1},
+#          \emph{x_2}, \emph{x_3} etc. Use \code{"label"} to add value label,
+#          e.g. \emph{x_low}, \emph{x_mid}, \emph{x_high}. May be abbreviated.
+# @param data optional, a data frame where the new dummy variables are appended
+#          as additional columns.
+# @return A data frame with dummy variables for each category of \code{x}, or
+#           \code{data} where new dummy variables are appended as additional
+#           columns. The dummy coded variables are of type \code{\link{atomic}}.
+#
+# @note \code{NA} values will be copied from \code{x}, so each dummy variable
+#         has the same amount of \code{NA}'s at the same position as \code{x}.
+#
+# @examples
+# data(efc)
+# head(to_dummy(efc$e42dep))
+#
+# # add value label as suffix to new variable name
+# head(to_dummy(efc$e42dep, suffix = "label"))
+#
+# # use "dummy" as new variable name
+# head(to_dummy(efc$e42dep, var.name = "dummy"))
+#
+# 
 to_dummy <- function(x,
                      var.name = "name",
                      suffix = c("numeric", "label"),
@@ -6868,89 +6869,89 @@ to_dummy <- function(x,
     return(cbind(data, mydf))
   return(mydf)
 }
-#' @title Convert variable into factor and keep value labels
-#' @name to_factor
-#'
-#' @description This function converts a variable into a factor, but preserves
-#'                variable and value label attributes. See 'Examples'.
-#'
-#' @seealso \code{\link{to_value}} to convert a factor into a numeric value and
-#'            \code{\link{to_label}} to convert a value into a factor with labelled
-#'            factor levels.
-#'
-#' @param x Numeric, atomic or character vector or a data frame with
-#'          such vectors.
-#' @param add.non.labelled Logical, if \code{TRUE}, non-labelled values also
-#'          get value labels.
-#' @param drop.na Logical, if \code{TRUE}, all types of missing value codes are
-#'          converted into NA before \code{x} is converted as factor. If
-#'          \code{FALSE}, missing values will be left as their original codes.
-#'          See 'Examples' and \code{\link{get_na}}.
-#' @param ref.lvl Numeric, specifies the reference level for the new factor. Use
-#'          this parameter if a different factor level than the lowest value
-#'          should be used as reference level. If \code{NULL}, lowest value
-#'          will become the reference level. See \code{\link{ref_lvl}} for
-#'          details.
-#' @return A factor variable, including variable and value labels, respectively
-#'           a data frame with factor variables (including variable and value labels)
-#'           if \code{x} was a data frame.
-#'
-#' @note This function is intended for use with vectors that have value and variable
-#'        label attributes. Unlike \code{\link{as.factor}}, \code{to_factor} converts
-#'        a variable into a factor and preserves the value and variable label attributes.
-#'        \cr \cr
-#'        Adding label attributes is automatically done by importing data sets
-#'        with one of the \code{read_*}-functions, like \code{\link{read_spss}}.
-#'        Else, value and variable labels can be manually added to vectors
-#'        with \code{\link{set_labels}} and \code{\link{set_label}}.
-#'
-#' @details See 'Details' in \code{\link{get_na}}.
-#'
-#' @examples
-#' \dontrun{
-#' data(efc)
-#' library(sjPlot)
-#' # normal factor conversion, loses value attributes
-#' efc$e42dep <- as.factor(efc$e42dep)
-#' sjt.frq(efc$e42dep)
-#'
-#' # factor conversion, which keeps value attributes
-#' efc$e42dep <- to_factor(efc$e42dep)
-#' sjt.frq(efc$e42dep)}
-#'
-#' data(efc)
-#' # create parially labelled vector
-#' x <- set_labels(efc$e42dep, c(`1` = "independent", `4` = "severe dependency",
-#'                               `9` = "missing value"))
-#'
-#' # only copy existing value labels
-#' to_factor(x)
-#' get_labels(to_factor(x), include.values = "p")
-#'
-#' # also add labels to non-labelled values
-#' to_factor(x, add.non.labelled = TRUE)
-#' get_labels(to_factor(x, add.non.labelled = TRUE), include.values = "p")
-#'
-#' # create labelled integer, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1),
-#'               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' # to factor, with missing labels
-#' to_factor(x, drop.na = FALSE)
-#' # to factor, missings removed
-#' to_factor(x, drop.na = TRUE)
-#'
-#'
-#' # Convert to factor, using different reference level
-#' x <- to_factor(efc$e42dep)
-#' str(x)
-#' table(x)
-#'
-#' x <- to_factor(efc$e42dep, ref.lvl = 3)
-#' str(x)
-#' table(x)
-#'
-#' 
+# @title Convert variable into factor and keep value labels
+# @name to_factor
+#
+# @description This function converts a variable into a factor, but preserves
+#                variable and value label attributes. See 'Examples'.
+#
+# @seealso \code{\link{to_value}} to convert a factor into a numeric value and
+#            \code{\link{to_label}} to convert a value into a factor with labelled
+#            factor levels.
+#
+# @param x Numeric, atomic or character vector or a data frame with
+#          such vectors.
+# @param add.non.labelled Logical, if \code{TRUE}, non-labelled values also
+#          get value labels.
+# @param drop.na Logical, if \code{TRUE}, all types of missing value codes are
+#          converted into NA before \code{x} is converted as factor. If
+#          \code{FALSE}, missing values will be left as their original codes.
+#          See 'Examples' and \code{\link{get_na}}.
+# @param ref.lvl Numeric, specifies the reference level for the new factor. Use
+#          this parameter if a different factor level than the lowest value
+#          should be used as reference level. If \code{NULL}, lowest value
+#          will become the reference level. See \code{\link{ref_lvl}} for
+#          details.
+# @return A factor variable, including variable and value labels, respectively
+#           a data frame with factor variables (including variable and value labels)
+#           if \code{x} was a data frame.
+#
+# @note This function is intended for use with vectors that have value and variable
+#        label attributes. Unlike \code{\link{as.factor}}, \code{to_factor} converts
+#        a variable into a factor and preserves the value and variable label attributes.
+#        \cr \cr
+#        Adding label attributes is automatically done by importing data sets
+#        with one of the \code{read_*}-functions, like \code{\link{read_spss}}.
+#        Else, value and variable labels can be manually added to vectors
+#        with \code{\link{set_labels}} and \code{\link{set_label}}.
+#
+# @details See 'Details' in \code{\link{get_na}}.
+#
+# @examples
+# \dontrun{
+# data(efc)
+# library(sjPlot)
+# # normal factor conversion, loses value attributes
+# efc$e42dep <- as.factor(efc$e42dep)
+# sjt.frq(efc$e42dep)
+#
+# # factor conversion, which keeps value attributes
+# efc$e42dep <- to_factor(efc$e42dep)
+# sjt.frq(efc$e42dep)}
+#
+# data(efc)
+# # create parially labelled vector
+# x <- set_labels(efc$e42dep, c(`1` = "independent", `4` = "severe dependency",
+#                               `9` = "missing value"))
+#
+# # only copy existing value labels
+# to_factor(x)
+# get_labels(to_factor(x), include.values = "p")
+#
+# # also add labels to non-labelled values
+# to_factor(x, add.non.labelled = TRUE)
+# get_labels(to_factor(x, add.non.labelled = TRUE), include.values = "p")
+#
+# # create labelled integer, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1),
+#               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# # to factor, with missing labels
+# to_factor(x, drop.na = FALSE)
+# # to factor, missings removed
+# to_factor(x, drop.na = TRUE)
+#
+#
+# # Convert to factor, using different reference level
+# x <- to_factor(efc$e42dep)
+# str(x)
+# table(x)
+#
+# x <- to_factor(efc$e42dep, ref.lvl = 3)
+# str(x)
+# table(x)
+#
+# 
 to_factor <- function(x, add.non.labelled = FALSE, drop.na = TRUE, ref.lvl = NULL) {
   if (is.matrix(x) || is.data.frame(x)) {
     for (i in 1:ncol(x)) x[[i]] <- to_fac_helper(x[[i]],
@@ -7015,99 +7016,99 @@ to_fac_helper <- function(x, add.non.labelled, drop.na, ref.lvl) {
   if (!is.null(ref.lvl)) ref_lvl(x) <- ref.lvl
   return(x)
 }
-#' @title Convert variable into factor and replaces values with associated value labels
-#' @name to_label
-#'
-#' @description This function converts (replaces) variable values (also of factors
-#'                or character vectors) with their associated value labels. Might
-#'                be helpful for factor variables.
-#'                For instance, if you have a Gender variable with 0/1 value, and associated
-#'                labels are male/female, this function would convert all 0 to male and
-#'                all 1 to female and returns the new variable as \code{\link{factor}}.
-#'
-#' @seealso \code{\link{to_factor}} to convert a numeric variable into a factor (and
-#'            preserve labels) and \code{\link{to_value}} to convert a factor into
-#'            a numeric variable.
-#'
-#' @param x A labelled vector (see \code{\link{set_labels}}),
-#'          respectively a data frame with such variables.
-#' @param add.non.labelled logical, if \code{TRUE}, values without associated
-#'          value label will also be converted to labels (as is). See 'Examples'.
-#' @param prefix Logical, if \code{TRUE}, the value labels used as factor levels
-#'          will be prefixed with their associated values. See 'Examples'.
-#' @param drop.na logical, if \code{TRUE}, all types of missing value codes are
-#'          converted into NA before \code{x} is converted as factor. If
-#'          \code{FALSE}, missing values will be left as their original codes.
-#'          See 'Examples' and \code{\link{get_na}}.
-#' @return A factor variable with the associated value labels as factor levels, or a
-#'           data frame with such factor variables (if \code{x} was a data frame).
-#'
-#' @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
-#'         or \code{\link{set_labels}}) will be removed  when converting variables to factors.
-#'         \cr \cr
-#'         Factors with non-numeric factor-levels won't be changed and returned "as is"
-#'         (see 'Examples').
-#'
-#' @details See 'Details' in \code{\link{get_na}}.
-#'
-#' @examples
-#' data(efc)
-#' print(get_labels(efc)['c161sex'])
-#' head(efc$c161sex)
-#' head(to_label(efc$c161sex))
-#'
-#' print(get_labels(efc)['e42dep'])
-#' table(efc$e42dep)
-#' table(to_label(efc$e42dep))
-#'
-#' head(efc$e42dep)
-#' head(to_label(efc$e42dep))
-#'
-#' # structure of numeric values won't be changed
-#' # by this function, it only applies to labelled vectors
-#' # (typically categorical or factor variables)
-#' str(efc$e17age)
-#' str(to_label(efc$e17age))
-#'
-#'
-#' # factor with non-numeric levels
-#' to_label(factor(c("a", "b", "c")))
-#'
-#' # factor with non-numeric levels, prefixed
-#' x <- factor(c("a", "b", "c"))
-#' set_labels(x) <- c("ape", "bear", "cat")
-#' to_label(x, prefix = TRUE)
-#'
-#'
-#' # create vector
-#' x <- c(1, 2, 3, 2, 4, NA)
-#' # add less labels than values
-#' x <- set_labels(x, c("yes", "maybe", "no"),
-#'                 force.labels = FALSE,
-#'                 force.values = FALSE)
-#' # convert to label w/o non-labelled values
-#' to_label(x)
-#' # convert to label, including non-labelled values
-#' to_label(x, add.non.labelled = TRUE)
-#'
-#'
-#' # create labelled integer, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1),
-#'               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' # to labelled factor, with missing labels
-#' to_label(x, drop.na = FALSE)
-#' # to labelled factor, missings removed
-#' to_label(x, drop.na = TRUE)
-#'
-#'
-#' # convert labelled character to factor
-#' dummy <- c("M", "F", "F", "X")
-#' set_labels(dummy) <- c(`M` = "Male", `F` = "Female", `X` = "Refused")
-#' get_labels(dummy,, "p")
-#' to_label(dummy)
-#'
-#' 
+# @title Convert variable into factor and replaces values with associated value labels
+# @name to_label
+#
+# @description This function converts (replaces) variable values (also of factors
+#                or character vectors) with their associated value labels. Might
+#                be helpful for factor variables.
+#                For instance, if you have a Gender variable with 0/1 value, and associated
+#                labels are male/female, this function would convert all 0 to male and
+#                all 1 to female and returns the new variable as \code{\link{factor}}.
+#
+# @seealso \code{\link{to_factor}} to convert a numeric variable into a factor (and
+#            preserve labels) and \code{\link{to_value}} to convert a factor into
+#            a numeric variable.
+#
+# @param x A labelled vector (see \code{\link{set_labels}}),
+#          respectively a data frame with such variables.
+# @param add.non.labelled logical, if \code{TRUE}, values without associated
+#          value label will also be converted to labels (as is). See 'Examples'.
+# @param prefix Logical, if \code{TRUE}, the value labels used as factor levels
+#          will be prefixed with their associated values. See 'Examples'.
+# @param drop.na logical, if \code{TRUE}, all types of missing value codes are
+#          converted into NA before \code{x} is converted as factor. If
+#          \code{FALSE}, missing values will be left as their original codes.
+#          See 'Examples' and \code{\link{get_na}}.
+# @return A factor variable with the associated value labels as factor levels, or a
+#           data frame with such factor variables (if \code{x} was a data frame).
+#
+# @note Value and variable label attributes (see, for instance, \code{\link{get_labels}}
+#         or \code{\link{set_labels}}) will be removed  when converting variables to factors.
+#         \cr \cr
+#         Factors with non-numeric factor-levels won't be changed and returned "as is"
+#         (see 'Examples').
+#
+# @details See 'Details' in \code{\link{get_na}}.
+#
+# @examples
+# data(efc)
+# print(get_labels(efc)['c161sex'])
+# head(efc$c161sex)
+# head(to_label(efc$c161sex))
+#
+# print(get_labels(efc)['e42dep'])
+# table(efc$e42dep)
+# table(to_label(efc$e42dep))
+#
+# head(efc$e42dep)
+# head(to_label(efc$e42dep))
+#
+# # structure of numeric values won't be changed
+# # by this function, it only applies to labelled vectors
+# # (typically categorical or factor variables)
+# str(efc$e17age)
+# str(to_label(efc$e17age))
+#
+#
+# # factor with non-numeric levels
+# to_label(factor(c("a", "b", "c")))
+#
+# # factor with non-numeric levels, prefixed
+# x <- factor(c("a", "b", "c"))
+# set_labels(x) <- c("ape", "bear", "cat")
+# to_label(x, prefix = TRUE)
+#
+#
+# # create vector
+# x <- c(1, 2, 3, 2, 4, NA)
+# # add less labels than values
+# x <- set_labels(x, c("yes", "maybe", "no"),
+#                 force.labels = FALSE,
+#                 force.values = FALSE)
+# # convert to label w/o non-labelled values
+# to_label(x)
+# # convert to label, including non-labelled values
+# to_label(x, add.non.labelled = TRUE)
+#
+#
+# # create labelled integer, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1),
+#               c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# # to labelled factor, with missing labels
+# to_label(x, drop.na = FALSE)
+# # to labelled factor, missings removed
+# to_label(x, drop.na = TRUE)
+#
+#
+# # convert labelled character to factor
+# dummy <- c("M", "F", "F", "X")
+# set_labels(dummy) <- c(`M` = "Male", `F` = "Female", `X` = "Refused")
+# get_labels(dummy,, "p")
+# to_label(dummy)
+#
+# 
 to_label <- function(x, add.non.labelled = FALSE, prefix = FALSE, drop.na = TRUE) {
   if (is.matrix(x) || is.data.frame(x)) {
     for (i in 1:ncol(x)) {
@@ -7153,90 +7154,90 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
   # return as factor
   return(x)
 }
-#' @title Convert wide data to long format
-#' @name to_long
-#' @description This function converts wide data into long format. It allows
-#'                to transform multiple key-value pairs to be transformed
-#'                from wide to long format in one single step.
-#'
-#' @param data A \code{data.frame} that should be tansformed from wide to
-#'          long format.
-#' @param keys Character vector with name(s) of key column(s) to create in output.
-#'          Either one key value per column group that should be gathered, or
-#'          a single string. In the latter case, this name will be used as
-#'          key column, and only one key column is created. See 'Examples'.
-#' @param values Character vector with names of value columns (variable names)
-#'          to create in output. Must be of same length as number of column
-#'          groups that should be gathered. See 'Examples'.
-#' @param ... Specification of columns that should be gathered. Must be one
-#'          character vector with variable names per column group, or a numeric
-#'          vector with column indices indicating those columns that should be
-#'          gathered. See 'Examples'.
-#' @param labels Character vector of same length as \code{values} with variable
-#'          labels for the new variables created from gathered columns.
-#'          See 'Examples' and 'Details'.
-#' @param recode.key Logical, if \code{TRUE}, the values of the \code{key}
-#'          column will be recoded to numeric values, in sequential ascending
-#'          order.
-#'
-#' @details This function enhances \pkg{tidyr}'s \code{\link[tidyr]{gather}}
-#'            function that you can gather multiple column groups at once.
-#'            Value and variable labels for non-gathered variables are preserved.
-#'            However, gathered variables may have different variable label
-#'            attributes. In this case, \code{\link[tidyr]{gather}} will drop
-#'            these attributes. Hence, the new created variables from gathered
-#'            columns don't have any variable label attributes. In such cases,
-#'            use \code{labels} argument to set variable label attributes.
-#'
-#' @examples
-#' # create sample
-#' mydat <- data.frame(age = c(20, 30, 40),
-#'                     sex = c("Female", "Male", "Male"),
-#'                     score_t1 = c(30, 35, 32),
-#'                     score_t2 = c(33, 34, 37),
-#'                     score_t3 = c(36, 35, 38),
-#'                     speed_t1 = c(2, 3, 1),
-#'                     speed_t2 = c(3, 4, 5),
-#'                     speed_t3 = c(1, 8, 6))
-#'
-#' # check tidyr. score is gathered, however, speed is not
-#' tidyr::gather(mydat, "time", "score", score_t1, score_t2, score_t3)
-#'
-#' # gather multiple columns. both time and speed are gathered.
-#' to_long(mydat, "time", c("score", "speed"),
-#'         c("score_t1", "score_t2", "score_t3"),
-#'         c("speed_t1", "speed_t2", "speed_t3"))
-#'
-#' # gather multiple columns, use numeric key-value
-#' to_long(mydat, "time", c("score", "speed"),
-#'         c("score_t1", "score_t2", "score_t3"),
-#'         c("speed_t1", "speed_t2", "speed_t3"),
-#'         recode.key = TRUE)
-#'
-#' # gather multiple columns by colum names and colum indices
-#' to_long(mydat, "time", c("score", "speed"),
-#'         c("score_t1", "score_t2", "score_t3"),
-#'         c(6:8),
-#'         recode.key = TRUE)
-#'
-#' # gather multiple columns, use separate key-column for each value-vector
-#' to_long(mydat, c("time_score", "time_speed"), c("score", "speed"),
-#'         c("score_t1", "score_t2", "score_t3"),
-#'         c("speed_t1", "speed_t2", "speed_t3"))
-#'
-#' # gather multiple columns, label columns
-#' mydat <- to_long(mydat, "time", c("score", "speed"),
-#'                  c("score_t1", "score_t2", "score_t3"),
-#'                  c("speed_t1", "speed_t2", "speed_t3"),
-#'                  labels = c("Test Score", "Time needed to finish"))
-#'
-#' str(mydat$score)
-#' get_label(mydat$speed)
-#' lbl_df(mydat)
-#'
+# @title Convert wide data to long format
+# @name to_long
+# @description This function converts wide data into long format. It allows
+#                to transform multiple key-value pairs to be transformed
+#                from wide to long format in one single step.
+#
+# @param data A \code{data.frame} that should be tansformed from wide to
+#          long format.
+# @param keys Character vector with name(s) of key column(s) to create in output.
+#          Either one key value per column group that should be gathered, or
+#          a single string. In the latter case, this name will be used as
+#          key column, and only one key column is created. See 'Examples'.
+# @param values Character vector with names of value columns (variable names)
+#          to create in output. Must be of same length as number of column
+#          groups that should be gathered. See 'Examples'.
+# @param ... Specification of columns that should be gathered. Must be one
+#          character vector with variable names per column group, or a numeric
+#          vector with column indices indicating those columns that should be
+#          gathered. See 'Examples'.
+# @param labels Character vector of same length as \code{values} with variable
+#          labels for the new variables created from gathered columns.
+#          See 'Examples' and 'Details'.
+# @param recode.key Logical, if \code{TRUE}, the values of the \code{key}
+#          column will be recoded to numeric values, in sequential ascending
+#          order.
+#
+# @details This function enhances \pkg{tidyr}'s \code{\link[tidyr]{gather}}
+#            function that you can gather multiple column groups at once.
+#            Value and variable labels for non-gathered variables are preserved.
+#            However, gathered variables may have different variable label
+#            attributes. In this case, \code{\link[tidyr]{gather}} will drop
+#            these attributes. Hence, the new created variables from gathered
+#            columns don't have any variable label attributes. In such cases,
+#            use \code{labels} argument to set variable label attributes.
+#
+# @examples
+# # create sample
+# mydat <- data.frame(age = c(20, 30, 40),
+#                     sex = c("Female", "Male", "Male"),
+#                     score_t1 = c(30, 35, 32),
+#                     score_t2 = c(33, 34, 37),
+#                     score_t3 = c(36, 35, 38),
+#                     speed_t1 = c(2, 3, 1),
+#                     speed_t2 = c(3, 4, 5),
+#                     speed_t3 = c(1, 8, 6))
+#
+# # check tidyr. score is gathered, however, speed is not
+# tidyr::gather(mydat, "time", "score", score_t1, score_t2, score_t3)
+#
+# # gather multiple columns. both time and speed are gathered.
+# to_long(mydat, "time", c("score", "speed"),
+#         c("score_t1", "score_t2", "score_t3"),
+#         c("speed_t1", "speed_t2", "speed_t3"))
+#
+# # gather multiple columns, use numeric key-value
+# to_long(mydat, "time", c("score", "speed"),
+#         c("score_t1", "score_t2", "score_t3"),
+#         c("speed_t1", "speed_t2", "speed_t3"),
+#         recode.key = TRUE)
+#
+# # gather multiple columns by colum names and colum indices
+# to_long(mydat, "time", c("score", "speed"),
+#         c("score_t1", "score_t2", "score_t3"),
+#         c(6:8),
+#         recode.key = TRUE)
+#
+# # gather multiple columns, use separate key-column for each value-vector
+# to_long(mydat, c("time_score", "time_speed"), c("score", "speed"),
+#         c("score_t1", "score_t2", "score_t3"),
+#         c("speed_t1", "speed_t2", "speed_t3"))
+#
+# # gather multiple columns, label columns
+# mydat <- to_long(mydat, "time", c("score", "speed"),
+#                  c("score_t1", "score_t2", "score_t3"),
+#                  c("speed_t1", "speed_t2", "speed_t3"),
+#                  labels = c("Test Score", "Time needed to finish"))
+#
+# str(mydat$score)
+# get_label(mydat$speed)
+# lbl_df(mydat)
+#
 #' @importFrom tidyr gather_
 #' @importFrom dplyr bind_cols
-#' 
+# 
 to_long <- function(data, keys, values, ..., labels = NULL, recode.key = FALSE) {
   # get variable names for gather columns
   data_cols <- eval(substitute(list(...)))
@@ -7297,57 +7298,57 @@ to_long <- function(data, keys, values, ..., labels = NULL, recode.key = FALSE) 
   }
   # return results
   return(mydat)
-}#' @title Convert missing values of labelled variables into NA
-#' @name to_na
-#'
-#' @description This function converts defined missing values that are stored as
-#'                original value code into \code{NA}.
-#'
-#' @seealso \code{\link{get_na}} to get value codes of missing values.
-#'
-#' @param x Variable (vector), \code{data.frame} or \code{list} of variables
-#'          with value label attributes and defined missing value codes
-#'          (see \code{\link[haven]{labelled}}).
-#' @return \code{x}, where each value code of missing values is converted
-#'            to \code{NA}.
-#'
-#' @details \code{to_na} converts values to \code{NA}, which are defined
-#'            as missing through the \code{is_na}-attribute of a vector
-#'            (see \code{\link{labelled}}). \code{\link{set_na}},
-#'            by contrast, converts those values to \code{NA} that are
-#'            specified in the function's \code{values} argument; hence,
-#'            \code{\link{set_na}} ignores the \code{is_na}-attribute.
-#'            \cr \cr
-#'            Furthermore, see 'Details' in \code{\link{get_values}}
-#'            and \code{\link{get_na}}.
-#'
-#' @note This is a convenient function for \code{set_na(x, get_na(x))}.
-#'
-#' @examples
-#' # create labelled factor, with missing flag
-#' x <- labelled(c("M", "M", "F", "X", "N/A"),
-#'               c(Male = "M", Female = "F",
-#'                 Refused = "X", "Not applicable" = "N/A"),
-#'               c(FALSE, FALSE, TRUE, TRUE))
-#' x
-#' get_na(x)
-#' to_na(x)
-#'
-#' # create labelled integer, with missing flag
-#' x <- labelled(c(1, 2, 1, 3, 4, 1),
-#'              c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
-#'              c(FALSE, FALSE, TRUE, TRUE))
-#' x
-#' get_na(x)
-#' to_na(x)
-#'
-#' # get summary
-#' x <- labelled(c(1, 2, 1, 3, 4, 1, NA, 5),
-#'               c(Male = 1, Female = 2, Refused = 5),
-#'               c(FALSE, FALSE, TRUE))
-#' frq(x)
-#'
-#' 
+}# @title Convert missing values of labelled variables into NA
+# @name to_na
+#
+# @description This function converts defined missing values that are stored as
+#                original value code into \code{NA}.
+#
+# @seealso \code{\link{get_na}} to get value codes of missing values.
+#
+# @param x Variable (vector), \code{data.frame} or \code{list} of variables
+#          with value label attributes and defined missing value codes
+#          (see \code{\link[haven]{labelled}}).
+# @return \code{x}, where each value code of missing values is converted
+#            to \code{NA}.
+#
+# @details \code{to_na} converts values to \code{NA}, which are defined
+#            as missing through the \code{is_na}-attribute of a vector
+#            (see \code{\link{labelled}}). \code{\link{set_na}},
+#            by contrast, converts those values to \code{NA} that are
+#            specified in the function's \code{values} argument; hence,
+#            \code{\link{set_na}} ignores the \code{is_na}-attribute.
+#            \cr \cr
+#            Furthermore, see 'Details' in \code{\link{get_values}}
+#            and \code{\link{get_na}}.
+#
+# @note This is a convenient function for \code{set_na(x, get_na(x))}.
+#
+# @examples
+# # create labelled factor, with missing flag
+# x <- labelled(c("M", "M", "F", "X", "N/A"),
+#               c(Male = "M", Female = "F",
+#                 Refused = "X", "Not applicable" = "N/A"),
+#               c(FALSE, FALSE, TRUE, TRUE))
+# x
+# get_na(x)
+# to_na(x)
+#
+# # create labelled integer, with missing flag
+# x <- labelled(c(1, 2, 1, 3, 4, 1),
+#              c(Male = 1, Female = 2, Refused = 3, "N/A" = 4),
+#              c(FALSE, FALSE, TRUE, TRUE))
+# x
+# get_na(x)
+# to_na(x)
+#
+# # get summary
+# x <- labelled(c(1, 2, 1, 3, 4, 1, NA, 5),
+#               c(Male = 1, Female = 2, Refused = 5),
+#               c(FALSE, FALSE, TRUE))
+# frq(x)
+#
+# 
 to_na <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -7365,58 +7366,58 @@ to_na <- function(x) {
 }
 
 to_na_helper <- function(x) set_na(x, suppressMessages(get_na(x)), as.attr = FALSE)
-#' @title Convert factors to numeric variables
-#' @name to_value
-#'
-#' @description This function converts (replaces) factor values with the
-#' related factor level index number, thus the factor is converted to
-#' a numeric variable.
-#'
-#' @seealso \code{\link{to_label}} to convert a labelled vector into a factor with labelled
-#'            factor levels and \code{\link{to_factor}} to convert a numeric variable
-#'            into a factor (and preserve labels)
-#'
-#' @param x \code{\link{factor}} or a data frame with \code{factor}s. May also be
-#'          a character vector.
-#' @param start.at starting index, i.e. the lowest numeric value of the variable's
-#'          value range. By default, this argument is \code{NULL}, hence the lowest
-#'          value of the returned numeric variable corresponds to the lowest factor
-#'          level (if factor is \code{\link{numeric}}) or to \code{1} (if factor levels
-#'          are not numeric).
-#' @param keep.labels logical, if \code{TRUE}, former factor levels will be added as
-#'          value labels. See \code{\link{set_labels}} for more details.
-#' @return A numeric variable with values ranging either from \code{start.at} to
-#'           \code{start.at} + length of factor levels, or to the corresponding
-#'           factor levels (if these were numeric). Or a data frame with numeric
-#'           variables, if \code{x} was a data frame.
-#'
-#' @examples
-#' data(efc)
-#' test <- to_label(efc$e42dep)
-#' table(test)
-#'
-#' table(to_value(test))
-#' hist(to_value(test, 0))
-#'
-#' # set lowest value of new variable
-#' # to "5".
-#' table(to_value(test, 5))
-#'
-#' # numeric factor keeps values
-#' dummy <- factor(c("3", "4", "6"))
-#' table(to_value(dummy))
-#'
-#' # do not drop unused factor levels
-#' dummy <- ordered(c(rep("No", 5), rep("Maybe", 3)),
-#'                  levels = c("Yes", "No", "Maybe"))
-#' to_value(dummy)
-#'
-#' # non-numeric factor is converted to numeric
-#' # starting at 1
-#' dummy <- factor(c("D", "F", "H"))
-#' table(to_value(dummy))
-#'
-#' 
+# @title Convert factors to numeric variables
+# @name to_value
+#
+# @description This function converts (replaces) factor values with the
+# related factor level index number, thus the factor is converted to
+# a numeric variable.
+#
+# @seealso \code{\link{to_label}} to convert a labelled vector into a factor with labelled
+#            factor levels and \code{\link{to_factor}} to convert a numeric variable
+#            into a factor (and preserve labels)
+#
+# @param x \code{\link{factor}} or a data frame with \code{factor}s. May also be
+#          a character vector.
+# @param start.at starting index, i.e. the lowest numeric value of the variable's
+#          value range. By default, this argument is \code{NULL}, hence the lowest
+#          value of the returned numeric variable corresponds to the lowest factor
+#          level (if factor is \code{\link{numeric}}) or to \code{1} (if factor levels
+#          are not numeric).
+# @param keep.labels logical, if \code{TRUE}, former factor levels will be added as
+#          value labels. See \code{\link{set_labels}} for more details.
+# @return A numeric variable with values ranging either from \code{start.at} to
+#           \code{start.at} + length of factor levels, or to the corresponding
+#           factor levels (if these were numeric). Or a data frame with numeric
+#           variables, if \code{x} was a data frame.
+#
+# @examples
+# data(efc)
+# test <- to_label(efc$e42dep)
+# table(test)
+#
+# table(to_value(test))
+# hist(to_value(test, 0))
+#
+# # set lowest value of new variable
+# # to "5".
+# table(to_value(test, 5))
+#
+# # numeric factor keeps values
+# dummy <- factor(c("3", "4", "6"))
+# table(to_value(dummy))
+#
+# # do not drop unused factor levels
+# dummy <- ordered(c(rep("No", 5), rep("Maybe", 3)),
+#                  levels = c("Yes", "No", "Maybe"))
+# to_value(dummy)
+#
+# # non-numeric factor is converted to numeric
+# # starting at 1
+# dummy <- factor(c("D", "F", "H"))
+# table(to_value(dummy))
+#
+# 
 to_value <- function(x,
                      start.at = NULL,
                      keep.labels = TRUE) {
@@ -7476,52 +7477,52 @@ to_value_helper <- function(x, start.at, keep.labels) {
   if (keep.labels) new_value <- set_labels(new_value, labels, force.labels = T)
   return(new_value)
 }
-#' @title Trim leading and trailing whitespaces from strings
-#' @name trim
-#'
-#' @description Trims leading and trailing whitespaces from strings or
-#'                character vectors.
-#'
-#' @param x Character vector or string. Function is vectorized, i.e. vector
-#'          may have a length greater than 1. See 'Examples'.
-#'
-#' @return Trimmed \code{x}, i.e. with leading and trailing spaces removed.
-#'
-#' @examples
-#' trim("white space at end ")
-#' trim(" white space at start and end ")
-#' trim(c(" string1 ", "   string2", "string 3   "))
-#'
-#' 
-trim <- function(x) gsub("^\\s+|\\s+$", "", x)#' @title Convert labelled vectors into normal classes
-#' @name unlabel
-#'
-#' @description This function converts \code{\link[haven]{labelled}} class vectors
-#'                into a generic data format, which means that simply all \code{\link[haven]{labelled}}
-#'                class attributes will be removed, so all vectors / variables will most
-#'                likely become \code{\link{atomic}}. Additionally, \code{tbl_df} and
-#'                \code{tbl} class attributes will be removed from data frames, and
-#'                a \code{\link{lbl_df}} class attribute will be added. See 'Note'.
-#'
-#' @seealso \href{http://www.strengejacke.de/sjPlot/datainit/}{sjPlot manual: data initialization}
-#'
-#' @param x data frame, which contains \code{\link[haven]{labelled}} class vectors or a single vector
-#'          of class \code{labelled}.
-#' @return a data frame or single vector (depending on \code{x}) with common object classes.
-#'
-#' @note This function is currently only used to avoid possible compatibility issues
-#'         with \code{\link[haven]{labelled}} class vectors and \code{tbl_df} resp.
-#'         \code{tbl} class attributes for data frames. Some known issues with \code{\link[haven]{labelled}}
-#'         class vectors have already been fixed, so it might be that this function
-#'         will become redundant in the future. Currently, data frames with \code{tbl_df} and
-#'         \code{tbl} class attributes may cause difficulties when indexing columns
-#'         like \code{data.frame[, colnr]} - only \code{data.frame[[colnr]]} seems
-#'         to be safe when accessing data frame columns from within function calls.
-#'         \cr \cr
-#'         Data frames will be converted into labelled data frames (see \code{\link{lbl_df}}).
-#'
+# @title Trim leading and trailing whitespaces from strings
+# @name trim
+#
+# @description Trims leading and trailing whitespaces from strings or
+#                character vectors.
+#
+# @param x Character vector or string. Function is vectorized, i.e. vector
+#          may have a length greater than 1. See 'Examples'.
+#
+# @return Trimmed \code{x}, i.e. with leading and trailing spaces removed.
+#
+# @examples
+# trim("white space at end ")
+# trim(" white space at start and end ")
+# trim(c(" string1 ", "   string2", "string 3   "))
+#
+# 
+trim <- function(x) gsub("^\\s+|\\s+$", "", x)# @title Convert labelled vectors into normal classes
+# @name unlabel
+#
+# @description This function converts \code{\link[haven]{labelled}} class vectors
+#                into a generic data format, which means that simply all \code{\link[haven]{labelled}}
+#                class attributes will be removed, so all vectors / variables will most
+#                likely become \code{\link{atomic}}. Additionally, \code{tbl_df} and
+#                \code{tbl} class attributes will be removed from data frames, and
+#                a \code{\link{lbl_df}} class attribute will be added. See 'Note'.
+#
+# @seealso \href{http://www.strengejacke.de/sjPlot/datainit/}{sjPlot manual: data initialization}
+#
+# @param x data frame, which contains \code{\link[haven]{labelled}} class vectors or a single vector
+#          of class \code{labelled}.
+# @return a data frame or single vector (depending on \code{x}) with common object classes.
+#
+# @note This function is currently only used to avoid possible compatibility issues
+#         with \code{\link[haven]{labelled}} class vectors and \code{tbl_df} resp.
+#         \code{tbl} class attributes for data frames. Some known issues with \code{\link[haven]{labelled}}
+#         class vectors have already been fixed, so it might be that this function
+#         will become redundant in the future. Currently, data frames with \code{tbl_df} and
+#         \code{tbl} class attributes may cause difficulties when indexing columns
+#         like \code{data.frame[, colnr]} - only \code{data.frame[[colnr]]} seems
+#         to be safe when accessing data frame columns from within function calls.
+#         \cr \cr
+#         Data frames will be converted into labelled data frames (see \code{\link{lbl_df}}).
+#
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' 
+# 
 unlabel <- function(x) {
   # check if complete data frame or only single
   # vector should be converted
@@ -7547,35 +7548,35 @@ unlabel <- function(x) {
   }
   return(x)
 }
-#' @title Weight a variable
-#' @name weight2
-#'
-#' @description This function weights the variable \code{x} by
-#'                a specific vector of \code{weights}. It's an
-#'                alternative weight calculation to \code{\link{weight}},
-#'                though \code{\link{weight}} usage is recommended.
-#'
-#' @seealso \code{\link{weight}}
-#'
-#' @inheritParams weight
-#'
-#' @return The weighted \code{x}.
-#'
-#' @details This function sums up all \code{weights} values of the associated
-#'            categories of \code{x}, whereas the \code{\link{weight}} function
-#'            uses a \code{\link{xtabs}} formula to weight cases. Thus, this function
-#'            may return a vector of different length than \code{x}.
-#'
-#' @note See 'Note' in \code{\link{weight}}
-#'
-#' @examples
-#' v <- sample(1:4, 20, TRUE)
-#' table(v)
-#' w <- abs(rnorm(20))
-#' table(weight2(v, w))
-#'
-#'
-#' 
+# @title Weight a variable
+# @name weight2
+#
+# @description This function weights the variable \code{x} by
+#                a specific vector of \code{weights}. It's an
+#                alternative weight calculation to \code{\link{weight}},
+#                though \code{\link{weight}} usage is recommended.
+#
+# @seealso \code{\link{weight}}
+#
+# @inheritParams weight
+#
+# @return The weighted \code{x}.
+#
+# @details This function sums up all \code{weights} values of the associated
+#            categories of \code{x}, whereas the \code{\link{weight}} function
+#            uses a \code{\link{xtabs}} formula to weight cases. Thus, this function
+#            may return a vector of different length than \code{x}.
+#
+# @note See 'Note' in \code{\link{weight}}
+#
+# @examples
+# v <- sample(1:4, 20, TRUE)
+# table(v)
+# w <- abs(rnorm(20))
+# table(weight2(v, w))
+#
+#
+# 
 weight2 <- function(x, weights) {
   items <- unique(x)
   newvar <- c()
@@ -7587,44 +7588,44 @@ weight2 <- function(x, weights) {
 }
 
 
-#' @title Weight a variable
-#' @name weight
-#' @description This function weights the variable \code{x} by
-#'                a specific vector of \code{weights}.
-#'
-#' @seealso \code{\link{weight2}}
-#'
-#' @param x (Unweighted) variable
-#' @param weights Vector with same length as \code{x}, which
-#'          contains weight factors. Each value of \code{x} has a
-#'          specific assigned weight in \code{weights}.
-#' @param digits Numeric value indicating the number of decimal places to be
-#'          used for rounding the weighted values. By default, this value is
-#'          \code{0}, i.e. the returned values are integer values.
-#'
-#' @return The weighted \code{x}.
-#'
-#' @note The values of the returned vector are in sorted order, whereas the values'
-#'        order of the original \code{x} may be spread randomly. Hence, \code{x} can't be
-#'        used, for instance, for further cross tabulation. In case you want to have
-#'        weighted contingency tables or (grouped) box plots etc., use the \code{weightBy}
-#'        argument of most functions.
-#'
-#' @examples
-#' v <- sample(1:4, 20, TRUE)
-#' table(v)
-#' w <- abs(rnorm(20))
-#' table(weight(v, w))
-#'
-#' set.seed(1)
-#' x <- sample(letters[1:5], size = 20, replace = TRUE)
-#' w <- runif(n = 20)
-#'
-#' table(x)
-#' table(weight(x, w))
-#'
+# @title Weight a variable
+# @name weight
+# @description This function weights the variable \code{x} by
+#                a specific vector of \code{weights}.
+#
+# @seealso \code{\link{weight2}}
+#
+# @param x (Unweighted) variable
+# @param weights Vector with same length as \code{x}, which
+#          contains weight factors. Each value of \code{x} has a
+#          specific assigned weight in \code{weights}.
+# @param digits Numeric value indicating the number of decimal places to be
+#          used for rounding the weighted values. By default, this value is
+#          \code{0}, i.e. the returned values are integer values.
+#
+# @return The weighted \code{x}.
+#
+# @note The values of the returned vector are in sorted order, whereas the values'
+#        order of the original \code{x} may be spread randomly. Hence, \code{x} can't be
+#        used, for instance, for further cross tabulation. In case you want to have
+#        weighted contingency tables or (grouped) box plots etc., use the \code{weightBy}
+#        argument of most functions.
+#
+# @examples
+# v <- sample(1:4, 20, TRUE)
+# table(v)
+# w <- abs(rnorm(20))
+# table(weight(v, w))
+#
+# set.seed(1)
+# x <- sample(letters[1:5], size = 20, replace = TRUE)
+# w <- runif(n = 20)
+#
+# table(x)
+# table(weight(x, w))
+#
 #' @importFrom stats na.pass xtabs
-#' 
+# 
 weight <- function(x, weights, digits = 0) {
   # init values
   weightedvar <- c()
@@ -7653,24 +7654,24 @@ weight <- function(x, weights, digits = 0) {
 }
 
 
-#' @title Weighted standard deviation for variables
-#' @name wtd_sd
-#' @description Compute weighted standard deviation for a variable or for all variables
-#'                of a data frame.
-#'
-#' @param x (Numeric) vector or a data frame.
-#' @param weights Numeric vector of weights.
-#' @return The weighted standard deviation of \code{x}, or for each variable
-#'           if \code{x} is a data frame.
-#'
-#' @examples
-#' wtd_sd(rnorm(n = 100, mean = 3),
-#'        runif(n = 100))
-#'
-#' data(efc)
-#' wtd_sd(efc[, 1:3], runif(n = nrow(efc)))
-#'
-#' 
+# @title Weighted standard deviation for variables
+# @name wtd_sd
+# @description Compute weighted standard deviation for a variable or for all variables
+#                of a data frame.
+#
+# @param x (Numeric) vector or a data frame.
+# @param weights Numeric vector of weights.
+# @return The weighted standard deviation of \code{x}, or for each variable
+#           if \code{x} is a data frame.
+#
+# @examples
+# wtd_sd(rnorm(n = 100, mean = 3),
+#        runif(n = 100))
+#
+# data(efc)
+# wtd_sd(efc[, 1:3], runif(n = nrow(efc)))
+#
+# 
 wtd_sd <- function(x, weights = NULL) {
   # check if suggested packages are available
   if (!requireNamespace("Hmisc", quietly = TRUE)) {
@@ -7699,24 +7700,24 @@ wtd_sd <- function(x, weights = NULL) {
 }
 
 
-#' @title Weighted standard error for variables
-#' @name wtd_se
-#' @description Compute weighted standard error for a variable or for all variables
-#'                of a data frame.
-#'
-#' @param x (Numeric) vector or a data frame.
-#' @param weights Numeric vector of weights.
-#' @return The weighted standard error of \code{x}, or for each variable
-#'           if \code{x} is a data frame.
-#'
-#' @examples
-#' wtd_se(rnorm(n = 100, mean = 3),
-#'        runif(n = 100))
-#'
-#' data(efc)
-#' wtd_se(efc[, 1:3], runif(n = nrow(efc)))
-#'
-#' 
+# @title Weighted standard error for variables
+# @name wtd_se
+# @description Compute weighted standard error for a variable or for all variables
+#                of a data frame.
+#
+# @param x (Numeric) vector or a data frame.
+# @param weights Numeric vector of weights.
+# @return The weighted standard error of \code{x}, or for each variable
+#           if \code{x} is a data frame.
+#
+# @examples
+# wtd_se(rnorm(n = 100, mean = 3),
+#        runif(n = 100))
+#
+# data(efc)
+# wtd_se(efc[, 1:3], runif(n = nrow(efc)))
+#
+# 
 wtd_se <- function(x, weights = NULL) {
   # check if suggested packages are available
   if (!requireNamespace("Hmisc", quietly = TRUE)) {
@@ -7743,28 +7744,28 @@ wtd_se <- function(x, weights = NULL) {
     return(sqrt(Hmisc::wtd.var(x, weights = weights, na.rm = TRUE) / length(stats::na.omit(x))))
   }
 }
-#' @title Insert line breaks in long labels
-#' @name word_wrap
-#'
-#' @description Insert line breaks in long character strings. Useful if you want to wordwrap
-#'                labels / titles for plots or tables.
-#'
-#' @param labels Label(s) as character string, where a line break should be
-#'          inserted. Several strings may be passed as vector  (see 'Examples').
-#' @param wrap Maximum amount of chars per line (i.e. line length). If code{wrap = Inf},
-#'          no word wrap will be performed (i.e. \code{labels} will be returned as is).
-#' @param linesep By default, this argument is \code{NULL} and a regular new line
-#'          string (\code{"\\n"}) is used. For HTML-purposes, for instance, \code{linesep}
-#'          could be \code{"<br>"}.
-#' @return New label(s) with line breaks inserted at every \code{wrap}'s position.
-#'
-#' @examples
-#' word_wrap(c("A very long string", "And another even longer string!"), 10)
-#'
-#' message(word_wrap("Much too long string for just one line!", 15))
-#'
+# @title Insert line breaks in long labels
+# @name word_wrap
+#
+# @description Insert line breaks in long character strings. Useful if you want to wordwrap
+#                labels / titles for plots or tables.
+#
+# @param labels Label(s) as character string, where a line break should be
+#          inserted. Several strings may be passed as vector  (see 'Examples').
+# @param wrap Maximum amount of chars per line (i.e. line length). If code{wrap = Inf},
+#          no word wrap will be performed (i.e. \code{labels} will be returned as is).
+# @param linesep By default, this argument is \code{NULL} and a regular new line
+#          string (\code{"\\n"}) is used. For HTML-purposes, for instance, \code{linesep}
+#          could be \code{"<br>"}.
+# @return New label(s) with line breaks inserted at every \code{wrap}'s position.
+#
+# @examples
+# word_wrap(c("A very long string", "And another even longer string!"), 10)
+#
+# message(word_wrap("Much too long string for just one line!", 15))
+#
 #' @importFrom stats na.omit
-#' 
+# 
 word_wrap <- function(labels, wrap, linesep = NULL) {
   # check if labels have NA values and remove them
   if (anyNA(labels)) labels <- as.character(stats::na.omit(labels))
@@ -7807,49 +7808,49 @@ word_wrap <- function(labels, wrap, linesep = NULL) {
   }
   return(labels)
 }
-#' @title Convert labelled values into NA
-#' @name zap_labels
-#'
-#' @description For (partially) labelled vectors, all values that have
-#'                a value label attribute will be replaced by \code{NA}.
-#'
-#' @param x (partially) \code{\link[haven]{labelled}} vector, \code{data.frame} or \code{list}
-#'            of (partially) labelled vectors
-#' @return \code{x}, where all labelled values are converted to \code{NA}.
-#'
-#' @seealso \code{\link{get_values}} and \code{\link{zap_unlabelled}};
-#'          \code{\link{drop_labels}} to drop labels from zero-count values.
-#'
-#' @examples
-#'
-#' data(efc)
-#' str(efc$e42dep)
-#'
-#' x <- set_labels(efc$e42dep,
-#'                 c(`1` = "independent",
-#'                   `4` = "severe dependency"))
-#' table(x)
-#' get_values(x)
-#' str(x)
-#'
-#' # zap all labelled values
-#' x <- set_labels(efc$e42dep,
-#'                 c(`1` = "independent",
-#'                   `4` = "severe dependency"))
-#' table(zap_labels(x))
-#' get_values(zap_labels(x))
-#' str(zap_labels(x))
-#'
-#' # zap all unlabelled values
-#' x <- set_labels(efc$e42dep,
-#'                 c(`1` = "independent",
-#'                   `4` = "severe dependency"))
-#' table(zap_unlabelled(x))
-#' get_values(zap_unlabelled(x))
-#' str(zap_unlabelled(x))
-#'
+# @title Convert labelled values into NA
+# @name zap_labels
+#
+# @description For (partially) labelled vectors, all values that have
+#                a value label attribute will be replaced by \code{NA}.
+#
+# @param x (partially) \code{\link[haven]{labelled}} vector, \code{data.frame} or \code{list}
+#            of (partially) labelled vectors
+# @return \code{x}, where all labelled values are converted to \code{NA}.
+#
+# @seealso \code{\link{get_values}} and \code{\link{zap_unlabelled}};
+#          \code{\link{drop_labels}} to drop labels from zero-count values.
+#
+# @examples
+#
+# data(efc)
+# str(efc$e42dep)
+#
+# x <- set_labels(efc$e42dep,
+#                 c(`1` = "independent",
+#                   `4` = "severe dependency"))
+# table(x)
+# get_values(x)
+# str(x)
+#
+# # zap all labelled values
+# x <- set_labels(efc$e42dep,
+#                 c(`1` = "independent",
+#                   `4` = "severe dependency"))
+# table(zap_labels(x))
+# get_values(zap_labels(x))
+# str(zap_labels(x))
+#
+# # zap all unlabelled values
+# x <- set_labels(efc$e42dep,
+#                 c(`1` = "independent",
+#                   `4` = "severe dependency"))
+# table(zap_unlabelled(x))
+# get_values(zap_unlabelled(x))
+# str(zap_unlabelled(x))
+#
 #' @importFrom stats na.omit
-#' 
+# 
 zap_labels <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -7867,48 +7868,48 @@ zap_labels <- function(x) {
 }
 
 
-#' @title Convert non-labelled values into NA
-#' @name zap_unlabelled
-#'
-#' @description For (partially) labelled vectors, all values that don't have
-#'                a value label attribute will be replaced by \code{NA}.
-#'
-#' @inheritParams zap_labels
-#' @return \code{x}, where all non-labelled values are converted to \code{NA}.
-#'
-#' @seealso \code{\link{get_values}} and \code{\link{zap_labels}};
-#'          \code{\link{drop_labels}} to drop labels from zero-count values.
-#'
-#' @examples
-#'
-#' data(efc)
-#' str(efc$e42dep)
-#'
-#' x <- set_labels(efc$e42dep,
-#'                 c(`1` = "independent",
-#'                   `4` = "severe dependency"))
-#' table(x)
-#' get_values(x)
-#' str(x)
-#'
-#' # zap all labelled values
-#' x <- set_labels(efc$e42dep,
-#'                 c(`1` = "independent",
-#'                   `4` = "severe dependency"))
-#' table(zap_labels(x))
-#' get_values(zap_labels(x))
-#' str(zap_labels(x))
-#'
-#' # zap all unlabelled values
-#' x <- set_labels(efc$e42dep,
-#'                 c(`1` = "independent",
-#'                   `4` = "severe dependency"))
-#' table(zap_unlabelled(x))
-#' get_values(zap_unlabelled(x))
-#' str(zap_unlabelled(x))
-#'
+# @title Convert non-labelled values into NA
+# @name zap_unlabelled
+#
+# @description For (partially) labelled vectors, all values that don't have
+#                a value label attribute will be replaced by \code{NA}.
+#
+# @inheritParams zap_labels
+# @return \code{x}, where all non-labelled values are converted to \code{NA}.
+#
+# @seealso \code{\link{get_values}} and \code{\link{zap_labels}};
+#          \code{\link{drop_labels}} to drop labels from zero-count values.
+#
+# @examples
+#
+# data(efc)
+# str(efc$e42dep)
+#
+# x <- set_labels(efc$e42dep,
+#                 c(`1` = "independent",
+#                   `4` = "severe dependency"))
+# table(x)
+# get_values(x)
+# str(x)
+#
+# # zap all labelled values
+# x <- set_labels(efc$e42dep,
+#                 c(`1` = "independent",
+#                   `4` = "severe dependency"))
+# table(zap_labels(x))
+# get_values(zap_labels(x))
+# str(zap_labels(x))
+#
+# # zap all unlabelled values
+# x <- set_labels(efc$e42dep,
+#                 c(`1` = "independent",
+#                   `4` = "severe dependency"))
+# table(zap_unlabelled(x))
+# get_values(zap_unlabelled(x))
+# str(zap_unlabelled(x))
+#
 #' @importFrom stats na.omit
-#' 
+# 
 zap_unlabelled <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
