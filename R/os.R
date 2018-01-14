@@ -41,8 +41,8 @@ ez.repo = function(repo=NULL){
 #' @return returns NULL
 ez.env=function(env=NULL){
     if (is.null(env)) {
-        message("Using library: ", .libPaths()[1])
         cat(readChar('~/Dropbox/Apps/RStudio/R3.3_library/note.txt', 1e5))
+        message('\n',"Using library: ", .libPaths()[1])
         return(invisible(NULL))
     }
 
@@ -58,6 +58,7 @@ ez.env=function(env=NULL){
     # https://stackoverflow.com/questions/6313079/quit-and-restart-a-clean-r-session-from-within-r
     # .rs.restartR()
     message('Please restart RStudio to make the change take effect!')
+    system('killall RStudio; open -a RStudio')
     return(invisible(NULL))
 }
 
