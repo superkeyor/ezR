@@ -292,7 +292,7 @@ view=function(x) {
         cat(v.elements)
         cat(sprintf('\n%s\t#Unique: %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
-            cat(sprintf('M = %.2f\t(%.2f,%.2f)\t%.2f\n', v.mean, v.min, v.max, v.sum))
+            cat(sprintf('M = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.min, v.max, v.sum))
         }
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
             cat(sprintf('%s\n',v.levels %>% toString(width=300)))

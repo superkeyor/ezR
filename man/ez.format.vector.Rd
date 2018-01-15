@@ -4,12 +4,12 @@
 \alias{ez.format.vector}
 \title{format a vector for easy manual copy/processing.}
 \usage{
-ez.format.vector(vec, quote = TRUE, print2screen = TRUE)
+ez.format.vector(vec, quote = NULL, print2screen = TRUE)
 }
 \arguments{
 \item{vec}{a vector}
 
-\item{quote}{TRUE/FALSE, whether add a quote around each element (switch for string or number)}
+\item{quote}{TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)}
 }
 \value{
 nothing, only print out. 
