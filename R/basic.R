@@ -166,12 +166,12 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 #' @description convert to date with friendly ori (no need to remember exact origin date)
 #' @param x a vector of char, num. param format for class 'character' (ignore ori); param ori for class 'numeric' (ignore format)
 #' \cr a string factor treated as char (ie, using param format), a num factor cannot be processed
-#' @param ori one of 'Excel', 'Matlab', 'R'
+#' @param ori one of 'Excel', 'Matlab', 'R', 'SPSS'
 #' @param format specify date format. see examples
 #' @examples 
 #' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @return returns a vector
-#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
 ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
     # from R help as.Date()
@@ -180,12 +180,31 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
         # if (ori=='Excel.Mac') origin="1904-01-01"  # tested on my mac, seems the same as Excel.Win
         if (ori=='Matlab') origin="1970-01-01"
         if (ori=='R') origin="1970-01-01"
+        if (ori=='SPSS') {
+            # http://scs.math.yorku.ca/index.php/R:_Importing_dates_from_SPSS
+            x = x/86400
+            origin = "1582-10-14"
+        }
         result = as.Date(x,origin=origin,...)
         if (ori=='Matlab') result=result-719529
     }
     if (is.character(x) | is.factor(x)) {
         result=as.Date(x,format=format,...)
     }
+    return(result)
+}
+
+#' convert to time
+#' @description convert from a number (read from external files, eg, spss date 64080) to time (17:48:00)/number(0.7416667)
+#' @param x a vector of number
+#' @param format string, 'numeric' or 'times'
+#' @return returns a vector of number (class numeric) or time (class times)
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
+#' @export
+ez.time = function(x,format='numeric') {
+    # https://stackoverflow.com/a/39208186/2292993
+    result = chron::chron(times. = x / (24*60*60))
+    if (format=='numeric') result = as.numeric(numeric)
     return(result)
 }
 
@@ -199,7 +218,7 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 #' mydate = as.Date(mydate,format = "%m/%d/%Y")  # "2012-10-11" "2012-10-12"
 #' ez.is.date(mydate)  # T
 #' @export
-#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 ez.is.date = function(x) {
     # https://stackoverflow.com/a/37062951/2292993
     return( inherits(x, 'Date') )
@@ -216,7 +235,7 @@ ez.is.date = function(x) {
 #' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' ez.is.date.convertible(mydate, format = "%m/%d/%Y")  # T F F
 #' @export
-#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 ez.is.date.convertible = function(x,format="%m/%d/%Y",...) {
     # https://stackoverflow.com/a/37062951/2292993
     result = !is.na( as.Date(as.character(x), format = format, ...) )

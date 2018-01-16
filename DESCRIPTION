@@ -34,4 +34,5 @@ Imports:
     R.matlab,
     crayon,
     gmodels,
-    scales
+    scales,
+    chron

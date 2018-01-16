@@ -10,7 +10,7 @@ ez.date(x, ori = "Excel", format = "\%m/\%d/\%Y", ...)
 \item{x}{a vector of char, num. param format for class 'character' (ignore ori); param ori for class 'numeric' (ignore format)
 \cr a string factor treated as char (ie, using param format), a num factor cannot be processed}
 
-\item{ori}{one of 'Excel', 'Matlab', 'R'}
+\item{ori}{one of 'Excel', 'Matlab', 'R', 'SPSS'}
 
 \item{format}{specify date format. see examples}
 }
@@ -24,5 +24,5 @@ convert to date with friendly ori (no need to remember exact origin date)
 # format one of c("\%d/\%m/\%Y", "\%d-\%m-\%Y", "\%Y/\%m/\%d", "\%m/\%d/\%Y", "\%Y-\%m-\%d"). \%y for two year digits
 }
 \seealso{
-\code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
+\code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 }

@@ -25,5 +25,5 @@ mydate = c("10/11/2012","10-12-2012", 345)
 ez.is.date.convertible(mydate, format = "\%m/\%d/\%Y")  # T F F
 }
 \seealso{
-\code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
+\code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 }
