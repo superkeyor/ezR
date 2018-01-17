@@ -4,7 +4,7 @@
 \alias{ez.writes}
 \title{alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.saves}}}
 \usage{
-ez.writes(x, path, enc.to.utf8 = TRUE)
+ez.writes(...)
 }
 \description{
 potentially keep variable labels and value labels

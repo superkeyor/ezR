@@ -241,12 +241,16 @@ ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 #' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.writes}}
 #' @description potentially keep variable labels and value labels
 #' @export
-ez.saves = sjmisc_write_spss
+ez.saves = function(...){
+    sjmisc_write_spss(...)
+}
 
 #' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.saves}}
 #' @description potentially keep variable labels and value labels
 #' @export
-ez.writes = sjmisc_write_spss
+ez.writes = function(...){
+    sjmisc_write_spss(...)
+}
 
 #' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @description save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package

@@ -1,5 +1,5 @@
 # based on sjmisc v 1.8
-# remove ', except @importFrom
+# remove ' before #, except ' @importFrom
 # exported appended to the end
 
 # 
