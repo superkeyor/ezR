@@ -196,27 +196,21 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 }
 
 #' convert to time
-#' @description convert from a time to class (chron) times (17:48:00--military only) or class numeric (0.7416667--fractions of a day): 
+#' @description convert from a time to class (chron) times (17:48:00--military only, format specified by out.format) or class numeric (0.7416667--fractions of a day): 
 #' \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day), or 
 #' \cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day), or
 #' \cr \cr string "17:48:00" (must have hour, min, seconds. with specified param format)
 #' @param x a vector of number or character
 #' @param ori one of 'Excel', 'SPSS' (ignored if x is character)
-#' @param format input format, c(times="h:m:s"), ignored if x is numeric
+#' @param format input format, eg, "h:m:s", ignored if x is numeric
 #' @param out.type string, 'numeric' (fractions of a day) or 'times'/'time'
-#' @param out.format  vector or list specifying date and time format for printing and output. If missing (default) is same as format.
+#' @param out.format  "h:m:s", ignored if out.type is numeric
 #' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}}
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
-ez.time = function(x,ori='SPSS',format=c(times="h:m:s"),out.type='numeric',out.format,...) {
-    if (is.null(format)) 
-        format <- c(dates = "m/d/y", times = "h:m:s")
-    if (missing(out.format)) {
-        if (is.character(format)) 
-            out.format <- format
-        else stop("must specify the \"out.format\" argument")
-    }
-
+ez.time = function(x,ori='SPSS',format="h:m:s",out.type='numeric',out.format="h:m:s",...) {
+    format <- c(dates = "m/d/y", times = format)
+    out.format <- c(dates = "m/d/y", times = out.format)
     if (is.numeric(x)) {
         if (ori=='SPSS') {
             if (out.type %in% c('time','times')) {
