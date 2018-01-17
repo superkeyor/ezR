@@ -17,9 +17,9 @@ ez.time(x, ori = "SPSS", format = "numeric")
 returns a vector of number (class numeric) or time (class times)
 }
 \description{
-convert from a time to class (chron) times (17:48:00--military only) or class numeric (0.7416667--fractions of a day)
-\cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080, or 
-\cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667
+convert from a time to class (chron) times (17:48:00--military only) or class numeric (0.7416667--fractions of a day): 
+\cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day), or 
+\cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day)
 }
 \seealso{
 \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
