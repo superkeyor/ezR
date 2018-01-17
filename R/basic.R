@@ -197,7 +197,7 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 #' convert to time
 #' @description convert from a number (read from external files, eg, spss date 64080) to time (17:48:00)/number(0.7416667)
 #' @param x a vector of number
-#' @param format string, 'numeric' or 'times'
+#' @param format string, 'numeric' or 'times'/'time'
 #' @return returns a vector of number (class numeric) or time (class times)
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export

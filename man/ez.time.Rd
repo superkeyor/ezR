@@ -9,7 +9,7 @@ ez.time(x, format = "numeric")
 \arguments{
 \item{x}{a vector of number}
 
-\item{format}{string, 'numeric' or 'times'}
+\item{format}{string, 'numeric' or 'times'/'time'}
 }
 \value{
 returns a vector of number (class numeric) or time (class times)
