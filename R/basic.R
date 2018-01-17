@@ -196,26 +196,27 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 }
 
 #' convert to time
-#' @description convert from a time to class (chron) times (17:48:00--military only, format specified by out.format) or class numeric (0.7416667--fractions of a day): 
+#' @description convert from a time to class (chron) times (17:48:00--h:m:s military only) or class numeric (0.7416667--fractions of a day), call \code{\link[chron]{time}}: 
 #' \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day), or 
 #' \cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day), or
-#' \cr \cr string "17:48:00" (must have hour, min, seconds. with specified param format)
+#' \cr \cr string "17:48:00" (format specified by param format)
 #' @param x a vector of number or character
 #' @param ori one of 'Excel', 'SPSS' (ignored if x is character)
-#' @param format input format, eg, "h:m:s", ignored if x is numeric
+#' @param format input format, see examples (more formats at \code{\link{strptime}}). ignored if x is numeric
 #' @param out.type string, 'numeric' (fractions of a day) or 'times'/'time'
-#' @param out.format  "h:m:s", 'h_m_s' (must have h m s), ignored if out.type is numeric
 #' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}}
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
-ez.time = function(x,ori='SPSS',format="h:m:s",out.type='numeric',out.format="h:m:s",...) {
-    format <- c(dates = "m/d/y", times = format)
-    out.format <- c(dates = "m/d/y", times = out.format)
+#' @examples 
+#' ez.time("5:20:31 am",format="%I:%M:%S %p",out.type="time")  # 5, 05; am AM aM Am OK. %I = 12 hr 
+#' ez.time("15:32", format="%H:%M",out.type="time")  # 5 05 OK.
+#' ez.time("5:2", format="%H:%M",out.type="time")
+ez.time = function(x,ori='SPSS',format="%H:%M",out.type='numeric',...) {
     if (is.numeric(x)) {
         if (ori=='SPSS') {
             if (out.type %in% c('time','times')) {
                 # https://stackoverflow.com/a/39208186/2292993
-                result = chron::times(x/(24*60*60),out.format=out.format,...)
+                result = chron::times(x/(24*60*60),...)
             }
             if (out.type=='numeric') {
                 result = x/(24*60*60)
@@ -223,12 +224,14 @@ ez.time = function(x,ori='SPSS',format="h:m:s",out.type='numeric',out.format="h:
         }
         if (ori=='Excel') {
             # https://stackoverflow.com/a/28044345/2292993
-            if (out.type %in% c('time','times')) result = chron::times(x,out.format=out.format,...)
+            if (out.type %in% c('time','times')) result = chron::times(x,...)
             if (out.type=='numeric') result = x
         }
     }
     if (is.character(x) | is.factor(x)) {
-        result=chron::chron(times.=x,format=format,out.format=out.format,...)
+        # https://stackoverflow.com/a/36347366/2292993
+        x=format(strptime(x, format = format), "%H:%M:%S")
+        result=chron::chron(times.=x,format=c(dates = "m/d/y", times = "h:m:s"),...)
         if (out.type=='numeric') result = as.numeric(result)
     }
     return(result)

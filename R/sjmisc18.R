@@ -1,3 +1,4 @@
+# based on sjmisc v 1.8
 # remove #' @export, except #' @importFrom
 # exported appended to the end
 
