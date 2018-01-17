@@ -204,7 +204,7 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 ez.time = function(x,format='numeric') {
     # https://stackoverflow.com/a/39208186/2292993
     result = chron::chron(times. = x / (24*60*60))
-    if (format=='numeric') result = as.numeric(numeric)
+    if (format=='numeric') result = as.numeric(result)
     return(result)
 }
 
