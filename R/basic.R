@@ -167,7 +167,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 #' @param x a vector of char, num. param format for class 'character' (ignore ori); param ori for class 'numeric' (ignore format)
 #' \cr a string factor treated as char (ie, using param format), a num factor cannot be processed
 #' @param ori one of 'Excel', 'Matlab', 'R', 'SPSS'
-#' @param format specify date format. see examples
+#' @param format specify in date format. see examples
 #' @examples 
 #' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @return returns a vector
@@ -182,6 +182,7 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
         if (ori=='R') origin="1970-01-01"
         if (ori=='SPSS') {
             # http://scs.math.yorku.ca/index.php/R:_Importing_dates_from_SPSS
+            # 24*60*60=86400
             x = x/86400
             origin = "1582-10-14"
         }
@@ -197,25 +198,44 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 #' convert to time
 #' @description convert from a time to class (chron) times (17:48:00--military only) or class numeric (0.7416667--fractions of a day): 
 #' \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day), or 
-#' \cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day)
-#' @param x a vector of number
-#' @param format string, 'numeric' (fractions of a day) or 'times'/'time'
-#' @param ori one of 'Excel', 'SPSS'
-#' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5)
+#' \cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day), or
+#' \cr \cr string "17:48:00" (must have hour, min, seconds. with specified param format)
+#' @param x a vector of number or character
+#' @param ori one of 'Excel', 'SPSS' (ignored if x is character)
+#' @param format input format, c(times="h:m:s"), ignored if x is numeric
+#' @param out.type string, 'numeric' (fractions of a day) or 'times'/'time'
+#' @param out.format  vector or list specifying date and time format for printing and output. If missing (default) is same as format.
+#' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}}
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
-ez.time = function(x,ori='SPSS',format='numeric') {
-    if (ori=='SPSS') {
-        # https://stackoverflow.com/a/39208186/2292993
-        # result = chron::chron(times. = x / (24*60*60))  # the same as chron::times()
-        result = chron::times(x/(24*60*60))
-        if (format=='numeric') result = as.numeric(result)
-        if (format %in% c('time','times')) result = result
+ez.time = function(x,ori='SPSS',format=c(times="h:m:s"),out.type='numeric',out.format,...) {
+    if (is.null(format)) 
+        format <- c(dates = "m/d/y", times = "h:m:s")
+    if (missing(out.format)) {
+        if (is.character(format)) 
+            out.format <- format
+        else stop("must specify the \"out.format\" argument")
     }
-    if (ori=='Excel') {
-        # https://stackoverflow.com/a/28044345/2292993
-        if (format=='numeric') result = x
-        if (format %in% c('time','times')) result = chron::times(x)
+
+    if (is.numeric(x)) {
+        if (ori=='SPSS') {
+            if (out.type %in% c('time','times')) {
+                # https://stackoverflow.com/a/39208186/2292993
+                result = chron::times(x/(24*60*60),out.format=out.format,...)
+            }
+            if (out.type=='numeric') {
+                result = x/(24*60*60)
+            }
+        }
+        if (ori=='Excel') {
+            # https://stackoverflow.com/a/28044345/2292993
+            if (out.type %in% c('time','times')) result = chron::times(x,out.format=out.format,...)
+            if (out.type=='numeric') result = x
+        }
+    }
+    if (is.character(x) | is.factor(x)) {
+        result=chron::chron(times.=x,format=format,out.format=out.format,...)
+        if (out.type=='numeric') result = as.numeric(result)
     }
     return(result)
 }

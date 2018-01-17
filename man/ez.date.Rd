@@ -12,7 +12,7 @@ ez.date(x, ori = "Excel", format = "\%m/\%d/\%Y", ...)
 
 \item{ori}{one of 'Excel', 'Matlab', 'R', 'SPSS'}
 
-\item{format}{specify date format. see examples}
+\item{format}{specify in date format. see examples}
 }
 \value{
 returns a vector
