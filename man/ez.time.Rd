@@ -14,7 +14,7 @@ ez.time(x, ori = "SPSS", format = "numeric")
 \item{format}{string, 'numeric' (fractions of a day) or 'times'/'time'}
 }
 \value{
-returns a vector of number (class numeric) or time (class times)
+returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5)
 }
 \description{
 convert from a time to class (chron) times (17:48:00--military only) or class numeric (0.7416667--fractions of a day): 

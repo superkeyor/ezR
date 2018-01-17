@@ -201,7 +201,7 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 #' @param x a vector of number
 #' @param format string, 'numeric' (fractions of a day) or 'times'/'time'
 #' @param ori one of 'Excel', 'SPSS'
-#' @return returns a vector of number (class numeric) or time (class times)
+#' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5)
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
 ez.time = function(x,ori='SPSS',format='numeric') {
