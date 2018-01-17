@@ -4,28 +4,30 @@
 \alias{ez.time}
 \title{convert to time}
 \usage{
-ez.time(x, ori = "SPSS", format = "h:m:s", out.type = "numeric",
-  out.format = "h:m:s", ...)
+ez.time(x, ori = "SPSS", format = "\%H:\%M", out.type = "numeric", ...)
 }
 \arguments{
 \item{x}{a vector of number or character}
 
 \item{ori}{one of 'Excel', 'SPSS' (ignored if x is character)}
 
-\item{format}{input format, eg, "h:m:s", ignored if x is numeric}
+\item{format}{input format, see examples (more formats at \code{\link{strptime}}). ignored if x is numeric}
 
 \item{out.type}{string, 'numeric' (fractions of a day) or 'times'/'time'}
-
-\item{out.format}{"h:m:s", 'h_m_s' (must have h m s), ignored if out.type is numeric}
 }
 \value{
 returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}}
 }
 \description{
-convert from a time to class (chron) times (17:48:00--military only, format specified by out.format) or class numeric (0.7416667--fractions of a day): 
+convert from a time to class (chron) times (17:48:00--h:m:s military only) or class numeric (0.7416667--fractions of a day), call \code{\link[chron]{time}}: 
 \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day), or 
 \cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day), or
-\cr \cr string "17:48:00" (must have hour, min, seconds. with specified param format)
+\cr \cr string "17:48:00" (format specified by param format)
+}
+\examples{
+ez.time("5:20:31 am",format="\%I:\%M:\%S \%p",out.type="time")  # 5, 05; am AM aM Am OK. \%I = 12 hr 
+ez.time("15:32", format="\%H:\%M",out.type="time")  # 5 05 OK.
+ez.time("5:2", format="\%H:\%M",out.type="time")
 }
 \seealso{
 \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
