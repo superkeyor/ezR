@@ -16,7 +16,7 @@ ez.time(x, ori = "SPSS", format = "h:m:s", out.type = "numeric",
 
 \item{out.type}{string, 'numeric' (fractions of a day) or 'times'/'time'}
 
-\item{out.format}{"h:m:s", ignored if out.type is numeric}
+\item{out.format}{"h:m:s", 'h_m_s' (must have h m s), ignored if out.type is numeric}
 }
 \value{
 returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}}
