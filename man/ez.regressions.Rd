@@ -5,7 +5,8 @@
 \title{a series of simple regression, for many y and many x}
 \usage{
 ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
-  print2screen = T, plot = T, pmethods = c("bonferroni", "fdr"), ...)
+  print2screen = T, plot = T, facet = "rows", pmethods = c("bonferroni",
+  "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
@@ -20,6 +21,8 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 \item{showerror}{whether show error message when error occurs, default F}
 
 \item{plot}{T/F}
+
+\item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.}
 

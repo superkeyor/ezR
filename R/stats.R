@@ -345,6 +345,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F
+#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible data frame with y,x,p,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
@@ -358,7 +359,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
+ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
@@ -396,11 +397,13 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
         if (length(x)>1 & yy!=y[length(y)]) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
     }
     if (plot) {
+        tt=sprintf('
         pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
-            geom_bar(stat='identity')+
-            geom_hline(yintercept = 0.05,color='black',linetype=5)+
+            geom_bar(stat="identity")+
+            geom_hline(yintercept = 0.05,color="black",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            facet_grid(y~.)
+            %s', sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),y) )
+        eval(parse(text = tt))
         print(pp)
     }
     for (method in pmethods) {
@@ -419,13 +422,14 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F
+#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df[[yy]],...)
 #' @return an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),...) {
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
     results4plot = results
@@ -466,11 +470,13 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
     }
     if (plot) {
+        tt = sprintf('
         pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
-            geom_bar(stat='identity')+
-            geom_hline(yintercept = 0.05,color='black',linetype=5)+
+            geom_bar(stat="identity")+
+            geom_hline(yintercept = 0.05,color="black",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            facet_grid(y~.)
+            %s', sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),y) )
+        eval(parse(text = tt))
         print(pp)
     }
     for (method in pmethods) {
@@ -489,11 +495,12 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pme
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F
+#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' @export
-ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pmethods=c('bonferroni','fdr'),width=300) {
+ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
     results4plot = results
@@ -528,11 +535,13 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,pm
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,'',NA),print2screen=print2screen)  # empty line between each x
     }
     if (plot) {
+        tt = sprintf('
         pp = results4plot %>% ez.dropna() %>% ggplot(aes(x=x,y=p,fill=y))+
-            geom_bar(stat='identity')+
-            geom_hline(yintercept = 0.05,color='black',linetype=5)+
+            geom_bar(stat="identity")+
+            geom_hline(yintercept = 0.05,color="black",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            facet_grid(y~.)
+            %s', sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),y) )
+        eval(parse(text = tt))
         print(pp)
     }
     for (method in pmethods) {
