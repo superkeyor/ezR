@@ -2133,7 +2133,7 @@ group_str <- function(strings,
   }
 
   # create progress bar
-  if (showProgressBar) pb <- utils::txtProgressBar(min = 0, max = ncol(m), style = 3)
+  if (showProgressBar) pb <- utils::txtProgressBar(min = 1, max = ncol(m), style = 3)
 
   # iterate matrix
   for (i in 1:nrow(m)) {
@@ -4025,7 +4025,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
   # check for valid attr.string
   if (!is.null(attr.string)) {
     # create progress bar
-    pb <- utils::txtProgressBar(min = 0,
+    pb <- utils::txtProgressBar(min = 1,
                                 max = ncol(data.spss),
                                 style = 3)
     # tell user...
@@ -4187,7 +4187,7 @@ write_data <- function(x, path, type, enc.to.utf8) {
   }
 
   # create progress bar
-  pb <- utils::txtProgressBar(min = 0,
+  pb <- utils::txtProgressBar(min = 1,
                               max = ncol(x),
                               style = 3)
   # tell user...
@@ -6718,7 +6718,7 @@ str_pos <- function(searchString,
   if (part.dist.match > 0) {
     ftlength <- nchar(findTerm)
     # create progress bar
-    if (showProgressBar) pb <- utils::txtProgressBar(min = 0,
+    if (showProgressBar) pb <- utils::txtProgressBar(min = 1,
                                                      max = length(searchString),
                                                      style = 3)
 
@@ -7538,7 +7538,7 @@ unlabel <- function(x) {
   # vector should be converted
   if (is.data.frame(x) || is.matrix(x)) {
     # create progress bar
-    pb <- utils::txtProgressBar(min = 0,
+    pb <- utils::txtProgressBar(min = 1,
                                 max = ncol(x),
                                 style = 3)
     # tell user...
