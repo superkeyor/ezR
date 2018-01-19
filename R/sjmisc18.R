@@ -4216,13 +4216,13 @@ write_data <- function(x, path, type, enc.to.utf8) {
   close(pb)
   if (type == "spss") {
     # tell user
-    message(sprintf("Writing %s file to '%s'. Please wait...\n", type, path))
+    # message(sprintf("Writing %s file to '%s'. Please wait...\n", type, path))
     # write SPSS
     haven::write_sav(x, path)
   } else if (type == "stata") {
     # tell user
-    message(sprintf("Writing %s file to '%s'. Please wait...\n", type, path))
-    # write SPSS
+    # message(sprintf("Writing %s file to '%s'. Please wait...\n", type, path))
+    # write Stata
     haven::write_dta(x, path)
   }
 }
