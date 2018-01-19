@@ -1631,13 +1631,13 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
       # legend is ignored, but because lab might be empty, better to keep the legend commands here
       tt = sprintf('
                   pp=ggplot(df, aes(x=%s, y=%s)) +
-                  geom_point(alpha=%f,size=%f) + %s 
-                  geom_smooth(method=lm,se=%s) + %s %s
-                  scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) +
+                  geom_point(alpha=%f,size=%f,aes(color="blue")) + %s 
+                  geom_smooth(method=lm,se=%s,aes(color="red")) + %s %s
+                  # scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) +
                   %s %s %s
                   theme(legend.direction="%s") + 
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,rp,se,rug,ellipse,ylab,xlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,point.alpha,point.size,rp,se,rug,ellipse,ylab,xlab,'theme(legend.position="none")',legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
