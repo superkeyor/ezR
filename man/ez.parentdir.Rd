@@ -2,12 +2,12 @@
 % Please edit documentation in R/os.R
 \name{ez.parentdir}
 \alias{ez.parentdir}
-\alias{ez.pp}
+\alias{ez.pr}
 \title{parentdir}
 \usage{
 ez.parentdir(path)
 
-ez.pp(path)
+ez.pr(path)
 }
 \description{
 parentdir

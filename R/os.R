@@ -302,7 +302,7 @@ ez.parentdir = function(path){dirname(path)}
 
 #' @rdname ez.parentdir
 #' @export
-ez.pp = ez.parentdir
+ez.pr = ez.parentdir
 
 #' alias of \code{\link{setwd}}
 #' @description alias of \code{\link{setwd}}
