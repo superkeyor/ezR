@@ -261,7 +261,11 @@ ez.execute = system
 #' @examples
 #' paste(..., sep=.Platform$file.sep)
 #' @export
-ez.joinpath = ez.jp = file.path
+ez.joinpath = file.path
+
+#' @rdname ez.joinpath
+#' @export
+ez.jp = ez.joinpath
 
 #' splitpath
 #' @description splitpath
@@ -277,7 +281,7 @@ ez.joinpath = ez.jp = file.path
 #' # $ext
 #' # '.pdf
 #' @export
-ez.splitpath = ez.sp = function(path){
+ez.splitpath = function(path){
     dir = dirname(path)
     file = basename(path)
     # file = strsplit(file, "\\.")[[1]][1]
@@ -287,10 +291,18 @@ ez.splitpath = ez.sp = function(path){
     return(list(dir=dir, file=file, ext=ext))
 }
 
+#' @rdname ez.splitpath
+#' @export
+ez.sp = ez.splitpath
+
 #' parentdir
 #' @description parentdir
 #' @export
-ez.parentdir = ez.pp = function(path){dirname(path)}
+ez.parentdir = function(path){dirname(path)}
+
+#' @rdname ez.parentdir
+#' @export
+ez.pp = ez.parentdir
 
 #' alias of \code{\link{setwd}}
 #' @description alias of \code{\link{setwd}}

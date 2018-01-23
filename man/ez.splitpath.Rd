@@ -2,9 +2,12 @@
 % Please edit documentation in R/os.R
 \name{ez.splitpath}
 \alias{ez.splitpath}
+\alias{ez.sp}
 \title{splitpath}
 \usage{
 ez.splitpath(path)
+
+ez.sp(path)
 }
 \description{
 splitpath

@@ -2,9 +2,12 @@
 % Please edit documentation in R/os.R
 \name{ez.joinpath}
 \alias{ez.joinpath}
+\alias{ez.jp}
 \title{alias of \code{\link{file.path}}}
 \usage{
 ez.joinpath(..., fsep = .Platform$file.sep)
+
+ez.jp(..., fsep = .Platform$file.sep)
 }
 \description{
 alias of \code{\link{file.path}}
