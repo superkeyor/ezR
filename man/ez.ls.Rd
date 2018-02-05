@@ -4,7 +4,7 @@
 \alias{ez.ls}
 \title{ls}
 \usage{
-ez.ls(path = ".", pattern = NULL, hidden = FALSE)
+ez.ls(path = ".", pattern = NULL, hidden = FALSE, fullpath = TRUE)
 }
 \description{
 ls

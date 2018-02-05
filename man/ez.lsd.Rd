@@ -4,7 +4,7 @@
 \alias{ez.lsd}
 \title{lsd}
 \usage{
-ez.lsd(path = ".", pattern = NULL, hidden = FALSE)
+ez.lsd(path = ".", pattern = NULL, hidden = FALSE, fullpath = FALSE)
 }
 \description{
 lsd
