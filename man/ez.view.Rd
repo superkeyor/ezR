@@ -32,3 +32,9 @@ returns a list $row, $col, $dat (input data frame), $pth (file path)
 \description{
 Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 }
+\note{
+when file=NULL (which stores to a temp file), debug=NULL, use getOption('debug') which is TRUE if not set up
+\cr when file=NULL, debug provided, overwrites getOption('debug')
+\cr when file provided, any debug is ignored
+\cr Bottom line: file > param debug > option debug
+}

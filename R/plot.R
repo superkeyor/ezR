@@ -1946,6 +1946,13 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
     if (ylab=='') ylab=xx
     df = ez.dropna(df, xx)
     dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+    # https://github.com/tidyverse/ggplot2/issues/2058
+    # https://github.com/tidyverse/ggplot2/issues/2242
+    # axis.text seems to have a bug. so always use:
+    # axis.line.x, axis.line.y
+    # axis.ticks.x, axis.ticks.y
+    # axis.text.x, axis.text.y
+    # axis.title.x, axis.title.y
     tt = sprintf('
     pp = ggplot2::ggplot(dfdf, aes(x="",n,fill=%s)) +
                  geom_bar(position="fill",stat="identity",alpha=%f,width=1) +
@@ -1955,14 +1962,17 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
                  theme(legend.direction="%s") + 
                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                  geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+
-                 coord_polar(theta="y",start=start,direction=direction)+
+                 coord_polar(theta="y",start=%f,direction=%f)+
                  theme_apa()+
-                 theme(axis.ticks=element_blank(),axis.text=element_blank(),panel.background=element_rect(fill="white",color="white"))'
-                 , xx, alpha, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+                 theme(axis.ticks.x=element_blank(),axis.ticks.y=element_blank(),
+                       axis.line.x=element_blank(),axis.line.y=element_blank(),
+                       axis.text.x=element_blank(),axis.text.y=element_blank(),
+                       panel.background=element_rect(fill="white",color="white"))'
+                 , xx, alpha, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, start, direction
     )
     gghistory=paste(gghistory,
          sprintf('df=ez.dropna(df,c("%s"))',xx),
-         sprintf('xx=%s',xx),
+         sprintf('xx="%s"',xx),
          'dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
          tt,sep='\n')
     eval(parse(text = tt))

@@ -50,6 +50,10 @@ ez.compare = function(lh,rh,...) {
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
 #' @param characterize T/F count the element freq of character cols or not 
+#' @note when file=NULL (which stores to a temp file), debug=NULL, use getOption('debug') which is TRUE if not set up
+#' \cr when file=NULL, debug provided, overwrites getOption('debug')
+#' \cr when file provided, any debug is ignored
+#' \cr Bottom line: file > param debug > option debug
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @export
 ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
