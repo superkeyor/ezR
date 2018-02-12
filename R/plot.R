@@ -1747,9 +1747,10 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
             if (is.null(ylab)) ylab='Count'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
             xlab = ifelse(xlab=='','xlab("")+',xlab)
+            # http://ggplot2.tidyverse.org/articles/releases/ggplot2-2.2.0.html#stacking-bars
             tt = sprintf('
             pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
-                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                         geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
@@ -1764,7 +1765,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
             xlab = ifelse(xlab=='','xlab("")+',xlab)
             tt = sprintf('
             pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
-                         geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                         geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
@@ -1811,7 +1812,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                 ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
                 tt = sprintf('
                 pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
-                             geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                             geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
@@ -1825,7 +1826,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                 ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
                 tt = sprintf('
                 pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
-                             geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                             geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
@@ -1855,7 +1856,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
                     tt = sprintf('
                     pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
-                                 geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                                 geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) +
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
@@ -1869,7 +1870,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
                     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
                     tt = sprintf('
                     pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
-                                 geom_bar(position="%s",stat="identity",alpha=%f,width=%f) +
+                                 geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) +
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
