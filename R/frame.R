@@ -1174,12 +1174,15 @@ ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FA
     if (fixed) perl=FALSE
     if (is.null(col)){
         colnames(df) <- gsub(pattern, replacement, colnames(df), fixed=fixed, ignore.case=ignore.case, perl=perl)
+        # R cannot have var starting with _
+        colnames(df) <- gsub('^_', 'X_', colnames(df), fixed=FALSE, perl=TRUE)
     } else {
         names_all = colnames(df)
         names_sel = (ez.selcol(df,col))
         selected = is.element(names_all,names_sel)
         names_new = dplyr::if_else(selected,gsub(pattern, replacement, names_all, fixed=fixed, ignore.case=ignore.case, perl=perl),names_all)
         colnames(df) <- names_new
+        colnames(df) <- gsub('^_', 'X_', colnames(df), fixed=FALSE, perl=TRUE)
     }
     return(df)
 } 
