@@ -4,9 +4,11 @@
 \alias{ez.read}
 \title{read csv table, wrapper of \code{\link{read.csv}}}
 \usage{
-ez.read(..., tolower = FALSE)
+ez.read(file, ..., skip.rows = NULL, tolower = FALSE)
 }
 \arguments{
+\item{skip.rows}{rows to skip (1 based) before read in, eg 1:3}
+
 \item{tolower}{whether to convert all column names to lower case}
 }
 \value{

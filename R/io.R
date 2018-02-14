@@ -4,6 +4,7 @@
 #' read csv table, wrapper of \code{\link{read.csv}}
 #' @description read csv table, wrapper of \code{\link{read.csv}}
 #' @param tolower whether to convert all column names to lower case
+#' @param skip.rows rows to skip (1 based) before read in, eg 1:3
 #' @return returns a data frame
 #' @export
 #' @examples
@@ -20,8 +21,16 @@
 #'
 #' read.csv(file, header = TRUE, sep = ",",
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
-ez.read = function(..., tolower=FALSE){
-    result = read.csv(...)
+ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE){
+    if (!is.null(skip.rows)) {
+        tmp = readLines(file)
+        tmp = tmp[-(skip.rows)]
+        tmpFile = tempfile()
+        on.exit(unlink(tmpFile))
+        writeLines(tmp,tmpFile)
+        file = tmpFile
+    }
+    result = read.csv(file, ...)
     if (tolower) names(result) = tolower(names(result))
     return(result)
 }
