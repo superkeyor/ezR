@@ -44,12 +44,13 @@ ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE){
 #'             col.names = TRUE, qmethod = c("escape", "double"),
 #'             fileEncoding = "")
 #' dec: decimal point
+#' sep: not applicable when file is csv
 #' @export
 ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = "", ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     x = data.frame(x)
     if (row.names==FALSE) {rownames(x) <- NULL}
-    if (col.names==TRUE) {
+    if (col.names==TRUE & tools::file_ext(file)=='csv') {
         write.csv(x=x, file=file, row.names=row.names, na=na, ...)
     }else{
         # hack to not save col names http://stackoverflow.com/a/19227265/2292993

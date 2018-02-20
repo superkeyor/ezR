@@ -19,4 +19,5 @@ wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}
             col.names = TRUE, qmethod = c("escape", "double"),
             fileEncoding = "")
 dec: decimal point
+sep: not applicable when file is csv
 }
