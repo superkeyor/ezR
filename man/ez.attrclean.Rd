@@ -11,7 +11,7 @@ ez.attrclean(x, col = NULL, attrs = c("variable.labels"), ...)
 
 \item{col}{evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.}
 
-\item{attrs}{c('variable.labels'). run names(attributes(x)) to see all attributes}
+\item{attrs}{c('variable.labels'), or c('variable.labels', 'labels'). run names(attributes(x)) to see all attributes}
 }
 \value{
 returns a new data frame or vector
@@ -20,5 +20,5 @@ returns a new data frame or vector
 remove specified attributes
 }
 \note{
-sjmisc_set_labels(x,"") only for value labels: haven style ("labels") or foreign style ("value.labels")
+this function uses a different mechanism from sjmisc_set_labels(x,"") which works only for value labels: haven style ("labels") or foreign style ("value.labels")
 }
