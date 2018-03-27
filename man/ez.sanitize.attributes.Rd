@@ -2,9 +2,12 @@
 % Please edit documentation in R/frame.R
 \name{ez.sanitize.attributes}
 \alias{ez.sanitize.attributes}
+\alias{ez.attrclean}
 \title{remove specified attributes}
 \usage{
 ez.sanitize.attributes(x, col = NULL, attrs = c("variable.labels"), ...)
+
+ez.attrclean(x, col = NULL, attrs = c("variable.labels"), ...)
 }
 \arguments{
 \item{x}{a data frame or a vector}

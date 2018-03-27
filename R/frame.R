@@ -1735,7 +1735,10 @@ ez.sanitize.colnames <- function(df,pattern='[[:space:][:punct:]]',replacement='
         colnames(df) <- gsub('^_', 'X_', colnames(df), fixed=FALSE, perl=TRUE)
     }
     return(df)
-} 
+}
+#' @rdname ez.sanitize.colnames
+#' @export
+ez.clcols=ez.sanitize.colnames
 
 #' sanitize column-wise char data
 #' @description sanitize column-wise char data (if not numeric,logical,date), see also \code{\link{ez.sanitize.colnames}}
@@ -1769,6 +1772,9 @@ ez.sanitize.coldata = function(x, col=NULL, procedures=c('toupper','removeleadin
     }
     return(x)
 }
+#' @rdname ez.sanitize.coldata
+#' @export
+ez.sanitize=ez.sanitize.coldata
 
 #' remove specified attributes
 #' @description remove specified attributes
@@ -1795,3 +1801,6 @@ ez.sanitize.attributes = function(x, col=NULL, attrs=c('variable.labels'), ...) 
     }
     return(x)
 }
+#' @rdname ez.sanitize.attributes
+#' @export
+ez.attrclean=ez.sanitize.attributes

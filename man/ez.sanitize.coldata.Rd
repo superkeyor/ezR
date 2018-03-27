@@ -2,10 +2,13 @@
 % Please edit documentation in R/frame.R
 \name{ez.sanitize.coldata}
 \alias{ez.sanitize.coldata}
+\alias{ez.sanitize}
 \title{sanitize column-wise char data}
 \usage{
 ez.sanitize.coldata(x, col = NULL, procedures = c("toupper",
   "removeleading0"))
+
+ez.sanitize(x, col = NULL, procedures = c("toupper", "removeleading0"))
 }
 \arguments{
 \item{x}{a data frame or a vector}

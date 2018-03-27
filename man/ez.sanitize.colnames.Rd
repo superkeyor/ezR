@@ -2,11 +2,15 @@
 % Please edit documentation in R/frame.R
 \name{ez.sanitize.colnames}
 \alias{ez.sanitize.colnames}
+\alias{ez.clcols}
 \title{sanitize col names}
 \usage{
 ez.sanitize.colnames(df, pattern = "[[:space:][:punct:]]",
   replacement = "_", fixed = FALSE, ignore.case = FALSE, perl = TRUE,
   col = NULL)
+
+ez.clcols(df, pattern = "[[:space:][:punct:]]", replacement = "_",
+  fixed = FALSE, ignore.case = FALSE, perl = TRUE, col = NULL)
 }
 \arguments{
 \item{df}{df}
