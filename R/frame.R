@@ -1149,44 +1149,6 @@ ez.recol = function(df, movecommand) {
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.move = ez.recol
 
-#' clean col names
-#' @description replace certain characters (all occurrence) in all column names, using regular expression and gsub()
-#' @param df df
-#' @param pattern search
-#' @param replacement replacement
-#' @param fixed FALSE=regex mode on, TRUE=regex mode off
-#' @param ignore.case if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.
-#' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]  
-#' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
-#' ignored when fixed=TRUE
-#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )
-#' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
-#' \cr 1:4 (not quoted)
-#' \cr 'col1:col3' (quoted)
-#' \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
-#' @return returns a new df with column names cleaned, old df does not change
-#' @examples
-#' all upper to lower using regex (ignore.case=FALSE or TRUE does not matter)
-#' ez.clcols(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
-#' @export
-ez.clcols <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
-    # ignore perl when fixed is true, otherwise issuing a warning
-    if (fixed) perl=FALSE
-    if (is.null(col)){
-        colnames(df) <- gsub(pattern, replacement, colnames(df), fixed=fixed, ignore.case=ignore.case, perl=perl)
-        # R cannot have var starting with _
-        colnames(df) <- gsub('^_', 'X_', colnames(df), fixed=FALSE, perl=TRUE)
-    } else {
-        names_all = colnames(df)
-        names_sel = (ez.selcol(df,col))
-        selected = is.element(names_all,names_sel)
-        names_new = dplyr::if_else(selected,gsub(pattern, replacement, names_all, fixed=fixed, ignore.case=ignore.case, perl=perl),names_all)
-        colnames(df) <- names_new
-        colnames(df) <- gsub('^_', 'X_', colnames(df), fixed=FALSE, perl=TRUE)
-    }
-    return(df)
-} 
-
 #' rename all cols, see also \code{\link{ez.rncol}}
 #' @description rename all cols, see also \code{\link{ez.rncol}}
 #' @param newColName c('','',''), number of cols must match
@@ -1736,15 +1698,54 @@ ez.selcol=function(df,col,...) {
     return(colnames(cols))
 }
 
-#' sanitize column-wise
-#' @description sanitize column-wise (if not numeric,logical,date), see also \code{\link{ez.clcols}}
+#' sanitize col names
+#' @description replace certain characters (all occurrence) in all column names, using regular expression and gsub(). see also \code{\link{ez.sanitize.coldata}}
+#' @param df df
+#' @param pattern search
+#' @param replacement replacement
+#' @param fixed FALSE=regex mode on, TRUE=regex mode off
+#' @param ignore.case if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.
+#' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]  
+#' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
+#' ignored when fixed=TRUE
+#' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )
+#' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
+#' \cr 1:4 (not quoted)
+#' \cr 'col1:col3' (quoted)
+#' \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
+#' @return returns a new df with column names cleaned, old df does not change
+#' @examples
+#' all upper to lower using regex (ignore.case=FALSE or TRUE does not matter)
+#' ez.sanitize.colnames(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
+#' @seealso see also \code{\link{ez.sanitize.coldata}}
+#' @export
+ez.sanitize.colnames <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
+    # ignore perl when fixed is true, otherwise issuing a warning
+    if (fixed) perl=FALSE
+    if (is.null(col)){
+        colnames(df) <- gsub(pattern, replacement, colnames(df), fixed=fixed, ignore.case=ignore.case, perl=perl)
+        # R cannot have var starting with _
+        colnames(df) <- gsub('^_', 'X_', colnames(df), fixed=FALSE, perl=TRUE)
+    } else {
+        names_all = colnames(df)
+        names_sel = (ez.selcol(df,col))
+        selected = is.element(names_all,names_sel)
+        names_new = dplyr::if_else(selected,gsub(pattern, replacement, names_all, fixed=fixed, ignore.case=ignore.case, perl=perl),names_all)
+        colnames(df) <- names_new
+        colnames(df) <- gsub('^_', 'X_', colnames(df), fixed=FALSE, perl=TRUE)
+    }
+    return(df)
+} 
+
+#' sanitize column-wise char data
+#' @description sanitize column-wise char data (if not numeric,logical,date), see also \code{\link{ez.sanitize.colnames}}
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
-#' @param procedures c('toupper','removeleading0')
+#' @param procedures c('toupper','removeleading0') or 'tolower'
 #' @return returns a new data frame or vector
-#' @seealso \code{\link{ez.clcols}}
+#' @seealso \code{\link{ez.sanitize.colnames}}
 #' @export
-ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
+ez.sanitize.coldata = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
     if (!is.data.frame(x)) {
         if (!is.numeric(x) && !is.logical(x) && !ez.is.date(x)) {
             factored = ifelse(is.factor(x), TRUE, FALSE)
@@ -1758,12 +1759,12 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
             x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         }
     } else if (is.data.frame(x) & is.null(col)) {
-        x = dplyr::mutate_all(x, funs(ez.sanitize(.,procedures=procedures)))
+        x = dplyr::mutate_all(x, funs(ez.sanitize.coldata(.,procedures=procedures)))
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
         for (col in cols) {
-            x[[col]] = ez.sanitize(x[[col]],procedures=procedures)
+            x[[col]] = ez.sanitize.coldata(x[[col]],procedures=procedures)
         }
     }
     return(x)
@@ -1777,19 +1778,19 @@ ez.sanitize = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
 #' @return returns a new data frame or vector
 #' @note this function uses a different mechanism from sjmisc_set_labels(x,"") which works only for value labels: haven style ("labels") or foreign style ("value.labels")
 #' @export
-ez.attrclean = function(x, col=NULL, attrs=c('variable.labels'), ...) {
+ez.sanitize.attributes = function(x, col=NULL, attrs=c('variable.labels'), ...) {
     if (!is.data.frame(x)) {
         # set_labels only for value labels
         # x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         # attributes(x) <- NULL  # this is not desirable because some attributes are needed, eg, $class, $level, $names
         for (a in attrs) {attr(x,a) <- NULL}
     } else if (is.data.frame(x) & is.null(col)) {
-        x = dplyr::mutate_all(x, funs(ez.attrclean(.,attrs=attrs)))
+        x = dplyr::mutate_all(x, funs(ez.sanitize.attributes(.,attrs=attrs)))
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
         for (col in cols) {
-            x[[col]] = ez.attrclean(x[[col]],attrs=attrs)
+            x[[col]] = ez.sanitize.attributes(x[[col]],attrs=attrs)
         }
     }
     return(x)
