@@ -343,7 +343,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
     as.vector(scale(resid(model),center=center,scale=scale))
 }
 
-#' a series of simple regression, for many y and many x
+#' a series of simple regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
@@ -351,7 +351,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
-#' @param plot T/F
+#' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
@@ -363,7 +363,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 #' \cr 
 #' \cr degree_of_freedom: from F-statistic
-#' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
+#' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
 ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
@@ -404,13 +404,14 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
         if (length(x)>1 & yy!=y[length(y)]) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
     }
     if (plot) {
+        bonferroniP = -log10(0.05/length(results4plot[['p']]))
         tt = sprintf('
-        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=p,fill=y))+
+        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
             geom_bar(stat="identity")+
-            geom_hline(yintercept = 0.05,color="black",linetype=5)+
+            geom_hline(yintercept = %f,color="black",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             theme(legend.position="none")+
-            %s', sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         eval(parse(text = tt))
         print(pp)
     }
@@ -421,7 +422,83 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
     return(invisible(results))
 }
 
-#' a series of one-way anova, for many y and many x
+#' a series of simple logistic regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
+#' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
+#' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
+#' \cr NA in df will be auto excluded in glm(), reflected by degree_of_freedom
+#' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
+#' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
+#' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
+#' @param plot T/F, the dash line is bonferroni p = 0.05
+#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
+#' @param showerror whether show error message when error occurs, default F
+#' @param ... dots passed to ez.2value(df,...)
+#' @return an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+#' \cr odds_ratio: odds ratio
+#' \cr so that the variances of dependent and independent variables are 1.
+#' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
+#' \cr per standard deviation increase in the predictor variable. 
+#' \cr 
+#' \cr degree_of_freedom
+#' @export
+ez.logistics = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+    y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
+    results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'odds_ratio'=numeric(),'degree_of_freedom'=numeric())
+    results4plot = results
+    df=ez.2value(df,y,...)
+    for (yy in y) {
+        for (xx in x) {
+            if (showerror) {
+                # try is implemented using tryCatch
+                # try(expr, silent = FALSE)
+                try({
+                    # nlevels(nonfactor)=0
+                    if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
+                    df[[xx]]=ez.2value(df[[xx]],...)
+                    glm((df[[yy]])~(df[[xx]]),family = binomial(link = "logit")) %>% summary() ->model
+                    p = model$coefficients[2,4]
+                    odds_ratio = exp(model$coefficients[2,1])
+                    degree_of_freedom = model$df[2]
+                    results4plot = ez.append(results4plot,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=F)
+                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=print2screen)}
+                    })
+            } else {
+                # go to next loop item, in case error
+                tryCatch({
+                    if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
+                    df[[xx]]=ez.2value(df[[xx]],...)
+                    glm((df[[yy]])~(df[[xx]]),family = binomial(link = "logit")) %>% summary() ->model
+                    p = model$coefficients[2,4]
+                    odds_ratio = exp(model$coefficients[2,1])
+                    degree_of_freedom = model$df[2]
+                    results4plot = ez.append(results4plot,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=F)
+                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=print2screen)}
+                }, error = function(e) {})
+            }
+        }
+        if (length(x)>1 & yy!=y[length(y)]) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
+    }
+    if (plot) {
+        bonferroniP = -log10(0.05/length(results4plot[['p']]))
+        tt = sprintf('
+        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+            geom_bar(stat="identity")+
+            geom_hline(yintercept = %f,color="black",linetype=5)+
+            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+            theme(legend.position="none")+
+            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        eval(parse(text = tt))
+        print(pp)
+    }
+    for (method in pmethods) {
+        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
+    }
+    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
+    return(invisible(results))
+}
+
+#' a series of one-way anova, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
 #' @description df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 #' @param df a data frame
 #' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
@@ -429,7 +506,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
-#' @param plot T/F
+#' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df[[yy]],...)
@@ -478,13 +555,14 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,fac
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
     }
     if (plot) {
+        bonferroniP = -log10(0.05/length(results4plot[['p']]))
         tt = sprintf('
-        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=p,fill=y))+
+        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
             geom_bar(stat="identity")+
-            geom_hline(yintercept = 0.05,color="black",linetype=5)+
+            geom_hline(yintercept = %f,color="black",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             theme(legend.position="none")+
-            %s', sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         eval(parse(text = tt))
         print(pp)
     }
@@ -495,7 +573,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,fac
     return(invisible(results))
 }
 
-#' a series of fisher.test, for many y and many x
+#' a series of fisher.test, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
 #' @description df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
 #' \cr NA in df will be auto excluded in fisher.test(), reflected by total
@@ -503,7 +581,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,fac
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
-#' @param plot T/F
+#' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)
@@ -544,13 +622,14 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,fa
         if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,'',NA),print2screen=print2screen)  # empty line between each x
     }
     if (plot) {
+        bonferroniP = -log10(0.05/length(results4plot[['p']]))
         tt = sprintf('
-        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=p,fill=y))+
+        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
             geom_bar(stat="identity")+
-            geom_hline(yintercept = 0.05,color="black",linetype=5)+
+            geom_hline(yintercept = %f,color="black",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             theme(legend.position="none")+
-            %s', sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         eval(parse(text = tt))
         print(pp)
     }

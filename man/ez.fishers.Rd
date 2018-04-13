@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{ez.fishers}
 \alias{ez.fishers}
-\title{a series of fisher.test, for many y and many x}
+\title{a series of fisher.test, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
 \usage{
 ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
   plot = T, facet = "rows", pmethods = c("bonferroni", "fdr"),
@@ -20,7 +20,7 @@ ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 
 \item{showerror}{whether show error message when error occurs, default F}
 
-\item{plot}{T/F}
+\item{plot}{T/F, the dash line is bonferroni p = 0.05}
 
 \item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
 
