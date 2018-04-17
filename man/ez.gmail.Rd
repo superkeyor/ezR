@@ -22,5 +22,5 @@ returns nothing
 Send mail with Gmail
 }
 \note{
-first-time use, gmailr::gmail_auth('compose') to generate ~/.httr-oauth
+first-time use will auto pop url to save secret file, or manually gmailr::gmail_auth('compose') to generate .httr-oauth
 }

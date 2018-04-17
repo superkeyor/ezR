@@ -541,7 +541,7 @@ ez.mv = function(from,to){
 #' @param htmlbody '<b>Gmailr</b> is a <i>very</i> handy package!' or 'Email using R.'
 #' @param attachment default NULL, 'BazaarQueriesforURLData.txt' 
 #' @return returns nothing
-#' @note first-time use, gmailr::gmail_auth('compose') to generate ~/.httr-oauth
+#' @note first-time use will auto pop url to save secret file, or manually gmailr::gmail_auth('compose') to generate .httr-oauth
 #' @export
 ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
     # https://cran.r-project.org/web/packages/gmailr/vignettes/sending_messages.html
