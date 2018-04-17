@@ -533,3 +533,28 @@ ez.mv = function(from,to){
     }
     result = file.rename(from = from, to = to)
 }
+
+#' @rdname bz.install
+#' @export
+bz.install2=bz.install
+
+#' Send mail with Gmail
+#' @description Send mail with Gmail
+#' @param to eg, 'jerryzhujian9@gmail.com'
+#' @param subject 'Gmail from R'
+#' @param htmlbody '<b>Gmailr</b> is a <i>very</i> handy package!' or 'Email using R.'
+#' @param attachment default NULL, 'BazaarQueriesforURLData.txt' 
+#' @return returns nothing
+#' @note first-time use, gmailr::gmail_auth('compose') to generate ~/.httr-oauth
+#' @export
+ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
+    # https://cran.r-project.org/web/packages/gmailr/vignettes/sending_messages.html
+    msg = gmailr::mime()
+    msg = gmailr::to(msg, to)
+    msg = gmailr::from(msg, "Memory Lab <fmrimemorylab@gmail.com>")
+    msg = gmailr::subject(msg, subject)
+    msg = gmailr::html_body(msg, htmlbody)
+    if (!is.null(attachment)) {msg = gmailr::attach_file(msg, attachment)}
+    gmailr::send_message(msg)
+    cat('Mail sent!', "\n")
+}

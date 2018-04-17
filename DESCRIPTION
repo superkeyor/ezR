@@ -35,4 +35,5 @@ Imports:
     crayon,
     gmodels,
     scales,
-    chron
+    chron,
+    gmailr
