@@ -534,10 +534,6 @@ ez.mv = function(from,to){
     result = file.rename(from = from, to = to)
 }
 
-#' @rdname bz.install
-#' @export
-bz.install2=bz.install
-
 #' Send mail with Gmail
 #' @description Send mail with Gmail
 #' @param to email address, if multiple seperated by comma
