@@ -540,7 +540,7 @@ bz.install2=bz.install
 
 #' Send mail with Gmail
 #' @description Send mail with Gmail
-#' @param to eg, 'jerryzhujian9@gmail.com'
+#' @param to email address, if multiple seperated by comma
 #' @param subject 'Gmail from R'
 #' @param htmlbody '<b>Gmailr</b> is a <i>very</i> handy package!' or 'Email using R.'
 #' @param attachment default NULL, 'BazaarQueriesforURLData.txt' 
