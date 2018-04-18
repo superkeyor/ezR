@@ -30,6 +30,7 @@ smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), nu
 \cr a=c(1,2,3); a[which(a==4)] <-3.1; a          #a changes a to double
 \cr bottom line: the new val determines outcome even without match
 \cr But my script protects that; data type remains unchanged if there is no match
+\cr logic is tricky TRUE=='TRUE', FALSE=='FALSE' return TRUE; always convert them first to num, eg, mutate(preterm=as.numeric(delivery_ega<37.0)) and then start from there.
 }
 \note{
 when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
