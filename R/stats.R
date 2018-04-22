@@ -44,7 +44,7 @@ ez.compare = function(lh,rh,...) {
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
-#' @description Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
+#' @description ez.view=viewx, View, view
 #' @param df a data frame
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
@@ -54,6 +54,7 @@ ez.compare = function(lh,rh,...) {
 #' \cr when file=NULL, debug provided, overwrites getOption('debug')
 #' \cr when file provided, any debug is ignored
 #' \cr Bottom line: file > param debug > option debug
+#' \cr Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @export
 ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
@@ -212,21 +213,7 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
 
 #' @rdname ez.view
 #' @export
-xview=ez.view
-
-#' @rdname ez.view
-#' @export
 viewx=ez.view
-
-#' View
-#' @description alias of \code{\link[utils]{View}}
-#' @export
-yview=utils::View
-
-#' View
-#' @description alias of \code{\link[utils]{View}}
-#' @export
-viewy=utils::View
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description print sorted uniques of a df col or a vector (NA last) and other information

@@ -2,14 +2,10 @@
 % Please edit documentation in R/stats.R
 \name{ez.view}
 \alias{ez.view}
-\alias{xview}
 \alias{viewx}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
 ez.view(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
-  incomparables = FALSE, debug = NULL, ...)
-
-xview(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
   incomparables = FALSE, debug = NULL, ...)
 
 viewx(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
@@ -30,11 +26,12 @@ viewx(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
 returns a list $row, $col, $dat (input data frame), $pth (file path)
 }
 \description{
-Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
+ez.view=viewx, View, view
 }
 \note{
 when file=NULL (which stores to a temp file), debug=NULL, use getOption('debug') which is TRUE if not set up
 \cr when file=NULL, debug provided, overwrites getOption('debug')
 \cr when file provided, any debug is ignored
 \cr Bottom line: file > param debug > option debug
+\cr Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 }
