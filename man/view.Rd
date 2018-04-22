@@ -7,5 +7,5 @@
 view(x)
 }
 \description{
-print sorted uniques of a df col or a vector (NA last) and other information
+viewx (ez.view, excel), View (built-in), view (print out). print sorted uniques of a df col or a vector (NA last) and other information
 }

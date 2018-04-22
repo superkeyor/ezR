@@ -26,7 +26,7 @@ viewx(df, id = NULL, file = NULL, width = 300, characterize = TRUE,
 returns a list $row, $col, $dat (input data frame), $pth (file path)
 }
 \description{
-ez.view=viewx, View, view
+viewx (ez.view, excel), View (built-in), view (print out)
 }
 \note{
 when file=NULL (which stores to a temp file), debug=NULL, use getOption('debug') which is TRUE if not set up

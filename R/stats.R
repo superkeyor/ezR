@@ -44,7 +44,7 @@ ez.compare = function(lh,rh,...) {
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
-#' @description ez.view=viewx, View, view
+#' @description viewx (ez.view, excel), View (built-in), view (print out)
 #' @param df a data frame
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
@@ -216,7 +216,7 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
 viewx=ez.view
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
-#' @description print sorted uniques of a df col or a vector (NA last) and other information
+#' @description viewx (ez.view, excel), View (built-in), view (print out). print sorted uniques of a df col or a vector (NA last) and other information
 #' @export
 view=function(x) {
     v = x
