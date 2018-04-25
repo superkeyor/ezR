@@ -618,8 +618,8 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
     legend.box = ifelse(legend.box,'theme(legend.background = element_rect(color = "black"))+','')
     
-    ymin = ifelse(error.direction %in% c('min','both'),'average-se','average')
-    ymax = ifelse(error.direction %in% c('max','both'),'average+se','average')
+    ymin = ifelse(error.direction %in% c('min','both'),'avgAverage-se','avgAverage')
+    ymax = ifelse(error.direction %in% c('max','both'),'avgAverage+se','avgAverage')
     
     vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
@@ -644,9 +644,9 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
             tt = sprintf('
                          pp=group_by(df,%s) %%>%% 
-                         summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                         summarise(avgAverage=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                          
-                         ggplot2::ggplot(aes(x=%s,y=average,fill=%s)) +
+                         ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=%s)) +
                          geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                          %s +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
@@ -671,9 +671,9 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                 # color = outline color of bar
                 tt = sprintf('
                             pp=group_by(df,%s,%s) %%>%% 
-                            summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                            summarise(avgAverage=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
 
-                            ggplot2::ggplot(aes(x=%s,y=average,fill=%s)) +
+                            ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=%s)) +
                             geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                             %s + 
                             geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
@@ -701,10 +701,10 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                     # color = outline color of bar
                     tt = sprintf('
                                 pp=group_by(df,%s,%s,%s) %%>%% 
-                                summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                                summarise(avgAverage=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                                 unite(zzaa,c(%s,%s)) %%>%% ez.2factor("zzaa") %%>%% ez.factorder("zzaa") %%>%%
 
-                                ggplot2::ggplot(aes(x=%s,y=average,fill=zzaa)) +
+                                ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=zzaa)) +
                                 geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                                 %s + 
                                 geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
@@ -769,8 +769,8 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
     legend.box = ifelse(legend.box,'theme(legend.background = element_rect(color = "black"))+','')
 
-    ymin = ifelse(error.direction %in% c('min','both'),'average-se','average')
-    ymax = ifelse(error.direction %in% c('max','both'),'average+se','average')
+    ymin = ifelse(error.direction %in% c('min','both'),'avgAverage-se','avgAverage')
+    ymax = ifelse(error.direction %in% c('max','both'),'avgAverage+se','avgAverage')
     
     vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
@@ -795,9 +795,9 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
             tt = sprintf('
                          pp=group_by(df,%s) %%>%% 
-                         summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                         summarise(avgAverage=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                          
-                         ggplot2::ggplot(aes(x=%s,y=average,group=1)) +
+                         ggplot2::ggplot(aes(x=%s,y=avgAverage,group=1)) +
                          geom_point() +
                          geom_line(size=%f) +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
@@ -822,9 +822,9 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                 # color = outline color of bar
                 tt = sprintf('
                             pp=group_by(df,%s,%s) %%>%% 
-                            summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                            summarise(avgAverage=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
 
-                            ggplot2::ggplot(aes(x=%s,y=average,group=%s)) +
+                            ggplot2::ggplot(aes(x=%s,y=avgAverage,group=%s)) +
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
@@ -849,10 +849,10 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                     df=ez.dropna(df,c(yy,xx,zz,aa))
                     tt = sprintf('
                             pp=group_by(df,%s,%s,%s) %%>%% 
-                            summarise(average=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
+                            summarise(avgAverage=mean(%s),se=sd(%s)/sqrt(n())) %%>%% 
                             unite(%s,c(%s,%s)) %%>%% ez.2factor("%s") %%>%% ez.factorder("%s") %%>%%
 
-                            ggplot2::ggplot(aes(x=%s,y=average,group=%s)) +
+                            ggplot2::ggplot(aes(x=%s,y=avgAverage,group=%s)) +
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
