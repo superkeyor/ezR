@@ -722,7 +722,7 @@ ez.age <- function(dob, enddate=Sys.Date(), floorize=FALSE, units='years', preci
   if (!inherits(dob, "Date") | !inherits(enddate, "Date")){
     stop("Both dob and enddate must be Date class objects")
   }
-  if(any(enddate < dob)){
+  if(any(enddate < dob, na.rm=TRUE)){
     stop("End date must be a date after date of birth")
   }
   start <- as.POSIXlt(dob)
