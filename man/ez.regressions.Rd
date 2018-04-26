@@ -20,7 +20,7 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 
 \item{showerror}{whether show error message when error occurs, default F}
 
-\item{plot}{T/F, the dash line is bonferroni p = 0.05}
+\item{plot}{T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05}
 
 \item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
 
@@ -29,7 +29,7 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 \item{...}{dots passed to ez.2value(df,...)}
 }
 \value{
-an invisible data frame with y,x,p,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 \cr beta: standardized coefficients or beta coefficients are the estimates resulting from a regression analysis that have been standardized 
 \cr so that the variances of dependent and independent variables are 1.
 \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -37,6 +37,7 @@ an invisible data frame with y,x,p,beta,degree_of_freedom and print results out 
 \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 \cr 
 \cr degree_of_freedom: from F-statistic
+\cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 }
 \description{
 df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))

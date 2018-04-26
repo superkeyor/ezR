@@ -338,11 +338,11 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
-#' @param plot T/F, the dash line is bonferroni p = 0.05
+#' @param plot T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible data frame with y,x,p,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+#' @return an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' \cr beta: standardized coefficients or beta coefficients are the estimates resulting from a regression analysis that have been standardized 
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -350,12 +350,13 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 #' \cr 
 #' \cr degree_of_freedom: from F-statistic
+#' \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
 ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
-    results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
+    results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'rp'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
     df=ez.2value(df,y,...)
     for (yy in y) {
@@ -369,10 +370,16 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                     df[[xx]]=ez.2value(df[[xx]],...)
                     lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
+
+                    rmodel = MASS::rlm(y=df[[yy]],x=df[[xx]])
+                    # https://stats.stackexchange.com/a/205615/100493
+                    rtest = sfsmisc::f.robftest(rmodel,var='df[[xx]]')
+                    rp = rtest$p.value
+
                     beta = model$coefficients[2,1]
                     degree_of_freedom = model$df[2]
-                    results4plot = ez.append(results4plot,list(yy,xx,p,beta,degree_of_freedom),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,beta,degree_of_freedom),print2screen=print2screen)}
+                    results4plot = ez.append(results4plot,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=F)
+                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=print2screen)}
                     })
             } else {
                 # go to next loop item, in case error
@@ -381,10 +388,16 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                     df[[xx]]=ez.2value(df[[xx]],...)
                     lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
+
+                    rmodel = MASS::rlm(y=df[[yy]],x=df[[xx]])
+                    # https://stats.stackexchange.com/a/205615/100493
+                    rtest = sfsmisc::f.robftest(rmodel,var='df[[xx]]')
+                    rp = rtest$p.value
+
                     beta = model$coefficients[2,1]
                     degree_of_freedom = model$df[2]
-                    results4plot = ez.append(results4plot,list(yy,xx,p,beta,degree_of_freedom),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,beta,degree_of_freedom),print2screen=print2screen)}
+                    results4plot = ez.append(results4plot,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=F)
+                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=print2screen)}
                 }, error = function(e) {})
             }
         }
@@ -396,6 +409,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
         pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
             geom_bar(stat="identity")+
             geom_hline(yintercept = %f,color="black",linetype=5)+
+            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
