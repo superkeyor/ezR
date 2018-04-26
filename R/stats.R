@@ -486,6 +486,7 @@ ez.logistics = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,
         pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
             geom_bar(stat="identity")+
             geom_hline(yintercept = %f,color="black",linetype=5)+
+            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
@@ -515,7 +516,7 @@ ez.logistics = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
     results4plot = results
@@ -561,6 +562,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,fac
         pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
             geom_bar(stat="identity")+
             geom_hline(yintercept = %f,color="black",linetype=5)+
+            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
@@ -628,6 +630,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,fa
         pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
             geom_bar(stat="identity")+
             geom_hline(yintercept = %f,color="black",linetype=5)+
+            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
             theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
