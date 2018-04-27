@@ -336,6 +336,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
+#' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05
@@ -354,11 +355,20 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'rp'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
     df=ez.2value(df,y,...)
+    if (is.null(covar)) {
+        covar = ''
+        rcovar = ''
+    } else {
+        covar=ez.selcol(df,covar)
+        df=ez.2value(df,covar,...)
+        rcovar = paste('+',covar,sep='',collapse='')
+        covar = paste('+scale(df[["',covar,'"]])',sep='',collapse='')
+    }
     for (yy in y) {
         for (xx in x) {
             if (showerror) {
@@ -368,15 +378,15 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                     # nlevels(nonfactor)=0
                     if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
                     df[[xx]]=ez.2value(df[[xx]],...)
-                    lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
+
+                    cmd = sprintf('model = summary( lm( scale(df[[yy]])~scale(df[[xx]])%s ) )', covar)
+                    ez.eval(cmd)
                     p = model$coefficients[2,4]
 
-                    # seems rlm(y,x) cannot auto delete NA
-                    rdf = ez.dropna(df,c(xx,yy),print2screen=FALSE)
-                    rdf[[xx]]=ez.2value(rdf[[xx]],...)
-                    rmodel = MASS::rlm(y=rdf[[yy]],x=rdf[[xx]])
+                    cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
+                    ez.eval(cmd)
                     # https://stats.stackexchange.com/a/205615/100493
-                    rtest = sfsmisc::f.robftest(rmodel,var='rdf[[xx]]')
+                    rtest = sfsmisc::f.robftest(rmodel,var=xx)
                     rp = rtest$p.value
 
                     beta = model$coefficients[2,1]
@@ -389,15 +399,15 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                 tryCatch({
                     if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
                     df[[xx]]=ez.2value(df[[xx]],...)
-                    lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
+                    
+                    cmd = sprintf('model = summary( lm( scale(df[[yy]])~scale(df[[xx]])%s ) )', covar)
+                    ez.eval(cmd)
                     p = model$coefficients[2,4]
 
-                    # seems rlm(y,x) cannot auto delete NA
-                    rdf = ez.dropna(df,c(xx,yy),print2screen=FALSE)
-                    rdf[[xx]]=ez.2value(rdf[[xx]],...)
-                    rmodel = MASS::rlm(y=rdf[[yy]],x=rdf[[xx]])
+                    cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
+                    ez.eval(cmd)
                     # https://stats.stackexchange.com/a/205615/100493
-                    rtest = sfsmisc::f.robftest(rmodel,var='rdf[[xx]]')
+                    rtest = sfsmisc::f.robftest(rmodel,var=xx)
                     rp = rtest$p.value
 
                     beta = model$coefficients[2,1]
@@ -458,7 +468,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
     if (is.null(covar)) {
         covar = ''
     } else {
-        covar=ez.selcol(df,covar); 
+        covar=ez.selcol(df,covar)
         df=ez.2value(df,covar,...)
         covar = paste('+df[["',covar,'"]]',sep='',collapse='')
     }
