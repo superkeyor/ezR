@@ -435,6 +435,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' \cr NA in df will be auto excluded in glm(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
+#' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
 #' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
@@ -449,11 +450,18 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' \cr 
 #' \cr degree_of_freedom
 #' @export
-ez.logistics = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'odds_ratio'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
     df=ez.2value(df,y,...)
+    if (is.null(covar)) {
+        covar = ''
+    } else {
+        covar=ez.selcol(df,covar); 
+        df=ez.2value(df,covar,...)
+        covar = paste('+df[["',covar,'"]]',sep='',collapse='')
+    }
     for (yy in y) {
         for (xx in x) {
             if (showerror) {
@@ -463,7 +471,10 @@ ez.logistics = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,
                     # nlevels(nonfactor)=0
                     if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
                     df[[xx]]=ez.2value(df[[xx]],...)
-                    glm((df[[yy]])~(df[[xx]]),family = binomial(link = "logit")) %>% summary() ->model
+                    
+                    cmd = sprintf('model = summary(glm((df[[yy]])~(df[[xx]])%s,family = binomial(link = "logit")))', covar)
+                    ez.eval(cmd)
+
                     p = model$coefficients[2,4]
                     odds_ratio = exp(model$coefficients[2,1])
                     degree_of_freedom = model$df[2]
@@ -475,7 +486,10 @@ ez.logistics = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=T,
                 tryCatch({
                     if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
                     df[[xx]]=ez.2value(df[[xx]],...)
-                    glm((df[[yy]])~(df[[xx]]),family = binomial(link = "logit")) %>% summary() ->model
+                    
+                    cmd = sprintf('model = summary(glm((df[[yy]])~(df[[xx]])%s,family = binomial(link = "logit")))', covar)
+                    ez.eval(cmd)
+
                     p = model$coefficients[2,4]
                     odds_ratio = exp(model$coefficients[2,1])
                     degree_of_freedom = model$df[2]
