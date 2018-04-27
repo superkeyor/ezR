@@ -1692,7 +1692,7 @@ ez.ppq = function(...) {
 #' \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
 #' @return returns vector of col names
 #' @export
-ez.selcol=function(df,col,...) {
+ez.selcol = function(df,col=NULL,...) {
     if (is.null(col)) return(colnames(df))
 
     cmd=sprintf('dplyr::select(df,%s,...)',toString(col))
