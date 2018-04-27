@@ -1487,7 +1487,7 @@ ez.rmcol = ez.del
 #' \cr eg, original row.names() is 1, 2, 3, then drop row 2
 #' \cr if not reindex, new index is 1, 3
 #' \cr if reindex, new index is 1, 2
-#' @param print2screen T/F. if T, print out %d rows containing NAs dropped (In: %d -> Out: %d)
+#' @param print2screen T/F. if T, print out rows containing NAs dropped (In: -> Out: )
 #' @return returns a new df with rows that have NA(s) removed, or a new vector/factor without NAs
 #' @rdname ez.dropna
 #' @export
