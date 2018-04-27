@@ -4,7 +4,7 @@
 \alias{ez.selcol}
 \title{select cols in a df}
 \usage{
-ez.selcol(df, col, ...)
+ez.selcol(df, col = NULL, ...)
 }
 \arguments{
 \item{df}{df}

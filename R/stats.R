@@ -349,6 +349,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
 #' \cr per standard deviation increase in the predictor variable. 
 #' \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
+#' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
 #' \cr 
 #' \cr degree_of_freedom: from F-statistic
 #' \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
@@ -379,6 +380,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
                     if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
                     df[[xx]]=ez.2value(df[[xx]],...)
 
+                    # according to my own testing, scale or not for x,y or covar, does not change p values for predictors, although intercept would differ
                     cmd = sprintf('model = summary( lm( scale(df[[yy]])~scale(df[[xx]])%s ) )', covar)
                     ez.eval(cmd)
                     p = model$coefficients[2,4]

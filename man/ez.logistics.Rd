@@ -4,8 +4,9 @@
 \alias{ez.logistics}
 \title{a series of simple logistic regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
 \usage{
-ez.logistics(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  plot = T, facet = "rows", pmethods = c("bonferroni", "fdr"), ...)
+ez.logistics(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
+  print2screen = T, plot = T, facet = "rows", pmethods = c("bonferroni",
+  "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
@@ -14,6 +15,8 @@ ez.logistics(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 \item{y}{internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'}
 
 \item{x}{internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)}
+
+\item{covar}{NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'}
 
 \item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
 

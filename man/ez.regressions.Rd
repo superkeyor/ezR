@@ -4,7 +4,7 @@
 \alias{ez.regressions}
 \title{a series of simple regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
 \usage{
-ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
+ez.regressions(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
   print2screen = T, plot = T, facet = "rows", pmethods = c("bonferroni",
   "fdr"), ...)
 }
@@ -15,6 +15,8 @@ ez.regressions(df, y, x, pthreshold = 0.05, showerror = F,
 \item{y}{internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'}
 
 \item{x}{internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)}
+
+\item{covar}{NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'}
 
 \item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
 
@@ -35,6 +37,7 @@ an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print results o
 \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
 \cr per standard deviation increase in the predictor variable. 
 \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
+\cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
 \cr 
 \cr degree_of_freedom: from F-statistic
 \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
