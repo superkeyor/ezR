@@ -373,6 +373,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 
                     # seems rlm(y,x) cannot auto delete NA
                     rdf = ez.dropna(df,c(xx,yy),print2screen=FALSE)
+                    rdf[[xx]]=ez.2value(rdf[[xx]],...)
                     rmodel = MASS::rlm(y=rdf[[yy]],x=rdf[[xx]])
                     # https://stats.stackexchange.com/a/205615/100493
                     rtest = sfsmisc::f.robftest(rmodel,var='rdf[[xx]]')
@@ -393,6 +394,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 
                     # seems rlm(y,x) cannot auto delete NA
                     rdf = ez.dropna(df,c(xx,yy),print2screen=FALSE)
+                    rdf[[xx]]=ez.2value(rdf[[xx]],...)
                     rmodel = MASS::rlm(y=rdf[[yy]],x=rdf[[xx]])
                     # https://stats.stackexchange.com/a/205615/100493
                     rtest = sfsmisc::f.robftest(rmodel,var='rdf[[xx]]')
