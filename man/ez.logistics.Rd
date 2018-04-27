@@ -29,7 +29,7 @@ ez.logistics(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 }
 \value{
 an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
-\cr odds_ratio: odds ratio
+\cr odds_ratio: odds ratio=exp(b), one unit increase in x results in the odds of being 1 for y "OR" times the odds of being 0 for y
 \cr so that the variances of dependent and independent variables are 1.
 \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
 \cr per standard deviation increase in the predictor variable. 

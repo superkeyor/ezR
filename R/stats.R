@@ -371,9 +371,11 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                     lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
 
-                    rmodel = MASS::rlm(y=df[[yy]],x=df[[xx]])
+                    # seems rlm(y,x) cannot auto delete NA
+                    rdf = ez.dropna(df,c(xx,yy),print2screen=FALSE)
+                    rmodel = MASS::rlm(y=rdf[[yy]],x=rdf[[xx]])
                     # https://stats.stackexchange.com/a/205615/100493
-                    rtest = sfsmisc::f.robftest(rmodel,var='df[[xx]]')
+                    rtest = sfsmisc::f.robftest(rmodel,var='rdf[[xx]]')
                     rp = rtest$p.value
 
                     beta = model$coefficients[2,1]
@@ -389,9 +391,11 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
                     lm(scale(df[[yy]])~scale(df[[xx]])) %>% summary() ->model
                     p = model$coefficients[2,4]
 
-                    rmodel = MASS::rlm(y=df[[yy]],x=df[[xx]])
+                    # seems rlm(y,x) cannot auto delete NA
+                    rdf = ez.dropna(df,c(xx,yy),print2screen=FALSE)
+                    rmodel = MASS::rlm(y=rdf[[yy]],x=rdf[[xx]])
                     # https://stats.stackexchange.com/a/205615/100493
-                    rtest = sfsmisc::f.robftest(rmodel,var='df[[xx]]')
+                    rtest = sfsmisc::f.robftest(rmodel,var='rdf[[xx]]')
                     rp = rtest$p.value
 
                     beta = model$coefficients[2,1]
@@ -436,7 +440,7 @@ ez.regressions = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,plot=
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
-#' \cr odds_ratio: odds ratio
+#' \cr odds_ratio: odds ratio=exp(b), one unit increase in x results in the odds of being 1 for y "OR" times the odds of being 0 for y
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
 #' \cr per standard deviation increase in the predictor variable. 
