@@ -1777,7 +1777,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
             )
         }
         gghistory=paste(gghistory,
-                 sprintf('xx=c(%s)',ez.format.vector(xx,print2screen=FALSE)),
+                 sprintf('xx=c(%s)',ez.vv(xx,print2screen=FALSE)),
                  sprintf('df=ez.dropna(df,xx)'),
                  'dfdf = df %>% tidyr::gather_("theKey","theValue",xx)',
                  '# first compute pos

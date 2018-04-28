@@ -44,7 +44,7 @@ ez.compare = function(lh,rh,...) {
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
-#' @description viewx (ez.view, excel), View (built-in), view (print out)
+#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). 
 #' @param df a data frame
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
@@ -57,7 +57,7 @@ ez.compare = function(lh,rh,...) {
 #' \cr Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @export
-ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
+ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
     # if temped and not debug, just jump out of the function to save time
     if (is.null(file)) {
         debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
@@ -211,20 +211,40 @@ ez.view = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompa
     return(invisible(list('row'=results0,'col'=results,'dat'=df,'pth'=file)))
 }
 
-#' @rdname ez.view
+#' format a vector for easy manual copy/processing. 
+#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). 
+#' @param vec a vector
+#' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
+#' @return nothing, only print out. 
+#' \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
+#' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
+#' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-viewx=ez.view
+ez.vv = function(vec, quote=NULL,print2screen=TRUE){
+    if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
+
+    if (quote) {
+        printout=noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'"))
+    } else {
+        printout=noquote(paste0(vec,collapse = ","))
+    }
+    if (print2screen) {
+        print(printout)
+        cat(sprintf("Total elements: %d\n",length(vec)))
+    }
+    return(invisible(printout))
+}
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
-#' @description viewx (ez.view, excel), View (built-in), view (print out). print sorted uniques of a df col or a vector (NA last) and other information
+#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
 #' @export
-view=function(x) {
+ez.vi=function(x) {
     v = x
     if (is.data.frame(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
             stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(v)[which(ez.duplicated(colnames(v),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
         }
-        v.cols = colnames(v) %>% ez.format.vector(print2screen=F)
+        v.cols = colnames(v) %>% ez.vv(print2screen=F)
         v.nrow = nrow(v)
         v.ncol = ncol(v)
         v.missing=ez.count(v,NA,dim=3)
@@ -245,7 +265,7 @@ view=function(x) {
         }
         cat(sprintf('List of %d\n',length(x)))
     } else {
-        v.elements = unique(v) %>% sort(na.last=T) %>% ez.format.vector(print2screen=F)
+        v.elements = unique(v) %>% sort(na.last=T) %>% ez.vv(print2screen=F)
         v.class=class(v)
         v.n=length(v)
         v.missing=sum(is.na(v))
@@ -291,6 +311,10 @@ view=function(x) {
     }
     return(invisible(NULL))
 }
+
+#' @rdname ez.vi
+#' @export
+vi=ez.vi
 
 #' standard error of mean
 #' @description na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))

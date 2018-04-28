@@ -637,30 +637,6 @@ ez.pprint = function(string,color='green') {
     eval(parse(text = cmd))
 }
 
-#' format a vector for easy manual copy/processing. 
-#' @description format a vector for easy manual copy/processing. 
-#' @param vec a vector
-#' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
-#' @return nothing, only print out. 
-#' \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
-#' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
-#' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
-#' @export
-ez.format.vector = function(vec, quote=NULL,print2screen=TRUE){
-    if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
-
-    if (quote) {
-        printout=noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'"))
-    } else {
-        printout=noquote(paste0(vec,collapse = ","))
-    }
-    if (print2screen) {
-        print(printout)
-        cat(sprintf("Total elements: %d\n",length(vec)))
-    }
-    return(invisible(printout))
-}
-
 #' wrapper of \code{\link{eval}}
 #' @description wrapper of \code{\link{eval}}
 #' @param cmd an R cmd in text, e.g., constructed with sprintf()
