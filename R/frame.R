@@ -1489,9 +1489,8 @@ ez.rmcol = ez.del
 #' \cr if reindex, new index is 1, 2
 #' @param print2screen T/F. if T, print out rows containing NAs dropped (In: -> Out: )
 #' @return returns a new df with rows that have NA(s) removed, or a new vector/factor without NAs
-#' @rdname ez.dropna
 #' @export
-ez.na.keep = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
+ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
     df=x
     if (is.factor(x)) x=as.character(x)
     if (is.vector(x)) {
@@ -1541,10 +1540,6 @@ ez.na.keep = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
 
     return(result)
 }
-
-#' @rdname ez.dropna
-#' @export
-ez.dropna = ez.na.keep
 
 #' reset the index of a data frame from 1...N
 #' @description internally call row.names(df) <- NULL
