@@ -4,9 +4,9 @@
 \alias{ez.fishers}
 \title{a series of fisher.test, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
 \usage{
-ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  plot = T, facet = "rows", pmethods = c("bonferroni", "fdr"),
-  width = 300)
+ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = F,
+  viewresults = T, plot = T, facet = "rows", pmethods = c("bonferroni",
+  "fdr"), width = 300)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))

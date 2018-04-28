@@ -5,8 +5,8 @@
 \title{a series of simple regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
 \usage{
 ez.regressions(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
-  print2screen = T, plot = T, facet = "rows", pmethods = c("bonferroni",
-  "fdr"), ...)
+  print2screen = F, viewresults = T, plot = T, facet = "rows",
+  pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))

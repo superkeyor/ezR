@@ -4,8 +4,9 @@
 \alias{ez.anovas}
 \title{a series of one-way anova, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
 \usage{
-ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  plot = T, facet = "cols", pmethods = c("bonferroni", "fdr"), ...)
+ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = F,
+  viewresults = T, plot = T, facet = "cols", pmethods = c("bonferroni",
+  "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame
