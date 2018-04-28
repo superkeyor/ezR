@@ -356,7 +356,7 @@ ez.zresid = function(model,center = TRUE, scale = TRUE) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=F,viewresults=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=F,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'rp'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
@@ -463,7 +463,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
 #' \cr 
 #' \cr degree_of_freedom
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=F,viewresults=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=F,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'odds_ratio'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
@@ -550,7 +550,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=F,viewresults=T,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=F,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
     results4plot = results
@@ -625,7 +625,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=F,viewresult
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' @export
-ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=F,viewresults=T,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),width=300) {
+ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=F,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
     results4plot = results

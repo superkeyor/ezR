@@ -5,7 +5,7 @@
 \title{a series of simple logistic regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
 \usage{
 ez.logistics(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
-  print2screen = F, viewresults = T, plot = T, facet = "rows",
+  print2screen = F, viewresults = F, plot = T, facet = "rows",
   pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{
