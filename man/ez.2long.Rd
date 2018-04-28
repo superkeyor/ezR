@@ -28,7 +28,7 @@ can handle one (similar to gather(), which does not require index input) or two 
 }
 \note{
 refer to my spss syntax 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
-\cr if index=c("Pre","Post"), then the character would not be viewed by ez.view; index=1:2 will be int and fine.
+\cr if index=c("Pre","Post"), then the character would not be viewed by ez.vx; index=1:2 will be int and fine.
 }
 \examples{
 df <- data.frame(
