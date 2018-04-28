@@ -1696,7 +1696,7 @@ ez.selcol = function(df,col=NULL,...) {
 }
 
 #' sanitize col names
-#' @description replace certain characters (all occurrence) in all column names, using regular expression and gsub(). see also \code{\link{ez.sanitize.coldata}}
+#' @description replace certain characters (all occurrence) in all column names, using regular expression and gsub(). see also \code{\link{ez.clcoldata}}
 #' @param df df
 #' @param pattern search
 #' @param replacement replacement
@@ -1713,10 +1713,10 @@ ez.selcol = function(df,col=NULL,...) {
 #' @return returns a new df with column names cleaned, old df does not change
 #' @examples
 #' all upper to lower using regex (ignore.case=FALSE or TRUE does not matter)
-#' ez.sanitize.colnames(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
-#' @seealso see also \code{\link{ez.sanitize.coldata}}
+#' ez.clcolnames(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
+#' @seealso see also \code{\link{ez.clcoldata}}
 #' @export
-ez.sanitize.colnames <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
+ez.clcolnames <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
     # ignore perl when fixed is true, otherwise issuing a warning
     if (fixed) perl=FALSE
     if (is.null(col)){
@@ -1733,19 +1733,16 @@ ez.sanitize.colnames <- function(df,pattern='[[:space:][:punct:]]',replacement='
     }
     return(df)
 }
-#' @rdname ez.sanitize.colnames
-#' @export
-ez.clcols=ez.sanitize.colnames
 
 #' sanitize column-wise char data
-#' @description sanitize column-wise char data (if not numeric,logical,date), see also \code{\link{ez.sanitize.colnames}}
+#' @description sanitize column-wise char data (if not numeric,logical,date), see also \code{\link{ez.clcolnames}}
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
 #' @param procedures c('toupper','removeleading0') or 'tolower'
 #' @return returns a new data frame or vector
-#' @seealso \code{\link{ez.sanitize.colnames}}
+#' @seealso \code{\link{ez.clcolnames}}
 #' @export
-ez.sanitize.coldata = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
+ez.clcoldata = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
     if (!is.data.frame(x)) {
         if (!is.numeric(x) && !is.logical(x) && !ez.is.date(x)) {
             factored = ifelse(is.factor(x), TRUE, FALSE)
@@ -1759,19 +1756,16 @@ ez.sanitize.coldata = function(x, col=NULL, procedures=c('toupper','removeleadin
             x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         }
     } else if (is.data.frame(x) & is.null(col)) {
-        x = dplyr::mutate_all(x, funs(ez.sanitize.coldata(.,procedures=procedures)))
+        x = dplyr::mutate_all(x, funs(ez.clcoldata(.,procedures=procedures)))
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
         for (col in cols) {
-            x[[col]] = ez.sanitize.coldata(x[[col]],procedures=procedures)
+            x[[col]] = ez.clcoldata(x[[col]],procedures=procedures)
         }
     }
     return(x)
 }
-#' @rdname ez.sanitize.coldata
-#' @export
-ez.sanitize=ez.sanitize.coldata
 
 #' remove specified attributes
 #' @description remove specified attributes
@@ -1781,23 +1775,20 @@ ez.sanitize=ez.sanitize.coldata
 #' @return returns a new data frame or vector
 #' @note this function uses a different mechanism from sjmisc_set_labels(x,"") which works only for value labels: haven style ("labels") or foreign style ("value.labels")
 #' @export
-ez.sanitize.attributes = function(x, col=NULL, attrs=c('variable.labels'), ...) {
+ez.clattr = function(x, col=NULL, attrs=c('variable.labels'), ...) {
     if (!is.data.frame(x)) {
         # set_labels only for value labels
         # x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         # attributes(x) <- NULL  # this is not desirable because some attributes are needed, eg, $class, $level, $names
         for (a in attrs) {attr(x,a) <- NULL}
     } else if (is.data.frame(x) & is.null(col)) {
-        x = dplyr::mutate_all(x, funs(ez.sanitize.attributes(.,attrs=attrs)))
+        x = dplyr::mutate_all(x, funs(ez.clattr(.,attrs=attrs)))
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
         for (col in cols) {
-            x[[col]] = ez.sanitize.attributes(x[[col]],attrs=attrs)
+            x[[col]] = ez.clattr(x[[col]],attrs=attrs)
         }
     }
     return(x)
 }
-#' @rdname ez.sanitize.attributes
-#' @export
-ez.attrclean=ez.sanitize.attributes
