@@ -1159,9 +1159,9 @@ frq <- function(x, print.frq = TRUE) {
     # get freq of character vector
     ft <- table(object)
     # valid values, i.e. values with counts
-    vv <- match(names(ft), values)
+    vvvv <- match(names(ft), values)
     # copy valid values
-    frq[vv] <- as.vector(ft)
+    frq[vvvv] <- as.vector(ft)
     # create data frame as return value
     lab_df <- data.frame(value = values,
                          label = names(labels),
