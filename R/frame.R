@@ -450,7 +450,7 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE,...){
 ez.factorder = function(x, col, ord="as"){
     if (is.data.frame(x)) {
         df = x
-        if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col) | !is.factor(df[[col]])) stop('col not valid!')
+        if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
         # [[]] is the programmable form of $
         if (length(ord)==1) {
             if (!is.factor(df[[col]])) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])
@@ -506,18 +506,18 @@ ez.factorder = function(x, col, ord="as"){
 ez.factorname = function(x, col, newLevelNames){
     if (is.data.frame(x)) {
         df = x
-        if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col) | !is.factor(df[[col]])) stop('col not valid!')
+        if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
         if (!is.factor(df[[col]])) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])
-        cat('initial level names: ', levels(df[[col]]), '\n')
+        cat('Initial level names: ', levels(df[[col]]), '\n')
         levels(df[[col]]) = newLevelNames
-        cat('renamed level names: ', newLevelNames, '\n')
+        cat('Renamed level names: ', newLevelNames, '\n')
         return(df)
     
     } else {
         if (!is.factor(x)) cat(sprintf('converting %s to factor via factor()...\n',class(x))); x = factor(x)
-        cat('initial level names: ', levels(x), '\n')
+        cat('Initial level names: ', levels(x), '\n')
         levels(x) = newLevelNames
-        cat('renamed level names: ', newLevelNames, '\n')
+        cat('Renamed level names: ', newLevelNames, '\n')
         return(x)
     }
 }
