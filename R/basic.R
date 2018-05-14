@@ -4,7 +4,7 @@
 #' not in
 #' @description not in
 #' @export
-#' @rdname not_in
+#' @name not_in
 # https://stackoverflow.com/questions/5831794/opposite-of-in
 `%!in%` <- function (x, table) is.na(match(x, table, nomatch=NA_integer_))
 
