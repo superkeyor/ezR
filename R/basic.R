@@ -156,7 +156,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
         cols=col
         for (col in cols) {
             # recursive to is.data.frame(x) && is.null(col)
-            x[col] = ez.num(x[[col]],force=force)
+            x[col] = ez.num(x[col],force=force)
             result=x
         }
     } else if (is.list(x)){
