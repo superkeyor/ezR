@@ -15,7 +15,7 @@ ez.num(x, col = NULL, force = FALSE, ...)
 \cr        if x is not a data frame, col is ignored}
 
 \item{force}{T/F, if force, will try to convert everything (factor, etc) to character first then to numeric, (no warning for NA coerce)
-\cr else only convert a vec/col that only has string of num, eg '1'->1, see example for "gentle" output}
+\cr else only convert a vec/col that only has string of num (but not factor of string of num), eg '1'->1, see example for "gentle" output}
 }
 \value{
 returns a converted vector, data frame

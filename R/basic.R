@@ -96,7 +96,7 @@ ez.pause = function(){
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @param force T/F, if force, will try to convert everything (factor, etc) to character first then to numeric, (no warning for NA coerce)
-#' \cr else only convert a vec/col that only has string of num, eg '1'->1, see example for "gentle" output 
+#' \cr else only convert a vec/col that only has string of num (but not factor of string of num), eg '1'->1, see example for "gentle" output 
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
 #' @return returns a converted vector, data frame
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
