@@ -1,6 +1,12 @@
 ###**************************************************.
 ###*functions for simple data type.
 ###**************************************************.
+#' not in
+#' @description not in
+#' @export
+# https://stackoverflow.com/questions/5831794/opposite-of-in
+`%!in%` <- function (x, table) is.na(match(x, table, nomatch=NA_integer_))
+
 #' not
 #' @description not
 #' @export
