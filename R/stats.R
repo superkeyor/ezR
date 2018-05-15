@@ -453,7 +453,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
             geom_hline(yintercept = %f,color="black",linetype=5)+
             geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+theme(axis.text.x=element_text(angle=90))+
+            theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         eval(parse(text = tt))
         print(pp)
@@ -545,7 +545,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
             geom_hline(yintercept = %f,color="black",linetype=5)+
             geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+theme(axis.text.x=element_text(angle=90))+
+            theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         eval(parse(text = tt))
         print(pp)
@@ -622,7 +622,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
             geom_hline(yintercept = %f,color="black",linetype=5)+
             geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+theme(axis.text.x=element_text(angle=90))+
+            theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         eval(parse(text = tt))
         print(pp)
@@ -691,7 +691,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresul
             geom_hline(yintercept = %f,color="black",linetype=5)+
             geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
             scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+theme(axis.text.x=element_text(angle=90))+
+            theme(legend.position="none")+
             %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         eval(parse(text = tt))
         print(pp)
