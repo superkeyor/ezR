@@ -86,8 +86,7 @@ ez.pause = function(){
     # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
     if (interactive())
     {
-        readline(prompt = "Press <Enter> to continue...")
-        return(invisible(NULL))
+        invisible(readline(prompt = "Press <Enter> to continue..."))
     }
     else
     {
