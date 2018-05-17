@@ -4027,7 +4027,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
     # create progress bar
     # pb <- utils::txtProgressBar(min = 1, max = ncol(data.spss), style = 3)
     # tell user...
-    message("Converting atomic to factors. Please wait...\n")
+    # message("Converting atomic to factors. Please wait...\n")
     # iterate all columns
     for (i in 1:ncol(data.spss)) {
       # copy column to vector
@@ -7534,7 +7534,7 @@ unlabel <- function(x) {
     # create progress bar
     # pb <- utils::txtProgressBar(min = 1, max = ncol(x), style = 3)
     # tell user...
-    message("Converting labelled-classes. Please wait...\n")
+    # message("Converting labelled-classes. Please wait...\n")
     for (i in 1:ncol(x)) {
       # remove labelled class
       if (is_labelled(x[[i]])) x[[i]] <- unclass(x[[i]])
