@@ -643,13 +643,19 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 
 #' Merge multiple spaces to single space in the middle, and remove trailing/leading spaces
 #' @description underlying function is \code{\link{gsub}} with regular expression
-#' @param s a string 
+#' @param s a string or a data frame. if data frame, how will be ignored/forced to be 'both'
 #' @param how a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle
 #' @examples  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
 #' For portability, whitespace is taken as the character class [ \t\r\n] (space, horizontal tab, line feed, carriage return).
 #' @seealso \code{\link{trimws}}
 #' @export
 ez.trim = function (s, how=4){
+    if is.data.frame(s) {
+        s[]=lapply(s, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+        s[]=lapply(s, function(x) if(is.character(x)) trimws(x,'both') else(x))
+        return(s)
+    }
+
     if (how==1) {
         s = trimws(s,"left")
     } else if (how==2) {

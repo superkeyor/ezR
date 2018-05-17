@@ -1429,7 +1429,7 @@ ez.leftjoin = dplyr::left_join
 
 #' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
 #' @description delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
-#' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all NAs
+#' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all empty or NAs
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -1442,11 +1442,15 @@ ez.leftjoin = dplyr::left_join
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.del = function(df,cols=NULL){
     if (is.null(cols)) {
+        # cols all empty
+        colNumsAllEmpty = as.vector(which(colSums(df=="") == nrow(df)))
         # https://stackoverflow.com/a/29269139/2292993
         colNumsAllNAs = as.vector(which(colSums(is.na(df)) == nrow(df)))
-        if (length(colNumsAllNAs)>0) {
-            cat(sprintf('%d cols removed that contain all NAs:\n%s\n', length(colNumsAllNAs), toString(colnames(df)[colNumsAllNAs])))
-            df = dplyr::select(df,-colNumsAllNAs)
+
+        colNumsAllTogether = dplyr::union(colNumsAllNAs,colNumsAllEmpty)
+        if (length(colNumsAllTogether)>0) {
+            cat(sprintf('%d cols removed that contain all empty or NAs:\n%s\n', length(colNumsAllTogether), toString(colnames(df)[colNumsAllTogether])))
+            df = dplyr::select(df,-colNumsAllTogether)
         }
     } else {
         # col not exist, cannot be selected, just skip
