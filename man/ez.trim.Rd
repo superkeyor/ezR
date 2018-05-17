@@ -7,7 +7,7 @@
 ez.trim(s, how = 4)
 }
 \arguments{
-\item{s}{a string}
+\item{s}{a string or a data frame. if data frame, how will be ignored/forced to be 'both'}
 
 \item{how}{a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle}
 }

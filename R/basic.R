@@ -650,7 +650,7 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 #' @seealso \code{\link{trimws}}
 #' @export
 ez.trim = function (s, how=4){
-    if is.data.frame(s) {
+    if (is.data.frame(s)) {
         s[]=lapply(s, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
         s[]=lapply(s, function(x) if(is.character(x)) trimws(x,'both') else(x))
         return(s)
