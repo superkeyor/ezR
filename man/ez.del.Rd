@@ -16,7 +16,7 @@ ez.rmcols(df, cols = NULL)
 ez.rmcol(df, cols = NULL)
 }
 \arguments{
-\item{cols}{evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all empty or NAs}
+\item{cols}{evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. Special situations: If NULL, auto delete/remove cols that are all empty or NAs. If a single decimal number less than 1 (NOT 1), any column whose non-missing rate less than the specified number will be removed (eg, cols=0.85, keep >=0.85; or cols=0.9999, remove <0.9999, essentially keep only completed cols)}
 }
 \value{
 returns a new df, old one does not change

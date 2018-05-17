@@ -1429,7 +1429,7 @@ ez.leftjoin = dplyr::left_join
 
 #' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
 #' @description delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
-#' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. If NULL, auto delete/remove cols that are all empty or NAs
+#' @param cols evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. Special situations: If NULL, auto delete/remove cols that are all empty or NAs. If a single decimal number less than 1 (NOT 1), any column whose non-missing rate less than the specified number will be removed (eg, cols=0.85, keep >=0.85; or cols=0.9999, remove <0.9999, essentially keep only completed cols) 
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -1453,6 +1453,14 @@ ez.del = function(df,cols=NULL){
         if (length(colNumsAllTogether)>0) {
             cat(sprintf('%d cols removed that contain all empty or NAs:\n%s\n', length(colNumsAllTogether), toString(colnames(df)[colNumsAllTogether])))
             df = dplyr::select(df,-colNumsAllTogether)
+        }
+    } else if (length(cols)==1 && is.numeric(cols) && !is.integer(cols) && cols<1) {
+        nonMissingRate = colSums(!is.na(df))/nrow(df)
+        colNumsLessThan = which(nonMissingRate<cols)
+
+        if (length(colNumsLessThan)>0) {
+            cat(sprintf('%d cols removed less than the least non-missing rate:\n%s\n', length(colNumsLessThan), toString(colnames(df)[colNumsLessThan])))
+            df = dplyr::select(df,-colNumsLessThan)
         }
     } else {
         # col not exist, cannot be selected, just skip
