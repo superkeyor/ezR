@@ -2133,12 +2133,12 @@ group_str <- function(strings,
   }
 
   # create progress bar
-  if (showProgressBar) pb <- utils::txtProgressBar(min = 1, max = ncol(m), style = 3)
+  # if (showProgressBar) pb <- utils::txtProgressBar(min = 1, max = ncol(m), style = 3)
 
   # iterate matrix
   for (i in 1:nrow(m)) {
     # update progress bar
-    if (showProgressBar) utils::setTxtProgressBar(pb, i)
+    # if (showProgressBar) utils::setTxtProgressBar(pb, i)
 
     # check if current element is already grouped
     if (!findInPairs(rownames(m)[i])) {
@@ -4025,9 +4025,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
   # check for valid attr.string
   if (!is.null(attr.string)) {
     # create progress bar
-    pb <- utils::txtProgressBar(min = 1,
-                                max = ncol(data.spss),
-                                style = 3)
+    # pb <- utils::txtProgressBar(min = 1, max = ncol(data.spss), style = 3)
     # tell user...
     message("Converting atomic to factors. Please wait...\n")
     # iterate all columns
@@ -4050,7 +4048,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
         data.spss[[i]] <- x
       }
       # update progress bar
-      utils::setTxtProgressBar(pb, i)
+      # utils::setTxtProgressBar(pb, i)
     }
     close(pb)
   }
@@ -4187,9 +4185,7 @@ write_data <- function(x, path, type, enc.to.utf8) {
   }
 
   # create progress bar
-  pb <- utils::txtProgressBar(min = 1,
-                              max = ncol(x),
-                              style = 3)
+  # pb <- utils::txtProgressBar(min = 1, max = ncol(x), style = 3)
   # tell user...
   message(sprintf("Prepare writing %s file. Please wait...\n", type))
   # check if variables should be converted to factors
@@ -4210,7 +4206,7 @@ write_data <- function(x, path, type, enc.to.utf8) {
       x[[i]] <- set_label(x[[i]], var.lab, "label")
     }
     # update progress bar
-    utils::setTxtProgressBar(pb, i)
+    # utils::setTxtProgressBar(pb, i)
   }
   # hide pb
   close(pb)
@@ -6718,9 +6714,7 @@ str_pos <- function(searchString,
   if (part.dist.match > 0) {
     ftlength <- nchar(findTerm)
     # create progress bar
-    if (showProgressBar) pb <- utils::txtProgressBar(min = 1,
-                                                     max = length(searchString),
-                                                     style = 3)
+    # if (showProgressBar) pb <- utils::txtProgressBar(min = 1, max = length(searchString), style = 3)
 
     # iterate search string vector
     for (ssl in 1:length(searchString)) {
@@ -6759,7 +6753,7 @@ str_pos <- function(searchString,
         }
       }
       # update progress bar
-      if (showProgressBar) utils::setTxtProgressBar(pb, ssl)
+      # if (showProgressBar) utils::setTxtProgressBar(pb, ssl)
     }
   }
   if (showProgressBar) close(pb)
@@ -7538,16 +7532,14 @@ unlabel <- function(x) {
   # vector should be converted
   if (is.data.frame(x) || is.matrix(x)) {
     # create progress bar
-    invisible(capture.output(pb <- utils::txtProgressBar(min = 0,
-                                max = ncol(x),
-                                style = 3))
+    # pb <- utils::txtProgressBar(min = 1, max = ncol(x), style = 3)
     # tell user...
     message("Converting labelled-classes. Please wait...\n")
     for (i in 1:ncol(x)) {
       # remove labelled class
       if (is_labelled(x[[i]])) x[[i]] <- unclass(x[[i]])
       # update progress bar
-      utils::setTxtProgressBar(pb, i)
+      # utils::setTxtProgressBar(pb, i)
     }
     close(pb)
     # remove redundant class attributes
