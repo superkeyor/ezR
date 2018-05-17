@@ -2,31 +2,30 @@
 % Please edit documentation in R/io.R
 \name{ez.reads}
 \alias{ez.reads}
-\title{read spss .sav file with foreign package}
+\title{THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.}
 \usage{
-ez.reads(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = TRUE, ...)
+ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
+  stringsAsFactors = TRUE, clcolnames = TRUE, ...)
 }
 \arguments{
+\item{path}{File path to the data file}
+
 \item{atm2fac}{c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
 \cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
 \cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.}
 
-\item{usrna}{if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well.}
+\item{usrna}{(unfortunately, no effect as of the underlying HAVEN v0.2.1) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
 \item{tolower}{whether to convert all column names to lower case}
 
 \item{stringsAsFactors}{T/F}
+
+\item{clcolnames}{if F, keep as is. if T, replace "[[:space:][:punct:]]" -> "."  Or one can call ez.clcolnames() by onself.}
 }
 \description{
-internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). 
-\cr SPSS numeric -> R numeric
-\cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
-\cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
-\cr See param for more other details.
-\cr Also somehow auto replace irregular chars in the col names (eg, @-->.)
+I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param clcolnames if one wants keep variable names as is.
 }
 \note{
-As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R.
+wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1
 }

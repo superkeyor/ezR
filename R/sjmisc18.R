@@ -3994,7 +3994,7 @@ read_spss <- function(path,
     if (atomic.to.fac) data.spss <- atomic_to_fac(data.spss, getValLabelAttribute(data.spss))
     # auto attach labels
     if (attach.var.labels) {
-      message("Attaching variable labels. Please wait...\n")
+      # message("Attaching variable labels. Please wait...\n")
       data.spss <- set_label(data.spss, get_label(data.spss))
     }
   } else {
@@ -4187,7 +4187,7 @@ write_data <- function(x, path, type, enc.to.utf8) {
   # create progress bar
   # pb <- utils::txtProgressBar(min = 1, max = ncol(x), style = 3)
   # tell user...
-  message(sprintf("Prepare writing %s file. Please wait...\n", type))
+  # message(sprintf("Writing %s file...", type))
   # check if variables should be converted to factors
   for (i in 1:ncol(x)) {
     # get value and variable labels

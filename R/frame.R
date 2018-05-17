@@ -1716,7 +1716,7 @@ ez.selcol = function(df,col=NULL,...) {
 #' ez.clcolnames(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
 #' @seealso see also \code{\link{ez.clcoldata}}
 #' @export
-ez.clcolnames <- function(df,pattern='[[:space:][:punct:]]',replacement='_',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
+ez.clcolnames <- function(df,pattern='[[:space:][:punct:]]',replacement='.',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
     # ignore perl when fixed is true, otherwise issuing a warning
     if (fixed) perl=FALSE
     if (is.null(col)){

@@ -7,5 +7,5 @@
 ez.saves(...)
 }
 \description{
-potentially keep variable labels and value labels
+potentially keep variable labels and value labels. (df, path)
 }

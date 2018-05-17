@@ -136,19 +136,20 @@ ez.readxlist = function(file, toprint=TRUE){
     return(sheetnames)
 }
 
-#' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE and almost the same as ez.reads. For a more perfect function, use ez.reads. This function kept as an archive just in case.
-#' wrapper of \code{\link{sjmisc_read_spss}}. read spss .sav file with haven package
-#' @description Internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). Will NOT auto replace col names as ez.reads will do (ie, keep them as is, @->@)
+#' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.
+#' @description I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param clcolnames if one wants keep variable names as is.
 #' @param path File path to the data file
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
 #' \cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
 #' \cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 #' \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
-#' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
+#' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
 #' @param tolower whether to convert all column names to lower case
+#' @param clcolnames if F, keep as is. if T, replace "[[:space:][:punct:]]" -> "."  Or one can call ez.clcolnames() by onself.
 #' @param stringsAsFactors T/F 
+#' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1
 #' @export
-ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
+ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, clcolnames=TRUE, ...){
     if (atm2fac==1) {
         result = sjmisc_read_spss(path=path, atomic.to.fac=FALSE, keep.na=!usrna, ...)
     } else if (atm2fac==2) {
@@ -165,11 +166,13 @@ ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+
+    if (clcolnames) result = ez.clcolnames(result, pattern = "[[:space:][:punct:]]", replacement = ".")
     return(result)
 }
 
-#' read spss .sav file with foreign package
-#' @description internally trim (leading and trailing) string spaces (The leading could be user written, the trailing could come from SPSS padding to Width). 
+#' THE UNDERLYING FOREIGN V0.8.67 CREATED EXTRA VARIABLES THAN SPSS HAS IF THERE IS A COLUMN WITH A WIDTH OF MORE THAN 255 CHARACTERS. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads, it can optionally keep user na.
+#' @description internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
 #' \cr SPSS numeric -> R numeric
 #' \cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
 #' \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
@@ -182,9 +185,9 @@ ez.reads2 = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
 #' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well. 
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
-#' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R.
+#' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
-ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
+ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
 
     if (atm2fac==1) {
         atm2fac=FALSE
@@ -249,14 +252,14 @@ ez.reads = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 }
 
 #' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.writes}}
-#' @description potentially keep variable labels and value labels
+#' @description potentially keep variable labels and value labels. (df, path)
 #' @export
 ez.saves = function(...){
     sjmisc_write_spss(...)
 }
 
 #' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.saves}}
-#' @description potentially keep variable labels and value labels
+#' @description potentially keep variable labels and value labels. (df, path)
 #' @export
 ez.writes = function(...){
     sjmisc_write_spss(...)
