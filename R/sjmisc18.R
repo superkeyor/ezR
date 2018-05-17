@@ -7538,9 +7538,9 @@ unlabel <- function(x) {
   # vector should be converted
   if (is.data.frame(x) || is.matrix(x)) {
     # create progress bar
-    pb <- utils::txtProgressBar(min = 0,
+    invisible(capture.output(pb <- utils::txtProgressBar(min = 0,
                                 max = ncol(x),
-                                style = 3)
+                                style = 3))
     # tell user...
     message("Converting labelled-classes. Please wait...\n")
     for (i in 1:ncol(x)) {
