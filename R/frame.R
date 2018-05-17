@@ -1443,7 +1443,9 @@ ez.leftjoin = dplyr::left_join
 ez.del = function(df,cols=NULL){
     if (is.null(cols)) {
         # cols all empty
-        colNumsAllEmpty = as.vector(which(colSums(df=="") == nrow(df)))
+        # convert  all cols to string first, in order to compare with ""
+        tmp = data.frame(lapply(df, as.character), stringsAsFactors=FALSE)
+        colNumsAllEmpty = as.vector(which(colSums(tmp=="") == nrow(tmp)))
         # https://stackoverflow.com/a/29269139/2292993
         colNumsAllNAs = as.vector(which(colSums(is.na(df)) == nrow(df)))
 
