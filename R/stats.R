@@ -129,7 +129,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     allFactorCounts=integer()
     for (var in vars) {
         v.variable=var
-        v.class=class(df[[var]])
+        v.class=class(df[[var]]) %>% toString(width=width)
         v.n=length(df[[var]])
         v.missing=sum(is.na(df[[var]]))
         v.unique=length(unique(df[[var]]))
