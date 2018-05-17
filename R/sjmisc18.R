@@ -2210,7 +2210,7 @@ group_str <- function(strings,
     }
     strings.new[indices] <- newvalue
   }
-  if (showProgressBar) close(pb)
+  # if (showProgressBar) close(pb)
 
   # return new vector, where all single "close"
   # values are replaced by the group of closed values.
@@ -4050,7 +4050,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
       # update progress bar
       # utils::setTxtProgressBar(pb, i)
     }
-    close(pb)
+    # close(pb)
   }
   return(data.spss)
 }
@@ -4209,7 +4209,7 @@ write_data <- function(x, path, type, enc.to.utf8) {
     # utils::setTxtProgressBar(pb, i)
   }
   # hide pb
-  close(pb)
+  # close(pb)
   if (type == "spss") {
     # tell user
     # message(sprintf("Writing %s file to '%s'. Please wait...\n", type, path))
@@ -6756,7 +6756,7 @@ str_pos <- function(searchString,
       # if (showProgressBar) utils::setTxtProgressBar(pb, ssl)
     }
   }
-  if (showProgressBar) close(pb)
+  # if (showProgressBar) close(pb)
 
   # return result
   if (length(indices) > 0) return(sort(unique(indices)))
@@ -7541,7 +7541,7 @@ unlabel <- function(x) {
       # update progress bar
       # utils::setTxtProgressBar(pb, i)
     }
-    close(pb)
+    # close(pb)
     # remove redundant class attributes
     class(x) <- c("lbl_df", "data.frame")
   } else {
