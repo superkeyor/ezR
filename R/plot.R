@@ -1083,7 +1083,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 }
 
 #' plot a correlation matrix map
-#' @description a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}
+#' @description a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}, in which Missing values are deleted in pairs rather than deleting all rows of x having any missing variables
 #' @param df data frame in wide format, should be all numeric
 #' @param corr.type "pearson" or "spearman", pairwise deletion for NA
 #' @param sig.level sig.level

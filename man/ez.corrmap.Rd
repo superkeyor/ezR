@@ -22,5 +22,5 @@ ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 }
 \description{
-a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}
+a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}, in which Missing values are deleted in pairs rather than deleting all rows of x having any missing variables
 }
