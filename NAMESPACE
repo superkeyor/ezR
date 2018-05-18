@@ -3,6 +3,7 @@
 export("%!in%")
 export(and)
 export(coord_radar)
+export(exit)
 export(ez.2char)
 export(ez.2factor)
 export(ez.2label)

@@ -14,6 +14,11 @@ ez.open = browseURL
 #' @export
 ez.error = stop
 
+#' exit without prompt to save workspace image
+#' @description exit without prompt to save workspace image
+#' @export
+exit = function() { q("no") }
+
 #' print out or set the repo
 #' @description print out or set the repo
 #' @param repo NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'
@@ -70,10 +75,19 @@ ez.envr = ez.env
 #' @description update ez package itself
 #' @export
 ez.selfupdate = function() {
-    ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezmisc')
-    ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bz')
-    cat('Please restart RStudio to make the change take effect!\n')
-    system('killall RStudio; open -a RStudio')
+    tryCatch({
+        ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
+        ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
+        ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
+        cat('Please restart RStudio to make the change take effect!\n')
+        system('killall RStudio; open -a RStudio')
+    }, error = function(e) {
+        ez.github('jerryzhujian9/ezR')
+        ez.github('jerryzhujian9/bzR')
+        ez.github('jerryzhujian9/mzR')
+        cat('Please restart RStudio to make the change take effect!\n')
+    }
+    )
     return(invisible(NULL))
 }
 
