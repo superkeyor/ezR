@@ -554,3 +554,24 @@ ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
     gmailr::send_message(msg)
     cat('Mail sent!', "\n")
 }
+
+#' detect os
+#' @description detect os
+#' @return returns 'osx','linux', 'windows', test with ==
+#' @export
+ez.getos = function(){
+    # https://stackoverflow.com/a/40212214/2292993
+    sysinf <- Sys.info()
+    if (!is.null(sysinf)){
+        os <- sysinf['sysname']
+    if (os == 'Darwin')
+        os <- "osx"
+    } else { ## mystery machine
+        os <- .Platform$OS.type
+        if (grepl("^darwin", R.version$os))
+            os <- "osx"
+        if (grepl("linux-gnu", R.version$os))
+            os <- "linux"
+    }
+    tolower(os)
+}

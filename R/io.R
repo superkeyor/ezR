@@ -346,6 +346,9 @@ ez.writex = ez.savex
 #' @return returns file path
 #' @export
 ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TRUE, colNames = TRUE, ...) {
+    # https://github.com/awalker89/openxlsx/issues/111
+    if (ez.getos()=='linux') {Sys.setenv(R_ZIPCMD= "/usr/bin/zip")}
+
     sheetNames = if (!is.null(names(xlist))) names(xlist) else paste0("Sheet",1:length(xlist))
     wb <- openxlsx::createWorkbook(creator = 'openxlsx')
     for (i in 1:length(xlist)) {
