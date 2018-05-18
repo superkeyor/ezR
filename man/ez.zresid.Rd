@@ -4,13 +4,15 @@
 \alias{ez.zresid}
 \title{z residual}
 \usage{
-ez.zresid(model, method = 1)
+ez.zresid(model, method = 3)
+}
+\arguments{
+\item{method}{1=scale(resid), 2=stats::rstandard, 3=MASS::stdres}
 }
 \description{
 z residual, as.vector(scale(resid(model),center=T,scale=T))
 }
 \note{
-according to jerry's test, \code{\link[stats]{rstandard}} and \code{\link[MASS]{stdres}} give the same results
-\cr this function gives slightly different result (but very close)
-\cr all three functions give different results from spss: linear regression->save->residuals, standarized
+according to jerry's test, \code{\link[stats]{rstandard}} and \code{\link[MASS]{stdres}} give the same results, both of which are slightly different from (but very close to, highly correlated with) method 1
+\cr all three methods give different results from spss: linear regression->save->residuals, standarized
 }
