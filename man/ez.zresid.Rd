@@ -4,7 +4,7 @@
 \alias{ez.zresid}
 \title{z residual}
 \usage{
-ez.zresid(model, center = TRUE, scale = TRUE)
+ez.zresid(model, method = 1)
 }
 \description{
 z residual, as.vector(scale(resid(model),center=T,scale=T))

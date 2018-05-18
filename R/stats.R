@@ -350,8 +350,11 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
 #' \cr this function gives slightly different result (but very close)
 #' \cr all three functions give different results from spss: linear regression->save->residuals, standarized
 #' @export
-ez.zresid = function(model,center = TRUE, scale = TRUE) {
-    as.vector(scale(resid(model),center=center,scale=scale))
+ez.zresid = function(model,method=1) {
+    if (method==1) {result=as.vector(scale(resid(model),center=TRUE,scale=TRUE))}
+    if (method==2) {result=stats::rstandard(model)}
+    if (method==3) {result=MASS::stdres(model)}
+    return(result)
 }
 
 #' a series of simple regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
