@@ -76,11 +76,18 @@ ez.envr = ez.env
 #' @export
 ez.selfupdate = function() {
     tryCatch({
-        ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
-        ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
-        ez.execute('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
+        # seems that some errors thrown by system() cannot be caught in this way
+        # https://stackoverflow.com/questions/25991973/suppress-system-error-with-trycatch-in-r
+        system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR', stdout=TRUE, stderr=TRUE)
+        system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR', stdout=TRUE, stderr=TRUE)
+        system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR', stdout=TRUE, stderr=TRUE)
         cat('Please restart RStudio to make the change take effect!\n')
-        system('killall RStudio; open -a RStudio')
+        system2('killall RStudio; open -a RStudio', stdout=TRUE, stderr=TRUE)
+    }, warning = function(w) {
+        ez.github('jerryzhujian9/ezR')
+        ez.github('jerryzhujian9/bzR')
+        ez.github('jerryzhujian9/mzR')
+        cat('Please restart RStudio to make the change take effect!\n')
     }, error = function(e) {
         ez.github('jerryzhujian9/ezR')
         ez.github('jerryzhujian9/bzR')
