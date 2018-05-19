@@ -12,9 +12,9 @@ ez.label.get(x, cols = NULL)
 \item{cols}{a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)}
 }
 \value{
-returns character (if x is a single var), or an named character vector (if x is df). 
-\cr If df has no variable label for all variables, returns NULL. If df has label for some variables, returns a string vector with some "". 
-\cr However, when cols specified, it is possible to return a string vector with all ""--because cols only for slicing posthoc
+returns a named character vector (if x is df), or character (if x is a single var)
+\cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "". 
+\cr If a single variable has no label, returns NULL
 }
 \description{
 get variable label, wrapper of \code{\link{sjmisc_get_label}}
