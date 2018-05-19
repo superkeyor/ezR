@@ -184,7 +184,8 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     results=results %>% ez.move('levels_view1 levels_view2 after variable')
     results=dplyr::mutate(results,nonmissing=nrow-missing,nonmissing_rate=nonmissing/nrow)
     results=results %>% ez.move('missing_rate nonmissing nonmissing_rate before unique_including_na')
-    labels=attr(df,'variable.labels')
+    # labels=attr(df,'variable.labels') # only work for foreign package: 'variable.labels'
+    labels = ez.label.get(df) # if no labels at all, NULL; otherwise a string vector
     # labels' length should match #variables selected
     if ((!is.null(labels)) & nrow(results)==length(labels)+1) {results['varlbl']=c(labels,''); results=results %>% ez.move('varlbl before class')}
 

@@ -7950,7 +7950,7 @@ zap_unlabelled_helper <- function(x) {
 sjmisc_copy_labels=copy_labels
 
 #' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, value labels
 #' @export
 sjmisc_get_labels=get_labels
 
@@ -7960,17 +7960,17 @@ sjmisc_get_labels=get_labels
 sjmisc_get_values=get_values
 
 #' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, value labels
 #' @export
 sjmisc_set_labels=set_labels
 
 #' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, variable labels
 #' @export
 sjmisc_get_label=get_label
 
 #' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, variable labels
 #' @export
 sjmisc_set_label=set_label
 

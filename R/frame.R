@@ -238,8 +238,11 @@ ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE,
 
 #' get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @description get variable label, wrapper of \code{\link{sjmisc_get_label}}
-#' @param ... var1, var2,  one or many
-#' @return returns character
+#' @param x a df: (efc), or a single var: (efc$e42dep)
+#' @param cols a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)
+#' @return returns character (if x is a single var), or an named character vector (if x is df). 
+#' \cr If df has no variable label for all variables, returns NULL. If df has label for some variables, returns a string vector with some "". 
+#' \cr However, when cols specified, it is possible to return a string vector with all ""--because cols only for slicing posthoc
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -249,8 +252,14 @@ ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE,
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.label.get = function(...){
-    result=sjmisc_get_label(list(...))
+ez.label.get = function(x,cols=NULL){
+    # sjmisc_get_label for variable label
+    # sjmisc_get_labels for value label
+    # def.value (jerry: only working if x is a single var) Optional, a character string which will be returned as label. if \code{x} has no label attribute. By default, \code{NULL} is returned.
+    # although sjmisc_get_label(list(var1,var2,var3)) ok, if var2 has no label, the returned labels would be a vector (var1lbl,var3lbl)--this might be confusing. So not to use this syntax
+    result=sjmisc_get_label(x, def.value = NULL)
+    if (is.data.frame(x)) {names(result)=names(x)}
+    if (is.data.frame(x) & !is.null(cols)) {result=result[cols]}
     return(result)
 }
 
