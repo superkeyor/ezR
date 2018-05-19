@@ -357,7 +357,7 @@ ez.zresid = function(model,method=3) {
     return(result)
 }
 
-#' a series of simple regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
+#' a series of simple regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
@@ -382,9 +382,25 @@ ez.zresid = function(model,method=3) {
 #' \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
+#' \cr if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
 ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
+
+    # patch to handle multiple y, multiple x
+    if (length(y)>1 & length(x)>1) {
+        xlist = list(); plist = list(); rlist = list()
+        for (yy in y) {
+            results = ez.regressions(df,yy,x,covar=covar,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,...)
+            if (plot) {plist[[yy]] = ggplot2::last_plot()}
+            xlist[[yy]] = results %>% arrange(p)
+        }
+        # https://stackoverflow.com/a/7945259/2292993
+        if (length(plist)==0) {plist=NULL}
+        rlist$xlist = xlist; rlist$plist = plist
+        return(invisible(rlist))
+    }
+
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'rp'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
     df=ez.2value(df,y,...)
@@ -469,7 +485,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
     return(invisible(results))
 }
 
-#' a series of simple logistic regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
+#' a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in glm(), reflected by degree_of_freedom
@@ -489,9 +505,25 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
 #' \cr per standard deviation increase in the predictor variable. 
 #' \cr 
 #' \cr degree_of_freedom
+#' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
 ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
+
+    # patch to handle multiple y, multiple x
+    if (length(y)>1 & length(x)>1) {
+        xlist = list(); plist = list(); rlist = list()
+        for (yy in y) {
+            results = ez.logistics(df,yy,x,covar=covar,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,...)
+            if (plot) {plist[[yy]] = ggplot2::last_plot()}
+            xlist[[yy]] = results %>% arrange(p)
+        }
+        # https://stackoverflow.com/a/7945259/2292993
+        if (length(plist)==0) {plist=NULL}
+        rlist$xlist = xlist; rlist$plist = plist
+        return(invisible(rlist))
+    }
+
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'odds_ratio'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
     df=ez.2value(df,y,...)
@@ -561,7 +593,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
     return(invisible(results))
 }
 
-#' a series of one-way anova, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
+#' a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list, see note for details
 #' @description df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 #' @param df a data frame
 #' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
@@ -576,9 +608,25 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
 #' @return an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
+#' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
 ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
+
+    # patch to handle multiple y, multiple x
+    if (length(y)>1 & length(x)>1) {
+        xlist = list(); plist = list(); rlist = list()
+        for (xx in x) {
+            results = ez.anovas(df,y,xx,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,...)
+            if (plot) {plist[[xx]] = ggplot2::last_plot()}
+            xlist[[xx]] = results %>% arrange(p)
+        }
+        # https://stackoverflow.com/a/7945259/2292993
+        if (length(plist)==0) {plist=NULL}
+        rlist$xlist = xlist; rlist$plist = plist
+        return(invisible(rlist))
+    }
+
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
     results4plot = results
     df = ez.2value(df,y,...); df = ez.2factor(df,x)
@@ -638,7 +686,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
     return(invisible(results))
 }
 
-#' a series of fisher.test, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x
+#' a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list, see note for details
 #' @description df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
 #' \cr NA in df will be auto excluded in fisher.test(), reflected by total
@@ -651,9 +699,25 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
 #' @param showerror whether show error message when error occurs, default F
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+#' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
 ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
+
+    # patch to handle multiple y, multiple x
+    if (length(y)>1 & length(x)>1) {
+        xlist = list(); plist = list(); rlist = list()
+        for (xx in x) {
+            results = ez.fishers(df,y,xx,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,width=width)
+            if (plot) {plist[[xx]] = ggplot2::last_plot()}
+            xlist[[xx]] = results %>% arrange(p)
+        }
+        # https://stackoverflow.com/a/7945259/2292993
+        if (length(plist)==0) {plist=NULL}
+        rlist$xlist = xlist; rlist$plist = plist
+        return(invisible(rlist))
+    }
+
     results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
     results4plot = results
     df=ez.2factor(df,c(x,y))
