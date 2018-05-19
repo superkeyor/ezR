@@ -5,7 +5,7 @@
 \title{a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
 \usage{
 ez.logistics(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
-  print2screen = T, viewresults = F, plot = T, facet = "rows",
+  print2screen = T, viewresults = F, plot = T, facet = "cols",
   pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{

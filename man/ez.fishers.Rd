@@ -5,7 +5,7 @@
 \title{a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
 \usage{
 ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  viewresults = F, plot = T, facet = "rows", pmethods = c("bonferroni",
+  viewresults = F, plot = T, facet = "cols", pmethods = c("bonferroni",
   "fdr"), width = 300)
 }
 \arguments{

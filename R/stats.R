@@ -384,7 +384,7 @@ ez.zresid = function(model,method=3) {
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' \cr if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -466,14 +466,25 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
     }
     if (plot) {
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
-        tt = sprintf('
-        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
-            geom_bar(stat="identity")+
-            geom_hline(yintercept = %f,color="black",linetype=5)+
-            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+
-            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        if (length(y)==1 & length(x)>1) {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        } else {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+        }
         eval(parse(text = tt))
         print(pp)
     }
@@ -507,7 +518,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
 #' \cr degree_of_freedom
 #' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -574,14 +585,25 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
     }
     if (plot) {
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
-        tt = sprintf('
-        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
-            geom_bar(stat="identity")+
-            geom_hline(yintercept = %f,color="black",linetype=5)+
-            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+
-            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        if (length(y)==1 & length(x)>1) {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        } else {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+        }
         eval(parse(text = tt))
         print(pp)
     }
@@ -610,7 +632,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
 #' \cr degree_of_freedom: from F-statistic
 #' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),...) {
+ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -667,14 +689,25 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
     }
     if (plot) {
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
-        tt = sprintf('
-        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
-            geom_bar(stat="identity")+
-            geom_hline(yintercept = %f,color="black",linetype=5)+
-            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+
-            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+        if (length(y)==1 & length(x)>1) {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        } else {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+        }
         eval(parse(text = tt))
         print(pp)
     }
@@ -701,7 +734,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
 #' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
 #' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='rows',pmethods=c('bonferroni','fdr'),width=300) {
+ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -752,14 +785,25 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresul
     }
     if (plot) {
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
-        tt = sprintf('
-        pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
-            geom_bar(stat="identity")+
-            geom_hline(yintercept = %f,color="black",linetype=5)+
-            geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-            scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-            theme(legend.position="none")+
-            %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+        if (length(y)==1 & length(x)>1) {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        } else {
+            tt = sprintf('
+            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+                geom_bar(stat="identity")+
+                geom_hline(yintercept = %f,color="black",linetype=5)+
+                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+                theme(legend.position="none")+
+                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+        }
         eval(parse(text = tt))
         print(pp)
     }
