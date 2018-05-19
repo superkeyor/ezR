@@ -453,7 +453,8 @@ ez.factorder = function(x, col, ord="as"){
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
         # [[]] is the programmable form of $
         if (length(ord)==1) {
-            if (!is.factor(df[[col]])) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])
+            # if (!is.factor(df[[col]])) {cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])}
+            if (!is.factor(df[[col]])) {df[[col]] = factor(df[[col]])}
             if (ord=="as"){
                 df[[col]] = factor(df[[col]], unique(as.character(df[[col]])))
             } else if (ord=="az") {

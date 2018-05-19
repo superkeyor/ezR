@@ -468,7 +468,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
         if (length(y)==1 & length(x)>1) {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
@@ -477,7 +477,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
                 %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         } else {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
@@ -587,7 +587,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
         if (length(y)==1 & length(x)>1) {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
@@ -596,7 +596,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
                 %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         } else {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
@@ -691,7 +691,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
         if (length(y)==1 & length(x)>1) {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
@@ -700,7 +700,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
                 %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         } else {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
@@ -787,7 +787,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresul
         bonferroniP = -log10(0.05/length(results4plot[['p']]))
         if (length(y)==1 & length(x)>1) {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
@@ -796,7 +796,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresul
                 %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
         } else {
             tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
                 geom_bar(stat="identity")+
                 geom_hline(yintercept = %f,color="black",linetype=5)+
                 geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
