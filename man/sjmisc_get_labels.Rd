@@ -8,5 +8,5 @@ sjmisc_get_labels(x, attr.only = FALSE, include.values = NULL,
   include.non.labelled = FALSE)
 }
 \description{
-sjmisc 1.8 hack
+sjmisc 1.8 hack, value labels
 }
