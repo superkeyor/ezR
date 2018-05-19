@@ -260,7 +260,7 @@ ez.label.get = function(x,cols=NULL){
     result=sjmisc_get_label(x, def.value = NULL)
     if (is.data.frame(x) & !is.null(result)) {names(result)=names(x)}
     if (is.data.frame(x) & !is.null(cols)) {result=result[cols]}
-    if (ez.is.empty(result)) {result=NULL}
+    if (all(ez.is.empty(result))) {result=NULL}
     return(result)
 }
 
