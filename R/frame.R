@@ -258,7 +258,7 @@ ez.label.get = function(x,cols=NULL){
     # def.value (jerry: only working if x is a single var) Optional, a character string which will be returned as label. if \code{x} has no label attribute. By default, \code{NULL} is returned.
     # although sjmisc_get_label(list(var1,var2,var3)) ok, if var2 has no label, the returned labels would be a vector (var1lbl,var3lbl)--this might be confusing. So not to use this syntax
     result=sjmisc_get_label(x, def.value = NULL)
-    if (is.data.frame(x)) {names(result)=names(x)}
+    if (is.data.frame(x) & !is.null(result)) {names(result)=names(x)}
     if (is.data.frame(x) & !is.null(cols)) {result=result[cols]}
     return(result)
 }
