@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{ez.logistics}
 \alias{ez.logistics}
-\title{a series of simple logistic regression, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
+\title{a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
 \usage{
 ez.logistics(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
   print2screen = T, viewresults = F, plot = T, facet = "rows",
@@ -41,4 +41,7 @@ an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print result
 }
 \description{
 df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
+}
+\note{
+if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 }

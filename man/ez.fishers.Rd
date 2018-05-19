@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{ez.fishers}
 \alias{ez.fishers}
-\title{a series of fisher.test, for many y and many x; in practice, in order to correctly calculate corrected p values, use many y and one x, or one y and many x}
+\title{a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
 \usage{
 ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
   viewresults = F, plot = T, facet = "rows", pmethods = c("bonferroni",
@@ -33,4 +33,7 @@ an invisible data frame with x,y,p,counts,total and print results out on screen;
 }
 \description{
 df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
+}
+\note{
+if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 }
