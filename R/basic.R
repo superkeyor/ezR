@@ -25,7 +25,7 @@ or = magrittr::or
 
 #' Empty Value
 #'
-#' Rails-inspired helper that checks if vector values are "empty", i.e. if it's: \code{NULL}, zero-length, \code{NA}, \code{NaN}, \code{FALSE}, an empty string or \code{0}. Note that unlike its native R \code{is.<something>} sibling functions, \code{is.empty} is vectorised (hence the "values").
+#' Rails-inspired helper that checks if vector values are "empty", i.e. if it's: \code{NULL}, zero-length, \code{NA}, \code{NaN}, \code{FALSE}, an empty string. Note that unlike its native R \code{is.<something>} sibling functions, \code{is.empty} is vectorised (hence the "values").
 #' @param x an object to check its emptiness
 #' @param trim trim whitespace? (\code{TRUE} by default)
 #' @param ... additional arguments for \code{\link{sapply}}
@@ -35,8 +35,8 @@ or = magrittr::or
 #' is.empty(NA)       # [1] TRUE
 #' is.empty(NaN)      # [1] TRUE
 #' is.empty("")       # [1] TRUE
-#' is.empty(0)        # [1] TRUE
-#' is.empty(0.00)     # [1] TRUE
+#' is.empty(0)        # [1] TRUE --> (\code{0} jerry changed to FALSE)
+#' is.empty(0.00)     # [1] TRUE --> (\code{0} jerry changed to FALSE)
 #' is.empty("    ")   # [1] TRUE
 #' is.empty("foobar") # [1] FALSE
 #' is.empty("    ", trim = FALSE)    # [1] FALSE
@@ -47,6 +47,25 @@ or = magrittr::or
 #' @export
 #' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
 ez.is.empty <- function(x, trim = TRUE, ...) {
+    vgsub <- function(pattern, replacement, x, ...){
+        for(i in 1:length(pattern))
+            x <- gsub(pattern[i], replacement[i], x, ...)
+        x
+    }
+
+    trim.space <- function(x, what = c('both', 'leading', 'trailing', 'none'), space.regex = '[:space:]', ...){
+        if (missing(x))
+            stop('nothing to trim spaces to =(')
+        re <- switch(match.arg(what),
+                     both     = sprintf('^[%s]+|[%s]+$', space.regex, space.regex),
+                     leading  = sprintf('^[%s]+', space.regex),
+                     trailing = sprintf('[%s]+$', space.regex),
+                     none     = {
+                         return (x)
+                     })
+        vgsub(re, '', x, ...)
+    }
+
     if (length(x) <= 1) {
         if (is.null(x))
             return (TRUE)
@@ -58,8 +77,9 @@ ez.is.empty <- function(x, trim = TRUE, ...) {
             return (TRUE)
         if (is.logical(x) && !isTRUE(x))
             return (TRUE)
-        if (is.numeric(x) && x == 0)
-            return (TRUE)
+        # jerry: not use this
+        # if (is.numeric(x) && x == 0)
+        #     return (TRUE)
         return (FALSE)
     } else
         sapply(x, ez.is.empty, trim = trim, ...)

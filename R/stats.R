@@ -129,7 +129,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     allFactorCounts=integer()
     for (var in vars) {
         v.variable=var
-        v.class=class(df[[var]]) %>% toString(width=width)
+        v.class=class(df[[var]]) %>% toString(width=width)  # could have multiple classes
         v.n=length(df[[var]])
         v.missing=sum(is.na(df[[var]]))
         v.unique=length(unique(df[[var]]))
@@ -493,6 +493,8 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
         results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
+    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
+    results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }
@@ -612,6 +614,8 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
         results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
+    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
+    results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }
@@ -716,6 +720,8 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
         results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
+    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
+    results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }
@@ -812,6 +818,8 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresul
         results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
+    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
+    results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }

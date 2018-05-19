@@ -240,9 +240,9 @@ ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE,
 #' @description get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @param x a df: (efc), or a single var: (efc$e42dep)
 #' @param cols a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)
-#' @return returns character (if x is a single var), or an named character vector (if x is df). 
-#' \cr If df has no variable label for all variables, returns NULL. If df has label for some variables, returns a string vector with some "". 
-#' \cr However, when cols specified, it is possible to return a string vector with all ""--because cols only for slicing posthoc
+#' @return returns a named character vector (if x is df), or character (if x is a single var)
+#' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "". 
+#' \cr If a single variable has no label, returns NULL
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -260,6 +260,7 @@ ez.label.get = function(x,cols=NULL){
     result=sjmisc_get_label(x, def.value = NULL)
     if (is.data.frame(x) & !is.null(result)) {names(result)=names(x)}
     if (is.data.frame(x) & !is.null(cols)) {result=result[cols]}
+    if (ez.is.empty(result)) {result=NULL}
     return(result)
 }
 
