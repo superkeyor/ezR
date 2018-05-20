@@ -2,19 +2,28 @@
 % Please edit documentation in R/io.R
 \name{ez.readxlist}
 \alias{ez.readxlist}
-\title{read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package}
+\title{read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package}
 \usage{
-ez.readxlist(file, toprint = TRUE)
+ez.readxlist(file, print2screen = TRUE, tolower = FALSE,
+  stringsAsFactors = TRUE, ...)
 }
 \arguments{
-\item{toprint}{print out sheet indices and names, default TRUE}
+\item{print2screen}{print out sheet indices and names, default TRUE}
+
+\item{tolower}{whether to convert all column names to lower case}
+
+\item{stringsAsFactors}{T/F}
 }
 \value{
-a list of sheet names
+a list of sheet as data frame. To get sheetnames, names(result)
+\cr when stringsAsFactors=T, in the returned data frame, string to factor
+\cr number stored as text in excel (->string) -> factor
 }
 \description{
-read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
+read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
 }
 \examples{
-readxlist(file)
+readxlist(file, sheet = 1, startRow = 1, colNames = TRUE,
+         rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
+         rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 }

@@ -119,21 +119,27 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
     return(result)
 }
 
-#' read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
-#' @description read an xlsx file, returns and prints sheet names, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
-#' @param toprint print out sheet indices and names, default TRUE
-#' @return a list of sheet names
+#' read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
+#' @description read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
+#' @param print2screen print out sheet indices and names, default TRUE
+#' @param tolower whether to convert all column names to lower case
+#' @param stringsAsFactors T/F 
+#' @return a list of sheet as data frame. To get sheetnames, names(result)
+#' \cr when stringsAsFactors=T, in the returned data frame, string to factor
+#' \cr number stored as text in excel (->string) -> factor
 #' @examples
-#' readxlist(file)
+#' readxlist(file, sheet = 1, startRow = 1, colNames = TRUE,
+#'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
+#'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readxlist = function(file, toprint=TRUE){
+ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
+    result = list()
     sheetnames = openxlsx::getSheetNames(file)
-    if (toprint){
-        for (i in 1:length(sheetnames)){
-            cat(i, '\t', sheetnames[i], '\n')
-        }
+    for (i in 1:length(sheetnames)) {
+        result[[sheetnames[i]]] = ez.readx(file, sheet=i, tolower=tolower, stringsAsFactors=stringsAsFactors, ...)
+        if (print2screen) {cat(i, '\t', sheetnames[i], '\n')}
     }
-    return(sheetnames)
+    return(result)
 }
 
 #' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.
