@@ -1727,7 +1727,7 @@ ez.selcol = function(df,col=NULL,...) {
 #' @param replacement replacement
 #' @param fixed FALSE=regex mode on, TRUE=regex mode off
 #' @param ignore.case if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.
-#' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]  
+#' @param perl Perl-compatible regexps be used, without perl, [[:space:][:punct:]] (except _) works, but not [\\s[:punct:]]  
 #' so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
 #' ignored when fixed=TRUE
 #' @param col NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )
@@ -1741,7 +1741,7 @@ ez.selcol = function(df,col=NULL,...) {
 #' ez.clcolnames(iris,pattern='([[:upper:]])', replacement = '\\L\\1', perl = TRUE, ignore.case=FALSE)
 #' @seealso see also \code{\link{ez.clcoldata}}
 #' @export
-ez.clcolnames <- function(df,pattern='[[:space:][:punct:]]',replacement='.',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
+ez.clcolnames <- function(df,pattern='[[:space:]!"#$%&’()*+,-./:;<=>?@[]^`{|}~]',replacement='.',fixed=FALSE,ignore.case=FALSE,perl=TRUE,col=NULL) { 
     # ignore perl when fixed is true, otherwise issuing a warning
     if (fixed) perl=FALSE
     if (is.null(col)){

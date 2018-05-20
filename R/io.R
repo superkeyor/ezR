@@ -151,7 +151,7 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 #' \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
 #' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
 #' @param tolower whether to convert all column names to lower case
-#' @param clcolnames if F, keep as is. if T, replace "[[:space:][:punct:]]" -> "."  Or one can call ez.clcolnames() by onself.
+#' @param clcolnames if F, keep as is. if T, replace "[[:space:][:punct:]]" (except exisiting_) -> "."  Or one can call ez.clcolnames() by onself.
 #' @param stringsAsFactors T/F 
 #' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
@@ -202,8 +202,11 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     }
     # hack end: atomic with attributes to factor
 
-    result = ez.clattr(result,attrs='format.spss') # avoid warning: attributes are not identical across measure variables
-    if (clcolnames) result = ez.clcolnames(result, pattern = "[[:space:][:punct:]]", replacement = ".")
+    # avoid warning: attributes are not identical across measure variables
+    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; return(x)})
+
+    # https://stackoverflow.com/a/21534285/2292993
+    if (clcolnames) result = ez.clcolnames(result, pattern = '[[:space:]!"#$%&’()*+,-./:;<=>?@[]^`{|}~]', replacement = ".")
     return(result)
 }
 
