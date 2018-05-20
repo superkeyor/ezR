@@ -143,7 +143,7 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 }
 
 #' THE UNDERLYING HAVEN V0.2.1/v1.1.0 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.
-#' @description I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param clcolnames if one wants keep variable names as is.
+#' @description I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
 #' @param path File path to the data file
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
 #' \cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
@@ -151,11 +151,11 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 #' \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
 #' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
 #' @param tolower whether to convert all column names to lower case
-#' @param clcolnames if F, keep as is. if T, replace "[[:space:][:punct:]]" (except exisiting_) -> "."  Or one can call ez.clcolnames() by onself.
+#' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @param stringsAsFactors T/F 
 #' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
-ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, clcolnames=TRUE, ...){
+ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
     # internal notes
     # haven: label = variable label, labels = value labels
     # foreign: variable.labels, value.labels
@@ -207,7 +207,7 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; return(x)})
 
     # https://stackoverflow.com/a/21534285/2292993
-    if (clcolnames) result = ez.clcolnames(result, pattern = '[[:space:]!"#$%&’()*+,-./:;<=>?@[]^`{|}~]', replacement = ".")
+    if (makenames) colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
 

@@ -5,7 +5,7 @@
 \title{THE UNDERLYING HAVEN V0.2.1/v1.1.0 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.}
 \usage{
 ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = TRUE, clcolnames = TRUE, ...)
+  stringsAsFactors = TRUE, makenames = TRUE, ...)
 }
 \arguments{
 \item{path}{File path to the data file}
@@ -21,10 +21,10 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 
 \item{stringsAsFactors}{T/F}
 
-\item{clcolnames}{if F, keep as is. if T, replace "[[:space:][:punct:]]" (except exisiting_) -> "."  Or one can call ez.clcolnames() by onself.}
+\item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 }
 \description{
-I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param clcolnames if one wants keep variable names as is.
+I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
 }
 \note{
 wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0

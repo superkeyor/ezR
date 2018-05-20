@@ -4,10 +4,8 @@
 \alias{ez.clcolnames}
 \title{sanitize col names}
 \usage{
-ez.clcolnames(df,
-  pattern = "[[:space:]!\\"#$\%&\\342\\200\\231()*+,-./:;<=>?@[]^`{|}~]",
-  replacement = ".", fixed = FALSE, ignore.case = FALSE, perl = TRUE,
-  col = NULL)
+ez.clcolnames(df, pattern = "[[:space:][:punct:]]", replacement = ".",
+  fixed = FALSE, ignore.case = FALSE, perl = TRUE, col = NULL)
 }
 \arguments{
 \item{df}{df}
@@ -20,7 +18,7 @@ ez.clcolnames(df,
 
 \item{ignore.case}{if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.}
 
-\item{perl}{Perl-compatible regexps be used, without perl, [[:space:][:punct:]] (except _) works, but not [\\s[:punct:]]
+\item{perl}{Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]
 so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
 ignored when fixed=TRUE}
 
