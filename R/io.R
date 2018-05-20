@@ -5,6 +5,7 @@
 #' @description read csv table, wrapper of \code{\link{read.csv}}
 #' @param tolower whether to convert all column names to lower case
 #' @param skip.rows rows to skip (1 based) before read in, eg 1:3
+#' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @return returns a data frame
 #' @export
 #' @examples
@@ -21,7 +22,7 @@
 #'
 #' read.csv(file, header = TRUE, sep = ",",
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
-ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE){
+ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
     if (!is.null(skip.rows)) {
         tmp = readLines(file)
         tmp = tmp[-(skip.rows)]
@@ -32,6 +33,7 @@ ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE){
     }
     result = read.csv(file, ...)
     if (tolower) names(result) = tolower(names(result))
+    if (makenames) colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
 
@@ -76,6 +78,7 @@ ez.write = ez.save
 #' @description read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
+#' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
 #' \cr number stored as text in excel (->string) -> factor
 #' @examples
@@ -86,7 +89,7 @@ ez.write = ez.save
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
+ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -94,6 +97,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, .
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    if (makenames) colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
 
@@ -101,6 +105,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, .
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
+#' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
 #' \cr number stored as text in excel (->string) -> factor
 #' @examples
@@ -108,7 +113,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, .
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
+ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
     result = openxlsx::read.xlsx(file, sheet, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -116,6 +121,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    if (makenames) colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
 
@@ -124,6 +130,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
 #' @param print2screen print out sheet indices and names, default TRUE
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
+#' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @return a list of sheet as data frame. To get sheetnames, names(result)
 #' \cr when stringsAsFactors=T, in the returned data frame, string to factor
 #' \cr number stored as text in excel (->string) -> factor
@@ -132,11 +139,11 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
+ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
     result = list()
     sheetnames = openxlsx::getSheetNames(file)
     for (i in 1:length(sheetnames)) {
-        result[[sheetnames[i]]] = ez.readx(file, sheet=i, tolower=tolower, stringsAsFactors=stringsAsFactors, ...)
+        result[[sheetnames[i]]] = ez.readx(file, sheet=i, tolower=tolower, stringsAsFactors=stringsAsFactors, makenames=makenames, ...)
         if (print2screen) {cat(i, '\t', sheetnames[i], '\n')}
     }
     return(result)
@@ -206,7 +213,6 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # avoid warning: attributes are not identical across measure variables
     result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; return(x)})
 
-    # https://stackoverflow.com/a/21534285/2292993
     if (makenames) colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
@@ -223,11 +229,12 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 #' \cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 #' \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
 #' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well. 
+#' @param makenames not effective for this function, kept for compatiablity with other functions
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
-ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
+ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
     # internal notes
     # haven: label = variable label, labels = value labels
     # foreign: variable.labels, value.labels
