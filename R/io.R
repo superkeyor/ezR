@@ -202,6 +202,7 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     }
     # hack end: atomic with attributes to factor
 
+    result = ez.clattr(result,attrs='format.spss') # avoid warning: attributes are not identical across measure variables
     if (clcolnames) result = ez.clcolnames(result, pattern = "[[:space:][:punct:]]", replacement = ".")
     return(result)
 }
