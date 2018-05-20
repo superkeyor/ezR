@@ -5,7 +5,7 @@
 \title{THE UNDERLYING FOREIGN V0.8.67 CREATED EXTRA VARIABLES THAN SPSS HAS IF THERE IS A COLUMN WITH A WIDTH OF MORE THAN 255 CHARACTERS. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads, it can optionally keep user na.}
 \usage{
 ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = TRUE, ...)
+  stringsAsFactors = TRUE, makenames = TRUE, ...)
 }
 \arguments{
 \item{atm2fac}{c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
@@ -18,6 +18,8 @@ ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \item{tolower}{whether to convert all column names to lower case}
 
 \item{stringsAsFactors}{T/F}
+
+\item{makenames}{not effective for this function, kept for compatiablity with other functions}
 }
 \description{
 internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 

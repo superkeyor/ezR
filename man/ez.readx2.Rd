@@ -5,12 +5,14 @@
 \title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces}
 \usage{
 ez.readx2(file, sheetIndex = 1, tolower = FALSE, stringsAsFactors = TRUE,
-  ...)
+  makenames = TRUE, ...)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}
 
 \item{stringsAsFactors}{T/F}
+
+\item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 }
 \value{
 when stringsAsFactors=T, in the returned data frame, string to factor

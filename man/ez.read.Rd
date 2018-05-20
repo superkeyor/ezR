@@ -4,12 +4,14 @@
 \alias{ez.read}
 \title{read csv table, wrapper of \code{\link{read.csv}}}
 \usage{
-ez.read(file, ..., skip.rows = NULL, tolower = FALSE)
+ez.read(file, ..., skip.rows = NULL, tolower = FALSE, makenames = TRUE)
 }
 \arguments{
 \item{skip.rows}{rows to skip (1 based) before read in, eg 1:3}
 
 \item{tolower}{whether to convert all column names to lower case}
+
+\item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 }
 \value{
 returns a data frame
