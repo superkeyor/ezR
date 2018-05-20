@@ -167,7 +167,8 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
         result = sjmisc_read_spss(path=path, atomic.to.fac=FALSE, keep.na=!usrna, ...)
     } else if (atm2fac==3) {
         result = sjmisc_read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
-        result = ez.2label(result)
+        # result = ez.2label(result) # slow
+        result[]=lapply(result, function(x) {ez.2label(x)})
     }
     if (tolower) names(result) = tolower(names(result))
     # the atm2fac/atomic.to.fac only works for variable with numbers with labels/attributes (gender 1/2)

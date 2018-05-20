@@ -21,7 +21,7 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 
 \item{stringsAsFactors}{T/F}
 
-\item{clcolnames}{if F, keep as is. if T, replace "[[:space:][:punct:]]" -> "."  Or one can call ez.clcolnames() by onself.}
+\item{clcolnames}{if F, keep as is. if T, replace "[[:space:][:punct:]]" (except exisiting_) -> "."  Or one can call ez.clcolnames() by onself.}
 }
 \description{
 I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param clcolnames if one wants keep variable names as is.
