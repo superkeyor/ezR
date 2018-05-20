@@ -74,7 +74,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     # if duplicated col names, the following main codes would crash with weird reasons
     # duplicated row names are fine
     if ( sum(ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1))>0 ) {
-        stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(df)[which(ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
+        stop(sprintf('I cannot proceed. Duplicated col names found: %s\n', colnames(df)[which(ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
     }
 
     # id string to tell user which col used as id

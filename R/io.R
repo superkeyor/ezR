@@ -33,7 +33,7 @@ ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
     }
     result = read.csv(file, ...)
     if (tolower) names(result) = tolower(names(result))
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ))} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
@@ -98,7 +98,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, m
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ))} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
@@ -123,7 +123,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenam
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ))} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
@@ -216,7 +216,7 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # avoid warning: attributes are not identical across measure variables
     result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; return(x)})
 
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ))} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }

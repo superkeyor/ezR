@@ -1520,7 +1520,7 @@ ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
     if (is.factor(x)) x=as.character(x)
     if (is.vector(x)) {
         x=x[!is.na(x)]
-        if (length(df)-length(x)>0) cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
+        if ((length(df)-length(x)>0) & print2screen) cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
         if (is.factor(df)) x=as.factor(x)
         return(x)
     }
