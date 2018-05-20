@@ -494,7 +494,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
     ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    results$ylbl=ylbl; results$xlbl=xlbl # NULL works fine
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }
@@ -615,7 +615,7 @@ ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scree
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
     ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    results$ylbl=ylbl; results$xlbl=xlbl # NULL works fine
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }
@@ -721,7 +721,7 @@ ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresult
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
     ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    results$ylbl=ylbl; results$xlbl=xlbl # NULL works fine
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }
@@ -819,7 +819,7 @@ ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresul
     }
     results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
     ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    results$ylbl=ylbl; results$xlbl=xlbl # NULL works fine
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
     if (viewresults) {View(results)}
     return(invisible(results))
 }
