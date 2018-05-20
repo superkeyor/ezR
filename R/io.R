@@ -92,7 +92,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, .
     # char to factor
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
-    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     return(result)
 }
@@ -114,7 +114,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, ...){
     # char to factor
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
-    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     return(result)
 }
@@ -142,24 +142,29 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
     return(result)
 }
 
-#' THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.
+#' THE UNDERLYING HAVEN V0.2.1/v1.1.0 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.
 #' @description I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param clcolnames if one wants keep variable names as is.
 #' @param path File path to the data file
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
 #' \cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
 #' \cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 #' \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
-#' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
+#' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
 #' @param tolower whether to convert all column names to lower case
 #' @param clcolnames if F, keep as is. if T, replace "[[:space:][:punct:]]" -> "."  Or one can call ez.clcolnames() by onself.
 #' @param stringsAsFactors T/F 
-#' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1
+#' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
 ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, clcolnames=TRUE, ...){
+    # internal notes
+    # haven: label = variable label, labels = value labels
+    # foreign: variable.labels, value.labels
+
     if (atm2fac==1) {
         result = sjmisc_read_spss(path=path, atomic.to.fac=FALSE, keep.na=!usrna, ...)
     } else if (atm2fac==2) {
-        result = sjmisc_read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
+        # atomic.to.fac=FALSE here, will be hacked below
+        result = sjmisc_read_spss(path=path, atomic.to.fac=FALSE, keep.na=!usrna, ...)
     } else if (atm2fac==3) {
         result = sjmisc_read_spss(path=path, atomic.to.fac=TRUE, keep.na=!usrna, ...)
         result = ez.2label(result)
@@ -170,8 +175,32 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
-    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+
+    # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
+    # because factor(trimws(x,'both')) would remove attributes
+    if (atm2fac==2) {
+        atomic_w_attr_to_fac_haven = function (data.spss) {
+            # haven packag uses 'labels' attr
+            attr.string='labels'
+            if (!is.null(attr.string)) {
+                for (i in 1:ncol(data.spss)) {
+                    x <- data.spss[[i]]
+                    labs <- attr(x, attr.string, exact = T)
+                    if (is.atomic(x) && !is.null(labs)) {
+                        x <- as.factor(x)
+                        attr(x, attr.string) <- labs
+                        data.spss[[i]] <- x
+                    }
+                }
+            }
+            return(data.spss)
+        }
+
+        result = atomic_w_attr_to_fac_haven(result)
+    }
+    # hack end: atomic with attributes to factor
 
     if (clcolnames) result = ez.clcolnames(result, pattern = "[[:space:][:punct:]]", replacement = ".")
     return(result)
@@ -194,6 +223,9 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
 ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, ...){
+    # internal notes
+    # haven: label = variable label, labels = value labels
+    # foreign: variable.labels, value.labels
 
     if (atm2fac==1) {
         atm2fac=FALSE
@@ -228,10 +260,11 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working??? 
     # --Where does the trailing spaces come from --String var padded to Width in SPSS
     # hack to remove leading and trailing string spaces
-    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
+    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
 
-    # hack begin: atomic with attributes to factor, do this before or after trimming spaces
+    # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
+    # because factor(trimws(x,'both')) would remove attributes
     if (atm2fac) {
         atomic_w_attr_to_fac_foreign = function (data.spss) {
             # foreign packag uses 'value.labels' attr

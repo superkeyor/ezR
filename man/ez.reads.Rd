@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{ez.reads}
 \alias{ez.reads}
-\title{THE UNDERLYING HAVEN V0.2.1 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.}
+\title{THE UNDERLYING HAVEN V0.2.1/v1.1.0 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.}
 \usage{
 ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
   stringsAsFactors = TRUE, clcolnames = TRUE, ...)
@@ -15,7 +15,7 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 \cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.}
 
-\item{usrna}{(unfortunately, no effect as of the underlying HAVEN v0.2.1) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
+\item{usrna}{(unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 
 \item{tolower}{whether to convert all column names to lower case}
 
@@ -27,5 +27,5 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param clcolnames if one wants keep variable names as is.
 }
 \note{
-wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1
+wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 }
