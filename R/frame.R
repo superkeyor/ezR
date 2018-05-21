@@ -127,7 +127,7 @@ ez.names = colnames
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, drop=NULL,...){
+ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, drop=NULL, ...){
     # 'Time(2) | Measure1(Pre1 Post1) | Measure2(Pre2 Post2) +/- Subject'
     # timevar: variable name for timing/repetition variable, such as "session"
     # times: level name for each timing/repetition point, such as c("1,2"), c("Pre, Post")
@@ -143,7 +143,7 @@ ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dr
                             v.names=measurename,varying=measure,
                             direction="long",
                             drop=drop,
-                            sep="_",...)
+                            sep="_", ...)
     row.names(result) <- NULL
     return(result)
 }
@@ -179,7 +179,7 @@ ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dr
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
+ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, ...){
     # 'SUBJID * Time [School] - Measure2'
     # note: v.names not varying
     df = data.frame(df)
@@ -189,7 +189,7 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL,...){
                             v.names=measure,
                             direction="wide",
                             drop=drop,
-                            sep="_",...)
+                            sep="_", ...)
     row.names(result) <- NULL
     return(result)
 }
@@ -303,12 +303,14 @@ ez.2char = function(x, col=NULL){
     } else if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
         cols=col
-        for (col in cols) {
-            if (is.factor(x[[col]])) {
-                x[[col]] = as.character(x[[col]])
-                result=x
-            }
-        }
+        # for (col in cols) {
+        #     if (is.factor(x[[col]])) {
+        #         x[[col]] = as.character(x[[col]])
+        #         result=x
+        #     }
+        # }
+        x[cols] = lapply(x[cols],function(e){if (is.factor(e)) as.character(e) else e})
+        result = x
     } else {
         if (is.factor(x)) result = as.character(x)
     }
@@ -339,15 +341,17 @@ ez.2char = function(x, col=NULL){
 #' @return returns a factor with string as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALSE,...){
+ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALSE, ...){
     if (is.data.frame(x) & !is.null(col)){
         col=(ez.selcol(x,col))
         cols=col
-        for (col in cols) { 
-            x[[col]] = ez.factorelevel(x[[col]]) 
-            x[col]=sjmisc_to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
-            result=x
-        }
+        # for (col in cols) { 
+        #     x[[col]] = ez.factorelevel(x[[col]]) 
+        #     x[col]=sjmisc_to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
+        #     result=x
+        # }
+        x[cols] = lapply(x[cols],function(e,add.non.labelled,drop.na){sjmisc_to_label(ez.factorelevel(e), add.non.labelled=add.non.labelled, drop.na=drop.na)}, add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
+        result = x
     } else {
         x=ez.factorelevel(x)
         result=sjmisc_to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
@@ -379,15 +383,17 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
 #' @return returns a factor with number as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL,...){
+ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl=NULL, ...){
     if (is.data.frame(x) & !is.null(col)){
         col=(ez.selcol(x,col))
         cols=col
-        for (col in cols) {
-            x[[col]] = ez.factorelevel(x[[col]])
-            x[col]=sjmisc_to_factor(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
-            result=x
-        }
+        # for (col in cols) {
+        #     x[[col]] = ez.factorelevel(x[[col]])
+        #     x[col]=sjmisc_to_factor(x[col], add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+        #     result=x
+        # }
+        x[cols] = lapply(x[cols],function(e,add.non.labelled,drop.na,ref.lvl){sjmisc_to_factor(ez.factorelevel(e), add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)}, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
+        result = x
     } else {
         x=ez.factorelevel(x)
         result=sjmisc_to_factor(x, add.non.labelled=add.non.labelled, drop.na=drop.na, ref.lvl=ref.lvl)
@@ -429,18 +435,20 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link{ez.num}}
-ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE,...){
+ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE, ...){
     if (is.data.frame(x) & !is.null(col)){
         col=(ez.selcol(x,col))
         cols=col
-        for (col in cols) {
-            x[[col]] = ez.factorelevel(x[[col]])
-            x[col]=sjmisc_to_value(x[col], start.at=start.at, keep.labels=keep.labels,...)
-            result=x
-        }
+        # for (col in cols) {
+        #     x[[col]] = ez.factorelevel(x[[col]])
+        #     x[col]=sjmisc_to_value(x[col], start.at=start.at, keep.labels=keep.labels, ...)
+        #     result=x
+        # }
+        x[cols] = lapply(x[cols],function(e,start.at,keep.labels, ...){sjmisc_to_value(ez.factorelevel(e), start.at=start.at, keep.labels=keep.labels, ...)}, start.at=start.at, keep.labels=keep.labels, ...)
+        result = x
     } else {    
         x=ez.factorelevel(x)
-        result=sjmisc_to_value(x, start.at=start.at, keep.labels=keep.labels,...)
+        result=sjmisc_to_value(x, start.at=start.at, keep.labels=keep.labels, ...)
     }
     return(result)
 }
@@ -551,7 +559,8 @@ ez.factorelevel = function(x, cols=NULL) {
         }
     } else if (is.data.frame(x) & !is.null(cols)) {
         cols=ez.selcol(x,cols)
-        for (col in cols) { x[[col]] = ez.factorelevel(x[[col]]) }
+        # for (col in cols) { x[[col]] = ez.factorelevel(x[[col]]) }
+        x[cols] = lapply(x[cols],function(e){ez.factorelevel(e)})
     } else if (is.data.frame(x) & is.null(cols)) {
         x = dplyr::mutate_all(x,ez.factorelevel)
     }
@@ -877,27 +886,51 @@ ez.replace = function(df, col, oldval, newval=NULL){
     if (!is.null(newval)) {
         col=(ez.selcol(df,col))
         cols = col
-        for (col in cols) {
+        # for (col in cols) {
+        #     # for factor, you cannot directly assign if the new val is not alredy in the levels, otherwise get "invalid factor level, NA generated"
+        #     factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
+        #     if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
+                
+        #     if (is.na(oldval)) {
+        #         if (length(which(is.na(df[[col]]))) > 0) {
+        #             cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
+        #             df[[col]][which(is.na(df[[col]]))] <- newval
+        #         }
+        #     } else {
+        #         if (length(which(df[[col]]==oldval)) > 0) {
+        #             cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
+        #             df[[col]][which(df[[col]]==oldval)] <- newval
+        #         }
+        #     }
+
+        #     if (factored) {df[[col]]=as.factor(df[[col]])}
+        #     # remove all value labels attr, with graceful failure
+        #     df[[col]]=tryCatch(sjmisc_set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
+        # }
+
+        thefun = function(dfcol,oldval,newval) {
             # for factor, you cannot directly assign if the new val is not alredy in the levels, otherwise get "invalid factor level, NA generated"
-            factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
-            if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
+            factored = ifelse(is.factor(dfcol), TRUE, FALSE)
+            if (is.factor(dfcol)) {dfcol=as.character(dfcol)}
                 
             if (is.na(oldval)) {
-                if (length(which(is.na(df[[col]]))) > 0) {
-                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
-                    df[[col]][which(is.na(df[[col]]))] <- newval
+                if (length(which(is.na(dfcol))) > 0) {
+                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(dfcol)), col, as.character(oldval), as.character(newval)))
+                    dfcol[which(is.na(dfcol))] <- newval
                 }
             } else {
-                if (length(which(df[[col]]==oldval)) > 0) {
-                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
-                    df[[col]][which(df[[col]]==oldval)] <- newval
+                if (length(which(dfcol==oldval)) > 0) {
+                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(dfcol==oldval)), col, as.character(oldval), as.character(newval)))
+                    dfcol[which(dfcol==oldval)] <- newval
                 }
             }
 
-            if (factored) {df[[col]]=as.factor(df[[col]])}
+            if (factored) {dfcol=as.factor(dfcol)}
             # remove all value labels attr, with graceful failure
-            df[[col]]=tryCatch(sjmisc_set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
+            dfcol=tryCatch(sjmisc_set_labels(dfcol,""), error=function(e) dfcol, warning = function(w) dfcol, finally=dfcol)
+            return(dfcol)
         }
+        df[cols] = lapply(df[cols],thefun,oldval=oldval,newval=newval)
 
     # three parameters passed        
     } else {
@@ -935,7 +968,7 @@ ez.replace = function(df, col, oldval, newval=NULL){
 #' @seealso \code{\link{ez.replace}}
 #' @examples df=ez.replacewhen(nicu,pt_num=1220,baby_num=3,baby_name='Ben')
 #' @export
-ez.replacewhen = function(df,...) {
+ez.replacewhen = function(df, ...) {
     theList = list(...)
     theCols = names(theList)
     theID = theCols[1]; theValue = theList[[1]]
@@ -1703,7 +1736,7 @@ ez.ppq = function(...) {
 }
 
 #' select cols in a df
-#' @description select cols in a df, evaluated by sprintf('dplyr::select(df,%s,...)',toString(col)
+#' @description select cols in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
 #' @param df df
 #' @param col a string or a vector or NULL (NULL=all cols)
 #' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
@@ -1712,10 +1745,10 @@ ez.ppq = function(...) {
 #' \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
 #' @return returns vector of col names
 #' @export
-ez.selcol = function(df,col=NULL,...) {
+ez.selcol = function(df,col=NULL, ...) {
     if (is.null(col)) return(colnames(df))
 
-    cmd=sprintf('dplyr::select(df,%s,...)',toString(col))
+    cmd=sprintf('dplyr::select(df,%s, ...)',toString(col))
     cols=ez.eval(cmd)
     return(colnames(cols))
 }
@@ -1785,9 +1818,10 @@ ez.clcoldata = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
-        for (col in cols) {
-            x[[col]] = ez.clcoldata(x[[col]],procedures=procedures)
-        }
+        # for (col in cols) {
+        #     x[[col]] = ez.clcoldata(x[[col]],procedures=procedures)
+        # }
+        x[cols] = lapply(x[cols],function(e,procedures){ez.clcoldata(e,procedures=procedures)},procedures=procedures)
     }
     return(x)
 }
@@ -1811,9 +1845,10 @@ ez.clattr = function(x, col=NULL, attrs=c('variable.labels'), ...) {
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
-        for (col in cols) {
-            x[[col]] = ez.clattr(x[[col]],attrs=attrs)
-        }
+        # for (col in cols) {
+        #     x[[col]] = ez.clattr(x[[col]],attrs=attrs)
+        # }
+        x[cols] = lapply(x[cols],function(e,attrs){ez.clattr(e,attrs=attrs)},attrs=attrs)
     }
     return(x)
 }
