@@ -330,11 +330,13 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
     } else if (is.data.frame(x) && !is.null(col)) {
         col=(ez.selcol(x,col))
         cols=col
-        for (col in cols) {
-            # recursive to is.data.frame(x) && is.null(col)
-            x[col] = ez.num(x[col],force=force)
-            result=x
-        }
+        # for (col in cols) {
+        #     # recursive to is.data.frame(x) && is.null(col)
+        #     x[col] = ez.num(x[col],force=force)
+        #     result=x
+        # }
+        x[cols] = lapply(x[cols],function(e,force){ez.num(e,force=force)},force=force)
+        result = x
     } else if (is.list(x)){
         result = utils::type.convert(as.character(unlist(x)), as.is = TRUE, ...)
     } else {
@@ -484,10 +486,12 @@ ez.str = function(x, col=NULL){
     } else if (is.data.frame(x) && !is.null(col)) {
         col=(ez.selcol(x,col))
         cols=col
-        for (col in cols) {
-            x[[col]] = as.character(x[[col]])
-            result=x
-        }
+        # for (col in cols) {
+        #     x[[col]] = as.character(x[[col]])
+        #     result=x
+        # }
+        x[cols] = lapply(x[cols],function(e){as.character(e)})
+        result = x
     } else {
         result = as.character(x)
     }
