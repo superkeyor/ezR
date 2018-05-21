@@ -4,7 +4,7 @@
 \alias{sjmisc_write_spss}
 \title{sjmisc 1.8 hack}
 \usage{
-sjmisc_write_spss(x, path)
+sjmisc_write_spss(x, path, enc.to.utf8 = TRUE)
 }
 \description{
 sjmisc 1.8 hack
