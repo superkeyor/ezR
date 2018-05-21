@@ -4150,8 +4150,8 @@ read_stata <- function(path, atomic.to.fac = FALSE) {
 #          value labels will be converted to UTF-8.
 #
 # 
-write_spss <- function(x, path, enc.to.utf8 = TRUE) {
-  write_data(x = x, path = path, type = "spss", enc.to.utf8 = enc.to.utf8)
+write_spss <- function(x, path) {
+  write_data(x = x, path = path, type = "spss", enc.to.utf8 = TRUE)
 }
 
 
