@@ -4151,7 +4151,7 @@ read_stata <- function(path, atomic.to.fac = FALSE) {
 #
 # 
 write_spss <- function(x, path) {
-  write_data(x = x, path = path, type = "spss", enc.to.utf8 = TRUE)
+  write_data(x = x, path = path, type = "spss", enc.to.utf8 = FALSE)
 }
 
 
