@@ -401,6 +401,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
                    type = "p", pch=16, 
                    main = yy,
                    col="#e69f00",
+                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
@@ -488,6 +489,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
                type = "p", pch=16, 
                main = ifelse((length(y)>1 & length(x)==1),x,y),
                col="#e69f00",
+               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
         print(pp)
@@ -540,6 +542,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
                    type = "p", pch=16, 
                    main = yy,
                    col="#e69f00",
+                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
@@ -596,6 +599,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
                type = "p", pch=16, 
                main = ifelse((length(y)>1 & length(x)==1),x,y),
                col="#e69f00",
+               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
         print(pp)
@@ -643,6 +647,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
                        type = "p", pch=16, 
                        main = xx,
                        col="#e69f00",
+                       ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
@@ -691,6 +696,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
                type = "p", pch=16, 
                main = ifelse((length(y)>1 & length(x)==1),x,y),
                col="#e69f00",
+               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
         print(pp)
@@ -737,6 +743,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
                    type = "p", pch=16, 
                    main = xx,
                    col="#e69f00",
+                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    panel=function(x,y,...){ 
                        panel.barchart(x,y,...) 
                        panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
@@ -773,6 +780,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
                    type = "p", pch=16, 
                    main = y,
                    col="#e69f00",
+                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    panel=function(x,y,...){ 
                        panel.barchart(x,y,...) 
                        panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
@@ -785,6 +793,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
                    type = "p", pch=16, 
                    main = x,
                    col="#e69f00",
+                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    panel=function(x,y,...){ 
                        panel.barchart(x,y,...) 
                        panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
