@@ -395,6 +395,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
             # plot = F; no need for sepearte plotlist
             result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
             if (plot) {
+                bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
                    xlab = "Standardized Coefficient",
                    ylab = "-log10(p-Value)",
@@ -536,6 +537,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
             # plot = F; no need for sepearte plotlist
             result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
             if (plot) {
+                bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
                    xlab = "log2(Odds Ratio)",
                    ylab = "-log10(p-Value)",
@@ -641,6 +643,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
             # plot = F; no need for sepearte plotlist
             result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
             if (plot) {
+                bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
                        xlab = expression('Partial' ~ eta^2),
                        ylab = "-log10(p-Value)",
@@ -737,6 +740,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             # plot = F; no need for sepearte plotlist
             result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,width=width)
             if (plot) {
+                bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
                    xlab = "Variable",
                    ylab = "-log10(p-Value)",
