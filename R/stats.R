@@ -407,7 +407,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
     results4plot = results
     df=ez.2value(df,y,...)
 
-    getStats = function(yy,xx,covar,swap=F,data,...){
+    getStats = function(yy,xx,covar,swap=F,data, ...){
         df=data
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
@@ -448,7 +448,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
     }
 
     if (length(y)>1 & length(x)==1) lapply(y,getStats,xx=x,covar=covar,data=df)
-    if (length(y==1 & length(x)>1) lapply(x,getStats,xx=y,swap=T,covar=covar,data=df)
+    if (length(y)==1 & length(x)>1) lapply(x,getStats,xx=y,swap=T,covar=covar,data=df)
 
     for (yy in y) {
         for (xx in x) {

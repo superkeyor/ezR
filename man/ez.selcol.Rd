@@ -19,5 +19,5 @@ ez.selcol(df, col = NULL, ...)
 returns vector of col names
 }
 \description{
-select cols in a df, evaluated by sprintf('dplyr::select(df,%s,...)',toString(col)
+select cols in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
 }
