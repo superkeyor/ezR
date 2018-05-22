@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.selcol}
 \alias{ez.selcol}
-\title{select cols in a df}
+\title{select col names in a df}
 \usage{
 ez.selcol(df, col = NULL, ...)
 }
@@ -19,5 +19,5 @@ ez.selcol(df, col = NULL, ...)
 returns vector of col names
 }
 \description{
-select cols in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
+select col names in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
 }

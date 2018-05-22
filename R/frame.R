@@ -1735,8 +1735,8 @@ ez.ppq = function(...) {
     return(result)
 }
 
-#' select cols in a df
-#' @description select cols in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
+#' select col names in a df
+#' @description select col names in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
 #' @param df df
 #' @param col a string or a vector or NULL (NULL=all cols)
 #' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
@@ -1747,7 +1747,10 @@ ez.ppq = function(...) {
 #' @export
 ez.selcol = function(df,col=NULL, ...) {
     if (is.null(col)) return(colnames(df))
-
+    # optimize for big df or long col
+    if (all(col %in% names(df))) return(col)
+    
+    df = df[1,,drop=F]
     cmd=sprintf('dplyr::select(df,%s, ...)',toString(col))
     cols=ez.eval(cmd)
     return(colnames(cols))

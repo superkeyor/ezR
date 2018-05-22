@@ -407,8 +407,8 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
     results4plot = results
     df=ez.2value(df,y,...)
 
-    getStats = function(yy,xx,covar,swap=F,data, ...){
-        df=data
+    getStats = function(y,x,covar,swap=F,data, ...){
+        df=data; yy=y; xx=x
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
         tryCatch({
