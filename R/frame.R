@@ -1749,6 +1749,7 @@ ez.selcol = function(df,col=NULL, ...) {
     if (is.null(col)) return(colnames(df))
     # optimize for big df or long col
     if (all(col %in% names(df))) return(col)
+    if (is.numeric(col)) return(names(df)[col])
     
     df = df[1,,drop=F]
     cmd=sprintf('dplyr::select(df,%s, ...)',toString(col))
