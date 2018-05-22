@@ -398,10 +398,9 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
                    xlab = "Standardized Coefficient",
                    ylab = "-log10(p-Value)",
-                   type = "p", 
+                   type = "p", pch=16, 
                    main = yy,
-                   col="darkgreen",
-                   ylim=c(-0.5,bonferroniP+0.5),
+                   col="#e69f00",
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
@@ -413,7 +412,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 
     df=ez.2value(df,y,...)
 
-    getStats = function(y,x,covar,swap=F,data, ...){
+    getStats = function(y,x,covar,swap=F,data,...){
         df=data; yy=y; xx=x
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
@@ -486,10 +485,9 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         pp=lattice::xyplot(-log10(result$p) ~ result$beta,
                xlab = "Standardized Coefficient",
                ylab = "-log10(p-Value)",
-               type = "p", 
+               type = "p", pch=16, 
                main = ifelse((length(y)>1 & length(x)==1),x,y),
-               col="darkgreen",
-               ylim=c(-0.5,bonferroniP+0.5),
+               col="#e69f00",
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
         print(pp)
@@ -539,10 +537,9 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
                    xlab = "log2(Odds Ratio)",
                    ylab = "-log10(p-Value)",
-                   type = "p", 
+                   type = "p", pch=16, 
                    main = yy,
-                   col="darkgreen",
-                   ylim=c(-0.5,bonferroniP+0.5),
+                   col="#e69f00",
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
@@ -596,10 +593,9 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
         pp=lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
                xlab = "log2(Odds Ratio)",
                ylab = "-log10(p-Value)",
-               type = "p", 
+               type = "p", pch=16, 
                main = ifelse((length(y)>1 & length(x)==1),x,y),
-               col="darkgreen",
-               ylim=c(-0.5,bonferroniP+0.5),
+               col="#e69f00",
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
         print(pp)
@@ -644,10 +640,9 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
                 plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
                        xlab = expression('Partial' ~ eta^2),
                        ylab = "-log10(p-Value)",
-                       type = "p", 
+                       type = "p", pch=16, 
                        main = xx,
-                       col="darkgreen",
-                       ylim=c(-0.5,bonferroniP+0.5),
+                       col="#e69f00",
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
@@ -693,10 +688,9 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         pp=lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
                xlab = expression('Partial' ~ eta^2),
                ylab = "-log10(p-Value)",
-               type = "p", 
+               type = "p", pch=16, 
                main = ifelse((length(y)>1 & length(x)==1),x,y),
-               col="darkgreen",
-               ylim=c(-0.5,bonferroniP+0.5),
+               col="#e69f00",
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
         print(pp)
@@ -740,10 +734,9 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
                 plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
                    xlab = "Variable",
                    ylab = "-log10(p-Value)",
-                   type = "p", 
+                   type = "p", pch=16, 
                    main = xx,
                    col="#e69f00",
-                   ylim=c(-0.5,bonferroniP+0.5),
                    panel=function(x,y,...){ 
                        panel.barchart(x,y,...) 
                        panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
@@ -777,10 +770,9 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             pp=lattice::barchart(-log10(result$p) ~ result$x,
                    xlab = "Variable",
                    ylab = "-log10(p-Value)",
-                   type = "p", 
+                   type = "p", pch=16, 
                    main = y,
                    col="#e69f00",
-                   ylim=c(-0.5,bonferroniP+0.5),
                    panel=function(x,y,...){ 
                        panel.barchart(x,y,...) 
                        panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
@@ -790,10 +782,9 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             pp=lattice::barchart(-log10(result$p) ~ result$y,
                    xlab = "Variable",
                    ylab = "-log10(p-Value)",
-                   type = "p", 
+                   type = "p", pch=16, 
                    main = x,
                    col="#e69f00",
-                   ylim=c(-0.5,bonferroniP+0.5),
                    panel=function(x,y,...){ 
                        panel.barchart(x,y,...) 
                        panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
