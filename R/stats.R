@@ -692,7 +692,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
     if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
-    names(result) <- c('y','x','p','partial_etasq2','degree_of_freedom','means','counts')
+    names(result) <- c('x','y','p','partial_etasq2','degree_of_freedom','means','counts')
     result %<>% ez.num() %>% ez.dropna()
 
     if (plot) {
@@ -784,7 +784,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
     if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
-    names(result) <- c('y','x','p','partial_etasq2','degree_of_freedom','means','counts')
+    names(result) <- c('x','y','p','partial_etasq2','degree_of_freedom','means','counts')
     result %<>% ez.num() %>% ez.dropna()
 
     if (plot) {
