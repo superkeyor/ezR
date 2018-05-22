@@ -550,6 +550,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
             }
             xlist[[yy]] = result
         }
+        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
     }
 
@@ -656,6 +657,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
             }
             xlist[[xx]] = result
         }
+        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
     }
 
@@ -756,6 +758,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             }
             xlist[[xx]] = result
         }
+        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
     }
 
