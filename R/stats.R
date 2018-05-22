@@ -495,6 +495,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         )
         print(pp)
     }
+
     for (method in pmethods) {
         result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
@@ -556,7 +557,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 
     df=ez.2value(df,y,...)
 
-    getStats = function(y,x,covar,swap=F,data, ...){
+    getStats = function(y,x,covar,swap=F,data,...){
         df=data; yy=y; xx=x
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
@@ -607,6 +608,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
         )
         print(pp)
     }
+
     for (method in pmethods) {
         result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
@@ -663,7 +665,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 
     df = ez.2value(df,y,...); df = ez.2factor(df,x)
 
-    getStats = function(y,x,swap=F,data, ...){
+    getStats = function(y,x,swap=F,data,...){
         df=data; yy=y; xx=x
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
@@ -682,8 +684,8 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         out = c(xx,yy,p,partial_etasq2,degree_of_freedom,means,counts)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
-            return(c(yy,xx,NA,NA,NA,NA,NA))
+            if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
+            return(c(xx,yy,NA,NA,NA,NA,NA))
         })
     }
 
@@ -706,10 +708,10 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         )
         print(pp)
     }
+
     for (method in pmethods) {
         result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
-
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
     result$orindex=1:nrow(result)
@@ -764,7 +766,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
 
     df=ez.2factor(df,c(x,y))
 
-    getStats = function(y,x,covar,swap=F,data, ...){
+    getStats = function(y,x,swap=F,data,...){
         tryCatch({
         fisher.test(df[[xx]],df[[yy]]) -> model # by default, pairwise NA auto removed
         p = model$p.value
@@ -774,10 +776,17 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         out = c(xx,yy,p,counts,total)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
-            return(c(yy,xx,NA,NA,NA))
+            if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
+            return(c(xx,yy,NA,NA,NA))
         })
     }
+
+    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
+    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
+    result = result %>% as.data.frame() %>% data.table::transpose()
+    names(result) <- c('y','x','p','partial_etasq2','degree_of_freedom','means','counts')
+    result %<>% ez.num() %>% ez.dropna()
+
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         if (length(y)==1 & length(x)>1) {
@@ -809,10 +818,10 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         }
         print(pp)
     }
+
     for (method in pmethods) {
         result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
-
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
     result$orindex=1:nrow(result)
