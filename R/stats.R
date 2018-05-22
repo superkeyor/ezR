@@ -358,20 +358,19 @@ ez.zresid = function(model,method=3) {
     return(result)
 }
 
-#' a series of regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details
-#' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]+scale(covar)))
+#' a series of regression, for many y and many x; if many y and many x at the same time, returns a list
+#' @description df=ez.2value(df,y,...), df[[x]]=ez.2value(df[[x]],...), lm(scale(df[[y]])~scale(df[[x]]+scale(df[[covar]])))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
-#' @param pthreshold eg, .05, print/output results whenever p < pthreshold, could be 1 then get all
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
-#' @param showerror whether show error message when error occurs, default F
+#' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+#' @return an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
 #' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -386,32 +385,39 @@ ez.zresid = function(model,method=3) {
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' \cr if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
+ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
-        xlist = list(); plist = list(); rlist = list()
+        xlist = list(); plist = list()
         for (yy in y) {
-            results = ez.regressions(df,yy,x,covar=covar,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,...)
-            if (plot) {plist[[yy]] = ggplot2::last_plot()}
-            xlist[[yy]] = results %>% arrange(p)
+            # plot = F; no need for sepearte plotlist
+            result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            if (plot) {
+                plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
+                   xlab = "Standardized Coefficient",
+                   ylab = "-log10(p-Value)",
+                   type = "p", 
+                   main = yy,
+                   col="darkgreen",
+                   ylim=c(-0.5,bonferroniP+0.5),
+                   abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+                )
+            }
+            xlist[[yy]] = result
         }
-        # https://stackoverflow.com/a/7945259/2292993
-        if (length(plist)==0) {plist=NULL}
-        rlist$xlist = xlist; rlist$plist = plist
-        return(invisible(rlist))
+        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
+        return(invisible(xlist))
     }
 
-    results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'rp'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
-    results4plot = results
     df=ez.2value(df,y,...)
 
     getStats = function(y,x,covar,swap=F,data, ...){
         df=data; yy=y; xx=x
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
-        tryCatch({
+        
         if (is.null(covar)) {
             covar = ''
             rcovar = ''
@@ -422,6 +428,7 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
             covar = paste('+scale(df[["',covar,'"]])',sep='',collapse='')
         }
 
+        tryCatch({
         if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
         df[[xx]]=ez.2value(df[[xx]],...)
 
@@ -447,109 +454,71 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
         })
     }
 
-    if (length(y)>1 & length(x)==1) lapply(y,getStats,xx=x,covar=covar,data=df)
-    if (length(y)==1 & length(x)>1) lapply(x,getStats,xx=y,swap=T,covar=covar,data=df)
+    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
+    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
+    result = result %>% as.data.frame() %>% data.table::transpose()
+    names(result) <- c('y','x','p','rp','beta','degree_of_freedom')
+    result %<>% ez.num() %>% ez.dropna()
 
-    for (yy in y) {
-        for (xx in x) {
-            if (showerror) {
-                # try is implemented using tryCatch
-                # try(expr, silent = FALSE)
-                try({
-                    # nlevels(nonfactor)=0
-                    if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
-                    df[[xx]]=ez.2value(df[[xx]],...)
-
-                    # according to my own testing, scale or not for x,y or covar, does not change p values for predictors, although intercept would differ
-                    cmd = sprintf('model = summary( lm( scale(df[[yy]])~scale(df[[xx]])%s ) )', covar)
-                    ez.eval(cmd)
-                    p = model$coefficients[2,4]
-
-                    cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
-                    ez.eval(cmd)
-                    # https://stats.stackexchange.com/a/205615/100493
-                    rtest = sfsmisc::f.robftest(rmodel,var=xx)
-                    rp = rtest$p.value
-
-                    beta = model$coefficients[2,1]
-                    degree_of_freedom = model$df[2]
-                    results4plot = ez.append(results4plot,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=print2screen)}
-                    })
-            } else {
-                # go to next loop item, in case error
-                tryCatch({
-                    if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
-                    df[[xx]]=ez.2value(df[[xx]],...)
-                    
-                    cmd = sprintf('model = summary( lm( scale(df[[yy]])~scale(df[[xx]])%s ) )', covar)
-                    ez.eval(cmd)
-                    p = model$coefficients[2,4]
-
-                    cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
-                    ez.eval(cmd)
-                    # https://stats.stackexchange.com/a/205615/100493
-                    rtest = sfsmisc::f.robftest(rmodel,var=xx)
-                    rp = rtest$p.value
-
-                    beta = model$coefficients[2,1]
-                    degree_of_freedom = model$df[2]
-                    results4plot = ez.append(results4plot,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,rp,beta,degree_of_freedom),print2screen=print2screen)}
-                }, error = function(e) {})
-            }
-        }
-        if (length(x)>1 & yy!=y[length(y)]) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
-    }
     if (plot) {
-        bonferroniP = -log10(0.05/length(results4plot[['p']]))
-        if (length(y)==1 & length(x)>1) {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
-        } else {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
-        }
-        eval(parse(text = tt))
+        bonferroniP = -log10(0.05/length(result[['p']]))
+        # if (length(y)==1 & length(x)>1) {
+        #     tt = sprintf('
+        #     pp = result %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
+        #         geom_bar(stat="identity")+
+        #         geom_hline(yintercept = %f,color="black",linetype=5)+
+        #         geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+        #         scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+        #         theme(legend.position="none")+
+        #         %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+        # } else {
+        #     tt = sprintf('
+        #     pp = result %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
+        #         geom_bar(stat="identity")+
+        #         geom_hline(yintercept = %f,color="black",linetype=5)+
+        #         geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
+        #         scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
+        #         theme(legend.position="none")+
+        #         %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+        # }
+        # eval(parse(text = tt))
+        # print(pp)
+        pp=lattice::xyplot(-log10(result$p) ~ result$beta,
+               xlab = "Standardized Coefficient",
+               ylab = "-log10(p-Value)",
+               type = "p", 
+               main = ifelse((length(y)>1 & length(x)==1),x,y),
+               col="darkgreen",
+               ylim=c(-0.5,bonferroniP+0.5),
+               abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+        )
         print(pp)
     }
     for (method in pmethods) {
-        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
+        result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
-    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
-    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
-    if (viewresults) {View(results)}
-    return(invisible(results))
+    ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
+    result$orindex=1:nrow(result)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
+    if (viewresult) {View(result)}
+    return(invisible(result))
 }
 
-#' a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details
+#' a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in glm(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
-#' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
-#' @param showerror whether show error message when error occurs, default F
+#' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
-#' \cr odds_ratio: odds ratio=exp(b), one unit increase in x results in the odds of being 1 for y "OR" times the odds of being 0 for y
+#' @return an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+#' \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
 #' \cr per standard deviation increase in the predictor variable. 
@@ -557,307 +526,292 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
 #' \cr degree_of_freedom
 #' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
+ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
-        xlist = list(); plist = list(); rlist = list()
+        xlist = list(); plist = list()
         for (yy in y) {
-            results = ez.logistics(df,yy,x,covar=covar,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,...)
-            if (plot) {plist[[yy]] = ggplot2::last_plot()}
-            xlist[[yy]] = results %>% arrange(p)
-        }
-        # https://stackoverflow.com/a/7945259/2292993
-        if (length(plist)==0) {plist=NULL}
-        rlist$xlist = xlist; rlist$plist = plist
-        return(invisible(rlist))
-    }
-
-    results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'odds_ratio'=numeric(),'degree_of_freedom'=numeric())
-    results4plot = results
-    df=ez.2value(df,y,...)
-    if (is.null(covar)) {
-        covar = ''
-    } else {
-        covar=ez.selcol(df,covar)
-        df=ez.2value(df,covar,...)
-        covar = paste('+df[["',covar,'"]]',sep='',collapse='')
-    }
-    for (yy in y) {
-        for (xx in x) {
-            if (showerror) {
-                # try is implemented using tryCatch
-                # try(expr, silent = FALSE)
-                try({
-                    # nlevels(nonfactor)=0
-                    if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
-                    df[[xx]]=ez.2value(df[[xx]],...)
-                    
-                    cmd = sprintf('model = summary(glm((df[[yy]])~(df[[xx]])%s,family = binomial(link = "logit")))', covar)
-                    ez.eval(cmd)
-
-                    p = model$coefficients[2,4]
-                    odds_ratio = exp(model$coefficients[2,1])
-                    degree_of_freedom = model$df[2]
-                    results4plot = ez.append(results4plot,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=print2screen)}
-                    })
-            } else {
-                # go to next loop item, in case error
-                tryCatch({
-                    if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
-                    df[[xx]]=ez.2value(df[[xx]],...)
-                    
-                    cmd = sprintf('model = summary(glm((df[[yy]])~(df[[xx]])%s,family = binomial(link = "logit")))', covar)
-                    ez.eval(cmd)
-
-                    p = model$coefficients[2,4]
-                    odds_ratio = exp(model$coefficients[2,1])
-                    degree_of_freedom = model$df[2]
-                    results4plot = ez.append(results4plot,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(yy,xx,p,odds_ratio,degree_of_freedom),print2screen=print2screen)}
-                }, error = function(e) {})
+            # plot = F; no need for sepearte plotlist
+            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            if (plot) {
+                plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
+                   xlab = "log2(Odds Ratio)",
+                   ylab = "-log10(p-Value)",
+                   type = "p", 
+                   main = yy,
+                   col="darkgreen",
+                   ylim=c(-0.5,bonferroniP+0.5),
+                   abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+                )
             }
+            xlist[[yy]] = result
         }
-        if (length(x)>1 & yy!=y[length(y)]) results = ez.append(results,list('','',NA,NA,NA),print2screen=print2screen)  # empty line between each y
+        return(invisible(xlist))
     }
-    if (plot) {
-        bonferroniP = -log10(0.05/length(results4plot[['p']]))
-        if (length(y)==1 & length(x)>1) {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+
+    df=ez.2value(df,y,...)
+
+    getStats = function(y,x,covar,swap=F,data, ...){
+        df=data; yy=y; xx=x
+        # for single y but multiple x using lapply
+        if (swap) {tmp=xx;xx=yy;yy=tmp}
+
+        if (is.null(covar)) {
+            covar = ''
         } else {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+            covar=ez.selcol(df,covar)
+            df=ez.2value(df,covar,...)
+            covar = paste('+df[["',covar,'"]]',sep='',collapse='')
         }
-        eval(parse(text = tt))
+
+        tryCatch({
+        if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
+        df[[xx]]=ez.2value(df[[xx]],...)
+        
+        cmd = sprintf('model = summary(glm((df[[yy]])~(df[[xx]])%s,family = binomial(link = "logit")))', covar)
+        ez.eval(cmd)
+
+        p = model$coefficients[2,4]
+        odds_ratio = exp(model$coefficients[2,1])
+        degree_of_freedom = model$df[2]
+
+        out = c(yy,xx,p,odds_ratio,degree_of_freedom)
+        return(out)
+        }, error = function(e) {
+            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
+            return(c(yy,xx,NA,NA,NA))
+        })
+    }
+
+    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
+    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
+    result = result %>% as.data.frame() %>% data.table::transpose()
+    names(result) <- c('y','x','p','odds_ratio','degree_of_freedom')
+    result %<>% ez.num() %>% ez.dropna()
+
+    if (plot) {
+        bonferroniP = -log10(0.05/length(result[['p']]))
+        pp=lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
+               xlab = "log2(Odds Ratio)",
+               ylab = "-log10(p-Value)",
+               type = "p", 
+               main = ifelse((length(y)>1 & length(x)==1),x,y),
+               col="darkgreen",
+               ylim=c(-0.5,bonferroniP+0.5),
+               abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+        )
         print(pp)
     }
     for (method in pmethods) {
-        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
+        result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
-    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
-    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
-    if (viewresults) {View(results)}
-    return(invisible(results))
+    ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
+    result$orindex=1:nrow(result)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
+    if (viewresult) {View(result)}
+    return(invisible(result))
 }
 
-#' a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list, see note for details
+#' a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list
 #' @description df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 #' @param df a data frame
 #' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
-#' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
-#' @param showerror whether show error message when error occurs, default F
+#' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df[[yy]],...)
-#' @return an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+#' @return an invisible data frame with x,y,p,means and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.anovas = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
+ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
-        xlist = list(); plist = list(); rlist = list()
+        xlist = list(); plist = list()
         for (xx in x) {
-            results = ez.anovas(df,y,xx,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,...)
-            if (plot) {plist[[xx]] = ggplot2::last_plot()}
-            xlist[[xx]] = results %>% arrange(p)
+            # plot = F; no need for sepearte plotlist
+            result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            if (plot) {
+                plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
+                       xlab = expression('Partial' ~ eta^2),
+                       ylab = "-log10(p-Value)",
+                       type = "p", 
+                       main = xx,
+                       col="darkgreen",
+                       ylim=c(-0.5,bonferroniP+0.5),
+                       abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+                )
+            }
+            xlist[[xx]] = result
         }
-        # https://stackoverflow.com/a/7945259/2292993
-        if (length(plist)==0) {plist=NULL}
-        rlist$xlist = xlist; rlist$plist = plist
-        return(invisible(rlist))
+        return(invisible(xlist))
     }
 
-    results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'degree_of_freedom'=character(),'means'=character(),'counts'=character())
-    results4plot = results
     df = ez.2value(df,y,...); df = ez.2factor(df,x)
-    for (xx in x) {
-        for (yy in y) {
-            if (showerror) {
-                # try is implemented using tryCatch
-                # try(expr, silent = FALSE)
-                try({
-                    a = aov(df[[yy]]~df[[xx]])
-                    p = summary(a)[[1]][["Pr(>F)"]][[1]]
-                    degree_of_freedom = toString(summary(a)[[1]][['Df']])
-                    s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
-                    n = aggregate(df[[yy]]~df[[xx]],FUN=length)
-                    means = ''; counts = ''
-                    for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
-                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=print2screen)}
-                    })
-            } else {
-                # go to next loop item, in case error
-                tryCatch({
-                    a = aov(df[[yy]]~df[[xx]])
-                    p = summary(a)[[1]][["Pr(>F)"]][[1]]
-                    degree_of_freedom = toString(summary(a)[[1]][['Df']])
-                    s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
-                    n = aggregate(df[[yy]]~df[[xx]],FUN=length)
-                    means = ''; counts = ''
-                    for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
-                    for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
-                    results4plot = ez.append(results4plot,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,degree_of_freedom,means,counts),print2screen=print2screen)}
-                }, error = function(e) {})
-            }
-        }
-        if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,''),print2screen=print2screen)  # empty line between each x
+
+    getStats = function(y,x,swap=F,data, ...){
+        df=data; yy=y; xx=x
+        # for single y but multiple x using lapply
+        if (swap) {tmp=xx;xx=yy;yy=tmp}
+
+        tryCatch({
+        a = aov(df[[yy]]~df[[xx]])
+        p = summary(a)[[1]][["Pr(>F)"]][[1]]
+        degree_of_freedom = toString(summary(a)[[1]][['Df']])
+        s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
+        n = aggregate(df[[yy]]~df[[xx]],FUN=length)
+        means = ''; counts = ''
+        for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
+        for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
+        # https://stats.stackexchange.com/a/78813/100493
+        partial_etasq2 = summary.lm(a)$r.squared
+        out = c(xx,yy,p,partial_etasq2,degree_of_freedom,means,counts)
+        return(out)
+        }, error = function(e) {
+            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
+            return(c(yy,xx,NA,NA,NA,NA,NA))
+        })
     }
+
+    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
+    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
+    result = result %>% as.data.frame() %>% data.table::transpose()
+    names(result) <- c('y','x','p','partial_etasq2','degree_of_freedom','means','counts')
+    result %<>% ez.num() %>% ez.dropna()
+
     if (plot) {
-        bonferroniP = -log10(0.05/length(results4plot[['p']]))
-        if (length(y)==1 & length(x)>1) {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
-        } else {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
-        }
-        eval(parse(text = tt))
+        bonferroniP = -log10(0.05/length(result[['p']]))
+        pp=lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
+               xlab = expression('Partial' ~ eta^2),
+               ylab = "-log10(p-Value)",
+               type = "p", 
+               main = ifelse((length(y)>1 & length(x)==1),x,y),
+               col="darkgreen",
+               ylim=c(-0.5,bonferroniP+0.5),
+               abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+        )
         print(pp)
     }
     for (method in pmethods) {
-        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
+        result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
-    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
-    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
-    if (viewresults) {View(results)}
-    return(invisible(results))
+
+    ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
+    result$orindex=1:nrow(result)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
+    if (viewresult) {View(result)}
+    return(invisible(result))
 }
 
-#' a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list, see note for details
+#' a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list
 #' @description df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
 #' \cr NA in df will be auto excluded in fisher.test(), reflected by total
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
-#' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
-#' @param showerror whether show error message when error occurs, default F
+#' @param showerror whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
-#' @return an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+#' @return an invisible data frame with x,y,p,counts,total and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
 #' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
-ez.fishers = function(df,y,x,pthreshold=.05,showerror=F,print2screen=T,viewresults=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),width=300) {
+ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
-        xlist = list(); plist = list(); rlist = list()
+        xlist = list(); plist = list()
         for (xx in x) {
-            results = ez.fishers(df,y,xx,pthreshold=pthreshold,showerror=showerror,print2screen=print2screen,viewresults=viewresults,plot=plot,facet=facet,pmethods=pmethods,width=width)
-            if (plot) {plist[[xx]] = ggplot2::last_plot()}
-            xlist[[xx]] = results %>% arrange(p)
+            # plot = F; no need for sepearte plotlist
+            result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,width=width)
+            if (plot) {
+                plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
+                   xlab = "Variable",
+                   ylab = "-log10(p-Value)",
+                   type = "p", 
+                   main = xx,
+                   col="#e69f00",
+                   ylim=c(-0.5,bonferroniP+0.5),
+                   panel=function(x,y,...){ 
+                       panel.barchart(x,y,...) 
+                       panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
+                       panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
+                )
+            }
+            xlist[[xx]] = result
         }
-        # https://stackoverflow.com/a/7945259/2292993
-        if (length(plist)==0) {plist=NULL}
-        rlist$xlist = xlist; rlist$plist = plist
-        return(invisible(rlist))
+        return(invisible(xlist))
     }
 
-    results = ez.header('x'=character(),'y'=character(),'p'=numeric(),'counts'=character(),'total'=numeric())
-    results4plot = results
     df=ez.2factor(df,c(x,y))
-    for (xx in x) {
-        for (yy in y) {
-            if (showerror) {
-                # try is implemented using tryCatch
-                # try(expr, silent = FALSE)
-                try({
-                    fisher.test(df[[xx]],df[[yy]]) -> model # by default, pairwise NA auto removed
-                    p = model$p.value
-                    countTable = table(df[[xx]],df[[yy]])   # by default, pairwise NA auto removed
-                    counts = toString(countTable,width=width)
-                    total = sum(countTable)
-                    results4plot = ez.append(results4plot,list(xx,yy,p,counts,total),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,counts,total),print2screen=print2screen)}
-                    })
-            } else {
-                # go to next loop item, in case error
-                tryCatch({
-                    fisher.test(df[[xx]],df[[yy]]) -> model # by default, pairwise NA auto removed
-                    p = model$p.value
-                    countTable = table(df[[xx]],df[[yy]])   # by default, pairwise NA auto removed
-                    counts = toString(countTable,width=width)
-                    total = sum(countTable)
-                    results4plot = ez.append(results4plot,list(xx,yy,p,counts,total),print2screen=F)
-                    if (p < pthreshold) {results = ez.append(results,list(xx,yy,p,counts,total),print2screen=print2screen)}
-                }, error = function(e) {})
-            }
-        }
-        if (length(y)>1 & xx!=x[length(x)]) results = ez.append(results,list('','',NA,'',NA),print2screen=print2screen)  # empty line between each x
+
+    getStats = function(y,x,covar,swap=F,data, ...){
+        tryCatch({
+        fisher.test(df[[xx]],df[[yy]]) -> model # by default, pairwise NA auto removed
+        p = model$p.value
+        countTable = table(df[[xx]],df[[yy]])   # by default, pairwise NA auto removed
+        counts = toString(countTable,width=width)
+        total = sum(countTable)
+        out = c(xx,yy,p,counts,total)
+        return(out)
+        }, error = function(e) {
+            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
+            return(c(yy,xx,NA,NA,NA))
+        })
     }
     if (plot) {
-        bonferroniP = -log10(0.05/length(results4plot[['p']]))
+        bonferroniP = -log10(0.05/length(result[['p']]))
         if (length(y)==1 & length(x)>1) {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
+            pp=lattice::barchart(-log10(result$p) ~ result$x,
+                   xlab = "Variable",
+                   ylab = "-log10(p-Value)",
+                   type = "p", 
+                   main = y,
+                   col="#e69f00",
+                   ylim=c(-0.5,bonferroniP+0.5),
+                   panel=function(x,y,...){ 
+                       panel.barchart(x,y,...) 
+                       panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
+                       panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
+                )
         } else {
-            tt = sprintf('
-            pp = results4plot %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
-                geom_bar(stat="identity")+
-                geom_hline(yintercept = %f,color="black",linetype=5)+
-                geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-                scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-                theme(legend.position="none")+
-                %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
+            pp=lattice::barchart(-log10(result$p) ~ result$y,
+                   xlab = "Variable",
+                   ylab = "-log10(p-Value)",
+                   type = "p", 
+                   main = x,
+                   col="#e69f00",
+                   ylim=c(-0.5,bonferroniP+0.5),
+                   panel=function(x,y,...){ 
+                       panel.barchart(x,y,...) 
+                       panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
+                       panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
+                )
         }
-        eval(parse(text = tt))
         print(pp)
     }
     for (method in pmethods) {
-        results4plot[[method]]=stats::p.adjust(results4plot[['p']],method=method)
+        result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
-    results=dplyr::left_join(results,results4plot %>% dplyr::select(x,y,one_of(pmethods)),by=c('x','y'))
-    ylbl = ez.label.get(df,results$y); xlbl = ez.label.get(df,results$x)
-    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; results$ylbl=ylbl; results$xlbl=xlbl
-    if (viewresults) {View(results)}
-    return(invisible(results))
+
+    ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
+    if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
+    result$orindex=1:nrow(result)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
+    if (viewresult) {View(result)}
+    return(invisible(result))
 }
 
 #' table xy
