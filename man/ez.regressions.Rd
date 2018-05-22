@@ -2,11 +2,10 @@
 % Please edit documentation in R/stats.R
 \name{ez.regressions}
 \alias{ez.regressions}
-\title{a series of regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
+\title{a series of regression, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
-ez.regressions(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
-  print2screen = T, viewresults = F, plot = T, facet = "cols",
-  pmethods = c("bonferroni", "fdr"), ...)
+ez.regressions(df, y, x, covar = NULL, showerror = T, viewresult = F,
+  plot = T, facet = "cols", pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
@@ -18,20 +17,18 @@ ez.regressions(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
 
 \item{covar}{NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'}
 
-\item{pthreshold}{eg, .05, print/output results whenever p < pthreshold, could be 1 then get all}
-
-\item{showerror}{whether show error message when error occurs, default F}
+\item{showerror}{whether show error message when error occurs}
 
 \item{plot}{T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05}
 
 \item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
 
-\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.}
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
 \item{...}{dots passed to ez.2value(df,...)}
 }
 \value{
-an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
 \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
 \cr so that the variances of dependent and independent variables are 1.
 \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -44,7 +41,7 @@ an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print results o
 \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 }
 \description{
-df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]+scale(covar)))
+df=ez.2value(df,y,...), df[[x]]=ez.2value(df[[x]],...), lm(scale(df[[y]])~scale(df[[x]]+scale(df[[covar]])))
 }
 \note{
 To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl

@@ -2,11 +2,10 @@
 % Please edit documentation in R/stats.R
 \name{ez.fishers}
 \alias{ez.fishers}
-\title{a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
+\title{a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
-ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  viewresults = F, plot = T, facet = "cols", pmethods = c("bonferroni",
-  "fdr"), width = 300)
+ez.fishers(df, y, x, showerror = T, viewresult = F, plot = T,
+  facet = "cols", pmethods = c("bonferroni", "fdr"), width = 300)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
@@ -16,20 +15,18 @@ ez.fishers(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 
 \item{x}{internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)}
 
-\item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
-
-\item{showerror}{whether show error message when error occurs, default F}
+\item{showerror}{whether show error message when error occurs}
 
 \item{plot}{T/F, the dash line is bonferroni p = 0.05}
 
 \item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
 
-\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.}
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
 \item{width}{width for toString(countTable,width=width)}
 }
 \value{
-an invisible data frame with x,y,p,counts,total and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+an invisible data frame with x,y,p,counts,total and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
 }
 \description{
 df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])

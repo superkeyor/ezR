@@ -2,11 +2,10 @@
 % Please edit documentation in R/stats.R
 \name{ez.logistics}
 \alias{ez.logistics}
-\title{a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
+\title{a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
-ez.logistics(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
-  print2screen = T, viewresults = F, plot = T, facet = "cols",
-  pmethods = c("bonferroni", "fdr"), ...)
+ez.logistics(df, y, x, covar = NULL, showerror = T, viewresult = F,
+  plot = T, facet = "cols", pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
@@ -18,21 +17,19 @@ ez.logistics(df, y, x, covar = NULL, pthreshold = 0.05, showerror = F,
 
 \item{covar}{NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'}
 
-\item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
-
-\item{showerror}{whether show error message when error occurs, default F}
+\item{showerror}{whether show error message when error occurs}
 
 \item{plot}{T/F, the dash line is bonferroni p = 0.05}
 
 \item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
 
-\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.}
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
 \item{...}{dots passed to ez.2value(df,...)}
 }
 \value{
-an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
-\cr odds_ratio: odds ratio=exp(b), one unit increase in x results in the odds of being 1 for y "OR" times the odds of being 0 for y
+an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+\cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 \cr so that the variances of dependent and independent variables are 1.
 \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
 \cr per standard deviation increase in the predictor variable. 

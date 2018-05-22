@@ -2,11 +2,10 @@
 % Please edit documentation in R/stats.R
 \name{ez.anovas}
 \alias{ez.anovas}
-\title{a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list, see note for details}
+\title{a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
-ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
-  viewresults = F, plot = T, facet = "cols", pmethods = c("bonferroni",
-  "fdr"), ...)
+ez.anovas(df, y, x, showerror = T, viewresult = F, plot = T,
+  facet = "cols", pmethods = c("bonferroni", "fdr"), ...)
 }
 \arguments{
 \item{df}{a data frame
@@ -16,20 +15,18 @@ ez.anovas(df, y, x, pthreshold = 0.05, showerror = F, print2screen = T,
 
 \item{x}{internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable}
 
-\item{pthreshold}{default .05, print/output results whenever p < pthreshold, could be 1 then get all}
-
-\item{showerror}{whether show error message when error occurs, default F}
+\item{showerror}{whether show error message when error occurs}
 
 \item{plot}{T/F, the dash line is bonferroni p = 0.05}
 
 \item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
 
-\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.}
+\item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
 \item{...}{dots passed to ez.2value(df[[yy]],...)}
 }
 \value{
-an invisible data frame with x,y,p,means and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
+an invisible data frame with x,y,p,means and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
 \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 \cr degree_of_freedom: from F-statistic
 }
