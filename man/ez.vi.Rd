@@ -5,9 +5,12 @@
 \alias{vi}
 \title{print sorted uniques of a df col or a vector (NA last) and other information}
 \usage{
-ez.vi(x)
+ez.vi(x, vsort = T)
 
-vi(x)
+vi(x, vsort = T)
+}
+\arguments{
+\item{vsort}{sort vector or not for printing out}
 }
 \description{
 vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information

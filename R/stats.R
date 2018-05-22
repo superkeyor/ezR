@@ -238,8 +238,9 @@ ez.vv = function(vec, quote=NULL,print2screen=TRUE){
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
+#' @param vsort sort vector or not for printing out
 #' @export
-ez.vi=function(x) {
+ez.vi=function(x,vsort=T) {
     v = x
     if (is.data.frame(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
@@ -266,7 +267,11 @@ ez.vi=function(x) {
         }
         cat(sprintf('List of %d\n',length(x)))
     } else {
-        v.elements = unique(v) %>% sort(na.last=T) %>% ez.vv(print2screen=F)
+        if (vsort) {
+            v.elements = unique(v) %>% sort(na.last=T) %>% ez.vv(print2screen=F)
+        } else {
+            v.elements = unique(v) %>% ez.vv(print2screen=F)
+        }
         v.class=class(v)
         v.n=length(v)
         v.missing=sum(is.na(v))
