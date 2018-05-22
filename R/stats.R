@@ -358,25 +358,26 @@ ez.zresid = function(model,method=3) {
     return(result)
 }
 
-#' a series of simple regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details
-#' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]))
+#' a series of regression, for many y and many x; if many y and many x at the same time, returns a list, see note for details
+#' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), lm(scale(df[[yy]])~scale(df[[xx]]+scale(covar)))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
 #' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
-#' @param pthreshold default .05, print/output results whenever p < pthreshold, could be 1 then get all
+#' @param pthreshold eg, .05, print/output results whenever p < pthreshold, could be 1 then get all
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. even though pthreshold only shows a few sig results, this correction applies for all possible tests that have been done.
 #' @param plot T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs, default F
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print results out on screen; results can then be saved using ez.savex(results,'results.xlsx')
-#' \cr beta: standardized coefficients or beta coefficients are the estimates resulting from a regression analysis that have been standardized 
+#' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
 #' \cr per standard deviation increase in the predictor variable. 
 #' \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
+#' \cr For multiple regression (with covar), the value of the standardized coefficient (beta) is close to semi-partial correlation
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
 #' \cr 
 #' \cr degree_of_freedom: from F-statistic
@@ -405,15 +406,50 @@ ez.regressions = function(df,y,x,covar=NULL,pthreshold=.05,showerror=F,print2scr
     results = ez.header('y'=character(),'x'=character(),'p'=numeric(),'rp'=numeric(),'beta'=numeric(),'degree_of_freedom'=numeric())
     results4plot = results
     df=ez.2value(df,y,...)
-    if (is.null(covar)) {
-        covar = ''
-        rcovar = ''
-    } else {
-        covar=ez.selcol(df,covar)
-        df=ez.2value(df,covar,...)
-        rcovar = paste('+',covar,sep='',collapse='')
-        covar = paste('+scale(df[["',covar,'"]])',sep='',collapse='')
+
+    getStats = function(yy,xx,covar,swap=F,data,...){
+        df=data
+        # for single y but multiple x using lapply
+        if (swap) {tmp=xx;xx=yy;yy=tmp}
+        tryCatch({
+        if (is.null(covar)) {
+            covar = ''
+            rcovar = ''
+        } else {
+            covar=ez.selcol(df,covar)
+            df=ez.2value(df,covar,...)
+            rcovar = paste('+',covar,sep='',collapse='')
+            covar = paste('+scale(df[["',covar,'"]])',sep='',collapse='')
+        }
+
+        if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
+        df[[xx]]=ez.2value(df[[xx]],...)
+
+        # according to my own testing, scale or not for x,y or covar, does not change p values for predictors, although intercept would differ
+        cmd = sprintf('model = summary( lm( scale(df[[yy]])~scale(df[[xx]])%s ) )', covar)
+        ez.eval(cmd)
+        p = model$coefficients[2,4]
+
+        cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
+        ez.eval(cmd)
+        # https://stats.stackexchange.com/a/205615/100493
+        rtest = sfsmisc::f.robftest(rmodel,var=xx)
+        rp = rtest$p.value
+
+        beta = model$coefficients[2,1]
+        degree_of_freedom = model$df[2]
+
+        out = c(yy,xx,p,rp,beta,degree_of_freedom)
+        return(out)
+        }, error = function(e) {
+            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
+            return(c(yy,xx,NA,NA,NA,NA))
+        })
     }
+
+    if (length(y)>1 & length(x)==1) lapply(y,getStats,xx=x,covar=covar,data=df)
+    if (length(y==1 & length(x)>1) lapply(x,getStats,xx=y,swap=T,covar=covar,data=df)
+
     for (yy in y) {
         for (xx in x) {
             if (showerror) {
