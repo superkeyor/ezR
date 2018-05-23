@@ -2,9 +2,15 @@
 % Please edit documentation in R/os.R
 \name{ez.clear}
 \alias{ez.clear}
+\alias{ez.clean}
+\alias{ez.cl}
 \title{clear, clean  console, workspace, plot or variable(s)}
 \usage{
 ez.clear(area = 0)
+
+ez.clean(area = 0)
+
+ez.cl(area = 0)
 }
 \arguments{
 \item{area}{0 all, \cr

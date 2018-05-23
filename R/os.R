@@ -258,16 +258,13 @@ ez.clear = function(area=0) {
     null = gc()  # call garbage collection
 }
 
-#' clear, clean  console, workspace, plot or variable(s)
-#' @description clear, clean  console, workspace, plot or variable(s)
-#' @param area 0 all, \cr
-#'             1 console only \cr
-#'             2 workspace only \cr
-#'             3 plot only \cr
-#'             'var' particular var \cr
-#'             c('var1','var2') particular vars
+#' @rdname ez.clear
 #' @export
-ez.cl = ez.clean = ez.clear
+ez.clean = ez.clear
+
+#' @rdname ez.clear
+#' @export
+ez.cl = ez.clear
 
 #' alias of \code{\link{find}}
 #' @description alias of \code{\link{find}}
