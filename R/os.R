@@ -81,6 +81,8 @@ ez.selfupdate = function() {
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
         system('bash ~/Dropbox/Apps/RStudio/ezR/publish.sh')
+        system('bash ~/Dropbox/Apps/RStudio/bzR/publish.sh')
+        system('bash ~/Dropbox/Apps/RStudio/mzR/publish.sh')
         cat('Please restart RStudio to make the change take effect!\n')
         save.image('~/Downloads/tmp.rda')
         system('killall RStudio; open -a RStudio')
@@ -90,6 +92,7 @@ ez.selfupdate = function() {
         ez.github('jerryzhujian9/mzR')
         cat('Please restart RStudio to make the change take effect!\n')
     }
+
 
     # system2 does not seem to work well on mac??
     # tryCatch({
