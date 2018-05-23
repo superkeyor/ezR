@@ -28,7 +28,7 @@ ez.regressions(df, y, x, covar = NULL, showerror = T, viewresult = F,
 \item{...}{dots passed to ez.2value(df,...)}
 }
 \value{
-an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+an invisible data frame
 \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
 \cr so that the variances of dependent and independent variables are 1.
 \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 

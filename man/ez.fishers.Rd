@@ -26,8 +26,11 @@ ez.fishers(df, y, x, showerror = T, viewresult = F, plot = T,
 \item{width}{width for toString(countTable,width=width)}
 }
 \value{
-an invisible data frame with x,y,p,counts,total and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+an invisible data frame
 }
 \description{
 df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
+}
+\note{
+odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 }

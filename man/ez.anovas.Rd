@@ -26,7 +26,7 @@ ez.anovas(df, y, x, showerror = T, viewresult = F, plot = T,
 \item{...}{dots passed to ez.2value(df[[yy]],...)}
 }
 \value{
-an invisible data frame with x,y,p,means and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+an invisible data frame
 \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 \cr degree_of_freedom: from F-statistic
 }

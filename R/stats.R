@@ -375,7 +375,7 @@ ez.zresid = function(model,method=3) {
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible data frame with y,x,p,rp,beta,degree_of_freedom and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+#' @return an invisible data frame
 #' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -523,7 +523,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+#' @return an invisible data frame
 #' \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -634,7 +634,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df[[yy]],...)
-#' @return an invisible data frame with x,y,p,means and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+#' @return an invisible data frame
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable. 
@@ -735,7 +735,8 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
-#' @return an invisible data frame with x,y,p,counts,total and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
+#' @return an invisible data frame
+#' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 #' @export
 ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -748,14 +749,17 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,width=width)
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
-                plist[[xx]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
-                   xlab = "log2(Odds Ratio)",
+                plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
+                   xlab = "Variable",
                    ylab = "-log10(p-Value)",
                    type = "p", pch=16, 
                    main = xx,
                    col="#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                   abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+                   panel=function(x,y,...){ 
+                       panel.barchart(x,y,...) 
+                       panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
+                       panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
                 )
             }
             xlist[[xx]] = result
@@ -766,11 +770,15 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
 
     df=ez.2factor(df,c(x,y))
 
-    getStats = function(y,x,swap=F,data,...){
+    getStats = function(y,x,swap=F,data){
+        df=data; yy=y; xx=x
+        # for single y but multiple x using lapply
+        if (swap) {tmp=xx;xx=yy;yy=tmp}
+
         tryCatch({
         fisher.test(df[[xx]],df[[yy]]) -> model # by default, pairwise NA auto removed
         p = model$p.value
-        odds_ratio = model$estimate
+        odds_ratio = if (is.null(model$estimate)) 0 else model$estimate  # only exist for 2x2 table
         countTable = table(df[[xx]],df[[yy]])   # by default, pairwise NA auto removed
         counts = toString(countTable,width=width)
         total = sum(countTable)
@@ -782,23 +790,41 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         })
     }
 
-    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
-    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
+    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df)
+    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df)
     result = result %>% as.data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','odds_ratio','counts','total')
     result %<>% ez.num() %>% ez.dropna()
 
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
-        pp=lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
-           xlab = "log2(Odds Ratio)",
-           ylab = "-log10(p-Value)",
-           type = "p", pch=16, 
-           main = ifelse((length(y)>=1 & length(x)==1),x,y),
-           col="#e69f00",
-           ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-           abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-        )
+        if (length(y)>=1 & length(x)==1) {
+            pp=lattice::barchart(-log10(result$p) ~ result$y,
+               xlab = "Variable",
+               ylab = "-log10(p-Value)",
+               type = "p", pch=16, 
+               main = x,
+               col="#e69f00",
+               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+               panel=function(x,y,...){ 
+                   panel.barchart(x,y,...) 
+                   panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
+                   panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
+            )
+        } else {
+            pp=lattice::barchart(-log10(result$p) ~ result$x,
+               xlab = "Variable",
+               ylab = "-log10(p-Value)",
+               type = "p", pch=16, 
+               main = y,
+               col="#e69f00",
+               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+               panel=function(x,y,...){ 
+                   panel.barchart(x,y,...) 
+                   panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
+                   panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
+            )
+        }
         print(pp)
     }
 
