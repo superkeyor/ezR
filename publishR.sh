@@ -14,6 +14,11 @@ fi
 package=$(basename "$csd")
 cd $csd
 
+if [[ -z $(git status -s) ]]
+then
+    echo "Tree is clean, no need to do anything, exiting..."
+    exit
+else
 R --vanilla -e "devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))"
 
 cd ..
@@ -23,6 +28,8 @@ cd $csd
 git add -A 
 git commit -m 'update' 
 git push origin master 
+
+fi
 
 # tips about git push
 # 1) use https (no git ssh)
