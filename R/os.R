@@ -267,7 +267,7 @@ ez.clear = function(area=0) {
 #'             'var' particular var \cr
 #'             c('var1','var2') particular vars
 #' @export
-ez.clean = ez.clear
+ez.cl = ez.clean = ez.clear
 
 #' alias of \code{\link{find}}
 #' @description alias of \code{\link{find}}
