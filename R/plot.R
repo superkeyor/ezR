@@ -1105,9 +1105,15 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
     p.mat = corrmatrix$P
 
     if (is.null(col)){
-        col1 <- colorRampPalette(rev(c("#7F0000", "red", "#FF7F00", "yellow", "grey", "cyan",
-                                       "#007FFF", "blue", "#00007F")))
-        col=col1(100)
+        # col1 <- colorRampPalette(rev(c("#7F0000", "red", "#FF7F00", "yellow", "grey", "cyan",
+        #                                "#007FFF", "blue", "#00007F")))
+        # col=col1(100)
+        
+        # from corrplot help file. just the reverse of default
+        col1 <- colorRampPalette(rev(c(c("#67001F", "#B2182B", "#D6604D", "#F4A582",
+                           "#FDDBC7", "#FFFFFF", "#D1E5F0", "#92C5DE",
+                           "#4393C3", "#2166AC", "#053061"))))
+        col=col1(200)
     }
 
     corr = corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
