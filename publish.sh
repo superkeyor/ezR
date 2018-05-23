@@ -15,7 +15,7 @@ package=$(basename "$csd")
 cd $csd
 
 
-if [[ -z $(git status -s) ]] 
+if [[ -z $(git status -s) ]]
 then
     echo "Tree is clean, no need to do anything, exiting..."
     exit
