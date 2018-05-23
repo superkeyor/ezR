@@ -39,6 +39,3 @@ an invisible data frame with y,x,p,odds_ratio,degree_of_freedom and print result
 \description{
 df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
 }
-\note{
-if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
-}

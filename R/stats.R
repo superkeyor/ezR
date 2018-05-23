@@ -388,7 +388,6 @@ ez.zresid = function(model,method=3) {
 #' \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
-#' \cr if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
 ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -531,7 +530,6 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 #' \cr per standard deviation increase in the predictor variable. 
 #' \cr 
 #' \cr degree_of_freedom
-#' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
 ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -639,7 +637,8 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 #' @return an invisible data frame with x,y,p,means and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
-#' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
+#' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable. 
+#' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared. 
 #' @export
 ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -653,7 +652,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
-                       xlab = expression('Partial' ~ eta^2),
+                       xlab = expression(eta^2),
                        ylab = "-log10(p-Value)",
                        type = "p", pch=16, 
                        main = xx,
@@ -703,7 +702,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
-               xlab = expression('Partial' ~ eta^2),
+               xlab = expression(eta^2),
                ylab = "-log10(p-Value)",
                type = "p", pch=16, 
                main = ifelse((length(y)>1 & length(x)==1),x,y),
@@ -737,7 +736,6 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 #' @param showerror whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame with x,y,p,counts,total and print result out on screen; result can then be saved using ez.savex(result,'result.xlsx')
-#' @note if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
 #' @export
 ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))

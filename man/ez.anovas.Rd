@@ -34,5 +34,6 @@ an invisible data frame with x,y,p,means and print result out on screen; result 
 df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 }
 \note{
-if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
+Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable. 
+\cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared.
 }

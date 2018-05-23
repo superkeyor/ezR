@@ -31,6 +31,3 @@ an invisible data frame with x,y,p,counts,total and print result out on screen; 
 \description{
 df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
 }
-\note{
-if many y and x at the same time, returns a list. $xlist for ez.savexlist(xlist), $plist (if plot = T) for ggmultiplot(plotlist = plist,cols=3)
-}
