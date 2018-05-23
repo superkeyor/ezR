@@ -1834,11 +1834,11 @@ ez.clcoldata = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
 #' @description remove specified attributes
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. 
-#' @param attrs c('variable.labels'), or c('variable.labels', 'labels'). run names(attributes(x)) to see all attributes
+#' @param attrs variable label: c('variable.labels', 'label'); value labels: c('value.labels', 'labels'). run names(attributes(x)) to see all attributes
 #' @return returns a new data frame or vector
 #' @note this function uses a different mechanism from sjmisc_set_labels(x,"") which works only for value labels: haven style ("labels") or foreign style ("value.labels")
 #' @export
-ez.clattr = function(x, col=NULL, attrs=c('variable.labels'), ...) {
+ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
     if (!is.data.frame(x)) {
         # set_labels only for value labels
         # x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)

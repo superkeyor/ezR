@@ -4,14 +4,14 @@
 \alias{ez.clattr}
 \title{remove specified attributes}
 \usage{
-ez.clattr(x, col = NULL, attrs = c("variable.labels"), ...)
+ez.clattr(x, col = NULL, attrs = c("variable.labels", "label"), ...)
 }
 \arguments{
 \item{x}{a data frame or a vector}
 
 \item{col}{evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.}
 
-\item{attrs}{c('variable.labels'), or c('variable.labels', 'labels'). run names(attributes(x)) to see all attributes}
+\item{attrs}{variable label: c('variable.labels', 'label'); value labels: c('value.labels', 'labels'). run names(attributes(x)) to see all attributes}
 }
 \value{
 returns a new data frame or vector
