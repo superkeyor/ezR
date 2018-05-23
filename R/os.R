@@ -75,26 +75,43 @@ ez.envr = ez.env
 #' @description update ez package itself
 #' @export
 ez.selfupdate = function() {
-    tryCatch({
-        # seems that some errors thrown by system() cannot be caught in this way
-        # https://stackoverflow.com/questions/25991973/suppress-system-error-with-trycatch-in-r
-        system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR', stdout=TRUE, stderr=TRUE)
-        system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR', stdout=TRUE, stderr=TRUE)
-        system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR', stdout=TRUE, stderr=TRUE)
+    # file.exists works for folder as well
+    if (file.exists('~/Dropbox/Apps/RStudio/ezR')) {
+        system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
+        system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
+        system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
+        system('/Users/jerry/Dropbox/Apps/RStudio/ezR/PublishR.app')
         cat('Please restart RStudio to make the change take effect!\n')
-        system2('killall RStudio; open -a RStudio', stdout=TRUE, stderr=TRUE)
-    }, warning = function(w) {
-        ez.github('jerryzhujian9/ezR')
-        ez.github('jerryzhujian9/bzR')
-        ez.github('jerryzhujian9/mzR')
-        cat('Please restart RStudio to make the change take effect!\n')
-    }, error = function(e) {
+        system('killall RStudio; open -a RStudio')
+    } else {
         ez.github('jerryzhujian9/ezR')
         ez.github('jerryzhujian9/bzR')
         ez.github('jerryzhujian9/mzR')
         cat('Please restart RStudio to make the change take effect!\n')
     }
-    )
+
+    # system2 does not seem to work well on mac??
+    # tryCatch({
+    #     # seems that some errors thrown by system() cannot be caught in this way
+    #     # https://stackoverflow.com/questions/25991973/suppress-system-error-with-trycatch-in-r
+    #     system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR', stdout=TRUE, stderr=TRUE)
+    #     system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR', stdout=TRUE, stderr=TRUE)
+    #     system2('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR', stdout=TRUE, stderr=TRUE)
+    #     cat('Please restart RStudio to make the change take effect!\n')
+    #     system2('killall RStudio; open -a RStudio', stdout=TRUE, stderr=TRUE)
+    # }, warning = function(w) {
+    #     ez.github('jerryzhujian9/ezR')
+    #     ez.github('jerryzhujian9/bzR')
+    #     ez.github('jerryzhujian9/mzR')
+    #     cat('Please restart RStudio to make the change take effect!\n')
+    # }, error = function(e) {
+    #     ez.github('jerryzhujian9/ezR')
+    #     ez.github('jerryzhujian9/bzR')
+    #     ez.github('jerryzhujian9/mzR')
+    #     cat('Please restart RStudio to make the change take effect!\n')
+    # }
+    # )
+
     return(invisible(NULL))
 }
 
