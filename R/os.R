@@ -80,7 +80,7 @@ ez.selfupdate = function() {
         system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
         system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
         system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
-        system('/Users/jerry/Dropbox/Apps/RStudio/ezR/PublishR.app')
+        system('open ~/Dropbox/Apps/RStudio/ezR/PublishR.app')
         cat('Please restart RStudio to make the change take effect!\n')
         system('killall RStudio; open -a RStudio')
     } else {
