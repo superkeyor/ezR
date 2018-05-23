@@ -748,17 +748,14 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,width=width)
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
-                plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
-                   xlab = "Variable",
+                plist[[xx]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
+                   xlab = "log2(Odds Ratio)",
                    ylab = "-log10(p-Value)",
                    type = "p", pch=16, 
                    main = xx,
                    col="#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                   panel=function(x,y,...){ 
-                       panel.barchart(x,y,...) 
-                       panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
-                       panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
+                   abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
             xlist[[xx]] = result
@@ -773,52 +770,35 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         tryCatch({
         fisher.test(df[[xx]],df[[yy]]) -> model # by default, pairwise NA auto removed
         p = model$p.value
+        odds_ratio = model$estimate
         countTable = table(df[[xx]],df[[yy]])   # by default, pairwise NA auto removed
         counts = toString(countTable,width=width)
         total = sum(countTable)
-        out = c(xx,yy,p,counts,total)
+        out = c(xx,yy,p,odds_ratio,counts,total)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
-            return(c(xx,yy,NA,NA,NA))
+            return(c(xx,yy,NA,NA,NA,NA))
         })
     }
 
     if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','partial_etasq2','degree_of_freedom','means','counts')
+    names(result) <- c('x','y','p','odds_ratio','counts','total')
     result %<>% ez.num() %>% ez.dropna()
 
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
-        if (length(y)==1 & length(x)>1) {
-            pp=lattice::barchart(-log10(result$p) ~ result$x,
-                   xlab = "Variable",
-                   ylab = "-log10(p-Value)",
-                   type = "p", pch=16, 
-                   main = y,
-                   col="#e69f00",
-                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                   panel=function(x,y,...){ 
-                       panel.barchart(x,y,...) 
-                       panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
-                       panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
-                )
-        } else {
-            pp=lattice::barchart(-log10(result$p) ~ result$y,
-                   xlab = "Variable",
-                   ylab = "-log10(p-Value)",
-                   type = "p", pch=16, 
-                   main = x,
-                   col="#e69f00",
-                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                   panel=function(x,y,...){ 
-                       panel.barchart(x,y,...) 
-                       panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
-                       panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
-                )
-        }
+        pp=lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
+           xlab = "log2(Odds Ratio)",
+           ylab = "-log10(p-Value)",
+           type = "p", pch=16, 
+           main = ifelse((length(y)>1 & length(x)==1),x,y),
+           col="#e69f00",
+           ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+           abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+        )
         print(pp)
     }
 
