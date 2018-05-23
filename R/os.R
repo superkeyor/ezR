@@ -77,11 +77,12 @@ ez.envr = ez.env
 ez.selfupdate = function() {
     # file.exists works for folder as well
     if (file.exists('~/Dropbox/Apps/RStudio/ezR')) {
-        system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
-        system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
-        system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
-        system('open ~/Dropbox/Apps/RStudio/ezR/PublishR.app')
+        # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
+        # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
+        # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
+        system('bash ~/Dropbox/Apps/RStudio/ezR/publish.sh')
         cat('Please restart RStudio to make the change take effect!\n')
+        save.image('~/Downloads/tmp.rda')
         system('killall RStudio; open -a RStudio')
     } else {
         ez.github('jerryzhujian9/ezR')
