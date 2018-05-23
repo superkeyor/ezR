@@ -459,7 +459,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         })
     }
 
-    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
+    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','rp','beta','degree_of_freedom')
@@ -492,7 +492,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
                xlab = "Standardized Coefficient",
                ylab = "-log10(p-Value)",
                type = "p", pch=16, 
-               main = ifelse((length(y)>1 & length(x)==1),x,y),
+               main = ifelse((length(y)>=1 & length(x)==1),x,y),
                col="#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -592,7 +592,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
         })
     }
 
-    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
+    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','odds_ratio','degree_of_freedom')
@@ -604,7 +604,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
                xlab = "log2(Odds Ratio)",
                ylab = "-log10(p-Value)",
                type = "p", pch=16, 
-               main = ifelse((length(y)>1 & length(x)==1),x,y),
+               main = ifelse((length(y)>=1 & length(x)==1),x,y),
                col="#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -693,7 +693,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         })
     }
 
-    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
+    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','partial_etasq2','degree_of_freedom','means','counts')
@@ -705,7 +705,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
                xlab = expression(eta^2),
                ylab = "-log10(p-Value)",
                type = "p", pch=16, 
-               main = ifelse((length(y)>1 & length(x)==1),x,y),
+               main = ifelse((length(y)>=1 & length(x)==1),x,y),
                col="#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -782,7 +782,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         })
     }
 
-    if (length(y)>1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
+    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','odds_ratio','counts','total')
@@ -794,7 +794,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
            xlab = "log2(Odds Ratio)",
            ylab = "-log10(p-Value)",
            type = "p", pch=16, 
-           main = ifelse((length(y)>1 & length(x)==1),x,y),
+           main = ifelse((length(y)>=1 & length(x)==1),x,y),
            col="#e69f00",
            ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
            abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
