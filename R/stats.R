@@ -651,15 +651,27 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
             result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
-                plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
-                       xlab = expression(eta^2),
+                if (all(is.na(result$mean12_difference))) {
+                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
+                       xlab = "Difference in Group Means",
                        ylab = "-log10(p-Value)",
                        type = "p", pch=16, 
                        main = xx,
                        col="#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-                )
+                    )
+                } else {
+                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$etasq2,
+                           xlab = expression(eta^2),
+                           ylab = "-log10(p-Value)",
+                           type = "p", pch=16, 
+                           main = xx,
+                           col="#e69f00",
+                           ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+                           abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+                    )
+                }
             }
             xlist[[xx]] = result
         }
@@ -684,32 +696,45 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
         for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
         # https://stats.stackexchange.com/a/78813/100493
-        partial_etasq2 = summary.lm(a)$r.squared
-        out = c(xx,yy,p,partial_etasq2,degree_of_freedom,means,counts)
+        etasq2 = summary.lm(a)$r.squared
+        mean12_difference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
+        out = c(xx,yy,p,etasq2,degree_of_freedom,mean12_difference,means,counts)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
-            return(c(xx,yy,NA,NA,NA,NA,NA))
+            return(c(xx,yy,NA,NA,NA,NA,NA,NA))
         })
     }
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','partial_etasq2','degree_of_freedom','means','counts')
+    names(result) <- c('x','y','p','etasq2','degree_of_freedom','mean12_difference','means','counts')
     result %<>% ez.num() %>% ez.dropna()
 
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
-        pp=lattice::xyplot(-log10(result$p) ~ result$partial_etasq2,
-               xlab = expression(eta^2),
-               ylab = "-log10(p-Value)",
-               type = "p", pch=16, 
-               main = ifelse((length(y)>=1 & length(x)==1),x,y),
-               col="#e69f00",
-               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-               abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-        )
+        if (all(is.na(result$mean12_difference))) {
+            pp=lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
+                       xlab = "Difference in Group Means",
+                       ylab = "-log10(p-Value)",
+                       type = "p", pch=16, 
+                       main = ifelse((length(y)>=1 & length(x)==1),x,y),
+                       col="#e69f00",
+                       ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+                       abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+            )
+        } else {
+            pp=lattice::xyplot(-log10(result$p) ~ result$etasq2,
+                   xlab = expression(eta^2),
+                   ylab = "-log10(p-Value)",
+                   type = "p", pch=16, 
+                   main = ifelse((length(y)>=1 & length(x)==1),x,y),
+                   col="#e69f00",
+                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+                   abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+            )
+        }
         print(pp)
     }
 
