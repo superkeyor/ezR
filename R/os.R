@@ -85,7 +85,7 @@ ez.selfupdate = function() {
         system('bash ~/Dropbox/Apps/RStudio/mzR/publish.sh')
         cat('Please restart RStudio to make the change take effect!\n')
         ez.pause()
-        savehistory(file="~/Downloads/tmp.Rhistory")
+        savehistory("~/.Rhistory") # since to kill RStudio soon. save by hand, will be auto restored by RStudio
         save.image('~/Downloads/tmp.rda')
         system('killall RStudio; open -a RStudio')
     } else {
