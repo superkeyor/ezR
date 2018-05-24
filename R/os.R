@@ -84,6 +84,7 @@ ez.selfupdate = function() {
         system('bash ~/Dropbox/Apps/RStudio/bzR/publish.sh')
         system('bash ~/Dropbox/Apps/RStudio/mzR/publish.sh')
         cat('Please restart RStudio to make the change take effect!\n')
+        ez.pause()
         save.image('~/Downloads/tmp.rda')
         system('killall RStudio; open -a RStudio')
     } else {
