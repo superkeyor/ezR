@@ -653,7 +653,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 if (!all(is.na(result$mean12_difference))) {
                     plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
-                       xlab = "Difference in Group Means",
+                       xlab = "Difference in Standardized Group Means",
                        ylab = "-log10(p-Value)",
                        type = "p", pch=16, 
                        main = xx,
@@ -697,6 +697,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
         # https://stats.stackexchange.com/a/78813/100493
         etasq2 = summary.lm(a)$r.squared
+        s = aggregate(scale(df[[yy]])~df[[xx]],FUN=mean)
         mean12_difference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
         out = c(xx,yy,p,etasq2,degree_of_freedom,mean12_difference,means,counts)
         return(out)
@@ -716,7 +717,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         bonferroniP = -log10(0.05/length(result[['p']]))
         if (!all(is.na(result$mean12_difference))) {
             pp=lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
-                       xlab = "Difference in Group Means",
+                       xlab = "Difference in Standardized Group Means",
                        ylab = "-log10(p-Value)",
                        type = "p", pch=16, 
                        main = ifelse((length(y)>=1 & length(x)==1),x,y),
