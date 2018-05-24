@@ -246,6 +246,7 @@ ez.vi=function(x,vsort=T) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
             stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(v)[which(ez.duplicated(colnames(v),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
         }
+        v.class = class(v) %>% toString()
         v.cols = colnames(v) %>% ez.vv(print2screen=F)
         v.nrow = nrow(v)
         v.ncol = ncol(v)
@@ -260,7 +261,7 @@ ez.vi=function(x,vsort=T) {
         v.classes = paste('#',freq %>% names,': ',freq,sep='',collapse = ', ')
 
         cat(v.cols)
-        cat(sprintf('\nDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
+        cat(sprintf('\n%s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
     } else if (is.list(x)) {
         for (l in names(x)) {
             cat(sprintf('$%s\t\t%s\n',l,class(x[[l]]) %>% toString))
@@ -272,7 +273,7 @@ ez.vi=function(x,vsort=T) {
         } else {
             v.elements = unique(v) %>% ez.vv(print2screen=F)
         }
-        v.class=class(v)
+        v.class=class(v) %>% toString()
         v.n=length(v)
         v.missing=sum(is.na(v))
         v.unique=length(unique(v))
