@@ -651,7 +651,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
             result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
-                if (all(is.na(result$mean12_difference))) {
+                if (!all(is.na(result$mean12_difference))) {
                     plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
                        xlab = "Difference in Group Means",
                        ylab = "-log10(p-Value)",
@@ -714,7 +714,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
-        if (all(is.na(result$mean12_difference))) {
+        if (!all(is.na(result$mean12_difference))) {
             pp=lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
                        xlab = "Difference in Group Means",
                        ylab = "-log10(p-Value)",
