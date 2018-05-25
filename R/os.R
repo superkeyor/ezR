@@ -88,7 +88,7 @@ ez.selfupdate = function() {
         savehistory("~/.Rhistory") # since to kill RStudio soon. save by hand, will be auto restored by RStudio
         save.image('~/Downloads/tmp.rda')
         # system('killall RStudio; open -a RStudio', wait=FALSE)
-        system('osascript -e \'tell application "RStudio" to quit\' && open -a RStudio', wait=FALSE)
+        system('osascript -e \'tell application "RStudio" to quit\'; open -a RStudio', wait=FALSE)
     } else {
         ez.github('jerryzhujian9/ezR')
         ez.github('jerryzhujian9/bzR')
