@@ -1120,7 +1120,7 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
         col  <- colorRampPalette(cols)(200)
     }
 
-    corrmatrix = Hmisc::rcorr(as.matrix(df), type=corr.type)
+    corrmatrix = Hmisc::rcorr(data.matrix(df), type=corr.type)
     M = corrmatrix$r
     p.mat = corrmatrix$P
 
