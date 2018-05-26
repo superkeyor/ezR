@@ -351,6 +351,21 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
     as.vector(scale(x,center=center,scale=scale))
 }
 
+#' r correlation
+#' @description r correlation
+#' @param x df or matrix
+#' @param col col included for calculation, ignored if x is not a df
+#' @param type "pearson" or "spearman"
+#' @return r matrix
+#' @export
+ez.r = function(x,col=NULL,type="pearson") {
+    if (is.data.frame(x) & !is.null(col)) {
+        col=(ez.selcol(x,col))
+        x=x[col]
+    }
+    Hmisc::rcorr(data.matrix(x),type=type)$r
+}
+
 #' z residual
 #' @description z residual, as.vector(scale(resid(model),center=T,scale=T))
 #' @param method 1=scale(resid), 2=stats::rstandard, 3=MASS::stdres
