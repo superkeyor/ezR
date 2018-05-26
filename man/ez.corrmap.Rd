@@ -5,16 +5,34 @@
 \title{plot a correlation matrix map}
 \usage{
 ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
-  method = "color", tl.col = "black", tl.cex = 0.4, col = NULL, ...)
+  method = "circle", tl.col = "black", tl.cex = 0.4, tl.pos = NULL,
+  order = c("original", "AOE", "FPC", "hclust", "alphabet"), col = NULL,
+  ...)
 }
 \arguments{
 \item{df}{data frame in wide format, should be all numeric}
 
 \item{corr.type}{"pearson" or "spearman", pairwise deletion for NA}
 
-\item{sig.level}{sig.level}
+\item{sig.level}{sig.level. make it 1 to essentially ignore param insig}
 
-\item{insig}{how to treat insig values, one of "pch"(show x),"p-value","blank", "n"(no change, as is)}
+\item{insig}{how to treat insig values, one of "pch"(show x, corrplot default),"p-value","blank", "n"(no change, as is)}
+
+\item{method}{"circle", "square", "ellipse", "number", "pie", "shade" and "color". The areas of circles or squares show the absolute value of corresponding correlation coefficients. "color" = same areas}
+
+\item{tl.col}{color of text label}
+
+\item{tl.cex}{size of text label (can still be increased to gain some margins for the map when tl.pos='n')}
+
+\item{tl.pos}{'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.}
+
+\item{order}{"original" for original order (default).
+\cr "AOE" for the angular order of the eigenvectors.
+\cr "FPC" for the first principal component order.
+\cr "hclust" for the hierarchical clustering order.
+\cr "alphabet" for alphabetical order.}
+
+\item{col}{Vector, the color of glyphs. NULL=corrplot default. Jerry auto generates a default one if NULL.}
 
 \item{...}{see \code{\link[corrplot]{corrplot}} for more parameters}
 }

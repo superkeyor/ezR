@@ -1086,38 +1086,51 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @description a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}, in which Missing values are deleted in pairs rather than deleting all rows of x having any missing variables
 #' @param df data frame in wide format, should be all numeric
 #' @param corr.type "pearson" or "spearman", pairwise deletion for NA
-#' @param sig.level sig.level
-#' @param insig how to treat insig values, one of "pch"(show x),"p-value","blank", "n"(no change, as is)
+#' @param sig.level sig.level. make it 1 to essentially ignore param insig
+#' @param insig how to treat insig values, one of "pch"(show x, corrplot default),"p-value","blank", "n"(no change, as is)
+#' @param tl.col color of text label
+#' @param tl.cex size of text label (can still be increased to gain some margins for the map when tl.pos='n')
+#' @param tl.pos 'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.
+#' @param method "circle", "square", "ellipse", "number", "pie", "shade" and "color". The areas of circles or squares show the absolute value of corresponding correlation coefficients. "color" = same areas
+#' @param order "original" for original order (default).
+#' \cr "AOE" for the angular order of the eigenvectors.
+#' \cr "FPC" for the first principal component order.
+#' \cr "hclust" for the hierarchical clustering order.
+#' \cr "alphabet" for alphabetical order.
+#' @param col Vector, the color of glyphs. NULL=corrplot default. Jerry auto generates a default one if NULL.
 #' @param ... see \code{\link[corrplot]{corrplot}} for more parameters
 #' @return returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 #' @export
 ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
-                     method ="color",tl.col = "black",tl.cex = 0.4,
+                     method ="circle",tl.col="black",tl.cex=0.4,tl.pos=NULL,
+                     order = c("original", "AOE", "FPC", "hclust", "alphabet"),
                      col=NULL,...){
-    df__copy=df
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    corrmatrix = Hmisc::rcorr(as.matrix(df), type=corr.type)
-    M = corrmatrix$r
-    p.mat = corrmatrix$P
 
     if (is.null(col)){
         # col1 <- colorRampPalette(rev(c("#7F0000", "red", "#FF7F00", "yellow", "grey", "cyan",
         #                                "#007FFF", "blue", "#00007F")))
         # col=col1(100)
         
-        # from corrplot help file. just the reverse of default
-        col1 <- colorRampPalette(rev(c(c("#67001F", "#B2182B", "#D6604D", "#F4A582",
-                           "#FDDBC7", "#FFFFFF", "#D1E5F0", "#92C5DE",
-                           "#4393C3", "#2166AC", "#053061"))))
-        col=col1(200)
+        cols <- c(rev(RColorBrewer::brewer.pal(7, "Blues")), RColorBrewer::brewer.pal(7, "Reds"))
+        col  <- colorRampPalette(cols)(200)
     }
 
+    corrmatrix = Hmisc::rcorr(as.matrix(df), type=corr.type)
+    M = corrmatrix$r
+    p.mat = corrmatrix$P
+
+    # increase tl.cex a bit to gain some margins for the map when tl.pos='n'
+    if (!is.null(tl.pos)) {if (tl.pos=='n' & tl.cex < 1) {tl.cex = 1.5}}
+    # add grid is like a mask/cover over the map (??)
     corr = corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
-                       tl.col = tl.col, tl.cex = tl.cex, col = col, ...)
+                       tl.col = tl.col, tl.cex = tl.cex, tl.pos = tl.pos, 
+                       order = order,
+                       col = col, addgrid.col = rgb(1,1,1,.01), ...)
 
     ind = which(p.mat > sig.level, arr.ind = TRUE)
     corr[ind] = NA
