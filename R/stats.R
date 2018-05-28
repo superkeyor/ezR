@@ -223,7 +223,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-ez.vv = function(vec,printn=NULL,quote=NULL,print2screen=TRUE,order='as'){
+ez.vv = function(vec,printn=NULL,order='as',quote=NULL,print2screen=TRUE){
     if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
 
     if (order=='az') {vec=sort(vec,decreasing=F,na.last=T)}

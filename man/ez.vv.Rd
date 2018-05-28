@@ -4,17 +4,17 @@
 \alias{ez.vv}
 \title{format a vector for easy manual copy/processing.}
 \usage{
-ez.vv(vec, printn = NULL, quote = NULL, print2screen = TRUE,
-  order = "as")
+ez.vv(vec, printn = NULL, order = "as", quote = NULL,
+  print2screen = TRUE)
 }
 \arguments{
 \item{vec}{a vector}
 
 \item{printn}{print first n and last n (useful for loooong vector) NULL=all}
 
-\item{quote}{TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)}
-
 \item{order}{vector order for printing out, 'as','az','za'}
+
+\item{quote}{TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)}
 }
 \value{
 nothing, only print out. 
