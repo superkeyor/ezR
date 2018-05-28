@@ -215,19 +215,36 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 #' format a vector for easy manual copy/processing. 
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). 
 #' @param vec a vector
+#' @param printn print first n and last n (useful for loooong vector) NULL=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
+#' @param order vector order for printing out, 'as','az','za'
 #' @return nothing, only print out. 
 #' \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-ez.vv = function(vec, quote=NULL,print2screen=TRUE){
+ez.vv = function(vec,printn=NULL,quote=NULL,print2screen=TRUE,order='as'){
     if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
 
+    if (order=='az') {vec=sort(vec,decreasing=F,na.last=T)}
+    if (order=='za') {vec=sort(vec,decreasing=T,na.last=T)}
+
     if (quote) {
-        printout=noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'"))
+        if (is.null(printn)){
+            printout=noquote(paste0("'",noquote(paste0(vec,collapse = "','")),"'"))
+        } else {
+            header = noquote(paste0("'",noquote(paste0(vec[1:printn],collapse = "','")),"'"))
+            tailer = noquote(paste0("'",noquote(paste0(vec[(length(vec)-printn+1):length(vec)],collapse = "','")),"'"))
+            printout = noquote(paste(header,tailer,sep=",...,"))
+        }
     } else {
-        printout=noquote(paste0(vec,collapse = ","))
+        if (is.null(printn)){
+            printout=noquote(paste0(vec,collapse = ","))
+        } else {
+            header = noquote(paste0(vec[1:printn],collapse = ","))
+            tailer = noquote(paste0(vec[(length(vec)-printn+1):length(vec)],collapse = ","))
+            printout = noquote(paste(header,tailer,sep=",...,"))
+        }
     }
     if (print2screen) {
         print(printout)
@@ -238,16 +255,16 @@ ez.vv = function(vec, quote=NULL,print2screen=TRUE){
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
-#' @param vsort sort vector or not for printing out
+#' @param order vector order for printing out, 'as','az','za'
 #' @export
-ez.vi=function(x,vsort=T) {
+ez.vi=function(x,printn=NULL,order='as') {
     v = x
     if (is.data.frame(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
             stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(v)[which(ez.duplicated(colnames(v),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
         }
         v.class = class(v) %>% toString()
-        v.cols = colnames(v) %>% ez.vv(print2screen=F)
+        v.cols = colnames(v) %>% ez.vv(print2screen=F,printn=printn,order=order)
         v.nrow = nrow(v)
         v.ncol = ncol(v)
         v.missing=ez.count(v,NA,dim=3)
@@ -268,11 +285,7 @@ ez.vi=function(x,vsort=T) {
         }
         cat(sprintf('List of %d\n',length(x)))
     } else {
-        if (vsort) {
-            v.elements = unique(v) %>% sort(na.last=T) %>% ez.vv(print2screen=F)
-        } else {
-            v.elements = unique(v) %>% ez.vv(print2screen=F)
-        }
+        v.elements = unique(v) %>% ez.vv(print2screen=F,printn=printn,order=order)
         v.class=class(v) %>% toString()
         v.n=length(v)
         v.missing=sum(is.na(v))
