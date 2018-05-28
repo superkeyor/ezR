@@ -256,6 +256,7 @@ ez.vv = function(vec,printn=NULL,order='as',quote=NULL,print2screen=TRUE){
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
 #' @param order vector order for printing out, 'as','az','za'
+#' @param printn print first n and last n (useful for loooong vector) NULL=all
 #' @export
 ez.vi=function(x,printn=NULL,order='as') {
     v = x

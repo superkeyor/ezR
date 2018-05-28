@@ -10,6 +10,8 @@ ez.vi(x, printn = NULL, order = "as")
 vi(x, printn = NULL, order = "as")
 }
 \arguments{
+\item{printn}{print first n and last n (useful for loooong vector) NULL=all}
+
 \item{order}{vector order for printing out, 'as','az','za'}
 }
 \description{
