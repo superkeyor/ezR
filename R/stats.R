@@ -226,7 +226,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
     if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
 
-    if (2*printn >= length(vec)) {vec=NULL}
+    if (2*printn >= length(vec)) {printn=NULL}
 
     if (order=='az') {vec=sort(vec,decreasing=F,na.last=T)}
     if (order=='za') {vec=sort(vec,decreasing=T,na.last=T)}
