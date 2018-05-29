@@ -5,12 +5,12 @@
 \alias{vi}
 \title{print sorted uniques of a df col or a vector (NA last) and other information}
 \usage{
-ez.vi(x, printn = NULL, order = "as")
+ez.vi(x, printn = 35, order = "as")
 
-vi(x, printn = NULL, order = "as")
+vi(x, printn = 35, order = "as")
 }
 \arguments{
-\item{printn}{print first n and last n (useful for loooong vector) NULL=all}
+\item{printn}{print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all}
 
 \item{order}{vector order for printing out, 'as','az','za'}
 }

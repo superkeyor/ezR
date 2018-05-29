@@ -215,7 +215,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 #' format a vector for easy manual copy/processing. 
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). 
 #' @param vec a vector
-#' @param printn print first n and last n (useful for loooong vector) NULL=all
+#' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
 #' @param order vector order for printing out, 'as','az','za'
 #' @return nothing, only print out. 
@@ -223,8 +223,10 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-ez.vv = function(vec,printn=NULL,order='as',quote=NULL,print2screen=TRUE){
+ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
     if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
+
+    if (2*printn >= length(vec)) {vec=NULL}
 
     if (order=='az') {vec=sort(vec,decreasing=F,na.last=T)}
     if (order=='za') {vec=sort(vec,decreasing=T,na.last=T)}
@@ -256,9 +258,9 @@ ez.vv = function(vec,printn=NULL,order='as',quote=NULL,print2screen=TRUE){
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
 #' @param order vector order for printing out, 'as','az','za'
-#' @param printn print first n and last n (useful for loooong vector) NULL=all
+#' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @export
-ez.vi=function(x,printn=NULL,order='as') {
+ez.vi=function(x,printn=35,order='as') {
     v = x
     if (is.data.frame(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {

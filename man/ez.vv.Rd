@@ -4,13 +4,13 @@
 \alias{ez.vv}
 \title{format a vector for easy manual copy/processing.}
 \usage{
-ez.vv(vec, printn = NULL, order = "as", quote = NULL,
+ez.vv(vec, printn = Inf, order = "as", quote = NULL,
   print2screen = TRUE)
 }
 \arguments{
 \item{vec}{a vector}
 
-\item{printn}{print first n and last n (useful for loooong vector) NULL=all}
+\item{printn}{print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all}
 
 \item{order}{vector order for printing out, 'as','az','za'}
 
