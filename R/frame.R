@@ -1484,7 +1484,7 @@ ez.leftjoin = dplyr::left_join
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.del = function(df,cols=NULL){
+ez.del = function(df,cols=NULL,print2screen=T){
     if (is.null(cols)) {
         # cols all empty
         # convert  all cols to string first, in order to compare with ""
@@ -1495,7 +1495,9 @@ ez.del = function(df,cols=NULL){
 
         colNumsAllTogether = dplyr::union(colNumsAllNAs,colNumsAllEmpty)
         if (length(colNumsAllTogether)>0) {
-            cat(sprintf('%d cols removed that contain all empty or NAs:\n%s\n', length(colNumsAllTogether), toString(colnames(df)[colNumsAllTogether])))
+            if (print2screen) {
+                cat(sprintf( '%s\n%d cols removed that contain all empty or NAs\n', toString(colnames(df)[colNumsAllTogether]), length(colNumsAllTogether) ))
+            }
             df = dplyr::select(df,-colNumsAllTogether)
         }
     } else if (length(cols)==1 && is.numeric(cols) && !is.integer(cols) && cols<1) {
@@ -1503,7 +1505,9 @@ ez.del = function(df,cols=NULL){
         colNumsLessThan = which(nonMissingRate<cols)
 
         if (length(colNumsLessThan)>0) {
-            cat(sprintf('%d cols removed less than the least non-missing rate:\n%s\n', length(colNumsLessThan), toString(colnames(df)[colNumsLessThan])))
+            if (print2screen) {
+                cat(sprintf( '%s\n%d cols removed less than the least non-missing rate\n', toString(colnames(df)[colNumsLessThan]), length(colNumsLessThan) ))
+            }
             df = dplyr::select(df,-colNumsLessThan)
         }
     } else {
@@ -1513,7 +1517,9 @@ ez.del = function(df,cols=NULL){
         },error = function(e) {})
         existCols = cols[(cols %in% colnames(df))]
         if (length(existCols)>0) {
-            cat(sprintf('deleted columns: %s\n',toString(existCols)))
+            if (print2screen) {
+                cat(sprintf( '%s\n%d columns deleted\n',toString(existCols),length(existCols) ))
+            }
             df[existCols] = NULL
         }
     }
