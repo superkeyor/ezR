@@ -280,6 +280,7 @@ ez.vi=function(x,printn=35,order='as') {
         freq = table(classes)
         v.classes = paste('#',freq %>% names,': ',freq,sep='',collapse = ', ')
 
+        if (nrow(v) > 10 | ncol(v) > 10) {print(v[c(1:2,(nrow(v)-2+1):nrow(v)),c(1:4,(ncol(v)-4+1):ncol(v))])}
         cat(v.cols)
         cat(sprintf('\n%s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
     } else if (is.list(x)) {
