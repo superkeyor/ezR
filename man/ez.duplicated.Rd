@@ -5,8 +5,8 @@
 \alias{ez.notduplicated}
 \title{duplicated}
 \usage{
-ez.duplicated(x, col = NULL, vec = TRUE, dim = 1, incomparables = FALSE,
-  value = FALSE, keepall = TRUE, ...)
+ez.duplicated(x, col = NULL, vec = TRUE, grouping = FALSE, dim = 1,
+  incomparables = FALSE, value = FALSE, keepall = TRUE, ...)
 
 ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
   incomparables = FALSE, value = FALSE, keepall = TRUE, ...)
@@ -21,7 +21,11 @@ ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
 
 \item{vec}{TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
 \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
-\cr This is useful for binding with other data frames}
+\cr This is useful for binding with other data frames
+\cr T/F could be replaced by 0,1,2, see grouping}
+
+\item{grouping}{TRUE/FALSE, if TRUE, returns a vector of 0,1,2 indicating duplicates, where 
+\cr 0=F, no duplicates; 1=duplicates group 1; 2=duplicates group 2, etc}
 
 \item{dim}{1=find duplicated rows, 2=find duplicated cols. dim has no effect when x is a vector}
 
@@ -31,7 +35,7 @@ ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
 
 \item{value}{TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
 The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
-Ignore/Overwrite vec=T/F.}
+Ignore/Overwrite vec, grouping.}
 
 \item{keepall}{TRUE/FALSE, only applicable when value=T (otherwise ignored). When col is specified, value only returns for that col. Use keepall=T to return all cols in input df}
 }
@@ -44,7 +48,7 @@ return depends, see vec above (By default, missing values are regarded as equal,
 }
 \description{
 find the duplicated rows/cols in a data frame or duplicated elements in a vector of any data type (factor, char, numeric)
-\cr ez.notduplicated is unique/distinct minus any of the duplicated
+\cr ez.notduplicated is not the same as unique, but unique/distinct minus any of the duplicated
 }
 \examples{
 c(2,2,3) \%>\% data.frame(col=.) \%>\% ez.duplicated(incomparables = 4)  # error
