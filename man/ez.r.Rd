@@ -4,7 +4,7 @@
 \alias{ez.r}
 \title{r correlation}
 \usage{
-ez.r(x, col = NULL, type = "pearson")
+ez.r(x, col = NULL, type = "pearson", viewresult = T)
 }
 \arguments{
 \item{x}{df or matrix}
@@ -12,6 +12,8 @@ ez.r(x, col = NULL, type = "pearson")
 \item{col}{col included for calculation, ignored if x is not a df}
 
 \item{type}{"pearson" or "spearman"}
+
+\item{viewresult}{no effect if there is no NA}
 }
 \value{
 r matrix (you may get some NAs in the marix without warning)
