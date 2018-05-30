@@ -386,6 +386,13 @@ ez.r = function(x,col=NULL,type="pearson") {
         col=(ez.selcol(x,col))
         x=x[col]
     }
+    # rcorr uses pairwise deletion; however, you may still get warnings/errors for calcuating r, p
+    # because too few samples, too small variance (close to 0) after deletion
+    # https://www.statmethods.net/stats/correlations.html
+    # stats::cor(Matrix or data frame, use=) use has 
+    #   all.obs (assumes no missing data - missing data will produce an error), 
+    #   complete.obs (listwise deletion), and 
+    #   pairwise.complete.obs (pairwise deletion)
     Hmisc::rcorr(data.matrix(x),type=type)$r
 }
 
