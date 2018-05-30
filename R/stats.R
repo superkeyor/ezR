@@ -260,7 +260,7 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
 #' @param order vector order for printing out, 'as','az','za'
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @export
-ez.vi=function(x,printn=35,order='as') {
+ez.vi = function(x,printn=35,order='as') {
     v = x
     if (is.data.frame(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
@@ -280,7 +280,11 @@ ez.vi=function(x,printn=35,order='as') {
         freq = table(classes)
         v.classes = paste('#',freq %>% names,': ',freq,sep='',collapse = ', ')
 
-        if (nrow(v) > 10 | ncol(v) > 10) {print(v[c(1:2,(nrow(v)-2+1):nrow(v)),c(1:4,(ncol(v)-4+1):ncol(v))])}
+        first2rows = if (nrow(v)>=4) 1:2 else 1:nrow(v); last2rows = if (nrow(v)>=4) (nrow(v)-2+1):nrow(v) else NULL
+        first3cols = if (ncol(v)>=6) 1:3 else 1:ncol(v); last3cols = if (ncol(v)>=6) (ncol(v)-3+1):ncol(v) else NULL
+        # c(1:2,NULL) -> (1,2)
+        print(v[c(first2rows,last2rows),c(first3cols,last3cols),drop=F])
+
         cat(v.cols)
         cat(sprintf('\n%s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
     } else if (is.list(x)) {
