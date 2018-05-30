@@ -1512,7 +1512,7 @@ ez.del = function(df,cols=NULL,print2screen=T){
         colNumsAllTogether = dplyr::union(colNumsAllNAs,colNumsAllEmpty)
         if (length(colNumsAllTogether)>0) {
             if (print2screen) {
-                cat(sprintf( '%s\n%d cols removed that contain all empty or NAs\n', toString(colnames(df)[colNumsAllTogether]), length(colNumsAllTogether) ))
+                cat(sprintf( '%s\n\n%d cols removed that contain all empty or NAs\n', toString(colnames(df)[colNumsAllTogether]), length(colNumsAllTogether) ))
             }
             df = dplyr::select(df,-colNumsAllTogether)
         }
@@ -1522,7 +1522,7 @@ ez.del = function(df,cols=NULL,print2screen=T){
 
         if (length(colNumsLessThan)>0) {
             if (print2screen) {
-                cat(sprintf( '%s\n%d cols removed less than the least non-missing rate\n', toString(colnames(df)[colNumsLessThan]), length(colNumsLessThan) ))
+                cat(sprintf( '%s\n\n%d cols removed less than the least non-missing rate\n', toString(colnames(df)[colNumsLessThan]), length(colNumsLessThan) ))
             }
             df = dplyr::select(df,-colNumsLessThan)
         }
@@ -1534,7 +1534,7 @@ ez.del = function(df,cols=NULL,print2screen=T){
         existCols = cols[(cols %in% colnames(df))]
         if (length(existCols)>0) {
             if (print2screen) {
-                cat(sprintf( '%s\n%d columns deleted\n',toString(existCols),length(existCols) ))
+                cat(sprintf( '%s\n\n%d columns deleted\n',toString(existCols),length(existCols) ))
             }
             df[existCols] = NULL
         }
