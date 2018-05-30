@@ -382,7 +382,7 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
 #' @param viewresult no effect if there is no NA
 #' @return r matrix (you may get some NAs in the marix without warning)
 #' @export
-ez.r = function(x,col=NULL,type="pearson",viewresult=T) {
+ez.r = function(x,col=NULL,type="pearson",viewresult=T,print2screen=T) {
     if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
         x=x[col]
@@ -395,12 +395,12 @@ ez.r = function(x,col=NULL,type="pearson",viewresult=T) {
     #   complete.obs (listwise deletion), and 
     #   pairwise.complete.obs (pairwise deletion)
     result = Hmisc::rcorr(data.matrix(x),type=type)$r
-    counts = data.frame(result) %>% ez.count(val=NA,dim=1) %>% tibble::rownames_to_column(var='variable') %>% dplyr::arrange(desc(count))
-    NAs = sum(counts$count)
+    NACounts = data.frame(result) %>% ez.count(val=NA,dim=1) %>% tibble::rownames_to_column(var='variable') %>% dplyr::arrange(desc(count))
+    NAs = sum(NACounts$count)
 
     if (NAs > 0) {
-        ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see viewresult=T).', NAs), color='red')
-        if (viewresult) {View(counts)}
+        if (print2screen) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see viewresult=T).', NAs), color='red')}
+        if (viewresult) {View(NACounts)}
     }
     return(result)
 }
