@@ -6,8 +6,8 @@
 \usage{
 ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
   method = "circle", tl.col = "black", tl.cex = 0.4, tl.pos = NULL,
-  order = c("original", "AOE", "FPC", "hclust", "alphabet"), col = NULL,
-  ...)
+  tl.offset = NULL, order = c("original", "AOE", "FPC", "hclust",
+  "alphabet"), col = NULL, ...)
 }
 \arguments{
 \item{df}{data frame in wide format, should be all numeric}
@@ -25,6 +25,8 @@ ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 \item{tl.cex}{size of text label (can still be increased to gain some margins for the map when tl.pos='n')}
 
 \item{tl.pos}{'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.}
+
+\item{tl.offset}{offset of text label, can somehow adjust margin if necessary (corrplot default 0.4)}
 
 \item{order}{"original" for original order (default).
 \cr "AOE" for the angular order of the eigenvectors.
