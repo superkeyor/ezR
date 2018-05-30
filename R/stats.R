@@ -300,18 +300,20 @@ ez.vi=function(x,printn=35,order='as') {
         # not all NA
         if ( is.numeric(v) & !all(is.na(v)) ) {
             v.mean=mean(v,na.rm=TRUE)
+            v.sd=sd(v,na.rm=TRUE)
             v.min=min(v,na.rm=TRUE)
             v.max=max(v,na.rm=TRUE)
             v.sum=sum(v,na.rm=TRUE)
         } else if ( is.date(v) & !all(is.na(v)) ) {
             # converted to numeric, to convert back to date: ez.date(ori='R')
             v.mean=mean(v,na.rm=TRUE)
+            v.sd=sd(v,na.rm=TRUE)
             v.min=min(v,na.rm=TRUE)
             v.max=max(v,na.rm=TRUE)
             # sum not defined for "Date" objects
             v.sum=NA
         } else {
-            v.mean=v.min=v.max=v.sum=NA
+            v.mean=v.sd=v.min=v.max=v.sum=NA
             # count as factor
             if ( is.factor(v) | is.character(v) | is.logical(v) ) {
                 vallbl=attr(v,"value.labels")
@@ -327,7 +329,7 @@ ez.vi=function(x,printn=35,order='as') {
         cat(v.elements)
         cat(sprintf('\n%s\t#Unique: %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
-            cat(sprintf('M = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.min, v.max, v.sum))
+            cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
             cat(sprintf('%s\n',v.levels %>% toString(width=300)))
