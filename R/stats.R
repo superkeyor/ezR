@@ -395,12 +395,12 @@ ez.r = function(x,col=NULL,type="pearson",viewresult=T,print2screen=T) {
     #   complete.obs (listwise deletion), and 
     #   pairwise.complete.obs (pairwise deletion)
     result = Hmisc::rcorr(data.matrix(x),type=type)$r
-    NACounts = data.frame(result) %>% ez.count(val=NA,dim=1) %>% tibble::rownames_to_column(var='variable') %>% dplyr::arrange(desc(count))
-    NAs = sum(NACounts$count)
+    CorrNACounts = data.frame(result) %>% ez.count(val=NA,dim=1) %>% tibble::rownames_to_column(var='variable') %>% dplyr::arrange(desc(count))
+    NAs = sum(CorrNACounts$count)
 
     if (NAs > 0) {
         if (print2screen) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see viewresult=T).', NAs), color='red')}
-        if (viewresult) {View(NACounts)}
+        if (viewresult) {View(CorrNACounts)}
     }
     return(result)
 }
