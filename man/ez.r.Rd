@@ -14,7 +14,7 @@ ez.r(x, col = NULL, type = "pearson")
 \item{type}{"pearson" or "spearman"}
 }
 \value{
-r matrix
+r matrix (you may get some NAs in the marix without warning)
 }
 \description{
 r correlation

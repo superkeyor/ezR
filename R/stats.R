@@ -379,21 +379,24 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
 #' @param x df or matrix
 #' @param col col included for calculation, ignored if x is not a df
 #' @param type "pearson" or "spearman"
-#' @return r matrix
+#' @return r matrix (you may get some NAs in the marix without warning)
 #' @export
 ez.r = function(x,col=NULL,type="pearson") {
     if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
         x=x[col]
     }
-    # rcorr uses pairwise deletion; however, you may still get warnings/errors for calcuating r, p
+    # rcorr uses pairwise deletion; however, you may still get warnings/errors/NAs for calcuating r, p
     # because too few samples, too small variance (close to 0) after deletion
     # https://www.statmethods.net/stats/correlations.html
     # stats::cor(Matrix or data frame, use=) use has 
     #   all.obs (assumes no missing data - missing data will produce an error), 
     #   complete.obs (listwise deletion), and 
     #   pairwise.complete.obs (pairwise deletion)
-    Hmisc::rcorr(data.matrix(x),type=type)$r
+    result = Hmisc::rcorr(data.matrix(x),type=type)$r
+    NAs = ez.count(result,val=NA)
+    if (NAs > 0) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix.', NAs), color='red')}
+    return(result)
 }
 
 #' z residual
