@@ -4,7 +4,7 @@
 \alias{ez.r}
 \title{r correlation}
 \usage{
-ez.r(x, col = NULL, type = "pearson", viewresult = T, print2screen = T)
+ez.r(x, col = NULL, type = "pearson", print2screen = T)
 }
 \arguments{
 \item{x}{df or matrix}

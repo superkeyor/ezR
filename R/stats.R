@@ -382,13 +382,13 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
 #' @param viewresult no effect if there is no NA
 #' @return r matrix (you may get some NAs in the marix without warning)
 #' @export
-ez.r = function(x,col=NULL,type="pearson",viewresult=T,print2screen=T) {
+ez.r = function(x,col=NULL,type="pearson",print2screen=T) {
     if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
         x=x[col]
     }
     # rcorr uses pairwise deletion; however, you may still get warnings/errors/NAs for calcuating r, p
-    # because too few samples, too small variance (close to 0) after deletion
+    # because too few samples, or too small variance (close to 0) after deletion
     # https://www.statmethods.net/stats/correlations.html
     # stats::cor(Matrix or data frame, use=) use has 
     #   all.obs (assumes no missing data - missing data will produce an error), 
@@ -399,8 +399,8 @@ ez.r = function(x,col=NULL,type="pearson",viewresult=T,print2screen=T) {
     NAs = sum(CorrNACounts$count)
 
     if (NAs > 0) {
-        if (print2screen) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see viewresult=T).', NAs), color='red')}
-        if (viewresult) {View(CorrNACounts)}
+        if (print2screen) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see CorrNACounts).', NAs), color='red')}
+        assign("CorrNACounts", CorrNACounts, envir = .GlobalEnv)
     }
     return(result)
 }
