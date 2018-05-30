@@ -101,9 +101,9 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     if (is.null(id)) {
         r.duplicated.content=ez.duplicated(df,vec=TRUE,incomparables=incomparables,dim=1)
     } else {
-      # https://github.com/tidyverse/dplyr/issues/2184
-      # to avoid the bug, in case variable name id is the same as one of the column names
-      idididid=id
+        # https://github.com/tidyverse/dplyr/issues/2184
+        # to avoid the bug, in case variable name id is the same as one of the column names
+        idididid=id
         r.duplicated.content=ez.duplicated(dplyr::select(df,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1)
     }
     r.duplicated.content[which(!r.duplicated.content)]=NA
