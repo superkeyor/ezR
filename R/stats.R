@@ -1017,15 +1017,15 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
 #' @export
 ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
     if (!is.null(targetVar)) {targetVar=ez.selcol(df,targetVar); df %<>% ez.move(sprintf('%s first',targetVar))}
-      
-    if (!is.null(fixedVars)) {
-        fixedVars = ez.selcol(df,fixedVars)
-        fixedVars = dplyr::setdiff(fixedVars,targetVar)  # works even if targetVar=NULL
+    if (!is.null(fixedVars)) {fixedVars = ez.selcol(df,fixedVars); fixedVars = dplyr::setdiff(fixedVars,targetVar)}  
+    
+    if ( (!is.null(targetVar)) | (!is.null(fixedVars)) ) {
+        # c() works even if targetVar=NULL
         df %>% select(-one_of(c(targetVar,fixedVars))) -> df01
     } else {
-        df01 = df
+        df -> df01
     }
-  
+    
     # df01: 0s and 1s without target, fix, completed vars, zeroVars for PCA
     ind.NAs = is.na(df01)
     lapply(df01, as.character) %>% data.frame(stringsAsFactors = F) -> df01
@@ -1066,11 +1066,19 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
     counts = matrix(NA,nrow=length(allvars),ncol=3)
     # chop from the last var
     for (i in length(allvars):1) {
-      vars = allvars[1:i]
-      df %>% select(vars) %>% ez.dropna(print2screen = F) -> df3
-      counts[i,1] = nrow(df3)
-      counts[i,2] = ncol(df3)
-      counts[i,3] = if(is.nan( mean(df3[[targetVar]]) )) NA else  mean(df3[[targetVar]])  # if df3 empty, mean=NaN
+        vars = allvars[1:i]
+        df %>% select(vars) %>% ez.dropna(print2screen = F) -> df3
+        counts[i,1] = nrow(df3)
+        counts[i,2] = ncol(df3)
+        
+        if (is.null(targetVar)) {
+            counts[i,3] = NA
+        } else if (is.nan( mean(df3[[targetVar]]) )) { 
+            # if df3 empty, mean=NaN
+            counts[i,3] = NA
+        } else {
+            counts[i,3] = mean(df3[[targetVar]])
+        }
     }
     counts = data.frame(counts)
     colnames(counts) = c('sampleNum','variableNum','targetMean')
