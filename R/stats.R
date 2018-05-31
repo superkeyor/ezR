@@ -262,11 +262,12 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
 #' @export
 ez.vi = function(x,printn=35,order='as') {
     v = x
-    if (is.data.frame(v)) {
+    if (is.data.frame(v) | is.matrix(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
             stop(sprintf('I cannot proceed. Duplicated col names foud: %s\n', colnames(v)[which(ez.duplicated(colnames(v),vec=TRUE,incomparables=incomparables,dim=1))] %>% toString))
         }
-        v.class = class(v) %>% toString()
+        v.class = if (is.matrix(v)) 'matrix' else class(v) %>% toString()
+        if (is.matrix(v)) {v = data.frame(v)}
         v.cols = colnames(v) %>% ez.vv(print2screen=F,printn=printn,order=order)
         v.nrow = nrow(v)
         v.ncol = ncol(v)

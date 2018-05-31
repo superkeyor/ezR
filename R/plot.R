@@ -1091,7 +1091,6 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param tl.col color of text label
 #' @param tl.cex size of text label (can still be increased to gain some margins for the map when tl.pos='n')
 #' @param tl.pos 'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.
-#' @param tl.offset offset of text label, can somehow adjust margin if necessary (corrplot default 0.4)
 #' @param method "circle", "square", "ellipse", "number", "pie", "shade" and "color". The areas of circles or squares show the absolute value of corresponding correlation coefficients. "color" = same areas
 #' @param order "original" for original order (default).
 #' \cr "AOE" for the angular order of the eigenvectors.
@@ -1103,7 +1102,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @return returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 #' @export
 ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
-                     method ="circle",tl.col="black",tl.cex=0.4,tl.pos=NULL,tl.offset=NULL,
+                     method ="circle",tl.col="black",tl.cex=0.4,tl.pos=NULL,
                      order = c("original", "AOE", "FPC", "hclust", "alphabet"),
                      col=NULL,...){
     # https://stackoverflow.com/a/25215323/2292993
@@ -1127,10 +1126,9 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
 
     # increase tl.cex a bit to gain some margins for the map when tl.pos='n'
     if (!is.null(tl.pos)) {if (tl.pos=='n' & tl.cex < 1) {tl.cex = 1.5}}
-    if (!is.null(tl.offset)) {tl.offset = if (tl.cex < 1) 1 else 0.4}
     # add grid is like a mask/cover over the map (??)
     corr = corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
-                       tl.col = tl.col, tl.cex = tl.cex, tl.pos = tl.pos, tl.offset = tl.offset,
+                       tl.col = tl.col, tl.cex = tl.cex, tl.pos = tl.pos, 
                        order = order,
                        col = col, addgrid.col = rgb(1,1,1,.01), ...)
 
