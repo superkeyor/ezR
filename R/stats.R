@@ -454,6 +454,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
             result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
@@ -466,7 +467,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
-            xlist[yy] = result
+            xlist[[yy]] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
@@ -596,6 +597,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
             result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
@@ -608,7 +610,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
-            xlist[yy] = result
+            xlist[[yy]] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
@@ -705,6 +707,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
             result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 if (!all(is.na(result$mean12_difference))) {
@@ -729,7 +732,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
                     )
                 }
             }
-            xlist[xx] = result
+            xlist[[xx]] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
@@ -829,6 +832,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
             result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,width=width)
+            result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
@@ -844,7 +848,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
                        panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
                 )
             }
-            xlist[xx] = result
+            xlist[[xx]] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
