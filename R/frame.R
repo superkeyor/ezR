@@ -465,13 +465,16 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE, ...){
 #' \cr "col2:za" --another column in za    (ignored if x is not a data frame)
 #' @return returns a new df, factor (non-factor->factor)
 #' @export
-ez.factorder = function(x, col, ord="as"){
+ez.factorder = function(x, col, ord="as", print2screen=F){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
         # [[]] is the programmable form of $
         if (length(ord)==1) {
-            # if (!is.factor(df[[col]])) {cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])}
+            if (!is.factor(df[[col]])) {
+                if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
+                df[[col]] = factor(df[[col]])
+            }
             if (!is.factor(df[[col]])) {df[[col]] = factor(df[[col]])}
             if (ord=="as"){
                 df[[col]] = factor(df[[col]], unique(as.character(df[[col]])))
@@ -499,7 +502,10 @@ ez.factorder = function(x, col, ord="as"){
         return(df)
     
     } else {
-        if (!is.factor(x)) cat(sprintf('converting %s to factor via factor()...\n',class(x))); x = factor(x)
+        if (!is.factor(x)) {
+            if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
+            x = factor(x)
+        }
         if (length(ord)==1) {
             if (ord=="as"){
                 x = factor(x, unique(as.character(x)))
@@ -522,21 +528,30 @@ ez.factorder = function(x, col, ord="as"){
 #' @return returns a new df, factor (non-factor->factor)
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
 #' @export
-ez.factorname = function(x, col, newLevelNames){
+ez.factorname = function(x, col, newLevelNames, print2screen=T){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
-        if (!is.factor(df[[col]])) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]]))); df[[col]] = factor(df[[col]])
-        cat('Initial level names: ', levels(df[[col]]), '\n')
+
+        if (!is.factor(df[[col]])){
+            if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
+            df[[col]] = factor(df[[col]])
+        }
+
+        if (print2screen) cat('Initial level names: ', levels(df[[col]]), '\n')
         levels(df[[col]]) = newLevelNames
-        cat('Renamed level names: ', newLevelNames, '\n')
+        if (print2screen) cat('Renamed level names: ', newLevelNames, '\n')
         return(df)
     
     } else {
-        if (!is.factor(x)) cat(sprintf('converting %s to factor via factor()...\n',class(x))); x = factor(x)
-        cat('Initial level names: ', levels(x), '\n')
+        if (!is.factor(x)){ 
+            if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
+            x = factor(x)
+        }
+
+        if (print2screen) cat('Initial level names: ', levels(x), '\n')
         levels(x) = newLevelNames
-        cat('Renamed level names: ', newLevelNames, '\n')
+        if (print2screen) cat('Renamed level names: ', newLevelNames, '\n')
         return(x)
     }
 }
@@ -550,11 +565,11 @@ ez.factorname = function(x, col, newLevelNames){
 #' @param cols column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols
 #' @return returns a new df, factor, vector (has no effect on (ie, make no change to) a non-factor object)
 #' @export
-ez.factorelevel = function(x, cols=NULL) {
+ez.factorelevel = function(x, cols=NULL, print2screen=F) {
     if (is.factor(x)) {
         # for nonfactor, length(levels(x)) returns 0
         if (length(levels(x))!=length(levels(factor(x,unique(as.character(x)))))) {
-            # cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
+            if (print2screen) cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
             x = factor(x, unique(as.character(x)))
         }
     } else if (is.data.frame(x) & !is.null(cols)) {
@@ -881,7 +896,7 @@ ez.recode2 = function(df, col, recodes){
 #'           # TV was char, now is still char
 #' ez.replace(data,'setosa','flower')
 #'           # Species was factor, now is still factor (notice, levels changed)
-ez.replace = function(df, col, oldval, newval=NULL){
+ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
     # four parameters passed
     if (!is.null(newval)) {
         col=(ez.selcol(df,col))
@@ -893,12 +908,12 @@ ez.replace = function(df, col, oldval, newval=NULL){
                 
         #     if (is.na(oldval)) {
         #         if (length(which(is.na(df[[col]]))) > 0) {
-        #             cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
+        #             if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
         #             df[[col]][which(is.na(df[[col]]))] <- newval
         #         }
         #     } else {
         #         if (length(which(df[[col]]==oldval)) > 0) {
-        #             cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
+        #             if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
         #             df[[col]][which(df[[col]]==oldval)] <- newval
         #         }
         #     }
@@ -915,12 +930,12 @@ ez.replace = function(df, col, oldval, newval=NULL){
                 
             if (is.na(oldval)) {
                 if (length(which(is.na(dfcol))) > 0) {
-                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(dfcol)), col, as.character(oldval), as.character(newval)))
+                    if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(dfcol)), col, as.character(oldval), as.character(newval)))
                     dfcol[which(is.na(dfcol))] <- newval
                 }
             } else {
                 if (length(which(dfcol==oldval)) > 0) {
-                    cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(dfcol==oldval)), col, as.character(oldval), as.character(newval)))
+                    if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(dfcol==oldval)), col, as.character(oldval), as.character(newval)))
                     dfcol[which(dfcol==oldval)] <- newval
                 }
             }
@@ -937,12 +952,12 @@ ez.replace = function(df, col, oldval, newval=NULL){
         # trick to recognize parameters
         newval=oldval;oldval=col
         if (is.na(oldval)) {
-            cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(is.na(df))), as.character(oldval), as.character(newval)))
+            if (print2screen) cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(is.na(df))), as.character(oldval), as.character(newval)))
             # the dot here, I think, refers to each column, not related to . for %>%
             # mutate() will somehow auto convert columns of factor but in a bad way. Use my own function to convert factor to char
             # df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
         } else {
-            cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(df==oldval,na.rm=TRUE)), as.character(oldval), as.character(newval)))
+            if (print2screen) cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(df==oldval,na.rm=TRUE)), as.character(oldval), as.character(newval)))
             # df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
         }
         # recursive call, but suppress output
@@ -968,7 +983,7 @@ ez.replace = function(df, col, oldval, newval=NULL){
 #' @seealso \code{\link{ez.replace}}
 #' @examples df=ez.replacewhen(nicu,pt_num=1220,baby_num=3,baby_name='Ben')
 #' @export
-ez.replacewhen = function(df, ...) {
+ez.replacewhen = function(df, print2screen=T, ...) {
     theList = list(...)
     theCols = names(theList)
     theID = theCols[1]; theValue = theList[[1]]
@@ -981,9 +996,9 @@ ez.replacewhen = function(df, ...) {
             # print
             theString = sprintf('%d row(s) replaced when %s=%s in column %s (%s -> %s)',length(theRow),theID,toString(theValue),col,toString(oldval),toString(newval))
             if (length(theRow)==1) {
-                ez.print(theString)
+                if (print2screen) ez.print(theString)
             } else if (length(theRow)>1) {
-                ez.pprint(theString)
+                if (print2screen) ez.pprint(theString)
             }
 
             factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
@@ -1762,10 +1777,10 @@ ez.ppq = function(...) {
 #' @param df df
 #' @param col a string or a vector or NULL (NULL=all cols)
 #' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
-#' \cr 1:4 (not quoted)
+#' \cr 1:4 (not quoted), c(2,1,3) --> the returned order will be 2,1,3 (not in original df col order)
 #' \cr 'col1:col3' (quoted)
 #' \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
-#' @return returns vector of col names
+#' @return returns vector of col names (if no col matched, resturn NULL, for easy later use with c(NULL,'a col') -> c('a col'))
 #' @export
 ez.selcol = function(df,col=NULL, ...) {
     if (is.null(col)) return(colnames(df))
@@ -1776,7 +1791,9 @@ ez.selcol = function(df,col=NULL, ...) {
     df = df[1,,drop=F]
     cmd=sprintf('dplyr::select(df,%s, ...)',toString(col))
     cols=ez.eval(cmd)
-    return(colnames(cols))
+    result=colnames(cols)
+    if (length(result)==0) result=NULL
+    return(result)
 }
 
 #' sanitize col names
