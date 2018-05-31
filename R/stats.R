@@ -431,7 +431,7 @@ ez.zresid = function(model,method=3) {
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible data frame
+#' @return an invisible list of data frame
 #' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -466,7 +466,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
-            xlist[[yy]] = result
+            xlist[yy] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
@@ -564,7 +564,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
     result$orindex=1:nrow(result)
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
-    return(invisible(result))
+    return(invisible(list(result)))
 }
 
 #' a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list
@@ -579,7 +579,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible data frame
+#' @return an invisible list of data frame
 #' \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
@@ -608,7 +608,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
-            xlist[[yy]] = result
+            xlist[yy] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
@@ -676,7 +676,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
     result$orindex=1:nrow(result)
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
-    return(invisible(result))
+    return(invisible(list(result)))
 }
 
 #' a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list
@@ -690,7 +690,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df[[yy]],...)
-#' @return an invisible data frame
+#' @return an invisible list of data frame
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable. 
@@ -729,7 +729,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
                     )
                 }
             }
-            xlist[[xx]] = result
+            xlist[xx] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
@@ -803,7 +803,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
     result$orindex=1:nrow(result)
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
-    return(invisible(result))
+    return(invisible(list(result)))
 }
 
 #' a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list
@@ -817,7 +817,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 #' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
 #' @param showerror whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
-#' @return an invisible data frame
+#' @return an invisible list of data frame
 #' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 #' @export
 ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),width=300) {
@@ -844,7 +844,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
                        panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
                 )
             }
-            xlist[[xx]] = result
+            xlist[xx] = result
         }
         if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
         return(invisible(xlist))
@@ -918,7 +918,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
     result$orindex=1:nrow(result)
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
-    return(invisible(result))
+    return(invisible(list(result)))
 }
 
 #' table xy

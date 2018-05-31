@@ -26,7 +26,7 @@ ez.fishers(df, y, x, showerror = T, viewresult = F, plot = T,
 \item{width}{width for toString(countTable,width=width)}
 }
 \value{
-an invisible data frame
+an invisible list of data frame
 }
 \description{
 df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
