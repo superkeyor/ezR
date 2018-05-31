@@ -1084,9 +1084,22 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
     colnames(counts) = c('sampleNum','variableNum','targetMean')
     counts$orderedVar = allvars
     
-    sampleNum = counts$sampleNum
-    variableNum = counts$variableNum
-    graphics::plot(x = variableNum, y = sampleNum)
+    # the plot() will not return an object. plot directly, hard to capture to an object
+    # graphics::plot(x = variableNum, y = sampleNum)
+    p1=lattice::xyplot(counts$sampleNum ~ counts$variableNum,
+                  xlab = "Number of Variables Kept",
+                  ylab = "Sample Size Without Missing Values",
+                  type = "p", pch=16, 
+                  col="#e69f00")
+    p2=NULL
+    if (!all(is.na(counts$targetMean))) {
+        p2=lattice::xyplot(counts$targetMean ~ counts$variableNum,
+                  xlab = "Number of Variables Kept",
+                  ylab = sprintf("Mean Value of %s",targetVar),
+                  type = "p", pch=16, 
+                  col="#56b4e9")
+    }
+    gmultiplot(p1,p2,cols=2)
     
     return(invisible(counts))
 }
