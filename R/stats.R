@@ -1008,3 +1008,77 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
 
     return(invisible(theTable))
 }
+
+#' maximize np by checking recursively various variable combinations (PCA trick)
+#' @description maximize np by checking recursively various variable combinations (PCA trick)
+#' @param targetVar a single outcome var, will calculate its mean in each completed subsamples
+#' @param fixedVars vars you must have remained. (does not matter if it includes targetVar or not)
+#' @return returns a new data frame
+#' @export
+ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
+    if (!is.null(targetVar)) {targetVar=ez.selcol(df,targetVar); df %<>% ez.move(sprintf('%s first',targetVar))}
+      
+    if (!is.null(fixedVars)) {
+        fixedVars = ez.selcol(df,fixedVars)
+        fixedVars = dplyr::setdiff(fixedVars,targetVar)  # works even if targetVar=NULL
+        df %>% select(-one_of(c(targetVar,fixedVars))) -> df01
+    } else {
+        df01 = df
+    }
+  
+    # df01: 0s and 1s without target, fix, completed vars, zeroVars for PCA
+    ind.NAs = is.na(df01)
+    lapply(df01, as.character) %>% data.frame(stringsAsFactors = F) -> df01
+    df01[!ind.NAs] <- 1; df01[ind.NAs] <- 0
+    lapply(df01, as.numeric) %>% data.frame() -> df01
+    
+    # get rid of constant 1, for scale and proper pca solution
+    # according to my test, if constant 1 into pca, you cannot scale and pca seems strange: 
+    # the constant var get loading of 0, in the middle of positive and negative laodings
+    completedVars = ez.selcol(df01, which(colSums(df01) == nrow(df01)))
+    zeroVars  = ez.selcol(df01, which(colSums(df01) == 0))
+    if (!is.null(completedVars)) {df01 %<>% select(-one_of(completedVars))}
+    if (!is.null(zeroVars)) {df01 %<>% select(-one_of(zeroVars))}
+    
+    ####************************************************************************************************
+                                         ####*obsolete*####
+    ####************************************************************************************************
+    # no need to scale for pca, has the same scale 0/1 (well, still not same variance?)
+    # in fact scale error if all 1 or 0, scale = TRUE cannot be used if there are zero or constant (for center = TRUE) variables
+    
+    # # https://stat.ethz.ch/pipermail/r-help/2006-April/104616.html
+    # # duplicated to increse sample size if necessary
+    # # because 'princomp' can only be used with more samples than variables
+    # df01 = df01[rep(seq(nrow(df01)), each = ceiling(ncol(df01)/nrow(df01))),,drop=F]
+    # pcaObj = stats::princomp(base::scale(df01))
+    # pcaLoadings <- with(pcaObj, unclass(loadings)) %>% as.data.frame()
+    # pcaLoadings %>% tibble::rownames_to_column() %>% arrange(Comp.1) %>% .$rowname %>% ez.vv()
+    ####************************************************************************************************
+                                         ####*obsolete*####
+    ####************************************************************************************************
+    
+    pcaObj = stats::prcomp(df01,scale=T)
+    # high loading=more 1s, which means fewer missing values
+    pcaLoadings = pcaObj$rotation %>% as.data.frame() %>% tibble::rownames_to_column() %>% arrange(desc(PC1)) 
+    
+    allvars = c(targetVar,fixedVars,completedVars,pcaLoadings$rowname,zeroVars)
+    # sample#, variable#, mean(targetVar)
+    counts = matrix(NA,nrow=length(allvars),ncol=3)
+    # chop from the last var
+    for (i in length(allvars):1) {
+      vars = allvars[1:i]
+      df %>% select(vars) %>% ez.dropna(print2screen = F) -> df3
+      counts[i,1] = nrow(df3)
+      counts[i,2] = ncol(df3)
+      counts[i,3] = if(is.nan( mean(df3[[targetVar]]) )) NA else  mean(df3[[targetVar]])  # if df3 empty, mean=NaN
+    }
+    counts = data.frame(counts)
+    colnames(counts) = c('sampleNum','variableNum','targetMean')
+    counts$orderedVar = allvars
+    
+    sampleNum = counts$sampleNum
+    variableNum = counts$variableNum
+    graphics::plot(x = variableNum, y = sampleNum)
+    
+    return(invisible(counts))
+}
