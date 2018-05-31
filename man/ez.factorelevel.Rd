@@ -4,7 +4,7 @@
 \alias{ez.factorelevel}
 \title{reset factor levels}
 \usage{
-ez.factorelevel(x, cols = NULL)
+ez.factorelevel(x, cols = NULL, print2screen = F)
 }
 \arguments{
 \item{x}{data frame or vector, factor}

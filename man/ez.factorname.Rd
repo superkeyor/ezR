@@ -4,7 +4,7 @@
 \alias{ez.factorname}
 \title{change factor level names in a df}
 \usage{
-ez.factorname(x, col, newLevelNames)
+ez.factorname(x, col, newLevelNames, print2screen = T)
 }
 \arguments{
 \item{x}{data frame or vector, factor or non-factor}

@@ -11,12 +11,12 @@ ez.selcol(df, col = NULL, ...)
 
 \item{col}{a string or a vector or NULL (NULL=all cols)
 \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
-\cr 1:4 (not quoted)
+\cr 1:4 (not quoted), c(2,1,3) --> the returned order will be 2,1,3 (not in original df col order)
 \cr 'col1:col3' (quoted)
 \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)}
 }
 \value{
-returns vector of col names
+returns vector of col names (if no col matched, resturn NULL, for easy later use with c(NULL,'a col') -> c('a col'))
 }
 \description{
 select col names in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)

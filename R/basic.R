@@ -804,7 +804,7 @@ ez.join = function(sep='',...){
 #' \cr        ez.print('a=',3)
 #' \cr        ez.print('a=',c(3,'b'))
 #' \cr        ez.print(var,'\\t',p)
-#' \cr        ez.print(c(var,'\\t',p))
+#' \cr        ez.print(c(var,'\\t',p)) 
 #' @param sep default empty
 #' @return each print generates a new line automatically
 #' @details do not use R \code{\link{print}}, not actually printing \\n
