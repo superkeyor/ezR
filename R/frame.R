@@ -1783,15 +1783,21 @@ ez.ppq = function(...) {
 #' @return returns vector of col names (if no col matched, resturn NULL, for easy later use with c(NULL,'a col') -> c('a col'))
 #' @export
 ez.selcol = function(df,col=NULL, ...) {
-    if (is.null(col)) return(colnames(df))
     # optimize for big df or long col
-    if (all(col %in% names(df))) return(col)
-    if (is.numeric(col)) return(names(df)[col])
+    if (is.null(col)) {
+        result = colnames(df)
+    } else if (all(col %in% colnames(df))) {
+        result = col
+    } else if (is.numeric(col)) {
+        result = names(df)[col]
+    } else {    
+        df = df[1,,drop=F]
+        cmd=sprintf('dplyr::select(df,%s, ...)',toString(col))
+        cols=ez.eval(cmd)
+        result=colnames(cols)
+    }
     
-    df = df[1,,drop=F]
-    cmd=sprintf('dplyr::select(df,%s, ...)',toString(col))
-    cols=ez.eval(cmd)
-    result=colnames(cols)
+    # note length(NULL) is 0
     if (length(result)==0) result=NULL
     return(result)
 }
