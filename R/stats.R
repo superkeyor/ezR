@@ -508,8 +508,8 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         beta = model$coefficients[2,1]
         degree_of_freedom = model$df[2]
 
-        # y should be the one that varies
-        v = df[[yy]]
+        # only calculate the one that varies
+        v = if (!swap) df[[yy]] else df[[xx]]
         v.unique=length(unique(v))
         v.min=min(v,na.rm=TRUE)
         v.max=max(v,na.rm=TRUE)
