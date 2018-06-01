@@ -332,7 +332,7 @@ ez.vi = function(x,printn=35,order='as') {
         }
 
         cat(sprintf('Uniques: %s\n', v.elements))
-        cat(sprintf('\n%s\t\t#Unique: %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
+        cat(sprintf('\n%-25s\t#Unique: %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
