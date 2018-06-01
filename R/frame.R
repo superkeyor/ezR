@@ -1358,12 +1358,12 @@ ez.unique = dplyr::distinct
 #' @param vec TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
 #' \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
 #' \cr This is useful for binding with other data frames
-#' \cr T/F could be replaced by 0,1,2, see grouping
-#' @param grouping TRUE/FALSE, if TRUE, returns a vector of 0,1,2 indicating duplicates, where 
+#' \cr T/F could be replaced by 0,1,2, see vecgroup
+#' @param vecgroup TRUE/FALSE, if TRUE, returns a vector of 0,1,2 indicating duplicates, where 
 #' \cr 0=F, no duplicates; 1=duplicates group 1; 2=duplicates group 2, etc
 #' @param value TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
 #' The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
-#' Ignore/Overwrite vec, grouping. 
+#' Ignore/Overwrite vec, vecgroup. 
 #' @param keepall TRUE/FALSE, only applicable when value=T (otherwise ignored). When col is specified, value only returns for that col. Use keepall=T to return all cols in input df
 #' @param dim 1=find duplicated rows, 2=find duplicated cols. dim has no effect when x is a vector
 #' @param incomparables a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
@@ -1378,7 +1378,7 @@ ez.unique = dplyr::distinct
 #' c(2,2,3) %>% data.frame(col=.) %>% ez.duplicated(incomparables = 4)  # error
 #' c(2,2,3) %>% ez.duplicated(incomparables = 4)  # OK  note that 4 is not even an element of the vector
 #' @export
-ez.duplicated = function(x, col=NULL, vec=TRUE, grouping=FALSE, dim=1, incomparables=FALSE, value=FALSE, keepall=TRUE, ...){
+ez.duplicated = function(x, col=NULL, vec=TRUE, vecgroup=FALSE, dim=1, incomparables=FALSE, value=FALSE, keepall=TRUE, ...){
     xinput = x
 
     if (is.data.frame(x) & !is.null(col)) {
@@ -1405,13 +1405,19 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, grouping=FALSE, dim=1, incompara
     result = duplicated(x,incomparables=incomparables, ...) | duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
 
     # hack to group duplicates somehow, such that ('a','b','c','b','d','a') -> (1,2,0,2,0,1)
-    if (grouping) {
+    if (vecgroup) {
         result = rep(0,length(result))
         # get d, duplicated elements' indices
         d = duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
         d = which(d)
-        # convert x to character vector for easy manipulation (as.character works for all(?) kinds of data type)
-        y = as.character(x)
+        # convert x to character vector for easy manipulation
+        if (is.data.frame(x) & dim==1) {
+            y = sapply(data.table::transpose(x),paste,collapse='')
+        } else {
+            # sapply works for vector, list, data frame colwise
+            y = sapply(x,paste,collapse='')
+        }
+
         for (i in 1:length(d)) {
             result[which(y==y[ d[i] ])] = i
         }

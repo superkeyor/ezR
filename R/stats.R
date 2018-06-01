@@ -95,16 +95,16 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         idname=df[,id]
     }
 
-    r.duplicated.idname=ez.duplicated(idname,vec=TRUE,incomparables=incomparables,dim=1,grouping=TRUE)
+    r.duplicated.idname=ez.duplicated(idname,vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     r.duplicated.idname[which(!r.duplicated.idname)]=NA
     # check duplicated row except the idname column
     if (is.null(id)) {
-        r.duplicated.content=ez.duplicated(df,vec=TRUE,incomparables=incomparables,dim=1,grouping=TRUE)
+        r.duplicated.content=ez.duplicated(df,vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     } else {
         # https://github.com/tidyverse/dplyr/issues/2184
         # to avoid the bug, in case variable name id is the same as one of the column names
         idididid=id
-        r.duplicated.content=ez.duplicated(dplyr::select(df,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1,grouping=TRUE)
+        r.duplicated.content=ez.duplicated(dplyr::select(df,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     }
     r.duplicated.content[which(!r.duplicated.content)]=NA
     
@@ -168,9 +168,9 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         }
         results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
     }
-    v.duplicated.varname=ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1,grouping=TRUE)
+    v.duplicated.varname=ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     v.duplicated.varname[which(!v.duplicated.varname)]=NA
-    v.duplicated.content=ez.duplicated(df,vec=TRUE,incomparables=incomparables,dim=2,grouping=TRUE)
+    v.duplicated.content=ez.duplicated(df,vec=TRUE,incomparables=incomparables,dim=2,vecgroup=TRUE)
     v.duplicated.content[which(!v.duplicated.content)]=NA
     v.duplicated=data.frame(duplicated_varname=v.duplicated.varname,duplicated_content=v.duplicated.content)
     results=dplyr::bind_cols(results,v.duplicated) %>% ez.move('duplicated_varname, duplicated_content before n')
