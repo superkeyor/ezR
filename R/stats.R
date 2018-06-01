@@ -508,18 +508,26 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         beta = model$coefficients[2,1]
         degree_of_freedom = model$df[2]
 
-        out = c(yy,xx,p,rp,beta,degree_of_freedom)
+        # y should be the one that varies
+        v = df[[yy]]
+        v.unique=length(unique(v))
+        v.min=min(v,na.rm=TRUE)
+        v.max=max(v,na.rm=TRUE)
+        v.mean=mean(v,na.rm=TRUE)
+        v.sd=sd(v,na.rm=TRUE)
+
+        out = c(yy,xx,p,rp,beta,degree_of_freedom,v.unique,v.min,v.max,v.mean,v.sd)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
-            return(c(yy,xx,NA,NA,NA,NA))
+            return(c(yy,xx,NA,NA,NA,NA,NA,NA,NA,NA,NA))
         })
     }
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% as.data.frame() %>% data.table::transpose()
-    names(result) <- c('y','x','p','rp','beta','degree_of_freedom')
+    names(result) <- c('y','x','p','rp','beta','degree_of_freedom','uniques_incl_na','min','max','mean','sd')
     result %<>% ez.num() %>% ez.dropna()
 
     if (plot) {
