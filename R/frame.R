@@ -1781,10 +1781,14 @@ ez.ppq = function(...) {
 #' @description select col names in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
 #' @param df df
 #' @param col a string or a vector or NULL (NULL=all cols)
-#' \cr 'c(sample_num,mother_num)' (quoted) or c("sample_num","mother_num") (not quoted)
+#' \cr recommended usage: 
+#' \cr c("sample_num","mother_num") (not quoted)
 #' \cr 1:4 (not quoted), c(2,1,3) --> the returned order will be 2,1,3 (not in original df col order)
-#' \cr 'col1:col3' (quoted)
+#' \cr 'col1:col3', 'col3:col5, col7:col8', (quoted)
 #' \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
+#' \cr 
+#' \cr OK usage:
+#' \cr 'c(sample_num,mother_num)', 'sample_num,mother_num', '1, col3:col5, col7:col8'
 #' @return returns vector of col names (if no col matched, resturn NULL, for easy later use with c(NULL,'a col') -> c('a col'))
 #' @export
 ez.selcol = function(df,col=NULL, ...) {
