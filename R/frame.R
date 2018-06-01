@@ -1393,7 +1393,9 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, grouping=FALSE, dim=1, incompara
     } else if (is.data.frame(x) & dim==2) {
         # trick from https://stackoverflow.com/a/33552742/2292993
         xx=x
-        x = as.list(x) # as.list applicable when x input is a vector as well, but vector x will not go through here
+        x = as.list(x) 
+        # as.list applicable when x input is a vector as well, but vector x will not go through here
+        # as.list() not the same as list()
     }
     
     # # https://stackoverflow.com/a/29730485/2292993  
@@ -1411,7 +1413,7 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, grouping=FALSE, dim=1, incompara
         # convert x to character vector for easy manipulation (as.character works for all(?) kinds of data type)
         y = as.character(x)
         for (i in 1:length(d)) {
-            result[which(y==y[d[i]])] = i
+            result[which(y==y[ d[i] ])] = i
         }
     }
     

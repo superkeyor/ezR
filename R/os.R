@@ -131,7 +131,7 @@ ez.ver = function(pkg=NULL){
     if (!is.null(pkg)) {
         cat(sprintf("%s\n%s: %s", R.version.string, pkg, as.character(packageVersion(pkg))))
     } else {
-        ip = as.data.frame(installed.packages()[,c(1,3:4)])
+        ip = data.frame(installed.packages()[,c(1,3:4)])
         # ip = ip[is.na(ip$Priority),1:2,drop=FALSE]
         ip = ip[,1:2,drop=FALSE]
         ipnames = row.names(ip)

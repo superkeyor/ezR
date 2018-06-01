@@ -526,7 +526,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
-    result = result %>% as.data.frame() %>% data.table::transpose()
+    result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','rp','beta','degree_of_freedom','uniques_incl_na','min','max','mean','sd')
     result %<>% ez.num() %>% ez.dropna()
 
@@ -660,7 +660,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
-    result = result %>% as.data.frame() %>% data.table::transpose()
+    result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','odds_ratio','degree_of_freedom')
     result %<>% ez.num() %>% ez.dropna()
 
@@ -776,7 +776,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
-    result = result %>% as.data.frame() %>% data.table::transpose()
+    result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','etasq2','degree_of_freedom','mean12_difference','means','counts')
     result %<>% ez.num() %>% ez.dropna()
 
@@ -886,7 +886,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df)
-    result = result %>% as.data.frame() %>% data.table::transpose()
+    result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','odds_ratio','counts','total')
     result %<>% ez.num() %>% ez.dropna()
 
@@ -1063,7 +1063,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
     # # because 'princomp' can only be used with more samples than variables
     # df01 = df01[rep(seq(nrow(df01)), each = ceiling(ncol(df01)/nrow(df01))),,drop=F]
     # pcaObj = stats::princomp(base::scale(df01))
-    # pcaLoadings <- with(pcaObj, unclass(loadings)) %>% as.data.frame()
+    # pcaLoadings <- with(pcaObj, unclass(loadings)) %>% data.frame()
     # pcaLoadings %>% tibble::rownames_to_column() %>% arrange(Comp.1) %>% .$rowname %>% ez.vv()
     ####************************************************************************************************
                                          ####*obsolete*####
@@ -1071,7 +1071,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
     
     pcaObj = stats::prcomp(df01,scale=T)
     # high loading=more 1s, which means fewer missing values
-    pcaLoadings = pcaObj$rotation %>% as.data.frame() %>% tibble::rownames_to_column() %>% arrange(desc(PC1)) 
+    pcaLoadings = pcaObj$rotation %>% data.frame() %>% tibble::rownames_to_column() %>% arrange(desc(PC1)) 
     
     allvars = c(targetVar,fixedVars,completedVars,pcaLoadings$rowname,zeroVars)
     # sample#, variable#, mean(targetVar)

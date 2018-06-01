@@ -1283,8 +1283,8 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     }
 
     # 2) rescale
-    df.stats = as.data.frame(lapply(df.stats, ez.rescale01))
-    gghistory=paste(gghistory,'df.stats = as.data.frame(lapply(df.stats, ez.rescale01))',sep='\n')
+    df.stats = data.frame(lapply(df.stats, ez.rescale01))
+    gghistory=paste(gghistory,'df.stats = data.frame(lapply(df.stats, ez.rescale01))',sep='\n')
 
     # 3) to long format
     cmd = sprintf('tidyr::gather(df.stats, variable,value,-%s,factor_key = T) -> df
@@ -1540,7 +1540,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     # but it does not matter, the purpose here is to change everything to numeric
     # so that 0 or 1 can be assigned for plotting
     # alternatively, guess one can also create an empty df with specified cols
-    df = suppressWarnings(as.data.frame(apply(df,2,as.numeric)))
+    df = suppressWarnings(data.frame(apply(df,2,as.numeric)))
     df[indx.value] = 0
     df[indx.na] = 1
 
