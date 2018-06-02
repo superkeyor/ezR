@@ -128,7 +128,7 @@ gmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
         print(plots[[1]])
 
     } else {
-        gridExtra::grid.arrange(grobs=plots,layout_matrix=layout) %>% print()
+        gridExtra::grid.arrange(grobs=plots,layout_matrix=layout)
         # # other example usage for reference:
         # gridExtra::grid.arrange(p1,p2,p3,layout_matrix=matrix(c(NA, 1, 2, 
         #                                  3, 4, 5), nrow = 2, byrow = TRUE) )
