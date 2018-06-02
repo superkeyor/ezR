@@ -2,8 +2,7 @@
 % Please edit documentation in R/io.R
 \name{ez.reads2}
 \alias{ez.reads2}
-\title{ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
-\cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric}
+\title{read spss}
 \usage{
 ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
   stringsAsFactors = TRUE, makenames = TRUE, ...)
@@ -23,8 +22,10 @@ ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \item{makenames}{not effective for this function, kept for compatiablity with other functions}
 }
 \description{
-#' ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+\cr 
 \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
+\cr 
 \cr internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
 \cr SPSS numeric -> R numeric
 \cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
