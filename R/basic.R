@@ -392,7 +392,7 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 #' @param ori one of 'Excel', 'SPSS' (ignored if x is character)
 #' @param format input format, see examples (more formats at \code{\link{strptime}}). ignored if x is numeric/hms
 #' @param out.type string, 'numeric' (fractions of a day) or 'times'/'time'
-#' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}} chron stores as a fraction of a day, if you do as.numeric()
+#' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}} chron stores as a fraction of a day, if you do as.numeric
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
 #' @examples 
@@ -424,7 +424,7 @@ ez.time = function(x,ori='SPSS',format="%H:%M",out.type='numeric',...) {
     }
     if ( all(class(x) %in% c('hms','difftime')) ) {
         if (out.type %in% c('time','times')) result = chron::times(x,...)  # simply change class type
-        if (out.type=='numeric') result = as.numeric()/(24*60*60)  # here as.numeric gets you seconds of a day
+        if (out.type=='numeric') result = as.numeric(x)/(24*60*60)  # here as.numeric gets you seconds of a day
     }
     return(result)
 }

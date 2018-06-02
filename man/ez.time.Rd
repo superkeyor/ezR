@@ -16,7 +16,7 @@ ez.time(x, ori = "SPSS", format = "\%H:\%M", out.type = "numeric", ...)
 \item{out.type}{string, 'numeric' (fractions of a day) or 'times'/'time'}
 }
 \value{
-returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}} chron stores as a fraction of a day, if you do as.numeric()
+returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}} chron stores as a fraction of a day, if you do as.numeric
 }
 \description{
 convert from a time (numeric, character/factor, hms/difftime) to class (chron) times (17:48:00--h:m:s military only) or to class numeric (0.7416667--fractions of a day), call \code{\link[chron]{times}}: 
