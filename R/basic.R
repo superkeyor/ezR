@@ -384,15 +384,15 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 }
 
 #' convert to time
-#' @description convert from a time to class (chron) times (17:48:00--h:m:s military only) or class numeric (0.7416667--fractions of a day), call \code{\link[chron]{time}}: 
-#' \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day), or 
+#' @description convert from a time (numeric, character/factor, hms/difftime) to class (chron) times (17:48:00--h:m:s military only) or to class numeric (0.7416667--fractions of a day), call \code{\link[chron]{times}}: 
+#' \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day, foreign package), or as hms/difftime (same as SPSS, haven package), or 
 #' \cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day), or
-#' \cr \cr string "17:48:00" (format specified by param format)
-#' @param x a vector of number or character
+#' \cr \cr Pass directly a string "17:48:00" (format specified by param format)
+#' @param x a vector of number or character, hms/difftime
 #' @param ori one of 'Excel', 'SPSS' (ignored if x is character)
-#' @param format input format, see examples (more formats at \code{\link{strptime}}). ignored if x is numeric
+#' @param format input format, see examples (more formats at \code{\link{strptime}}). ignored if x is numeric/hms
 #' @param out.type string, 'numeric' (fractions of a day) or 'times'/'time'
-#' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}}
+#' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}} chron stores as a fraction of a day, if you do as.numeric()
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
 #' @examples 
@@ -407,20 +407,24 @@ ez.time = function(x,ori='SPSS',format="%H:%M",out.type='numeric',...) {
                 result = chron::times(x/(24*60*60),...)
             }
             if (out.type=='numeric') {
-                result = x/(24*60*60)
+                result = x/(24*60*60)  # SPSS stores as seconds of a day
             }
         }
         if (ori=='Excel') {
             # https://stackoverflow.com/a/28044345/2292993
             if (out.type %in% c('time','times')) result = chron::times(x,...)
-            if (out.type=='numeric') result = x
+            if (out.type=='numeric') result = x  # Excel stores as fractions of a day
         }
     }
     if (is.character(x) | is.factor(x)) {
         # https://stackoverflow.com/a/36347366/2292993
         x=format(strptime(x, format = format), "%H:%M:%S")
         result=chron::chron(times.=x,format=c(dates = "m/d/y", times = "h:m:s"),...)
-        if (out.type=='numeric') result = as.numeric(result)
+        if (out.type=='numeric') result = as.numeric(result)  # here chron stores as fraction of a day, as.numeric gets you that
+    }
+    if ( all(class(x) %in% c('hms','difftime')) ) {
+        if (out.type %in% c('time','times')) result = chron::times(x,...)  # simply change class type
+        if (out.type=='numeric') result = as.numeric()/(24*60*60)  # here as.numeric gets you seconds of a day
     }
     return(result)
 }
