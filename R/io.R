@@ -214,7 +214,10 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # hack end: atomic with attributes to factor
 
     # avoid warning: attributes are not identical across measure variables
-    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; return(x)})
+    # get rid of label, replaced with variable.labels as an attr of df--still be recognized by rstudio
+    variable.labels = ez.label.get(result)
+    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; attr(x,'label') <- NULL; return(x)})
+    attr(result,'variable.labels') <- variable.labels
 
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
