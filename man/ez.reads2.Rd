@@ -2,7 +2,8 @@
 % Please edit documentation in R/io.R
 \name{ez.reads2}
 \alias{ez.reads2}
-\title{THE UNDERLYING FOREIGN V0.8.67 CREATED EXTRA VARIABLES THAN SPSS HAS IF THERE IS A COLUMN WITH A WIDTH OF MORE THAN 255 CHARACTERS. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads, it can optionally keep user na.}
+\title{ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+\cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric}
 \usage{
 ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
   stringsAsFactors = TRUE, makenames = TRUE, ...)
@@ -22,7 +23,9 @@ ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \item{makenames}{not effective for this function, kept for compatiablity with other functions}
 }
 \description{
-internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
+#' ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+\cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
+\cr internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
 \cr SPSS numeric -> R numeric
 \cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
 \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter

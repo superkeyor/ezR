@@ -152,8 +152,11 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
     return(result)
 }
 
-#' THE UNDERLYING HAVEN V0.2.1/v1.1.0 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.
-#' @description I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
+#' ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+#' \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric
+#' @description #' ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+#' \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
+#' \cr I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
 #' @param path File path to the data file
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
 #' \cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
@@ -224,8 +227,11 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     return(result)
 }
 
-#' THE UNDERLYING FOREIGN V0.8.67 CREATED EXTRA VARIABLES THAN SPSS HAS IF THERE IS A COLUMN WITH A WIDTH OF MORE THAN 255 CHARACTERS. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads, it can optionally keep user na.
-#' @description internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
+#' ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+#' \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric
+#' @description #' ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+#' \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
+#' \cr internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
 #' \cr SPSS numeric -> R numeric
 #' \cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
 #' \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter

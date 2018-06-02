@@ -2,7 +2,8 @@
 % Please edit documentation in R/io.R
 \name{ez.reads}
 \alias{ez.reads}
-\title{THE UNDERLYING HAVEN V0.2.1/v1.1.0 ALWAYS CONVERTS USER MISSING TO NA, SO usrna HAS NO EFFECT HERE. OTHERWISE THE FUNCTION WORKS GENERALLY FINE. Compared with ez.reads2, it can correctly read in a col with a width of more than 255 characters.}
+\title{ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+\cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric}
 \usage{
 ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
   stringsAsFactors = TRUE, makenames = TRUE, ...)
@@ -24,7 +25,9 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 }
 \description{
-I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
+#' ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+\cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
+\cr I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
 }
 \note{
 wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
