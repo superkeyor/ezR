@@ -1620,6 +1620,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
         # http://stackoverflow.com/a/7549819/2292993
         # http://stackoverflow.com/a/13451587/2292993
         lmrp = function(m) {
+            n = summary(m)$df.residual + 2
             rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
             rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
             pvalue = summary(m)$coefficients[2,4]
@@ -1631,10 +1632,11 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
                 pvalue = sprintf("%.2f", pvalue)
             }
 
-            eq <- substitute(italic(r)~"="~rvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,pvalue = pvalue))
+            eq <- substitute(italic(r)~"="~rvalue*","~italic(n)~"="~n,"~italic(p)~"="~pvalue,list(rvalue = rvalue,n = n,pvalue = pvalue))
             as.character(as.expression(eq));                 
         }
 
+        # lmList: Fit a list of lm objects with a common model for different subgroups of the data
         lmrp2 = function(y,x,z,df) {
             m = eval(parse(text=sprintf("lme4::lmList(%s ~ %s|%s, df)",y,x,z)))
             rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
