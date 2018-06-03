@@ -5,7 +5,8 @@
 \title{a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
 ez.anovas(df, y, x, showerror = T, viewresult = F, plot = T,
-  facet = "cols", pmethods = c("bonferroni", "fdr"), ...)
+  facet = "cols", pmethods = c("bonferroni", "fdr"), labsize = 2,
+  textsize = 1.5, titlesize = 3, ...)
 }
 \arguments{
 \item{df}{a data frame

@@ -5,7 +5,8 @@
 \title{a series of regression, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
 ez.regressions(df, y, x, covar = NULL, showerror = T, viewresult = F,
-  plot = T, facet = "cols", pmethods = c("bonferroni", "fdr"), ...)
+  plot = T, facet = "cols", pmethods = c("bonferroni", "fdr"),
+  labsize = 2, textsize = 1.5, titlesize = 3, ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))

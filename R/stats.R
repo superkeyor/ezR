@@ -449,7 +449,7 @@ ez.zresid = function(model,method=3) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
+ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -457,17 +457,17 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
-                   xlab = list("Standardized Coefficient", cex=2.5, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+                   xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
+                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                    type = "p", pch=16, 
                    main = list(yy, cex=3, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-                   col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+                   col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
@@ -559,12 +559,12 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         # eval(parse(text = tt))
         # print(pp)
         pp=lattice::xyplot(-log10(result$p) ~ result$beta,
-               xlab = list("Standardized Coefficient", cex=2.5, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+               xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                type = "p", pch=16, 
                main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-               col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+               col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
@@ -602,7 +602,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 #' \cr 
 #' \cr degree_of_freedom
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
+ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -610,17 +610,17 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
-                   xlab = list("log2(Odds Ratio)", cex=2.5, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+                   xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
+                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                    type = "p", pch=16, 
                    main = list(yy, cex=3, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-                   col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+                   col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
@@ -674,12 +674,12 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
-               xlab = list("log2(Odds Ratio)", cex=2.5, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+               xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                type = "p", pch=16, 
                main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-               col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+               col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
         )
@@ -714,7 +714,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable. 
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared. 
 #' @export
-ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),...) {
+ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -722,29 +722,29 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,...)
+            result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 if (!all(is.na(result$mean12_difference))) {
                     plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
-                       xlab = list("Difference in Standardized Group Means", cex=2.5, fontfamily="Times New Roman"),
-                       ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+                       xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
+                       ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+                       scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                        type = "p", pch=16, 
-                       main = list(xx, cex=3, fontfamily="Times New Roman"),
-                       scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-                       col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+                       main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
+                       col = "#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                     )
                 } else {
                     plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$etasq2,
-                           xlab = list(expression(eta^2), cex=2.5, fontfamily="Times New Roman"),
-                           ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+                           xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
+                           ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+                           scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                            type = "p", pch=16, 
-                           main = list(xx, cex=3, fontfamily="Times New Roman"),
-                           scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-                           col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+                           main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
+                           col = "#e69f00",
                            ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                            abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                     )
@@ -794,23 +794,23 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         bonferroniP = -log10(0.05/length(result[['p']]))
         if (!all(is.na(result$mean12_difference))) {
             pp=lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
-                       xlab = list("Difference in Standardized Group Means", cex=2.5, fontfamily="Times New Roman"),
-                       ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+                       xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
+                       ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+                       scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                        type = "p", pch=16, 
                        main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
-                       scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-                       col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+                       col = "#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
             )
         } else {
             pp=lattice::xyplot(-log10(result$p) ~ result$etasq2,
-                   xlab = list(expression(eta^2), cex=2.5, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+                   xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
+                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                    type = "p", pch=16, 
                    main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-                   col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+                   col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
             )
@@ -843,7 +843,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 #' @return an invisible list of data frame
 #' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 #' @export
-ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),width=300) {
+ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -851,17 +851,17 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,width=width)
+            result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
-                   xlab = list("Variable", cex=2.5, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+                   xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
+                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                    type = "p", pch=16, 
-                   main = list(xx, cex=3, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-                   col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+                   main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
+                   col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    panel=function(x,y,...){ 
                        panel.barchart(x,y,...) 
@@ -907,12 +907,12 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         bonferroniP = -log10(0.05/length(result[['p']]))
         if (length(y)>=1 & length(x)==1) {
             pp=lattice::barchart(-log10(result$p) ~ result$y,
-               xlab = list("Variable", cex=2.5, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+               xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                type = "p", pch=16, 
                main = list(x, cex=3, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-               col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+               col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                panel=function(x,y,...){ 
                    panel.barchart(x,y,...) 
@@ -921,12 +921,12 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             )
         } else {
             pp=lattice::barchart(-log10(result$p) ~ result$x,
-               xlab = list("Variable", cex=2.5, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=2.5, fontfamily="Times New Roman"),
+               xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                type = "p", pch=16, 
                main = list(y, cex=3, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=1.5, fontfamily="Times New Roman"), y=list(cex=1.5, fontfamily="Times New Roman") ),
-               col = c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),
+               col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                panel=function(x,y,...){ 
                    panel.barchart(x,y,...) 
@@ -1114,15 +1114,17 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
     # the plot() will not return an object. plot directly, hard to capture to an object
     # graphics::plot(x = variableNum, y = sampleNum)
     p1=lattice::xyplot(counts$sampleNum ~ counts$variableNum,
-                  xlab = list("Number of Variables Kept", cex=2.5, fontfamily="Times New Roman"),
-                  ylab = list("Sample Size Without Missing Values", cex=2.5, fontfamily="Times New Roman"),
+                  xlab = list("Number of Variables Kept", cex=labsize, fontfamily="Times New Roman"),
+                  ylab = list("Sample Size Without Missing Values", cex=labsize, fontfamily="Times New Roman"),
+                  scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                   type = "p", pch=16, 
                   col="#e69f00")
     p2=NULL
     if (!all(is.na(counts$targetMean))) {
         p2=lattice::xyplot(counts$targetMean ~ counts$variableNum,
-                  xlab = list("Number of Variables Kept", cex=2.5, fontfamily="Times New Roman"),
-                  ylab = list(sprintf("Mean Value of %s",targetVar), cex=2.5, fontfamily="Times New Roman"),
+                  xlab = list("Number of Variables Kept", cex=labsize, fontfamily="Times New Roman"),
+                  ylab = list(sprintf("Mean Value of %s",targetVar), cex=labsize, fontfamily="Times New Roman"),
+                  scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                   type = "p", pch=16, 
                   col="#56b4e9")
     }

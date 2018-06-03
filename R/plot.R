@@ -202,7 +202,7 @@ ggcook <- function() {
 #'
 #' A ggplot2 theme with no background and Times New Roman font (legend size not affected).
 #'
-#' @param titlesize default 18 (axis.title.x, axis.title.y)
+#' @param labsize default 18
 #' @param textsize default 16
 #' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
 #' @export
@@ -210,7 +210,7 @@ ggcook <- function() {
 #' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa_nosize}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
-theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
+theme_apa <- function(plot.box = FALSE, labsize = 18, textsize = 16){
 
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
@@ -224,13 +224,13 @@ theme_apa <- function(plot.box = FALSE, titlesize = 18, textsize = 16){
     }
 
     out <- theme(
-        plot.title=element_text(family=RMN, size=titlesize, face="bold", colour="black"),
+        plot.title=element_text(family=RMN, size=labsize+2, face="bold", colour="black"),
         legend.title = element_text(family=RMN, colour="black"),
         legend.text = element_text(family=RMN, colour="black"),
         strip.text.x = element_text(family=RMN, size=textsize, colour="black"),
         strip.text.y = element_text(family=RMN, size=textsize, colour="black"),
-        axis.title.x=element_text(family=RMN, size=titlesize, face="bold", colour="black"),
-        axis.title.y=element_text(family=RMN, size=titlesize, face="bold", angle=90, colour="black"),
+        axis.title.x=element_text(family=RMN, size=labsize, face="bold", colour="black"),
+        axis.title.y=element_text(family=RMN, size=labsize, face="bold", angle=90, colour="black"),
         axis.text.x=element_text(family=RMN, size=textsize, colour="black"),
         axis.text.y=element_text(family=RMN, size=textsize, colour="black"),
         axis.ticks=element_line(colour="black"))

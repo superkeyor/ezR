@@ -5,7 +5,8 @@
 \title{a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
 ez.fishers(df, y, x, showerror = T, viewresult = F, plot = T,
-  facet = "cols", pmethods = c("bonferroni", "fdr"), width = 300)
+  facet = "cols", pmethods = c("bonferroni", "fdr"), labsize = 2,
+  textsize = 1.5, titlesize = 3, width = 300)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
