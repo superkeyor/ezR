@@ -1575,7 +1575,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param legend.box  box of legend, T or F
 #' @param legend.direction  horizontal or vertical
 #' @param legend.size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @param rp show r squared and p values
+#' @param rp show r (signed) and p values
 #' @param se standard error of linear regression line
 #' @param rug marginal rug indicating univariate distribution
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()

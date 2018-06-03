@@ -42,7 +42,7 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.95, rp.y = 0.95,
 
 \item{legend.size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
-\item{rp}{show r squared and p values}
+\item{rp}{show r (signed) and p values}
 
 \item{se}{standard error of linear regression line}
 
