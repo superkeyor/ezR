@@ -202,7 +202,7 @@ ggcook <- function() {
 #'
 #' A ggplot2 theme with no background and Times New Roman font (legend size not affected).
 #'
-#' @param titlesize default 18
+#' @param titlesize default 18 (axis.title.x, axis.title.y)
 #' @param textsize default 16
 #' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
 #' @export

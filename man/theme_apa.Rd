@@ -9,7 +9,7 @@ theme_apa(plot.box = FALSE, titlesize = 18, textsize = 16)
 \arguments{
 \item{plot.box}{logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.}
 
-\item{titlesize}{default 18}
+\item{titlesize}{default 18 (axis.title.x, axis.title.y)}
 
 \item{textsize}{default 16}
 }
