@@ -4,9 +4,9 @@
 \alias{ez.anovas}
 \title{a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
-ez.anovas(df, y, x, showerror = T, viewresult = F, plot = T,
-  facet = "cols", pmethods = c("bonferroni", "fdr"), labsize = 2,
-  textsize = 1.5, titlesize = 3, ...)
+ez.anovas(df, y, x, showerror = T, viewresult = F, plot = T, cols = 3,
+  pmethods = c("bonferroni", "fdr"), labsize = 2, textsize = 1.5,
+  titlesize = 3, ...)
 }
 \arguments{
 \item{df}{a data frame
@@ -20,7 +20,7 @@ ez.anovas(df, y, x, showerror = T, viewresult = F, plot = T,
 
 \item{plot}{T/F, the dash line is bonferroni p = 0.05}
 
-\item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
+\item{cols}{number of columns for gmultiplot. NULL=auto calculate}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 

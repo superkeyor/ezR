@@ -474,7 +474,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
             }
             xlist[[yy]] = result
         }
-        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
+        if (plot) {if (is.null(cols)) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
@@ -627,7 +627,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
             }
             xlist[[yy]] = result
         }
-        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
+        if (plot) {if (is.null(cols)) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
@@ -752,7 +752,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
             }
             xlist[[xx]] = result
         }
-        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
+        if (plot) {if (is.null(cols)) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
@@ -871,7 +871,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
             }
             xlist[[xx]] = result
         }
-        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
+        if (plot) {if (is.null(cols)) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 

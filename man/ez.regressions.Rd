@@ -5,8 +5,8 @@
 \title{a series of regression, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
 ez.regressions(df, y, x, covar = NULL, showerror = T, viewresult = F,
-  plot = T, facet = "cols", pmethods = c("bonferroni", "fdr"),
-  labsize = 2, textsize = 1.5, titlesize = 3, ...)
+  plot = T, cols = 3, pmethods = c("bonferroni", "fdr"), labsize = 2,
+  textsize = 1.5, titlesize = 3, ...)
 }
 \arguments{
 \item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
@@ -22,7 +22,7 @@ ez.regressions(df, y, x, covar = NULL, showerror = T, viewresult = F,
 
 \item{plot}{T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05}
 
-\item{facet}{one of 'cols', 'rows', 'wrap', valid only if plot=T}
+\item{cols}{number of columns for gmultiplot. NULL=auto calculate}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
