@@ -1042,7 +1042,7 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
 #' @param fixedVars vars you must have remained. (does not matter if it includes targetVar or not)
 #' @return returns a new data frame
 #' @export
-ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL) {
+ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
     if (!is.null(targetVar)) {targetVar=ez.selcol(df,targetVar); df %<>% ez.move(sprintf('%s first',targetVar))}
     if (!is.null(fixedVars)) {fixedVars = ez.selcol(df,fixedVars); fixedVars = dplyr::setdiff(fixedVars,targetVar)}  
     

@@ -4,7 +4,8 @@
 \alias{ez.maxnp}
 \title{maximize np by checking recursively various variable combinations (PCA trick)}
 \usage{
-ez.maxnp(df, targetVar = NULL, fixedVars = NULL)
+ez.maxnp(df, targetVar = NULL, fixedVars = NULL, labsize = 2.5,
+  textsize = 1.5)
 }
 \arguments{
 \item{targetVar}{a single outcome var, will calculate its mean in each completed subsamples}

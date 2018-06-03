@@ -4,7 +4,7 @@
 \alias{ez.updateself}
 \title{update ez package itself}
 \usage{
-ez.updateself(force = T)
+ez.updateself(force = F)
 }
 \description{
 update ez package itself
