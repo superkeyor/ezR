@@ -432,7 +432,7 @@ ez.zresid = function(model,method=3) {
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05
-#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
+#' @param cols number of columns for gmultiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible list of data frame
@@ -449,7 +449,7 @@ ez.zresid = function(model,method=3) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -457,7 +457,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -474,7 +474,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
             }
             xlist[[yy]] = result
         }
-        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
+        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
@@ -591,7 +591,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
-#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
+#' @param cols number of columns for gmultiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible list of data frame
@@ -602,7 +602,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,face
 #' \cr 
 #' \cr degree_of_freedom
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -610,7 +610,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -627,7 +627,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
             }
             xlist[[yy]] = result
         }
-        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
+        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
@@ -705,7 +705,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
-#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
+#' @param cols number of columns for gmultiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df[[yy]],...)
 #' @return an invisible list of data frame
@@ -714,7 +714,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,facet=
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable. 
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared. 
 #' @export
-ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -722,7 +722,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -752,7 +752,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
             }
             xlist[[xx]] = result
         }
-        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
+        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
@@ -837,13 +837,13 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethod
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
-#' @param facet  one of 'cols', 'rows', 'wrap', valid only if plot=T
+#' @param cols number of columns for gmultiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible list of data frame
 #' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 #' @export
-ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
+ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -851,7 +851,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,facet=facet,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
+            result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -871,7 +871,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,facet='cols',pmetho
             }
             xlist[[xx]] = result
         }
-        if (plot) {gridExtra::grid.arrange(grobs=plist,ncol=floor(sqrt(length(plist)))+1)}
+        if (plot) {if (is.null(cols) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
