@@ -2134,7 +2134,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
         if (is.null(xline)) xline=mean(df[[xx]])
         vline=''
         for (xl in xline) {
-            vline=paste0(vline,sprintf('geom_vline(aes(xintercept=%f,color="red"))+geom_text(x=%f,y=0,label="%.2f")+',xl,xl,xl))
+            vline=paste0(vline,sprintf('geom_vline(aes(xintercept=%f),color="red")+geom_text(x=%f,y=0,label="%.2f")+',xl,xl,xl))
         }
         tt = sprintf('
             pp = ggplot2::ggplot(df, aes(x=%s)) +
