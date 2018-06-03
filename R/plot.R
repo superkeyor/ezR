@@ -1565,8 +1565,8 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param point.size if less point, increase size
 #' @param rug.size rug size
 #' @param rp.size  r p values font size, ignored if rp=FALSE
-#' @param rp.x  r p values x position (relative to max of x value), ignored if rp=FALSE
-#' @param rp.y  r p values y position (relative to min of y value), ignored if rp=FALSE
+#' @param rp.x  r p values x position (relative to max of x value, big-->right), ignored if rp=FALSE
+#' @param rp.y  r p values y position (relative to min of y value, big-->bottom), ignored if rp=FALSE
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL
 #' @param zlab  z/fill/legend label, only applicable when there is z provided NULL
@@ -1581,7 +1581,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
+ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.3,rp.y=0.95,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=TRUE,ellipse=FALSE){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
