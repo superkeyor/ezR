@@ -74,9 +74,9 @@ ez.envr = ez.env
 #' update ez package itself
 #' @description update ez package itself
 #' @export
-ez.updateself = function() {
+ez.updateself = function(force=T) {
     # file.exists works for folder as well
-    if (file.exists('~/Dropbox/Apps/RStudio/ezR')) {
+    if (file.exists('~/Dropbox/Apps/RStudio/ezR') & !force) {
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
