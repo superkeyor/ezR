@@ -1619,7 +1619,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.95,rp.y=0.95,point.alpha=0.95,
         # http://stackoverflow.com/a/7549819/2292993
         # http://stackoverflow.com/a/13451587/2292993
         lmrp = function(m) {
-            nvalue = summary(m)$df.residual + 2
+            nvalue = m$df.residual + 2
             rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
             rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
             pvalue = summary(m)$coefficients[2,4]
