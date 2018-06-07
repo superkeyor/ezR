@@ -4034,6 +4034,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
       x <- data.spss[[i]]
       # capture labels attribute first
       labs <- attr(x, attr.string, exact = T)
+      varlab <- attr(x,'label')
       # is atomic, which was factor in SPSS?
       if (is.atomic(x) && !is.null(labs)) {
         # so we have value labels (only typical for factors, not
@@ -4044,6 +4045,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
         x <- as.factor(x)
         # set back labels attribute
         attr(x, attr.string) <- labs
+        attr(x, 'label') <- varlab
         # copy vector back to data frame
         data.spss[[i]] <- x
       }
