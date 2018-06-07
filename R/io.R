@@ -193,6 +193,13 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
 
+    # avoid warning: attributes are not identical across measure variables
+    # get rid of label, replaced with variable.labels as an attr of df--still be recognized by rstudio
+    # do this before atm2fac
+    variable.labels = ez.label.get(result)
+    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; attr(x,'label') <- NULL; return(x)})
+    attr(result,'variable.labels') <- variable.labels
+
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes
     if (atm2fac==2) {
@@ -216,12 +223,6 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
         result = atomic_w_attr_to_fac_haven(result)
     }
     # hack end: atomic with attributes to factor
-
-    # avoid warning: attributes are not identical across measure variables
-    # get rid of label, replaced with variable.labels as an attr of df--still be recognized by rstudio
-    variable.labels = ez.label.get(result)
-    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; attr(x,'label') <- NULL; return(x)})
-    attr(result,'variable.labels') <- variable.labels
 
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
