@@ -185,6 +185,14 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
         result[]=lapply(result, function(x) {ez.2label(x)})
     }
     if (tolower) names(result) = tolower(names(result))
+
+    # avoid warning: attributes are not identical across measure variables
+    # get rid of label, replaced with variable.labels as an attr of df--still be recognized by rstudio
+    # do this before atm2fac, trim
+    variable.labels = ez.label.get(result)
+    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; attr(x,'label') <- NULL; return(x)})
+    attr(result,'variable.labels') <- variable.labels
+    
     # the atm2fac/atomic.to.fac only works for variable with numbers with labels/attributes (gender 1/2)
     # not string values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
@@ -192,13 +200,6 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
-
-    # avoid warning: attributes are not identical across measure variables
-    # get rid of label, replaced with variable.labels as an attr of df--still be recognized by rstudio
-    # do this before atm2fac
-    variable.labels = ez.label.get(result)
-    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; attr(x,'label') <- NULL; return(x)})
-    attr(result,'variable.labels') <- variable.labels
 
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes
