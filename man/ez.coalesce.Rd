@@ -18,7 +18,7 @@ see example for more details, dplyr::coalesce do columnwise, only replace NA, bu
 \examples{
 ez.coalesce(c(NA,3,3))  # 3
 ez.coalesce(c(NA,NA))  # NA
-ez.coalesce(c(NA,3,4))  # c(3,4)  
+ez.coalesce(c(NA,3,4))  # c(3,4)
 
 # typical use for coalesce by rows, see https://stackoverflow.com/q/45515218/2292993
 df <- data.frame(A=c(1,1,2,2,2),B=c(NA,2,NA,4,4),
@@ -27,7 +27,7 @@ df \%>\% group_by(A) \%>\% summarise_all(funs( ez.coalesce(.) ))
 
 df <- data.frame(A=c(1,1,2,2,2),B=c(NA,2,NA,4,5),
                  C=c(3,NA,NA,5,NA),D=c(NA,2,3,NA,NA),E=c(5,NA,NA,4,4))
-df \%>\% group_by(A) \%>\% summarise_all(funs( ez.coalesce(.) ))  
+df \%>\% group_by(A) \%>\% summarise_all(funs( ez.coalesce(.) ))
 # ->default give summarise_all an error, but I hack to give '4 | 5' as a string
 print/show all values, store all unique values
 }

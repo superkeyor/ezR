@@ -19,7 +19,7 @@ ez.clcolnames(df, pattern = "[[:space:][:punct:]]", replacement = ".",
 \item{ignore.case}{if FALSE, the pattern matching is case sensitive and if TRUE, case is ignored during matching.}
 
 \item{perl}{Perl-compatible regexps be used, without perl, [[:space:][:punct:]] works, but not [\\s[:punct:]]
-so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}. 
+so seems always a good idea to turn on perl compatible. see \code{\link{gsub}}.
 ignored when fixed=TRUE}
 
 \item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )

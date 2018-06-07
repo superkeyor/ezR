@@ -10,12 +10,12 @@ ez.selcol(df, col = NULL, ...)
 \item{df}{df}
 
 \item{col}{a string or a vector or NULL (NULL=all cols)
-\cr recommended usage: 
+\cr recommended usage:
 \cr c("sample_num","mother_num") (not quoted)
 \cr 1:4 (not quoted), c(2,1,3) --> the returned order will be 2,1,3 (not in original df col order)
 \cr 'col1:col3', 'col3:col5, col7:col8', (quoted)
 \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
-\cr 
+\cr
 \cr OK usage:
 \cr 'c(sample_num,mother_num)', 'sample_num,mother_num', '1, col3:col5, col7:col8'}
 }

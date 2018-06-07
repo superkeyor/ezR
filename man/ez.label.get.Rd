@@ -13,7 +13,7 @@ ez.label.get(x, cols = NULL)
 }
 \value{
 returns a named character vector (if x is df), or character (if x is a single var)
-\cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "". 
+\cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
 \cr If a single variable has no label, returns NULL
 }
 \description{

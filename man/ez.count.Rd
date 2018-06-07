@@ -16,7 +16,7 @@ ez.count(x, val = NA, col = NULL, dim = 3)
 \item{dim}{1=along row (rowwise), 2=along col (colwse), 3=area, both, grand total (within specified cols/rows)}
 }
 \value{
-returns a data frame, if dim=1/2; a single value if dim=3. 
+returns a data frame, if dim=1/2; a single value if dim=3.
 \cr vector input x always outputs a single value.
 }
 \description{

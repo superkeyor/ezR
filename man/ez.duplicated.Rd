@@ -19,22 +19,22 @@ ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
 \cr if x is a data frame, col is unspecified (i.e., NULL default), check all cols in x
 \cr if x is not a data frame, col is ignored}
 
-\item{vec}{TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates; 
+\item{vec}{TRUE/FALSE, if TRUE, returns a vector of TRUE/FALSE indicating duplicates;
 \cr if FALSE, returns a df with one column 'Duplicated' of TRUE/FALSE
 \cr This is useful for binding with other data frames
 \cr T/F could be replaced by 0,1,2, see vecgroup}
 
-\item{vecgroup}{TRUE/FALSE, if TRUE, returns a vector of 0,1,2 indicating duplicates, where 
+\item{vecgroup}{TRUE/FALSE, if TRUE, returns a vector of 0,1,2 indicating duplicates, where
 \cr 0=F, no duplicates; 1=duplicates group 1; 2=duplicates group 2, etc}
 
 \item{dim}{1=find duplicated rows, 2=find duplicated cols. dim has no effect when x is a vector}
 
-\item{incomparables}{a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared, 
+\item{incomparables}{a vector of values that cannot be compared. FALSE is a special value, meaning that all values can be compared,
 \cr and may be the only value accepted for methods other than the default. It will be coerced internally to the same type as x.
 \cr not applicable to data.frame x (see https://stackoverflow.com/a/29730485/2292993), but ok for vector x}
 
-\item{value}{TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals. 
-The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals). 
+\item{value}{TRUE/FALSE, if TRUE, returns actual duplicated values, instead of logicals.
+The returned data type is the same as the original (data frame->data frame, factor->factor, etc, because only slicing based on logicals).
 Ignore/Overwrite vec, vecgroup.}
 
 \item{keepall}{TRUE/FALSE, only applicable when value=T (otherwise ignored). When col is specified, value only returns for that col. Use keepall=T to return all cols in input df}

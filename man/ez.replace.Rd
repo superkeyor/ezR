@@ -24,7 +24,7 @@ replace within one or more than one columns, or entire data frame (ie, all colum
 }
 \details{
 smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
-\cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval   
+\cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
 \cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        #a changes a to char as well
 \cr a=c(1,2,3); a[which(a==4)] <-3.1; a          #a changes a to double
@@ -33,8 +33,8 @@ smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), nu
 \cr logic is tricky TRUE=='TRUE', FALSE=='FALSE' return TRUE; always convert them first to num, eg, mutate(preterm=as.integer(delivery_ega<37.0)) and then start from there.
 }
 \note{
-when 4 parameters provided, it is recognized as (df,col,oldval,newval) 
-\cr when 3 parameters provided, it is recognized as (df,oldval,newval) 
+when 4 parameters provided, it is recognized as (df,col,oldval,newval)
+\cr when 3 parameters provided, it is recognized as (df,oldval,newval)
 see example
 }
 \examples{
@@ -49,7 +49,7 @@ ez.replace(data,'a','r1',3) \%>\% .$a
 
 data=data.frame(a=c('r1','r2'),stringsAsFactors = F)
 ez.replace(data,'a','r1',3) \%>\% .$a
-ez.replace(data,'a','r1',NA) \%>\% .$a 
+ez.replace(data,'a','r1',NA) \%>\% .$a
           # a was char, now is still char, (NA counted here as char)
 
 data=data.frame(a=c(1,2))

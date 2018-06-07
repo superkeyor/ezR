@@ -7,7 +7,7 @@
 ez.recols(df, newColOrder, col = NULL)
 }
 \arguments{
-\item{newColOrder}{c('','',''), number of cols must match that of all cols (when para col=NULL) or specified by para col. 
+\item{newColOrder}{c('','',''), number of cols must match that of all cols (when para col=NULL) or specified by para col.
 or, newColOrder='az' or 'za', sort all cols alphabetically}
 
 \item{col}{NULL=all columns, otherwise restricted to specified cols, eg, ( internally evaluated by eval('dplyr::select()') )

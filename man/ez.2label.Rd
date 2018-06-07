@@ -30,7 +30,7 @@ Both value and variable label attributes will be removed when converting variabl
 \cr wrapper of \code{\link{sjmisc_to_label}}
 }
 \examples{
-e=c(1,2); f=factor(1:2) 
+e=c(1,2); f=factor(1:2)
 g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
 h=factor(c(0,0,1,1,1,0)); attr(h,'labels') <- c(boy=1,girl=0)
 i=factor(c('girl','girl','boy','boy','boy','girl'))

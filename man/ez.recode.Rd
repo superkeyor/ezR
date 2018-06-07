@@ -48,8 +48,8 @@ data<-data.frame(a=rnorm(100),b=rnorm(100),male=rnorm(100)>0)
 ez.recode(data, "a", "hi = 1")
 ez.recode(data, "a", "lo:0 = 0;0:hi = 1;")
 ez.recode(data, "b", "lo:0 = 0;0:hi = 1;")
-ez.recode(data, "a", "lo:0 = 'low';0:hi = 1;")  
-         #a was numeric type, now is character type 
+ez.recode(data, "a", "lo:0 = 'low';0:hi = 1;")
+         #a was numeric type, now is character type
          #note: for hi=1, the 1 is not even quoted
          #can be quoted hi='1', but it does not matter here
 data <- ez.recode(data,"male", "1 = 'Male';FALSE = 'Female';else = NA;")

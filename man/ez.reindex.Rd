@@ -16,7 +16,7 @@ returns a new df
 internally call row.names(df) <- NULL
 }
 \examples{
-occasionally, the index of a data frame could be broken, eg, after removing a row: 
+occasionally, the index of a data frame could be broken, eg, after removing a row:
 original row.names() is 1, 2, 3, then drop row 2
 if not reindex, new index is 1, 3
 if reindex, new index is 1, 2

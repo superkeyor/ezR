@@ -22,7 +22,7 @@ ez.countif(x, cnd, col = NULL, dim = 3, na.rm = FALSE)
 \cr na.rm=FALSE to catch NA returned above}
 }
 \value{
-returns a data frame, if dim=1/2; a single value if dim=3. 
+returns a data frame, if dim=1/2; a single value if dim=3.
 \cr vector input x always outputs a single value.
 }
 \description{
