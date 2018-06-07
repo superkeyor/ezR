@@ -7152,7 +7152,9 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
     } else {
       for (i in 1:length(vl)) x[x == vn[i]] <- vl[i]
       # to factor
+      varlab <- attr(x,'label')
       x <- factor(x, levels = vl)
+      attr(x,'label') <- varlab
     }
   }
   # return as factor
