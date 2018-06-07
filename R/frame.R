@@ -570,7 +570,9 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
         # for nonfactor, length(levels(x)) returns 0
         if (length(levels(x))!=length(levels(factor(x,unique(as.character(x)))))) {
             if (print2screen) cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
+            varlab <- attr(x,'label')
             x = factor(x, unique(as.character(x)))
+            attr(x,'label') <- varlab
         }
     } else if (is.data.frame(x) & !is.null(cols)) {
         cols=ez.selcol(x,cols)
