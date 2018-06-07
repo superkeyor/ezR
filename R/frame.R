@@ -1416,16 +1416,19 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, vecgroup=FALSE, dim=1, incompara
         # get d, duplicated elements
         d = duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
         d = base::unique(x[which(d)])
-        # convert x to character vector for easy manipulation
-        if (is.data.frame(x) & dim==1) {
-            y = sapply(data.table::transpose(x),paste,collapse='')
-        } else {
-            # sapply works for vector, list, data frame colwise
-            y = sapply(x,paste,collapse='')
-        }
 
-        for (i in 1:length(d)) {
-            result[which(y==d[i])] = i
+        if (length(d)>0) {
+            # convert x to character vector for easy manipulation
+            if (is.data.frame(x) & dim==1) {
+                y = sapply(data.table::transpose(x),paste,collapse='')
+            } else {
+                # sapply works for vector, list, data frame colwise
+                y = sapply(x,paste,collapse='')
+            }
+
+            for (i in 1:length(d)) {
+                result[which(y==d[i])] = i
+            }
         }
     }
 
