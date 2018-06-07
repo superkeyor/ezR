@@ -577,7 +577,9 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
         # for (col in cols) { x[[col]] = ez.factorelevel(x[[col]]) }
         x[cols] = lapply(x[cols],function(e){ez.factorelevel(e)})
     } else if (is.data.frame(x) & is.null(cols)) {
-        x = dplyr::mutate_all(x,ez.factorelevel)
+        # x = dplyr::mutate_all(x,ez.factorelevel) 
+        # mutate gets rid of variable labels
+        x[] = lapply(x,ez.factorelevel)
     }
     return(x)
 }
