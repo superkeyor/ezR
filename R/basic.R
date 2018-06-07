@@ -324,7 +324,8 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
         if (!force) {
             x[] = rapply(x, utils::type.convert, classes = "character", how = "replace", as.is = TRUE)
         } else {
-            x = dplyr::mutate_all(x, funs(suppressWarnings(as.numeric(as.character(.)))))
+            # x = dplyr::mutate_all(x, funs(suppressWarnings(as.numeric(as.character(.)))))
+            x[] = lapply( x, function(e){suppressWarnings(as.numeric(as.character(e)))} )
         }
         result = x
     } else if (is.data.frame(x) && !is.null(col)) {
@@ -480,13 +481,17 @@ ez.is.date.convertible = function(x,format="%m/%d/%Y",...) {
 #' @seealso \code{\link{ez.2char}}
 ez.str = function(x, col=NULL){
     if (is.data.frame(x) && is.null(col)){
-        result = dplyr::mutate_all(x, as.character)
+        # result = dplyr::mutate_all(x, as.character)
+        x[] = lapply(x,function(e){as.character(e)})
+        result = x
     } else if (is.data.frame(x) && is.na(col)) {
         # convert all numeric NAs to character NAs, for bind_rows
         # https://github.com/tidyverse/dplyr/issues/2584
         # use ifelse, not if_else because we know we are going to deal with different data types
         # use & not &&, because we are vectorizing
-        result = dplyr::mutate_all(x,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
+        # result = dplyr::mutate_all(x,funs(ifelse(is.na(.)&is.numeric(.),NA_character_,.)))
+        x[] = lapply( x, function(e){ifelse(is.na(e) & is.numeric(e), NA_character_, e)} )
+        result = x
     } else if (is.data.frame(x) && !is.null(col)) {
         col=(ez.selcol(x,col))
         cols=col

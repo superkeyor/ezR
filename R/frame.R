@@ -299,7 +299,9 @@ ez.label.set = function(df,varname,label){
 ez.2char = function(x, col=NULL){
     result=x
     if (is.data.frame(x) & is.null(col)){
-        result = dplyr::mutate_if(x, is.factor, as.character)
+        # result = dplyr::mutate_if(x, is.factor, as.character)
+        x[] = lapply(x,function(e){if (is.factor(e)) as.character(e) else e})
+        result = x
     } else if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
         cols=col
@@ -1785,6 +1787,7 @@ ez.coalesce = function(vec){
 ez.ppq = function(...) {
     # https://stackoverflow.com/questions/35215027/adding-nas-to-a-vector
     result = list(...)
+    # x=1:3; length(x) <- 4 will make the length of x be 4, or length(x) <- 2 will truncate
     result = data.frame(lapply(result, `length<-`, max(lengths(result))))
     return(result)
 }
@@ -1884,7 +1887,8 @@ ez.clcoldata = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
             x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         }
     } else if (is.data.frame(x) & is.null(col)) {
-        x = dplyr::mutate_all(x, funs(ez.clcoldata(.,procedures=procedures)))
+        # x = dplyr::mutate_all(x, funs(ez.clcoldata(.,procedures=procedures)))
+        x[] = lapply(x,function(e,procedures){ez.clcoldata(e,procedures=procedures)},procedures=procedures)
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
@@ -1911,7 +1915,8 @@ ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
         # attributes(x) <- NULL  # this is not desirable because some attributes are needed, eg, $class, $level, $names
         for (a in attrs) {attr(x,a) <- NULL}
     } else if (is.data.frame(x) & is.null(col)) {
-        x = dplyr::mutate_all(x, funs(ez.clattr(.,attrs=attrs)))
+        # x = dplyr::mutate_all(x, funs(ez.clattr(.,attrs=attrs)))
+        x[] = lapply(x,function(e,attrs){ez.clattr(e,attrs=attrs)},attrs=attrs)
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         cols = col
