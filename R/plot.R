@@ -1681,7 +1681,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.3,rp.y=0.95,point.alpha=0.95,p
       zz = trimws(cmd[3])
       df=ez.dropna(df,c(yy,xx,zz))
 
-      rp.x = (max(df[[xx]])-min(df[[x]]))*rp.x
+      rp.x = (max(df[[xx]])-min(df[[xx]]))*rp.x
       rp.y = (max(df[[yy]])-min(df[[yy]]))*(1-rp.y)
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
@@ -1709,7 +1709,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.3,rp.y=0.95,point.alpha=0.95,p
       yy = trimws(cmd[1])
       xx = trimws(cmd[2])
       df=ez.dropna(df,c(yy,xx))
-      rp.x = (max(df[[xx]])-min(df[[x]]))*rp.x
+      rp.x = (max(df[[xx]])-min(df[[xx]]))*rp.x
       rp.y = (max(df[[yy]])-min(df[[yy]]))*(1-rp.y)
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
@@ -1736,7 +1736,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.3,rp.y=0.95,point.alpha=0.95,p
           xx = trimws(cmd[2])
           zz = trimws(cmd[3])
           df=ez.dropna(df,c(yy,xx,zz))
-          rp.x = (max(df[[xx]])-min(df[[x]]))*rp.x
+          rp.x = (max(df[[xx]])-min(df[[xx]]))*rp.x
           rp.y = (max(df[[yy]])-min(df[[yy]]))*(1-rp.y)
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
           se = ifelse(se,'TRUE','FALSE')
