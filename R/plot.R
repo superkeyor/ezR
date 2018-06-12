@@ -1565,8 +1565,8 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param point.size if less point, increase size
 #' @param rug.size rug size
 #' @param rp.size  r p values font size, ignored if rp=FALSE
-#' @param rp.x  0-1 r p values x position (relative to max of x value, big-->right), ignored if rp=FALSE
-#' @param rp.y  0-1 r p values y position (relative to min of y value, big-->bottom), ignored if rp=FALSE
+#' @param rp.x  r p values x position (0-1, relative to top left, big-->right), ignored if rp=FALSE. Internally, convert to geom_label(x,y) where x,y refers to actually x,y axis value
+#' @param rp.y  r p values y position (0-1, relative to top left, big-->bottom), ignored if rp=FALSE
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL
 #' @param zlab  z/fill/legend label, only applicable when there is z provided NULL
@@ -1682,7 +1682,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.3,rp.y=0.95,point.alpha=0.95,p
       df=ez.dropna(df,c(yy,xx,zz))
 
       rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
-      rp.y = min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y
+      rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
@@ -1710,7 +1710,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.3,rp.y=0.95,point.alpha=0.95,p
       xx = trimws(cmd[2])
       df=ez.dropna(df,c(yy,xx))
       rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
-      rp.y = min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y
+      rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
@@ -1737,7 +1737,7 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.3,rp.y=0.95,point.alpha=0.95,p
           zz = trimws(cmd[3])
           df=ez.dropna(df,c(yy,xx,zz))
           rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
-          rp.y = min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*(1-rp.y)
+          rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
           se = ifelse(se,'TRUE','FALSE')
           rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')

@@ -17,9 +17,9 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.3, rp.y = 0.95,
 
 \item{rp.size}{r p values font size, ignored if rp=FALSE}
 
-\item{rp.x}{0-1 r p values x position (relative to max of x value, big-->right), ignored if rp=FALSE}
+\item{rp.x}{r p values x position (0-1, relative to top left, big-->right), ignored if rp=FALSE. Internally, convert to geom_label(x,y) where x,y refers to actually x,y axis value}
 
-\item{rp.y}{0-1 r p values y position (relative to min of y value, big-->bottom), ignored if rp=FALSE}
+\item{rp.y}{r p values y position (0-1, relative to top left, big-->bottom), ignored if rp=FALSE}
 
 \item{point.alpha}{if overplot for points, reduce alpha}
 
