@@ -1409,7 +1409,12 @@ get_label <- function(x, def.value = NULL) {
 #          (or \code{include.values = "n"}), values are set as \code{\link{names}}
 #          attribute of the returned object. If \code{include.values = "as.prefix"}
 #          (or \code{include.values = "p"}), values are included as prefix
-#          to each label. See 'Examples'.
+#          to each label. See 'Examples'.  
+#          'as.name', 'n'
+#                         0      1 
+#                        "BOY" "GIRL" 
+#          'as.prefix', 'p'
+#                        "[0] BOY"  "[1] GIRL"
 # @param attr.only Logical, if \code{TRUE}, labels are only searched for
 #          in the the vector's \code{\link{attributes}}; else, if \code{x} has no
 #          label attributes, factor levels or string values are returned. See
@@ -1494,9 +1499,9 @@ get_label <- function(x, def.value = NULL) {
 # # create a dummy factor
 # f1 <- factor(c("hi", "low", "mid"))
 # # search for label attributes only
-# get_labels(f1, attr.only = TRUE)
+# get_labels(f1, attr.only = TRUE)    # NULL
 # # search for factor levels as well
-# get_labels(f1)
+# get_labels(f1)                      # "hi"  "low" "mid"
 #
 # # same for character vectors
 # c1 <- c("higher", "lower", "mid")

@@ -197,7 +197,6 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, ...){
 #' get value labels, wrapper of \code{\link{sjmisc_get_labels}}
 #' @description get value labels, wrapper of \code{\link{sjmisc_get_labels}}
 #' @details see also \code{\link{sjmisc_get_values}}
-#' @return returns a list $varname
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -207,7 +206,7 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, ...){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.values.get = function(x, include.values=NULL, attr.only=T, include.non.labelled=F, ...){
+ez.values.get = function(x, include.values='n', attr.only=T, include.non.labelled=F, ...){
     result=sjmisc_get_labels(x, include.values=include.values, attr.only=attr.only, include.non.labelled=include.non.labelled, ...)
     return(result)
 }

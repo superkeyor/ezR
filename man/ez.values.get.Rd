@@ -4,11 +4,8 @@
 \alias{ez.values.get}
 \title{get value labels, wrapper of \code{\link{sjmisc_get_labels}}}
 \usage{
-ez.values.get(x, include.values = NULL, attr.only = T,
+ez.values.get(x, include.values = "n", attr.only = T,
   include.non.labelled = F, ...)
-}
-\value{
-returns a list $varname
 }
 \description{
 get value labels, wrapper of \code{\link{sjmisc_get_labels}}

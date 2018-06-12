@@ -291,10 +291,10 @@ ez.vi = function(x,printn=35,order='as') {
         print(v[c(first2rows,last2rows),c(first3cols,last3cols),drop=F])
 
         cat(v.cols)
-        cat(sprintf('\n%s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
+        cat(sprintf('\n%-25s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
     } else if (is.list(x)) {
         for (l in names(x)) {
-            cat(sprintf('$%s\t\t%s\n',l,class(x[[l]]) %>% toString))
+            cat(sprintf('$%-25s\t%s\n',l,class(x[[l]]) %>% toString))
         }
         cat(sprintf('List of %d\n',length(x)))
     } else {
@@ -325,11 +325,16 @@ ez.vi = function(x,printn=35,order='as') {
             v.mean=v.sd=v.min=v.max=v.sum=NA
             # count as factor
             if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-                vallbl=attr(v,"value.labels")
                 freq = table(v)
+                # make the order of names(freq) to be the same as v
+                if (is.factor(v)) freq = freq[levels(v)]
+                if (is.character(v)) freq = freq[unique(v)]
+                if (is.logical(v)) freq = freq[unique(v) %>% as.character()]
+
+                vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
                 lbl = character()
                 if (!is.null(vallbl)) {
-                    for (f in names(freq)) {lbl=c(lbl,paste0('(',names(which(vallbl==f)),')'))}
+                    for (f in names(freq)) {lbl=c(lbl,paste0('(',vallbl[which(names(vallbl)==f)],')'))}
                 }
                 v.levels = paste(freq %>% names,lbl,': ',freq,sep='',collapse = ', ')
             }
@@ -341,7 +346,7 @@ ez.vi = function(x,printn=35,order='as') {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('%s\n',v.levels %>% toString(width=300)))
+            cat(sprintf('Counts: %s\n',v.levels %>% toString(width=300)))
         }
     }
     return(invisible(NULL))
