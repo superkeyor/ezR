@@ -342,10 +342,23 @@ ez.swaplabel=ez.label.swap
 #' @family data transformation functions
 #' @export
 ez.2char = function(x, col=NULL){
+    char_if_fac = function (e) {
+        if (is.factor(e)) {
+            labels <- sjmisc_get_labels(e, attr.only = T, include.values = "n")
+            varlab <- sjmisc_get_label(e)
+            new_value = as.character(e)
+            new_value <- sjmisc_set_labels(new_value, labels, force.labels = T)
+            new_value <- sjmisc_set_label(new_value, lab = varlab)
+        } else {
+            new_value = e
+        }
+        return(new_value)
+    }
+    
     result=x
     if (is.data.frame(x) & is.null(col)){
         # result = dplyr::mutate_if(x, is.factor, as.character)
-        x[] = lapply(x,function(e){if (is.factor(e)) as.character(e) else e})
+        x[] = lapply(x,char_if_fac)
         result = x
     } else if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
@@ -356,10 +369,10 @@ ez.2char = function(x, col=NULL){
         #         result=x
         #     }
         # }
-        x[cols] = lapply(x[cols],function(e){if (is.factor(e)) as.character(e) else e})
+        x[cols] = lapply(x[cols],char_if_fac)
         result = x
     } else {
-        if (is.factor(x)) result = as.character(x)
+        result = char_if_fac(x)
     }
     return(result)
 }
