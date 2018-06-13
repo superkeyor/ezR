@@ -7458,10 +7458,10 @@ to_value_helper <- function(x, start.at, keep.labels) {
   labels <- NULL
   # is already numeric?
   if (is.numeric(x)) return(x)
+  labels <- get_labels(x, attr.only = T, include.values = "n")
+  varlab <- get_label(x)
   # is character?
   if (is.character(x)) {
-    # get labels
-    labels <- get_labels(x, attr.only = T, include.values = "n")
     # has labels?
     if (!is.null(labels)) {
       # sort labels correctly
@@ -7498,7 +7498,10 @@ to_value_helper <- function(x, start.at, keep.labels) {
     new_value <- as.numeric(as.character(x))
   }
   # check if we should attach former labels as value labels
-  if (keep.labels) new_value <- set_labels(new_value, labels, force.labels = T)
+  if (keep.labels) {
+    new_value <- set_labels(new_value, labels, force.labels = T)
+    new_value <- set_label(new_value, label = varlab)
+  }
   return(new_value)
 }
 # @title Trim leading and trailing whitespaces from strings
