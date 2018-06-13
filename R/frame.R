@@ -211,6 +211,10 @@ ez.values.get = function(x, include.values='n', attr.only=T, include.non.labelle
     return(result)
 }
 
+#' @rdname ez.values.get
+#' @export
+ez.values.get=ez.getvalues
+
 #' set value labels, wrapper of \code{\link{sjmisc_set_labels}}
 #' @description set value labels, wrapper of \code{\link{sjmisc_set_labels}}
 #' @examples
@@ -234,6 +238,10 @@ ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE,
     result=sjmisc_set_labels(x, valuelabels, force.labels=force.labels, force.values=force.values, ...)
     return(result)
 }
+
+#' @rdname ez.values.set
+#' @export
+ez.values.set=ez.setvalues
 
 #' get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @description get variable label, wrapper of \code{\link{sjmisc_get_label}}
@@ -263,6 +271,10 @@ ez.label.get = function(x,cols=NULL){
     return(result)
 }
 
+#' @rdname ez.label.get
+#' @export
+ez.label.get=ez.getlabel
+
 #' set variable label, wrapper of \code{\link{sjmisc_set_label}}
 #' @description set variable label, wrapper of \code{\link{sjmisc_set_label}}
 #' @param df data frame
@@ -283,11 +295,15 @@ ez.label.set = function(df,varname,label){
     return(df)
 }
 
-#' set variable label mode
-#' @description set variable label mode
-#' @param mode 1=attr(df,'variable.labels'); 2=attr(df[[col]],'label')-->better for left_join.
+#' @rdname ez.label.set
 #' @export
-ez.label.mode = function(df, mode=1) {
+ez.label.set=ez.setlabel
+
+#' swap variable label mode
+#' @description swap variable label mode
+#' @param mode 1=attr(df,'variable.labels')-->better for slice[,]; 2=attr(df[[col]],'label')-->better for left_join.
+#' @export
+ez.label.swap = function(df, mode=1) {
     if (mode==1) {
         variable.labels = ez.label.get(df)
         df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
@@ -308,6 +324,10 @@ ez.label.mode = function(df, mode=1) {
     }
     return(df)
 }
+
+#' @rdname ez.label.swap
+#' @export
+ez.label.swap=ez.swaplabel
 
 #' convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor
 #' @description factor 2 char
