@@ -4057,8 +4057,8 @@ atomic_to_fac <- function(data.spss, attr.string) {
         # factor
         x <- as.factor(x)
         # set back labels attribute
-        attr(x, attr.string,exact=T) <- labs
-        attr(x, 'label',exact=T) <- varlab
+        attr(x, attr.string) <- labs
+        attr(x, 'label') <- varlab
         # copy vector back to data frame
         data.spss[[i]] <- x
       }
@@ -4977,17 +4977,17 @@ remove_all_labels_helper <- function(x) {
   # find label-attribute string
   attr.string <- getValLabelAttribute(x)
   # remove attributes
-  if (!is.null(attr.string)) attr(x, attr.string,exact=T) <- NULL
+  if (!is.null(attr.string)) attr(x, attr.string) <- NULL
 
   # jerry: do not remove variable label
   # # find label-attribute string
   # attr.string <- getVarLabelAttribute(x)
   # # remove attributes
-  # if (!is.null(attr.string)) attr(x, attr.string,exact=T) <- NULL
+  # if (!is.null(attr.string)) attr(x, attr.string) <- NULL
 
   # remove is_na attribute
   na.flags <- get_na_flags(x)
-  if (!is.null(na.flags)) attr(x, getNaAttribute(),exact=T) <- NULL
+  if (!is.null(na.flags)) attr(x, getNaAttribute()) <- NULL
   # unclass, if labelled. labelled class may throw
   # errors / warnings, when not havin label attributes
   if (is_labelled(x)) x <- unclass(x)
@@ -5548,22 +5548,22 @@ set_label <- function(x, lab, attr.string = NULL) {
           if (is_empty(lab[i])) {
             # empty label value means, remove
             # the label attribute
-            attr(x[[i]], attr.string,exact=T) <- NULL
+            attr(x[[i]], attr.string) <- NULL
           } else {
             # set variable label
-            attr(x[[i]], attr.string,exact=T) <- lab[i]
+            attr(x[[i]], attr.string) <- lab[i]
             # set names attribute. equals variable name
-            if (is.data.frame(x)) names(attr(x[[i]], attr.string,exact=T)) <- cnames[i]
+            if (is.data.frame(x)) names(attr(x[[i]], attr.string)) <- cnames[i]
           }
         }
       }
     } else {
       if (is_empty(lab))
         # empty label, so remove label attribute
-        attr(x, attr.string,exact=T) <- NULL
+        attr(x, attr.string) <- NULL
       else
         # set label attribute
-        attr(x, attr.string,exact=T) <- lab
+        attr(x, attr.string) <- lab
     }
   }
   return(x)
@@ -5812,7 +5812,7 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
   if (!is.null(labels)) {
     # if labels is empty string, remove labels attribute
     if (length(labels) == 1 && nchar(labels) == 0) {
-      attr(x, attr.string,exact=T) <- NULL
+      attr(x, attr.string) <- NULL
 
       # set labels for character vectors here!
     } else if (is.character(x)) {
@@ -5825,7 +5825,7 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
           warning("`labels` must be a named vector.", call. = T)
         } else {
           names(dummy.labels) <- unname(labels)
-          attr(x, attr.string,exact=T) <- dummy.labels
+          attr(x, attr.string) <- dummy.labels
         }
       } else {
         warning("Character vectors can only get labels of same type.", call. = T)
@@ -5878,13 +5878,13 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
         if (anyNA(suppressWarnings(as.numeric(labels)))) {
           # here we have also non-numeric labels, so we set
           # names as character string
-          attr(x, attr.string,exact=T) <- labels
+          attr(x, attr.string) <- labels
         } else {
           # we have only numeric labels, so we set them
           # as numeric values
-          attr(x, attr.string,exact=T) <- as.numeric(labels)
+          attr(x, attr.string) <- as.numeric(labels)
         }
-        names(attr(x, attr.string,exact=T)) <- as.character(names(labels))
+        names(attr(x, attr.string)) <- as.character(names(labels))
         # check for valid length of labels
         # if amount of labels and values are equal,
         # we assume matching labels
@@ -5894,10 +5894,10 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
         # only has numeric character values. If yes, add values
         # as numeric labels-attribute
         if (is.numeric(values) || !anyNA(suppressWarnings(as.numeric(values))))
-          attr(x, attr.string,exact=T) <- as.numeric(values)
+          attr(x, attr.string) <- as.numeric(values)
         else
           attr(x, attr.string) <- as.character(values)
-        names(attr(x, attr.string,exact=T)) <- labels
+        names(attr(x, attr.string)) <- labels
         # check for valid length of labels
         # here, we have a smaller value range (i.e. less values)
         # than amount of labels
@@ -5905,14 +5905,14 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
         # do we want to force to set labels, even if we have more labels
         # than values in variable?
         if (force.labels) {
-          attr(x, attr.string,exact=T) <- as.numeric(c(1:lablen))
-          names(attr(x, attr.string,exact=T)) <- labels
+          attr(x, attr.string) <- as.numeric(c(1:lablen))
+          names(attr(x, attr.string)) <- labels
         } else {
           # we have more labels than values, so just take as many
           # labes as values are present
           message(sprintf("More labels than values of \"%s\". Using first %i labels.", name.string, valrange))
-          attr(x, attr.string,exact=T) <- as.numeric(c(minval:maxval))
-          names(attr(x, attr.string,exact=T)) <- labels[1:valrange]
+          attr(x, attr.string) <- as.numeric(c(minval:maxval))
+          names(attr(x, attr.string)) <- labels[1:valrange]
         }
         # value range is larger than amount of labels. we may
         # have not continuous value range, e.g. "-2" as filter and
@@ -5934,18 +5934,18 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
           }
 
           # set attributes
-          attr(x, attr.string,exact=T) <- as.numeric(c(1:valrange))
-          names(attr(x, attr.string,exact=T)) <- labels
+          attr(x, attr.string) <- as.numeric(c(1:valrange))
+          names(attr(x, attr.string)) <- labels
         } else {
           # tell user about modification
           message(sprintf("\"%s\" has more values than \"labels\", hence not all values are labelled.", name.string))
           # drop values with no associated labels
-          attr(x, attr.string,exact=T) <- as.numeric(c(1:length(labels)))
-          names(attr(x, attr.string,exact=T)) <- labels
+          attr(x, attr.string) <- as.numeric(c(1:length(labels)))
+          names(attr(x, attr.string)) <- labels
         }
       } else {
-        attr(x, attr.string,exact=T) <- as.numeric(c(minval:maxval))
-        names(attr(x, attr.string,exact=T)) <- labels
+        attr(x, attr.string) <- as.numeric(c(minval:maxval))
+        names(attr(x, attr.string)) <- labels
       }
     }
   }
@@ -6120,21 +6120,21 @@ set_na_helper <- function(x, value, as.attr = FALSE) {
       # do we have any labels left?
       if (length(vl) > 0) {
         # if yes, set back label attribute
-        attr(x, attr.string,exact=T) <- vl
-        names(attr(x, attr.string,exact=T)) <- ln
+        attr(x, attr.string) <- vl
+        names(attr(x, attr.string)) <- ln
 
         # shorten is_na attribute
         na.flag <- get_na_flags(x)
         if (!is.null(na.flag)) {
           # do we have is_na attribute? if yes,
           # remove missing flags of values set to NA
-          attr(x, getNaAttribute(),exact=T) <- na.flag[-labelpos]
+          attr(x, getNaAttribute()) <- na.flag[-labelpos]
         }
       } else {
         # else remove attribute
-        attr(x, attr.string,exact=T) <- NULL
+        attr(x, attr.string) <- NULL
         # remove is_na attribute, no longer needed
-        attr(x, getNaAttribute(),exact=T) <- NULL
+        attr(x, getNaAttribute()) <- NULL
 
         # unclass labelled, because it may result
         # in errors when printing a labelled-class-vector
@@ -6174,7 +6174,7 @@ set_na_attr <- function(x, na.values) {
     # If not, warn user
     warning("Length of logical indices for missing codes did not match length of values.", call. = F)
   # set is_na attribute
-  attr(x, getNaAttribute(),exact=T) <- na.values
+  attr(x, getNaAttribute()) <- na.values
   return(x)
 }
 
@@ -7170,7 +7170,7 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
       # to factor
       varlab <- attr(x,'label',exact=T)
       x <- factor(x, levels = vl)
-      attr(x,'label',exact=T) <- varlab
+      attr(x,'label') <- varlab
     }
   }
   # return as factor
