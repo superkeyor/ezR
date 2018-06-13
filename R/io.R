@@ -184,6 +184,8 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
         # result = ez.2label(result) # slow
         result[]=lapply(result, function(x) {ez.2label(x)})
     }
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
+    colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     if (tolower) names(result) = tolower(names(result))
 
     # avoid warning: attributes are not identical across measure variables
@@ -224,9 +226,6 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
         result = atomic_w_attr_to_fac_haven(result)
     }
     # hack end: atomic with attributes to factor
-
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
-    colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
 

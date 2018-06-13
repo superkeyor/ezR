@@ -2,7 +2,7 @@
 # remove ' before #, except ' @importFrom
 # exported appended to the end
 
-# 
+#
 mean.labelled <- function(x, trim = 0, na.rm = FALSE, missing_to_na = FALSE, ...) {
   # unclass vector for mean-call
   x <- unclass(x)
@@ -20,7 +20,7 @@ mean.labelled <- function(x, trim = 0, na.rm = FALSE, missing_to_na = FALSE, ...
   mean(x, trim = trim, na.rm = na.rm)
 }
 
-# 
+#
 is.na.labelled <- function(x) {
   # unclass vector for is.na-call
   x <- unclass(x)
@@ -32,7 +32,7 @@ is.na.labelled <- function(x) {
 }
 
 #' @importFrom nlme getData getCovariateFormula
-# 
+#
 model.matrix.gls <- function(object, ...) {
   mm <- cbind(`(Intercept)` = 1,
               nlme::getData(object)[, all.vars(nlme::getCovariateFormula(object))])
@@ -40,7 +40,7 @@ model.matrix.gls <- function(object, ...) {
 }
 
 #' @importFrom nlme getResponse getData getCovariateFormula
-# 
+#
 model.frame.gls <- function(formula, ...) {
   if (all(class(formula) != "gls")) {
     stop("`formula` needs to be an object of class `gls`.", call. = F)
@@ -54,7 +54,7 @@ model.frame.gls <- function(formula, ...) {
 }
 
 #' @importFrom dplyr tbl_df trunc_mat
-# 
+#
 print.lbl_df <- function(x, ..., n = NULL, width = NULL) {
   # get labels
   dlab <- get_label(x)
@@ -77,7 +77,7 @@ print.lbl_df <- function(x, ..., n = NULL, width = NULL) {
 }
 
 
-# 
+#
 print.sjmisc_r2 <- function(x, ...) {
   if (length(x) > 1) {
     if (identical(names(x[[2]]), "Nagelkerke")) {
@@ -107,7 +107,7 @@ print.sjmisc_r2 <- function(x, ...) {
 }
 
 
-# 
+#
 print.icc.lme4 <- function(x, comp, ...) {
   # print model information
   cat(sprintf("%s\n Family: %s (%s)\nFormula: %s\n\n",
@@ -253,7 +253,7 @@ print.labelled <- function(x, ...) {
 # add_labels(x) <- c(`new second` = 2)
 #
 #
-# 
+#
 add_labels <- function(x, value) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -309,12 +309,12 @@ add_labels_helper <- function(x, value) {
 }
 
 # @rdname add_labels
-# 
+#
 `add_labels<-` <- function(x, value) {
   UseMethod("add_labels<-")
 }
 
-# 
+#
 `add_labels<-.default` <- function(x, value) {
   x <- add_labels(x, value)
   x
@@ -368,7 +368,7 @@ add_labels_helper <- function(x, value) {
 # get_values(x2)
 #
 #' @importFrom stats na.omit
-# 
+#
 as_labelled <- function(x, add.labels = FALSE, add.class = FALSE) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -453,7 +453,7 @@ as_labelled_helper <- function(x, add.labels, add.class) {
 #
 # mydf
 #
-# 
+#
 lbl_df <- function(x) {
   # add class attribute, if necessary
   if (!"lbl_df" %in% class(x))
@@ -501,7 +501,7 @@ lbl_df <- function(x) {
 # converge_ok(fit)
 #
 #' @importFrom Matrix solve
-# 
+#
 converge_ok <- function(x, tolerance = 0.001) {
   # check for package availability
   if (!requireNamespace("Matrix", quietly = TRUE)) {
@@ -559,7 +559,7 @@ converge_ok <- function(x, tolerance = 0.001) {
 # efc.sub <- copy_labels(efc.sub)
 # str(efc.sub)
 #
-# 
+#
 copy_labels <- function(df_new, df_origin = NULL) {
   # check if old df is NULL. if so, we remove all labels
   # from the data frame.
@@ -608,7 +608,7 @@ copy_labels <- function(df_new, df_origin = NULL) {
 # cramer(tab)
 #
 #' @importFrom stats ftable
-# 
+#
 cramer <- function(tab) {
   if (all(class(tab) != "ftable")) tab <- stats::ftable(tab)
   phi_val <- phi(tab)
@@ -628,7 +628,7 @@ cramer <- function(tab) {
 # @note See 'Examples' from \code{\link[sjPlot]{sjp.pca}} and \code{\link[sjPlot]{sjt.pca}}.
 #
 #' @importFrom stats na.omit var
-# 
+#
 cronb <- function(data) {
   .data <- stats::na.omit(data)
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
@@ -677,7 +677,7 @@ cronb <- function(data) {
 # cv(fit)
 #
 #' @importFrom stats sd
-# 
+#
 cv <- function(x, ...) {
   # return value
   cv_ <- cv_helper(x)
@@ -793,7 +793,7 @@ cv_helper <- function(x) {
 # sjp.frq(dicho(efc$e42dep, var.label = "Dependency (dichotomized)",
 #               val.labels = c("lower", "higher")))}
 #
-# 
+#
 dicho <- function(x,
                   dich.by = c("median", "mean", "value"),
                   dich.val = -1,
@@ -899,7 +899,7 @@ dicho_helper <- function(x, dich.by, dich.val, as.num, var.label, val.labels) {
 # # now, let's drop zero's
 # frq(as_labelled(drop_labels(x)))
 #
-# 
+#
 drop_labels <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -996,7 +996,7 @@ NULL
 # eta_sq(efc$c12hour, efc$e42dep)
 #
 #' @importFrom stats aov summary.lm
-# 
+#
 eta_sq <- function(...) {
   # retrieve list of parameters
   input_list <- list(...)
@@ -1057,7 +1057,7 @@ eta_sq <- function(...) {
 #               c(FALSE, FALSE, TRUE))
 # frq(x)
 #
-# 
+#
 fill_labels <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -1132,7 +1132,7 @@ fill_labels_helper <- function(x) {
 # frq(x)
 #
 #' @importFrom stats quantile median na.omit
-# 
+#
 frq <- function(x, print.frq = TRUE) {
   # check for labelled class
   if (!is_labelled(x)) {
@@ -1268,7 +1268,7 @@ frq <- function(x, print.frq = TRUE) {
 # get_frq(x)
 #
 #' @importFrom stats quantile median na.omit
-# 
+#
 get_frq <- function(x, coerce = TRUE) {
   if (!is_labelled(x) && TRUE == coerce)
     x <- as_labelled(x, add.class = T)
@@ -1336,7 +1336,7 @@ get_frq <- function(x, coerce = TRUE) {
 # # get labels from multiple variables
 # get_label(list(efc$e42dep, efc$e16sex, efc$e15relat))
 #
-# 
+#
 get_label <- function(x, def.value = NULL) {
   # auto-detect variable label attribute
   attr.string <- getVarLabelAttribute(x)
@@ -1412,10 +1412,10 @@ get_label <- function(x, def.value = NULL) {
 #          (or \code{include.values = "n"}), values are set as \code{\link{names}}
 #          attribute of the returned object. If \code{include.values = "as.prefix"}
 #          (or \code{include.values = "p"}), values are included as prefix
-#          to each label. See 'Examples'.  
+#          to each label. See 'Examples'.
 #          'as.name', 'n'
-#                         0      1 
-#                        "BOY" "GIRL" 
+#                         0      1
+#                        "BOY" "GIRL"
 #          'as.prefix', 'p'
 #                        "[0] BOY"  "[1] GIRL"
 # @param attr.only Logical, if \code{TRUE}, labels are only searched for
@@ -1524,7 +1524,7 @@ get_label <- function(x, def.value = NULL) {
 # get_labels(x, include.non.labelled = TRUE)
 #
 #
-# 
+#
 get_labels <- function(x,
                        attr.only = FALSE,
                        include.values = NULL,
@@ -1681,7 +1681,7 @@ get_labels_helper <- function(x, attr.only, include.values, include.non.labelled
 #               c(FALSE, FALSE, TRUE, TRUE))
 # get_na(x)
 #
-# 
+#
 get_na <- function(x) {
   # get values
   values <- get_values(x, sort.val = FALSE, drop.na = FALSE)
@@ -1727,7 +1727,7 @@ getNaAttribute <- function() return("is_na")
 #               c(FALSE, FALSE, TRUE, TRUE))
 # get_na_flags(x)
 #
-# 
+#
 get_na_flags <- function(x) return(attr(x, getNaAttribute(), exact = T))
 # @title Retrieve notes (annotations) from labelled variables
 # @name get_note
@@ -1750,7 +1750,7 @@ get_na_flags <- function(x) return(attr(x, getNaAttribute(), exact = T))
 # get_note(x)
 # x
 #
-# 
+#
 get_note <- function(x) {
   return(attr(x, "note", exact = TRUE))
 }
@@ -1780,7 +1780,7 @@ get_note <- function(x) {
 # get_note(x)
 # x
 #
-# 
+#
 set_note <- function(x, value = NULL) {
   if (is.null(value) || is_empty(value)) {
     attr(x, "note") <- NULL
@@ -1791,12 +1791,12 @@ set_note <- function(x, value = NULL) {
 }
 
 # @rdname set_note
-# 
+#
 `set_note<-` <- function(x, value) {
   UseMethod("set_note<-")
 }
 
-# 
+#
 `set_note<-.default` <- function(x, value) {
   x <- set_note(x = x, value = value)
   x
@@ -1843,7 +1843,7 @@ set_note <- function(x, value = NULL) {
 # get_values(x, , TRUE)
 #
 #
-# 
+#
 get_values <- function(x, sort.val = FALSE, drop.na = FALSE) {
   # haven or sjPlot?
   attr.string <- getValLabelAttribute(x)
@@ -1916,7 +1916,7 @@ get_values <- function(x, sort.val = FALSE, drop.na = FALSE) {
 # chisq_gof(fit)
 #
 #' @importFrom stats na.omit fitted resid formula as.formula lm pnorm chisq.test
-# 
+#
 chisq_gof <- function(x, prob = NULL, weights = NULL) {
   if (any(class(x) == "glm")) {
 
@@ -1999,7 +1999,7 @@ chisq_gof <- function(x, prob = NULL, weights = NULL) {
 # hoslem_gof(fit)
 #
 #' @importFrom stats fitted pchisq quantile xtabs
-# 
+#
 hoslem_gof <- function(x, g = 10) {
   # check for valid object class
   if (!any(class(x) == "glmerMod") && !any(class(x) == "glm")) {
@@ -2091,7 +2091,7 @@ hoslem_gof <- function(x, g = 10) {
 #
 #' @importFrom utils txtProgressBar
 #' @importFrom stringdist stringdistmatrix
-# 
+#
 group_str <- function(strings,
                       maxdist = 2,
                       method = "lv",
@@ -2299,7 +2299,7 @@ group_str <- function(strings,
 # ageGrpLab <- group_labels(efc$e17age)
 # barplot(table(ageGrp), main = get_label(efc$e17age), names.arg = ageGrpLab)
 #
-# 
+#
 group_var <- function(var,
                       groupsize = 5,
                       as.num = TRUE,
@@ -2374,7 +2374,7 @@ group_var <- function(var,
 # ageGrpLab <- group_labels(efc$e17age)
 # barplot(table(ageGrp), main = get_label(efc$e17age), names.arg = ageGrpLab)
 #
-# 
+#
 group_labels <- function(var,
                          groupsize = 5,
                          right.interval = FALSE,
@@ -2615,7 +2615,7 @@ getValLabelAttribute <- function(x) {
 #
 #
 #' @importFrom stats family
-# 
+#
 icc <- function(x, ...) {
   # return value
   icc_ <- icc.lme4(x)
@@ -2755,7 +2755,7 @@ icc.lme4 <- function(fit) {
 # re_var(fit2)
 #
 #' @importFrom stats family
-# 
+#
 re_var <- function(x) {
   # return value
   revar_ <- icc(x)
@@ -2807,7 +2807,7 @@ re_var <- function(x) {
 # fit <- lmer(Reaction ~ Days + (1 | mygrp) + (Days | Subject), sleepstudy)
 # get_re_var(fit, "rho.01")
 #
-# 
+#
 get_re_var <- function(x, comp = c("tau.00", "tau.01", "tau.11", "rho.01", "sigma_2")) {
   # check if we have a valid object
   if (!any(class(x) == "icc.lme4") && !is_merMod(x)) {
@@ -2856,7 +2856,7 @@ get_re_var <- function(x, comp = c("tau.00", "tau.01", "tau.11", "rho.01", "sigm
 # # check if crossed
 # is_crossed(x, y)
 #
-# 
+#
 is_crossed <- function(f1, f2) {
   tab <- table(f1, f2)
   # for crossed factors, we should have no zeros in any rows
@@ -2902,7 +2902,7 @@ is_crossed <- function(f1, f2) {
 # x <- x[-1]
 # is_empty(x)
 #
-# 
+#
 is_empty <- function(x) {
   # do we have a valid vector?
   if (!is.null(x)) {
@@ -2936,7 +2936,7 @@ is_empty <- function(x) {
 # is_even(5)
 # is_even(1:4)
 #
-# 
+#
 is_even <- function(x) (x %% 2) == 0
 # @title Check whether object is of class "labelled"
 # @name is_labelled
@@ -2946,7 +2946,7 @@ is_even <- function(x) (x %% 2) == 0
 # @return Logical, \code{TRUE} if \code{any(class(x))} is \code{labelled},
 #           \code{FALSE} otherwise.
 #
-# 
+#
 is_labelled <- function(x) {
   # check if object has multiple class attributes
   if (length(class(x)) > 1) return(any(class(x) == "labelled"))
@@ -2990,7 +2990,7 @@ is_labelled <- function(x) {
 # is_nested(x, y)
 # is_nested(y, x)
 #
-# 
+#
 is_nested <- function(f1, f2) {
   tab <- table(f1, f2)
   # cross tabulation of nested factors should have only 1 value per row
@@ -3029,7 +3029,7 @@ is_nested <- function(f1, f2) {
 # f3 <- factor(c("Justus", "Bob", "Peter"))
 # is_num_fac(f3)
 #
-# 
+#
 is_num_fac <- function(x) {
   # check if we have numeric levels
   return(!anyNA(suppressWarnings(as.numeric(levels(x)))))
@@ -3052,7 +3052,7 @@ is_num_fac <- function(x) {
 # is_odd(5)
 # is_odd(1:4)
 #
-# 
+#
 is_odd <- function(x) (x %% 2) == 1
 # @title Create a labelled vector
 # @name labelled
@@ -3087,7 +3087,7 @@ is_odd <- function(x) (x %% 2) == 1
 #               c(Male = 1, Female = 2, Refused = 5, Missing = 9),
 #               c(FALSE, FALSE, TRUE, TRUE))
 #
-# 
+#
 labelled <- function(x, labels, is_na = NULL) {
   if (!is.numeric(x) && !is.character(x)) {
     stop("`x` must be either numeric or a character vector", call. = FALSE)
@@ -3168,7 +3168,7 @@ labelled <- function(x, labels, is_na = NULL) {
 # # needs at least 75% of non-missing values per row
 # mean_n(dat, .75) # 2 valid return values
 #
-# 
+#
 mean_n <- function(dat, n, digits = 2) {
   # is 'n' indicating a proportion?
   digs <- n %% 1
@@ -3233,7 +3233,7 @@ mean_n <- function(dat, n, digits = 2) {
 # mydf
 # str(mydf)
 #
-# 
+#
 merge_df <- function(x1, x2, ..., id = NULL) {
   # retrieve list of parameters
   more_dfs <- list(...)
@@ -3374,7 +3374,7 @@ merge_df_helper <- function(x1, x2) {
 # mic(mydat)
 #
 #' @importFrom stats cor na.omit
-# 
+#
 mic <- function(data, cor.method = c("pearson", "spearman", "kendall")) {
   # Check parameter
   cor.method <- match.arg(cor.method)
@@ -3441,7 +3441,7 @@ mic <- function(data, cor.method = c("pearson", "spearman", "kendall")) {
 #
 #' @importFrom stats na.omit wilcox.test kruskal.test
 #' @importFrom coin wilcox_test pvalue statistic
-# 
+#
 mwu <- function(x, grp, distribution = "asymptotic", weights = NULL) {
   # check if suggested package is available
   if (!requireNamespace("coin", quietly = TRUE)) {
@@ -3600,7 +3600,7 @@ mwu <- function(x, grp, distribution = "asymptotic", weights = NULL) {
 #
 #
 #' @importFrom stats df.residual residuals pchisq
-# 
+#
 overdisp <- function(x, trafo = NULL) {
   if (str_contains(class(x), "merMod", ignore.case = TRUE))
     return(overdisp.lme4(x))
@@ -3669,7 +3669,7 @@ overdisp.lme4 <- function(x) {
 # phi(tab)
 #
 #' @importFrom MASS loglm
-# 
+#
 phi <- function(tab) {
   # convert to flat table
   if (all(class(tab) != "ftable")) tab <- ftable(tab)
@@ -3710,7 +3710,7 @@ phi <- function(tab) {
 # cod(fit)
 #
 #' @importFrom stats predict predict.glm residuals
-# 
+#
 cod <- function(x) {
   # check for valid object class
   if (!any(class(x) == "glmerMod") && !any(class(x) == "glm")) {
@@ -3817,7 +3817,7 @@ cod <- function(x) {
 #
 #
 #' @importFrom stats model.response model.frame fitted var residuals
-# 
+#
 r2 <- function(x, n = NULL) {
   rsq <- NULL
   osq <- NULL
@@ -3962,7 +3962,7 @@ pseudo_ralt <- function(x) {
 # mydat.val <- get_labels(mydat)}
 #
 #' @importFrom haven read_spss
-# 
+#
 read_spss <- function(path,
                       enc = NA,
                       attach.var.labels = FALSE,
@@ -4085,7 +4085,7 @@ atomic_to_fac <- function(data.spss, attr.string) {
 #         into a common class format (see \code{\link{unlabel}}).
 #
 #' @importFrom haven read_sas
-# 
+#
 read_sas <- function(path, path.cat = NULL, atomic.to.fac = FALSE) {
   # check if suggested package is available
   if (!requireNamespace("haven", quietly = TRUE)) {
@@ -4120,7 +4120,7 @@ read_sas <- function(path, path.cat = NULL, atomic.to.fac = FALSE) {
 #         into a common class format (see \code{\link{unlabel}}).
 #
 #' @importFrom haven read_dta
-# 
+#
 read_stata <- function(path, atomic.to.fac = FALSE) {
   # check if suggested package is available
   if (!requireNamespace("haven", quietly = TRUE)) {
@@ -4159,7 +4159,7 @@ read_stata <- function(path, atomic.to.fac = FALSE) {
 # @param enc.to.utf8 Logical, if \code{TRUE}, character encoding of variable and
 #          value labels will be converted to UTF-8.
 #
-# 
+#
 write_spss <- function(x, path, enc.to.utf8=FALSE) {
   write_data(x = x, path = path, type = "spss", enc.to.utf8 = enc.to.utf8)
 }
@@ -4180,7 +4180,7 @@ write_spss <- function(x, path, enc.to.utf8=FALSE) {
 #
 # @inheritParams write_spss
 #
-# 
+#
 write_stata <- function(x, path, enc.to.utf8 = TRUE) {
   write_data(x = x, path = path, type = "stata", enc.to.utf8 = enc.to.utf8)
 }
@@ -4283,7 +4283,7 @@ write_data <- function(x, path, type, enc.to.utf8) {
 # # renumber from 1 to 0
 # lapply(recode_to(dummy), table)
 #
-# 
+#
 recode_to <- function(x, lowest = 0, highest = -1) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -4432,7 +4432,7 @@ rec_to_helper <- function(x, lowest, highest) {
 # data(iris)
 # rec(iris$Species, "setosa=huhu; else=copy")
 #
-# 
+#
 rec <- function(x,
                 recodes,
                 as.fac = FALSE,
@@ -4653,12 +4653,12 @@ rec_helper <- function(x, recodes, as.fac, var.label, val.labels) {
 }
 
 # @rdname rec
-# 
+#
 `rec<-` <- function(x, as.fac = FALSE, var.label = NULL, val.labels = NULL, value) {
   UseMethod("rec<-")
 }
 
-# 
+#
 `rec<-.default` <- function(x, as.fac = FALSE, var.label = NULL, val.labels = NULL, value) {
   x <- rec(x = x, recodes = value, as.fac = as.fac, var.label = var.label, val.labels = val.labels)
   x
@@ -4701,7 +4701,7 @@ rec_helper <- function(x, recodes, as.fac, var.label, val.labels) {
 # # watch result
 # frq(as_labelled(x))
 #
-# 
+#
 rec_pattern <- function(from, to, width = 5, other = NULL){
   # init variables
   rec.pat <- c()
@@ -4755,7 +4755,7 @@ rec_pattern <- function(from, to, width = 5, other = NULL){
 # str(x)
 # table(x)
 #
-# 
+#
 ref_lvl <- function(x, value = NULL) {
   # check correct arguments
   if (is.null(x)) {
@@ -4807,12 +4807,12 @@ ref_lvl <- function(x, value = NULL) {
 }
 
 # @rdname ref_lvl
-# 
+#
 `ref_lvl<-` <- function(x, value) {
   UseMethod("ref_lvl<-")
 }
 
-# 
+#
 `ref_lvl<-.default` <- function(x, value) {
   x <- ref_lvl(x = x, value = value)
   x
@@ -4877,7 +4877,7 @@ ref_lvl <- function(x, value = NULL) {
 #  }}
 #
 #' @importFrom stats cor
-# 
+#
 reliab_test <- function(x,
                         scale.items = FALSE,
                         digits = 3) {
@@ -4957,7 +4957,7 @@ reliab_test <- function(x,
 # str(efc)
 # str(remove_all_labels(efc))
 #
-# 
+#
 remove_all_labels <- function(x) {
   if (is.data.frame(x)) {
     for (i in 1:ncol(x)) x[[i]] <- remove_all_labels_helper(x[[i]])
@@ -5020,7 +5020,7 @@ remove_all_labels_helper <- function(x) {
 # get_labels(x, include.values = "p")
 #
 #
-# 
+#
 remove_labels <- function(x, value) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -5076,12 +5076,12 @@ remove_labels_helper <- function(x, value) {
 }
 
 # @rdname remove_labels
-# 
+#
 `remove_labels<-` <- function(x, value) {
   UseMethod("remove_labels<-")
 }
 
-# 
+#
 `remove_labels<-.default` <- function(x, value) {
   x <- remove_labels(x, value)
   x
@@ -5118,7 +5118,7 @@ remove_labels_helper <- function(x, value) {
 # # show variables, NA's replaced with 99
 # lapply(replace_na(dummy, 99), table, exclude = NULL)
 #
-# 
+#
 replace_na <- function(x, value, na.label = NULL) {
   # check for valid value
   if (is.null(value) || is.na(value)) return(x)
@@ -5165,12 +5165,12 @@ replace_na_helper <- function(x, value, na.label) {
 
 
 # @rdname replace_na
-# 
+#
 `replace_na<-` <- function(x, na.label = NULL, value) {
   UseMethod("replace_na<-")
 }
 
-# 
+#
 `replace_na<-.default` <- function(x, na.label = NULL, value) {
   x <- replace_na(x = x, value = value, na.label = na.label)
   x
@@ -5222,7 +5222,7 @@ replace_na_helper <- function(x, value, na.label) {
 # rmse(fit, normalized = TRUE)
 #
 #' @importFrom stats residuals
-# 
+#
 rmse <- function(fit, normalized = FALSE) {
   # compute rmse
   rmse_val <- sqrt(mean(stats::residuals(fit) ^ 2, na.rm = TRUE))
@@ -5295,7 +5295,7 @@ rmse <- function(fit, normalized = FALSE) {
 # # hence a total sample size of about 172 observations is needed.
 # smpsize_lmm(eff.size = .2, df.n = 5, k = 20, power = .9)
 #
-# 
+#
 smpsize_lmm <- function(eff.size, df.n = NULL, power = .8, sig.level = .05, k, icc = 0.05) {
   if (!requireNamespace("pwr", quietly = TRUE)) {
     stop("Package `pwr` needed for this function to work. Please install it.", call. = FALSE)
@@ -5337,7 +5337,7 @@ smpsize_lmm <- function(eff.size, df.n = NULL, power = .8, sig.level = .05, k, i
 # # and an assumed intraclass correlation coefficient of 0.05.
 # deff(n = 30)
 #
-# 
+#
 deff <- function(n, icc = 0.05) {
   return(1 + (n - 1) * icc)
 }
@@ -5372,7 +5372,7 @@ deff <- function(n, icc = 0.05) {
 # fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 # se(fit)
 #
-# 
+#
 se <- function(x) {
   if (is_merMod(x)) {
     return(std_merMod(x))
@@ -5512,7 +5512,7 @@ std_merMod <- function(fit) {
 # # see result...
 # get_label(dummies)
 #
-# 
+#
 set_label <- function(x, lab, attr.string = NULL) {
   # auto-detect variable label attribute
   if (is.null(attr.string)) attr.string <- getVarLabelAttribute(x)
@@ -5566,12 +5566,12 @@ set_label <- function(x, lab, attr.string = NULL) {
 
 
 # @rdname set_label
-# 
+#
 `set_label<-` <- function(x, attr.string = NULL, value) {
   UseMethod("set_label<-")
 }
 
-# 
+#
 `set_label<-.default` <- function(x, attr.string = NULL, value) {
   x <- set_label(x, value, attr.string)
   x
@@ -5698,7 +5698,7 @@ set_label <- function(x, lab, attr.string = NULL) {
 # # see result...
 # get_labels(dummies)
 #
-# 
+#
 set_labels <- function(x,
                        labels,
                        force.labels = FALSE,
@@ -5948,12 +5948,12 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
 }
 
 # @rdname set_labels
-# 
+#
 `set_labels<-` <- function(x, force.labels = FALSE, force.values = TRUE, value) {
   UseMethod("set_labels<-")
 }
 
-# 
+#
 `set_labels<-.default` <- function(x, force.labels = FALSE, force.values = TRUE, value) {
   x <- set_labels(x, value, force.labels, force.values)
   x
@@ -6053,7 +6053,7 @@ set_values_vector <- function(x, labels, var.name, force.labels, force.values) {
 # table(dummy)
 # get_na(dummy)
 #
-# 
+#
 set_na <- function(x, value, as.attr = FALSE) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -6174,12 +6174,12 @@ set_na_attr <- function(x, na.values) {
 }
 
 # @rdname set_na
-# 
+#
 `set_na<-` <- function(x, as.attr = FALSE, value) {
   UseMethod("set_na<-")
 }
 
-# 
+#
 `set_na<-.default` <- function(x, as.attr = FALSE, value) {
   x <- set_na(x, value, as.attr)
   x
@@ -6209,7 +6209,7 @@ set_na_attr <- function(x, na.values) {
 # # show cell percentages
 # table_values(tab)$cell
 #
-# 
+#
 table_values <- function(tab, digits = 2) {
   # convert to ftable object
   if (all(class(tab) != "ftable")) tab <- ftable(tab)
@@ -6239,7 +6239,7 @@ table_values <- function(tab, digits = 2) {
 # data(efc)
 # levene_test(efc$c12hour, efc$e42dep)
 #
-# 
+#
 levene_test <- function(depVar, grpVar) {
   # check if grpVar is factor
   if (!is.factor(grpVar)) grpVar <- factor(grpVar)
@@ -6350,7 +6350,7 @@ lm_pval_fstat <- function(x) {
 # table(split_var(efc$e42dep, 2, inclusive = TRUE))
 #
 #' @importFrom stats quantile
-# 
+#
 split_var <- function(x, groupcount, as.num = FALSE, val.labels = NULL, var.label = NULL, inclusive = FALSE) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -6470,7 +6470,7 @@ split_var_helper <- function(x, groupcount, as.num, val.labels, var.label, inclu
 #
 #' @importFrom stats model.matrix coef terms
 #' @importFrom nlme getResponse
-# 
+#
 std_beta <- function(fit,
                      include.ci = FALSE,
                      type = "std") {
@@ -6613,7 +6613,7 @@ sjs.stdmm <- function(fit) {
 # str_contains("abc", c("a", "b", "e"), logic = "not")
 # str_contains("abc", c("d", "e", "f"), logic = "not")
 #
-# 
+#
 str_contains <- function(x, pattern, ignore.case = FALSE, logic = NULL) {
   # ignore case in search term
   if (ignore.case) x <- tolower(x)
@@ -6699,7 +6699,7 @@ str_contains <- function(x, pattern, ignore.case = FALSE, logic = NULL) {
 #
 #' @importFrom stringdist stringdist
 #' @importFrom utils txtProgressBar setTxtProgressBar
-# 
+#
 str_pos <- function(searchString,
                     findTerm,
                     maxdist = 2,
@@ -6808,7 +6808,7 @@ str_pos <- function(searchString,
 # # use "dummy" as new variable name
 # head(to_dummy(efc$e42dep, var.name = "dummy"))
 #
-# 
+#
 to_dummy <- function(x,
                      var.name = "name",
                      suffix = c("numeric", "label"),
@@ -6966,7 +6966,7 @@ to_dummy <- function(x,
 # str(x)
 # table(x)
 #
-# 
+#
 to_factor <- function(x, add.non.labelled = FALSE, drop.na = TRUE, ref.lvl = NULL) {
   if (is.matrix(x) || is.data.frame(x)) {
     for (i in 1:ncol(x)) x[[i]] <- to_fac_helper(x[[i]],
@@ -7123,7 +7123,7 @@ to_fac_helper <- function(x, add.non.labelled, drop.na, ref.lvl) {
 # get_labels(dummy,, "p")
 # to_label(dummy)
 #
-# 
+#
 to_label <- function(x, add.non.labelled = FALSE, prefix = FALSE, drop.na = TRUE) {
   if (is.matrix(x) || is.data.frame(x)) {
     for (i in 1:ncol(x)) {
@@ -7254,7 +7254,7 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
 #
 #' @importFrom tidyr gather_
 #' @importFrom dplyr bind_cols
-# 
+#
 to_long <- function(data, keys, values, ..., labels = NULL, recode.key = FALSE) {
   # get variable names for gather columns
   data_cols <- eval(substitute(list(...)))
@@ -7367,7 +7367,7 @@ to_long <- function(data, keys, values, ..., labels = NULL, recode.key = FALSE) 
 #               c(FALSE, FALSE, TRUE))
 # frq(x)
 #
-# 
+#
 to_na <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -7436,7 +7436,7 @@ to_na_helper <- function(x) set_na(x, suppressMessages(get_na(x)), as.attr = FAL
 # dummy <- factor(c("D", "F", "H"))
 # table(to_value(dummy))
 #
-# 
+#
 to_value <- function(x,
                      start.at = NULL,
                      keep.labels = TRUE) {
@@ -7512,7 +7512,7 @@ to_value_helper <- function(x, start.at, keep.labels) {
 # trim(" white space at start and end ")
 # trim(c(" string1 ", "   string2", "string 3   "))
 #
-# 
+#
 trim <- function(x) gsub("^\\s+|\\s+$", "", x)# @title Convert labelled vectors into normal classes
 # @name unlabel
 #
@@ -7541,7 +7541,7 @@ trim <- function(x) gsub("^\\s+|\\s+$", "", x)# @title Convert labelled vectors 
 #         Data frames will be converted into labelled data frames (see \code{\link{lbl_df}}).
 #
 #' @importFrom utils txtProgressBar setTxtProgressBar
-# 
+#
 unlabel <- function(x) {
   # check if complete data frame or only single
   # vector should be converted
@@ -7593,7 +7593,7 @@ unlabel <- function(x) {
 # table(weight2(v, w))
 #
 #
-# 
+#
 weight2 <- function(x, weights) {
   items <- unique(x)
   newvar <- c()
@@ -7642,7 +7642,7 @@ weight2 <- function(x, weights) {
 # table(weight(x, w))
 #
 #' @importFrom stats na.pass xtabs
-# 
+#
 weight <- function(x, weights, digits = 0) {
   # init values
   weightedvar <- c()
@@ -7688,7 +7688,7 @@ weight <- function(x, weights, digits = 0) {
 # data(efc)
 # wtd_sd(efc[, 1:3], runif(n = nrow(efc)))
 #
-# 
+#
 wtd_sd <- function(x, weights = NULL) {
   # check if suggested packages are available
   if (!requireNamespace("Hmisc", quietly = TRUE)) {
@@ -7734,7 +7734,7 @@ wtd_sd <- function(x, weights = NULL) {
 # data(efc)
 # wtd_se(efc[, 1:3], runif(n = nrow(efc)))
 #
-# 
+#
 wtd_se <- function(x, weights = NULL) {
   # check if suggested packages are available
   if (!requireNamespace("Hmisc", quietly = TRUE)) {
@@ -7782,7 +7782,7 @@ wtd_se <- function(x, weights = NULL) {
 # message(word_wrap("Much too long string for just one line!", 15))
 #
 #' @importFrom stats na.omit
-# 
+#
 word_wrap <- function(labels, wrap, linesep = NULL) {
   # check if labels have NA values and remove them
   if (anyNA(labels)) labels <- as.character(stats::na.omit(labels))
@@ -7867,7 +7867,7 @@ word_wrap <- function(labels, wrap, linesep = NULL) {
 # str(zap_unlabelled(x))
 #
 #' @importFrom stats na.omit
-# 
+#
 zap_labels <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
@@ -7926,7 +7926,7 @@ zap_labels <- function(x) {
 # str(zap_unlabelled(x))
 #
 #' @importFrom stats na.omit
-# 
+#
 zap_unlabelled <- function(x) {
   if (is.matrix(x) || is.data.frame(x) || is.list(x)) {
     # get length of data frame or list, i.e.
