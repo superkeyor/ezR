@@ -1667,9 +1667,9 @@ ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
         # but iris['Sepal.Length'] will not! (iris['Sepal.Length',drop=F] actually gives a warning!)
         # will not convert a single row, but it does not hurt to add drop=F, e.g., iris[1,,drop=F] OK
         col=(ez.selcol(x,col))
-        df.temp = df[,col,drop=FALSE]
-        # # slicing with [] would cause to lose attributes information, which in some case are not desired
-        # df.temp = dplyr::select(df,col)
+        # df.temp = df[,col,drop=FALSE]
+        # slicing with [] would cause to lose attributes information, which in some case are not desired
+        df.temp = dplyr::select(df,col)
     } else {
         df.temp = df
     }
@@ -1677,14 +1677,14 @@ ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
     if (length(n)==1){
         if (n==0) {
             # simply call complete.cases which might be faster
-            result = df[complete.cases(df.temp),,drop=FALSE]
-            # result = dplyr::slice(df,which( complete.cases(df.temp) ))
+            # result = df[complete.cases(df.temp),,drop=FALSE]
+            result = dplyr::filter(df,complete.cases(df.temp))
         } else {
             # credit: http://stackoverflow.com/a/30461945/2292993
             log <- apply(df.temp, 2, is.na)
             logindex <- apply(log, 1, function(x) sum(x) == n)
-            result = df[logindex,,drop=FALSE]
-            # result = dplyr::slice(df, which( logindex ))
+            # result = df[logindex,,drop=FALSE]
+            result = dplyr::filter(df,logindex)
         }
     }
 
@@ -1692,8 +1692,8 @@ ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
         min = n[1]; max = n[2]
         log <- apply(df.temp, 2, is.na)
         logindex <- apply(log, 1, function(x) {sum(x) >= min && sum(x) <= max})
-        result = df[logindex,,drop=FALSE]
-        # result = dplyr::slice(df, which( logindex ))
+        # result = df[logindex,,drop=FALSE]
+        result = dplyr::filter(df,logindex)
     }
 
     # https://stackoverflow.com/a/7570677/2292993
