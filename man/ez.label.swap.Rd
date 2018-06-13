@@ -10,7 +10,7 @@ ez.label.swap(df, mode = 1)
 ez.swaplabel(df, mode = 1)
 }
 \arguments{
-\item{mode}{1=attr(df,'variable.labels')-->better for slice[,]; 2=attr(df[[col]],'label')-->better for left_join.}
+\item{mode}{1=attr(df,'variable.labels')-->better for slice[1:10,]; 2=attr(df[[col]],'label')-->better for left_join.}
 }
 \description{
 swap variable label mode

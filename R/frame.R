@@ -301,7 +301,7 @@ ez.setlabel=ez.label.set
 
 #' swap variable label mode
 #' @description swap variable label mode
-#' @param mode 1=attr(df,'variable.labels')-->better for slice[,]; 2=attr(df[[col]],'label')-->better for left_join.
+#' @param mode 1=attr(df,'variable.labels')-->better for slice[1:10,]; 2=attr(df[[col]],'label')-->better for left_join.
 #' @export
 ez.label.swap = function(df, mode=1) {
     if (mode==1) {
