@@ -24,9 +24,9 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 }
 \description{
-ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+ez.reads:  haven (label,labels), usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
 \cr 
-\cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
+\cr ez.reads2: foreign (variable.labels, value.labels), perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
 \cr 
 \cr I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
 }

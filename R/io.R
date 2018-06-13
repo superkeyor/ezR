@@ -153,9 +153,9 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 }
 
 #' read spss
-#' @description ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
+#' @description ez.reads:  haven (label,labels), usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
 #' \cr 
-#' \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
+#' \cr ez.reads2: foreign (variable.labels, value.labels), perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
 #' \cr 
 #' \cr I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
 #' @param path File path to the data file
@@ -189,11 +189,8 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     if (tolower) names(result) = tolower(names(result))
 
     # avoid warning: attributes are not identical across measure variables
-    # get rid of label, replaced with variable.labels as an attr of df--still be recognized by rstudio
     # do this before atm2fac, trim
-    variable.labels = ez.label.get(result)
-    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; attr(x,'label') <- NULL; return(x)})
-    attr(result,'variable.labels') <- variable.labels
+    result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; return(x)})
     
     # the atm2fac/atomic.to.fac only works for variable with numbers with labels/attributes (gender 1/2)
     # not string values (group control/patient)
