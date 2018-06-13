@@ -524,8 +524,9 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE, ...){
 #' \cr "col2:az" --another column in az    (ignored if x is not a data frame)
 #' \cr "col2:za" --another column in za    (ignored if x is not a data frame)
 #' @return returns a new df, factor (non-factor->factor)
+#' @note if x df, pass (x,col,ord);  if x not df, pass (x,ord), or (x,ord=)
 #' @export
-ez.factorder = function(x, col, ord="as", print2screen=F){
+ez.factorder = function(x, col, ord=NULL, print2screen=F){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
@@ -568,6 +569,7 @@ ez.factorder = function(x, col, ord="as", print2screen=F){
         return(df)
 
     } else {
+        if (is.null(ord)) ord = col
         labels <- sjmisc_get_labels(x, attr.only = T, include.values = "n")
         varlab <- attr(x,'label',exact=T)
         if (!is.factor(x)) {
@@ -596,11 +598,12 @@ ez.factorder = function(x, col, ord="as", print2screen=F){
 #' change factor level names in a df
 #' @param x data frame or vector, factor or non-factor
 #' @param col a single column name, quoted string, ignored when x is not a data frame
-#' @param newLevelNames new level names coresponding to levels(x), eg, c("one","two","three")
+#' @param orn new level names coresponding to levels(x), eg, c("one","two","three")
 #' @return returns a new df, factor (non-factor->factor)
+#' @note if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=)
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
 #' @export
-ez.factorname = function(x, col, newLevelNames, print2screen=T){
+ez.factorname = function(x, col, orn=NULL, print2screen=T){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
@@ -613,11 +616,13 @@ ez.factorname = function(x, col, newLevelNames, print2screen=T){
         }
 
         if (print2screen) cat('Initial level names: ', levels(df[[col]]), '\n')
-        levels(df[[col]]) = newLevelNames
-        if (print2screen) cat('Renamed level names: ', newLevelNames, '\n')
+        df[[col]] = factor(df[[col]])  # get rid of value labels, if exist
+        levels(df[[col]]) = orn
+        if (print2screen) cat('Renamed level names: ', orn, '\n')
         return(df)
 
     } else {
+        if (is.null(orn)) orn = col
         if (!is.factor(x)){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
             varlab <- attr(x,'label',exact=T)
@@ -626,8 +631,9 @@ ez.factorname = function(x, col, newLevelNames, print2screen=T){
         }
 
         if (print2screen) cat('Initial level names: ', levels(x), '\n')
-        levels(x) = newLevelNames
-        if (print2screen) cat('Renamed level names: ', newLevelNames, '\n')
+        x = factor(x)   # get rid of value labels, if exist
+        levels(x) = orn
+        if (print2screen) cat('Renamed level names: ', orn, '\n')
         return(x)
     }
 }
@@ -1208,7 +1214,7 @@ ez.countif = function(x, cnd, col=NULL, dim=3, na.rm=FALSE) {
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.recols = function(df, newColOrder,col=NULL){
+ez.recols = function(df,newColOrder,col=NULL){
     # http://rrubyperlundich.blogspot.com/2011/06/r-sorting-vectors-sort-vs-order.html
     # the result of sort() is a vector consisting of elements of the original (unsorted) vector
     # order(), we get a vector with the ordered indices of the original (unsorted) vector

@@ -4,20 +4,23 @@
 \alias{ez.factorname}
 \title{change factor level names in a df}
 \usage{
-ez.factorname(x, col, newLevelNames, print2screen = T)
+ez.factorname(x, col, orn = NULL, print2screen = T)
 }
 \arguments{
 \item{x}{data frame or vector, factor or non-factor}
 
 \item{col}{a single column name, quoted string, ignored when x is not a data frame}
 
-\item{newLevelNames}{new level names coresponding to levels(x), eg, c("one","two","three")}
+\item{orn}{new level names coresponding to levels(x), eg, c("one","two","three")}
 }
 \value{
 returns a new df, factor (non-factor->factor)
 }
 \description{
 change factor level names in a df
+}
+\note{
+if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=)
 }
 \references{
 \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}

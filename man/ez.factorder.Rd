@@ -4,7 +4,7 @@
 \alias{ez.factorder}
 \title{change factor level order in a df}
 \usage{
-ez.factorder(x, col, ord = "as", print2screen = F)
+ez.factorder(x, col, ord = NULL, print2screen = F)
 }
 \arguments{
 \item{x}{data frame or vector, factor or non-factor}
@@ -23,4 +23,7 @@ returns a new df, factor (non-factor->factor)
 }
 \description{
 does not change factor label; only changes the order of printing out
+}
+\note{
+if x df, pass (x,col,ord);  if x not df, pass (x,ord), or (x,ord=)
 }
