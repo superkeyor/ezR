@@ -7500,7 +7500,7 @@ to_value_helper <- function(x, start.at, keep.labels) {
   # check if we should attach former labels as value labels
   if (keep.labels) {
     new_value <- set_labels(new_value, labels, force.labels = T)
-    new_value <- set_label(new_value, label = varlab)
+    new_value <- set_label(new_value, lab = varlab)
   }
   return(new_value)
 }
