@@ -289,6 +289,7 @@ ez.vi = function(x,printn=35,order='as') {
         v.attrs[c('row.names','names','class')] <- NULL
         v.attrs = sapply(v.attrs,length)
         v.attrs = paste(names(v.attrs),v.attrs,sep = ' @ ',collapse = ', ')
+        if (v.attrs!='') v.attrs = '@'
 
         first2rows = if (nrow(v)>=4) 1:2 else 1:nrow(v); last2rows = if (nrow(v)>=4) (nrow(v)-2+1):nrow(v) else NULL
         first3cols = if (ncol(v)>=6) 1:3 else 1:ncol(v); last3cols = if (ncol(v)>=6) (ncol(v)-3+1):ncol(v) else NULL
@@ -299,7 +300,7 @@ ez.vi = function(x,printn=35,order='as') {
 
         cat(v.cols)
         cat(sprintf('\n%-25s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
-        if (v.attrs!='') cat(sprintf('attributes: %s\n',v.attrs))
+        cat(sprintf('attributes: %s\n',v.attrs))
     } else if (is.list(x)) {
         for (l in names(x)) {
             cat(sprintf('$%-25s\t%s\n',l,class(x[[l]]) %>% toString))
