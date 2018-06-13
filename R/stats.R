@@ -315,7 +315,7 @@ ez.vi = function(x,printn=35,order='as') {
         v.unique=length(unique(v))
 
         v.attrs = attributes(v)
-        v.attrs[c('levels','class')] <- NULL
+        v.attrs[c('levels','names','class')] <- NULL
         v.attrs = sapply(v.attrs,length)
         v.attrs = paste(names(v.attrs),v.attrs,sep = ' @ ',collapse = ', ')
         if (v.attrs == '') v.attrs = '@'
