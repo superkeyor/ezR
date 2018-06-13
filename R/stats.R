@@ -288,7 +288,9 @@ ez.vi = function(x,printn=35,order='as') {
         first2rows = if (nrow(v)>=4) 1:2 else 1:nrow(v); last2rows = if (nrow(v)>=4) (nrow(v)-2+1):nrow(v) else NULL
         first3cols = if (ncol(v)>=6) 1:3 else 1:ncol(v); last3cols = if (ncol(v)>=6) (ncol(v)-3+1):ncol(v) else NULL
         # c(1:2,NULL) -> (1,2)
-        print(v[c(first2rows,last2rows),c(first3cols,last3cols),drop=F])
+        rows = if (nrow(v)==0) integer(0) else c(first2rows,last2rows)
+        cols = if (ncol(v)==0) integer(0) else c(first3cols,last3cols)
+        print(v[rows,cols,drop=F])
 
         cat(v.cols)
         cat(sprintf('\n%-25s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
