@@ -306,20 +306,20 @@ ez.setlabel=ez.label.set
 ez.label.swap = function(df, mode=1) {
     if (mode==1) {
         lbls = ez.label.get(df)
-        df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
-        attr(df,'variable.labels') <- lbls
+        df[]=lapply(df, function(x) {attr(x,'label',exact=T) <- NULL; return(x)})
+        attr(df,'variable.labels',exact=T) <- lbls
     } else if (mode==2) {
         lbls = ez.label.get(df)
         if (!is.null(lbls)) {
             for (j in colnames(df)) {
                 lbl = lbls[[j]]  # or unname(lbls[j])
                 if (lbl == '') lbl = NULL
-                attr(df[[j]],'label') <- lbl
+                attr(df[[j]],'label',exact=T) <- lbl
             }
-            attr(df,'variable.labels') <- NULL
+            attr(df,'variable.labels',exact=T) <- NULL
         } else {
-            df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
-            attr(df,'variable.labels') <- NULL
+            df[]=lapply(df, function(x) {attr(x,'label',exact=T) <- NULL; return(x)})
+            attr(df,'variable.labels',exact=T) <- NULL
         }
     }
     return(df)
@@ -617,9 +617,9 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
         # for nonfactor, length(levels(x)) returns 0
         if (length(levels(x))!=length(levels(factor(x,unique(as.character(x)))))) {
             if (print2screen) cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
-            varlab <- attr(x,'label')
+            varlab <- attr(x,'label',exact=T)
             x = factor(x, unique(as.character(x)))
-            attr(x,'label') <- varlab
+            attr(x,'label',exact=T) <- varlab
         }
     } else if (is.data.frame(x) & !is.null(cols)) {
         cols=ez.selcol(x,cols)
@@ -1963,7 +1963,7 @@ ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
         # set_labels only for value labels
         # x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
         # attributes(x) <- NULL  # this is not desirable because some attributes are needed, eg, $class, $level, $names
-        for (a in attrs) {attr(x,a) <- NULL}
+        for (a in attrs) {attr(x,a,exact=T) <- NULL}
     } else if (is.data.frame(x) & is.null(col)) {
         # x = dplyr::mutate_all(x, funs(ez.clattr(.,attrs=attrs)))
         x[] = lapply(x,function(e,attrs){ez.clattr(e,attrs=attrs)},attrs=attrs)
