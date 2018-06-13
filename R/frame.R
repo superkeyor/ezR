@@ -285,7 +285,7 @@ ez.label.set = function(df,varname,label){
 
 #' set variable label mode
 #' @description set variable label mode
-#' @param mode 1=attr(df,'variable.labels'); 2=attr(df[[col]],'label')
+#' @param mode 1=attr(df,'variable.labels'); 2=attr(df[[col]],'label')-->better for left_join.
 #' @export
 ez.label.mode = function(df, mode=1) {
     if (mode==1) {
@@ -294,12 +294,17 @@ ez.label.mode = function(df, mode=1) {
         attr(df,'variable.labels') <- variable.labels
     } else if (mode==2) {
         variable.labels = ez.label.get(df)
-        for (j in colnames(df)) {
-            lbl = unname(variable.labels[j])
-            if (lbl == '') lbl = NULL
-            attr(df[[j]],'label') <- lbl
+        if (!is.null(variable.labels)) {
+            for (j in colnames(df)) {
+                lbl = unname(variable.labels[j])
+                if (lbl == '') lbl = NULL
+                attr(df[[j]],'label') <- lbl
+            }
+            attr(df,'variable.labels') <- NULL
+        } else {
+            df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
+            attr(df,'variable.labels') <- NULL
         }
-        attr(df,'variable.labels') <- NULL
     }
     return(df)
 }

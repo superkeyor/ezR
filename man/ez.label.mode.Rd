@@ -7,7 +7,7 @@
 ez.label.mode(df, mode = 1)
 }
 \arguments{
-\item{mode}{1=attr(df,'variable.labels'); 2=attr(df[[col]],'label')}
+\item{mode}{1=attr(df,'variable.labels'); 2=attr(df[[col]],'label')-->better for left_join.}
 }
 \description{
 set variable label mode
