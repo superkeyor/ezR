@@ -1368,7 +1368,12 @@ get_label <- function(x, def.value = NULL) {
       # return(attr(x, "variable.labels", exact = T))
       # jerry: maybe variable.labels has variables that have already been deleted in x
       # so only return existing variables
-      return(attr(x, "variable.labels", exact = T)[colnames(x)])
+      # or maybe added variables
+      mylbls = attr(x, "variable.labels", exact = T)
+      mylbls = mylbls[colnames(x)]
+      names(mylbls) = colnames(x)       # if added variables
+      mylbls[which(is.na(mylbls))] = '' # if added variables  NA --> ''
+      return(mylbls)
     }
   } else if (is.list(x)) {
     # nothing found? then leave...

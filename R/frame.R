@@ -305,14 +305,14 @@ ez.setlabel=ez.label.set
 #' @export
 ez.label.swap = function(df, mode=1) {
     if (mode==1) {
-        variable.labels = ez.label.get(df)
+        lbls = ez.label.get(df)
         df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
-        attr(df,'variable.labels') <- variable.labels
+        attr(df,'variable.labels') <- lbls
     } else if (mode==2) {
-        variable.labels = ez.label.get(df)
-        if (!is.null(variable.labels)) {
+        lbls = ez.label.get(df)
+        if (!is.null(lbls)) {
             for (j in colnames(df)) {
-                lbl = unname(variable.labels[j])
+                lbl = lbls[[j]]  # or unname(lbls[j])
                 if (lbl == '') lbl = NULL
                 attr(df[[j]],'label') <- lbl
             }

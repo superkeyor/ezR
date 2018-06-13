@@ -136,7 +136,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         # countable as levels
         if ( is.factor(df[[var]]) | (is.character(df[[var]]) & characterize) | is.logical(df[[var]]) ) {
             v.levels1=dplyr::count_(df,var) %>% 
-                format.data.frame() %>% toString(width=width) %>%  # width controls if too many factor levels
+                format.data.frame() %>% toString(width=width) %>%  
                 gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
 
             freqtable=dplyr::count_(df,var)
@@ -284,6 +284,11 @@ ez.vi = function(x,printn=35,order='as') {
         }
         freq = table(classes)
         v.classes = paste('#',freq %>% names,': ',freq,sep='',collapse = ', ')
+        
+        v.attrs = attributes(v)
+        v.attrs[c('row.names','names','class')] <- NULL
+        v.attrs = sapply(v.attrs,length)
+        v.attrs = paste(names(v.attrs),v.attrs,sep = ' @ ',collapse = ', ')
 
         first2rows = if (nrow(v)>=4) 1:2 else 1:nrow(v); last2rows = if (nrow(v)>=4) (nrow(v)-2+1):nrow(v) else NULL
         first3cols = if (ncol(v)>=6) 1:3 else 1:ncol(v); last3cols = if (ncol(v)>=6) (ncol(v)-3+1):ncol(v) else NULL
@@ -294,6 +299,7 @@ ez.vi = function(x,printn=35,order='as') {
 
         cat(v.cols)
         cat(sprintf('\n%-25s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
+        if (v.attrs!='') cat(sprintf('attributes: %s\n',v.attrs))
     } else if (is.list(x)) {
         for (l in names(x)) {
             cat(sprintf('$%-25s\t%s\n',l,class(x[[l]]) %>% toString))
@@ -302,6 +308,7 @@ ez.vi = function(x,printn=35,order='as') {
     } else {
         v.elements = unique(v) %>% ez.vv(print2screen=F,printn=printn,order=order)
         v.class=class(v) %>% toString()
+        if (!is.null(names(v))) v.class=paste0('Named ',v.class)
         v.n=length(v)
         v.missing=sum(is.na(v))
         v.unique=length(unique(v))
