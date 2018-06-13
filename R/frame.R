@@ -608,32 +608,32 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
 
+        varlab <- attr(df[[col]],'label',exact=T)
         if (!is.factor(df[[col]])){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
-            varlab <- attr(df[[col]],'label',exact=T)
             df[[col]] = factor(df[[col]])
-            attr(df[[col]],'label') <- varlab
         }
 
         if (print2screen) cat('Initial level names: ', levels(df[[col]]), '\n')
         df[[col]] = factor(df[[col]])  # get rid of value labels, if exist
         levels(df[[col]]) = orn
         if (print2screen) cat('Renamed level names: ', orn, '\n')
+        attr(df[[col]],'label') <- varlab
         return(df)
 
     } else {
         if (is.null(orn)) orn = col
+        varlab <- attr(x,'label',exact=T)
         if (!is.factor(x)){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
-            varlab <- attr(x,'label',exact=T)
             x = factor(x)
-            attr(x,'label') <- varlab
         }
 
         if (print2screen) cat('Initial level names: ', levels(x), '\n')
         x = factor(x)   # get rid of value labels, if exist
         levels(x) = orn
         if (print2screen) cat('Renamed level names: ', orn, '\n')
+        attr(x,'label') <- varlab
         return(x)
     }
 }
