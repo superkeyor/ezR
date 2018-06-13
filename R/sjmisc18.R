@@ -1370,9 +1370,11 @@ get_label <- function(x, def.value = NULL) {
       # so only return existing variables
       # or maybe added variables
       mylbls = attr(x, "variable.labels", exact = T)
-      mylbls = mylbls[colnames(x)]
-      names(mylbls) = colnames(x)       # if added variables
-      mylbls[which(is.na(mylbls))] = '' # if added variables  NA --> ''
+      if (!is.null(mylbls)) {
+          mylbls = mylbls[colnames(x)]
+          names(mylbls) = colnames(x)       # if added variables
+          mylbls[which(is.na(mylbls))] = '' # if added variables  NA --> ''
+      }
       return(mylbls)
     }
   } else if (is.list(x)) {
