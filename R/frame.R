@@ -530,6 +530,8 @@ ez.factorder = function(x, col, ord="as", print2screen=F){
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
         # [[]] is the programmable form of $
+        labels <- sjmisc_get_labels(df[[col]], attr.only = T, include.values = "n")
+        varlab <- attr(df[[col]],'label',exact=T)
         if (length(ord)==1) {
             if (!is.factor(df[[col]])) {
                 if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
@@ -559,9 +561,15 @@ ez.factorder = function(x, col, ord="as", print2screen=F){
         } else {
             df[[col]]= factor(df[[col]],ord)
         }
+        lvls <- levels(df[[col]])
+        labels <- labels[lvls]
+        df[[col]] <- sjmisc_set_labels(df[[col]], labels, force.labels = T)
+        attr(df[[col]],'label') <- varlab
         return(df)
 
     } else {
+        labels <- sjmisc_get_labels(x, attr.only = T, include.values = "n")
+        varlab <- attr(x,'label',exact=T)
         if (!is.factor(x)) {
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
             x = factor(x)
@@ -577,6 +585,10 @@ ez.factorder = function(x, col, ord="as", print2screen=F){
         } else {
             x= factor(x,ord)
         }
+        lvls <- levels(x)
+        labels <- labels[lvls]
+        x <- sjmisc_set_labels(x, labels, force.labels = T)
+        attr(x,'label') <- varlab
         return(x)
     }
 }
@@ -595,7 +607,9 @@ ez.factorname = function(x, col, newLevelNames, print2screen=T){
 
         if (!is.factor(df[[col]])){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
+            varlab <- attr(df[[col]],'label',exact=T)
             df[[col]] = factor(df[[col]])
+            attr(df[[col]],'label') <- varlab
         }
 
         if (print2screen) cat('Initial level names: ', levels(df[[col]]), '\n')
@@ -606,7 +620,9 @@ ez.factorname = function(x, col, newLevelNames, print2screen=T){
     } else {
         if (!is.factor(x)){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
+            varlab <- attr(x,'label',exact=T)
             x = factor(x)
+            attr(x,'label') <- varlab
         }
 
         if (print2screen) cat('Initial level names: ', levels(x), '\n')
