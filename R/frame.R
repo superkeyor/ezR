@@ -213,7 +213,7 @@ ez.values.get = function(x, include.values='n', attr.only=T, include.non.labelle
 
 #' @rdname ez.values.get
 #' @export
-ez.values.get=ez.getvalues
+ez.getvalues=ez.values.get
 
 #' set value labels, wrapper of \code{\link{sjmisc_set_labels}}
 #' @description set value labels, wrapper of \code{\link{sjmisc_set_labels}}
@@ -241,7 +241,7 @@ ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE,
 
 #' @rdname ez.values.set
 #' @export
-ez.values.set=ez.setvalues
+ez.setvalues=ez.values.set
 
 #' get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @description get variable label, wrapper of \code{\link{sjmisc_get_label}}
@@ -273,7 +273,7 @@ ez.label.get = function(x,cols=NULL){
 
 #' @rdname ez.label.get
 #' @export
-ez.label.get=ez.getlabel
+ez.getlabel=ez.label.get
 
 #' set variable label, wrapper of \code{\link{sjmisc_set_label}}
 #' @description set variable label, wrapper of \code{\link{sjmisc_set_label}}
@@ -297,7 +297,7 @@ ez.label.set = function(df,varname,label){
 
 #' @rdname ez.label.set
 #' @export
-ez.label.set=ez.setlabel
+ez.setlabel=ez.label.set
 
 #' swap variable label mode
 #' @description swap variable label mode
@@ -327,7 +327,7 @@ ez.label.swap = function(df, mode=1) {
 
 #' @rdname ez.label.swap
 #' @export
-ez.label.swap=ez.swaplabel
+ez.swaplabel=ez.label.swap
 
 #' convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor
 #' @description factor 2 char

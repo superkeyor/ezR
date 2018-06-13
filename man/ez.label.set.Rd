@@ -2,9 +2,12 @@
 % Please edit documentation in R/frame.R
 \name{ez.label.set}
 \alias{ez.label.set}
+\alias{ez.setlabel}
 \title{set variable label, wrapper of \code{\link{sjmisc_set_label}}}
 \usage{
 ez.label.set(df, varname, label)
+
+ez.setlabel(df, varname, label)
 }
 \arguments{
 \item{df}{data frame}

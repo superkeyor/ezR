@@ -2,9 +2,13 @@
 % Please edit documentation in R/frame.R
 \name{ez.values.get}
 \alias{ez.values.get}
+\alias{ez.getvalues}
 \title{get value labels, wrapper of \code{\link{sjmisc_get_labels}}}
 \usage{
 ez.values.get(x, include.values = "n", attr.only = T,
+  include.non.labelled = F, ...)
+
+ez.getvalues(x, include.values = "n", attr.only = T,
   include.non.labelled = F, ...)
 }
 \description{

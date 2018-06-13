@@ -2,9 +2,12 @@
 % Please edit documentation in R/frame.R
 \name{ez.label.get}
 \alias{ez.label.get}
+\alias{ez.getlabel}
 \title{get variable label, wrapper of \code{\link{sjmisc_get_label}}}
 \usage{
 ez.label.get(x, cols = NULL)
+
+ez.getlabel(x, cols = NULL)
 }
 \arguments{
 \item{x}{a df: (efc), or a single var: (efc$e42dep)}

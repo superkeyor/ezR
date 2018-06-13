@@ -2,9 +2,13 @@
 % Please edit documentation in R/frame.R
 \name{ez.values.set}
 \alias{ez.values.set}
+\alias{ez.setvalues}
 \title{set value labels, wrapper of \code{\link{sjmisc_set_labels}}}
 \usage{
 ez.values.set(x, valuelabels, force.labels = FALSE, force.values = FALSE,
+  ...)
+
+ez.setvalues(x, valuelabels, force.labels = FALSE, force.values = FALSE,
   ...)
 }
 \value{
