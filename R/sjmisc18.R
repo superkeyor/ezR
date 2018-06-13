@@ -1365,7 +1365,10 @@ get_label <- function(x, def.value = NULL) {
       }
       return(all.labels)
     } else {
-      return(attr(x, "variable.labels", exact = T))
+      # return(attr(x, "variable.labels", exact = T))
+      # jerry: maybe variable.labels has variables that have already been deleted in x
+      # so only return existing variables
+      return(attr(x, "variable.labels", exact = T)[colnames(x)])
     }
   } else if (is.list(x)) {
     # nothing found? then leave...
