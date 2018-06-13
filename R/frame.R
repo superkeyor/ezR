@@ -2012,3 +2012,18 @@ ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
     }
     return(x)
 }
+
+#' kinda like filter(), but the order of rows are in the order of vec
+#' @description kinda like filter(), but the order of rows are in the order of vec
+#' @param col a single col name
+#' @param vec elements; see note
+#' @param nomatch if 0, not return a row for the nomatch; if NA/NULL, return NA.
+#' @return returns a new data frame with rows in df[[col]] matching the vec elements. row names are normal (1:nrow)
+#' @note works best if your vec contains exactly the same elements as df[[col]], and neither contain duplicate values
+#' \cr Actually, duplicated elements in vec OK, will be mathched multiple times. Duplicates in df[[col]] will be picked using first match. 
+#' @export
+ez.match = function(df, col, vec, nomatch=0) {
+    if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
+    # https://stackoverflow.com/a/11977256/2292993
+    df[match(vec, df[[col]], nomatch=nomatch),,drop=F]
+}
