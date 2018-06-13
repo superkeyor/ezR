@@ -289,7 +289,7 @@ ez.vi = function(x,printn=35,order='as') {
         v.attrs[c('row.names','names','class')] <- NULL
         v.attrs = sapply(v.attrs,length)
         v.attrs = paste(names(v.attrs),v.attrs,sep = ' @ ',collapse = ', ')
-        if (v.attrs!='') v.attrs = '@'
+        if (v.attrs == '') v.attrs = '@'
 
         first2rows = if (nrow(v)>=4) 1:2 else 1:nrow(v); last2rows = if (nrow(v)>=4) (nrow(v)-2+1):nrow(v) else NULL
         first3cols = if (ncol(v)>=6) 1:3 else 1:ncol(v); last3cols = if (ncol(v)>=6) (ncol(v)-3+1):ncol(v) else NULL
@@ -313,6 +313,12 @@ ez.vi = function(x,printn=35,order='as') {
         v.n=length(v)
         v.missing=sum(is.na(v))
         v.unique=length(unique(v))
+
+        v.attrs = attributes(v)
+        v.attrs[c('levels','class')] <- NULL
+        v.attrs = sapply(v.attrs,length)
+        v.attrs = paste(names(v.attrs),v.attrs,sep = ' @ ',collapse = ', ')
+        if (v.attrs == '') v.attrs = '@'
 
         # calculable 
         is.date <- function(x) inherits(x, 'Date')
@@ -358,6 +364,7 @@ ez.vi = function(x,printn=35,order='as') {
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
             cat(sprintf('Counts: %s\n',v.levels %>% toString(width=300)))
         }
+        cat(sprintf('attributes: %s\n',v.attrs))
     }
     return(invisible(NULL))
 }
