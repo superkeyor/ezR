@@ -11,6 +11,11 @@
 #' people = data.frame(sx, ht, wt)
 ez.frame = data.frame
 
+#' alias of \code{\link[data.table]{transpose}}
+#' @description alias of \code{\link[data.table]{transpose}}
+#' @export
+ez.transpose = data.table::transpose
+
 #' length of an object
 #' @description length of an object
 #' @return if a character vector with only one element, returns the number of characters in that item
