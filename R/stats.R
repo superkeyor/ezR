@@ -352,7 +352,7 @@ ez.vi = function(x,printn=35,order='as') {
                 if (!is.null(vallbl)) {
                     for (f in names(freq)) {lbl=c(lbl,paste0('(',vallbl[which(names(vallbl)==f)],')'))}
                 }
-                v.levels = paste(freq %>% names,lbl,': ',freq,sep='',collapse = ', ')
+                v.levels = paste(freq %>% names,lbl,': ',freq,sep='',collapse = '\n')
             }
         }
 
@@ -362,7 +362,7 @@ ez.vi = function(x,printn=35,order='as') {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts: %s\n',v.levels %>% toString(width=300)))
+            cat(sprintf('Counts: \n%s\n',v.levels %>% toString(width=300)))
         }
         cat(sprintf('attributes: %s\n',v.attrs))
     }
