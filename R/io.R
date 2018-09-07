@@ -68,7 +68,7 @@ xlcolconv = function(col){
 
 #' Excel-style column name converter: number from or to letters
 #' @description Excel-style column name converter: number from or to letters. Vectorized.
-#' @param col number or letters, input a number (27), output letters ('AA'), vice versa
+#' @param col number or letters, input a number (27), output letters ('AA'), vice versa. Vectorized. 1 = A, 26 = Z, 27 = AA, 703 = AAA
 #' @export
 # Vectorize in case you want to pass more than one column name in a single call
 ez.xlcolconv = Vectorize(xlcolconv)
