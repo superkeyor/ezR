@@ -38,6 +38,41 @@ ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
     return(result)
 }
 
+xlcolconv = function(col){
+    # test: 1 = A, 26 = Z, 27 = AA, 703 = AAA
+    if (is.character(col)) {
+        # codes from https://stackoverflow.com/a/34537691/2292993
+        s = col
+        # Uppercase
+        s_upper <- toupper(s)
+        # Convert string to a vector of single letters
+        s_split <- unlist(strsplit(s_upper, split=""))
+        # Convert each letter to the corresponding number
+        s_number <- sapply(s_split, function(x) {which(LETTERS == x)})
+        # Derive the numeric value associated with each letter
+        numbers <- 26^((length(s_number)-1):0)
+        # Calculate the column number
+        column_number <- sum(s_number * numbers)
+        return(column_number)
+    } else {
+        n = col
+        letters = ''
+        while (n > 0) {
+            r = (n - 1) %% 26  # remainder
+            letters = paste0(intToUtf8(r + utf8ToInt('A')), letters) # ascii
+            n = (n - 1) %/% 26 # quotient
+        }
+        return(letters)
+    }
+}
+
+#' Excel-style column name converter: number from or to letters
+#' @description Excel-style column name converter: number from or to letters. Vectorized.
+#' @param col number or letters, input a number (27), output letters ('AA'), vice versa
+#' @export
+# Vectorize in case you want to pass more than one column name in a single call
+ez.xlcolconv = Vectorize(xlcolconv)
+
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @return returns file path
