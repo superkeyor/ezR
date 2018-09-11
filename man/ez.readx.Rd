@@ -5,14 +5,18 @@
 \title{read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}}
 \usage{
 ez.readx(file, sheet = 1, tolower = FALSE, stringsAsFactors = TRUE,
-  makenames = TRUE, ...)
+  makenames = TRUE, detectDates = TRUE, ...)
 }
 \arguments{
+\item{sheet}{The name or index of the sheet to read data from.}
+
 \item{tolower}{whether to convert all column names to lower case}
 
 \item{stringsAsFactors}{T/F}
 
 \item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
+
+\item{detectDates}{If TRUE, attempt to recognise dates and perform conversion.}
 }
 \value{
 when stringsAsFactors=T, in the returned data frame, string to factor

@@ -115,8 +115,12 @@ ez.write = ez.save
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
+#' \cr in fact, makenames is ignored, because xlsx::read.xlsx internally deals with col names. I still keep it for consistency with ez.readx
+#' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
+#' \cr in fact, detectDates is ignored, because xlsx::read.xlsx internally deals with dates. I still keep it for consistency with ez.readx
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
 #' \cr number stored as text in excel (->string) -> factor
+#' \cr dates and datetimes will be auto converted, duplicate or illegal col names as variables will also be auto dealt with
 #' @examples
 #' read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
 #'           startRow=NULL, endRow=NULL, colIndex=NULL,
@@ -125,7 +129,7 @@ ez.write = ez.save
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
+ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, detectDates=TRUE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -133,6 +137,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, m
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    # xlsx::read.xlsx internally deals with col names. I still keep makenames for consistency with ez.readx
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
@@ -140,9 +145,11 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, m
 
 #' read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces
+#' @param sheet The name or index of the sheet to read data from.
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
+#' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
 #' \cr number stored as text in excel (->string) -> factor
 #' @examples
@@ -150,14 +157,15 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, m
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
-    result = openxlsx::read.xlsx(file, sheet, ...)
+ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, detectDates=TRUE, ...){
+    result = openxlsx::read.xlsx(file, sheet, detectDates=detectDates, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    # openxlsx::read.xlsx supports check.names, but my codes can print out information
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
