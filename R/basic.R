@@ -23,6 +23,11 @@ and = magrittr::and
 #' @export
 or = magrittr::or
 
+#' alias of \code{\link[glue]{glue}}
+#' @description alias of \code{\link[glue]{glue}}
+#' @export
+ez.sprintf = glue::glue
+
 #' Empty Value
 #'
 #' Rails-inspired helper that checks if vector values are "empty", i.e. if it's: \code{NULL}, zero-length, \code{NA}, \code{NaN}, \code{FALSE}, an empty string. Note that unlike its native R \code{is.<something>} sibling functions, \code{is.empty} is vectorised (hence the "values").
