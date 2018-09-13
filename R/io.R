@@ -252,10 +252,12 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
             if (!is.null(attr.string)) {
                 for (i in 1:ncol(data.spss)) {
                     x <- data.spss[[i]]
+                    lab <- attr(x, 'label', exact = T)
                     labs <- attr(x, attr.string, exact = T)
                     if (is.atomic(x) && !is.null(labs)) {
                         x <- as.factor(x)
                         attr(x, attr.string) <- labs
+                        attr(x, 'label') <- lab
                         data.spss[[i]] <- x
                     }
                 }

@@ -344,7 +344,7 @@ ez.vi = function(x,printn=35,order='as') {
             if ( is.factor(v) | is.character(v) | is.logical(v) ) {
                 # https://stackoverflow.com/questions/39370738/one-of-the-factors-levels-is-an-empty-string-how-to-replace-it-with-non-missin
                 levels(v)[levels(v) == ""] <- "_JERRYZHU_"
-                freq = table(v)
+                freq = table(v)  # table(v) excl NA
                 # make the order of names(freq) to be the same as v
                 if (is.factor(v)) freq = freq[levels(v)]
                 if (is.character(v)) freq = freq[unique(v)]
@@ -366,7 +366,7 @@ ez.vi = function(x,printn=35,order='as') {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts/Levels: \n%s\n',v.levels %>% toString(width=300)))
+            cat(sprintf('Counts/Levels (Excl NA): \n%s\n',v.levels %>% toString(width=300)))
         }
         cat(sprintf('attributes: %s\n',v.attrs))
     }
