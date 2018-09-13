@@ -355,7 +355,7 @@ ez.vi = function(x,printn=35,order='as') {
                     for (f in names(freq)) {lbl=c(lbl,paste0('(',vallbl[which(names(vallbl)==f)],')'))}
                 }
                 v.levels = paste(freq %>% names,lbl,': ',freq,sep='',collapse = '\n')
-                v.levels = gsub('_JERRYZHU_',v.levels,'',fixed=TRUE)
+                v.levels = gsub('_JERRYZHU_','',v.levels,fixed=TRUE)
             }
         }
 
