@@ -318,6 +318,7 @@ ez.vi = function(x,printn=35,order='as') {
         v.attrs[c('levels','names','class')] <- NULL
         v.attrs = sapply(v.attrs,length)
         v.attrs = paste(names(v.attrs),v.attrs,sep = ' @ ',collapse = ', ')
+        if (!is.null(ez.getlabel(v))) {v.attrs = paste(v.attrs,ez.getlabel(v),sep='',collapse = '\n')}
         if (v.attrs == '') v.attrs = '@'
 
         # calculable 
