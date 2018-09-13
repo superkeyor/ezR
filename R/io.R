@@ -238,7 +238,7 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # the atm2fac/atomic.to.fac only works for variable with numbers with labels/attributes (gender 1/2)
     # not string values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
-    if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
+    if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], function(x) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); as.factor(x); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x})
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
     result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else x)  
     result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else(x))
