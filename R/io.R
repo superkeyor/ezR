@@ -240,8 +240,8 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
-    result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab} else x)  
-    result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab} else(x))
+    result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else x)  
+    result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else(x))
 
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes
@@ -330,8 +330,8 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working??? 
     # --Where does the trailing spaces come from --String var padded to Width in SPSS
     # hack to remove leading and trailing string spaces
-    result[]=lapply(result, function(x) if (is.factor(x)) {labs <- attr(x, 'value.labels', exact = T); factor(trimws(x,'both')); attr(x, 'value.labels') <- labs} else x)  
-    result[]=lapply(result, function(x) if(is.character(x)) {labs <- attr(x, 'value.labels', exact = T); trimws(x,'both'); attr(x, 'value.labels') <- labs} else(x))
+    result[]=lapply(result, function(x) if (is.factor(x)) {labs <- attr(x, 'value.labels', exact = T); factor(trimws(x,'both')); attr(x, 'value.labels') <- labs; x} else x)  
+    result[]=lapply(result, function(x) if(is.character(x)) {labs <- attr(x, 'value.labels', exact = T); trimws(x,'both'); attr(x, 'value.labels') <- labs; x} else(x))
 
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes
