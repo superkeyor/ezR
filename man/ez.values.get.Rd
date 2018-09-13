@@ -11,6 +11,9 @@ ez.values.get(x, include.values = "n", attr.only = T,
 ez.getvalues(x, include.values = "n", attr.only = T,
   include.non.labelled = F, ...)
 }
+\arguments{
+\item{x}{data frame or variable with value labels attribute}
+}
 \description{
 get value labels, wrapper of \code{\link{sjmisc_get_labels}}
 }

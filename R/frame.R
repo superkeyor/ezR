@@ -201,6 +201,7 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, ...){
 
 #' get value labels, wrapper of \code{\link{sjmisc_get_labels}}
 #' @description get value labels, wrapper of \code{\link{sjmisc_get_labels}}
+#' @param x data frame or variable with value labels attribute
 #' @details see also \code{\link{sjmisc_get_values}}
 #' @family data transformation functions
 #' @export
