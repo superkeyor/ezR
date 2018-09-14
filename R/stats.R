@@ -263,8 +263,9 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
 #' @param order vector order for printing out, 'as','az','za'
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
+#' @param printcn Counts/Levels print n
 #' @export
-ez.vi = function(x,printn=35,order='as') {
+ez.vi = function(x,printn=35,printcn=600,order='as') {
     v = x
     if (is.data.frame(v) | is.matrix(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
@@ -366,7 +367,7 @@ ez.vi = function(x,printn=35,order='as') {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts/Levels (Excl NA): \n%s\n',v.levels %>% toString(width=300)))
+            cat(sprintf('Counts/Levels (Excl NA): \n%s\n',v.levels %>% toString(width=printcn)))
         }
         cat(sprintf('attributes: %s\n',v.attrs))
     }
