@@ -297,6 +297,11 @@ theme_apa_nosize <- function(plot.box = FALSE){
 
 }
 
+#' "see" color
+#' @description "see" color
+#' @export
+ggshowcolor = function(vec){barplot(rep(1,length(vec)),axes=F,col=vec,names.arg=vec)}
+
 #' show some help info on color, run ggcolor() for usage
 #' @description show some help info on color, run ggcolor() for usage
 #' @export
@@ -328,7 +333,7 @@ ggcolor = function(n=NULL){
         col2rgb("red"); col2rgb("#000d00")
 
         # "see" a color
-        showcolor=function(vec){barplot(rep(1,length(vec)),axes=F,col=vec,names.arg=vec)}
+        ggshowcolor(vec)
 
         RColorBrewer::display.brewer.all()
 
