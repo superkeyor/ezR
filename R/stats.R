@@ -135,14 +135,19 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         v.unique=length(unique(df[[var]]))
         # countable as levels
         if ( is.factor(df[[var]]) | (is.character(df[[var]]) & characterize) | is.logical(df[[var]]) ) {
-            v.levels1=dplyr::count_(df,var) %>% 
-                format.data.frame() %>% toString(width=width) %>%  
-                gsub('"','',.,fixed = T) %>% gsub('c(','(',.,fixed = T)
-
             freqtable=dplyr::count_(df,var)
-            col1=format.factor(freqtable[[1]])
-            col2=as.character(freqtable[[2]])
-            v.levels2=paste0(col1,'(',col2,')') %>% toString(width=width)
+            vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
+            if (!is.null(vallbl)){
+                vallbl = ez.2label(df[[var]])  # would be in the same order to freqtable
+                vallbl = paste("[",vallbl,"]",sep="")
+            } else {
+                vallbl = rep("", nrow(freqtable))
+            }
+
+            v.levels1 = paste("(", paste(freqtable[[1]],vallbl,sep="",collapse=", "),")", " : ", "(", paste(freqtable[[2]],sep="",collapse=", "), ")", sep="") %>% toString(width=width)
+            v.levels2 = paste("(",freqtable[[1]],vallbl,": ",freqtable[[2]],")",sep="",collapse=", ") %>% toString(width=width)
+            
+            freqtable=dplyr::count_(df,var)
             allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
             allFactorCounts=c(allFactorCounts,freqtable[[2]])
         } else {
