@@ -356,7 +356,7 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
                 } else {
                     vallbl = rep("", nrow(freqtable))
                 }
-                v.levels = paste("(",freqtable[[1]],vallbl,": ",freqtable[[2]],")",sep="",collapse="\n")
+                v.levels = paste(freqtable[[1]],vallbl,": ",freqtable[[2]],sep="",collapse="\n")
             }
         }
 
