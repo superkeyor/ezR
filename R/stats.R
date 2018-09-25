@@ -136,7 +136,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         # countable as levels
         if ( is.factor(df[[var]]) | (is.character(df[[var]]) & characterize) | is.logical(df[[var]]) ) {
             freqtable=dplyr::count_(df,var)
-            vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
+            vallbl=sjmisc_get_labels(df[[var]],include.values='n',attr.only=T,include.non.labelled=F)
             if (!is.null(vallbl)){
                 vallbl = ez.2label(df[[var]])  # would be in the same order to freqtable
                 vallbl = paste("[",vallbl,"]",sep="")
@@ -348,21 +348,15 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
             v.mean=v.sd=v.min=v.max=v.sum=NA
             # count as factor
             if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-                # https://stackoverflow.com/questions/39370738/one-of-the-factors-levels-is-an-empty-string-how-to-replace-it-with-non-missin
-                levels(v)[levels(v) == ""] <- "_JERRYZHU_"
-                freq = table(v)  # table(v) excl NA
-                # make the order of names(freq) to be the same as v
-                if (is.factor(v)) freq = freq[levels(v)]
-                if (is.character(v)) freq = freq[unique(v)]
-                if (is.logical(v)) freq = freq[unique(v) %>% as.character()]
-
+                freqtable=dplyr::count_(data.frame(tmpvar=v),"tmpvar")
                 vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
-                lbl = character()
-                if (!is.null(vallbl)) {
-                    for (f in names(freq)) {lbl=c(lbl,paste0('(',vallbl[which(names(vallbl)==f)],')'))}
+                if (!is.null(vallbl)){
+                    vallbl = ez.2label(v)  # would be in the same order to freqtable
+                    vallbl = paste("[",vallbl,"]",sep="")
+                } else {
+                    vallbl = rep("", nrow(freqtable))
                 }
-                v.levels = paste(freq %>% names,lbl,': ',freq,sep='',collapse = '\n')
-                v.levels = gsub('_JERRYZHU_','',v.levels,fixed=TRUE)
+                v.levels = paste("(",freqtable[[1]],vallbl,": ",freqtable[[2]],")",sep="",collapse="\n")
             }
         }
 
