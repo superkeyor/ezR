@@ -138,7 +138,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
             freqtable=dplyr::count_(df,var)
             vallbl=sjmisc_get_labels(df[[var]],include.values='n',attr.only=T,include.non.labelled=F)
             if (!is.null(vallbl)){
-                vallbl = ez.2label(df[[var]])  # would be in the same order to freqtable
+                vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
                 vallbl = paste("[",vallbl,"]",sep="")
             } else {
                 vallbl = rep("", nrow(freqtable))
@@ -351,7 +351,7 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
                 freqtable=dplyr::count_(data.frame(tmpvar=v),"tmpvar")
                 vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
                 if (!is.null(vallbl)){
-                    vallbl = ez.2label(v)  # would be in the same order to freqtable
+                    vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
                     vallbl = paste("[",vallbl,"]",sep="")
                 } else {
                     vallbl = rep("", nrow(freqtable))
@@ -366,7 +366,7 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts/Levels (Excl NA): \n%s\n',v.levels %>% toString(width=printcn)))
+            cat(sprintf('Counts/Levels (Incl NA): \n%s\n',v.levels %>% toString(width=printcn)))
         }
         cat(sprintf('attributes: %s\n',v.attrs))
     }
