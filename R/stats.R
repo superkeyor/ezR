@@ -1159,19 +1159,19 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
     return(invisible(counts))
 }
 
-#' Dprime and Other Signal Detection Theory indices.
+#' dprime and other Signal Detection Theory indices.
 #'
 #' Computes Signal Detection Theory indices (percent of correct, d', beta, A', B''D, c, c').
 #'
-#' @param n_hit Number of hits.
-#' @param n_fa Number of false alarms.
-#' @param n_miss Number of misses.
-#' @param n_cr Number of correct rejections.
+#' @param hit Number of hits.
+#' @param fa Number of false alarms.
+#' @param miss Number of misses.
+#' @param cr Number of correct rejections.
 #' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). see more at \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
 #'
 #' @return Returns a list objects:
 #' \itemize{
-#'  \item{\strong{correct}: }{correct = (Hits + CR)/(Hits+Misses+FA+CR) , but it cannot disentangle the two components, ie, discriminability and bias (The major contribution of SDT to psychology is the separation of these two). Intuitively, the best subject maximizes H (and thus minimizes the Miss rate) and minimizes F (and thus maximizes the Correct Rejection rate); hit rate H = hit / (hit+miss); false alarm rate F = FA / (FA + CR); targets = n_hit + n_miss; distractors= n_fa + n_cr.}
+#'  \item{\strong{correct}: }{correct = (Hits + CR)/(Hits+Misses+FA+CR) , but it cannot disentangle the two components, ie, discriminability and bias (The major contribution of SDT to psychology is the separation of these two). Intuitively, the best subject maximizes H (and thus minimizes the Miss rate) and minimizes F (and thus maximizes the Correct Rejection rate); hit rate H = hit / (hit+miss); false alarm rate F = FA / (FA + CR); targets = hit + miss; distractors= fa + cr.}
 #'  \item{\strong{dprime (d')}: }{The sensitivity, discriminability index. Reflects the mean/peak distance (in standard deviation unit) between the signal and noise distributions (d' = z(H) ­- z(F), other sensitivity measures include a transform other than z, or even no transform at all). The larger the difference between H and F, the better the subject's sensitivity. A value of 0 indicates an inability to distinguish signals from noise, whereas larger values indicate a correspondingly greater ability to distinguish signals from noise. Negative values of d' can arise through sampling error or response confusion (responding yes when intending to respond no, and vice versa). Though Z values can have any real value, normally distributed ones are between -2 and 2 about 95 percent of the time. SDT states that d' is unaffected by response bias (i.e., is a pure measure of sensitivity) if two assumptions are met regarding the decision variable: (1) The signal and noise distributions are both normal, and (2) the signal and noise distributions have the same standard deviation. We call these the d ' assumptions. If either assumption is violated, d' will vary with response bias. Because of this, some researchers prefer to use nonparametric measures of sensitivity. The most popular is A'. }
 #'  \item{\strong{beta}: }{The decision bias, response bias, bias/criterion. Use of this measure assumes that responses are based on a likelihood ratio. Suppose the decision variable achieves a value of x on a given trial. The numerator for the ratio is the likelihood of obtaining x on a signal trial (i.e., the height of the signal distribution at x), whereas the denominator for the ratio is the likelihood of obtaining x on a noise trial (i.e., the height of the noise distribution at x). Formula is exp(-(zH-zF) x (zH+zF)/2). When subjects favor neither the yes response nor the no response, 􏰂beta=1. Values less than 1 signify a bias toward responding yes (liberal), whereas values of beta greater than 1 signify a bias toward the no (conservative) response. Because beta is based on a ratio, the natural logarithm of beta is often analyzed in place of beta itself. This script gives beta, not ln(beta).}
 #'  \item{\strong{aprime (A')}: }{Non-parametric estimate of discriminability. A' typically ranges from .5, which indicates that signals cannot be distinguished from noise, to 1, which corresponds to perfect performance. Values less than .5 may arise from sampling error or response confusion; the minimum possible value is 0.}
@@ -1183,22 +1183,22 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #'
 #' Note that for d', beta, c, cprime, adjustement for extreme values are made following the loglinear recommandations of Hautus (1995). These extreme values are particularly likely to arise when signals differ markedly from noise, few trials are presented (so that sampling error is large), or subjects adopt extremely liberal or conservative criteria (as might occur if, for example, the consequences of a false alarm are severe). Advocates of the loglinear approach recommend using it regardless of whether or not extreme rates are obtained.
 #' @examples
-#' n_hit <- 9
-#' n_fa <- 2
-#' n_miss <- 1
-#' n_cr <- 7
+#' hit <- 9
+#' fa <- 2
+#' miss <- 1
+#' cr <- 7
 #'
-#' indices <- ez.dprime(n_hit, n_fa, n_miss, n_cr)
+#' indices <- ez.dprime(hit, fa, miss, cr)
 #'
 #'
 #' df <- data.frame(Participant = c("A", "B", "C"),
-#'     n_hit = c(1, 2, 5), n_miss = c(9, 8, 5),
-#'     n_fa = c(6, 8, 1), n_cr = c(4, 2, 9))
+#'     hit = c(1, 2, 5), miss = c(9, 8, 5),
+#'     fa = c(6, 8, 1), cr = c(4, 2, 9))
 #'
-#' indices <- ez.dprime(n_hit=df$n_hit,
-#'     n_fa=df$n_fa,
-#'     n_miss=df$n_miss,
-#'     n_cr=df$n_cr,
+#' indices <- ez.dprime(hit=df$hit,
+#'     fa=df$fa,
+#'     miss=df$miss,
+#'     cr=df$cr,
 #'     adjusted=FALSE)
 #'
 #'
@@ -1206,7 +1206,13 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #'
 #' @importFrom stats qnorm
 #' @export
-ez.dprime <- function(n_hit, n_fa, n_miss, n_cr, adjusted=TRUE) {
+ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
+
+    n_hit = hit
+    n_fa = fa
+    n_miss = miss
+    n_cr = cr
+
     n_targets <- n_hit + n_miss
     n_distractors <- n_fa + n_cr
     correct <- (n_hit+n_fa)/(n_hit+n_miss+n_fa+n_cr)
