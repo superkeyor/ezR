@@ -1161,7 +1161,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 
 #' Dprime and Other Signal Detection Theory indices.
 #'
-#' Computes Signal Detection Theory indices (%correct, d', beta, A', B''D, c, c').
+#' Computes Signal Detection Theory indices (percent of correct, d', beta, A', B''D, c, c').
 #'
 #' @param n_hit Number of hits.
 #' @param n_fa Number of false alarms.
@@ -1190,14 +1190,14 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #' n_miss <- 1
 #' n_cr <- 7
 #'
-#' indices <- dprime(n_hit, n_fa, n_miss, n_cr)
+#' indices <- ez.dprime(n_hit, n_fa, n_miss, n_cr)
 #'
 #'
 #' df <- data.frame(Participant = c("A", "B", "C"),
 #'     n_hit = c(1, 2, 5),
 #'     n_fa = c(6, 8, 1))
 #'
-#' indices <- dprime(n_hit=df$n_hit,
+#' indices <- ez.dprime(n_hit=df$n_hit,
 #'     n_fa=df$n_fa,
 #'     n_targets=10,
 #'     n_distractors=10,

@@ -35,7 +35,7 @@ Returns a list objects:
 Note that for d', beta, c, cprime, adjustement for extreme values are made following the loglinear recommandations of Hautus (1995). These extreme values are particularly likely to arise when signals differ markedly from noise, few trials are presented (so that sampling error is large), or subjects adopt extremely liberal or conservative criteria (as might occur if, for example, the consequences of a false alarm are severe). Advocates of the loglinear approach recommend using it regardless of whether or not extreme rates are obtained.
 }
 \description{
-Computes Signal Detection Theory indices (%correct, d', beta, A', B''D, c, c').
+Computes Signal Detection Theory indices (percent of correct, d', beta, A', B''D, c, c').
 }
 \examples{
 n_hit <- 9
@@ -43,14 +43,14 @@ n_fa <- 2
 n_miss <- 1
 n_cr <- 7
 
-indices <- dprime(n_hit, n_fa, n_miss, n_cr)
+indices <- ez.dprime(n_hit, n_fa, n_miss, n_cr)
 
 
 df <- data.frame(Participant = c("A", "B", "C"),
     n_hit = c(1, 2, 5),
     n_fa = c(6, 8, 1))
 
-indices <- dprime(n_hit=df$n_hit,
+indices <- ez.dprime(n_hit=df$n_hit,
     n_fa=df$n_fa,
     n_targets=10,
     n_distractors=10,
