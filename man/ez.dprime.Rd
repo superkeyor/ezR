@@ -45,13 +45,13 @@ indices <- ez.dprime(n_hit, n_fa, n_miss, n_cr)
 
 
 df <- data.frame(Participant = c("A", "B", "C"),
-    n_hit = c(1, 2, 5),
-    n_fa = c(6, 8, 1))
+    n_hit = c(1, 2, 5), n_miss = c(9, 8, 5),
+    n_fa = c(6, 8, 1), n_cr = c(4, 2, 9))
 
 indices <- ez.dprime(n_hit=df$n_hit,
     n_fa=df$n_fa,
-    n_targets=10,
-    n_distractors=10,
+    n_miss=df$n_miss,
+    n_cr=df$n_cr,
     adjusted=FALSE)
 
 
