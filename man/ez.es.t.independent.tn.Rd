@@ -7,7 +7,7 @@
 ez.es.t.independent.tn(t, n1, n2)
 }
 \arguments{
-\item{t}{t, numbers/subjects/samples group 1 and 2}
+\item{t}{t (equal variances assumed in SPSS), numbers/subjects/samples group 1 and 2}
 }
 \value{
 returns invisible

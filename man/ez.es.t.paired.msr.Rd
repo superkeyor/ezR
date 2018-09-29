@@ -4,7 +4,7 @@
 \alias{ez.es.t.paired.msr}
 \title{calculate effect size}
 \usage{
-ez.es.t.paired.msr(m1, s1, m2, s2, r)
+ez.es.t.paired.msr(m1, s1, m2, s2, r = 0)
 }
 \arguments{
 \item{m1}{mean}
@@ -15,7 +15,7 @@ ez.es.t.paired.msr(m1, s1, m2, s2, r)
 
 \item{s2}{standard deviation}
 
-\item{r}{correlation}
+\item{r}{correlation, In case, the correlation is unknown, please fill in 0. The results will be a conservative estimation in this case, because standard errors will not be controlled then.}
 }
 \value{
 returns invisible

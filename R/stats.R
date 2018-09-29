@@ -1300,7 +1300,7 @@ ez.es.t.independent.msn = function(m1,s1,n1,m2,s2,n2) {
 
 #' calculate effect size
 #' @description calculate effect size
-#' @param t t, numbers/subjects/samples group 1 and 2
+#' @param t t (equal variances assumed in SPSS), numbers/subjects/samples group 1 and 2
 #' @return returns invisible
 #' @export
 ez.es.t.independent.tn = function(t,n1,n2) {
@@ -1333,10 +1333,10 @@ ez.es.t.paired.tnr = function(t,n,r=0) {
 #' @description calculate effect size
 #' @param m12 the mean of differences that equals the difference of means (m1-m2), available in SPSS paired samples Test output table 
 #' @param s12 the standard deviation of the difference score, available in SPSS paired samples Test output table 
-#' @param r correlation
+#' @param r correlation, In case, the correlation is unknown, please fill in 0. The results will be a conservative estimation in this case, because standard errors will not be controlled then.
 #' @return returns invisible
 #' @export
-ez.es.t.paired.m12s12r = function(m12,s12,r) {
+ez.es.t.paired.m12s12r = function(m12,s12,r=0) {
     # derive the following formulas, based on t = m12/se12 = m12/(s12/sqrt(n)), therefore 
     # d = t*sqrt(2.0*(1.0-r)/n) = ( m12/(s12/sqrt(n)) ) * sqrt(2.0*(1.0-r)/n) = m12*sqrt(2*(1-r))/s12
     d = m12*sqrt(2*(1-r))/s12
@@ -1352,10 +1352,10 @@ ez.es.t.paired.m12s12r = function(m12,s12,r) {
 #' @param s1 standard deviation
 #' @param m2 mean
 #' @param s2 standard deviation
-#' @param r correlation
+#' @param r correlation, In case, the correlation is unknown, please fill in 0. The results will be a conservative estimation in this case, because standard errors will not be controlled then.
 #' @return returns invisible
 #' @export
-ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
+ez.es.t.paired.msr = function(m1,s1,m2,s2,r=0) {
     s12 = sqrt( s1*s1 + s2*s2 - 2*r*s1*s2 )
     d = m12*sqrt(2*(1-r))/s12
 

@@ -4,14 +4,14 @@
 \alias{ez.es.t.paired.m12s12r}
 \title{calculate effect size}
 \usage{
-ez.es.t.paired.m12s12r(m12, s12, r)
+ez.es.t.paired.m12s12r(m12, s12, r = 0)
 }
 \arguments{
 \item{m12}{the mean of differences that equals the difference of means (m1-m2), available in SPSS paired samples Test output table}
 
 \item{s12}{the standard deviation of the difference score, available in SPSS paired samples Test output table}
 
-\item{r}{correlation}
+\item{r}{correlation, In case, the correlation is unknown, please fill in 0. The results will be a conservative estimation in this case, because standard errors will not be controlled then.}
 }
 \value{
 returns invisible
