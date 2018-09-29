@@ -4,14 +4,14 @@
 \alias{ez.es.t.paired.tnr}
 \title{calculate effect size}
 \usage{
-ez.es.t.paired.tnr(t, n, r = 0)
+ez.es.t.paired.tnr(t, n, r)
 }
 \arguments{
 \item{t}{t for paired samples t test, available in SPSS paired samples Test output table}
 
 \item{n}{in SPSS paired samples Test output table, n=df+1}
 
-\item{r}{correlation, In case, the correlation is unknown, please fill in 0. The results will be a conservative estimation in this case, because standard errors will not be controlled then.}
+\item{r}{correlation, In case, the correlation is unknown, please fill in 0.}
 }
 \value{
 returns invisible
