@@ -1295,7 +1295,7 @@ ez.es.t.independent.msn = function(m1,s1,n1,m2,s2,n2) {
 
     output = sprintf("d = %0.2f", d)
     cat(output, "\n", sep = "")
-    cat('[0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
+    cat('d [0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
     return(invisible(d))
 }
 
@@ -1311,7 +1311,7 @@ ez.es.t.independent.tn = function(t,n1,n2) {
 
     output = sprintf("d = %0.2f", d)
     cat(output, "\n", sep = "")
-    cat('[0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
+    cat('d [0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
     return(invisible(d))
 }
 
@@ -1328,7 +1328,7 @@ ez.es.t.paired.tnr = function(t,n,r) {
 
     output = sprintf("d = %0.2f", d)
     cat(output, "\n", sep = "")
-    cat('[0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
+    cat('d [0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
     return(invisible(d))
 }
 
@@ -1346,7 +1346,7 @@ ez.es.t.paired.m12s12r = function(m12,s12,r) {
 
     output = sprintf("d = %0.2f", d)
     cat(output, "\n", sep = "")
-    cat('[0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
+    cat('d [0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
     return(invisible(d))
 }
 
@@ -1366,6 +1366,6 @@ ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
 
     output = sprintf("d = %0.2f", d)
     cat(output, "\n", sep = "")
-    cat('[0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
+    cat('d [0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
     return(invisible(d))    
 }
