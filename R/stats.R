@@ -1287,7 +1287,6 @@ ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
 #' @param s2 standard deviation
 #' @param n2 numbers/subjects/samples group 2
 #' @return returns invisible
-#' @note 
 #' @export
 ez.es.t.independent.msn = function(m1,s1,n1,m2,s2,n2) {
     # simply sd weighted by sample size
@@ -1303,7 +1302,6 @@ ez.es.t.independent.msn = function(m1,s1,n1,m2,s2,n2) {
 #' @description calculate effect size
 #' @param t t, numbers/subjects/samples group 1 and 2
 #' @return returns invisible
-#' @note 
 #' @export
 ez.es.t.independent.tn = function(t,n1,n2) {
     # this formula could be derived from t formula for independent t-test
@@ -1337,7 +1335,6 @@ ez.es.t.paired.tnr = function(t,n,r=0) {
 #' @param s12 the standard deviation of the difference score, available in SPSS paired samples Test output table 
 #' @param r correlation
 #' @return returns invisible
-#' @note 
 #' @export
 ez.es.t.paired.m12s12r = function(m12,s12,r) {
     # derive the following formulas, based on t = m12/se12 = m12/(s12/sqrt(n)), therefore 
@@ -1357,7 +1354,6 @@ ez.es.t.paired.m12s12r = function(m12,s12,r) {
 #' @param s2 standard deviation
 #' @param r correlation
 #' @return returns invisible
-#' @note 
 #' @export
 ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
     s12 = sqrt( s1*s1 + s2*s2 - 2*r*s1*s2 )
