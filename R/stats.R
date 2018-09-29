@@ -1357,6 +1357,7 @@ ez.es.t.paired.m12s12r = function(m12,s12,r) {
 #' @export
 ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
     s12 = sqrt( s1*s1 + s2*s2 - 2*r*s1*s2 )
+    m12 = m1 - m2
     d = m12*sqrt(2*(1-r))/s12
 
     output = sprintf("d = %0.2f", d)
