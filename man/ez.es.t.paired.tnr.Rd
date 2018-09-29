@@ -9,7 +9,7 @@ ez.es.t.paired.tnr(t, n, r)
 \arguments{
 \item{t}{t for paired samples t test, available in SPSS paired samples Test output table}
 
-\item{n}{in SPSS paired samples Test output table, n=df+1}
+\item{n}{number of pairs, in SPSS paired samples Test output table, n=df+1}
 
 \item{r}{correlation, In case, the correlation is unknown, please fill in 0.}
 }

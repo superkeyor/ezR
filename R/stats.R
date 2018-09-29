@@ -1316,7 +1316,7 @@ ez.es.t.independent.tn = function(t,n1,n2) {
 #' calculate effect size
 #' @description calculate effect size
 #' @param t t for paired samples t test, available in SPSS paired samples Test output table 
-#' @param n in SPSS paired samples Test output table, n=df+1
+#' @param n number of pairs, in SPSS paired samples Test output table, n=df+1
 #' @param r correlation, In case, the correlation is unknown, please fill in 0.
 #' @return returns invisible
 #' @note formula from Dunlap 1996: Meta-analysis of experiments with matched groups or repeated measures designs. And notes from Section 5 https://www.psychometrica.de/effect_size.html
