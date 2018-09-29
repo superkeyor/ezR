@@ -1167,7 +1167,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #' @param fa Number of false alarms.
 #' @param miss Number of misses.
 #' @param cr Number of correct rejections.
-#' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). see more at \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
+#' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). see for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
 #'
 #' @return Returns a list objects:
 #' \itemize{
