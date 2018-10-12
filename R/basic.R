@@ -974,7 +974,8 @@ ez.age <- function(dob, enddate=Sys.Date(), floorize=FALSE, units='years', preci
 #' @description Replaces non-finite values (Inf, -Inf, NaN, NA) with \code{NA}s in array-like objects.
 #' @param x An array-like object, or vector
 #' @return Returns \code{x} with non-finite values (Inf, -Inf, NaN, NA) replaced with \code{NA}s.
-#' @note NaN could be generated from mean(c(NA,NA),na.rm=T). is.na() returns TRUE for both NA and NaN, however is.nan() return TRUE for NaN (0/0) and FALSE for NA.
+#' @note is.na() returns TRUE for both NA and NaN, however is.nan() return TRUE for NaN (0/0) and FALSE for NA.
+#' \cr mean(c(NA,NA),na.rm=T)  ---> NaN, mean(c(NA,NA),na.rm=F) ---> NA  sum(c(NA,NA),na.rm=T)  ---> 0, sum(c(NA,NA),na.rm=F) ---> NA
 #' @examples
 #' ez.nan2na(Inf)
 #' ez.nan2na(rep(c(0, -Inf, Inf, NA, NaN), 3))
