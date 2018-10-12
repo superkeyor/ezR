@@ -361,7 +361,7 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
         }
 
         cat(sprintf('Uniques (Incl NA): %s\n', v.elements))
-        cat(sprintf('\n%-25s\t#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n))
+        cat(sprintf('\n%-25s\t#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Non-NA: %d\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n-v.missing, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
