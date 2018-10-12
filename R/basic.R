@@ -969,3 +969,29 @@ ez.age <- function(dob, enddate=Sys.Date(), floorize=FALSE, units='years', preci
   if (floorize) result = as.integer(floor(result))
   return(result)
 }
+
+#' Replaces non-finite values (Inf, -Inf, NaN, NA) with \code{NA}s in array-like objects.
+#' @description Replaces non-finite values (Inf, -Inf, NaN, NA) with \code{NA}s in array-like objects.
+#' @param x An array-like object, or vector
+#' @return Returns \code{x} with non-finite values (Inf, -Inf, NaN, NA) replaced with \code{NA}s.
+#' @note NaN could be generated from mean(c(NA,NA),na.rm=T). is.na() returns TRUE for both NA and NaN, however is.nan() return TRUE for NaN (0/0) and FALSE for NA.
+#' @examples
+#' ez.nan2na(Inf)
+#' ez.nan2na(rep(c(0, -Inf, Inf, NA, NaN), 3))
+#' ez.nan2na(matrix(c(0, Inf, -Inf, 0), 2, 2))
+#' ez.nan2na(array(c(0, -Inf, Inf, 1, NaN), dim = c(2, 3, 4)))
+#' ez.nan2na(ts(rep(c(0, -Inf, Inf), 2), frequency = 5))
+#' @seealso \code{\link{is.finite}}, \code{\link{NA}}
+#' @export
+ez.nan2na = function(x) {
+    # https://cran.r-project.org/web/packages/cmrutils/index.html
+    if(!is.null(x))
+    {
+        result <- x
+        result[!is.finite(result)] <- NA
+    }
+    else {
+        result <- NULL
+    }
+    return(result)
+}
