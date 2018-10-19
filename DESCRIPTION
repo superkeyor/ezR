@@ -38,4 +38,6 @@ Imports:
     glue,
     scales,
     chron,
-    gmailr
+    gmailr,
+    XML,
+    rentrez

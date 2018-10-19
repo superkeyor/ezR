@@ -1369,3 +1369,76 @@ ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
     cat('d [0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
     return(invisible(d))    
 }
+
+#' retrieve article citation numbers from pubmed
+#' @description retrieve article citation numbers from pubmed
+#' @param xmlFile EndNote library file, contains exported articles with correct titles
+#' @param outFile an excel file to store the results
+#' @return returns invisible, save an excel file with results
+#' @note get citation numbers cited by available pubmed central papers
+#' @export
+ez.cites = function(xmlFile,outFile){
+    # https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html
+    # https://www.ncbi.nlm.nih.gov/books/NBK25501/
+    # https://www.stat.berkeley.edu/~statcur/Workshop2/Presentations/XML.pdf
+
+    bibs = XML::xmlParse(file = xmlFile)
+    nodes = XML::getNodeSet(bibs,"//title")
+    titles = XML::xmlSApply(nodes,xmlValue)
+
+    pubmedcites = function(title){
+        # title = "Dissociating Normal Aging from Alzheimer's Disease: A View from Cognitive Neuroscience"
+        rsearch <- rentrez::entrez_search(db="pubmed", retmax=1, term=title)
+        
+        if (rsearch$count==0) {
+            # nothing found, give up
+            result = list("sortpubdate" = "",
+                          "pmcrefcount" = integer(0),
+                          "sortfirstauthor" = "",
+                          "lastauthor" = "",
+                          "title" = "",
+                          "fulljournalname" = "")
+        } else {
+            rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids) 
+            result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
+            # if not same title, try title search according to previously returned parsed search term
+            if (!stringr::str_detect( tolower(gsub('[[:space:][:punct:]]','',title,perl=TRUE)), tolower(gsub('[[:space:][:punct:]]','',result$title,perl=TRUE)))){
+                term=gsub('\\[.*?\\]','[Title]',rsearch$QueryTranslation,perl=TRUE)
+                rsearch <- rentrez::entrez_search(db="pubmed", retmax=1, term=term)
+                # if fails, give up
+                if (rsearch$count==0) {
+                    result = list("sortpubdate" = "",
+                                  "pmcrefcount" = integer(0),
+                                  "sortfirstauthor" = "",
+                                  "lastauthor" = "",
+                                  "title" = "",
+                                  "fulljournalname" = "")
+                } else {
+                    rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids) 
+                    result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
+                }
+            }
+
+        }
+        
+        
+        result$OriginalTitle = title
+        result$RetrievedDate = ez.moment()
+        
+        if (stringr::str_detect( tolower(gsub('[[:space:][:punct:]]','',result$OriginalTitle,perl=TRUE)), tolower(gsub('[[:space:][:punct:]]','',result$title,perl=TRUE)))){
+           result$TitleMatch = 1
+        } else {
+           result$TitleMatch = 0
+        }
+
+        return(result)
+    }
+
+    cites = lapply(titles, pubmedcites)
+    results = as.data.frame( t(matrix(unlist(cites), nrow=length(unlist(cites[[1]])))) )
+    names(results) = names(cites[[1]])
+    results = ez.num(results, c('pmcrefcount','TitleMatch'),force=TRUE)
+
+    ez.savex(results,file=outFile)
+    return(invisible(results))
+}
