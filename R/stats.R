@@ -1170,18 +1170,6 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). see for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
 #'
 #' @return Returns a list objects:
-#' \itemize{
-#'  \item{\strong{correct}: }{correct = (Hits + CR)/(Hits+Misses+FA+CR) , but it cannot disentangle the two components, ie, discriminability and bias (The major contribution of SDT to psychology is the separation of these two). Intuitively, the best subject maximizes H (and thus minimizes the Miss rate) and minimizes F (and thus maximizes the Correct Rejection rate); hit rate H = hit / (hit+miss); false alarm rate F = FA / (FA + CR); targets = hit + miss; distractors= fa + cr.}
-#'  \item{\strong{dprime (d')}: }{The sensitivity, discriminability index. Reflects the mean/peak distance (in standard deviation unit) between the signal and noise distributions (d' = z(H) ­- z(F), other sensitivity measures include a transform other than z, or even no transform at all). The larger the difference between H and F, the better the subject's sensitivity. A value of 0 indicates an inability to distinguish signals from noise, whereas larger values indicate a correspondingly greater ability to distinguish signals from noise. Negative values of d' can arise through sampling error or response confusion (responding yes when intending to respond no, and vice versa). Though Z values can have any real value, normally distributed ones are between -2 and 2 about 95 percent of the time. SDT states that d' is unaffected by response bias (i.e., is a pure measure of sensitivity) if two assumptions are met regarding the decision variable: (1) The signal and noise distributions are both normal, and (2) the signal and noise distributions have the same standard deviation. We call these the d' assumptions. If either assumption is violated, d' will vary with response bias. Because of this, some researchers prefer to use nonparametric measures of sensitivity. The most popular is A'. }
-#'  \item{\strong{beta}: }{The decision bias, response bias, bias/criterion. Use of this measure assumes that responses are based on a likelihood ratio. Suppose the decision variable achieves a value of x on a given trial. The numerator for the ratio is the likelihood of obtaining x on a signal trial (i.e., the height of the signal distribution at x), whereas the denominator for the ratio is the likelihood of obtaining x on a noise trial (i.e., the height of the noise distribution at x). Formula is exp(-(zH-zF) x (zH+zF)/2). When subjects favor neither the yes response nor the no response, beta=1. Values less than 1 signify a bias toward responding yes (liberal), whereas values of beta greater than 1 signify a bias toward the no (conservative) response. Because beta is based on a ratio, the natural logarithm of beta is often analyzed in place of beta itself. This script gives beta, not ln(beta).}
-#'  \item{\strong{aprime (A')}: }{Non-parametric estimate of discriminability. A' typically ranges from .5, which indicates that signals cannot be distinguished from noise, to 1, which corresponds to perfect performance. Values less than .5 may arise from sampling error or response confusion; the minimum possible value is 0.}
-#'  \item{\strong{bppd (B''D)}: }{Non-parametric estimate of bias. B''D ranges from -1 (extreme bias in favor of yes/liberal responses) to 1 (extreme bias in favor of no/conservative responses). A value of 0 signifies no response bias.}
-#'  \item{\strong{c}: }{Another index of bias, criterion c. c is defined as the distance (the number/unit of standard deviations) between the criterion and the neutral/midpoint point between these two distributions, where neither response is favored (beta=1). If the criterion is located at this point, c has a value of 0. Negative values of c signify a bias toward responding yes (the criterion lies to the left of the neutral point), whereas positive values signify a bias toward the no response (the criterion lies to the right of the neutral point). One advantage of c is that it is unaffected by changes in d', whereas beta is not.}
-#'  \item{\strong{cprime}: }{Normalized c, which is c/dprime}
-#'  }
-#'
-#'
-#' Note that for d', beta, c, cprime, adjustement for extreme values are made following the loglinear recommandations of Hautus (1995). These extreme values are particularly likely to arise when signals differ markedly from noise, few trials are presented (so that sampling error is large), or subjects adopt extremely liberal or conservative criteria (as might occur if, for example, the consequences of a false alarm are severe). Advocates of the loglinear approach recommend using it regardless of whether or not extreme rates are obtained.
 #' @examples
 #' hit <- 9
 #' fa <- 2
@@ -1202,7 +1190,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #'     adjusted=FALSE)
 #'
 #'
-#' @author Jerry modified from \href{https://dominiquemakowski.github.io/}{Dominique Makowski}. See Pallier (2002) for the algorithms, Stanislaw, Todorov (1999) for a good tutorial.
+#' @author Jerry modified from \href{https://dominiquemakowski.github.io/}{Dominique Makowski}. See Pallier (2002) for the algorithms, Stanislaw & Todorov (1999) for a good tutorial.
 #'
 #' @importFrom stats qnorm
 #' @export
