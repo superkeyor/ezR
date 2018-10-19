@@ -1388,7 +1388,7 @@ ez.cites = function(xmlFile,outFile=NULL){
 
     bibs = XML::xmlParse(file = xmlFile)
     nodes = XML::getNodeSet(bibs,"//title")
-    titles = XML::xmlSApply(nodes,xmlValue)
+    titles = XML::xmlSApply(nodes,XML::xmlValue)
 
     pubmedcites = function(title){
         # title = "Dissociating Normal Aging from Alzheimer's Disease: A View from Cognitive Neuroscience"
