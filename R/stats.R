@@ -44,12 +44,12 @@ ez.compare = function(lh,rh,...) {
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
-#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). 
+#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param df a data frame
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
-#' @param characterize T/F count the element freq of character cols or not 
+#' @param characterize T/F count the element freq of character cols or not
 #' @note when file=NULL (which stores to a temp file), debug=NULL, use getOption('debug') which is TRUE if not set up
 #' \cr when file=NULL, debug provided, overwrites getOption('debug')
 #' \cr when file provided, any debug is ignored
@@ -69,7 +69,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         } else if (!debug) {
             return(invisible(NULL))
         }
-    }     
+    }
 
     # if duplicated col names, the following main codes would crash with weird reasons
     # duplicated row names are fine
@@ -107,17 +107,17 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         r.duplicated.content=ez.duplicated(dplyr::select(df,-one_of(idididid)),vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     }
     r.duplicated.content[which(!r.duplicated.content)]=NA
-    
+
     tmpMatrix = is.na(df)
     r.ncol = rep(ncol(tmpMatrix), nrow(tmpMatrix))
     r.missing = rowSums(tmpMatrix,na.rm=TRUE)
-    
+
     results0=data.frame(rowname=r.rowname,id=idname,duplicated_id=r.duplicated.idname,
                         duplicated_content_except_id=r.duplicated.content,ncol=r.ncol,missing=r.missing)
     results0=dplyr::mutate(results0,missing_rate=missing/ncol)
     results0=ez.rncol(results0,c('id'=paste0('id_',idString)))
     results0=dplyr::mutate(results0,nonmissing=ncol-missing,nonmissing_rate=nonmissing/ncol)
-    
+
 
 
     # col summary
@@ -146,14 +146,14 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 
             v.levels1 = paste("(", paste(freqtable[[1]],vallbl,sep="",collapse=", "),")", " : ", "(", paste(freqtable[[2]],sep="",collapse=", "), ")", sep="") %>% toString(width=width)
             v.levels2 = paste("(",freqtable[[1]],vallbl,": ",freqtable[[2]],")",sep="",collapse=", ") %>% toString(width=width)
-            
+
             freqtable=dplyr::count_(df,var)
             allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
             allFactorCounts=c(allFactorCounts,freqtable[[2]])
         } else {
             v.levels1=v.levels2=NA
         }
-        # calculable 
+        # calculable
         is.date <- function(x) inherits(x, 'Date')
         # not all NA
         if ( is.numeric(df[[var]]) & !all(is.na(df[[var]])) ) {
@@ -190,7 +190,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     results=dplyr::mutate(results,nonmissing=nrow-missing,nonmissing_rate=nonmissing/nrow)
     results=results %>% ez.move('missing_rate nonmissing nonmissing_rate before unique_including_na')
     # labels=attr(df,'variable.labels') # only work for foreign package: 'variable.labels'
-    # in case of 'variable.labels', it contains all varialbes' labels, 
+    # in case of 'variable.labels', it contains all varialbes' labels,
     # even some of them are not in the current df due to variable selection, eg, select()
     # So only retrieve exisiting cols in current df
     labels = ez.label.get(df,cols=colnames(df))
@@ -209,25 +209,25 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         if (is.null(debug)) {
             if (debugMode) {
                 browseURL(file)
-                ez.sleep(3) 
+                ez.sleep(3)
             }
         } else {
             if (debug) {
                 browseURL(file)
-                ez.sleep(3) 
+                ez.sleep(3)
             }
         }
-    } 
+    }
     return(invisible(list('row'=results0,'col'=results,'dat'=df,'pth'=file)))
 }
 
-#' format a vector for easy manual copy/processing. 
-#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). 
+#' format a vector for easy manual copy/processing.
+#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param vec a vector
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
 #' @param order vector order for printing out, 'as','az','za'
-#' @return nothing, only print out. 
+#' @return nothing, only print out.
 #' \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
@@ -283,14 +283,14 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
         v.ncol = ncol(v)
         v.missing=ez.count(v,NA,dim=3)
         v.n.colNumsAllNAs = length(as.vector(which(colSums(is.na(v)) == nrow(v))))
-        
+
         classes=character()
         for (col in colnames(v)) {
             classes=c(classes,class(v[[col]]))
         }
         freq = table(classes)
         v.classes = paste('#',freq %>% names,': ',freq,sep='',collapse = ', ')
-        
+
         v.attrs = attributes(v)
         v.attrs[c('row.names','names','class')] <- NULL
         v.attrs = sapply(v.attrs,length)
@@ -327,7 +327,7 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
         if (!is.null(ez.getlabel(v))) {v.attrs = paste(v.attrs,ez.getlabel(v),sep='\n',collapse = '')}
         if (v.attrs == '') v.attrs = '@'
 
-        # calculable 
+        # calculable
         is.date <- function(x) inherits(x, 'Date')
         # not all NA
         if ( is.numeric(v) & !all(is.na(v)) ) {
@@ -380,10 +380,10 @@ vi=ez.vi
 #' standard error of mean
 #' @description na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
 #' @param x a vector
-#' @note \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations. 
+#' @note \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations.
 #' se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
 #' \cr\cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{ez.scale}}(x, center = TRUE, scale = TRUE) demean: ez.scale(x,center=TRUE,scale=FALSE). (ez.scale() auto omits NAs)
-#' \cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way. 
+#' \cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way.
 #' see https://www.spss-tutorials.com/z-scores-what-and-why/
 #' @export
 ez.se = function(x) {
@@ -421,9 +421,9 @@ ez.r = function(x,col=NULL,type="pearson",print2screen=T) {
     # rcorr uses pairwise deletion; however, you may still get warnings/errors/NAs for calcuating r, p
     # because too few samples, or too small variance (close to 0) after deletion
     # https://www.statmethods.net/stats/correlations.html
-    # stats::cor(Matrix or data frame, use=) use has 
-    #   all.obs (assumes no missing data - missing data will produce an error), 
-    #   complete.obs (listwise deletion), and 
+    # stats::cor(Matrix or data frame, use=) use has
+    #   all.obs (assumes no missing data - missing data will produce an error),
+    #   complete.obs (listwise deletion), and
     #   pairwise.complete.obs (pairwise deletion)
     result = Hmisc::rcorr(data.matrix(x),type=type)$r
     CorrNACounts = data.frame(result) %>% ez.count(val=NA,dim=1) %>% tibble::rownames_to_column(var='variable') %>% dplyr::arrange(desc(count))
@@ -462,14 +462,14 @@ ez.zresid = function(model,method=3) {
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible list of data frame
-#' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
+#' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized
 #' \cr so that the variances of dependent and independent variables are 1.
-#' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
-#' \cr per standard deviation increase in the predictor variable. 
+#' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
+#' \cr per standard deviation increase in the predictor variable.
 #' \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 #' \cr For multiple regression (with covar), the value of the standardized coefficient (beta) is close to semi-partial correlation
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
-#' \cr 
+#' \cr
 #' \cr degree_of_freedom: from F-statistic
 #' \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
@@ -491,7 +491,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
                    xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                    scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                   type = "p", pch=16, 
+                   type = "p", pch=16,
                    main = list(yy, cex=3, fontfamily="Times New Roman"),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -510,7 +510,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         df=data; yy=y; xx=x
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
-        
+
         if (is.null(covar)) {
             covar = ''
             rcovar = ''
@@ -588,7 +588,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
                xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-               type = "p", pch=16, 
+               type = "p", pch=16,
                main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -623,9 +623,9 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
 #' @return an invisible list of data frame
 #' \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 #' \cr so that the variances of dependent and independent variables are 1.
-#' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
-#' \cr per standard deviation increase in the predictor variable. 
-#' \cr 
+#' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
+#' \cr per standard deviation increase in the predictor variable.
+#' \cr
 #' \cr degree_of_freedom
 #' @export
 ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
@@ -644,7 +644,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
                    xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                    scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                   type = "p", pch=16, 
+                   type = "p", pch=16,
                    main = list(yy, cex=3, fontfamily="Times New Roman"),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -675,7 +675,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
         tryCatch({
         if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
         df[[xx]]=ez.2value(df[[xx]],...)
-        
+
         cmd = sprintf('model = summary(glm((df[[yy]])~(df[[xx]])%s,family = binomial(link = "logit")))', covar)
         ez.eval(cmd)
 
@@ -703,7 +703,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
                xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-               type = "p", pch=16, 
+               type = "p", pch=16,
                main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -737,8 +737,8 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' @return an invisible list of data frame
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
-#' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable. 
-#' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared. 
+#' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
+#' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared.
 #' @export
 ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -757,7 +757,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
                        xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
                        ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                        scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                       type = "p", pch=16, 
+                       type = "p", pch=16,
                        main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
                        col = "#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -768,7 +768,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
                            xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
                            ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                            scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                           type = "p", pch=16, 
+                           type = "p", pch=16,
                            main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
                            col = "#e69f00",
                            ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -823,7 +823,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
                        xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
                        ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                        scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                       type = "p", pch=16, 
+                       type = "p", pch=16,
                        main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
                        col = "#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -834,7 +834,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
                    xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                    scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                   type = "p", pch=16, 
+                   type = "p", pch=16,
                    main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
@@ -885,12 +885,12 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
                    xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                    scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                   type = "p", pch=16, 
+                   type = "p", pch=16,
                    main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                   panel=function(x,y,...){ 
-                       panel.barchart(x,y,...) 
+                   panel=function(x,y,...){
+                       panel.barchart(x,y,...)
                        panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
                        panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
                 )
@@ -936,12 +936,12 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
                xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-               type = "p", pch=16, 
+               type = "p", pch=16,
                main = list(x, cex=3, fontfamily="Times New Roman"),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-               panel=function(x,y,...){ 
-                   panel.barchart(x,y,...) 
+               panel=function(x,y,...){
+                   panel.barchart(x,y,...)
                    panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
                    panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
             )
@@ -950,12 +950,12 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
                xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-               type = "p", pch=16, 
+               type = "p", pch=16,
                main = list(y, cex=3, fontfamily="Times New Roman"),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-               panel=function(x,y,...){ 
-                   panel.barchart(x,y,...) 
+               panel=function(x,y,...){
+                   panel.barchart(x,y,...)
                    panel.abline(h=bonferroniP,col.line="black",lty=2,lwd=2)
                    panel.abline(h=-log10(0.05),col.line="darkgrey",lty=2,lwd=2)}
             )
@@ -1013,7 +1013,7 @@ ez.table2 = function(df, x, y=NULL, digits=2, max.width = 1, expected=FALSE, pro
 
 #' freq table
 #' @description freq table, df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z), auto convert/reset factor
-#' \cr ez.table2 output is more beautiful, but must be two varibles/cols 
+#' \cr ez.table2 output is more beautiful, but must be two varibles/cols
 #' \cr result table can be further passed to prop.table(), addmargins(), addmargins(prop.table())
 #' @export
 #' @param x, ... df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z)
@@ -1031,7 +1031,7 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
         theTable = ez.eval(cmd)
         cmd = sprintf('fisher.test(%s)',input)
     } else {
-        dots=sapply(as.list(substitute(list(...)))[-1L], deparse) 
+        dots=sapply(as.list(substitute(list(...)))[-1L], deparse)
         if (is.null(dnn)) {
             dnn=paste("'",c(deparse(substitute(x)),dots),"'",sep='',collapse = ', ')
             # print(dnn)
@@ -1070,35 +1070,35 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
 #' @export
 ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
     if (!is.null(targetVar)) {targetVar=ez.selcol(df,targetVar); df %<>% ez.move(sprintf('%s first',targetVar))}
-    if (!is.null(fixedVars)) {fixedVars = ez.selcol(df,fixedVars); fixedVars = dplyr::setdiff(fixedVars,targetVar)}  
-    
+    if (!is.null(fixedVars)) {fixedVars = ez.selcol(df,fixedVars); fixedVars = dplyr::setdiff(fixedVars,targetVar)}
+
     if ( (!is.null(targetVar)) | (!is.null(fixedVars)) ) {
         # c() works even if targetVar=NULL
         df %>% select(-one_of(c(targetVar,fixedVars))) -> df01
     } else {
         df -> df01
     }
-    
+
     # df01: 0s and 1s without target, fix, completed vars, zeroVars for PCA
     ind.NAs = is.na(df01)
     lapply(df01, as.character) %>% data.frame(stringsAsFactors = F) -> df01
     df01[!ind.NAs] <- 1; df01[ind.NAs] <- 0
     lapply(df01, as.numeric) %>% data.frame() -> df01
-    
+
     # get rid of constant 1, for scale and proper pca solution
-    # according to my test, if constant 1 into pca, you cannot scale and pca seems strange: 
+    # according to my test, if constant 1 into pca, you cannot scale and pca seems strange:
     # the constant var get loading of 0, in the middle of positive and negative laodings
     completedVars = ez.selcol(df01, which(colSums(df01) == nrow(df01)))
     zeroVars  = ez.selcol(df01, which(colSums(df01) == 0))
     if (!is.null(completedVars)) {df01 %<>% select(-one_of(completedVars))}
     if (!is.null(zeroVars)) {df01 %<>% select(-one_of(zeroVars))}
-    
+
     ####************************************************************************************************
                                          ####*obsolete*####
     ####************************************************************************************************
     # no need to scale for pca, has the same scale 0/1 (well, still not same variance?)
     # in fact scale error if all 1 or 0, scale = TRUE cannot be used if there are zero or constant (for center = TRUE) variables
-    
+
     # # https://stat.ethz.ch/pipermail/r-help/2006-April/104616.html
     # # duplicated to increse sample size if necessary
     # # because 'princomp' can only be used with more samples than variables
@@ -1109,11 +1109,11 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
     ####************************************************************************************************
                                          ####*obsolete*####
     ####************************************************************************************************
-    
+
     pcaObj = stats::prcomp(df01,scale=T)
     # high loading=more 1s, which means fewer missing values
-    pcaLoadings = pcaObj$rotation %>% data.frame() %>% tibble::rownames_to_column() %>% arrange(desc(PC1)) 
-    
+    pcaLoadings = pcaObj$rotation %>% data.frame() %>% tibble::rownames_to_column() %>% arrange(desc(PC1))
+
     allvars = c(targetVar,fixedVars,completedVars,pcaLoadings$rowname,zeroVars)
     # sample#, variable#, mean(targetVar)
     counts = matrix(NA,nrow=length(allvars),ncol=3)
@@ -1123,10 +1123,10 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
         df %>% select(vars) %>% ez.dropna(print2screen = F) -> df3
         counts[i,1] = nrow(df3)
         counts[i,2] = ncol(df3)
-        
+
         if (is.null(targetVar)) {
             counts[i,3] = NA
-        } else if (is.nan( mean(df3[[targetVar]]) )) { 
+        } else if (is.nan( mean(df3[[targetVar]]) )) {
             # if df3 empty, mean=NaN
             counts[i,3] = NA
         } else {
@@ -1136,14 +1136,14 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
     counts = data.frame(counts)
     colnames(counts) = c('sampleNum','variableNum','targetMean')
     counts$orderedVar = allvars
-    
+
     # the plot() will not return an object. plot directly, hard to capture to an object
     # graphics::plot(x = variableNum, y = sampleNum)
     p1=lattice::xyplot(counts$sampleNum ~ counts$variableNum,
                   xlab = list("Number of Variables Kept", cex=labsize, fontfamily="Times New Roman"),
                   ylab = list("Sample Size Without Missing Values", cex=labsize, fontfamily="Times New Roman"),
                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                  type = "p", pch=16, 
+                  type = "p", pch=16,
                   col="#e69f00")
     p2=NULL
     if (!all(is.na(counts$targetMean))) {
@@ -1151,11 +1151,11 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
                   xlab = list("Number of Variables Kept", cex=labsize, fontfamily="Times New Roman"),
                   ylab = list(sprintf("Mean Value of %s",targetVar), cex=labsize, fontfamily="Times New Roman"),
                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                  type = "p", pch=16, 
+                  type = "p", pch=16,
                   col="#56b4e9")
     }
     gmultiplot(p1,p2,cols=2)
-    
+
     return(invisible(counts))
 }
 
@@ -1172,7 +1172,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #' @return Returns a list objects:
 #' \itemize{
 #'  \item{\strong{correct}: }{correct = (Hits + CR)/(Hits+Misses+FA+CR) , but it cannot disentangle the two components, ie, discriminability and bias (The major contribution of SDT to psychology is the separation of these two). Intuitively, the best subject maximizes H (and thus minimizes the Miss rate) and minimizes F (and thus maximizes the Correct Rejection rate); hit rate H = hit / (hit+miss); false alarm rate F = FA / (FA + CR); targets = hit + miss; distractors= fa + cr.}
-#'  \item{\strong{dprime (d')}: }{The sensitivity, discriminability index. Reflects the mean/peak distance (in standard deviation unit) between the signal and noise distributions (d' = z(H) ­- z(F), other sensitivity measures include a transform other than z, or even no transform at all). The larger the difference between H and F, the better the subject's sensitivity. A value of 0 indicates an inability to distinguish signals from noise, whereas larger values indicate a correspondingly greater ability to distinguish signals from noise. Negative values of d' can arise through sampling error or response confusion (responding yes when intending to respond no, and vice versa). Though Z values can have any real value, normally distributed ones are between -2 and 2 about 95 percent of the time. SDT states that d' is unaffected by response bias (i.e., is a pure measure of sensitivity) if two assumptions are met regarding the decision variable: (1) The signal and noise distributions are both normal, and (2) the signal and noise distributions have the same standard deviation. We call these the d ' assumptions. If either assumption is violated, d' will vary with response bias. Because of this, some researchers prefer to use nonparametric measures of sensitivity. The most popular is A'. }
+#'  \item{\strong{dprime (d')}: }{The sensitivity, discriminability index. Reflects the mean/peak distance (in standard deviation unit) between the signal and noise distributions (d' = z(H) �- z(F), other sensitivity measures include a transform other than z, or even no transform at all). The larger the difference between H and F, the better the subject's sensitivity. A value of 0 indicates an inability to distinguish signals from noise, whereas larger values indicate a correspondingly greater ability to distinguish signals from noise. Negative values of d' can arise through sampling error or response confusion (responding yes when intending to respond no, and vice versa). Though Z values can have any real value, normally distributed ones are between -2 and 2 about 95 percent of the time. SDT states that d' is unaffected by response bias (i.e., is a pure measure of sensitivity) if two assumptions are met regarding the decision variable: (1) The signal and noise distributions are both normal, and (2) the signal and noise distributions have the same standard deviation. We call these the d ' assumptions. If either assumption is violated, d' will vary with response bias. Because of this, some researchers prefer to use nonparametric measures of sensitivity. The most popular is A'. }
 #'  \item{\strong{beta}: }{The decision bias, response bias, bias/criterion. Use of this measure assumes that responses are based on a likelihood ratio. Suppose the decision variable achieves a value of x on a given trial. The numerator for the ratio is the likelihood of obtaining x on a signal trial (i.e., the height of the signal distribution at x), whereas the denominator for the ratio is the likelihood of obtaining x on a noise trial (i.e., the height of the noise distribution at x). Formula is exp(-(zH-zF) x (zH+zF)/2). When subjects favor neither the yes response nor the no response, 􏰂beta=1. Values less than 1 signify a bias toward responding yes (liberal), whereas values of beta greater than 1 signify a bias toward the no (conservative) response. Because beta is based on a ratio, the natural logarithm of beta is often analyzed in place of beta itself. This script gives beta, not ln(beta).}
 #'  \item{\strong{aprime (A')}: }{Non-parametric estimate of discriminability. A' typically ranges from .5, which indicates that signals cannot be distinguished from noise, to 1, which corresponds to perfect performance. Values less than .5 may arise from sampling error or response confusion; the minimum possible value is 0.}
 #'  \item{\strong{bppd (B''D)}: }{Non-parametric estimate of bias. B''D ranges from 􏰁1 (extreme bias in favor of yes/liberal responses) to 1 (extreme bias in favor of no/conservative responses). A value of 0 signifies no response bias.}
@@ -1237,7 +1237,7 @@ ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
         c <- -(qnorm(hit_rate_adjusted) + qnorm(fa_rate_adjusted)) / 2
         # normalized c prime
         cprime <- c/dprime
-    
+
     } else {
         # Ratios
         hit_rate <- n_hit / n_targets
@@ -1307,7 +1307,7 @@ ez.es.t.independent.msn = function(m1,s1,n1,m2,s2,n2) {
 ez.es.t.independent.tn = function(t,n1,n2) {
     # this formula could be derived from t formula for independent t-test
     # equivalently sqrt((n1+n2)/(n1*n2))
-    d = t*( sqrt((1/n1+1/n2)) )  
+    d = t*( sqrt((1/n1+1/n2)) )
 
     output = sprintf("d = %0.2f", d)
     cat(output, "\n", sep = "")
@@ -1317,7 +1317,7 @@ ez.es.t.independent.tn = function(t,n1,n2) {
 
 #' calculate effect size
 #' @description calculate effect size
-#' @param t t for paired samples t test, available in SPSS paired samples Test output table 
+#' @param t t for paired samples t test, available in SPSS paired samples Test output table
 #' @param n number of pairs, in SPSS paired samples Test output table, n=df+1
 #' @param r correlation, In case, the correlation is unknown, please fill in 0.
 #' @return returns invisible
@@ -1334,13 +1334,13 @@ ez.es.t.paired.tnr = function(t,n,r) {
 
 #' calculate effect size
 #' @description calculate effect size
-#' @param m12 the mean of differences that equals the difference of means (m1-m2), available in SPSS paired samples Test output table 
-#' @param s12 the standard deviation of the difference score, available in SPSS paired samples Test output table 
+#' @param m12 the mean of differences that equals the difference of means (m1-m2), available in SPSS paired samples Test output table
+#' @param s12 the standard deviation of the difference score, available in SPSS paired samples Test output table
 #' @param r correlation, In case, the correlation is unknown, please fill in 0.
 #' @return returns invisible
 #' @export
 ez.es.t.paired.m12s12r = function(m12,s12,r) {
-    # derive the following formulas, based on t = m12/se12 = m12/(s12/sqrt(n)), therefore 
+    # derive the following formulas, based on t = m12/se12 = m12/(s12/sqrt(n)), therefore
     # d = t*sqrt(2.0*(1.0-r)/n) = ( m12/(s12/sqrt(n)) ) * sqrt(2.0*(1.0-r)/n) = m12*sqrt(2*(1-r))/s12
     d = m12*sqrt(2*(1-r))/s12
 
@@ -1367,7 +1367,7 @@ ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
     output = sprintf("d = %0.2f", d)
     cat(output, "\n", sep = "")
     cat('d [0.20 0.50) = small, [0.50 0.80) = medium, [0.80 ) = large. The sign of d is arbitrary.\n')
-    return(invisible(d))    
+    return(invisible(d))
 }
 
 #' retrieve article citation numbers from pubmed
@@ -1393,7 +1393,7 @@ ez.cites = function(xmlFile,outFile=NULL){
     pubmedcites = function(title){
         # title = "Dissociating Normal Aging from Alzheimer's Disease: A View from Cognitive Neuroscience"
         rsearch <- rentrez::entrez_search(db="pubmed", retmax=1, term=title)
-        
+
         if (rsearch$count==0) {
             # nothing found, give up
             result = list("sortpubdate" = "",
@@ -1403,7 +1403,7 @@ ez.cites = function(xmlFile,outFile=NULL){
                           "title" = "",
                           "fulljournalname" = "")
         } else {
-            rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids) 
+            rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids)
             result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
             # if not same title, try title search according to previously returned parsed search term
             if (!stringr::str_detect( tolower(gsub('[[:space:][:punct:]]','',title,perl=TRUE)), tolower(gsub('[[:space:][:punct:]]','',result$title,perl=TRUE)))){
@@ -1418,17 +1418,17 @@ ez.cites = function(xmlFile,outFile=NULL){
                                   "title" = "",
                                   "fulljournalname" = "")
                 } else {
-                    rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids) 
+                    rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids)
                     result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
                 }
             }
 
         }
-        
-        
+
+
         result$OriginalTitle = title
         result$RetrievedDate = ez.moment()
-        
+
         if (stringr::str_detect( tolower(gsub('[[:space:][:punct:]]','',result$OriginalTitle,perl=TRUE)), tolower(gsub('[[:space:][:punct:]]','',result$title,perl=TRUE)))){
            result$TitleMatch = 1
         } else {
@@ -1439,7 +1439,7 @@ ez.cites = function(xmlFile,outFile=NULL){
     }
 
     cites = lapply(titles, pubmedcites)
-    results = as.data.frame( t(matrix(unlist(cites), nrow=length(unlist(cites[[1]])))) )
+    results = as.data.frame( t(matrix(unlist(cites), nrow=length((cites[[1]])))) )
     names(results) = names(cites[[1]])
     results = ez.num(results, c('pmcrefcount','TitleMatch'),force=TRUE)
 

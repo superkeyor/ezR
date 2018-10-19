@@ -30,14 +30,14 @@ ez.regressions(df, y, x, covar = NULL, showerror = T, viewresult = F,
 }
 \value{
 an invisible list of data frame
-\cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized 
+\cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized
 \cr so that the variances of dependent and independent variables are 1.
-\cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
-\cr per standard deviation increase in the predictor variable. 
+\cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
+\cr per standard deviation increase in the predictor variable.
 \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 \cr For multiple regression (with covar), the value of the standardized coefficient (beta) is close to semi-partial correlation
 \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
-\cr 
+\cr
 \cr degree_of_freedom: from F-statistic
 \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 }

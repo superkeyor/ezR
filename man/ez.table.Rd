@@ -20,6 +20,6 @@ ez.table(x, ..., dnn = NULL, exclude = c(NA, NaN), row.vars = NULL,
 }
 \description{
 freq table, df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z), auto convert/reset factor
-\cr ez.table2 output is more beautiful, but must be two varibles/cols 
+\cr ez.table2 output is more beautiful, but must be two varibles/cols
 \cr result table can be further passed to prop.table(), addmargins(), addmargins(prop.table())
 }

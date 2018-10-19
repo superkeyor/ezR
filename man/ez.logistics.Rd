@@ -32,9 +32,9 @@ ez.logistics(df, y, x, covar = NULL, showerror = T, viewresult = F,
 an invisible list of data frame
 \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 \cr so that the variances of dependent and independent variables are 1.
-\cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change, 
-\cr per standard deviation increase in the predictor variable. 
-\cr 
+\cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
+\cr per standard deviation increase in the predictor variable.
+\cr
 \cr degree_of_freedom
 }
 \description{
