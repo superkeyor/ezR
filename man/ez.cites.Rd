@@ -4,12 +4,12 @@
 \alias{ez.cites}
 \title{retrieve article citation numbers from pubmed}
 \usage{
-ez.cites(xmlFile, outFile)
+ez.cites(xmlFile, outFile = NULL)
 }
 \arguments{
 \item{xmlFile}{EndNote library file, contains exported articles with correct titles}
 
-\item{outFile}{an excel file to store the results}
+\item{outFile}{an excel file to store the results, if not provided, same base name as xmlFile}
 }
 \value{
 returns invisible, save an excel file with results

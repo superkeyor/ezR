@@ -1373,11 +1373,15 @@ ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
 #' retrieve article citation numbers from pubmed
 #' @description retrieve article citation numbers from pubmed
 #' @param xmlFile EndNote library file, contains exported articles with correct titles
-#' @param outFile an excel file to store the results
+#' @param outFile an excel file to store the results, if not provided, same base name as xmlFile
 #' @return returns invisible, save an excel file with results
 #' @note get citation numbers cited by available pubmed central papers
 #' @export
-ez.cites = function(xmlFile,outFile){
+ez.cites = function(xmlFile,outFile=NULL){
+
+    if (is.null(outFile)){
+        outFile=gsub('xml$','xlsx',xmlFile,perl=TRUE)
+    }
     # https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html
     # https://www.ncbi.nlm.nih.gov/books/NBK25501/
     # https://www.stat.berkeley.edu/~statcur/Workshop2/Presentations/XML.pdf
