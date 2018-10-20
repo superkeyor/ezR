@@ -10,6 +10,8 @@ ez.cites(xmlFile, outFile = NULL, index = NULL)
 \item{xmlFile}{EndNote library file, contains exported articles with correct titles}
 
 \item{outFile}{an excel file to store the results, if not provided, same base name as xmlFile}
+
+\item{index}{1:10, same syntax titles[index] to choose a subset of titles in xmlFile to process, NULL=all}
 }
 \value{
 returns invisible, save an excel file with results
