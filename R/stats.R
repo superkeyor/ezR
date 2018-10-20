@@ -1442,7 +1442,9 @@ ez.cites = function(xmlFile,outFile=NULL,index=NULL){
     results = as.data.frame( t(matrix(unlist(cites), nrow=length((cites[[1]])))) )
     names(results) = names(cites[[1]])
     results = ez.num(results, c('pmcrefcount','TitleMatch'),force=TRUE)
+    results$ID = seq.int(nrow(results))
+    results = dplyr::arrange(results,desc(pmcrefcount))
 
-    ez.savex(results,file=outFile)
+    ez.savex(results,file=outFile,withFilter=TRUE)
     return(invisible(results))
 }
