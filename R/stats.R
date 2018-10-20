@@ -1394,17 +1394,17 @@ ez.cites = function(xmlFile,outFile=NULL){
 
         if (rsearch$count==0) {
             # nothing found, give up
-            result = list("sortpubdate" = "",
+            result = list("sortpubdate" = character(0),
                           "pmcrefcount" = integer(0),
-                          "sortfirstauthor" = "",
-                          "lastauthor" = "",
-                          "title" = "",
-                          "fulljournalname" = "")
+                          "sortfirstauthor" = character(0),
+                          "lastauthor" = character(0),
+                          "title" = character(0),
+                          "fulljournalname" = character(0))
         } else {
             rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids)
             result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
             # if not same title, try title search according to previously returned parsed search term
-            if (!stringr::str_detect( tolower(gsub('[[:space:][:punct:]]','',title,perl=TRUE)), tolower(gsub('[[:space:][:punct:]]','',result$title,perl=TRUE)))){
+            if (!ez.strcomp(title,result$title)){
                 term=gsub('\\[.*?\\]','[Title]',rsearch$QueryTranslation,perl=TRUE)
                 rsearch <- rentrez::entrez_search(db="pubmed", retmax=1, term=term)
                 # if fails, give up
@@ -1427,7 +1427,7 @@ ez.cites = function(xmlFile,outFile=NULL){
         result$OriginalTitle = title
         result$RetrievedDate = ez.moment()
 
-        if (stringr::str_detect( tolower(gsub('[[:space:][:punct:]]','',result$OriginalTitle,perl=TRUE)), tolower(gsub('[[:space:][:punct:]]','',result$title,perl=TRUE)))){
+        if (ez.strcomp(title,result$title)){
            result$TitleMatch = 1
         } else {
            result$TitleMatch = 0

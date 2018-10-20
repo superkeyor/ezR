@@ -520,8 +520,31 @@ ez.str = function(x, col=NULL){
 #' @description rev a str: 'abc'->'cba'
 #' @export
 ez.strrev <- function(x) {
-  nc <- nchar(x)
-  paste(substring(x, nc:1, nc:1), collapse = "")
+    nc <- nchar(x)
+    paste(substring(x, nc:1, nc:1), collapse = "")
+}
+
+#' compare if s1 exact the same as s2, but ignore case, space, punctuation
+#' @description compare if s1 exact the same as s2, but ignore case, space, punctuation
+#' @param s string, supports vectorization
+#' @param i ignore case, space, punctuation
+#' @note internally strip the space, punct, and convert case, then use "==" to compare
+#' @return logic
+#' @export
+ez.strcomp <- function(s1,s2,icase=TRUE,ispace=TRUE,ipunctuation=TRUE) {
+    if (ispace) {
+        s1 = gsub('[[:space:]]','',s1,perl=TRUE)
+        s2 = gsub('[[:space:]]','',s2,perl=TRUE)
+    }
+    if (ipunctuation){
+        s1 = gsub('[[:punct:]]','',s1,perl=TRUE)
+        s2 = gsub('[[:punct:]]','',s2,perl=TRUE)
+    }
+    if (icase){
+        s1 = tolower(s1)
+        s2 = tolower(s2)
+    }
+    return(s1==s2)
 }
 
 #' alias of \code{\link{ceiling}}
