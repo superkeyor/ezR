@@ -1369,14 +1369,14 @@ ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
 }
 
 #' retrieve article citation numbers from pubmed
-#' @description retrieve article citation numbers from pubmed
+#' @description retrieve article citation numbers from pubmed --
 #' @param xmlFile EndNote library file, contains exported articles with correct titles
 #' @param outFile an excel file to store the results, if not provided, same base name as xmlFile
 #' @param index 1:10, same syntax titles[index] to choose a subset of titles in xmlFile to process, NULL=all 
 #' @return returns invisible, save an excel file with results
 #' @note get citation numbers cited by available pubmed central papers
 #' @export
-ez.cites = function(xmlFile,outFile=NULL,index=NULL){
+ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 
     if (is.null(outFile)){
         outFile=gsub('xml$','xlsx',xmlFile,perl=TRUE)
