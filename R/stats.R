@@ -1394,12 +1394,12 @@ ez.cites = function(xmlFile,outFile=NULL){
 
         if (rsearch$count==0) {
             # nothing found, give up
-            result = list("sortpubdate" = character(0),
-                          "pmcrefcount" = integer(0),
-                          "sortfirstauthor" = character(0),
-                          "lastauthor" = character(0),
-                          "title" = character(0),
-                          "fulljournalname" = character(0))
+            result = list("sortpubdate" = "",
+                          "pmcrefcount" = NA_integer_,
+                          "sortfirstauthor" = "",
+                          "lastauthor" = "",
+                          "title" = "",
+                          "fulljournalname" = "")
         } else {
             rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids)
             result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
@@ -1410,7 +1410,7 @@ ez.cites = function(xmlFile,outFile=NULL){
                 # if fails, give up
                 if (rsearch$count==0) {
                     result = list("sortpubdate" = "",
-                                  "pmcrefcount" = integer(0),
+                                  "pmcrefcount" = NA_integer_,
                                   "sortfirstauthor" = "",
                                   "lastauthor" = "",
                                   "title" = "",
