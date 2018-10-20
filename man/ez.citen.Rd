@@ -17,7 +17,7 @@ ez.citen(xmlFile, outFile = NULL, index = NULL)
 returns invisible, save an excel file with results
 }
 \description{
-retrieve article citation numbers from pubmed --
+retrieve article citation numbers from pubmed
 }
 \note{
 get citation numbers cited by available pubmed central papers
