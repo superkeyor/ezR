@@ -4,7 +4,7 @@
 \alias{ez.cites}
 \title{retrieve article citation numbers from pubmed}
 \usage{
-ez.cites(xmlFile, outFile = NULL)
+ez.cites(xmlFile, outFile = NULL, index = NULL)
 }
 \arguments{
 \item{xmlFile}{EndNote library file, contains exported articles with correct titles}
