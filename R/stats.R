@@ -1388,6 +1388,12 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
     bibs = XML::xmlParse(file = xmlFile)
     nodes = XML::getNodeSet(bibs,"//title")
     titles = XML::xmlSApply(nodes,XML::xmlValue)
+    
+    strcomp <- function(s1,s2) {
+        s1 = tolower(gsub('\\W','',s1,perl=TRUE))
+        s2 = tolower(gsub('\\W','',s2,perl=TRUE))
+        return(s1==s2)
+    }
 
     pubmedcites = function(title){
         # title = "Dissociating Normal Aging from Alzheimer's Disease: A View from Cognitive Neuroscience"
@@ -1405,7 +1411,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
             rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids)
             result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
             # if not same title, try title search according to previously returned parsed search term
-            if (!ez.strcomp(title,result$title)){
+            if (!strcomp(title,result$title)){
                 term=gsub('\\[.*?\\]','[Title]',rsearch$QueryTranslation,perl=TRUE)
                 rsearch <- rentrez::entrez_search(db="pubmed", retmax=1, term=term)
                 # if fails, give up
@@ -1428,7 +1434,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
         result$OriginalTitle = title
         result$RetrievedDate = ez.moment()
 
-        if (ez.strcomp(title,result$title)){
+        if (strcomp(title,result$title)){
            result$TitleMatch = 1
         } else {
            result$TitleMatch = 0
