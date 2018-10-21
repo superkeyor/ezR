@@ -1405,11 +1405,11 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
                           "pmcrefcount" = NA_integer_,
                           "sortfirstauthor" = "",
                           "lastauthor" = "",
-                          "title" = "",
-                          "fulljournalname" = "")
+                          "fulljournalname" = "",
+                          "title" = "")
         } else {
             rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids)
-            result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
+            result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "fulljournalname", "title"))
             # if not same title, try title search according to previously returned parsed search term
             if (!strcomp(title,result$title)){
                 term=gsub('\\[.*?\\]','[Title]',rsearch$QueryTranslation,perl=TRUE)
@@ -1420,11 +1420,11 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
                                   "pmcrefcount" = NA_integer_,
                                   "sortfirstauthor" = "",
                                   "lastauthor" = "",
-                                  "title" = "",
-                                  "fulljournalname" = "")
+                                  "fulljournalname" = "",
+                                  "title" = "")
                 } else {
                     rsum <- rentrez::entrez_summary(db="pubmed", id=rsearch$ids)
-                    result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "title", "fulljournalname"))
+                    result <- rentrez::extract_from_esummary(rsum, c("sortpubdate", "pmcrefcount", "sortfirstauthor", "lastauthor", "fulljournalname", "title"))
                 }
             }
 
