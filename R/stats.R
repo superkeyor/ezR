@@ -1165,7 +1165,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #' @param fa Number of false alarms.
 #' @param miss Number of misses.
 #' @param cr Number of correct rejections.
-#' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). see for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
+#' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). Note: only affects dprime, beta, c, cprime; all other results have nothing to do with adjustment. see for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
 #'
 #' @return Returns a list objects:
 #' \itemize{
@@ -1211,13 +1211,11 @@ ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
     n_miss = miss
     n_cr = cr
 
-    n_targets <- n_hit + n_miss
-    n_distractors <- n_fa + n_cr
-    correct <- (n_hit+n_fa)/(n_hit+n_miss+n_fa+n_cr)
+    # 1) correct ------------------------------------------------------
+    correct <- (n_hit+n_cr)/(n_hit+n_miss+n_fa+n_cr)
 
 
-    # Parametric Indices ------------------------------------------------------
-
+    # 2) Parametric Indices ------------------------------------------------------
     if (adjusted == TRUE) {
         # Adjusted ratios: Advocates of the loglinear approach recommend using it regardless of whether or not extreme rates are obtained.
         hit_rate_adjusted <- (n_hit + 0.5) / ((n_hit + 0.5) + n_miss + 1)
@@ -1238,6 +1236,9 @@ ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
 
     } else {
         # Ratios
+        n_targets <- n_hit + n_miss
+        n_distractors <- n_fa + n_cr
+
         hit_rate <- n_hit / n_targets
         fa_rate <- n_fa / n_distractors
 
@@ -1255,9 +1256,11 @@ ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
         cprime <- c/dprime
     }
 
-    # Non-Parametric Indices ------------------------------------------------------
 
+    # 3) Non-Parametric Indices ------------------------------------------------------
     # Ratios
+    n_targets <- n_hit + n_miss
+    n_distractors <- n_fa + n_cr
     hit_rate <- n_hit / n_targets
     fa_rate <- n_fa / n_distractors
 
@@ -1273,7 +1276,10 @@ ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
     bppd <- ((1 - hit_rate) * (1 - fa_rate) - hit_rate * fa_rate) / ((1 - hit_rate) * (1 - fa_rate) + hit_rate * fa_rate)
 
 
-    return(list(correct = correct, dprime = dprime, beta = beta, aprime = aprime, bppd = bppd, c = c, cprime = cprime))
+    # 4) return ------------------------------------------------------
+    hr = n_hit / (n_hit + n_miss)
+    far = n_fa / (n_fa + n_cr)
+    return(list(dprime = dprime, beta = beta, c = c, cprime = cprime, hr = hr, far = far, correct = correct, aprime = aprime, bppd = bppd))
 }
 
 #' calculate effect size

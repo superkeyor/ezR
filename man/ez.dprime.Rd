@@ -15,7 +15,7 @@ ez.dprime(hit, fa, miss, cr, adjusted = TRUE)
 
 \item{cr}{Number of correct rejections.}
 
-\item{adjusted}{Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). see for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}}
+\item{adjusted}{Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). Note: only affects dprime, beta, c, cprime; all other results have nothing to do with adjustment. see for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}}
 }
 \value{
 Returns a list objects:
