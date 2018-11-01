@@ -300,9 +300,9 @@ ez.execute = system
 
 #' join path
 #' @description join path
-#' @note \code{\link{file.path}} cannot handle/ignore trailing slash, internally trim double+ slashes, though some OS treats multiple slashes as one
-#' @example
-#' #alternative: paste(..., sep=.Platform$file.sep)
+#' @note \code{\link{file.path}} cannot handle/ignore trailing slash, 
+#' internally trim double+ slashes, though some OS treats multiple slashes as one
+#' alternative: paste(..., sep=.Platform$file.sep)
 #' @export
 ez.joinpath = function(...) {
     sep = .Platform$file.sep
