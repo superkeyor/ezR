@@ -14,6 +14,6 @@ join path
 }
 \note{
 \code{\link{file.path}} cannot handle/ignore trailing slash, 
-internally trim double+ slashes, though some OS treats multiple slashes as one
+internally trim double+ and trailing slashes, though some OS treats multiple slashes as one
 alternative: paste(..., sep=.Platform$file.sep)
 }

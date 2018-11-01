@@ -301,12 +301,14 @@ ez.execute = system
 #' join path
 #' @description join path
 #' @note \code{\link{file.path}} cannot handle/ignore trailing slash, 
-#' internally trim double+ slashes, though some OS treats multiple slashes as one
+#' internally trim double+ and trailing slashes, though some OS treats multiple slashes as one
 #' alternative: paste(..., sep=.Platform$file.sep)
 #' @export
 ez.joinpath = function(...) {
     sep = .Platform$file.sep
-    gsub(paste0(sep,"{2,}"), sep, file.path(...), fixed=FALSE, perl=TRUE)
+    result = gsub(paste0(sep,"{2,}"), sep, file.path(...), fixed=FALSE, perl=TRUE)
+    result = gsub(paste0(sep,"$"), '', file.path(...), fixed=FALSE, perl=TRUE)
+    return(result)
 }
 
 #' @rdname ez.joinpath
