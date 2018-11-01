@@ -6,10 +6,12 @@
 \usage{
 ez.lsd(path = ".", pattern = NULL, full = FALSE, hidden = FALSE)
 }
+\value{
+a char vector with 0, 1 or more elements
+}
 \description{
 lsd
 }
-\examples{
-default: hidden=FALSE, not include .folders
-all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
+\note{
+if hidden=FALSE, not include .folders
 }

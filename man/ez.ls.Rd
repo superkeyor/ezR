@@ -6,6 +6,9 @@
 \usage{
 ez.ls(path = ".", pattern = NULL, full = TRUE, hidden = FALSE)
 }
+\value{
+a char vector with 0, 1 or more elements
+}
 \description{
 ls
 }

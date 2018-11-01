@@ -6,6 +6,9 @@
 \usage{
 ez.fls(path = ".", pattern = NULL, hidden = FALSE)
 }
+\value{
+a char vector with 0, 1 or more elements
+}
 \description{
 fls
 }

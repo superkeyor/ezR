@@ -403,11 +403,11 @@ ez.csd <- function() {
 
 #' lsd
 #' @description lsd
-#' @examples
-#' default: hidden=FALSE, not include .folders
-#' all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
+#' @note if hidden=FALSE, not include .folders
+#' @return a char vector with 0, 1 or more elements
 #' @export
 ez.lsd = function(path='.', pattern=NULL, full=FALSE, hidden=FALSE){
+    # all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
     folders = dir(path=path, pattern=pattern, all.files=hidden, full.name=FALSE,
                   recursive = FALSE, ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
     fullFolders = file.path(path,folders)
@@ -425,6 +425,7 @@ ez.lsd = function(path='.', pattern=NULL, full=FALSE, hidden=FALSE){
 
 #' ls
 #' @description ls
+#' @return a char vector with 0, 1 or more elements
 #' @export
 ez.ls = function(path='.', pattern=NULL, full=TRUE, hidden=FALSE){
     files = list.files(path = path, pattern = pattern, all.files = hidden,
@@ -444,6 +445,7 @@ ez.ls = function(path='.', pattern=NULL, full=TRUE, hidden=FALSE){
 #' fls
 #' @description fls
 #' @export
+#' @return a char vector with 0, 1 or more elements
 ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
     files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = TRUE,
