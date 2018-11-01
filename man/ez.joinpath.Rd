@@ -3,15 +3,15 @@
 \name{ez.joinpath}
 \alias{ez.joinpath}
 \alias{ez.jp}
-\title{alias of \code{\link{file.path}}}
+\title{join path}
 \usage{
-ez.joinpath(..., fsep = .Platform$file.sep)
+ez.joinpath(...)
 
-ez.jp(..., fsep = .Platform$file.sep)
+ez.jp(...)
 }
 \description{
-alias of \code{\link{file.path}}
+join path
 }
-\examples{
-paste(..., sep=.Platform$file.sep)
+\note{
+\code{\link{file.path}} cannot handle/ignore trailing slash, internally trim double+ slashes, though some OS treats multiple slashes as one
 }

@@ -298,12 +298,16 @@ ez.path = search
 #' @export
 ez.execute = system
 
-#' alias of \code{\link{file.path}}
-#' @description alias of \code{\link{file.path}}
-#' @examples
-#' paste(..., sep=.Platform$file.sep)
+#' join path
+#' @description join path
+#' @note \code{\link{file.path}} cannot handle/ignore trailing slash, internally trim double+ slashes, though some OS treats multiple slashes as one
+#' @example
+#' #alternative: paste(..., sep=.Platform$file.sep)
 #' @export
-ez.joinpath = file.path
+ez.joinpath = function(...) {
+    sep = .Platform$file.sep
+    gsub(paste0(sep,"{2,}"), sep, file.path(...), fixed=FALSE, perl=TRUE)
+}
 
 #' @rdname ez.joinpath
 #' @export
