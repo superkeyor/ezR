@@ -159,6 +159,7 @@ ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dr
 #' @param indexname variable name for timing/repetition/index variable, such as "session"
 #' @param measure column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")
 #' @param drop variables to drop before reshaping
+#' @param sep could be '_acc_'
 #' @note refer to my spss syntax 'SUBJID * Time [School] - Measure2'
 #' @examples
 #' set.seed(10)
@@ -184,7 +185,7 @@ ez.2long = function(df, id, indexname, index, measurename=NULL, measure=NULL, dr
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, ...){
+ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, sep='_', ...){
     # 'SUBJID * Time [School] - Measure2'
     # note: v.names not varying
     df = data.frame(df)
@@ -194,7 +195,7 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, ...){
                             v.names=measure,
                             direction="wide",
                             drop=drop,
-                            sep="_", ...)
+                            sep=sep, ...)
     row.names(result) <- NULL
     return(result)
 }

@@ -4,7 +4,7 @@
 \alias{ez.2wide}
 \title{reconstruct to wide format, wrapper of \code{\link[stats]{reshape}}}
 \usage{
-ez.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
+ez.2wide(df, id, indexname, measure = NULL, drop = NULL, sep = "_", ...)
 }
 \arguments{
 \item{id}{unique identification variable, or variable combination}
@@ -14,6 +14,8 @@ ez.2wide(df, id, indexname, measure = NULL, drop = NULL, ...)
 \item{measure}{column names that are the repeated measures, such as c("BDI_Pre","BDI_Post")}
 
 \item{drop}{variables to drop before reshaping}
+
+\item{sep}{could be '_acc_'}
 }
 \value{
 returns a new df. Because of the structural change, lable attributes would be lost and can NOT be copied with \code{\link{sjmisc_copy_labels}}--not a subset.
