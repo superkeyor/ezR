@@ -1177,15 +1177,15 @@ dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
         fa_rate_adjusted <- (n_fa + 0.5) / ((n_fa + 0.5) + n_cr + 1)
 
         # dprime
-        dprime <- qnorm(hit_rate_adjusted) - qnorm(fa_rate_adjusted)
+        dprime <- stats::qnorm(hit_rate_adjusted) - stats::qnorm(fa_rate_adjusted)
 
         # beta
-        zhr <- qnorm(hit_rate_adjusted)
-        zfar <- qnorm(fa_rate_adjusted)
+        zhr <- stats::qnorm(hit_rate_adjusted)
+        zfar <- stats::qnorm(fa_rate_adjusted)
         beta <- exp(-zhr * zhr / 2 + zfar * zfar / 2)
 
         # criterion c
-        c <- -(qnorm(hit_rate_adjusted) + qnorm(fa_rate_adjusted)) / 2
+        c <- -(stats::qnorm(hit_rate_adjusted) + stats::qnorm(fa_rate_adjusted)) / 2
         # normalized c prime
         cprime <- c/dprime
 
@@ -1198,15 +1198,15 @@ dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
         fa_rate <- n_fa / n_distractors
 
         # dprime
-        dprime <- qnorm(hit_rate) - qnorm(fa_rate)
+        dprime <- stats::qnorm(hit_rate) - stats::qnorm(fa_rate)
 
         # beta
-        zhr <- qnorm(hit_rate)
-        zfar <- qnorm(fa_rate)
+        zhr <- stats::qnorm(hit_rate)
+        zfar <- stats::qnorm(fa_rate)
         beta <- exp(-zhr * zhr / 2 + zfar * zfar / 2)
 
         # criterion c
-        c <- -(qnorm(hit_rate) + qnorm(fa_rate)) / 2
+        c <- -(stats::qnorm(hit_rate) + stats::qnorm(fa_rate)) / 2
         # normalized c prime
         cprime <- c/dprime
     }
@@ -1248,7 +1248,8 @@ dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
 #' @param cr Number of correct rejections.
 #' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). Note: only affects dprime, beta, c, cprime; all other results have nothing to do with adjustment. see for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
 #'
-#' @return Returns a list objects: (summary: aprime, bppd are nonparametric version of dprime, beta, nonparemetric not subjective to assumptions/extreme values)
+#' @return Returns a data frame: 
+#' (summary: aprime, bppd are nonparametric version of dprime, beta, nonparemetric not subjective to assumptions/extreme values)
 #' \itemize{
 #'  \item{\strong{hr}: }{hit rate, calculated with raw data, the unadjusted one returned}
 #'  \item{\strong{far}: }{false alarm rate, , the unadjusted one returned}    
@@ -1285,9 +1286,23 @@ dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
 #'
 #' @author Jerry modified from \href{https://dominiquemakowski.github.io/}{Dominique Makowski}. See Pallier (2002) for the algorithms, Stanislaw & Todorov (1999) for a good tutorial.
 #'
-#' @importFrom stats qnorm
 #' @export
-ez.dprime = Vectorize(dprime)
+ez.dprime = function(hit, fa, miss, cr, adjusted=TRUE){
+    if (length(hit)>1){
+        # Vectorize accepts SIMPLIFY, but even though dprime() returns a data.frame
+        # Vectorized function still returns a list
+        # so I deal with list and convert it to a data frame
+        myfun = Vectorize(dprime)
+        result = myfun(hit, fa, miss, cr, adjusted)
+        # return a data frame
+        result = data.frame(t(result))
+    } else {
+        # return a data frame
+        result = dprime(hit, fa, miss, cr, adjusted)
+        result = data.frame(result)
+    }
+    return(result)
+}
 
 #' calculate effect size
 #' @description calculate effect size
