@@ -1206,7 +1206,9 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
 #'
 #' @importFrom stats qnorm
 #' @export
-ez.dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
+ez.dprime = Vectorize(dprime)
+
+dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
 
     n_hit = hit
     n_fa = fa
