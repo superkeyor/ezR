@@ -1296,6 +1296,8 @@ ez.dprime = function(hit, fa, miss, cr, adjusted=TRUE){
         result = myfun(hit, fa, miss, cr, adjusted)
         # return a data frame
         result = data.frame(t(result))
+        # convert each column to numeric from list inherited from Vectorize
+        result = apply(result,2,as.numeric)
     } else {
         # return a data frame
         result = dprime(hit, fa, miss, cr, adjusted)
