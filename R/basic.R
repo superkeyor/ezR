@@ -28,6 +28,14 @@ or = magrittr::or
 #' @export
 ez.sprintf = glue::glue
 
+#' wrap each element of a vector around ""
+#' @description wrap each element of a vector around ""
+#' @return returns a vector
+#' @export
+ez.quoted = function(v){
+    base::strsplit(paste0('"', v, '"',collapse = '/|||/'), split = '/|||/',fixed = TRUE)[[1]]
+}
+
 #' Empty Value
 #'
 #' Rails-inspired helper that checks if vector values are "empty", i.e. if it's: \code{NULL}, zero-length, \code{NA}, \code{NaN}, \code{FALSE}, an empty string. Note that unlike its native R \code{is.<something>} sibling functions, \code{is.empty} is vectorised (hence the "values").
