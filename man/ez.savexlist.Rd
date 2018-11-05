@@ -2,9 +2,13 @@
 % Please edit documentation in R/io.R
 \name{ez.savexlist}
 \alias{ez.savexlist}
+\alias{ez.writexlist}
 \title{Save multiple data frames to multiple sheets individually}
 \usage{
 ez.savexlist(xlist, file = "RData.xlsx", withFilter = TRUE,
+  rowNames = TRUE, colNames = TRUE, ...)
+
+ez.writexlist(xlist, file = "RData.xlsx", withFilter = TRUE,
   rowNames = TRUE, colNames = TRUE, ...)
 }
 \arguments{

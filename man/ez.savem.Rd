@@ -5,12 +5,12 @@
 \alias{ez.writem}
 \title{Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax}
 \usage{
-ez.savem(fn, vars)
+ez.savem(file, vars)
 
-ez.writem(fn, vars)
+ez.writem(file, vars)
 }
 \arguments{
-\item{fn}{file name, a character string, with or without '.mat'}
+\item{file}{file name, a character string, with or without '.mat'}
 
 \item{vars}{character vector containing a comma separated listing of
 variables to be saved in the matfile. The variables have to exist in the
@@ -39,10 +39,10 @@ myChar  <- c("from", "R", "to", "Matlab")
 bool    <- TRUE # logical
 k       <- FALSE
 l       <- FALSE
-fn      <- "mytestmat"
+file      <- "mytestmat"
 vars    <- "A, b, cc, dd, myChar, bool, k, l"
-ez.savem(fn, vars)
-unlink(paste(fn, ".mat", sep = ""))
+ez.savem(file, vars)
+unlink(paste(file, ".mat", sep = ""))
 
 }
 \author{

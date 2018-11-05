@@ -22,7 +22,7 @@
 #'
 #' read.csv(file, header = TRUE, sep = ",",
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
-ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
+ez.readt = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
     if (!is.null(skip.rows)) {
         tmp = readLines(file)
         tmp = tmp[-(skip.rows)]
@@ -38,41 +38,6 @@ ez.read = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
     return(result)
 }
 
-xlcolconv = function(col){
-    # test: 1 = A, 26 = Z, 27 = AA, 703 = AAA
-    if (is.character(col)) {
-        # codes from https://stackoverflow.com/a/34537691/2292993
-        s = col
-        # Uppercase
-        s_upper <- toupper(s)
-        # Convert string to a vector of single letters
-        s_split <- unlist(strsplit(s_upper, split=""))
-        # Convert each letter to the corresponding number
-        s_number <- sapply(s_split, function(x) {which(LETTERS == x)})
-        # Derive the numeric value associated with each letter
-        numbers <- 26^((length(s_number)-1):0)
-        # Calculate the column number
-        column_number <- sum(s_number * numbers)
-        return(column_number)
-    } else {
-        n = col
-        letters = ''
-        while (n > 0) {
-            r = (n - 1) %% 26  # remainder
-            letters = paste0(intToUtf8(r + utf8ToInt('A')), letters) # ascii
-            n = (n - 1) %/% 26 # quotient
-        }
-        return(letters)
-    }
-}
-
-#' Excel-style column name converter: number from or to letters
-#' @description Excel-style column name converter: number from or to letters. Vectorized.
-#' @param col number or letters, input a number (27), output letters ('AA'), vice versa. Vectorized. 1 = A, 26 = Z, 27 = AA, 703 = AAA
-#' @export
-# Vectorize in case you want to pass more than one column name in a single call
-ez.xlcolconv = Vectorize(xlcolconv)
-
 #' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.write}}, wrapper of \code{\link{write.csv}}
 #' @return returns file path
@@ -84,7 +49,7 @@ ez.xlcolconv = Vectorize(xlcolconv)
 #' dec: decimal point
 #' sep: not applicable when file is csv
 #' @export
-ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = "", ...){
+ez.savet = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = "", ...){
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     x = data.frame(x)
     if (row.names==FALSE) {rownames(x) <- NULL}
@@ -99,16 +64,44 @@ ez.save = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = ""
     return(invisible(file))
 }
 
-#' wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
-#' @description wrapper of write.csv, but with row.names removed, alias of \code{\link{ez.save}}, wrapper of \code{\link{write.csv}}
-#' @examples
-#' (x, file="RData.csv", row.names=FALSE, append = FALSE, quote = TRUE, sep = ",",
-#'             na = "NA", dec = ".",
-#'             col.names = TRUE, qmethod = c("escape", "double"),
-#'             fileEncoding = "")
-#' dec: decimal point
+#' @rdname ez.savet
 #' @export
-ez.write = ez.save
+ez.writet = ez.savet
+
+#' save one or more or all objects to a rda file
+#' @description save one or more or all objects to a rda file
+#' @param file file path to a rda file
+#' @param vars a vector of obj names. NULL=all. 'var1', c('var1','var2'). If you have want a particular name, you have to assign that name as a variable first. e.g., desiredName=x; ez.saver(file,c('desiredName'))
+#' @param ... see ... for \code{\link{save}} or \code{\link{save.image}}
+#' @return returns nothing 
+#' @seealso \code{\link{ez.readr}}, \code{\link{ez.savem}}
+#' @export
+ez.saver = function(file, vars=NULL, ...){
+    if (is.null(vars)) {
+        save.image(file=file, ...)
+    } else {
+        # usage for save (you have to always explicitly specify file=):
+        # 1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
+        # 2) save(list='x', file='my.rda'), save(list=c('x', 'y'), file='my.rda')
+        # the variable name will also be the same as when you save
+        save(file=file, list=vars, ...)
+    }
+    return(invisible(NULL))
+}
+
+#' @rdname ez.saver
+#' @export
+ez.writer = ez.saver
+
+#' read a rda file
+#' @description read a rda file
+#' @param file file path to a rda file
+#' @return obj = ez.readr(file)
+#' @export
+ez.readr = function(file){
+    # https://stackoverflow.com/a/4676519/2292993
+    local(get(load(file)))
+}
 
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @description read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
@@ -480,6 +473,10 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
     return(invisible(file))
 }
 
+#' @rdname ez.savexlist
+#' @export
+ez.writexlist = ez.savexlist
+
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
 #' @description Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
 #' \cr 
@@ -494,7 +491,7 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
 #' \cr R.matlab::writeMat() that stores logicals as 0 / 1 and that transposes atomic
 #' \cr vectors when saving the matfile.
 #'
-#' @param fn file name, a character string, with or without '.mat'
+#' @param file file name, a character string, with or without '.mat'
 #'
 #' @param vars character vector containing a comma separated listing of
 #'   variables to be saved in the matfile. The variables have to exist in the
@@ -511,92 +508,84 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
 #' bool    <- TRUE # logical
 #' k       <- FALSE
 #' l       <- FALSE
-#' fn      <- "mytestmat"
+#' file      <- "mytestmat"
 #' vars    <- "A, b, cc, dd, myChar, bool, k, l"
-#' ez.savem(fn, vars)
-#' unlink(paste(fn, ".mat", sep = ""))
+#' ez.savem(file, vars)
+#' unlink(paste(file, ".mat", sep = ""))
 #'
 #' @author Christoph Schmidt <christoph.schmidt@@med.uni-jena.de>
 # 17.12.15
-ez.savem <- function(fn, vars){
-   if(!stringr::str_detect(fn, "^.*\\.mat$")){
-      fn <- paste(fn, ".mat", sep = "")
-   }
+ez.savem <- function(file, vars){
+    fn=fileName
+    if(!stringr::str_detect(fn, "^.*\\.mat$")){
+        fn <- paste(fn, ".mat", sep = "")
+    }
 
-   str_extractCommaSepArgs <- function(args_str){
-      inp       <- list()
-      ind_start <- 1
-      k         <- 1
-      bool      <- TRUE
+    str_extractCommaSepArgs <- function(args_str){
+        inp       <- list()
+        ind_start <- 1
+        k         <- 1
+        bool      <- TRUE
 
+    while(bool){
+        args_str     <- stringr::str_sub( args_str, ind_start )
+        ind_end    <- stringr::str_locate( args_str, "," )[1,1]
 
-      while(bool){
-         args_str     <- stringr::str_sub( args_str, ind_start )
-         ind_end    <- stringr::str_locate( args_str, "," )[1,1]
+    if(is.na(ind_end)){
+        bool    <- FALSE
+        ind_end <- stringr::str_length(args_str) + 1
+     }
 
-         if(is.na(ind_end)){
-            bool    <- FALSE
-            ind_end <- stringr::str_length(args_str) + 1
-         }
+     this_arg   <- stringr::str_sub( args_str, 1, ind_end-1 )
+     inp[[k]]   <- stringr::str_trim(this_arg)
+     ind_start  <- ind_end + 1
+     k          <- k + 1
+    }
 
-         this_arg   <- stringr::str_sub( args_str, 1, ind_end-1 )
-         inp[[k]]   <- stringr::str_trim(this_arg)
-         ind_start  <- ind_end + 1
-         k          <- k + 1
-      }
+    return(inp)
+    }
 
-      return(inp)
-   }
+    varsList <- str_extractCommaSepArgs(vars)
+    saveVars <- ""
 
+    # strange iterator name to circumvent manipulating a global variable that should
+    # be saved to .mat, e.g. k, i, ...
+    for(kqzuacrlk in 1:length(varsList)){
+        tmpStr  <- varsList[[kqzuacrlk]]
+        tmpStr_ <- paste(tmpStr, '_', sep = "") # for storing local copy of global variable from parent frame
 
-
-   varsList <- str_extractCommaSepArgs(vars)
-   saveVars <- ""
-
-   # strange iterator name to circumvent manipulating a global variable that should
-   # be saved to .mat, e.g. k, i, ...
-   for(kqzuacrlk in 1:length(varsList)){
-      tmpStr  <- varsList[[kqzuacrlk]]
-      tmpStr_ <- paste(tmpStr, '_', sep = "") # for storing local copy of global variable from parent frame
-
-      if( !exists(tmpStr, envir = parent.frame()) ){
-         stop(paste("Input variable name: '", tmpStr,
+    if( !exists(tmpStr, envir = parent.frame()) ){
+        stop(paste("Input variable name: '", tmpStr,
                     "'\ndoes not correspond to a variable stored in the parent frame.", sep = ""))
-      }
+    }
 
+    tmpVal  <- get(tmpStr, envir = parent.frame())
 
-      tmpVal  <- get(tmpStr, envir = parent.frame())
-
-
-      # is.vector(list) = TRUE, is.vector(logical) = TRUE, is.vector(array) = FALSE, is.list(vector) = FALSE
-      # does not transpose one-dimensional matrices / arrays (they don't need to be transformed)
-      if(is.vector(tmpVal) && !is.list(tmpVal) && !is.logical(tmpVal)){
-         assign(tmpStr_, t(tmpVal)) # create new local variable containing the transpose of the corresponding parent.frame atomic vector
-      }
-      else if(is.logical(tmpVal)){
-         if(tmpVal){
+    # is.vector(list) = TRUE, is.vector(logical) = TRUE, is.vector(array) = FALSE, is.list(vector) = FALSE
+    # does not transpose one-dimensional matrices / arrays (they don't need to be transformed)
+    if(is.vector(tmpVal) && !is.list(tmpVal) && !is.logical(tmpVal)){
+        assign(tmpStr_, t(tmpVal)) # create new local variable containing the transpose of the corresponding parent.frame atomic vector
+    }
+    else if(is.logical(tmpVal)){
+        if(tmpVal){
             assign(tmpStr_, 1) # create new local variable containing the corresponding integer encoding of the corresponding parent.frame logical
-         }
-         else {
+        }
+        else {
             assign(tmpStr_, 0)
-         }
-      }
-      else {
-         assign(tmpStr_, tmpVal)
-      }
+        }
+    }
+    else {
+        assign(tmpStr_, tmpVal)
+    }
 
+    saveVars <- paste(saveVars, tmpStr, " = ", tmpStr_, ",", sep = "")
+    } # end for
 
-      saveVars <- paste(saveVars, tmpStr, " = ", tmpStr_, ",", sep = "")
-   }
+    saveVars <- stringr::str_sub(saveVars, end = -2L) # deleting last comma
 
-
-   saveVars <- stringr::str_sub(saveVars, end = -2L) # deleting last comma
-
-
-
-   ### saving .mat file ---
-   f <- paste("R.matlab::writeMat('", fn, "', ", saveVars, ")", sep = "")
-   eval(parse(text=f))
+    ### saving .mat file ---
+    f <- paste("R.matlab::writeMat('", fn, "', ", saveVars, ")", sep = "")
+    eval(parse(text=f))
 }
 
 #' @rdname ez.savem
@@ -666,3 +655,38 @@ ez.logon = function(file='log.txt',mode='a',status=TRUE,timestamp=TRUE){
 ez.logoff = function(){
     ez.log(status=FALSE)
 }
+
+xlcolconv = function(col){
+    # test: 1 = A, 26 = Z, 27 = AA, 703 = AAA
+    if (is.character(col)) {
+        # codes from https://stackoverflow.com/a/34537691/2292993
+        s = col
+        # Uppercase
+        s_upper <- toupper(s)
+        # Convert string to a vector of single letters
+        s_split <- unlist(strsplit(s_upper, split=""))
+        # Convert each letter to the corresponding number
+        s_number <- sapply(s_split, function(x) {which(LETTERS == x)})
+        # Derive the numeric value associated with each letter
+        numbers <- 26^((length(s_number)-1):0)
+        # Calculate the column number
+        column_number <- sum(s_number * numbers)
+        return(column_number)
+    } else {
+        n = col
+        letters = ''
+        while (n > 0) {
+            r = (n - 1) %% 26  # remainder
+            letters = paste0(intToUtf8(r + utf8ToInt('A')), letters) # ascii
+            n = (n - 1) %/% 26 # quotient
+        }
+        return(letters)
+    }
+}
+
+#' Excel-style column name converter: number from or to letters
+#' @description Excel-style column name converter: number from or to letters. Vectorized.
+#' @param col number or letters, input a number (27), output letters ('AA'), vice versa. Vectorized. 1 = A, 26 = Z, 27 = AA, 703 = AAA
+#' @export
+# Vectorize in case you want to pass more than one column name in a single call
+ez.xlcolconv = Vectorize(xlcolconv)
