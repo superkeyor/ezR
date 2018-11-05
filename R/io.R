@@ -84,6 +84,7 @@ ez.saver = function(file, vars=NULL, ...){
         # 1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
         # 2) save(list='x', file='my.rda'), save(list=c('x', 'y'), file='my.rda')
         # the variable name will also be the same as when you save
+        # if you want a different name, you have to assign variable to that name first
         save(file=file, list=vars, ...)
     }
     return(invisible(NULL))
