@@ -1045,7 +1045,11 @@ ez.blank2na = function(x,na.strings=c('','NA','na','N/A','n/a','NaN','nan')) {
         x = trimws(x,'both')
         # convert to NA
         x[x %in% na.strings] = NA
+        # also remember to remove na.strings from value labels 
+        labs1 = labs1[! labs1 %in% na.strings]
+        labs2 = labs2[! labs2 %in% na.strings]
 
+        # the levels will be reset here
         x = factor(x)
         attr(x, 'label') <- lab
         attr(x, 'labels') <- labs1
@@ -1059,6 +1063,9 @@ ez.blank2na = function(x,na.strings=c('','NA','na','N/A','n/a','NaN','nan')) {
         x = trimws(x,'both')
         # convert to NA
         x[x %in% na.strings] = NA
+        # also remember to remove na.strings from value labels 
+        labs1 = labs1[! labs1 %in% na.strings]
+        labs2 = labs2[! labs2 %in% na.strings]
 
         attr(x, 'label') <- lab
         attr(x, 'labels') <- labs1
