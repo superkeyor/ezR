@@ -5,8 +5,8 @@
 \title{read spss}
 \usage{
 ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = TRUE, blanksAsNA = FALSE, na.strings = c("", "NA",
-  "na", "N/A", "n/a", "NaN", "nan"), makenames = TRUE, ...)
+  stringsAsFactors = TRUE, blanksAsNA = TRUE, na.strings = c("", "."),
+  makenames = TRUE, ...)
 }
 \arguments{
 \item{path}{File path to the data file}
@@ -24,7 +24,7 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 
 \item{blanksAsNA}{T/F, converts factor or character vector elements to NA if matching na.strings}
 
-\item{na.strings}{only applicable if blanksAsNA=T}
+\item{na.strings}{only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')}
 
 \item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 }

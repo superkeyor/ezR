@@ -101,7 +101,7 @@ ez.readr = readRDS
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' \cr in fact, makenames is ignored, because xlsx::read.xlsx internally deals with col names. I still keep it for consistency with ez.readx
 #' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
@@ -117,7 +117,7 @@ ez.readr = readRDS
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, detectDates=TRUE, ...){
+ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -138,7 +138,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, b
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
@@ -148,7 +148,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, b
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, detectDates=TRUE, ...){
+ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
     result = openxlsx::read.xlsx(file, sheet, detectDates=detectDates, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -169,7 +169,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksA
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @return a list of sheet as data frame. To get sheetnames, names(result)
 #' \cr when stringsAsFactors=T, in the returned data frame, string to factor
@@ -179,7 +179,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksA
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, ...){
+ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
     result = list()
     sheetnames = openxlsx::getSheetNames(file)
     for (i in 1:length(sheetnames)) {
@@ -205,10 +205,10 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
 #' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
-ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, ...){
+ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
     # internal notes
     # haven: label = variable label, labels = value labels
     # foreign: variable.labels (as df attributes), value.labels
@@ -287,10 +287,10 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
-ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, ...){
+ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
     # internal notes
     # haven: label = variable label, labels = value labels
     # foreign: variable.labels (as df attributes), value.labels

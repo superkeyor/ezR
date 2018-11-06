@@ -4,7 +4,8 @@
 \alias{ez.blank2na}
 \title{Replaces blank-ish elements of a factor or character vector to NA}
 \usage{
-ez.blank2na(x, na.strings = c("", "NA", "na", "N/A", "n/a", "NaN", "nan"))
+ez.blank2na(x, na.strings = c("", ".", "NA", "na", "N/A", "n/a", "NaN",
+  "nan"))
 }
 \arguments{
 \item{x}{a vector of factor or character or any type}

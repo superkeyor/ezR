@@ -1035,7 +1035,7 @@ ez.nan2na = function(x) {
 #' @return Returns a vector trimws (always for factor, character) and NA converted (if matching na.strings). Attributes will also be kept ('label','labels', 'value.labels').
 #' @seealso \code{\link{ez.nan2na}}
 #' @export
-ez.blank2na = function(x,na.strings=c('','NA','na','N/A','n/a','NaN','nan')) {
+ez.blank2na = function(x,na.strings=c('','.','NA','na','N/A','n/a','NaN','nan')) {
     if (is.factor(x)) {
         lab = attr(x, 'label', exact = T)
         labs1 <- attr(x, 'labels', exact = T)

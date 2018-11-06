@@ -5,8 +5,8 @@
 \title{read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}}
 \usage{
 ez.readx(file, sheet = 1, tolower = FALSE, stringsAsFactors = TRUE,
-  blanksAsNA = FALSE, na.strings = c("", "NA", "na", "N/A", "n/a", "NaN",
-  "nan"), makenames = TRUE, detectDates = TRUE, ...)
+  blanksAsNA = TRUE, na.strings = c("", "."), makenames = TRUE,
+  detectDates = TRUE, ...)
 }
 \arguments{
 \item{sheet}{The name or index of the sheet to read data from.}
@@ -17,7 +17,7 @@ ez.readx(file, sheet = 1, tolower = FALSE, stringsAsFactors = TRUE,
 
 \item{blanksAsNA}{T/F, converts factor or character vector elements to NA if matching na.strings}
 
-\item{na.strings}{only applicable if blanksAsNA=T}
+\item{na.strings}{only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')}
 
 \item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 
