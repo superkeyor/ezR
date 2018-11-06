@@ -70,7 +70,8 @@ ez.writet = ez.savet
 
 #' save one (only one) object to a rds file
 #' @description save one (only one) object to a rds file
-#' @note x=5; saveRDS(x, "my.rds")
+#' @note alias of \code{\link{saveRDS}} 
+#' \cr x=5; saveRDS(x, "my.rds")
 #' \cr 
 #' \cr usage for save (you have to always explicitly specify file=):
 #' \cr      1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
@@ -81,7 +82,6 @@ ez.writet = ez.savet
 #' \cr save.image(file='my.rda')
 #' \cr 
 #' \cr load(file)
-#' @seealso \code{\link{saveRDS}}
 #' @export
 ez.saver = saveRDS
 
@@ -91,8 +91,8 @@ ez.writer = ez.saver
 
 #' read a rds file which contains only one obj
 #' @description read a rds file which contains only one obj
-#' @return obj = ez.readr(file)
-#' @seealso alias of \code{\link{readRDS}}
+#' @note alias of \code{\link{readRDS}}
+#' \cr obj = ez.readr(file)
 #' @export
 ez.readr = readRDS
 

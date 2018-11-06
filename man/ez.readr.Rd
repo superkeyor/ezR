@@ -6,12 +6,10 @@
 \usage{
 ez.readr(file, refhook = NULL)
 }
-\value{
-obj = ez.readr(file)
-}
 \description{
 read a rds file which contains only one obj
 }
-\seealso{
+\note{
 alias of \code{\link{readRDS}}
+\cr obj = ez.readr(file)
 }

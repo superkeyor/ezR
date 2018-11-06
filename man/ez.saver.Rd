@@ -15,7 +15,8 @@ ez.writer(object, file = "", ascii = FALSE, version = NULL,
 save one (only one) object to a rds file
 }
 \note{
-x=5; saveRDS(x, "my.rds")
+alias of \code{\link{saveRDS}} 
+\cr x=5; saveRDS(x, "my.rds")
 \cr 
 \cr usage for save (you have to always explicitly specify file=):
 \cr      1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
@@ -26,7 +27,4 @@ x=5; saveRDS(x, "my.rds")
 \cr save.image(file='my.rda')
 \cr 
 \cr load(file)
-}
-\seealso{
-\code{\link{saveRDS}}
 }
