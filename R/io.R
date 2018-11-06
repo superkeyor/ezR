@@ -99,7 +99,9 @@ ez.readr = readRDS
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @description read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
-#' @param stringsAsFactors T/F 
+#' @param stringsAsFactors T/F
+#' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
+#' @param na.strings only applicable if blanksAsNA=T 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' \cr in fact, makenames is ignored, because xlsx::read.xlsx internally deals with col names. I still keep it for consistency with ez.readx
 #' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
@@ -115,7 +117,7 @@ ez.readr = readRDS
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, detectDates=TRUE, ...){
+ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, detectDates=TRUE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -123,6 +125,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, m
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # xlsx::read.xlsx internally deals with col names. I still keep makenames for consistency with ez.readx
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
@@ -133,7 +136,9 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, m
 #' @description uses openxlsx package which does not require java and is much faster, but has a slightly different interface/parameters from xlsx package. internally trim (leading and trailing) string spaces
 #' @param sheet The name or index of the sheet to read data from.
 #' @param tolower whether to convert all column names to lower case
-#' @param stringsAsFactors T/F 
+#' @param stringsAsFactors T/F
+#' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
+#' @param na.strings only applicable if blanksAsNA=T 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
@@ -143,7 +148,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, m
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, detectDates=TRUE, ...){
+ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, detectDates=TRUE, ...){
     result = openxlsx::read.xlsx(file, sheet, detectDates=detectDates, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -151,6 +156,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenam
     # trim spaces
     result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
     result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # openxlsx::read.xlsx supports check.names, but my codes can print out information
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
@@ -161,7 +167,9 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenam
 #' @description read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
 #' @param print2screen print out sheet indices and names, default TRUE
 #' @param tolower whether to convert all column names to lower case
-#' @param stringsAsFactors T/F 
+#' @param stringsAsFactors T/F
+#' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
+#' @param na.strings only applicable if blanksAsNA=T 
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @return a list of sheet as data frame. To get sheetnames, names(result)
 #' \cr when stringsAsFactors=T, in the returned data frame, string to factor
@@ -171,11 +179,11 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, makenam
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
+ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, ...){
     result = list()
     sheetnames = openxlsx::getSheetNames(file)
     for (i in 1:length(sheetnames)) {
-        result[[sheetnames[i]]] = ez.readx(file, sheet=i, tolower=tolower, stringsAsFactors=stringsAsFactors, makenames=makenames, ...)
+        result[[sheetnames[i]]] = ez.readx(file, sheet=i, tolower=tolower, stringsAsFactors=stringsAsFactors, blanksAsNA=blanksAsNA, na.strings=na.strings, makenames=makenames, ...)
         if (print2screen) {cat(i, '\t', sheetnames[i], '\n')}
     }
     return(result)
@@ -195,10 +203,12 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 #' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
 #' @param tolower whether to convert all column names to lower case
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
-#' @param stringsAsFactors T/F 
+#' @param stringsAsFactors T/F
+#' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
+#' @param na.strings only applicable if blanksAsNA=T 
 #' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
-ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
+ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, ...){
     # internal notes
     # haven: label = variable label, labels = value labels
     # foreign: variable.labels (as df attributes), value.labels
@@ -228,7 +238,7 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
     result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else x)  
     result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else(x))
-
+    if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes
     if (atm2fac==2) {
@@ -275,10 +285,12 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 #' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well. 
 #' @param makenames not effective for this function, kept for compatiablity with other functions
 #' @param tolower whether to convert all column names to lower case
-#' @param stringsAsFactors T/F 
+#' @param stringsAsFactors T/F
+#' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
+#' @param na.strings only applicable if blanksAsNA=T 
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
-ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, makenames=TRUE, ...){
+ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=FALSE, na.strings=c('','NA','na','N/A','n/a','NaN','nan'), makenames=TRUE, ...){
     # internal notes
     # haven: label = variable label, labels = value labels
     # foreign: variable.labels (as df attributes), value.labels
@@ -318,7 +330,7 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # hack to remove leading and trailing string spaces
     result[]=lapply(result, function(x) if (is.factor(x)) {labs <- attr(x, 'value.labels', exact = T); factor(trimws(x,'both')); attr(x, 'value.labels') <- labs; x} else x)  
     result[]=lapply(result, function(x) if(is.character(x)) {labs <- attr(x, 'value.labels', exact = T); trimws(x,'both'); attr(x, 'value.labels') <- labs; x} else(x))
-
+    if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes
     if (atm2fac) {

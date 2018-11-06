@@ -5,7 +5,8 @@
 \title{read spss}
 \usage{
 ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = TRUE, makenames = TRUE, ...)
+  stringsAsFactors = TRUE, blanksAsNA = FALSE, na.strings = c("", "NA",
+  "na", "N/A", "n/a", "NaN", "nan"), makenames = TRUE, ...)
 }
 \arguments{
 \item{path}{File path to the data file}
@@ -20,6 +21,10 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \item{tolower}{whether to convert all column names to lower case}
 
 \item{stringsAsFactors}{T/F}
+
+\item{blanksAsNA}{T/F, converts factor or character vector elements to NA if matching na.strings}
+
+\item{na.strings}{only applicable if blanksAsNA=T}
 
 \item{makenames}{if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness}
 }
