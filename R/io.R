@@ -123,8 +123,11 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, b
     # char to factor
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
-    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
-    result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    # result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
+    # result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    # the above codes do not trim value labels
+    # ez.blank2na trick, trimws both value and value labels without converting to NA
+    result[]=lapply(result,ez.blank2na,na.strings=NULL)
     if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # xlsx::read.xlsx internally deals with col names. I still keep makenames for consistency with ez.readx
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
@@ -154,8 +157,11 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksA
     # char to factor
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
-    result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
-    result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    # result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
+    # result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
+    # the above codes do not trim value labels
+    # ez.blank2na trick, trimws both value and value labels without converting to NA
+    result[]=lapply(result,ez.blank2na,na.strings=NULL)
     if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # openxlsx::read.xlsx supports check.names, but my codes can print out information
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
@@ -236,8 +242,11 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], function(x) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); as.factor(x); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x})
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
-    result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else x)  
-    result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else(x))
+    # result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else x)  
+    # result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else(x))
+    # the above codes do not trim value labels
+    # ez.blank2na trick, trimws both value and value labels without converting to NA
+    result[]=lapply(result,ez.blank2na,na.strings=NULL)
     if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes
@@ -328,8 +337,11 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working??? 
     # --Where does the trailing spaces come from --String var padded to Width in SPSS
     # hack to remove leading and trailing string spaces
-    result[]=lapply(result, function(x) if (is.factor(x)) {labs <- attr(x, 'value.labels', exact = T); factor(trimws(x,'both')); attr(x, 'value.labels') <- labs; x} else x)  
-    result[]=lapply(result, function(x) if(is.character(x)) {labs <- attr(x, 'value.labels', exact = T); trimws(x,'both'); attr(x, 'value.labels') <- labs; x} else(x))
+    # result[]=lapply(result, function(x) if (is.factor(x)) {labs <- attr(x, 'value.labels', exact = T); factor(trimws(x,'both')); attr(x, 'value.labels') <- labs; x} else x)  
+    # result[]=lapply(result, function(x) if(is.character(x)) {labs <- attr(x, 'value.labels', exact = T); trimws(x,'both'); attr(x, 'value.labels') <- labs; x} else(x))
+    # the above codes do not trim value labels
+    # ez.blank2na trick, trimws both value and value labels without converting to NA
+    result[]=lapply(result,ez.blank2na,na.strings=NULL)
     if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # hack begin: atomic with attributes to factor, do this after trimming spaces, esp for factor
     # because factor(trimws(x,'both')) would remove attributes

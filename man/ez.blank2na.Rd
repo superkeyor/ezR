@@ -10,7 +10,7 @@ ez.blank2na(x, na.strings = c("", ".", "NA", "na", "N/A", "n/a", "NaN",
 \arguments{
 \item{x}{a vector of factor or character or any type}
 
-\item{na.strings}{case sensitive strings that will be coverted to NA. The function will do a trimws(x,'both') before conversion.}
+\item{na.strings}{case sensitive strings that will be coverted to NA. The function will do a trimws(x,'both') before conversion. If NULL, do only trimws, no conversion to NA.}
 }
 \value{
 Returns a vector trimws (always for factor, character) and NA converted (if matching na.strings). Attributes will also be kept ('label','labels', 'value.labels').
