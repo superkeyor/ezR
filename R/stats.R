@@ -246,7 +246,7 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
         } else {
             header = noquote(paste0("'",noquote(paste0(vec[1:printn],collapse = "','")),"'"))
             tailer = noquote(paste0("'",noquote(paste0(vec[(length(vec)-printn+1):length(vec)],collapse = "','")),"'"))
-            printout = noquote(paste(header,tailer,sep=",...,"))
+            printout = noquote(paste(header,tailer,sep=",..................,"))
         }
     } else {
         if (is.null(printn)){
@@ -254,7 +254,7 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
         } else {
             header = noquote(paste0(vec[1:printn],collapse = ","))
             tailer = noquote(paste0(vec[(length(vec)-printn+1):length(vec)],collapse = ","))
-            printout = noquote(paste(header,tailer,sep=",...,"))
+            printout = noquote(paste(header,tailer,sep=",..................,"))
         }
     }
     if (print2screen) {
@@ -360,13 +360,13 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
             }
         }
 
+        if ( is.factor(v) | is.character(v) | is.logical(v) ) {
+            cat(sprintf('Counts/Levels (Incl NA): \n%s\n',v.levels %>% toString(width=printcn)))
+        }
         cat(sprintf('Uniques (Incl NA): %s\n', v.elements))
         cat(sprintf('\n%-25s\t#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Non-NA: %d\t#Total: %d\n', v.class, v.unique, v.missing, v.missing*100/v.n, v.n-v.missing, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
-        }
-        if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts/Levels (Incl NA): \n%s\n',v.levels %>% toString(width=printcn)))
         }
         cat(sprintf('attributes: %s\n',v.attrs))
     }
