@@ -68,41 +68,33 @@ ez.savet = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = "
 #' @export
 ez.writet = ez.savet
 
-#' save one or more or all objects to a rda file
-#' @description save one or more or all objects to a rda file
-#' @param file file path to a rda file
-#' @param vars a vector of obj names. NULL=all. 'var1', c('var1','var2'). If you have want a particular name, you have to assign that name as a variable first. e.g., desiredName=x; ez.saver(file,c('desiredName'))
-#' @param ... see ... for \code{\link{save}} or \code{\link{save.image}}
-#' @return returns nothing 
-#' @seealso \code{\link{ez.readr}}, \code{\link{ez.savem}}
+#' save one (only one) object to a rds file
+#' @description save one (only one) object to a rds file
+#' @note x=5; saveRDS(x, "my.rds")
+#' \cr 
+#' \cr usage for save (you have to always explicitly specify file=):
+#' \cr      1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
+#' \cr      2) save(list='x', file='my.rda'), save(list=c('x', 'y'), file='my.rda')
+#' \cr      the variable name will also be the same as when you save
+#' \cr      if you want a different name, you have to assign variable to that name first
+#' \cr 
+#' \cr save.image(file='my.rda')
+#' \cr 
+#' \cr load(file)
+#' @seealso \code{\link{saveRDS}}
 #' @export
-ez.saver = function(file, vars=NULL, ...){
-    if (is.null(vars)) {
-        save.image(file=file, ...)
-    } else {
-        # usage for save (you have to always explicitly specify file=):
-        # 1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
-        # 2) save(list='x', file='my.rda'), save(list=c('x', 'y'), file='my.rda')
-        # the variable name will also be the same as when you save
-        # if you want a different name, you have to assign variable to that name first
-        save(file=file, list=vars, ...)
-    }
-    return(invisible(NULL))
-}
+ez.saver = saveRDS
 
 #' @rdname ez.saver
 #' @export
 ez.writer = ez.saver
 
-#' read a rda file
-#' @description read a rda file
-#' @param file file path to a rda file
+#' read a rds file which contains only one obj
+#' @description read a rds file which contains only one obj
 #' @return obj = ez.readr(file)
+#' @seealso alias of \code{\link{readRDS}}
 #' @export
-ez.readr = function(file){
-    # https://stackoverflow.com/a/4676519/2292993
-    local(get(load(file)))
-}
+ez.readr = readRDS
 
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @description read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces

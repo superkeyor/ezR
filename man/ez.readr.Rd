@@ -2,16 +2,16 @@
 % Please edit documentation in R/io.R
 \name{ez.readr}
 \alias{ez.readr}
-\title{read a rda file}
+\title{read a rds file which contains only one obj}
 \usage{
-ez.readr(file)
-}
-\arguments{
-\item{file}{file path to a rda file}
+ez.readr(file, refhook = NULL)
 }
 \value{
 obj = ez.readr(file)
 }
 \description{
-read a rda file
+read a rds file which contains only one obj
+}
+\seealso{
+alias of \code{\link{readRDS}}
 }

@@ -3,25 +3,30 @@
 \name{ez.saver}
 \alias{ez.saver}
 \alias{ez.writer}
-\title{save one or more or all objects to a rda file}
+\title{save one (only one) object to a rds file}
 \usage{
-ez.saver(file, vars = NULL, ...)
+ez.saver(object, file = "", ascii = FALSE, version = NULL,
+  compress = TRUE, refhook = NULL)
 
-ez.writer(file, vars = NULL, ...)
-}
-\arguments{
-\item{file}{file path to a rda file}
-
-\item{vars}{a vector of obj names. NULL=all. 'var1', c('var1','var2'). If you have want a particular name, you have to assign that name as a variable first. e.g., desiredName=x; ez.saver(file,c('desiredName'))}
-
-\item{...}{see ... for \code{\link{save}} or \code{\link{save.image}}}
-}
-\value{
-returns nothing
+ez.writer(object, file = "", ascii = FALSE, version = NULL,
+  compress = TRUE, refhook = NULL)
 }
 \description{
-save one or more or all objects to a rda file
+save one (only one) object to a rds file
+}
+\note{
+x=5; saveRDS(x, "my.rds")
+\cr 
+\cr usage for save (you have to always explicitly specify file=):
+\cr      1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
+\cr      2) save(list='x', file='my.rda'), save(list=c('x', 'y'), file='my.rda')
+\cr      the variable name will also be the same as when you save
+\cr      if you want a different name, you have to assign variable to that name first
+\cr 
+\cr save.image(file='my.rda')
+\cr 
+\cr load(file)
 }
 \seealso{
-\code{\link{ez.readr}}, \code{\link{ez.savem}}
+\code{\link{saveRDS}}
 }
