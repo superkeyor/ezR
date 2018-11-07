@@ -209,12 +209,12 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         if (is.null(debug)) {
             if (debugMode) {
                 browseURL(file)
-                ez.sleep(3)
+                ez.sleep(10)
             }
         } else {
             if (debug) {
                 browseURL(file)
-                ez.sleep(3)
+                ez.sleep(10)
             }
         }
     }
