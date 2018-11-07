@@ -5614,8 +5614,8 @@ set_label <- function(x, lab, attr.string = NULL) {
 #          Use \code{labels = ""} to remove labels-attribute from \code{x}.
 # @param value See \code{labels},
 # @param force.labels Logical; if \code{TRUE}, all \code{labels} are added as value label
-#          attribute, even if \code{x} has less unique values then length of \code{labels}
-#          or if \code{x} has a smaller range then length of \code{labels}. See 'Examples'.
+#          attribute, even if \code{x} has less unique values than length of \code{labels}
+#          or if \code{x} has a smaller range than length of \code{labels}. See 'Examples'.
 #          This parameter will be ignored, if \code{labels} is a named vector.
 # @param force.values Logical, if \code{TRUE} (default) and \code{labels} has less
 #          elements than unique values of \code{x}, additional values not covered
@@ -7968,36 +7968,18 @@ zap_unlabelled_helper <- function(x) {
 
 
 
-
+####************************************************************************************************
+                                     ####*export*####
+####************************************************************************************************
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_copy_labels=copy_labels
 
 #' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack, value labels
-#' @export
-sjmisc_get_labels=get_labels
-
-#' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_get_values=get_values
-
-#' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack, value labels
-#' @export
-sjmisc_set_labels=set_labels
-
-#' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack, variable labels
-#' @export
-sjmisc_get_label=get_label
-
-#' sjmisc 1.8 hack
-#' @description sjmisc 1.8 hack, variable labels
-#' @export
-sjmisc_set_label=set_label
 
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack
@@ -8028,3 +8010,196 @@ sjmisc_read_spss=read_spss
 #' @description sjmisc 1.8 hack
 #' @export
 sjmisc_write_spss=write_spss
+
+####************************************************************************************************
+                                     ####*export with additional alias*####
+####************************************************************************************************
+#' sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, value labels
+#' @note
+#' \cr include.values, how values are returned, as named vector = "as.name" or "n" or "as.prefix" or "p"
+#' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
+#' \cr include.non.labelled, if T, values without labels will also be included in the returned labels
+#' @export
+sjmisc_get_labels=get_labels
+
+#' get value labels, wrapper of \code{\link{sjmisc_get_labels}}. I refer to "get values".
+#' @description get value labels, wrapper of \code{\link{sjmisc_get_labels}}. I refer to "get values".
+#' @param x data frame or variable with value labels attribute
+#' @details see also \code{\link{sjmisc_get_values}}
+#' \cr include.values, how values are returned, as named vector = "as.name" or "n" or "as.prefix" or "p"
+#' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
+#' \cr include.non.labelled, if T, values without labels (when less labels than values) will also be included in the returned labels
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+ez.values.get = function(x, include.values='n', attr.only=T, include.non.labelled=F, ...){
+    result=sjmisc_get_labels(x, include.values=include.values, attr.only=attr.only, include.non.labelled=include.non.labelled, ...)
+    return(result)
+}
+
+#' @rdname ez.values.get
+#' @export
+ez.getvalues=ez.values.get
+
+
+
+#' sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, value labels
+#' @note The usage of the original function is a bit confusing. Here, I summarize:
+#' \cr 1) Always use a named vector for valuelabels, in which case force.labels and force.values will be ignored
+#' \cr valuelabels:
+#' \cr 1 4 5 9 do not have to all appear in x (that is, you can assign more labels than values)
+#' \cr notice the particular order and symbol: "strongly agree" <- 1
+#' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
+#' \cr 
+#' \cr 2) when valuelabels="", essentially clear value labels attributes
+#' @export
+sjmisc_set_labels=set_labels
+
+#' set value labels, wrapper of \code{\link{sjmisc_set_labels}}. I refer to "set values".
+#' @description set value labels, wrapper of \code{\link{sjmisc_set_labels}}. I refer to "set values".
+#' @note The usage of the original function is a bit confusing. Here, I summarize:
+#' \cr 1) Always use a named vector for valuelabels, in which case force.labels and force.values will be ignored
+#' \cr valuelabels:
+#' \cr 1 4 5 9 do not have to all appear in x (that is, you can assign more labels than values)
+#' \cr notice the particular order and symbol: "strongly agree" <- 1
+#' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
+#' \cr 
+#' \cr 2) when valuelabels="", essentially clear value labels attributes
+#' @return returns a new changed df
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, ...){
+    result=sjmisc_set_labels(x, valuelabels, force.labels=force.labels, force.values=force.values, ...)
+    return(result)
+}
+
+#' @rdname ez.values.set
+#' @export
+ez.setvalues=ez.values.set
+
+
+
+
+#' sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, variable labels
+#' @param x a df: (efc), or a single var: (efc$e42dep)
+#' @param cols a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)
+#' @return returns a named character vector (if x is df), or character (if x is a single var)
+#' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
+#' \cr If a single variable has no label, returns NULL
+#' @export
+sjmisc_get_label=get_label
+
+#' get variable label, wrapper of \code{\link{sjmisc_get_label}}
+#' @description get variable label, wrapper of \code{\link{sjmisc_get_label}}
+#' @param x a df: (efc), or a single var: (efc$e42dep)
+#' @param cols a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)
+#' @return returns a named character vector (if x is df), or character (if x is a single var)
+#' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
+#' \cr If a single variable has no label, returns NULL
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+ez.label.get = function(x,cols=NULL){
+    # sjmisc_get_label for variable label
+    # sjmisc_get_labels for value label
+    # def.value (jerry: only working if x is a single var) Optional, a character string which will be returned as label. if \code{x} has no label attribute. By default, \code{NULL} is returned.
+    # although sjmisc_get_label(list(var1,var2,var3)) ok, if var2 has no label, the returned labels would be a vector (var1lbl,var3lbl)--this might be confusing. So not to use this syntax
+    result=sjmisc_get_label(x, def.value = NULL)
+    if (is.data.frame(x) & !is.null(result)) {names(result)=names(x)}
+    if (is.data.frame(x) & !is.null(cols)) {result=result[cols]}
+    if (all(ez.is.empty(result))) {result=NULL}
+    return(result)
+}
+
+#' @rdname ez.label.get
+#' @export
+ez.getlabel=ez.label.get
+
+
+
+#' sjmisc 1.8 hack
+#' @description sjmisc 1.8 hack, variable labels
+#' @param df data frame
+#' @param varname variable name with quote ""
+#' @param label explanatory string
+#' @return returns a new changed df
+#' @export
+sjmisc_set_label=set_label
+
+#' set variable label, wrapper of \code{\link{sjmisc_set_label}}
+#' @description set variable label, wrapper of \code{\link{sjmisc_set_label}}
+#' @param df data frame
+#' @param varname variable name with quote ""
+#' @param label explanatory string
+#' @return returns a new changed df
+#' @family data transformation functions
+#' @export
+#' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
+#' \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}
+#' \cr \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{arrange}}
+#' \cr \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{mutate}}
+#' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
+#' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
+#' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
+ez.label.set = function(df,varname,label){
+    df[varname] <- sjmisc_set_label(df[varname],label)
+    return(df)
+}
+
+#' @rdname ez.label.set
+#' @export
+ez.setlabel=ez.label.set
+
+
+
+#' swap variable label mode
+#' @description swap variable label mode
+#' @param mode 1=attr(df,'variable.labels')-->better for slice[1:10,]; 2=attr(df[[col]],'label')-->better for left_join.
+#' @export
+ez.label.swap = function(df, mode=1) {
+    if (mode==1) {
+        lbls = ez.label.get(df)
+        df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
+        attr(df,'variable.labels') <- lbls
+    } else if (mode==2) {
+        lbls = ez.label.get(df)
+        if (!is.null(lbls)) {
+            for (j in colnames(df)) {
+                lbl = lbls[[j]]  # or unname(lbls[j])
+                if (lbl == '') lbl = NULL
+                attr(df[[j]],'label') <- lbl
+            }
+            attr(df,'variable.labels') <- NULL
+        } else {
+            df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
+            attr(df,'variable.labels') <- NULL
+        }
+    }
+    return(df)
+}
+
+#' @rdname ez.label.swap
+#' @export
+ez.swaplabel=ez.label.swap
