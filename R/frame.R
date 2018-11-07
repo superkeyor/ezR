@@ -384,8 +384,8 @@ ez.2char = function(x, col=NULL){
     return(result)
 }
 
-#' number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
-#' @description e=e, f=f, g/h/i->i, j=j, k=k
+#' e=e, f=f, g/h/i->i, j=j, k=k
+#' @description number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
 #' @param x a data frame or a vector
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only

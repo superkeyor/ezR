@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.2label}
 \alias{ez.2label}
-\title{number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]}
+\title{e=e, f=f, g/h/i->i, j=j, k=k}
 \usage{
 ez.2label(x, col = NULL, add.non.labelled = TRUE,
   drop.missing.value = FALSE, ...)
@@ -23,7 +23,7 @@ ez.2label(x, col = NULL, add.non.labelled = TRUE,
 returns a factor with string as its levels or a data frame with changed col(s)
 }
 \description{
-e=e, f=f, g/h/i->i, j=j, k=k
+number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
 }
 \details{
 Both value and variable label attributes will be removed when converting variables to factors.
