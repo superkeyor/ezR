@@ -336,14 +336,14 @@ ez.label.swap = function(df, mode=1) {
 #' @export
 ez.swaplabel=ez.label.swap
 
-#' convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor
-#' @description factor 2 char
+#' factor 2 char
+#' @description convert a column of factor type (or all factor columns) in a data frame into character type as.character(). Check with is.factor(). If not is.factor(), remain untouched.
 #' @param x a data frame or a vector/col
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only.
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible factor cols in x
 #' \cr        if x is not a data frame, col is ignored
-#' @details Both value and variable label attributes will be removed when converting variables to characters.
+#' @details Both value and variable label attributes will be kept when converting variables to characters.
 #' @seealso \code{\link{ez.str}}
 #' @return returns a character vector or a data frame with changed col(s)
 #' @family data transformation functions
@@ -386,6 +386,7 @@ ez.2char = function(x, col=NULL){
 
 #' e=e, f=f, g/h/i->i, j=j, k=k
 #' @description e=e, f=f, g/h/i->i, j=j, k=k
+#' \cr 
 #' \cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
 #' @param x a data frame or a vector
 #' @param col internally evaluated by eval('dplyr::select()')
@@ -427,8 +428,9 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
     return(result)
 }
 
-#' number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]
+#' ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @description ef->f, g/h->h, i=i, factor[x,y,z]<j/k
+#' \cr number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]
 #' @param x a data frame or a vector/col
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
@@ -469,8 +471,9 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
     return(result)
 }
 
-#' number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
+#' e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 #' @description e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
+#' \cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
 #' @param x a data frame or a vector/col
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only

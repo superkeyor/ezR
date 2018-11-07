@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.2factor}
 \alias{ez.2factor}
-\title{number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]}
+\title{ef->f, g/h->h, i=i, factor[x,y,z]<j/k}
 \usage{
 ez.2factor(x, col = NULL, add.non.labelled = TRUE, drop.na = FALSE,
   ref.lvl = NULL, ...)
@@ -26,6 +26,7 @@ returns a factor with number as its levels or a data frame with changed col(s)
 }
 \description{
 ef->f, g/h->h, i=i, factor[x,y,z]<j/k
+\cr number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]
 }
 \details{
 wrapper of \code{\link{sjmisc_to_factor}}

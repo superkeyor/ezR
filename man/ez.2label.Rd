@@ -24,6 +24,7 @@ returns a factor with string as its levels or a data frame with changed col(s)
 }
 \description{
 e=e, f=f, g/h/i->i, j=j, k=k
+\cr 
 \cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
 }
 \details{

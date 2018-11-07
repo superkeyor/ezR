@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.2char}
 \alias{ez.2char}
-\title{convert a column of factor type (or all factor columns) in a data frame into character type. Check with is.factor}
+\title{factor 2 char}
 \usage{
 ez.2char(x, col = NULL)
 }
@@ -18,10 +18,10 @@ ez.2char(x, col = NULL)
 returns a character vector or a data frame with changed col(s)
 }
 \description{
-factor 2 char
+convert a column of factor type (or all factor columns) in a data frame into character type as.character(). Check with is.factor(). If not is.factor(), remain untouched.
 }
 \details{
-Both value and variable label attributes will be removed when converting variables to characters.
+Both value and variable label attributes will be kept when converting variables to characters.
 }
 \seealso{
 \code{\link{ez.str}}
