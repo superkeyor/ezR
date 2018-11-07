@@ -9,14 +9,14 @@ ez.replacewhen(df, print2screen = T, ...)
 \arguments{
 \item{df}{df}
 
-\item{...}{pt_num=1220,baby_num=3,baby_name='Bennnnnnn',the first element is used as condition to pinpoint the row(s), the rest as cols to be replaced. Quotes around col names are optional, 'pt_num'=1220.}
+\item{...}{pt_num=1220,baby_num=3,baby_name='Bennnnnnn',the first element is used as condition to pinpoint the row(s) (multiple matched rows allowed), the rest as cols to be replaced. Quotes around col names are optional, 'pt_num'=1220.}
 }
 \value{
 returns a new df
 }
 \description{
 replace a df: eg, when pt_num=1220, let baby_num=3,baby_name='Bennnnnnn'
-\cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
+\cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
 }
 \details{
 smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)

@@ -1075,12 +1075,12 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 
 #' replace when
 #' @description replace a df: eg, when pt_num=1220, let baby_num=3,baby_name='Bennnnnnn'
-#' \cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
+#' \cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][theRow] <- newval
 #' \cr df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
 #' @param df df
-#' @param ... pt_num=1220,baby_num=3,baby_name='Bennnnnnn',the first element is used as condition to pinpoint the row(s), the rest as cols to be replaced. Quotes around col names are optional, 'pt_num'=1220.
+#' @param ... pt_num=1220,baby_num=3,baby_name='Bennnnnnn',the first element is used as condition to pinpoint the row(s) (multiple matched rows allowed), the rest as cols to be replaced. Quotes around col names are optional, 'pt_num'=1220.
 #' @return returns a new df
 #' @seealso \code{\link{ez.replace}}
 #' @examples df=ez.replacewhen(nicu,pt_num=1220,baby_num=3,baby_name='Ben')

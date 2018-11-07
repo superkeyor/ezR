@@ -122,7 +122,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 
     # col summary
     results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
-                        levels_view1=character(),levels_view2=character(),
+                        counts_levels_view1=character(),counts_levels_view2=character(),
                         mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
     vars=colnames(df)
     allFactorUniqueValues=character()
@@ -184,9 +184,9 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     # no factors in the data frame!
     allFactorUniqueValues = if (length(allFactorUniqueValues)==0) NA else allFactorUniqueValues %>% toString(width=width)
     allFactorCounts = if (length(allFactorCounts)==0) NA else range(allFactorCounts,na.rm =T) %>% toString(width=width)
-    results=dplyr::add_row(results,variable='Total',levels_view1=allFactorUniqueValues,
-                          levels_view2=allFactorCounts)
-    results=results %>% ez.move('levels_view1 levels_view2 after variable')
+    results=dplyr::add_row(results,variable='Total',counts_levels_view1=allFactorUniqueValues,
+                          counts_levels_view2=allFactorCounts)
+    results=results %>% ez.move('counts_levels_view1 counts_levels_view2 after variable')
     results=dplyr::mutate(results,nonmissing=nrow-missing,nonmissing_rate=nonmissing/nrow)
     results=results %>% ez.move('missing_rate nonmissing nonmissing_rate before unique_including_na')
     # labels=attr(df,'variable.labels') # only work for foreign package: 'variable.labels'
