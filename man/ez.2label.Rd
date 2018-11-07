@@ -23,7 +23,7 @@ ez.2label(x, col = NULL, add.non.labelled = TRUE,
 returns a factor with string as its levels or a data frame with changed col(s)
 }
 \description{
-number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
+e=e, f=f, g/h/i->i, j=j, k=k   number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
 }
 \details{
 Both value and variable label attributes will be removed when converting variables to factors.
