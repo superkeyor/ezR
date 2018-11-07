@@ -215,11 +215,11 @@ ez.2wide = function(df, id, indexname, measure=NULL, drop=NULL, sep='_', ...){
 ez.2char = function(x, col=NULL){
     char_if_fac = function (e) {
         if (is.factor(e)) {
-            labels <- sjmisc_get_labels(e, attr.only = T, include.values = "n")
+            labels <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
             varlab <- sjmisc_get_label(e)
             new_value = as.character(e)
-            new_value <- sjmisc_set_labels(new_value, labels, force.labels = T)
-            new_value <- sjmisc_set_label(new_value, lab = varlab)
+            new_value <- sjmisc_set_labels(new_value, labels)
+            new_value <- sjmisc_set_label(new_value, varlab)
         } else {
             new_value = e
         }
