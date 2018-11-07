@@ -8013,18 +8013,26 @@ sjmisc_write_spss=write_spss
 
 ####************************************************************************************************
                                      ####*export with additional alias*####
+
+# When writing my own ezR package, still use sjmisc_
+# example: 
+# labs <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
+# lab <- sjmisc_get_label(e, def.value = NULL)
+# ee = as.character(e)
+# ee <- sjmisc_set_labels(ee, labels)
+# ee <- sjmisc_set_label(ee, lab)                      
 ####************************************************************************************************
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack, value labels
 #' @note
-#' \cr include.values, how values are returned, as named vector = "as.name" or "n" or "as.prefix" or "p"
+#' \cr include.values, how values are returned: NULL = unnamed vector; as named vector = "as.name" or "n"; "as.prefix" or "p", c("[1] Caucasian", "[3] Asian")
 #' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
 #' \cr include.non.labelled, if T, values without labels will also be included in the returned labels
 #' @export
 sjmisc_get_labels=get_labels
 
-#' get value labels, wrapper of \code{\link{sjmisc_get_labels}}. I refer to "get values".
-#' @description get value labels, wrapper of \code{\link{sjmisc_get_labels}}. I refer to "get values".
+#' get value labels, wrapper of \code{\link{sjmisc_get_labels}}.
+#' @description get value labels, wrapper of \code{\link{sjmisc_get_labels}}.
 #' @param x data frame or variable with value labels attribute
 #' @details see also \code{\link{sjmisc_get_values}}
 #' \cr include.values, how values are returned, as named vector = "as.name" or "n" or "as.prefix" or "p"
@@ -8039,14 +8047,14 @@ sjmisc_get_labels=get_labels
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.values.get = function(x, include.values='n', attr.only=T, include.non.labelled=F, ...){
+ez.labels.get = function(x, include.values='n', attr.only=T, include.non.labelled=F, ...){
     result=sjmisc_get_labels(x, include.values=include.values, attr.only=attr.only, include.non.labelled=include.non.labelled, ...)
     return(result)
 }
 
-#' @rdname ez.values.get
+#' @rdname ez.labels.get
 #' @export
-ez.getvalues=ez.values.get
+ez.getlabels=ez.labels.get
 
 
 
@@ -8063,8 +8071,8 @@ ez.getvalues=ez.values.get
 #' @export
 sjmisc_set_labels=set_labels
 
-#' set value labels, wrapper of \code{\link{sjmisc_set_labels}}. I refer to "set values".
-#' @description set value labels, wrapper of \code{\link{sjmisc_set_labels}}. I refer to "set values".
+#' set value labels, wrapper of \code{\link{sjmisc_set_labels}}.
+#' @description set value labels, wrapper of \code{\link{sjmisc_set_labels}}.
 #' @note The usage of the original function is a bit confusing. Here, I summarize:
 #' \cr 1) Always use a named vector for valuelabels, in which case force.labels and force.values will be ignored
 #' \cr valuelabels:
@@ -8083,14 +8091,14 @@ sjmisc_set_labels=set_labels
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.values.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, ...){
+ez.labels.set = function(x, valuelabels, force.labels=FALSE, force.values=FALSE, ...){
     result=sjmisc_set_labels(x, valuelabels, force.labels=force.labels, force.values=force.values, ...)
     return(result)
 }
 
-#' @rdname ez.values.set
+#' @rdname ez.labels.set
 #' @export
-ez.setvalues=ez.values.set
+ez.setlabels=ez.labels.set
 
 
 
@@ -8098,10 +8106,7 @@ ez.setvalues=ez.values.set
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack, variable labels
 #' @param x a df: (efc), or a single var: (efc$e42dep)
-#' @param cols a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)
-#' @return returns a named character vector (if x is df), or character (if x is a single var)
-#' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
-#' \cr If a single variable has no label, returns NULL
+#' @param def.value the value returned when no label attribute
 #' @export
 sjmisc_get_label=get_label
 
