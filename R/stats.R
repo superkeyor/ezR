@@ -138,6 +138,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
             freqtable=dplyr::count_(df,var)
             vallbl=sjmisc_get_labels(df[[var]],include.values='n',attr.only=T,include.non.labelled=F)
             if (!is.null(vallbl)){
+                # ez.2label trick here, do not use the results from sjmisc_get_labels
                 vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
                 vallbl = paste("[",vallbl,"]",sep="")
             } else {
@@ -351,6 +352,7 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
                 freqtable=dplyr::count_(data.frame(tmpvar=v),"tmpvar")
                 vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
                 if (!is.null(vallbl)){
+                    # ez.2label trick here, do not use the results from sjmisc_get_labels
                     vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
                     vallbl = paste("[",vallbl,"]",sep="")
                 } else {
