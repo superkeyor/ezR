@@ -7,15 +7,16 @@
 sjmisc_set_label(x, lab, attr.string = NULL)
 }
 \arguments{
-\item{df}{data frame}
+\item{x}{var or df}
 
-\item{varname}{variable name with quote ""}
-
-\item{label}{explanatory string, if "" or NULL, essentially clear label attribute}
+\item{lab}{if x is var, single vector; if x is df, vector of the same length as ncol(df). If "" or NULL, essentially clear label attribute}
 }
 \value{
-returns a new changed df
+returns a new changed x
 }
 \description{
 sjmisc 1.8 hack, variable labels
+}
+\note{
+if no exisiting attr, using haven style: label
 }

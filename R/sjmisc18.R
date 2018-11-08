@@ -8104,6 +8104,8 @@ ez.getlabels=ez.labels.get
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
 #' \cr 
 #' \cr 2) when valuelabels="" or NULL, essentially clear value labels attribute
+#' \cr 
+#' \cr 3) if no exisiting attr, using haven style: labels
 #' @export
 sjmisc_set_labels=set_labels
 
@@ -8117,6 +8119,8 @@ sjmisc_set_labels=set_labels
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
 #' \cr 
 #' \cr 2) when valuelabels="", essentially clear value labels attribute
+#' \cr 
+#' \cr 3) if no exisiting attr, using haven style: labels
 #' @return returns a new changed df
 #' @family data transformation functions
 #' @export
@@ -8149,7 +8153,7 @@ sjmisc_get_label=get_label
 #' get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @description get variable label, wrapper of \code{\link{sjmisc_get_label}}
 #' @param x a df: (efc), or a single var: (efc$e42dep)
-#' @param cols a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)
+#' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. returns only labels for specified cols of the df (ignored if x is a var)
 #' @return returns a named character vector (if x is df), or character (if x is a single var)
 #' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
 #' \cr If a single variable has no label, returns NULL
@@ -8165,14 +8169,14 @@ sjmisc_get_label=get_label
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.label.get = function(x,cols=NULL){
+ez.label.get = function(x,col=NULL){
     # sjmisc_get_label for variable label
     # sjmisc_get_labels for value label
     # the value returned when no label attribute for a single var. if x is a df, def.value is not effective, instead returns '' if no label for a col in df
     # although sjmisc_get_label(list(var1,var2,var3)) ok, if var2 has no label, the returned labels would be a vector (var1lbl,var3lbl)--this might be confusing. So not to use this syntax
     result=sjmisc_get_label(x, def.value = NULL)
     if (is.data.frame(x) & !is.null(result)) {names(result)=names(x)}
-    if (is.data.frame(x) & !is.null(cols)) {result=result[cols]}
+    if (is.data.frame(x) & !is.null(col)) {col=ez.selcol(x,col); result=result[col]}
     if (all(ez.is.empty(result))) {result=NULL}
     return(result)
 }
@@ -8185,18 +8189,18 @@ ez.getlabel=ez.label.get
 
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack, variable labels
-#' @param df data frame
-#' @param varname variable name with quote ""
-#' @param label explanatory string, if "" or NULL, essentially clear label attribute
-#' @return returns a new changed df
+#' @param x var or df
+#' @param lab if x is var, single vector; if x is df, vector of the same length as ncol(df). If "" or NULL, essentially clear label attribute
+#' @note if no exisiting attr, using haven style: label
+#' @return returns a new changed x
 #' @export
 sjmisc_set_label=set_label
 
 #' set variable label, wrapper of \code{\link{sjmisc_set_label}}
 #' @description set variable label, wrapper of \code{\link{sjmisc_set_label}}
-#' @param df data frame
-#' @param varname variable name with quote ""
-#' @param label explanatory string, if "" or NULL, essentially clear label attribute
+#' @param x var or df
+#' @param label if x is var, single vector; if x is df, vector of the same length as ncol(df), or a named vector of equal or smaller length--eg, c('var lab 1'='var1', 'var lab 3'='var3'), in this case only change var1 and var3, the rest unchanged. If "" or NULL, essentially clear label attribute
+#' @note if no exisiting attr, using haven style: label
 #' @return returns a new changed df
 #' @family data transformation functions
 #' @export
@@ -8207,9 +8211,26 @@ sjmisc_set_label=set_label
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.label.set = function(df,varname,label){
-    df[varname] <- sjmisc_set_label(df[varname],label)
-    return(df)
+ez.label.set = function(x,label=NULL){
+    if (!is.data.frame(x)) {
+        result = sjmisc_set_label(x,label)
+    } else {
+        # label is NULL, '' or unnamed vector
+        if (is.null(names(label))) {
+            result = sjmisc_set_label(x,label)
+        } else {
+            cols = label
+            labs = names(label)
+            for (i in 1:length(cols)) {
+                col = cols[i]
+                y = x[[col]]
+                attr(y, 'label') <- labs[i]
+                x[[col]] = y
+            }
+            result = x
+        }
+    }
+    return(result)
 }
 
 #' @rdname ez.label.set

@@ -5,22 +5,23 @@
 \alias{ez.setlabel}
 \title{set variable label, wrapper of \code{\link{sjmisc_set_label}}}
 \usage{
-ez.label.set(df, varname, label)
+ez.label.set(x, label = NULL)
 
-ez.setlabel(df, varname, label)
+ez.setlabel(x, label = NULL)
 }
 \arguments{
-\item{df}{data frame}
+\item{x}{var or df}
 
-\item{varname}{variable name with quote ""}
-
-\item{label}{explanatory string, if "" or NULL, essentially clear label attribute}
+\item{label}{if x is var, single vector; if x is df, vector of the same length as ncol(df), or a named vector of equal or smaller length--eg, c('var lab 1'='var1', 'var lab 3'='var3'), in this case only change var1 and var3, the rest unchanged. If "" or NULL, essentially clear label attribute}
 }
 \value{
 returns a new changed df
 }
 \description{
 set variable label, wrapper of \code{\link{sjmisc_set_label}}
+}
+\note{
+if no exisiting attr, using haven style: label
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

@@ -5,14 +5,14 @@
 \alias{ez.getlabel}
 \title{get variable label, wrapper of \code{\link{sjmisc_get_label}}}
 \usage{
-ez.label.get(x, cols = NULL)
+ez.label.get(x, col = NULL)
 
-ez.getlabel(x, cols = NULL)
+ez.getlabel(x, col = NULL)
 }
 \arguments{
 \item{x}{a df: (efc), or a single var: (efc$e42dep)}
 
-\item{cols}{a character (vector), 'e42dep' or c('e42dep','e42anx'). returns only labels for specified cols of the df (ignored if x is a var)}
+\item{col}{evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols. returns only labels for specified cols of the df (ignored if x is a var)}
 }
 \value{
 returns a named character vector (if x is df), or character (if x is a single var)
@@ -23,7 +23,7 @@ returns a named character vector (if x is df), or character (if x is a single va
 get variable label, wrapper of \code{\link{sjmisc_get_label}}
 }
 \note{
-\cr if df uses foreign style 'variable.labels' and 
+if df uses foreign style 'variable.labels' and 
 \cr because of renaming, new col name is not in 'variable.labels', 
 \cr the function will not retrieve label for that new col name during the process, which is obvious
 }

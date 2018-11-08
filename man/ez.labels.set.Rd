@@ -21,11 +21,13 @@ set value labels, wrapper of \code{\link{sjmisc_set_labels}}.
 The usage of the original function is a bit confusing. Here, I summarize:
 \cr 1) Always use a named vector for valuelabels, in which case force.labels and force.values will be ignored
 \cr valuelabels:
-\cr 1 4 5 9 do not have to all appear in x (that is, you can assign more labels than values)
+\cr 1 4 5 9 do not have to all appear in x, that is, you can assign more labels than values (or vice versa, assign less labels)
 \cr notice the particular order and symbol: "strongly agree" <- 1
 \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
 \cr 
 \cr 2) when valuelabels="", essentially clear value labels attribute
+\cr 
+\cr 3) if no exisiting attr, using haven style: labels
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
