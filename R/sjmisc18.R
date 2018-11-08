@@ -7167,7 +7167,7 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
         x,
         attr.only = TRUE,
         include.values = "n",
-        non.labelled = add.non.labelled)
+        include.non.labelled = add.non.labelled)
 
     # convert to numeric
     vn <- suppressWarnings(as.numeric(names(vnn)))
