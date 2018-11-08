@@ -8218,8 +8218,8 @@ ez.setlabel=ez.label.set
 
 
 
-#' swap variable label mode, in general, mode 2 (col attr, haven style, "variable.labels") is preferred to mode 1 (df attr, foreign style, "label")
-#' @description swap variable label mode, in general, mode 2 (col attr, haven style, "variable.labels") is preferred to mode 1 (df attr, foreign style, "label")
+#' swap variable label mode, in general, mode 2 (col attr, haven style, "label") is preferred to mode 1 (df attr, foreign style, "variable.labels")
+#' @description swap variable label mode, in general, mode 2 (col attr, haven style, "label") is preferred to mode 1 (df attr, foreign style, "variable.labels")
 #' @param mode 1: returned df uses df attribute, attr(df,'variable.labels')
 #' \cr Pros(+) same: slicing df rows, but not cols (df[1:10,])
 #' \cr Cons(-) mess: rename column, change df structure (eg, left_join)
@@ -8228,8 +8228,8 @@ ez.setlabel=ez.label.set
 #' \cr Pros(+) same: rename column, change df structure (eg, left_join)
 #' \cr Cons(-) mess: slicing df rows, but not cols (df[1:10,])
 #' \cr 
-#' \cr foreign: variable.labels (as df attributes), value.labels
-#' \cr haven: label = variable label, labels = value labels
+#' \cr 1: foreign: variable.labels (as df attributes), value.labels
+#' \cr 2: haven: label = variable label, labels = value labels
 #' @export
 ez.label.swap = function(df, mode=2) {
     if (mode==1) {
@@ -8266,8 +8266,8 @@ ez.swaplabel=ez.label.swap
 #' @description swap value labels format, to be consistent, haven style ("labels", mode 2) is preferred to foreign ("value.labels", mode 1)
 #' @param mode 1: foreign, "value.labels";  2: haven, "labels"
 #' \cr 
-#' \cr foreign: variable.labels (as df attributes), value.labels
-#' \cr haven: label = variable label, labels = value labels
+#' \cr 1: foreign: variable.labels (as df attributes), value.labels
+#' \cr 2: haven: label = variable label, labels = value labels
 #' @export
 ez.labels.swap = function(df, mode=2) {
     change_attr_name = function(x,old,new){
