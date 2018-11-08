@@ -30,6 +30,7 @@ smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), nu
 \cr a=c(1,2,3); a[which(a==4)] <-3.1; a          # a changes a to double
 \cr a=c(1,'2',3); a[which(a==1)] <-4; a          # here a=c(1,'2',3)->c('1','2','3'), then '1'==1 TRUE, because 1 converted to '1', finally 4 converted to '4' assigned 
 \cr a=c(1,2,3); a[which(a=='1')] <-4; a          # same logic, but the returned a is still numeric
+\cr Thus, the conclusion is: alawys better to not quote numbers. It is not compatible, could auto convert.
 \cr bottom line: the new val determines outcome even without match
 \cr But my script protects that; data type remains unchanged if there is no match
 \cr logic is tricky TRUE=='TRUE', FALSE=='FALSE' return TRUE; always convert them first to num, eg, mutate(preterm=as.integer(delivery_ega<37.0)) and then start from there.
