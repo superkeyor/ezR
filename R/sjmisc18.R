@@ -7173,6 +7173,8 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
       # here, if vl does not have one element, that element will be NA by factor()
       x <- factor(x, levels = vl)
       attr(x,'label') <- varlab
+      # # do not return labels
+      # attr(x,'labels') <- tmp
   }
   return(x)
 }
