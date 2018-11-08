@@ -8136,7 +8136,7 @@ ez.setlabels=ez.labels.set
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack, variable labels
 #' @param x a df: (efc), or a single var: (efc$e42dep)
-#' @param def.value the value returned when no label attribute
+#' @param def.value the value returned when no label attribute for a single var. if x is a df, def.value is not effective, instead returns '' if no label for a col in df
 #' @export
 sjmisc_get_label=get_label
 
@@ -8147,6 +8147,10 @@ sjmisc_get_label=get_label
 #' @return returns a named character vector (if x is df), or character (if x is a single var)
 #' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
 #' \cr If a single variable has no label, returns NULL
+#' @note
+#' \cr if df uses foreign style 'variable.labels' and 
+#' \cr because of renaming, new col name is not in 'variable.labels', 
+#' \cr the function will not retrieve label for that new col name during the process, which is obvious
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -8159,7 +8163,7 @@ sjmisc_get_label=get_label
 ez.label.get = function(x,cols=NULL){
     # sjmisc_get_label for variable label
     # sjmisc_get_labels for value label
-    # def.value (jerry: only working if x is a single var) Optional, a character string which will be returned as label. if \code{x} has no label attribute. By default, \code{NULL} is returned.
+    # the value returned when no label attribute for a single var. if x is a df, def.value is not effective, instead returns '' if no label for a col in df
     # although sjmisc_get_label(list(var1,var2,var3)) ok, if var2 has no label, the returned labels would be a vector (var1lbl,var3lbl)--this might be confusing. So not to use this syntax
     result=sjmisc_get_label(x, def.value = NULL)
     if (is.data.frame(x) & !is.null(result)) {names(result)=names(x)}
@@ -8228,7 +8232,10 @@ ez.label.swap = function(df, mode=2) {
         df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
         attr(df,'variable.labels') <- lbls
     } else if (mode==2) {
-        lbls = ez.label.get(df)
+        # if df uses foreign style 'variable.labels' and 
+        # because of renaming, new col name is not in 'variable.labels', 
+        # the function will not retrieve label for that new col name during the process, which is obvious
+        lbls = ez.label.get(df)   
         if (!is.null(lbls)) {
             for (j in colnames(df)) {
                 lbl = lbls[[j]]  # or unname(lbls[j])
@@ -8252,7 +8259,7 @@ ez.label.swap = function(df, mode=2) {
 #' \cr haven: label = variable label, labels = value labels
 #' @export
 ez.labels.swap = function(df, mode=2) {
-    change_attr_name(x,old,new){
+    change_attr_name = function(x,old,new){
         value = attr(x, old, exact = T)
         attr(x, old) <- NULL
         attr(x, new) <- value
