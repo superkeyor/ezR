@@ -8211,9 +8211,15 @@ ez.setlabel=ez.label.set
 
 #' swap variable label mode
 #' @description swap variable label mode
-#' @param mode 1=attr(df,'variable.labels')-->better for slice[1:10,]; 2=attr(df[[col]],'label')-->better for left_join.
+#' @param mode 1: returned df uses df attribute, attr(df,'variable.labels')
+#' \cr Pros(+) same: slicing df rows, but not cols (df[1:10,])
+#' \cr Cons(-) mess: rename column, change df structure (eg, left_join)
+#' \cr 
+#' \cr 2: returned df uses column attribute, attr(df[[col]],'label')
+#' \cr Pros(+) same: rename column, change df structure (eg, left_join)
+#' \cr Cons(-) mess: slicing df rows, but not cols (df[1:10,])
 #' @export
-ez.label.swap = function(df, mode=1) {
+ez.label.swap = function(df, mode=2) {
     if (mode==1) {
         lbls = ez.label.get(df)
         df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
