@@ -35,7 +35,7 @@ recodes contains a set of recoding rules separated by ";". There are several dif
   \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
   \item the \code{\link{sjmisc_rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 }
-\cr 
+\cr
 \cr ====================================================================================
 \cr recommends \code{\link{ez.replace}} to change characters, factors
 \cr ====================================================================================

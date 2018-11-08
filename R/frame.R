@@ -225,7 +225,7 @@ ez.2char = function(x, col=NULL){
         }
         return(new_value)
     }
-    
+
     result=x
     if (is.data.frame(x) & is.null(col)){
         # result = dplyr::mutate_if(x, is.factor, as.character)
@@ -250,7 +250,7 @@ ez.2char = function(x, col=NULL){
 
 #' e=e, f=f, g/h/i->i, j=j, k=k
 #' @description e=e, f=f, g/h/i->i, j=j, k=k
-#' \cr 
+#' \cr
 #' \cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[girl/boy]   |char jk[(girl/boy)]
 #' @param x a data frame or a vector
 #' @param col internally evaluated by eval('dplyr::select()')
@@ -693,7 +693,7 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
 #'   \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
 #'   \item the \code{\link{sjmisc_rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 #' }
-#' \cr 
+#' \cr
 #' \cr ====================================================================================
 #' \cr recommends \code{\link{ez.replace}} to change characters, factors
 #' \cr ====================================================================================
@@ -814,17 +814,17 @@ ez.recode2 = function(df, col, recodes){
 
 #' replace a single value in data frame with another value
 #' @description replace within one or more than one columns, or entire data frame (ie, all columns)
-#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
+#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 #' \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
 #' \cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        # a changes a to char as well
 #' \cr a=c(1,2,3); a[which(a==4)] <-3.1; a          # a changes a to double
-#' \cr a=c(1,'2',3); a[which(a==1)] <-4; a          # here a=c(1,'2',3)->c('1','2','3'), then '1'==1 TRUE, because 1 converted to '1', finally 4 converted to '4' assigned 
+#' \cr a=c(1,'2',3); a[which(a==1)] <-4; a          # here a=c(1,'2',3)->c('1','2','3'), then '1'==1 TRUE, because 1 converted to '1', finally 4 converted to '4' assigned
 #' \cr a=c(1,2,3); a[which(a=='1')] <-4; a          # same logic, but the returned a is still numeric
 #' \cr Thus, the conclusion is: alawys better to not quote numbers. It is not compatible, could auto convert.
 #' \cr bottom line: the new val determines outcome even without match
-#' \cr But my script protects that; data type remains unchanged if there is no match 
+#' \cr But my script protects that; data type remains unchanged if there is no match
 #' \cr logic is tricky TRUE=='TRUE', FALSE=='FALSE' return TRUE; always convert them first to num, eg, mutate(preterm=as.integer(delivery_ega<37.0)) and then start from there.
 #' @param df data frame
 #' @param col column name evaluated by eval('dplyr::select()'), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used
@@ -953,7 +953,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 
 #' replace when
 #' @description replace a df: eg, when pt_num=1220, let baby_num=3,baby_name='Bennnnnnn'
-#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
+#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][theRow] <- newval
 #' \cr df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
@@ -983,8 +983,10 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                     theRow2 = which( df[theID]==theValue & !is.na(df[[col]]) )
                 }
             } else {
-                if (length(which(oldval!=newval)) > 0) {
-                    toReplace = TRUE 
+                # when oldval = NA, != returns NA
+                # https://stackoverflow.com/questions/16822426/r-dealing-with-true-false-na-and-nan
+                if (length(which( (oldval!=newval) %in% c(TRUE,NA) )) > 0) {
+                    toReplace = TRUE
                     theString = sprintf('%d row(s) replaced when %s=%s in column %s (%s -> %s)',length(which(oldval!=newval)),theID,toString(theValue),col,toString(oldval[which(oldval!=newval)]),toString(newval))
                     theRow2 = which( df[theID]==theValue & df[[col]]!=newval )
                 }
@@ -1931,7 +1933,7 @@ ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
 #' @param nomatch if 0, not return a row for the nomatch; if NA/NULL, return NA.
 #' @return returns a new data frame with rows in df[[col]] matching the vec elements. row names are normal (1:nrow)
 #' @note works best if your vec contains exactly the same elements as df[[col]], and neither contain duplicate values
-#' \cr Actually, duplicated elements in vec OK, will be mathched multiple times. Duplicates in df[[col]] will be picked using first match. 
+#' \cr Actually, duplicated elements in vec OK, will be mathched multiple times. Duplicates in df[[col]] will be picked using first match.
 #' @export
 ez.match = function(df, col, vec, nomatch=0) {
     if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
