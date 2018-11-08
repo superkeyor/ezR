@@ -20,7 +20,7 @@ returns a new df, factor (non-factor->factor)
 change factor level names in a df
 }
 \note{
-if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=)
+if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=).  See also \code{\link{ez.2label}}.  Because of the change, will remove value labels attr
 }
 \references{
 \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}

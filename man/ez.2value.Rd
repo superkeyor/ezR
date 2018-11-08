@@ -2,7 +2,7 @@
 % Please edit documentation in R/frame.R
 \name{ez.2value}
 \alias{ez.2value}
-\title{e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k}
+\title{e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k}
 \usage{
 ez.2value(x, col = NULL, start.at = 0, keep.labels = TRUE, ...)
 }
@@ -29,8 +29,8 @@ returns a numeric variable or a data frame with changed col(s)
 \cr if x, however, is a factor with chars of numbers ez.2value(c("2","4","6.3"),start.at=NULL), will be converted to (2 4 6.3) etc, see the example
 }
 \description{
-e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
-\cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[girl/boy]   <---char j/k[(girl/boy)]
+e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
+\cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] / factor char i[girl/boy] / char j/k[(girl/boy)]
 }
 \details{
 Variable label will be kept. opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link{sjmisc_to_value}}
@@ -43,7 +43,7 @@ i=factor(c('girl','girl','boy','boy','boy','girl'))
 j=c('x','y'); k=factor(c('x','y'))
 
 ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
+ez.2value: e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
 ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 
 ez.2value(c('','2','1'),start.at = NULL) # -> c(1,3,2)

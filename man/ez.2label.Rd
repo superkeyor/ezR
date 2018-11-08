@@ -34,6 +34,9 @@ e=e, f=f, g/h/i->i, j=j, k=k
 Variable label will be kept, but value labels will be removed to avoid confusion after converting to factor.
 \cr wrapper of \code{\link{sjmisc_to_label}}
 }
+\note{
+See also \code{\link{ez.factorname}}
+}
 \examples{
 e=c(1,2); f=factor(1:2)
 g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
@@ -42,7 +45,7 @@ i=factor(c('girl','girl','boy','boy','boy','girl'))
 j=c('x','y'); k=factor(c('x','y'))
 
 ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
+ez.2value: e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
 ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 }
 \seealso{
