@@ -7165,6 +7165,7 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
                    include.values = 'n',
                    include.non.labelled = add.non.labelled)
       vn = names(vl)
+      # convert to character for compare == in case of numeric vector
       x = as.character(x)
       for (i in 1:length(vl)) x[x == vn[i]] <- vl[i]
       # to factor
