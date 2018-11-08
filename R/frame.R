@@ -218,7 +218,7 @@ ez.2char = function(x, col=NULL){
             labels <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
             varlab <- sjmisc_get_label(e)
             new_value = as.character(e)
-            new_value <- sjmisc_set_labels(new_value, labels)
+            new_value <- sjmisc_set_labels(new_value, labels, force.labels = T)
             new_value <- sjmisc_set_label(new_value, varlab)
         } else {
             new_value = e
