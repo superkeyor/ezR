@@ -8074,7 +8074,7 @@ sjmisc_get_labels=get_labels
 
 #' get value labels, wrapper of \code{\link{sjmisc_get_labels}}.
 #' @description get value labels, wrapper of \code{\link{sjmisc_get_labels}}.
-#' @param x data frame or variable with value labels attribute
+#' @param x df or var (I generally use x as var)
 #' @details see also \code{\link{sjmisc_get_values}}
 #' \cr include.values, how values are returned, as named vector = "as.name" or "n" or "as.prefix" or "p"
 #' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
@@ -8112,6 +8112,8 @@ ez.getlabels=ez.labels.get
 #' \cr 2) when valuelabels="" or NULL, essentially clear value labels attribute
 #' \cr
 #' \cr 3) if no exisiting attr, using haven style: labels
+#' \cr
+#' \cr 4) though x could be df, I generally use x as var
 #' @export
 sjmisc_set_labels=set_labels
 
@@ -8127,6 +8129,8 @@ sjmisc_set_labels=set_labels
 #' \cr 2) when valuelabels="", essentially clear value labels attribute
 #' \cr
 #' \cr 3) if no exisiting attr, using haven style: labels
+#' \cr
+#' \cr 4) though x could be df, I generally use x as var
 #' @return returns a new changed df
 #' @family data transformation functions
 #' @export

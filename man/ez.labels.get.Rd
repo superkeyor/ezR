@@ -12,7 +12,7 @@ ez.getlabels(x, include.values = "n", attr.only = T,
   include.non.labelled = F, ...)
 }
 \arguments{
-\item{x}{data frame or variable with value labels attribute}
+\item{x}{df or var (I generally use x as var)}
 }
 \description{
 get value labels, wrapper of \code{\link{sjmisc_get_labels}}.

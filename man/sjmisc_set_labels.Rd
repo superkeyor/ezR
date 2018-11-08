@@ -20,4 +20,6 @@ The usage of the original function is a bit confusing. Here, I summarize:
 \cr 2) when valuelabels="" or NULL, essentially clear value labels attribute
 \cr
 \cr 3) if no exisiting attr, using haven style: labels
+\cr
+\cr 4) though x could be df, I generally use x as var
 }
