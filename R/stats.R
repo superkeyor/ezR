@@ -194,7 +194,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     # in case of 'variable.labels', it contains all varialbes' labels,
     # even some of them are not in the current df due to variable selection, eg, select()
     # So only retrieve exisiting cols in current df
-    labels = ez.label.get(df,cols=colnames(df))
+    labels = ez.label.get(df,colnames(df))
     # if no labels at all, NULL; otherwise a string vector
     # labels' length should match #variables selected
     if ((!is.null(labels)) & nrow(results)==length(labels)+1) {results['varlbl']=c(labels,''); results=results %>% ez.move('varlbl before class')}
@@ -1238,7 +1238,7 @@ dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
     n_distractors <- n_fa + n_cr
     hr <- n_hit / n_targets
     far <- n_fa / n_distractors
-    
+
     return(list(dprime = dprime, beta = beta, c = c, cprime = cprime, hr = hr, far = far, correct = correct, aprime = aprime, bppd = bppd))
 }
 
@@ -1250,11 +1250,11 @@ dprime <- function(hit, fa, miss, cr, adjusted=TRUE) {
 #' @param cr Number of correct rejections.
 #' @param adjusted Should it use the Hautus (1995) adjustments for extreme values (hit rate of 1 and false alarm rate of 0). Note: only affects dprime, beta, c, cprime; all other results have nothing to do with adjustment. This script adjusts both extreme and non-extreme values when adjusted = T. See for more the following notes and \href{https://stats.stackexchange.com/questions/134779}{stackexchange}
 #'
-#' @return Returns a data frame: 
+#' @return Returns a data frame:
 #' (summary: aprime, bppd are nonparametric version of dprime, beta, nonparemetric not subjective to assumptions/extreme values)
 #' \itemize{
 #'  \item{\strong{hr}: }{hit rate, calculated with raw data, the unadjusted one returned}
-#'  \item{\strong{far}: }{false alarm rate, the unadjusted one returned}    
+#'  \item{\strong{far}: }{false alarm rate, the unadjusted one returned}
 #'  \item{\strong{correct}: }{correct = (Hits + CR)/(Hits+Misses+FA+CR) , but it cannot disentangle the two components, ie, discriminability and bias (The major contribution of SDT to psychology is the separation of these two). Intuitively, the best subject maximizes H (and thus minimizes the Miss rate) and minimizes F (and thus maximizes the Correct Rejection rate); hit rate H = hit / (hit+miss); false alarm rate F = FA / (FA + CR); targets = hit + miss; distractors= fa + cr.}
 #'  \item{\strong{dprime (d')}: }{The sensitivity, discriminability index. Reflects the mean/peak distance (in standard deviation unit) between the signal and noise distributions (d' = z(H) - z(F), other sensitivity measures include a transform other than z, or even no transform at all). The larger the difference between H and F, the better the subject's sensitivity. A value of 0 indicates an inability to distinguish signals from noise, whereas larger values indicate a correspondingly greater ability to distinguish signals from noise. Negative values of d' can arise through sampling error or response confusion (responding yes when intending to respond no, and vice versa). Though Z values can have any real value, normally distributed ones are between -2 and 2 about 95 percent of the time. SDT states that d' is unaffected by response bias (i.e., is a pure measure of sensitivity) if two assumptions are met regarding the decision variable: (1) The signal and noise distributions are both normal, and (2) the signal and noise distributions have the same standard deviation. We call these the d' assumptions. If either assumption is violated, d' will vary with response bias. Because of this, some researchers prefer to use nonparametric measures of sensitivity. The most popular is A'. }
 #'  \item{\strong{beta}: }{The decision bias, response bias, bias/criterion. Use of this measure assumes that responses are based on a likelihood ratio. Suppose the decision variable achieves a value of x on a given trial. The numerator for the ratio is the likelihood of obtaining x on a signal trial (i.e., the height of the signal distribution at x), whereas the denominator for the ratio is the likelihood of obtaining x on a noise trial (i.e., the height of the noise distribution at x). Formula is exp(-(zH-zF) x (zH+zF)/2). When subjects favor neither the yes response nor the no response, beta=1. Values less than 1 signify a bias toward responding yes (liberal), whereas values of beta greater than 1 signify a bias toward the no (conservative) response. Because beta is based on a ratio, the natural logarithm of beta is often analyzed in place of beta itself. This script gives beta, not ln(beta).}
@@ -1405,7 +1405,7 @@ ez.es.t.paired.msr = function(m1,s1,m2,s2,r) {
 #' @description retrieve article citation numbers from pubmed
 #' @param xmlFile EndNote library file, contains exported articles with correct titles
 #' @param outFile an excel file to store the results, if not provided, same base name as xmlFile
-#' @param index 1:10, same syntax titles[index] to choose a subset of titles in xmlFile to process, NULL=all 
+#' @param index 1:10, same syntax titles[index] to choose a subset of titles in xmlFile to process, NULL=all
 #' @return returns invisible, save an excel file with results
 #' @note get citation numbers cited by available pubmed central papers
 #' @export
@@ -1421,7 +1421,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
     bibs = XML::xmlParse(file = xmlFile)
     nodes = XML::getNodeSet(bibs,"//title")
     titles = XML::xmlSApply(nodes,XML::xmlValue)
-    
+
     strcomp <- function(s1,s2) {
         s1 = tolower(gsub('\\W','',s1,perl=TRUE))
         s2 = tolower(gsub('\\W','',s2,perl=TRUE))
