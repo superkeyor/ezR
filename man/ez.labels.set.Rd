@@ -24,9 +24,9 @@ The usage of the original function is a bit confusing. Here, I summarize:
 \cr 1 4 5 9 do not have to all appear in x, that is, you can assign more labels than values (or vice versa, assign less labels)
 \cr notice the particular order and symbol: "strongly agree" <- 1
 \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
-\cr
+\cr 
 \cr 2) when valuelabels="", essentially clear value labels attribute
-\cr
+\cr 
 \cr 3) if no exisiting attr, using haven style: labels
 }
 \seealso{

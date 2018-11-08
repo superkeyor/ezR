@@ -251,14 +251,14 @@ ez.2char = function(x, col=NULL){
 #' e=e, f=f, g/h/i->i, j=j, k=k
 #' @description e=e, f=f, g/h/i->i, j=j, k=k
 #' \cr 
-#' \cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
+#' \cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[girl/boy]   |char jk[(girl/boy)]
 #' @param x a data frame or a vector
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all possible cols in x
 #' \cr        if x is not a data frame, col is ignored
 #' @param add.non.labelled  logical, if TRUE, values without associated value label (ie, more values than "labels", hence not all values are labelled.) will also be converted to labels (as is). If FALSE, non-labelled values are converted to NA
-#' @param drop.missing.value if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.
+#' @param drop.missing.value (jerry: do not use) if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.
 #' @details Both value and variable label attributes will be removed when converting variables to factors.
 #'\cr wrapper of \code{\link{sjmisc_to_label}}
 #' @examples
@@ -294,7 +294,7 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
 
 #' ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @description ef->f, g/h->h, i=i, factor[x,y,z]<j/k
-#' \cr number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]
+#' \cr number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[girl/boy]   |char j->k[(girl/boy)]
 #' @param x a data frame or a vector/col
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
@@ -337,7 +337,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 
 #' e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 #' @description e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
-#' \cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
+#' \cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[girl/boy]   <---char j/k[(girl/boy)]
 #' @param x a data frame or a vector/col
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only

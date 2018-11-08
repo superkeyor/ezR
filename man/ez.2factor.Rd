@@ -26,7 +26,7 @@ returns a factor with number as its levels or a data frame with changed col(s)
 }
 \description{
 ef->f, g/h->h, i=i, factor[x,y,z]<j/k
-\cr number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[male/female]   |char j->k[(male/female)]
+\cr number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[girl/boy]   |char j->k[(girl/boy)]
 }
 \details{
 wrapper of \code{\link{sjmisc_to_factor}}

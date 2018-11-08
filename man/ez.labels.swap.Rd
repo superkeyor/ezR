@@ -11,7 +11,7 @@ ez.swaplabels(df, mode = 2)
 }
 \arguments{
 \item{mode}{1: foreign, "value.labels";  2: haven, "labels"
-\cr
+\cr 
 \cr 1: foreign: variable.labels (as df attributes), value.labels
 \cr 2: haven: label = variable label, labels = value labels}
 }

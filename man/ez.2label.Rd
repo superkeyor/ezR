@@ -17,7 +17,7 @@ ez.2label(x, col = NULL, add.non.labelled = TRUE,
 
 \item{add.non.labelled}{logical, if TRUE, values without associated value label (ie, more values than "labels", hence not all values are labelled.) will also be converted to labels (as is). If FALSE, non-labelled values are converted to NA}
 
-\item{drop.missing.value}{if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.}
+\item{drop.missing.value}{(jerry: do not use) if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.}
 }
 \value{
 returns a factor with string as its levels or a data frame with changed col(s)
@@ -25,7 +25,7 @@ returns a factor with string as its levels or a data frame with changed col(s)
 \description{
 e=e, f=f, g/h/i->i, j=j, k=k
 \cr 
-\cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[male/female]   |char jk[(male/female)]
+\cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[girl/boy]   |char jk[(girl/boy)]
 }
 \details{
 Both value and variable label attributes will be removed when converting variables to factors.

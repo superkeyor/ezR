@@ -23,8 +23,8 @@ returns a named character vector (if x is df), or character (if x is a single va
 get variable label, wrapper of \code{\link{sjmisc_get_label}}
 }
 \note{
-if df uses foreign style 'variable.labels' and
-\cr because of renaming, new col name is not in 'variable.labels',
+if df uses foreign style 'variable.labels' and 
+\cr because of renaming, new col name is not in 'variable.labels', 
 \cr the function will not retrieve label for that new col name during the process, which is obvious
 }
 \seealso{

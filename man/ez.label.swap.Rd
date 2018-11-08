@@ -13,11 +13,11 @@ ez.swaplabel(df, mode = 2)
 \item{mode}{1: returned df uses df attribute, attr(df,'variable.labels')
 \cr Pros(+) same: slicing df rows, but not cols (df[1:10,])
 \cr Cons(-) mess: rename column, change df structure (eg, left_join)
-\cr
+\cr 
 \cr 2: returned df uses column attribute, attr(df[[col]],'label')
 \cr Pros(+) same: rename column, change df structure (eg, left_join)
 \cr Cons(-) mess: slicing df rows, but not cols (df[1:10,])
-\cr
+\cr 
 \cr 1: foreign: variable.labels (as df attributes), value.labels
 \cr 2: haven: label = variable label, labels = value labels}
 }

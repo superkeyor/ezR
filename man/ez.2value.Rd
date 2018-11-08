@@ -30,7 +30,7 @@ returns a numeric variable or a data frame with changed col(s)
 }
 \description{
 e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
-\cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[male/female]   <---char j/k[(male/female)]
+\cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[girl/boy]   <---char j/k[(girl/boy)]
 }
 \details{
 opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link{sjmisc_to_value}}
