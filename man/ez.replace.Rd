@@ -20,7 +20,7 @@ returns a new df, old one does not change
 }
 \description{
 replace within one or more than one columns, or entire data frame (ie, all columns)
-\cr keep data type whenever possible, var label and value labels are also kept, will also update labels if oldval in the labels, but notice that value labels might be incomplete because of the insertion of new unlabelled value
+\cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value
 }
 \details{
 smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)

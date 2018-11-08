@@ -814,7 +814,7 @@ ez.recode2 = function(df, col, recodes){
 
 #' replace a single value in data frame with another value
 #' @description replace within one or more than one columns, or entire data frame (ie, all columns)
-#' \cr keep data type whenever possible, var label and value labels are also kept, will also update labels if oldval in the labels, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
+#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 #' \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
@@ -915,10 +915,6 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
                 if (length(which(dfcol==oldval)) > 0) {
                     if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(dfcol==oldval)), col, as.character(oldval), as.character(newval)))
                     dfcol[which(dfcol==oldval)] <- newval
-                    # also replace labs if the oldval is in the labels
-                    labsnames = names(labs)
-                    labsnames[labsnames==as.character(oldval)] <- as.character(newval)
-                    names(labs) = labsnames
                 }
             }
 
@@ -954,7 +950,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 
 #' replace when
 #' @description replace a df: eg, when pt_num=1220, let baby_num=3,baby_name='Bennnnnnn'
-#' \cr keep data type whenever possible, var label and value labels are also kept, will also update labels if oldval in the labels, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
+#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][theRow] <- newval
 #' \cr df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
@@ -987,12 +983,6 @@ ez.replacewhen = function(df, print2screen=T, ...) {
             if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
             # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
             df[[col]][theRow] <- newval
-            # also replace labs if the oldval is in the labels
-            if (!is.na(oldval)) {
-                labsnames = names(labs)
-                labsnames[labsnames==as.character(oldval)] <- as.character(newval)
-                names(labs) = labsnames
-            }
             if (factored) {df[[col]]=as.factor(df[[col]])}
             df[[col]] = ez.setlabel(df[[col]],lab); df[[col]] = ez.setlabels(df[[col]],labs)
         }
