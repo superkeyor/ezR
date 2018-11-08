@@ -6,6 +6,16 @@
 \usage{
 sjmisc_set_label(x, lab, attr.string = NULL)
 }
+\arguments{
+\item{df}{data frame}
+
+\item{varname}{variable name with quote ""}
+
+\item{label}{explanatory string, if "" or NULL, essentially clear label attribute}
+}
+\value{
+returns a new changed df
+}
 \description{
 sjmisc 1.8 hack, variable labels
 }

@@ -12,9 +12,9 @@ ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 \item{path}{File path to the data file}
 
 \item{atm2fac}{c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
-\cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
-\cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
-\cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.}
+\cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+\cr 2: atomic with a value labels attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
+\cr 3: atomic with a value labels attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.}
 
 \item{usrna}{(unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.}
 

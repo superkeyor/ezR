@@ -10,9 +10,9 @@ ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 }
 \arguments{
 \item{atm2fac}{c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
-\cr 1: atomic with a value.label/attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
-\cr 2: atomic with a value.label/attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
-\cr 3: atomic with a value.label/attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.}
+\cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+\cr 2: atomic with a value labels attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
+\cr 3: atomic with a value labels attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.}
 
 \item{usrna}{if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well.}
 

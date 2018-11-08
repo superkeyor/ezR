@@ -6,6 +6,11 @@
 \usage{
 sjmisc_get_label(x, def.value = NULL)
 }
+\arguments{
+\item{x}{a df: (efc), or a single var: (efc$e42dep)}
+
+\item{def.value}{the value returned when no label attribute for a single var. if x is a df, def.value is not effective, instead returns '' if no label for a col in df}
+}
 \description{
 sjmisc 1.8 hack, variable labels
 }

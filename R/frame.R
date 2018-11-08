@@ -751,8 +751,17 @@ ez.recode = function(df, col, recodes){
     # the helper function changes column name to sth like recode.other.variable.
     # now change it back
     names(newVar) = varName
-    # remove all value labels attr, with graceful failure
-    newVar=tryCatch(sjmisc_set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
+
+    # # remove all value labels attr, with graceful failure
+    # newVar=tryCatch(sjmisc_set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
+    # ez.label.swap()
+    # e = df[varName]
+    # labs <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
+    # lab <- sjmisc_get_label(e, def.value = NULL)
+    # newVar <- sjmisc_set_labels(newVar, labels)
+    # newVar <- sjmisc_set_label(newVar, lab)
+
+
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
     # parse: http://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
     df = eval(parse(text=cmd))

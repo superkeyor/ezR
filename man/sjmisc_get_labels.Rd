@@ -10,3 +10,9 @@ sjmisc_get_labels(x, attr.only = FALSE, include.values = NULL,
 \description{
 sjmisc 1.8 hack, value labels
 }
+\note{
+\cr include.values, how values are returned: NULL = unnamed vector; as named vector = "as.name" or "n"; "as.prefix" or "p", c("[1] Caucasian", "[3] Asian")
+\cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
+\cr include.non.labelled, if T, values without labels will also be included in the returned labels
+\cr returns NULL if no value labels attribute
+}

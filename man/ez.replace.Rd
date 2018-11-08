@@ -20,7 +20,7 @@ returns a new df, old one does not change
 }
 \description{
 replace within one or more than one columns, or entire data frame (ie, all columns)
-\cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
+\cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
 }
 \details{
 smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
@@ -86,6 +86,7 @@ Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.2value}}, \code{\link{ez.2wide}},
   \code{\link{ez.compute}}, \code{\link{ez.del}},
   \code{\link{ez.label.get}}, \code{\link{ez.label.set}},
+  \code{\link{ez.labels.get}}, \code{\link{ez.labels.set}},
   \code{\link{ez.leftjoin}}, \code{\link{ez.move}},
   \code{\link{ez.newcol}}, \code{\link{ez.num}},
   \code{\link{ez.recode}}, \code{\link{ez.recols}},
@@ -93,6 +94,5 @@ Other data transformation functions: \code{\link{ez.2char}},
   \code{\link{ez.rncols}}, \code{\link{ez.rncol}},
   \code{\link{ez.select}}, \code{\link{ez.sort}},
   \code{\link{ez.split}}, \code{\link{ez.str}},
-  \code{\link{ez.unique}}, \code{\link{ez.values.get}},
-  \code{\link{ez.values.set}}
+  \code{\link{ez.unique}}
 }
