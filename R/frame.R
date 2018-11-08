@@ -983,7 +983,7 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                     theRow2 = which( df[theID]==theValue & !is.na(df[[col]]) )
                 }
             } else {
-                if (length(which(oldval!=newval))) > 0) {
+                if (length(which(oldval!=newval)) > 0) {
                     toReplace = TRUE 
                     theString = sprintf('%d row(s) replaced when %s=%s in column %s (%s -> %s)',length(which(oldval!=newval)),theID,toString(theValue),col,toString(oldval[which(oldval!=newval)]),toString(newval))
                     theRow2 = which( df[theID]==theValue & df[[col]]!=newval )
