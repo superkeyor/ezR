@@ -259,6 +259,8 @@ ez.2char = function(x, col=NULL){
 #' \cr        if x is not a data frame, col is ignored
 #' @param add.non.labelled  logical, if TRUE, values without associated value label (ie, more values than "labels", hence not all values are labelled.) will also be converted to labels (as is). If FALSE, non-labelled values are converted to NA
 #' @param drop.missing.value (jerry: do not use) if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.
+#' @param prefix Logical, if \code{TRUE}, the value labels used as factor levels
+#'          will be prefixed with their associated values.
 #' @details Variable label will be kept, but value labels will be removed to avoid confusion after converting to factor.
 #'\cr wrapper of \code{\link{sjmisc_to_label}}
 #' @examples

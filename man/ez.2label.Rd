@@ -18,6 +18,9 @@ ez.2label(x, col = NULL, add.non.labelled = TRUE,
 \item{add.non.labelled}{logical, if TRUE, values without associated value label (ie, more values than "labels", hence not all values are labelled.) will also be converted to labels (as is). If FALSE, non-labelled values are converted to NA}
 
 \item{drop.missing.value}{(jerry: do not use) if TRUE, all types of missing value codes are converted (is_na attr) into NA before x is converted as factor. If FALSE, ignore is_na attr, missing values will be left as their original codes.}
+
+\item{prefix}{Logical, if \code{TRUE}, the value labels used as factor levels
+will be prefixed with their associated values.}
 }
 \value{
 returns a factor with string as its levels or a data frame with changed col(s)

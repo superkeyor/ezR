@@ -7160,11 +7160,11 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
   # return variable "as is"
   if (!is.null(vl)) {
       # jerry fix!
-      vl <- get_labels(x,
+      tmp <- get_labels(x,
                    attr.only = TRUE,
                    include.values = 'n',
                    include.non.labelled = add.non.labelled)
-      vn = names(vl)
+      vn = names(tmp)
       # convert to character for compare == in case of numeric vector
       x = as.character(x)
       for (i in 1:length(vl)) x[x == vn[i]] <- vl[i]
