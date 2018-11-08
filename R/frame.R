@@ -974,23 +974,39 @@ ez.replacewhen = function(df, print2screen=T, ...) {
         for (i in 2:length(theCols)) {
             col=theCols[i]; newval=theList[[i]]; oldval=df[[col]][theRow]
 
-            # print
-            theString = sprintf('%d row(s) replaced when %s=%s in column %s (%s -> %s)',length(theRow),theID,toString(theValue),col,toString(oldval),toString(newval))
-            if (length(theRow)==1) {
-                if (print2screen) ez.print(theString)
-            } else if (length(theRow)>1) {
-                if (print2screen) ez.pprint(theString)
+            # prepare
+            toReplace=FALSE
+            if (is.na(newval)) {
+                if (length(which(!is.na(oldval))) > 0) {
+                    toReplace = TRUE
+                    theString = sprintf('%d row(s) replaced when %s=%s in column %s (%s -> %s)',length(which(!is.na(oldval))),theID,toString(theValue),col,toString(oldval[which(!is.na(oldval))]),toString(newval))
+                    theRow2 = which( df[theID]==theValue & !is.na(df[[col]]) )
+                }
+            } else {
+                if (length(which(oldval!=newval))) > 0) {
+                    toReplace = TRUE
+                    theString = sprintf('%d row(s) replaced when %s=%s in column %s (%s -> %s)',length(which(oldval!=newval)),theID,toString(theValue),col,toString(oldval[which(oldval!=newval)]),toString(newval))
+                    theRow2 = which( df[theID]==theValue & df[[col]]!=newval )
+                }
             }
 
-            lab = ez.getlabel(df[[col]]); labs = ez.getlabels(df[[col]])
-            factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
-            if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
-            # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
-            df[[col]][theRow] <- newval
-            if (factored) {df[[col]]=as.factor(df[[col]])}
-            df[[col]] = ez.setlabel(df[[col]],lab); df[[col]] = ez.setlabels(df[[col]],labs)
-        }
-    }
+            if (toReplace) {
+                if (length(theRow2)==1) {
+                    if (print2screen) ez.print(theString)
+                } else if (length(theRow2)>1) {
+                    if (print2screen) ez.pprint(theString)
+                }
+
+                lab = ez.getlabel(df[[col]]); labs = ez.getlabels(df[[col]])
+                factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
+                if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
+                # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
+                df[[col]][theRow2] <- newval
+                if (factored) {df[[col]]=as.factor(df[[col]])}
+                df[[col]] = ez.setlabel(df[[col]],lab); df[[col]] = ez.setlabels(df[[col]],labs)
+            }
+        } # end for
+    } # end if
     return(df)
 }
 
