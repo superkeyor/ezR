@@ -28,7 +28,7 @@ e=e, f=f, g/h/i->i, j=j, k=k
 \cr number ef[(0/1)]|   {attr number g(0/1) / factor attr number h[0/1]}-->factor char i[girl/boy]   |char jk[(girl/boy)]
 }
 \details{
-Both value and variable label attributes will also be kept when converting variables to factors.
+Variable label will be kept, but value labels will be removed to avoid confusion after converting to factor.
 \cr wrapper of \code{\link{sjmisc_to_label}}
 }
 \examples{
