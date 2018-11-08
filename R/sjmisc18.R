@@ -7156,25 +7156,43 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
                    attr.only = TRUE,
                    include.values = iv,
                    include.non.labelled = add.non.labelled)
+  # retrieve variable label
+  var_lab <- get_label(x)
   # check if we have any labels, else
   # return variable "as is"
   if (!is.null(vl)) {
     # get associated values for value labels
-    vn <- get_values(x, sort.val = FALSE, drop.na = FALSE)
+    vnn <-
+      get_labels(
+        x,
+        attr.only = TRUE,
+        values = "n",
+        non.labelled = add.non.labelled,
+        drop.na = drop.na
+      )
+
+    # convert to numeric
+    vn <- suppressWarnings(as.numeric(names(vnn)))
+    # where some values non-numeric? if yes,
+    # use value names as character values
+    if (anyNA(vn)) vn <- names(vnn)
+
     # replace values with labels
     if (is.factor(x)) {
+      # more levels than labels?
+      remain_labels <- levels(x)[!levels(x) %in% vn]
       # set new levels
-      levels(x) <- vl
+      levels(x) <- c(vl, remain_labels)
       # remove attributes
       x <- remove_all_labels(x)
     } else {
-      for (i in 1:length(vl)) x[x == vn[i]] <- vl[i]
+      for (i in seq_len(length(vl))) x[x == vn[i]] <- vl[i]
       # to factor
-      varlab <- attr(x,'label',exact=T)
-      x <- factor(x, levels = vl)
-      attr(x,'label') <- varlab
+      x <- factor(x, levels = unique(vl))
     }
   }
+  # set back variable labels
+  if (!is.null(var_lab)) x <- suppressWarnings(set_label(x, label = var_lab))
   # return as factor
   return(x)
 }
