@@ -263,6 +263,7 @@ ez.2char = function(x, col=NULL){
 #'          will be prefixed with their associated values.
 #' @details Variable label will be kept, but value labels will be removed to avoid confusion after converting to factor.
 #'\cr wrapper of \code{\link{sjmisc_to_label}}
+#' @note See also \code{\link{ez.factorname}}
 #' @examples
 #' e=c(1,2); f=factor(1:2)
 #' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
@@ -271,7 +272,7 @@ ez.2char = function(x, col=NULL){
 #' j=c('x','y'); k=factor(c('x','y'))
 #'
 #' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-#' ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
+#' ez.2value: e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
 #' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a factor with string as its levels or a data frame with changed col(s)
 #' @family data transformation functions
@@ -314,7 +315,7 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
 #' j=c('x','y'); k=factor(c('x','y'))
 #'
 #' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-#' ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
+#' ez.2value: e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
 #' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #' @return returns a factor with number as its levels or a data frame with changed col(s)
 #' @family data transformation functions
@@ -337,9 +338,9 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
     return(result)
 }
 
-#' e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
-#' @description e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
-#' \cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[girl/boy]   <---char j/k[(girl/boy)]
+#' e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
+#' @description e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
+#' \cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] / factor char i[girl/boy] / char j/k[(girl/boy)]
 #' @param x a data frame or a vector/col
 #' @param col internally evaluated by eval('dplyr::select()')
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
@@ -362,7 +363,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' j=c('x','y'); k=factor(c('x','y'))
 #'
 #' ez.2label: e=e, f=f, g/h/i->i, j=j, k=k
-#' ez.2value: e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
+#' ez.2value: e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
 #' ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 #'
 #' ez.2value(c('','2','1'),start.at = NULL) # -> c(1,3,2)
@@ -482,7 +483,7 @@ ez.factorder = function(x, col, ord=NULL, print2screen=F){
 #' @param col a single column name, quoted string, ignored when x is not a data frame
 #' @param orn new level names coresponding to levels(x), eg, c("one","two","three")
 #' @return returns a new df, factor (non-factor->factor)
-#' @note if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=)
+#' @note if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=).  See also \code{\link{ez.2label}}
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
 #' @export
 ez.factorname = function(x, col, orn=NULL, print2screen=T){
@@ -535,8 +536,10 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
         if (length(levels(x))!=length(levels(factor(x,unique(as.character(x)))))) {
             if (print2screen) cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
             varlab <- attr(x,'label',exact=T)
+            labs = ez.getlabels(x)
             x = factor(x, unique(as.character(x)))
             attr(x,'label') <- varlab
+            x = ez.setlabels(x,labs)
         }
     } else if (is.data.frame(x) & !is.null(cols)) {
         cols=ez.selcol(x,cols)
