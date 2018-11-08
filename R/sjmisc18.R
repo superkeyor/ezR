@@ -8059,8 +8059,7 @@ sjmisc_write_spss=write_spss
 ####************************************************************************************************
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack, value labels
-#' @note
-#' \cr include.values, how values are returned: NULL = unnamed vector; as named vector = "as.name" or "n"; "as.prefix" or "p", c("[1] Caucasian", "[3] Asian")
+#' @note include.values, how values are returned: NULL = unnamed vector; as named vector = "as.name" or "n"; "as.prefix" or "p", c("[1] Caucasian", "[3] Asian")
 #' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
 #' \cr include.non.labelled, if T, values without labels will also be included in the returned labels
 #' \cr returns NULL if no value labels attribute
@@ -8154,8 +8153,7 @@ sjmisc_get_label=get_label
 #' @return returns a named character vector (if x is df), or character (if x is a single var)
 #' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
 #' \cr If a single variable has no label, returns NULL
-#' @note
-#' \cr if df uses foreign style 'variable.labels' and 
+#' @note if df uses foreign style 'variable.labels' and 
 #' \cr because of renaming, new col name is not in 'variable.labels', 
 #' \cr the function will not retrieve label for that new col name during the process, which is obvious
 #' @family data transformation functions
