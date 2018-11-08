@@ -676,7 +676,7 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
 #' \cr\cr ez.recode replaces the original var with recoded var;
 #' \cr ez.recode2 saves orignal var as var_ori, and then recodes var
 #' \cr see also \code{\link{ez.replace}}, recommends for numeric (single value change), characters, factors
-#' \cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
+#' \cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent), but variable label is kept for numeric, character, factors etc.
 #' @param df data.frame to be recoded
 #' @param col the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
@@ -809,7 +809,7 @@ ez.recode2 = function(df, col, recodes){
 
 #' replace a single value in data frame with another value
 #' @description replace within one or more than one columns, or entire data frame (ie, all columns)
-#' \cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
+#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 #' \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
@@ -896,6 +896,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
         # }
 
         thefun = function(dfcol,oldval,newval) {
+            lab = ez.getlabel(dfcol); labs = ez.getlabels(dfcol)
             # for factor, you cannot directly assign if the new val is not alredy in the levels, otherwise get "invalid factor level, NA generated"
             factored = ifelse(is.factor(dfcol), TRUE, FALSE)
             if (is.factor(dfcol)) {dfcol=as.character(dfcol)}
@@ -913,8 +914,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
             }
 
             if (factored) {dfcol=as.factor(dfcol)}
-            # remove all value labels attr, with graceful failure
-            dfcol=tryCatch(sjmisc_set_labels(dfcol,""), error=function(e) dfcol, warning = function(w) dfcol, finally=dfcol)
+            dfcol = ez.setlabel(dfcol,lab); dfcol = ez.setlabels(dfcol,labs)
             return(dfcol)
         }
         df[cols] = lapply(df[cols],thefun,oldval=oldval,newval=newval)
@@ -945,7 +945,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 
 #' replace when
 #' @description replace a df: eg, when pt_num=1220, let baby_num=3,baby_name='Bennnnnnn'
-#' \cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
+#' \cr keep data type whenever possible, var label and value labels are also kept, but notice that value labels might be incomplete because of the insertion of new unlabelled value 
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][theRow] <- newval
 #' \cr df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
@@ -973,13 +973,13 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                 if (print2screen) ez.pprint(theString)
             }
 
+            lab = ez.getlabel(df[[col]]); labs = ez.getlabels(df[[col]])
             factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
             if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
             # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
             df[[col]][theRow] <- newval
             if (factored) {df[[col]]=as.factor(df[[col]])}
-            # remove all value labels attr, with graceful failure
-            df[[col]]=tryCatch(sjmisc_set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
+            df[[col]] = ez.setlabel(df[[col]],lab); df[[col]] = ez.setlabels(df[[col]],labs)
         }
     }
     return(df)

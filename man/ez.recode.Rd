@@ -24,7 +24,7 @@ Recodes one single according to a set of rules. Recommends for numeric (single v
 \cr\cr ez.recode replaces the original var with recoded var;
 \cr ez.recode2 saves orignal var as var_ori, and then recodes var
 \cr see also \code{\link{ez.replace}}, recommends for numeric (single value change), characters, factors
-\cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
+\cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent), but variable label is kept for numeric, character, factors etc.
 }
 \details{
 recodes contains a set of recoding rules separated by ";". There are several different types of recoding rules:
