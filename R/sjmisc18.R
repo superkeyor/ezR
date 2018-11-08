@@ -8013,9 +8013,16 @@ sjmisc_write_spss=write_spss
 
 ####************************************************************************************************
                                      ####*export with additional alias*####
+# # example: 
+# labs <- ez.getlabels(e)
+# lab <- ez.getlabel(e)
+# ee = as.character(e)
+# ee <- ez.setlabels(ee, labels)  # labels could be NULL or '' = remove labels attr
+# ee <- ez.getlabel(ee, lab)      # lab could be NULL or '' = remove label attr
 
-# When writing my own ezR package, still use sjmisc_
-# example: 
+
+
+# # Or use sjmisc_
 # labs <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
 # lab <- sjmisc_get_label(e, def.value = NULL)
 # ee = as.character(e)
@@ -8024,7 +8031,7 @@ sjmisc_write_spss=write_spss
 
 
 
-# Or manually change attributes:
+# # Or manually change attributes:
 # lab = attr(x, 'label', exact = T)
 # labs1 <- attr(x, 'labels', exact = T)
 # labs2 <- attr(x, 'value.labels', exact = T)
