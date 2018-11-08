@@ -8019,8 +8019,8 @@ sjmisc_write_spss=write_spss
 # labs <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
 # lab <- sjmisc_get_label(e, def.value = NULL)
 # ee = as.character(e)
-# ee <- sjmisc_set_labels(ee, labels)
-# ee <- sjmisc_set_label(ee, lab)
+# ee <- sjmisc_set_labels(ee, labels)  # labels could be NULL or '' = remove labels attr
+# ee <- sjmisc_set_label(ee, lab)      # lab could be NULL or '' = remove label attr
 
 
 
@@ -8046,9 +8046,9 @@ sjmisc_write_spss=write_spss
 # # the levels will be reset here
 # x = factor(x)
 
-# if (! is.null(lab)) attr(x, 'label') <- lab
-# if (! is.null(labs1)) attr(x, 'labels') <- labs1
-# if (! is.null(labs2)) attr(x, 'value.labels') <- labs2
+# attr(x, 'label') <- lab             # NULL removes the attr, but '' results in empty attr
+# attr(x, 'labels') <- labs1          # NULL removes the attr, but '' results in empty attr
+# attr(x, 'value.labels') <- labs2    # NULL removes the attr, but '' results in empty attr
 ####************************************************************************************************
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack, value labels
@@ -8056,6 +8056,7 @@ sjmisc_write_spss=write_spss
 #' \cr include.values, how values are returned: NULL = unnamed vector; as named vector = "as.name" or "n"; "as.prefix" or "p", c("[1] Caucasian", "[3] Asian")
 #' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
 #' \cr include.non.labelled, if T, values without labels will also be included in the returned labels
+#' \cr returns NULL if no value labels attribute
 #' @export
 sjmisc_get_labels=get_labels
 
@@ -8066,6 +8067,7 @@ sjmisc_get_labels=get_labels
 #' \cr include.values, how values are returned, as named vector = "as.name" or "n" or "as.prefix" or "p"
 #' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
 #' \cr include.non.labelled, if T, values without labels (when less labels than values) will also be included in the returned labels
+#' \cr returns NULL if no value labels attribute
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -8095,7 +8097,7 @@ ez.getlabels=ez.labels.get
 #' \cr notice the particular order and symbol: "strongly agree" <- 1
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
 #' \cr 
-#' \cr 2) when valuelabels="", essentially clear value labels attributes
+#' \cr 2) when valuelabels="" or NULL, essentially clear value labels attribute
 #' @export
 sjmisc_set_labels=set_labels
 
@@ -8108,7 +8110,7 @@ sjmisc_set_labels=set_labels
 #' \cr notice the particular order and symbol: "strongly agree" <- 1
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
 #' \cr 
-#' \cr 2) when valuelabels="", essentially clear value labels attributes
+#' \cr 2) when valuelabels="", essentially clear value labels attribute
 #' @return returns a new changed df
 #' @family data transformation functions
 #' @export
@@ -8176,7 +8178,7 @@ ez.getlabel=ez.label.get
 #' @description sjmisc 1.8 hack, variable labels
 #' @param df data frame
 #' @param varname variable name with quote ""
-#' @param label explanatory string
+#' @param label explanatory string, if "" or NULL, essentially clear label attribute
 #' @return returns a new changed df
 #' @export
 sjmisc_set_label=set_label
@@ -8185,7 +8187,7 @@ sjmisc_set_label=set_label
 #' @description set variable label, wrapper of \code{\link{sjmisc_set_label}}
 #' @param df data frame
 #' @param varname variable name with quote ""
-#' @param label explanatory string
+#' @param label explanatory string, if "" or NULL, essentially clear label attribute
 #' @return returns a new changed df
 #' @family data transformation functions
 #' @export
