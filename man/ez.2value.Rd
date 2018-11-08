@@ -33,7 +33,7 @@ e=e, f(0,1)<-f[1,2], g=g, h(0,1-attr)<-h, g(0,1+attr)<-i/j/k
 \cr number e<-f[(0/1)]|   attr number g(0/1)<--factor attr number h[0/1] // factor char i[girl/boy]   <---char j/k[(girl/boy)]
 }
 \details{
-opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link{sjmisc_to_value}}
+Variable label will be kept. opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link{sjmisc_to_value}}
 }
 \examples{
 e=c(1,2); f=factor(1:2)

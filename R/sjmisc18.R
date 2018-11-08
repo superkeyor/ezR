@@ -7165,11 +7165,11 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
                    include.values = 'n',
                    include.non.labelled = add.non.labelled)
       vn = names(tmp)
+      varlab <- attr(x,'label',exact=T)
       # convert to character for compare == in case of numeric vector
       x = as.character(x)
       for (i in 1:length(vl)) x[x == vn[i]] <- vl[i]
       # to factor
-      varlab <- attr(x,'label',exact=T)
       # here, if vl does not have one element, that element will be NA by factor()
       x <- factor(x, levels = vl)
       attr(x,'label') <- varlab
@@ -8011,7 +8011,7 @@ sjmisc_write_spss=write_spss
 
 ####************************************************************************************************
                                      ####*export with additional alias*####
-# # example: 
+# # example:
 # labs <- ez.getlabels(e)
 # lab <- ez.getlabel(e)
 # ee = as.character(e)
@@ -8043,7 +8043,7 @@ sjmisc_write_spss=write_spss
 # if (!is.null(na.strings)) {
 #     # convert to NA
 #     x[x %in% na.strings] = NA
-#     # also remember to remove na.strings from value labels 
+#     # also remember to remove na.strings from value labels
 #     labs1 = labs1[! labs1 %in% na.strings]
 #     labs2 = labs2[! labs2 %in% na.strings]
 # }
@@ -8100,9 +8100,9 @@ ez.getlabels=ez.labels.get
 #' \cr 1 4 5 9 do not have to all appear in x, that is, you can assign more labels than values (or vice versa, assign less labels)
 #' \cr notice the particular order and symbol: "strongly agree" <- 1
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
-#' \cr 
+#' \cr
 #' \cr 2) when valuelabels="" or NULL, essentially clear value labels attribute
-#' \cr 
+#' \cr
 #' \cr 3) if no exisiting attr, using haven style: labels
 #' @export
 sjmisc_set_labels=set_labels
@@ -8115,9 +8115,9 @@ sjmisc_set_labels=set_labels
 #' \cr 1 4 5 9 do not have to all appear in x, that is, you can assign more labels than values (or vice versa, assign less labels)
 #' \cr notice the particular order and symbol: "strongly agree" <- 1
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
-#' \cr 
+#' \cr
 #' \cr 2) when valuelabels="", essentially clear value labels attribute
-#' \cr 
+#' \cr
 #' \cr 3) if no exisiting attr, using haven style: labels
 #' @return returns a new changed df
 #' @family data transformation functions
@@ -8155,8 +8155,8 @@ sjmisc_get_label=get_label
 #' @return returns a named character vector (if x is df), or character (if x is a single var)
 #' \cr If df has no variable label for all variables or for specified cols, returns NULL. If df has label for some variables, returns a string vector with some "".
 #' \cr If a single variable has no label, returns NULL
-#' @note if df uses foreign style 'variable.labels' and 
-#' \cr because of renaming, new col name is not in 'variable.labels', 
+#' @note if df uses foreign style 'variable.labels' and
+#' \cr because of renaming, new col name is not in 'variable.labels',
 #' \cr the function will not retrieve label for that new col name during the process, which is obvious
 #' @family data transformation functions
 #' @export
@@ -8243,11 +8243,11 @@ ez.setlabel=ez.label.set
 #' @param mode 1: returned df uses df attribute, attr(df,'variable.labels')
 #' \cr Pros(+) same: slicing df rows, but not cols (df[1:10,])
 #' \cr Cons(-) mess: rename column, change df structure (eg, left_join)
-#' \cr 
+#' \cr
 #' \cr 2: returned df uses column attribute, attr(df[[col]],'label')
 #' \cr Pros(+) same: rename column, change df structure (eg, left_join)
 #' \cr Cons(-) mess: slicing df rows, but not cols (df[1:10,])
-#' \cr 
+#' \cr
 #' \cr 1: foreign: variable.labels (as df attributes), value.labels
 #' \cr 2: haven: label = variable label, labels = value labels
 #' @export
@@ -8257,10 +8257,10 @@ ez.label.swap = function(df, mode=2) {
         df[]=lapply(df, function(x) {attr(x,'label') <- NULL; return(x)})
         attr(df,'variable.labels') <- lbls
     } else if (mode==2) {
-        # if df uses foreign style 'variable.labels' and 
-        # because of renaming, new col name is not in 'variable.labels', 
+        # if df uses foreign style 'variable.labels' and
+        # because of renaming, new col name is not in 'variable.labels',
         # the function will not retrieve label for that new col name during the process, which is obvious
-        lbls = ez.label.get(df)   
+        lbls = ez.label.get(df)
         if (!is.null(lbls)) {
             for (j in colnames(df)) {
                 lbl = lbls[[j]]  # or unname(lbls[j])
@@ -8285,7 +8285,7 @@ ez.swaplabel=ez.label.swap
 #' swap value labels format, to be consistent, haven style ("labels", mode 2) is preferred to foreign ("value.labels", mode 1)
 #' @description swap value labels format, to be consistent, haven style ("labels", mode 2) is preferred to foreign ("value.labels", mode 1)
 #' @param mode 1: foreign, "value.labels";  2: haven, "labels"
-#' \cr 
+#' \cr
 #' \cr 1: foreign: variable.labels (as df attributes), value.labels
 #' \cr 2: haven: label = variable label, labels = value labels
 #' @export

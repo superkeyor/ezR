@@ -305,7 +305,7 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
 #' @param add.non.labelled    Logical, if TRUE, non-labelled values also get value labels.
 #' @param drop.na Logical, if TRUE, all types of missing value codes are converted into NA before x is converted as factor. If FALSE, missing values will be left as their original codes. See 'Examples' and get_na.
 #' @param ref.lvl Numeric, specifies the reference level for the new factor. Use this parameter if a different factor level than the lowest value should be used as reference level. If NULL, lowest value will become the reference level. See ref_lvl for details.
-#' @details wrapper of \code{\link{sjmisc_to_factor}}
+#' @details Variable label will be kept. wrapper of \code{\link{sjmisc_to_factor}}
 #' @examples
 #' e=c(1,2); f=factor(1:2)
 #' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)
@@ -353,7 +353,7 @@ ez.2factor = function(x, col=NULL, add.non.labelled=TRUE, drop.na=FALSE, ref.lvl
 #' \cr
 #' \cr To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0)
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
-#' @details opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link{sjmisc_to_value}}
+#' @details Variable label will be kept. opposite of \code{\link{ez.2factor}}, \code{\link{ez.2label}}  wrapper of \code{\link{sjmisc_to_value}}
 #' @examples
 #' e=c(1,2); f=factor(1:2)
 #' g=c(0,0,1,1,1,0); attr(g,'value.labels') <- c(boy=1,girl=0)

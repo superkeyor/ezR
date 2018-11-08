@@ -29,7 +29,7 @@ ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 \cr number e->f[(0/1)]|   attr number g(0/1)-->factor attr number h[0/1]   |factor char i[girl/boy]   |char j->k[(girl/boy)]
 }
 \details{
-wrapper of \code{\link{sjmisc_to_factor}}
+Variable label will be kept. wrapper of \code{\link{sjmisc_to_factor}}
 }
 \examples{
 e=c(1,2); f=factor(1:2)
