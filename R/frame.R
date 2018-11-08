@@ -988,7 +988,7 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                 if (length(which( (oldval!=newval) %in% c(TRUE,NA) )) > 0) {
                     toReplace = TRUE
                     theString = sprintf('%d row(s) replaced when %s=%s in column %s (%s -> %s)',length(which((oldval!=newval) %in% c(TRUE,NA))),theID,toString(theValue),col,toString(oldval[which((oldval!=newval) %in% c(TRUE,NA))]),toString(newval))
-                    theRow2 = which( df[theID]==theValue & df[[col]]!=newval )
+                    theRow2 = which( df[theID]==theValue & ((df[[col]]!=newval) %in% c(TRUE,NA)) )
                 }
             }
 
