@@ -824,7 +824,7 @@ ez.recode2 = function(df, col, recodes){
 #' \cr a=c(1,2,3); a[which(a=='1')] <-4; a          # same logic, but the returned a is still numeric
 #' \cr Thus, the conclusion is: alawys better to not quote numbers. It is not compatible, could auto convert.
 #' \cr bottom line: the new val determines outcome even without match
-#' \cr But my script protects that; data type remains unchanged if there is no match
+#' \cr But my script protects that; data type remains unchanged if there is no match 
 #' \cr logic is tricky TRUE=='TRUE', FALSE=='FALSE' return TRUE; always convert them first to num, eg, mutate(preterm=as.integer(delivery_ega<37.0)) and then start from there.
 #' @param df data frame
 #' @param col column name evaluated by eval('dplyr::select()'), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used
