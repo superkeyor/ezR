@@ -8224,6 +8224,7 @@ ez.label.set = function(x,label=NULL){
             for (i in 1:length(cols)) {
                 col = cols[i]
                 y = x[[col]]
+                # attr() assignment changes numeric to atomic
                 attr(y, 'label') <- labs[i]
                 x[[col]] = y
             }

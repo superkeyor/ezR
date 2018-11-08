@@ -20,11 +20,11 @@ ez.recode2(df, col, recodes)
 returns a new df, old one does not change
 }
 \description{
-Recodes one single according to a set of rules
+Recodes one single according to a set of rules. Recommends for numeric (single value or range change)
 \cr\cr ez.recode replaces the original var with recoded var;
 \cr ez.recode2 saves orignal var as var_ori, and then recodes var
-\cr see also \code{\link{ez.replace}}
-\cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
+\cr see also \code{\link{ez.replace}}, recommends for numeric (single value change), characters, factors
+\cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
 }
 \details{
 recodes contains a set of recoding rules separated by ";". There are several different types of recoding rules:
@@ -35,6 +35,10 @@ recodes contains a set of recoding rules separated by ";". There are several dif
   \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
   \item the \code{\link{sjmisc_rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 }
+\cr 
+\cr ====================================================================================
+\cr recommends \code{\link{ez.replace}} to change characters, factors
+\cr ====================================================================================
 \cr Works with characters/factors as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 \cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
 \cr but number to character works directly, char->char, factor->factor

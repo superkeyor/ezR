@@ -672,11 +672,11 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
     return(result.data[-1])
 }
 #' recode
-#' @description Recodes one single according to a set of rules
+#' @description Recodes one single according to a set of rules. Recommends for numeric (single value or range change)
 #' \cr\cr ez.recode replaces the original var with recoded var;
 #' \cr ez.recode2 saves orignal var as var_ori, and then recodes var
-#' \cr see also \code{\link{ez.replace}}
-#' \cr keep data type whenever possible, remove all attr of col (otherwise could be inconsistent)
+#' \cr see also \code{\link{ez.replace}}, recommends for numeric (single value change), characters, factors
+#' \cr keep data type whenever possible, remove value labels attr of col (otherwise could be inconsistent)
 #' @param df data.frame to be recoded
 #' @param col the name of var to be recoded, must be a string in quotes ""
 #' @param recodes Definition of the recoding rules. See details
@@ -688,6 +688,10 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
 #'   \item Variable label attributes (see, for instance, \code{\link{get_label}}) are preserved if exists, however, value label attributes are removed (makes sense, right)
 #'   \item the \code{\link{sjmisc_rec}} function in sjmisc does not work well with double numbers (eg, 3.59)
 #' }
+#' \cr 
+#' \cr ====================================================================================
+#' \cr recommends \code{\link{ez.replace}} to change characters, factors
+#' \cr ====================================================================================
 #' \cr Works with characters/factors as well e.g., ('Gr',"'U1'='U';'U2'='U';'R1'='R';'R2'='R'")
 #' \cr characters to number does not work directly e.g., ('Gr',"'U1'=2;'U2'=3")  --> 2, 3 are converted to "2", "3" (char of number)
 #' \cr but number to character works directly, char->char, factor->factor
@@ -732,27 +736,27 @@ ez.recode = function(df, col, recodes){
     if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('col not valid!')
     varName=col
 
-    recodes = gsub("min","Lo",recodes,fixed=True)
-    recodes = gsub("max","Hi",recodes,fixed=True)
-    recodes = gsub("Min","Lo",recodes,fixed=True)
-    recodes = gsub("Max","Hi",recodes,fixed=True)
-    recodes = gsub("MIN","Lo",recodes,fixed=True)
-    recodes = gsub("MAX","Hi",recodes,fixed=True)
-    recodes = gsub("LO","Lo",recodes,fixed=True)
-    recodes = gsub("HI","Hi",recodes,fixed=True)
-    recodes = gsub("lo","Lo",recodes,fixed=True)
-    recodes = gsub("hi","Hi",recodes,fixed=True)
-    recodes = gsub("=","->",recodes,fixed=True)
-    recodes = gsub(" thru ",":",recodes,fixed=True)
-    recodes = gsub(" THRU ",":",recodes,fixed=True)
-    recodes = gsub(" Thru ",":",recodes,fixed=True)
+    recodes = gsub("min","Lo",recodes,fixed=TRUE)
+    recodes = gsub("max","Hi",recodes,fixed=TRUE)
+    recodes = gsub("Min","Lo",recodes,fixed=TRUE)
+    recodes = gsub("Max","Hi",recodes,fixed=TRUE)
+    recodes = gsub("MIN","Lo",recodes,fixed=TRUE)
+    recodes = gsub("MAX","Hi",recodes,fixed=TRUE)
+    recodes = gsub("LO","Lo",recodes,fixed=TRUE)
+    recodes = gsub("HI","Hi",recodes,fixed=TRUE)
+    recodes = gsub("lo","Lo",recodes,fixed=TRUE)
+    recodes = gsub("hi","Hi",recodes,fixed=TRUE)
+    recodes = gsub("=","->",recodes,fixed=TRUE)
+    recodes = gsub(" thru ",":",recodes,fixed=TRUE)
+    recodes = gsub(" THRU ",":",recodes,fixed=TRUE)
+    recodes = gsub(" Thru ",":",recodes,fixed=TRUE)
 
     newVar = .recode_helper(df[varName],recodes)
     # the helper function changes column name to sth like recode.other.variable.
     # now change it back
     names(newVar) = varName
 
-    # remove all value labels attr, with graceful failure
+    # remove value labels attr, with graceful failure
     newVar=tryCatch(sjmisc_set_labels(newVar,""), error=function(e) newVar, warning = function(w) newVar, finally=newVar)
 
     cmd = sprintf("reshape::rename(df,c(%s='%s'))",varName,paste0(varName,'_ori'))
@@ -773,20 +777,20 @@ ez.recode2 = function(df, col, recodes){
     if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('col not valid!')
     varName=col
 
-    recodes = gsub("min","Lo",recodes,fixed=True)
-    recodes = gsub("max","Hi",recodes,fixed=True)
-    recodes = gsub("Min","Lo",recodes,fixed=True)
-    recodes = gsub("Max","Hi",recodes,fixed=True)
-    recodes = gsub("MIN","Lo",recodes,fixed=True)
-    recodes = gsub("MAX","Hi",recodes,fixed=True)
-    recodes = gsub("LO","Lo",recodes,fixed=True)
-    recodes = gsub("HI","Hi",recodes,fixed=True)
-    recodes = gsub("lo","Lo",recodes,fixed=True)
-    recodes = gsub("hi","Hi",recodes,fixed=True)
-    recodes = gsub("=","->",recodes,fixed=True)
-    recodes = gsub(" thru ",":",recodes,fixed=True)
-    recodes = gsub(" Thru ",":",recodes,fixed=True)
-    recodes = gsub(" THRU ",":",recodes,fixed=True)
+    recodes = gsub("min","Lo",recodes,fixed=TRUE)
+    recodes = gsub("max","Hi",recodes,fixed=TRUE)
+    recodes = gsub("Min","Lo",recodes,fixed=TRUE)
+    recodes = gsub("Max","Hi",recodes,fixed=TRUE)
+    recodes = gsub("MIN","Lo",recodes,fixed=TRUE)
+    recodes = gsub("MAX","Hi",recodes,fixed=TRUE)
+    recodes = gsub("LO","Lo",recodes,fixed=TRUE)
+    recodes = gsub("HI","Hi",recodes,fixed=TRUE)
+    recodes = gsub("lo","Lo",recodes,fixed=TRUE)
+    recodes = gsub("hi","Hi",recodes,fixed=TRUE)
+    recodes = gsub("=","->",recodes,fixed=TRUE)
+    recodes = gsub(" thru ",":",recodes,fixed=TRUE)
+    recodes = gsub(" Thru ",":",recodes,fixed=TRUE)
+    recodes = gsub(" THRU ",":",recodes,fixed=TRUE)
 
     newVar = .recode_helper(df[varName],recodes)
     # the helper function changes column name to sth like recode.other.variable.
