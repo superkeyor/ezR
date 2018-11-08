@@ -8209,8 +8209,8 @@ ez.setlabel=ez.label.set
 
 
 
-#' swap variable label mode
-#' @description swap variable label mode
+#' swap variable label mode, in general, mode 2 (col attr, haven style, "variable.labels") is preferred to mode 1 (df attr, foreign style, "label")
+#' @description swap variable label mode, in general, mode 2 (col attr, haven style, "variable.labels") is preferred to mode 1 (df attr, foreign style, "label")
 #' @param mode 1: returned df uses df attribute, attr(df,'variable.labels')
 #' \cr Pros(+) same: slicing df rows, but not cols (df[1:10,])
 #' \cr Cons(-) mess: rename column, change df structure (eg, left_join)
@@ -8218,6 +8218,9 @@ ez.setlabel=ez.label.set
 #' \cr 2: returned df uses column attribute, attr(df[[col]],'label')
 #' \cr Pros(+) same: rename column, change df structure (eg, left_join)
 #' \cr Cons(-) mess: slicing df rows, but not cols (df[1:10,])
+#' \cr 
+#' \cr foreign: variable.labels (as df attributes), value.labels
+#' \cr haven: label = variable label, labels = value labels
 #' @export
 ez.label.swap = function(df, mode=2) {
     if (mode==1) {
@@ -8241,6 +8244,25 @@ ez.label.swap = function(df, mode=2) {
     return(df)
 }
 
+#' swap value labels format, to be consistent, haven style ("labels", mode 2) is preferred to foreign ("value.labels", mode 1)
+#' @description swap value labels format, to be consistent, haven style ("labels", mode 2) is preferred to foreign ("value.labels", mode 1)
+#' @param mode 1: foreign, "value.labels";  2: haven, "labels"
+#' \cr 
+#' \cr foreign: variable.labels (as df attributes), value.labels
+#' \cr haven: label = variable label, labels = value labels
+#' @export
+ez.labels.swap = function(df, mode=2) {
+    change_attr_name(x,old,new){
+        value = attr(x, old, exact = T)
+        attr(x, old) <- NULL
+        attr(x, new) <- value
+        x
+    }
+    if (mode==1) df[]=lapply(df,change_attr_name,old="labels",new="value.labels")
+    if (mode==2) df[]=lapply(df,change_attr_name,old="value.labels",new="labels")
+    return(df)
+}
+
 #' @rdname ez.label.swap
 #' @export
-ez.swaplabel=ez.label.swap
+ez.swaplabels=ez.labels.swap
