@@ -7466,8 +7466,14 @@ to_value_helper <- function(x, start.at, keep.labels) {
   if (is.character(x)) {
     # has labels?
     if (!is.null(labels)) {
-      # sort labels correctly
+      # sort labels correctly, therefor get "levels"
       lvls <- levels(as.factor(x))
+      # do we have more labels than values? If yes, drop unused labels
+      if (length(labels) > length(lvls)) labels <- labels[names(labels) %in% lvls]
+      # it might be that we have more levels than labels, in this case
+      # drop unused levels - else, ordering won't work
+      if (length(lvls) > length(labels)) lvls <- lvls[lvls %in% names(labels)]
+      # sort labels correctly
       labels <- unname(labels[order(names(labels), lvls)])
     }
     # convert to factor
