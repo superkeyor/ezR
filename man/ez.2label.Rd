@@ -5,7 +5,7 @@
 \title{e=e, f=f, g/h/i->i, j=j, k=k}
 \usage{
 ez.2label(x, col = NULL, add.non.labelled = TRUE,
-  drop.missing.value = FALSE, ...)
+  drop.missing.value = FALSE, prefix = FALSE, ...)
 }
 \arguments{
 \item{x}{a data frame or a vector}

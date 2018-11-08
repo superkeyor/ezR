@@ -276,7 +276,7 @@ ez.2char = function(x, col=NULL){
 #' @return returns a factor with string as its levels or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
-ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALSE, ...){
+ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALSE, prefix=FALSE, ...){
     if (is.data.frame(x) & !is.null(col)){
         col=(ez.selcol(x,col))
         cols=col
@@ -285,11 +285,11 @@ ez.2label = function(x, col=NULL, add.non.labelled=TRUE, drop.missing.value=FALS
         #     x[col]=sjmisc_to_label(x[col], add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
         #     result=x
         # }
-        x[cols] = lapply(x[cols],function(e,add.non.labelled,drop.na){sjmisc_to_label(ez.factorelevel(e), add.non.labelled=add.non.labelled, drop.na=drop.na)}, add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
+        x[cols] = lapply(x[cols],function(e,add.non.labelled,drop.na,prefix){sjmisc_to_label(ez.factorelevel(e), add.non.labelled=add.non.labelled, drop.na=drop.na, prefix=prefix)}, add.non.labelled=add.non.labelled, drop.na=drop.missing.value, prefix=prefix)
         result = x
     } else {
         x=ez.factorelevel(x)
-        result=sjmisc_to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.missing.value)
+        result=sjmisc_to_label(x, add.non.labelled=add.non.labelled, drop.na=drop.missing.value, prefix=prefix, ...)
     }
     return(result)
 }
