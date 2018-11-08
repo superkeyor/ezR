@@ -818,8 +818,10 @@ ez.recode2 = function(df, col, recodes){
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][which(df[[col]]==oldval)] <- newval
 #' \cr a=c(1,2,3); a[which(a=='usb')] <-'cup'; a    # the assign of a char (even though no match) will change a to char of "1" "2" "3"!
-#' \cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        #a changes a to char as well
-#' \cr a=c(1,2,3); a[which(a==4)] <-3.1; a          #a changes a to double
+#' \cr a=c(1,2,3); a[which(a==4)] <-'cup'; a        # a changes a to char as well
+#' \cr a=c(1,2,3); a[which(a==4)] <-3.1; a          # a changes a to double
+#' \cr a=c(1,'2',3); a[which(a==1)] <-4; a          # here a=c(1,'2',3)->c('1','2','3'), then '1'==1 TRUE, because 1 converted to '1', finally 4 converted to '4' assigned 
+#' \cr a=c(1,2,3); a[which(a=='1')] <-4; a          # same logic, but the returned a is still numeric
 #' \cr bottom line: the new val determines outcome even without match
 #' \cr But my script protects that; data type remains unchanged if there is no match
 #' \cr logic is tricky TRUE=='TRUE', FALSE=='FALSE' return TRUE; always convert them first to num, eg, mutate(preterm=as.integer(delivery_ega<37.0)) and then start from there.
@@ -954,6 +956,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 #' @details smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 #' \cr wrapper of df[[col]][theRow] <- newval
 #' \cr df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
+#' \cr whether the number in pt_num=1220 should be quoted or not, see \code{\link{ez.replace}} for comparison logic details.
 #' @param df df
 #' @param ... pt_num=1220,baby_num=3,baby_name='Bennnnnnn',the first element is used as condition to pinpoint the row(s) (multiple matched rows allowed), the rest as cols to be replaced. Quotes around col names are optional, 'pt_num'=1220.
 #' @return returns a new df

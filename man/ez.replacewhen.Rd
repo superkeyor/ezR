@@ -22,6 +22,7 @@ replace a df: eg, when pt_num=1220, let baby_num=3,baby_name='Bennnnnnn'
 smilar to \code{\link{ez.recode}}num->num (if get replaced with another num), numeric->char (if get replaced with a char), char->char, factor->factor (factor internally converted to char then back to factor)
 \cr wrapper of df[[col]][theRow] <- newval
 \cr df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
+\cr whether the number in pt_num=1220 should be quoted or not, see \code{\link{ez.replace}} for comparison logic details.
 }
 \examples{
 df=ez.replacewhen(nicu,pt_num=1220,baby_num=3,baby_name='Ben')
