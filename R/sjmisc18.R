@@ -7159,23 +7159,21 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
   # check if we have any labels, else
   # return variable "as is"
   if (!is.null(vl)) {
-    # get associated values for value labels
-    vn <- get_values(x, sort.val = FALSE, drop.na = FALSE)
-    # replace values with labels
-    if (is.factor(x)) {
-      # set new levels
-      levels(x) <- vl
-      # remove attributes
-      x <- remove_all_labels(x)
-    } else {
+      # jerry fix!
+      vl <- get_labels(x,
+                   attr.only = TRUE,
+                   include.values = 'n',
+                   include.non.labelled = add.non.labelled)
+      vn = names(vl)
+      x = as.character(x)
       for (i in 1:length(vl)) x[x == vn[i]] <- vl[i]
       # to factor
       varlab <- attr(x,'label',exact=T)
+      # here, if vl does not have one element, that element will be NA by factor()
       x <- factor(x, levels = vl)
       attr(x,'label') <- varlab
-    }
+      attr(x, 'labels') <- vl
   }
-  # return as factor
   return(x)
 }
 # @title Convert wide data to long format
