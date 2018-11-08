@@ -8251,6 +8251,12 @@ ez.label.swap = function(df, mode=2) {
     return(df)
 }
 
+#' @rdname ez.label.swap
+#' @export
+ez.swaplabel=ez.label.swap
+
+
+
 #' swap value labels format, to be consistent, haven style ("labels", mode 2) is preferred to foreign ("value.labels", mode 1)
 #' @description swap value labels format, to be consistent, haven style ("labels", mode 2) is preferred to foreign ("value.labels", mode 1)
 #' @param mode 1: foreign, "value.labels";  2: haven, "labels"
@@ -8270,6 +8276,6 @@ ez.labels.swap = function(df, mode=2) {
     return(df)
 }
 
-#' @rdname ez.label.swap
+#' @rdname ez.labels.swap
 #' @export
 ez.swaplabels=ez.labels.swap
