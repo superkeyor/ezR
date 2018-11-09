@@ -83,7 +83,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     temped=F
     if(is.null(file)){
         temped=T
-        file=tempfile(pattern = paste0('view_id_',idString,'_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
+        file=tempfile(pattern = paste0('View_ID_',idString,'_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
         on.exit(unlink(file))
     }
 
@@ -220,6 +220,20 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         }
     }
     return(invisible(list('row'=results0,'col'=results,'dat'=df,'pth'=file)))
+}
+
+#' view df in excel (saved to a temp file, auto delete the temp file)
+#' @description view df in excel (saved to a temp file, auto delete the temp file)
+#' @param ... one or more df. df1, df2 becomes Sheet1, Sheet2 etc
+#' @return returns nothing
+#' @export
+ez.x = function(...) {
+    file=tempfile(pattern = paste0('Data_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
+    on.exit(unlink(file))
+    ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
+    browseURL(file)
+    ez.sleep(10)
+    return(invisible(NULL))
 }
 
 #' format a vector for easy manual copy/processing.
@@ -374,10 +388,6 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
     }
     return(invisible(NULL))
 }
-
-#' @rdname ez.vi
-#' @export
-vi=ez.vi
 
 #' standard error of mean
 #' @description na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
