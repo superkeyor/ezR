@@ -745,7 +745,7 @@ ez.trim = function (s, how=4){
 #' replace string or string vectors literally
 #' @description support single string, vectors
 #' \cr case sensitive! wrapper of sub, gsub
-#' @seealso \code{\link{ez.regexprep}} \code{\link{ez.regexprepi}} \code{\link{ez.replace}} 
+#' @seealso \code{\link{ez.recode}}, \code{\link{ez.recode2}}, \code{\link{ez.replace}}, \code{\link{ez.replacewhen}}, \code{\link{ez.2label}}, \code{\link{ez.factorname}}, \code{\link{ez.strreplace}}, \code{\link{ez.strrev}}, \code{\link{ez.regexprep}}, \code{\link{ez.regexprepi}}
 #' @export
 ez.strreplace = function (s, expr, repstr, once = FALSE){
     if (once) {
