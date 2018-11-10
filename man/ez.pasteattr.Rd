@@ -11,7 +11,7 @@ ez.pasteattr(x, col = NULL, attrs, ...)
 
 \item{col}{evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.}
 
-\item{attrs}{a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector)}
+\item{attrs}{a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector). Works fine even if the list or list of list is empty.}
 }
 \value{
 returns a new data frame or vector

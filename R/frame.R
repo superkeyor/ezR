@@ -1948,7 +1948,7 @@ ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.
 #' @param attrs variable label: c('variable.labels', 'label'); value labels: c('value.labels', 'labels'). run names(attributes(x)) to see all attributes
-#' @return returns a list of list (x is df), or list (x is vector)
+#' @return returns a list of list (x is df), or list (x is vector). Works fine even if x, its col, does not have attrs.
 #' @export
 ez.copyattr = function(x, col=NULL, attrs=c('label', 'labels'), ...) {
     if (!is.data.frame(x)) {
@@ -1968,7 +1968,7 @@ ez.copyattr = function(x, col=NULL, attrs=c('label', 'labels'), ...) {
 #' @description paste attr to a df or vector, from a list of list, or list respectively
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.
-#' @param attrs a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector)
+#' @param attrs a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector). Works fine even if the list or list of list is empty.
 #' @return returns a new data frame or vector
 #' @export
 ez.pasteattr = function(x, col=NULL, attrs, ...) {

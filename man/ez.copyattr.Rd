@@ -14,7 +14,7 @@ ez.copyattr(x, col = NULL, attrs = c("label", "labels"), ...)
 \item{attrs}{variable label: c('variable.labels', 'label'); value labels: c('value.labels', 'labels'). run names(attributes(x)) to see all attributes}
 }
 \value{
-returns a list of list (x is df), or list (x is vector)
+returns a list of list (x is df), or list (x is vector). Works fine even if x, its col, does not have attrs.
 }
 \description{
 copy attr of a df or vector, save as a list of list, or list respectively
