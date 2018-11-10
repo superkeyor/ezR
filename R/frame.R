@@ -483,39 +483,50 @@ ez.factorder = function(x, col, ord=NULL, print2screen=F){
 #' @param col a single column name, quoted string, ignored when x is not a data frame
 #' @param orn new level names coresponding to levels(x), eg, c("one","two","three")
 #' @return returns a new df, factor (non-factor->factor)
-#' @note if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=).  See also \code{\link{ez.2label}}.  Because of the change, will remove value labels attr
+#' @note if x df, pass (x,col,orn);  if x not df, pass (x,orn), or (x,orn=). Because of the change, will remove value labels attr
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
+#' @seealso \code{\link{ez.recode}}, \code{\link{ez.recode2}}, \code{\link{ez.replace}}, \code{\link{ez.replacewhen}}, \code{\link{ez.2label}}, \code{\link{ez.factorname}}, \code{\link{ez.strreplace}}, \code{\link{ez.strrev}}, \code{\link{ez.regexprep}}, \code{\link{ez.regexprepi}}
 #' @export
 ez.factorname = function(x, col, orn=NULL, print2screen=T){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
 
-        varlab <- attr(df[[col]],'label',exact=T)
+        varlab <- attr(df[[col]],'label',exact=T); labs=ez.getlabels(df[[col]])
         if (!is.factor(df[[col]])){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
             df[[col]] = factor(df[[col]])
         }
 
-        if (print2screen) cat('Initial level names: ', levels(df[[col]]), '\n')
-        df[[col]] = factor(df[[col]])  # get rid of value labels, if exist
+        labs=labs[levels(df[[col]])]
+        df[[col]] = factor(df[[col]])  # factor() removes value labels, if exist
         levels(df[[col]]) = orn
-        if (print2screen) cat('Renamed level names: ', orn, '\n')
+        if (print2screen) {
+            labs = paste0(names(labs), '[', labs, ']')
+            labs = sprintf('%-20s',labs)
+            cat('Renamed level names: \n')
+            cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
+        }
         attr(df[[col]],'label') <- varlab
         return(df)
 
     } else {
         if (is.null(orn)) orn = col
-        varlab <- attr(x,'label',exact=T)
+        varlab <- attr(x,'label',exact=T); labs=ez.getlabels(x)
         if (!is.factor(x)){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
             x = factor(x)
         }
 
-        if (print2screen) cat('Initial level names: ', levels(x), '\n')
-        x = factor(x)   # get rid of value labels, if exist
+        labs=labs[levels(x)]
+        x = factor(x)   # factor() removes value labels, if exist
         levels(x) = orn
-        if (print2screen) cat('Renamed level names: ', orn, '\n')
+        if (print2screen) {
+            labs = paste0(names(labs), '[', labs, ']')
+            labs = sprintf('%-20s',labs)
+            cat('Renamed level names: \n')
+            cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
+        }
         attr(x,'label') <- varlab
         return(x)
     }
@@ -836,7 +847,7 @@ ez.recode2 = function(df, col, recodes){
 #' @note when 4 parameters provided, it is recognized as (df,col,oldval,newval)
 #' \cr when 3 parameters provided, it is recognized as (df,oldval,newval)
 #' see example
-#' @seealso \code{\link{ez.strreplace}} \code{\link{ez.recode}} \code{\link{ez.recode2}} \code{\link{ez.replacewhen}}
+#' @seealso \code{\link{ez.recode}}, \code{\link{ez.recode2}}, \code{\link{ez.replace}}, \code{\link{ez.replacewhen}}, \code{\link{ez.2label}}, \code{\link{ez.factorname}}, \code{\link{ez.strreplace}}, \code{\link{ez.strrev}}, \code{\link{ez.regexprep}}, \code{\link{ez.regexprepi}}
 #' @examples
 #' data=data.frame(a=factor(c(1,2)))
 #' ez.replace(data,'a',1,3) %>% .$a
