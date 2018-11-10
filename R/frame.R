@@ -1943,6 +1943,47 @@ ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
     return(x)
 }
 
+#' copy attr of a df or vector, save as a list of list, or list respectively
+#' @description copy attr of a df or vector, save as a list of list, or list respectively
+#' @param x a data frame or a vector
+#' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.
+#' @param attrs variable label: c('variable.labels', 'label'); value labels: c('value.labels', 'labels'). run names(attributes(x)) to see all attributes
+#' @return returns a list of list (x is df), or list (x is vector)
+#' @export
+ez.copyattr = function(x, col=NULL, attrs=c('label', 'labels'), ...) {
+    if (!is.data.frame(x)) {
+        result = list()
+        for (a in attrs) { result[[a]] = attr(x,a,exact=T) }
+    } else if (is.data.frame(x) & is.null(col)) {
+        result = lapply(x,function(e,attrs){ez.copyattr(e,attrs=attrs)},attrs=attrs)
+    } else if (is.data.frame(x) & !is.null(col)) {
+        col = ez.selcol(x,col)
+        cols = col
+        result = lapply(x[cols],function(e,attrs){ez.copyattr(e,attrs=attrs)},attrs=attrs)
+    }
+    return(result)
+}
+
+#' paste attr to a df or vector, from a list of list, or list respectively
+#' @description paste attr to a df or vector, from a list of list, or list respectively
+#' @param x a data frame or a vector
+#' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.
+#' @param attrs a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector)
+#' @return returns a new data frame or vector
+#' @export
+ez.pasteattr = function(x, col=NULL, attrs, ...) {
+    if (!is.data.frame(x)) {
+        for (a in names(attrs)) { attr(x,a) = attrs[[a]] }
+    } else if (is.data.frame(x) & is.null(col)) {
+        x[] = lapply(names(x),function(e,attrs){ez.pasteattr(x[[e]],attrs=attrs[[e]])},attrs=attrs)
+    } else if (is.data.frame(x) & !is.null(col)) {
+        col = ez.selcol(x,col)
+        cols = col
+        x[cols] = lapply(names(x[cols]),function(e,attrs){ez.pasteattr(x[[e]],attrs=attrs[[e]])},attrs=attrs)
+    }
+    return(x)
+}
+
 #' kinda like filter(), but the order of rows are in the order of vec
 #' @description kinda like filter(), but the order of rows are in the order of vec
 #' @param col a single col name
