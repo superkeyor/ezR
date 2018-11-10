@@ -1923,7 +1923,7 @@ ez.clcoldata = function(x, col=NULL, procedures=c('toupper','removeleading0')) {
 #' @return returns a new data frame or vector
 #' @note this function uses a different mechanism from sjmisc_set_labels(x,"") which works only for value labels: haven style ("labels") or foreign style ("value.labels")
 #' @export
-ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label'), ...) {
+ez.clattr = function(x, col=NULL, attrs=c('variable.labels', 'label','value.labels','labels'), ...) {
     if (!is.data.frame(x)) {
         # set_labels only for value labels
         # x=tryCatch(sjmisc_set_labels(x,""), error=function(e) x, warning = function(w) x, finally=x)
@@ -1973,6 +1973,8 @@ ez.copyattr = function(x, col=NULL, attrs=c('label', 'labels'), ...) {
 #' @return returns a new data frame or vector
 #' @export
 ez.pasteattr = function(x, col=NULL, attrs=NULL, ...) {
+    # when col names is not in names(attrs), ez.pasteattr(vector,NULL,NULL) essentially returns vector itself
+    # if names(attrs) has more than col names, because of looping over each col, this is fine.
     if (!is.data.frame(x)) {
         for (a in names(attrs)) { attr(x,a) = attrs[[a]] }
     } else if (is.data.frame(x) & is.null(col)) {

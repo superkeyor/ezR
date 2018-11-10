@@ -4,7 +4,8 @@
 \alias{ez.clattr}
 \title{remove specified attributes}
 \usage{
-ez.clattr(x, col = NULL, attrs = c("variable.labels", "label"), ...)
+ez.clattr(x, col = NULL, attrs = c("variable.labels", "label",
+  "value.labels", "labels"), ...)
 }
 \arguments{
 \item{x}{a data frame or a vector}
