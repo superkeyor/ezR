@@ -506,6 +506,7 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
             labs = sprintf('%-36s',labs)
             cat('Renamed level names: \n') 
             cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
+            cat('\nFirst two items:\n')
             firstTwo=sprintf('%-36s',paste0(firstTwo,collapse=', '))
             cat(paste0(firstTwo, ' --> ', paste0(df[[col]][1:2], collapse = ', '), '\n'))
         }
@@ -528,6 +529,7 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
             labs = sprintf('%-36s',labs)
             cat('Renamed level names: \n')
             cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
+            cat('\nFirst two items:\n')
             firstTwo=sprintf('%-36s',paste0(firstTwo,collapse=', '))
             cat(paste0(firstTwo, ' --> ', paste0(x[1:2], collapse = ', '), '\n'))
         }
