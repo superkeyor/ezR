@@ -504,7 +504,7 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
         if (print2screen) {
             labs = paste0(names(labs), '[', labs, ']')
             labs = sprintf('%-20s',labs)
-            cat('Renamed level names: \n')
+            cat('Renamed level names: \n') 
             cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
         }
         attr(df[[col]],'label') <- varlab
