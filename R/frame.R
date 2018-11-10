@@ -492,7 +492,7 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
 
-        varlab <- attr(df[[col]],'label',exact=T); labs=ez.getlabels(df[[col]])
+        varlab <- attr(df[[col]],'label',exact=T); labs=ez.getlabels(df[[col]]); firstTwo=df[[col]][1:2]
         if (!is.factor(df[[col]])){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
             df[[col]] = factor(df[[col]])
@@ -503,16 +503,18 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
         levels(df[[col]]) = orn
         if (print2screen) {
             labs = paste0(names(labs), '[', labs, ']')
-            labs = sprintf('%-20s',labs)
+            labs = sprintf('%-36s',labs)
             cat('Renamed level names: \n') 
             cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
+            firstTwo=sprintf('%-36s',paste0(firstTwo,collapse=', '))
+            cat(paste0(firstTwo, ' --> ', paste0(df[[col]][1:2], collapse = ', '), '\n'))
         }
         attr(df[[col]],'label') <- varlab
         return(df)
 
     } else {
         if (is.null(orn)) orn = col
-        varlab <- attr(x,'label',exact=T); labs=ez.getlabels(x)
+        varlab <- attr(x,'label',exact=T); labs=ez.getlabels(x); firstTwo=x[1:2]
         if (!is.factor(x)){
             if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
             x = factor(x)
@@ -523,9 +525,11 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
         levels(x) = orn
         if (print2screen) {
             labs = paste0(names(labs), '[', labs, ']')
-            labs = sprintf('%-20s',labs)
+            labs = sprintf('%-36s',labs)
             cat('Renamed level names: \n')
             cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
+            firstTwo=sprintf('%-36s',paste0(firstTwo,collapse=', '))
+            cat(paste0(firstTwo, ' --> ', paste0(x[1:2], collapse = ', '), '\n'))
         }
         attr(x,'label') <- varlab
         return(x)
