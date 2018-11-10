@@ -4,14 +4,15 @@
 \alias{ez.pasteattr}
 \title{paste attr to a df or vector, from a list of list, or list respectively}
 \usage{
-ez.pasteattr(x, col = NULL, attrs, ...)
+ez.pasteattr(x, col = NULL, attrs = NULL, ...)
 }
 \arguments{
 \item{x}{a data frame or a vector}
 
 \item{col}{evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.}
 
-\item{attrs}{a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector). Works fine even if the list or list of list is empty.}
+\item{attrs}{a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector). Works fine even if the list or list of list is empty.
+\cr when only two parameters passed in, will be interpreted as (x,attrs) with col=NULL}
 }
 \value{
 returns a new data frame or vector

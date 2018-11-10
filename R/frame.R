@@ -1969,17 +1969,24 @@ ez.copyattr = function(x, col=NULL, attrs=c('label', 'labels'), ...) {
 #' @param x a data frame or a vector
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.
 #' @param attrs a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector). Works fine even if the list or list of list is empty.
+#' \cr when only two parameters passed in, will be interpreted as (x,attrs) with col=NULL
 #' @return returns a new data frame or vector
 #' @export
-ez.pasteattr = function(x, col=NULL, attrs, ...) {
+ez.pasteattr = function(x, col=NULL, attrs=NULL, ...) {
     if (!is.data.frame(x)) {
         for (a in names(attrs)) { attr(x,a) = attrs[[a]] }
     } else if (is.data.frame(x) & is.null(col)) {
         x[] = lapply(names(x),function(e,attrs){ez.pasteattr(x[[e]],attrs=attrs[[e]])},attrs=attrs)
     } else if (is.data.frame(x) & !is.null(col)) {
-        col = ez.selcol(x,col)
-        cols = col
-        x[cols] = lapply(names(x[cols]),function(e,attrs){ez.pasteattr(x[[e]],attrs=attrs[[e]])},attrs=attrs)
+        if (is.null(attrs)) {
+            # only two parameters passed in
+            attrs=col; col=NULL
+            x[] = lapply(names(x),function(e,attrs){ez.pasteattr(x[[e]],attrs=attrs[[e]])},attrs=attrs)
+        } else {
+            col = ez.selcol(x,col)
+            cols = col
+            x[cols] = lapply(names(x[cols]),function(e,attrs){ez.pasteattr(x[[e]],attrs=attrs[[e]])},attrs=attrs)
+        }
     }
     return(x)
 }
