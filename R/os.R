@@ -6,7 +6,7 @@
 
 #' open a local file with default program (xlsx etc)
 #' @description open a local file with default program (xlsx etc)
-#' @note \code{\link{browseURL}} does the same, but the window size and location is always at top left corner and too small
+#' @note \code{\link{browseURL}} does the same
 #' @export
 ez.open <- function(filePath) {
     # https://stackoverflow.com/a/10969105/2292993

@@ -10,5 +10,5 @@ ez.open(filePath)
 open a local file with default program (xlsx etc)
 }
 \note{
-\code{\link{browseURL}} does the same, but the window size and location is always at top left corner and too small
+\code{\link{browseURL}} does the same
 }
