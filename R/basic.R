@@ -1008,7 +1008,7 @@ ez.age <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE){
             } else {
                 return(age_calc(dob[i],enddate[i],units,precise))
             }
-        }, enddate=enddate,units=units,precise=precise)
+        }, dob=dob,enddate=enddate,units=units,precise=precise)
     return(result)
 }
 
