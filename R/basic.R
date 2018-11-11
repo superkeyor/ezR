@@ -899,7 +899,7 @@ ez.eval = function(cmd,env = parent.frame()){
 ez.evaluate = ez.eval
 
 #' Function to calculate age from date of birth.
-#' @description his function calculates age in days, months, or years from a 
+#' @description This function calculates age in days, months, or years from a 
 #' date of birth to another arbitrary date. This returns a numeric vector in 
 #' the specified units.
 #' @param dob a vector of class \code{Date} representing the date of birth/start date

@@ -28,7 +28,7 @@ and leap second precision}
 A numeric vector of ages the same length as the dob vector
 }
 \description{
-his function calculates age in days, months, or years from a 
+This function calculates age in days, months, or years from a 
 date of birth to another arbitrary date. This returns a numeric vector in 
 the specified units.
 }
