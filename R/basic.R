@@ -1001,11 +1001,12 @@ age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
 #' age
 ez.age <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE){
     # age_calc cannot deal with NA
-    result = sapply(dob,function(dob,enddate,units,precise) {
-            if (is.na(dob) || is.na(enddate)) {
+    # well sapply here is essentially a loop
+    result = sapply(1:length(dob),function(i,dob,enddate,units,precise) {
+            if (is.na(dob[i]) || is.na(enddate[i])) {
                 return(NA)
             } else {
-                return(age_calc(dob,enddate,units,precise))
+                return(age_calc(dob[i],enddate[i],units,precise))
             }
         }, enddate=enddate,units=units,precise=precise)
     return(result)
