@@ -968,6 +968,7 @@ age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
     }
     return(result)
 }
+
 #' Function to calculate age from date of birth.
 #' @description This function calculates age in days, months, or years from a 
 #' date of birth to another arbitrary date. This returns a numeric vector in 
