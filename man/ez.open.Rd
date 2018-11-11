@@ -2,10 +2,13 @@
 % Please edit documentation in R/os.R
 \name{ez.open}
 \alias{ez.open}
-\title{open a local file, or web url with associated programs, alias of \code{\link{browseURL}}}
+\title{open a local file with default program (xlsx etc)}
 \usage{
-ez.open(url, browser = getOption("browser"), encodeIfNeeded = FALSE)
+ez.open(filePath)
 }
 \description{
-open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
+open a local file with default program (xlsx etc)
+}
+\note{
+\code{\link{browseURL}} does the same, but the window size and location is always at top left corner and too small
 }

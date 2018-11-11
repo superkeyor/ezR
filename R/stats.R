@@ -209,12 +209,12 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
         # overwritten by 'debug' passed to function
         if (is.null(debug)) {
             if (debugMode) {
-                browseURL(file)
+                ez.open(file)
                 ez.sleep(10)
             }
         } else {
             if (debug) {
-                browseURL(file)
+                ez.open(file)
                 ez.sleep(10)
             }
         }
@@ -231,7 +231,7 @@ ez.x = function(...) {
     file=tempfile(pattern = paste0('Data_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
     on.exit(unlink(file))
     ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
-    browseURL(file)
+    ez.open(file)
     ez.sleep(10)
     return(invisible(NULL))
 }

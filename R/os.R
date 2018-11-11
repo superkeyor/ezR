@@ -4,10 +4,35 @@
 # options(warn=-1)  # turn off warning
 # options(warn=0)  # turn back on warning
 
-#' open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
-#' @description open a local file, or web url with associated programs, alias of \code{\link{browseURL}}
+#' open a local file with default program (xlsx etc)
+#' @description open a local file with default program (xlsx etc)
+#' @note \code{\link{browseURL}} does the same, but the window size and location is always at top left corner and too small
 #' @export
-ez.open = browseURL
+ez.open <- function(filePath) {
+    # https://stackoverflow.com/a/10969105/2292993
+    f=filePath
+    if (missing(f)) {
+        stop('No file to open!')
+    }
+    f <- path.expand(f)
+    if (!file.exists(f)) {
+        stop('File not found!')
+    }
+    if (grepl('w|W', .Platform$OS.type)) {
+        ## we are on Windows
+        shell.exec(f) #nolint
+    } else {
+        if (grepl('darwin', version$os)) {
+            ## Mac
+            system(paste(shQuote('open'), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
+        } else {
+            ## Linux
+            system(paste(shQuote('/usr/bin/xdg-open'), shQuote(f)), #nolint
+                   wait = FALSE,
+                   ignore.stdout = TRUE)
+        }
+    }
+}
 
 #' alias of \code{\link{stop}}
 #' @description alias of \code{\link{stop}}
