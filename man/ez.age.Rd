@@ -7,8 +7,7 @@
 This function was developed in part from this response on the R-Help mailing list.
 }
 \usage{
-ez.age(dob, enddate = Sys.Date(), floorize = FALSE, units = "years",
-  precise = TRUE)
+ez.age(dob, enddate = Sys.Date(), units = "years", precise = TRUE)
 }
 \arguments{
 \item{dob}{a vector of class \code{Date} representing the date of birth/start date}
@@ -16,16 +15,14 @@ ez.age(dob, enddate = Sys.Date(), floorize = FALSE, units = "years",
 \item{enddate}{a vector of class Date representing the when the observation's 
 age is of interest, defaults to current date.}
 
-\item{floorize}{TRUE/FALSE, age in integer, using \code{\link{floor}}}
-
 \item{units}{character, which units of age should be calculated? allowed values are 
 days, months, and years}
 
 \item{precise}{logical indicating whether or not to calculate with leap year 
-and leap second precision}
+and leap second precision. If F, returns an integer.}
 }
 \value{
-A numeric vector of ages the same length as the dob vector
+A numeric vector of ages the same length as the dob vector (if dob or enddate is NA, return NA as well--I hacked this)
 }
 \description{
 This function calculates age in days, months, or years from a 
