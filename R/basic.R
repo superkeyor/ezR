@@ -898,7 +898,7 @@ ez.eval = function(cmd,env = parent.frame()){
 #' @export
 ez.evaluate = ez.eval
 
-age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE){
+age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
     if (!inherits(dob, "Date") | !inherits(enddate, "Date")) {
         stop("Both dob and enddate must be Date class objects")
     }
