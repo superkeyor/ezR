@@ -200,7 +200,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     if ((!is.null(labels)) & nrow(results)==length(labels)+1) {results['varlbl']=c(labels,''); results=results %>% ez.move('varlbl before class')}
 
     # add col number in excel style
-    results['excelcol']=ez.xlcolconv(1:(nrow(results)-1))
+    results['excelcol']=c(ez.xlcolconv(1:(nrow(results)-1)),NA_character_)
     results %<>% ez.move('excelcol first')
 
     ez.savexlist(list('row'=results0,'col'=results,'dat'=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
