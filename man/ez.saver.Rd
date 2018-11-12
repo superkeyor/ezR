@@ -15,16 +15,16 @@ ez.writer(object, file = "", ascii = FALSE, version = NULL,
 save one (only one) object to a rds file
 }
 \note{
-alias of \code{\link{saveRDS}} 
+alias of \code{\link{saveRDS}}
 \cr x=5; saveRDS(x, "my.rds")
-\cr 
+\cr
 \cr usage for save (you have to always explicitly specify file=):
 \cr      1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
 \cr      2) save(list='x', file='my.rda'), save(list=c('x', 'y'), file='my.rda')
 \cr      the variable name will also be the same as when you save
 \cr      if you want a different name, you have to assign variable to that name first
-\cr 
+\cr
 \cr save.image(file='my.rda')
-\cr 
+\cr
 \cr load(file)
 }

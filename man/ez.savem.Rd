@@ -18,7 +18,7 @@ environment where the function was called from. eg. 'var1,var2,   var3' with or 
 }
 \description{
 Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
-\cr 
+\cr
 \cr seems column in a data frame should be atomic if factor does not work well.
 \cr Writes .mat files to store R session data using the R.matlab package and
 \cr takes care that logicals and atomic vectors are saved properly: currently,

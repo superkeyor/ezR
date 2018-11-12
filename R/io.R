@@ -33,7 +33,7 @@ ez.readt = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
     }
     result = read.csv(file, ...)
     if (tolower) names(result) = tolower(names(result))
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')}
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
@@ -57,7 +57,7 @@ ez.savet = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = "
         write.csv(x=x, file=file, row.names=row.names, na=na, ...)
     }else{
         # hack to not save col names http://stackoverflow.com/a/19227265/2292993
-        # why not write.table for both? 
+        # why not write.table for both?
         # because write.table can be slow for data frames with large numbers (hundreds or more) of columns
         write.table(x=x, file=file, row.names=row.names, col.names=col.names, na=na, ...)
     }
@@ -70,17 +70,17 @@ ez.writet = ez.savet
 
 #' save one (only one) object to a rds file
 #' @description save one (only one) object to a rds file
-#' @note alias of \code{\link{saveRDS}} 
+#' @note alias of \code{\link{saveRDS}}
 #' \cr x=5; saveRDS(x, "my.rds")
-#' \cr 
+#' \cr
 #' \cr usage for save (you have to always explicitly specify file=):
 #' \cr      1) save(x, file='my.rda'), save(x, y, file='my.rda'), save('x', y, file='my.rda')
 #' \cr      2) save(list='x', file='my.rda'), save(list=c('x', 'y'), file='my.rda')
 #' \cr      the variable name will also be the same as when you save
 #' \cr      if you want a different name, you have to assign variable to that name first
-#' \cr 
+#' \cr
 #' \cr save.image(file='my.rda')
-#' \cr 
+#' \cr
 #' \cr load(file)
 #' @export
 ez.saver = saveRDS
@@ -101,7 +101,7 @@ ez.readr = readRDS
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' \cr in fact, makenames is ignored, because xlsx::read.xlsx internally deals with col names. I still keep it for consistency with ez.readx
 #' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
@@ -123,14 +123,14 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, b
     # char to factor
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
-    # result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
+    # result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     # result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     # the above codes do not trim value labels
     # ez.blank2na trick, trimws both value and value labels without converting to NA
     if (!blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=NULL)
     if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # xlsx::read.xlsx internally deals with col names. I still keep makenames for consistency with ez.readx
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')}
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
@@ -141,7 +141,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, b
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
 #' @return when stringsAsFactors=T, in the returned data frame, string to factor
@@ -157,14 +157,14 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksA
     # char to factor
     if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], as.factor)
     # trim spaces
-    # result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)  
+    # result[]=lapply(result, function(x) if (is.factor(x)) factor(trimws(x,'both')) else x)
     # result[]=lapply(result, function(x) if(is.character(x)) trimws(x,'both') else(x))
     # the above codes do not trim value labels
     # ez.blank2na trick, trimws both value and value labels without converting to NA
     if (!blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=NULL)
     if (blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=na.strings)
     # openxlsx::read.xlsx supports check.names, but my codes can print out information
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')}
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     return(result)
 }
@@ -175,7 +175,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksA
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @return a list of sheet as data frame. To get sheetnames, names(result)
 #' \cr when stringsAsFactors=T, in the returned data frame, string to factor
@@ -197,21 +197,21 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 
 #' read spss
 #' @description ez.reads:  haven (label,labels), usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
-#' \cr 
+#' \cr
 #' \cr ez.reads2: foreign (variable.labels, value.labels), perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
-#' \cr 
+#' \cr
 #' \cr I hacked to trim (leading and trailing) string spaces (The leading spaces could be previously added by user, the trailing could come from SPSS padding to Width). Also, I hacked to auto replace col names (eg, @->.), see param makenames if one wants keep variable names as is.
 #' @param path File path to the data file
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
-#' \cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+#' \cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female).
 #' \cr 2: atomic with a value labels attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 #' \cr 3: atomic with a value labels attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
-#' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. 
+#' @param usrna (unfortunately, no effect as of the underlying HAVEN v0.2.1/v1.1.0) if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R.
 #' @param tolower whether to convert all column names to lower case
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')
 #' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
 ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
@@ -230,21 +230,21 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
         # result = ez.2label(result) # slow
         result[]=lapply(result, function(x) {ez.2label(x)})
     }
-    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')} 
+    if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')}
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
     if (tolower) names(result) = tolower(names(result))
 
     # avoid warning: attributes are not identical across measure variables
     # do this before atm2fac, trim
     result[]=lapply(result, function(x) {attr(x,'format.spss') <- NULL; attr(x,'display_width') <- NULL; return(x)})
-    
+
     # the atm2fac/atomic.to.fac only works for variable with numbers with labels/attributes (gender 1/2)
     # not string values (group control/patient)
     # here is a hack from http://stackoverflow.com/a/20638742/2292993
-    if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], function(x) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); as.factor(x); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x})
+    if (stringsAsFactors) result[sapply(result, is.character)] <- lapply(result[sapply(result, is.character)], function(x) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); x=as.factor(x); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x})
     # another hack to trim both leading and trailing spaces (sjmisc_read_spss only trims trailing)
-    # result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else x)  
-    # result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else(x))
+    # result[]=lapply(result, function(x) if (is.factor(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); x=factor(trimws(x,'both')); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else x)
+    # result[]=lapply(result, function(x) if(is.character(x)) {lab <- attr(x, 'label', exact = T); labs <- attr(x, 'labels', exact = T); x=trimws(x,'both'); attr(x, 'labels') <- labs; attr(x, 'label') <- lab; x} else(x))
     # the above codes do not trim value labels
     # ez.blank2na trick, trimws both value and value labels without converting to NA
     if (!blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=NULL)
@@ -279,25 +279,25 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 
 #' read spss
 #' @description ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
-#' \cr 
+#' \cr
 #' \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
-#' \cr 
-#' \cr internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
+#' \cr
+#' \cr internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width).
 #' \cr SPSS numeric -> R numeric
 #' \cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
 #' \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
 #' \cr See param for more other details.
 #' \cr Also somehow auto replace irregular chars in the col names (eg, @-->.)
 #' @param atm2fac c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
-#' \cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+#' \cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female).
 #' \cr 2: atomic with a value labels attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 #' \cr 3: atomic with a value labels attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.
-#' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well. 
+#' @param usrna if TRUE, honor/convert user-defined missing values in SPSS to NA after reading into R; if FALSE, keep user-defined missing values in SPSS as their original codes after reading into R. Should generally be TRUE, because most R stuff does not auto recognize attr well.
 #' @param makenames not effective for this function, kept for compatiablity with other functions
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
-#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan') 
+#' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
 ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
@@ -325,7 +325,7 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # http://www.r-bloggers.com/migrating-from-spss-to-r-rstats/
     # http://stackoverflow.com/questions/19914962/
     # but I do not wanna bother, because sometimes the variable label could have unusal strings (eg punctuation)
-    
+
     # trick to provide an option (set to.data.frame=F to get a list)
     # foreign::read.spss auto string->factor (since 0.8-69 you are allowed to pass stringsAsFactors)
     # internally, foreign::read.spss calls as.data.frame which is udner the influence of stringsAsFactors
@@ -335,12 +335,12 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
                                                  trim_values = TRUE, reencode = NA, use.missings = usrna, ...))
     options(oldOpts)
     if (tolower) names(result) = tolower(names(result))
-    # Important: cannot trim trailing (and leading) string space 
-    # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working??? 
+    # Important: cannot trim trailing (and leading) string space
+    # trim.factor.names, trim_values in \code{\link[foreign]{read.spss}} seems not working???
     # --Where does the trailing spaces come from --String var padded to Width in SPSS
     # hack to remove leading and trailing string spaces
-    # result[]=lapply(result, function(x) if (is.factor(x)) {labs <- attr(x, 'value.labels', exact = T); factor(trimws(x,'both')); attr(x, 'value.labels') <- labs; x} else x)  
-    # result[]=lapply(result, function(x) if(is.character(x)) {labs <- attr(x, 'value.labels', exact = T); trimws(x,'both'); attr(x, 'value.labels') <- labs; x} else(x))
+    # result[]=lapply(result, function(x) if (is.factor(x)) {labs <- attr(x, 'value.labels', exact = T); x=factor(trimws(x,'both')); attr(x, 'value.labels') <- labs; x} else x)
+    # result[]=lapply(result, function(x) if(is.character(x)) {labs <- attr(x, 'value.labels', exact = T); x=trimws(x,'both'); attr(x, 'value.labels') <- labs; x} else(x))
     # the above codes do not trim value labels
     # ez.blank2na trick, trimws both value and value labels without converting to NA
     if (!blanksAsNA) result[]=lapply(result,ez.blank2na,na.strings=NULL)
@@ -435,17 +435,17 @@ ez.writex2 = ez.savex2
 #' options("openxlsx.borderColour" = "#4F80BD") ## set default border colour
 #' write.xlsx(iris, file = "writeXLSX1.xlsx", colNames = TRUE, borders = "columns")
 #' write.xlsx(iris, file = "writeXLSX2.xlsx", colNames = TRUE, borders = "surrounding")
-#' 
-#' 
+#'
+#'
 #' hs <- createStyle(textDecoration = "BOLD", fontColour = "#FFFFFF", fontSize=12,
 #'                   fontName="Arial Narrow", fgFill = "#4F80BD")
-#' 
+#'
 #' write.xlsx(iris, file = "writeXLSX3.xlsx", colNames = TRUE, borders = "rows", headerStyle = hs)
-#' 
+#'
 #' ## Lists elements are written to individual worksheets, using list names as sheet names if available
 #' l <- list("IRIS" = iris, "MTCATS" = mtcars, matrix(runif(1000), ncol = 5))
 #' write.xlsx(l, "writeList1.xlsx")
-#' 
+#'
 #' ## different sheets can be given different parameters
 #' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
@@ -489,7 +489,7 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
         sheetName = toString(sheetNames[i],width=31)
         openxlsx::addWorksheet(wb, sheetName = sheetName)
         openxlsx::writeData(wb, sheetName, sheet,
-          colNames = colNames, rowNames = FALSE, 
+          colNames = colNames, rowNames = FALSE,
           withFilter = withFilter, ...)
     }
     openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
@@ -502,7 +502,7 @@ ez.writexlist = ez.savexlist
 
 #' Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
 #' @description Writes .mat files for exporting data to be used with Matlab, more similar to matlab save() syntax
-#' \cr 
+#' \cr
 #' \cr seems column in a data frame should be atomic if factor does not work well.
 #' \cr Writes .mat files to store R session data using the R.matlab package and
 #' \cr takes care that logicals and atomic vectors are saved properly: currently,

@@ -10,7 +10,7 @@ ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 }
 \arguments{
 \item{atm2fac}{c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.
-\cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female). 
+\cr 1: atomic with a value labels attribute kept as is (eg, gender 1/2 numeric). SPSS value label kept as R attribute (Male/Female).
 \cr 2: atomic with a value labels attribute converted to factor (eg, gender 1/2 factor). SPSS value label kept as R attribute (Male/Female). Should be desirable most of time.
 \cr 3: atomic with a value labels attribute converted to factor, also factor values replaced by value labels (eg, gender Male/Female factor). No R attribute. Useful for plotting.}
 
@@ -28,10 +28,10 @@ ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
 }
 \description{
 ez.reads:  haven, usrna always to NA, col width >255 characters OK, Date, Time -> Date, hms/difftime
-\cr 
+\cr
 \cr ez.reads2: foreign, perserve initial usrna if necessary, col width >255 characters Bad, Date, Time -> numeric.
-\cr 
-\cr internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width). 
+\cr
+\cr internally trim (leading and trailing) string spaces (The leading could be previously added by user, the trailing could come from SPSS padding to Width).
 \cr SPSS numeric -> R numeric
 \cr SPSS string (could be string of num) -> R character...then, when stringsAsFactors=T... -> R factor.
 \cr SPSS Type (numeric, string) matters, but Measure (scale, ordinal, nominal) seems to not matter
