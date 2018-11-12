@@ -313,8 +313,13 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
         if (!force) {
             x[] = rapply(x, utils::type.convert, classes = "character", how = "replace", as.is = TRUE)
         } else {
+            oldNAs = ez.count(x)
             # x = dplyr::mutate_all(x, funs(suppressWarnings(as.numeric(as.character(.)))))
             x[] = lapply( x, function(e){suppressWarnings(as.numeric(as.character(e)))} )
+            if (print2screen) {
+                newNAs = ez.count(x) - oldNAs
+                if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
+            }
         }
         result = x
     } else if (is.data.frame(x) && !is.null(col)) {
@@ -325,7 +330,12 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
         #     x[col] = ez.num(x[col],force=force)
         #     result=x
         # }
-        x[cols] = lapply(x[cols],function(e,force){ez.num(e,force=force)},force=force)
+        oldNAs = ez.count(x[cols])
+        x[cols] = lapply(x[cols],function(e,force){ez.num(e,force=force,print2screen=F)},force=force)
+        if (print2screen) {
+            newNAs = ez.count(x[cols]) - oldNAs
+            if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
+        }
         result = x
     } else if (is.list(x)){
         result = utils::type.convert(as.character(unlist(x)), as.is = TRUE, ...)
