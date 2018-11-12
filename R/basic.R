@@ -264,6 +264,8 @@ ez.pause = function(){
 #' @family data transformation functions
 #' @export
 #' @examples
+#' ez.num(c(1,2,3,NA),force=T)        # -> 1 2 3 NA numeric vector
+#' ez.num(c(1,2,3,NA),force=F)        # -> 1 2 3 NA int vector
 #' ez.num(c(1,'2','a',3,NA))          # -> same chara vector
 #' ez.num(c(1,'2',3,NA))              # -> 1 2 3 NA int vector
 #' ez.num(c(1,'',3))                  # -> 1 NA 3 int vector
@@ -292,7 +294,7 @@ ez.pause = function(){
 #' sapply(ez.num(d), class)
 #'        char   fake_char         fac    char_fac  mixed_char         num
 #' "character"   "integer"    "factor"    "factor" "character"   "integer"
-ez.num = function(x, col=NULL, force=TRUE, print2screen=TRUE, ...){
+ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
         # as.numeric(factor(5:10)) # not what you'd expect
@@ -345,7 +347,7 @@ ez.num = function(x, col=NULL, force=TRUE, print2screen=TRUE, ...){
         # utils::type.convert(c(1,2,'3'), as.is = T) -> int
         # utils::type.convert(c(1,2,'a'), as.is = F) -> fac  ['1' '2' 'a']
         # utils::type.convert(c(1,2,'a'), as.is = T) -> vec  ('1' '2' 'a')
-        if (!force) result = utils::type.convert(x, as.is = TRUE, ...) else result=suppressWarnings(as.numeric(x))
+        if (!force) result = utils::type.convert(as.character(x), as.is = TRUE, ...) else result=suppressWarnings(as.numeric(as.character(x)))
         if (print2screen) {
             newNAs = length(which( (!is.na(x)) & is.na(result) ))
             if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
