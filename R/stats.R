@@ -230,13 +230,30 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 #' @description view df in excel (saved to a temp file, auto delete the temp file)
 #' @param ... one or more df. df1, df2 becomes Sheet1, Sheet2 etc
 #' @return returns nothing
+#' @note when debug provided, overwrites getOption('debug')
 #' @export
-ez.x = function(...) {
-    file=tempfile(pattern = paste0('Data_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
-    on.exit(unlink(file))
-    ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
-    ez.open(file)
-    ez.sleep(10)
+ez.x = function(...,debug=NULL) {
+    debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
+    
+    # overwritten by 'debug' passed to function
+    if (is.null(debug)) {
+        if (debugMode) {
+            file=tempfile(pattern = paste0('Data_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
+            on.exit(unlink(file))
+            ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
+            ez.open(file)
+            ez.sleep(10)
+        }
+    } else {
+        if (debug) {
+            file=tempfile(pattern = paste0('Data_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
+            on.exit(unlink(file))
+            ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
+            ez.open(file)
+            ez.sleep(10)
+        }
+    }
+
     return(invisible(NULL))
 }
 
