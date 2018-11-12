@@ -481,6 +481,7 @@ ez.is.date.like = function(x,format="%m/%d/%Y",...) {
 #' @return returns a character vector or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
+#' @note ez.2char only coverts factor, ez.str coverts all types, both use as.character
 #' @seealso \code{\link{ez.2char}}
 ez.str = function(x, col=NULL){
     if (is.data.frame(x) && is.null(col)){

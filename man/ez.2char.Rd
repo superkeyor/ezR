@@ -23,6 +23,9 @@ convert a column of factor type (or all factor columns) in a data frame into cha
 \details{
 Both value and variable label attributes will be kept when converting variables to characters.
 }
+\note{
+ez.2char only coverts factor, ez.str coverts all types, both use as.character
+}
 \seealso{
 \code{\link{ez.str}}
 

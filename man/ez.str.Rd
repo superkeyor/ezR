@@ -24,6 +24,9 @@ convert a column (or all columns) in a data frame, or a vector into character ty
 \details{
 Both value and variable label attributes will be removed when converting variables to characters.
 }
+\note{
+ez.2char only coverts factor, ez.str coverts all types, both use as.character
+}
 \examples{
 
 }
