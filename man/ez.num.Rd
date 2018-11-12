@@ -14,9 +14,9 @@ ez.num(x, col = NULL, force = FALSE, ...)
 \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 \cr        if x is not a data frame, col is ignored}
 
-\item{force}{T/F, if force, will try to convert everything (factor, etc) to character first then to numeric, (no warning for NA coerce)
-\cr else only convert a string vec/col that only has string of num, eg c('1','2')->c(1,2) (but not factor of string of num, factor(1:2)-->factor(1:2))
-\cr see example for more}
+\item{force}{T/F. a string vec/col that only has string of num, eg c('1','2')->c(1,2) will always become num.
+\cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce). Otherwise, factor(1:2)-->factor(1:2)
+\cr See example for more}
 }
 \value{
 returns a converted vector, data frame

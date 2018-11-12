@@ -156,19 +156,21 @@ ez.is.integer.like <- function(x){
 #' Check numeric
 #'
 #' @description check if a str obj is actually numeric
-#' @param x a str vector
+#' @param x a str vector, or a factor of str vector, or numeric vector. non-string will be coerced using as.character
 #' @return a logical vector
 #' @export
 #' @note Using regular expression, https://stackoverflow.com/a/21154566/2292993
-#' \cr TRUE for:  c("-3","+4.4",   "-42","4L","3.9L",   "1.36e4","1.36E4",   "NA","NaN")
+#' \cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","3.9L",   "1.36e4","1.36E4"): 
 #' \cr positive or negative numbers with no more than one decimal c("-3","+4.4") OR
 #' \cr positive or negative integers (e.g., c("-42","4L","3.9L")) OR
 #' \cr positive or negative numbers in scientific notation c("1.36e4","1.36E4")
 #' \cr 
 #' \cr Special note:
-#' \cr "NA","NaN" (but not "na","nan" etc--use ez.blank2na first) will be treated as numeric as well, ie, returns TRUE.
-ez.is.numeric.like <- function(x){
-    grepl("[-]?[0-9]+[.]?[0-9]*|[-]?[0-9]+[L]?|[-]?[0-9]+[.]?[0-9]*[eE][0-9]+|^NA$|^NaN$",x)
+#' \cr if naAsTrue=TRUE, c(3,4,NA) or c("3","4",NA), but not c("3","4","NA"), will be treated as numeric as well, ie, returns TRUE.
+ez.is.numeric.like <- function(x,naAsTrue=TRUE){
+    result = grepl("[-]?[0-9]+[.]?[0-9]*|[-]?[0-9]+[L]?|[-]?[0-9]+[.]?[0-9]*[eE][0-9]+",x)
+    if (naAsTrue) result = result | is.na(x)
+    return(result)
 }
 
 #' alias of \code{\link{class}}
@@ -250,9 +252,9 @@ ez.pause = function(){
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 #' \cr        if x is not a data frame, col is ignored
-#' @param force T/F, if force, will try to convert everything (factor, etc) to character first then to numeric, (no warning for NA coerce)
-#' \cr else only convert a string vec/col that only has string of num, eg c('1','2')->c(1,2) (but not factor of string of num, factor(1:2)-->factor(1:2))
-#' \cr see example for more
+#' @param force T/F. a string vec/col that only has string of num, eg c('1','2')->c(1,2) will always become num.
+#' \cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce). Otherwise, factor(1:2)-->factor(1:2)
+#' \cr See example for more
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
 #' @return returns a converted vector, data frame
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
@@ -1010,7 +1012,7 @@ ez.nan2na = function(x) {
 #' @param x a vector of factor or character or any type
 #' @param na.strings case sensitive strings that will be coverted to NA. The function will do a trimws(x,'both') before conversion. If NULL, do only trimws, no conversion to NA.
 #' @return Returns a vector trimws (always for factor, character) and NA converted (if matching na.strings). Attributes will also be kept ('label','labels', 'value.labels').
-#' @seealso \code{\link{ez.nan2na}}
+#' @seealso \code{\link{ez.nan2na}}, \code{\link{ez.is.numeric.like}}, \code{\link{ez.num}}
 #' @export
 ez.blank2na = function(x,na.strings=c('','.','NA','na','N/A','n/a','NaN','nan')) {
     if (is.factor(x)) {

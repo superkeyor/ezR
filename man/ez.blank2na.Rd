@@ -19,5 +19,5 @@ Returns a vector trimws (always for factor, character) and NA converted (if matc
 Replaces blank-ish elements of a factor or character vector to NA
 }
 \seealso{
-\code{\link{ez.nan2na}}
+\code{\link{ez.nan2na}}, \code{\link{ez.is.numeric.like}}, \code{\link{ez.num}}
 }

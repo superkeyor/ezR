@@ -4,10 +4,10 @@
 \alias{ez.is.numeric.like}
 \title{Check numeric}
 \usage{
-ez.is.numeric.like(x)
+ez.is.numeric.like(x, naAsTrue = TRUE)
 }
 \arguments{
-\item{x}{a str vector}
+\item{x}{a str vector, or a factor of str vector, or numeric vector. non-string will be coerced using as.character}
 }
 \value{
 a logical vector
@@ -17,11 +17,11 @@ check if a str obj is actually numeric
 }
 \note{
 Using regular expression, https://stackoverflow.com/a/21154566/2292993
-\cr TRUE for:  c("-3","+4.4",   "-42","4L","3.9L",   "1.36e4","1.36E4",   "NA","NaN")
+\cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","3.9L",   "1.36e4","1.36E4"): 
 \cr positive or negative numbers with no more than one decimal c("-3","+4.4") OR
 \cr positive or negative integers (e.g., c("-42","4L","3.9L")) OR
 \cr positive or negative numbers in scientific notation c("1.36e4","1.36E4")
 \cr 
 \cr Special note:
-\cr "NA","NaN" (but not "na","nan" etc--use ez.blank2na first) will be treated as numeric as well, ie, returns TRUE.
+\cr if naAsTrue=TRUE, c(3,4,NA) or c("3","4",NA), but not c("3","4","NA"), will be treated as numeric as well, ie, returns TRUE.
 }
