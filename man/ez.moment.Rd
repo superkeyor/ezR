@@ -16,26 +16,26 @@ returns a string
 current date,time in string
 }
 \examples{
-# \%a  Abbreviated weekday 
+# \%a  Abbreviated weekday
 # \%A  Full weekday
-# \%b  Abbreviated month   
+# \%b  Abbreviated month
 # \%B  Full month
-# \%c  Locale-specific date and time   
+# \%c  Locale-specific date and time
 # \%d  Decimal date
-# \%H  Decimal hours (24 hour) 
+# \%H  Decimal hours (24 hour)
 # \%I  Decimal hours (12 hour)
-# \%j  Decimal day of the year 
+# \%j  Decimal day of the year
 # \%m  Decimal month
-# \%M  Decimal minute  
+# \%M  Decimal minute
 # \%p  Locale-specific AM/PM
-# \%S  Decimal second  
+# \%S  Decimal second
 # \%U  Decimal week of the year (starting on Sunday)
-# \%w  Decimal Weekday (0=Sunday)  
+# \%w  Decimal Weekday (0=Sunday)
 # \%W  Decimal week of the year (starting on Monday)
-# \%x  Locale-specific Date    
+# \%x  Locale-specific Date
 # \%X  Locale-specific Time
-# \%y  2-digit year    
+# \%y  2-digit year
 # \%Y  4-digit year
-# \%z  Offset from GMT 
+# \%z  Offset from GMT
 # \%Z  Time zone (character)
 }

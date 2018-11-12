@@ -98,58 +98,6 @@ ez.is.empty <- function(x, trim = TRUE, ...) {
         sapply(x, ez.is.empty, trim = trim, ...)
 }
 
-#' Strings
-#'
-#' Checks if provided object is a string i.e. a length-one character vector.
-#' @param x an object to check
-#' @return a logical value indicating whether provided object is a string
-#' @examples
-#'     is.string("foobar")          # [1] TRUE
-#'     is.string(1)                 # [1] FALSE
-#'     is.string(c("foo", "bar"))   # [1] FALSE
-#' @export
-#' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
-ez.is.string <- function(x){
-    is.character(x) && length(x) == 1
-}
-
-#' Boolean
-#'
-#' Checks if provided object is a boolean i.e. a length-one logical vector.
-#' @param x an object to check
-#' @return a logical value indicating whether provided object is a boolean
-#' @examples \dontrun{
-#'     is.boolean(TRUE)                # [1] TRUE
-#'     # the following will work on most systems, unless you have tweaked global Rprofile
-#'     is.boolean(T)                   # [1] TRUE
-#'     is.boolean(1)                   # [1] FALSE
-#'     is.string(c("foo", "bar"))      # [1] FALSE
-#' }
-#' @export
-#' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
-ez.is.boolean <- function(x){
-    is.logical(x) && length(x) == 1
-}
-
-#' Numbers
-#'
-#' Checks if provided object is a number, i.e. a length-one numeric vector.
-#' @param x an object to check
-#' @param integer logical: check if number is integer
-#' @return a logical value indicating whether provided object is a string
-#' @examples
-#' is.number(3)              # [1] TRUE
-#' is.number(3:4)            # [1] FALSE
-#' is.number("3")            # [1] FALSE
-#' is.number(NaN)            # [1] TRUE
-#' is.number(NA_integer_)    # [1] TRUE
-#' @export
-#' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
-ez.is.number <- function(x, integer = FALSE) {
-    check.fn <- if (isTRUE(integer)) is.integer else is.numeric
-    do.call(check.fn, list(x)) && length(x) == 1
-}
-
 #' Variables
 #'
 #' From \emph{rapport}'s point of view, a \code{variable} is a non-\code{NULL} atomic vector that has no dimension attribute (see \code{dim} for details). This approach bypasses \code{factor} issues with \code{\link{is.vector}}, and also eliminates multidimensional vectors, such as matrices and arrays.
@@ -197,12 +145,30 @@ ez.is.tabular <- function(x){
 #' @return a logical value that indicates that tested variable "looks like" integer
 #' @export
 #' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
+#' \cr The built-in is.integer(x) does not test if x contains integer numbers! For that, use round, as in the function is.wholenumber(x) in its examples.
 ez.is.integer.like <- function(x){
-
     if (missing(x))
         stop('no object to test integer')
 
     is.numeric(x) & all(grepl('^-?[[:digit:]]+$', x))
+}
+
+#' Check numeric
+#'
+#' @description check if a str obj is actually numeric
+#' @param x a str vector
+#' @return a logical vector
+#' @export
+#' @note Using regular expression, https://stackoverflow.com/a/21154566/2292993
+#' \cr TRUE for:  c("-3","+4.4",   "-42","4L","3.9L",   "1.36e4","1.36E4",   "NA","NaN")
+#' \cr positive or negative numbers with no more than one decimal c("-3","+4.4") OR
+#' \cr positive or negative integers (e.g., c("-42","4L","3.9L")) OR
+#' \cr positive or negative numbers in scientific notation c("1.36e4","1.36E4")
+#' \cr 
+#' \cr Special note:
+#' \cr "NA","NaN" (but not "na","nan" etc--use ez.blank2na first) will be treated as numeric as well, ie, returns TRUE.
+ez.is.numeric.like <- function(x){
+    grepl("[-]?[0-9]+[.]?[0-9]*|[-]?[0-9]+[L]?|[-]?[0-9]+[.]?[0-9]*[eE][0-9]+|^NA$|^NaN$",x)
 }
 
 #' alias of \code{\link{class}}
@@ -377,7 +343,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 #' @examples
 #' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @return returns a vector
-#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
 ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
     # from R help as.Date()
@@ -411,7 +377,7 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 #' @param format input format, see examples (more formats at \code{\link{strptime}}). ignored if x is numeric/hms
 #' @param out.type string, 'numeric' (fractions of a day) or 'times'/'time'
 #' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}} chron stores as a fraction of a day, if you do as.numeric
-#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
 #' @examples
 #' ez.time("5:20:31 am",format="%I:%M:%S %p",out.type="time")  # 5, 05; am AM aM Am OK. %I = 12 hr
@@ -457,7 +423,7 @@ ez.time = function(x,ori='SPSS',format="%H:%M",out.type='numeric',...) {
 #' mydate = as.Date(mydate,format = "%m/%d/%Y")  # "2012-10-11" "2012-10-12"
 #' ez.is.date(mydate)  # T
 #' @export
-#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} \code{\link{ez.time}}
 ez.is.date = function(x) {
     # https://stackoverflow.com/a/37062951/2292993
     return( inherits(x, 'Date') )
@@ -472,10 +438,10 @@ ez.is.date = function(x) {
 #' @examples
 #' mydate = c("10/11/2012","10-12-2012", 345)
 #' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
-#' ez.is.date.convertible(mydate, format = "%m/%d/%Y")  # T F F
+#' ez.is.date.like(mydate, format = "%m/%d/%Y")  # T F F
 #' @export
-#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
-ez.is.date.convertible = function(x,format="%m/%d/%Y",...) {
+#' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} \code{\link{ez.time}}
+ez.is.date.like = function(x,format="%m/%d/%Y",...) {
     # https://stackoverflow.com/a/37062951/2292993
     result = !is.na( as.Date(as.character(x), format = format, ...) )
     return( result )
@@ -983,7 +949,7 @@ age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
 #' @return A numeric vector of ages the same length as the dob vector (if dob or enddate is NA, return NA as well--I hacked this)
 #' @source This function was developed in part from this response on the R-Help mailing list.
 #' @seealso See also \code{\link{difftime}} which this function uses and mimics
-#' some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
+#' some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}}
 #' @author Jason P. Becker from package eeptools (sligthly modified by Jerry)
 #' @export
 #' @examples

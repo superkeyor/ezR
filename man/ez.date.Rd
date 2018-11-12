@@ -24,5 +24,5 @@ convert to date with friendly ori (no need to remember exact origin date)
 # format one of c("\%d/\%m/\%Y", "\%d-\%m-\%Y", "\%Y/\%m/\%d", "\%m/\%d/\%Y", "\%Y-\%m-\%d"). \%y for two year digits
 }
 \seealso{
-\code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
+\code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} \code{\link{ez.time}}
 }

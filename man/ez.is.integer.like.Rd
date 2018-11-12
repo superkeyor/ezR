@@ -17,4 +17,5 @@ This function tests if given variable "appears" to be an integer. To qualify as 
 }
 \note{
 copied from https://cran.r-project.org/web/packages/rapportools/index.html
+\cr The built-in is.integer(x) does not test if x contains integer numbers! For that, use round, as in the function is.wholenumber(x) in its examples.
 }

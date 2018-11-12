@@ -42,10 +42,10 @@ ez.num(factor(c(1,'2',3, NA)),force=F)  # factor['1','2','3', NA]
 ez.num(factor(c(1,2,3, NA)),force=F)  # factor['1','2','3', NA]
 ez.num(factor(c(1,'2',3,NA)),force=T)  # 1 2 3 NA int
 
-d <- data.frame(char = letters[1:5], 
-                fake_char = as.character(1:5), 
-                fac = factor(1:5), 
-                char_fac = factor(letters[1:5]), 
+d <- data.frame(char = letters[1:5],
+                fake_char = as.character(1:5),
+                fac = factor(1:5),
+                char_fac = factor(letters[1:5]),
                 mixed_char = c(1,2,3,'4','f'),
                 num = 1:5, stringsAsFactors = FALSE)
 #   char fake_char fac char_fac mixed_char num
@@ -55,11 +55,11 @@ d <- data.frame(char = letters[1:5],
 # 4    d         4   4        d          4   4
 # 5    e         5   5        e          f   5
 sapply(d, class)
-#        char   fake_char         fac    char_fac  mixed_char         num 
-# "character" "character"    "factor"    "factor" "character"   "integer" 
+#        char   fake_char         fac    char_fac  mixed_char         num
+# "character" "character"    "factor"    "factor" "character"   "integer"
 sapply(ez.num(d), class)
-       char   fake_char         fac    char_fac  mixed_char         num 
-"character"   "integer"    "factor"    "factor" "character"   "integer" 
+       char   fake_char         fac    char_fac  mixed_char         num
+"character"   "integer"    "factor"    "factor" "character"   "integer"
 }
 \seealso{
 \code{\link{ez.2value}}
