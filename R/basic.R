@@ -292,7 +292,7 @@ ez.pause = function(){
 #' sapply(ez.num(d), class)
 #'        char   fake_char         fac    char_fac  mixed_char         num
 #' "character"   "integer"    "factor"    "factor" "character"   "integer"
-ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
+ez.num = function(x, col=NULL, force=TRUE, print2screen=TRUE, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
         # as.numeric(factor(5:10)) # not what you'd expect
