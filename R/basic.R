@@ -231,27 +231,27 @@ ez.rprofile = function(){system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStud
 #' @param format see example or https://www.stat.berkeley.edu/~s133/dates.html
 #' @return returns a string
 #' @examples
-#' # %a  Abbreviated weekday 
+#' # %a  Abbreviated weekday
 #' # %A  Full weekday
-#' # %b  Abbreviated month   
+#' # %b  Abbreviated month
 #' # %B  Full month
-#' # %c  Locale-specific date and time   
+#' # %c  Locale-specific date and time
 #' # %d  Decimal date
-#' # %H  Decimal hours (24 hour) 
+#' # %H  Decimal hours (24 hour)
 #' # %I  Decimal hours (12 hour)
-#' # %j  Decimal day of the year 
+#' # %j  Decimal day of the year
 #' # %m  Decimal month
-#' # %M  Decimal minute  
+#' # %M  Decimal minute
 #' # %p  Locale-specific AM/PM
-#' # %S  Decimal second  
+#' # %S  Decimal second
 #' # %U  Decimal week of the year (starting on Sunday)
-#' # %w  Decimal Weekday (0=Sunday)  
+#' # %w  Decimal Weekday (0=Sunday)
 #' # %W  Decimal week of the year (starting on Monday)
-#' # %x  Locale-specific Date    
+#' # %x  Locale-specific Date
 #' # %X  Locale-specific Time
-#' # %y  2-digit year    
+#' # %y  2-digit year
 #' # %Y  4-digit year
-#' # %z  Offset from GMT 
+#' # %z  Offset from GMT
 #' # %Z  Time zone (character)
 #' @export
 ez.moment = function(format='%Y-%m-%d_%H-%M-%S') {
@@ -305,11 +305,11 @@ ez.pause = function(){
 #' ez.num(factor(c(1,'2',3, NA)),force=F)  # factor['1','2','3', NA]
 #' ez.num(factor(c(1,2,3, NA)),force=F)  # factor['1','2','3', NA]
 #' ez.num(factor(c(1,'2',3,NA)),force=T)  # 1 2 3 NA int
-#' 
-#' d <- data.frame(char = letters[1:5], 
-#'                 fake_char = as.character(1:5), 
-#'                 fac = factor(1:5), 
-#'                 char_fac = factor(letters[1:5]), 
+#'
+#' d <- data.frame(char = letters[1:5],
+#'                 fake_char = as.character(1:5),
+#'                 fac = factor(1:5),
+#'                 char_fac = factor(letters[1:5]),
 #'                 mixed_char = c(1,2,3,'4','f'),
 #'                 num = 1:5, stringsAsFactors = FALSE)
 #' #   char fake_char fac char_fac mixed_char num
@@ -319,11 +319,11 @@ ez.pause = function(){
 #' # 4    d         4   4        d          4   4
 #' # 5    e         5   5        e          f   5
 #' sapply(d, class)
-#' #        char   fake_char         fac    char_fac  mixed_char         num 
-#' # "character" "character"    "factor"    "factor" "character"   "integer" 
+#' #        char   fake_char         fac    char_fac  mixed_char         num
+#' # "character" "character"    "factor"    "factor" "character"   "integer"
 #' sapply(ez.num(d), class)
-#'        char   fake_char         fac    char_fac  mixed_char         num 
-#' "character"   "integer"    "factor"    "factor" "character"   "integer" 
+#'        char   fake_char         fac    char_fac  mixed_char         num
+#' "character"   "integer"    "factor"    "factor" "character"   "integer"
 ez.num = function(x, col=NULL, force=FALSE, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
@@ -374,7 +374,7 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
 #' \cr a string factor treated as char (ie, using param format), a num factor cannot be processed
 #' @param ori one of 'Excel', 'Matlab', 'R', 'SPSS'
 #' @param format specify in date format. see examples
-#' @examples 
+#' @examples
 #' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @return returns a vector
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
@@ -402,8 +402,8 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 }
 
 #' convert to time
-#' @description convert from a time (numeric, character/factor, hms/difftime) to class (chron) times (17:48:00--h:m:s military only) or to class numeric (0.7416667--fractions of a day), call \code{\link[chron]{times}}: 
-#' \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day, foreign package), or as hms/difftime (same as SPSS, haven package), or 
+#' @description convert from a time (numeric, character/factor, hms/difftime) to class (chron) times (17:48:00--h:m:s military only) or to class numeric (0.7416667--fractions of a day), call \code{\link[chron]{times}}:
+#' \cr \cr SPSS military time (civilian time not supported) specified in date format, 17:48 read into R as 64080 (seconds of a day, foreign package), or as hms/difftime (same as SPSS, haven package), or
 #' \cr \cr Excel military/civilian time specified in time format, 5:48:00 PM, 17:48:00 read into R as 0.7416667 (fractions of a day), or
 #' \cr \cr Pass directly a string "17:48:00" (format specified by param format)
 #' @param x a vector of number or character, hms/difftime
@@ -413,8 +413,8 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
 #' @return returns a vector of number (class numeric) or time (class times). class times can be passed to as.character(.), or substr(.,1,5), or as.numeric(.), see more at \code{\link[chron]{chron}} chron stores as a fraction of a day, if you do as.numeric
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
-#' @examples 
-#' ez.time("5:20:31 am",format="%I:%M:%S %p",out.type="time")  # 5, 05; am AM aM Am OK. %I = 12 hr 
+#' @examples
+#' ez.time("5:20:31 am",format="%I:%M:%S %p",out.type="time")  # 5, 05; am AM aM Am OK. %I = 12 hr
 #' ez.time("15:32", format="%H:%M",out.type="time")  # 5 05 OK.
 #' ez.time("5:2", format="%H:%M",out.type="time")
 ez.time = function(x,ori='SPSS',format="%H:%M",out.type='numeric',...) {
@@ -467,7 +467,7 @@ ez.is.date = function(x) {
 #' @description check if a vector of char, number is convertiable to date type as.Date(as.character(x), format)
 #' @param x a vector of char, number
 #' @param format specify date format. see examples
-#' @param ... other parameters passed to as.Date(...) 
+#' @param ... other parameters passed to as.Date(...)
 #' @return returns a vector of T/F (vectorized because of is.na() used).
 #' @examples
 #' mydate = c("10/11/2012","10-12-2012", 345)
@@ -848,12 +848,12 @@ ez.join = function(sep='',...){
 
 #' wrapper of \code{\link{cat}}
 #' @description wrapper of \code{\link{cat}}
-#' @param ... could be char, num, vector, or mixed (no need to convert type) e.g., 
+#' @param ... could be char, num, vector, or mixed (no need to convert type) e.g.,
 #' \cr        but be careful with factors (in number)--convert with as.character(factor variable)
 #' \cr        ez.print('a=',3)
 #' \cr        ez.print('a=',c(3,'b'))
 #' \cr        ez.print(var,'\\t',p)
-#' \cr        ez.print(c(var,'\\t',p)) 
+#' \cr        ez.print(c(var,'\\t',p))
 #' @param sep default empty
 #' @return each print generates a new line automatically
 #' @details do not use R \code{\link{print}}, not actually printing \\n
@@ -908,42 +908,42 @@ age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
     start <- as.POSIXlt(dob)
     end <- as.POSIXlt(enddate)
     if (precise) {
-        start_is_leap <- ifelse(start$year %% 400 == 0, TRUE, 
+        start_is_leap <- ifelse(start$year %% 400 == 0, TRUE,
                                                         ifelse(start$year %% 100 == 0, FALSE,
                                                                      ifelse(start$year %% 4 == 0, TRUE, FALSE)))
-        end_is_leap <- ifelse(end$year %% 400 == 0, TRUE, 
+        end_is_leap <- ifelse(end$year %% 400 == 0, TRUE,
                                                     ifelse(end$year %% 100 == 0, FALSE,
                                                                  ifelse(end$year %% 4 == 0, TRUE, FALSE)))
     }
     if (units == 'days') {
         result <- difftime(end, start, units = 'days')
     } else if (units == 'months') {
-        months <- vapply(mapply(seq, as.POSIXct(start), as.POSIXct(end), 
-                                                        by = 'months', SIMPLIFY = FALSE), 
+        months <- vapply(mapply(seq, as.POSIXct(start), as.POSIXct(end),
+                                                        by = 'months', SIMPLIFY = FALSE),
                                          length, FUN.VALUE = length(start)) - 1
         # length(seq(start, end, by='month')) - 1
         if (precise) {
             month_length_end <- ifelse(end$mon == 1 & end_is_leap, 29,
-                                                                 ifelse(end$mon == 1, 28, 
-                                                                                ifelse(end$mon %in% c(3, 5, 8, 10), 
+                                                                 ifelse(end$mon == 1, 28,
+                                                                                ifelse(end$mon %in% c(3, 5, 8, 10),
                                                                                              30, 31)))
-            month_length_prior <- ifelse((end$mon - 1) == 1 & start_is_leap, 29, 
-                                                                     ifelse((end$mon - 1) == 1, 28, 
-                                                                                ifelse((end$mon - 1) %in% c(3, 5, 8, 10), 
+            month_length_prior <- ifelse((end$mon - 1) == 1 & start_is_leap, 29,
+                                                                     ifelse((end$mon - 1) == 1, 28,
+                                                                                ifelse((end$mon - 1) %in% c(3, 5, 8, 10),
                                                                                                  30, 31)))
             month_frac <- ifelse(end$mday > start$mday,
                                                      (end$mday - start$mday) / month_length_end,
-                                                     ifelse(end$mday < start$mday, 
-                                                                    (month_length_prior - start$mday) / 
-                                                                        month_length_prior + 
+                                                     ifelse(end$mday < start$mday,
+                                                                    (month_length_prior - start$mday) /
+                                                                        month_length_prior +
                                                                         end$mday/month_length_end, 0.0))
             result <- months + month_frac
         }else{
             result <- months
         }
     } else if (units == 'years') {
-        years <- vapply(mapply(seq, as.POSIXct(start), as.POSIXct(end), 
-                                                     by = 'years', SIMPLIFY = FALSE), 
+        years <- vapply(mapply(seq, as.POSIXct(start), as.POSIXct(end),
+                                                     by = 'years', SIMPLIFY = FALSE),
                                         length, FUN.VALUE = length(start)) - 1
         if (precise) {
             start_length <- ifelse(start_is_leap, 366, 365)
@@ -956,7 +956,7 @@ age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
                                                 end$yday)
             year_frac <- ifelse(start_day < end_day,
                                                     (end_day - start_day)/end_length,
-                                                    ifelse(start_day > end_day, 
+                                                    ifelse(start_day > end_day,
                                                                  (start_length - start_day) / start_length +
                                                                      end_day / end_length, 0.0))
             result <- years + year_frac
@@ -970,20 +970,20 @@ age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
 }
 
 #' Function to calculate age from date of birth.
-#' @description This function calculates age in days, months, or years from a 
-#' date of birth to another arbitrary date. This returns a numeric vector in 
+#' @description This function calculates age in days, months, or years from a
+#' date of birth to another arbitrary date. This returns a numeric vector in
 #' the specified units.
 #' @param dob a vector of class \code{Date} representing the date of birth/start date
-#' @param enddate a vector of class Date representing the when the observation's 
+#' @param enddate a vector of class Date representing the when the observation's
 #' age is of interest, defaults to current date.
-#' @param units character, which units of age should be calculated? allowed values are 
+#' @param units character, which units of age should be calculated? allowed values are
 #' days, months, and years
-#' @param precise logical indicating whether or not to calculate with leap year 
+#' @param precise logical indicating whether or not to calculate with leap year
 #' and leap second precision. If F, returns an integer.
 #' @return A numeric vector of ages the same length as the dob vector (if dob or enddate is NA, return NA as well--I hacked this)
 #' @source This function was developed in part from this response on the R-Help mailing list.
-#' @seealso See also \code{\link{difftime}} which this function uses and mimics 
-#' some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}} 
+#' @seealso See also \code{\link{difftime}} which this function uses and mimics
+#' some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.convertible}} \code{\link{ez.age}}
 #' @author Jason P. Becker from package eeptools (sligthly modified by Jerry)
 #' @export
 #' @examples
@@ -1062,7 +1062,7 @@ ez.blank2na = function(x,na.strings=c('','.','NA','na','N/A','n/a','NaN','nan'))
         if (!is.null(na.strings)) {
             # convert to NA
             x[x %in% na.strings] = NA
-            # also remember to remove na.strings from value labels 
+            # also remember to remove na.strings from value labels
             labs1 = labs1[! labs1 %in% na.strings]
             labs2 = labs2[! labs2 %in% na.strings]
         }
@@ -1088,11 +1088,11 @@ ez.blank2na = function(x,na.strings=c('','.','NA','na','N/A','n/a','NaN','nan'))
         if (!is.null(na.strings)) {
             # convert to NA
             x[x %in% na.strings] = NA
-            # also remember to remove na.strings from value labels 
+            # also remember to remove na.strings from value labels
             labs1 = labs1[! labs1 %in% na.strings]
             labs2 = labs2[! labs2 %in% na.strings]
         }
-        
+
         # NULL removes the attr, but '' results in empty attr
         attr(x, 'label') <- lab
         attr(x, 'labels') <- labs1

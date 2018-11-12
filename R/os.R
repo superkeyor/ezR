@@ -161,7 +161,7 @@ ez.ver = function(pkg=NULL){
         # ip = ip[is.na(ip$Priority),1:2,drop=FALSE]
         ip = ip[,1:2,drop=FALSE]
         ipnames = row.names(ip)
-        rownames(ip) <- NULL 
+        rownames(ip) <- NULL
         print(ip)
         print(paste0(ipnames,collapse = ','))
 
@@ -326,7 +326,7 @@ ez.execute = system
 
 #' join path
 #' @description join path
-#' @note \code{\link{file.path}} cannot handle/ignore trailing slash, 
+#' @note \code{\link{file.path}} cannot handle/ignore trailing slash,
 #' internally trim double+ and trailing slashes, though some OS treats multiple slashes as one
 #' alternative: paste(..., sep=.Platform$file.sep)
 #' @export
@@ -348,7 +348,7 @@ ez.jp = ez.joinpath
 #' # returns
 #' # $dir
 #' # [1] "/Users/jerry/Downloads"
-#' 
+#'
 #' # $file
 #' # [1] "026999397379845a"
 #'
@@ -410,14 +410,14 @@ ez.csf <- function() {
         ls_vars = ls(sys.frames()[[1]])
         if ("fileName" %in% ls_vars) {
             # Source'd via RStudio
-            return(normalizePath(sys.frames()[[1]]$fileName)) 
+            return(normalizePath(sys.frames()[[1]]$fileName))
         } else {
             if (!is.null(sys.frames()[[1]]$ofile)) {
             # Source'd via R console
             return(normalizePath(sys.frames()[[1]]$ofile))
             } else {
                 # RStudio Run Selection
-                # http://stackoverflow.com/a/35842176/2292993  
+                # http://stackoverflow.com/a/35842176/2292993
                 return(normalizePath(rstudioapi::getActiveDocumentContext()$path))
             }
         }
@@ -464,7 +464,7 @@ ez.ls = function(path='.', pattern=NULL, full=TRUE, hidden=FALSE){
                        full.names = TRUE, recursive = FALSE,
                        ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
     isfiles = !(file.info(files)$isdir)
-    
+
     if (full) {
         result=files[isfiles]
     } else {
@@ -615,7 +615,7 @@ ez.mv = function(from,to){
 #' @param to email address, if multiple seperated by comma
 #' @param subject 'Gmail from R'
 #' @param htmlbody '<b>Gmailr</b> is a <i>very</i> handy package!' or 'Email using R.'
-#' @param attachment default NULL, 'BazaarQueriesforURLData.txt' 
+#' @param attachment default NULL, 'BazaarQueriesforURLData.txt'
 #' @return returns nothing
 #' @note first-time use will auto pop url to save secret file, or manually gmailr::gmail_auth('compose') to generate .httr-oauth
 #' @export

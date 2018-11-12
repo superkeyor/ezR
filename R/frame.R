@@ -504,7 +504,7 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
         if (print2screen) {
             labs = paste0(names(labs), '[', labs, ']')
             labs = sprintf('%-36s',labs)
-            cat('Renamed level names: \n') 
+            cat('Renamed level names: \n')
             cat(paste0(labs, ' --> ', orn, collapse = '\n'), '\n')
             cat('\nFirst two items:\n')
             firstTwo=sprintf('%-36s',paste0(firstTwo,collapse=', '))

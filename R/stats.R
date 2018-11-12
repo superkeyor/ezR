@@ -234,7 +234,7 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 #' @export
 ez.x = function(...,debug=NULL) {
     debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
-    
+
     # overwritten by 'debug' passed to function
     if (is.null(debug)) {
         if (debugMode) {
