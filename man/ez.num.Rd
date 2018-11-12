@@ -4,7 +4,7 @@
 \alias{ez.num}
 \title{convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric}
 \usage{
-ez.num(x, col = NULL, force = FALSE, ...)
+ez.num(x, col = NULL, force = FALSE, print2screen = TRUE, ...)
 }
 \arguments{
 \item{x}{a character vector, data frame, list, or a factor}

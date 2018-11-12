@@ -329,6 +329,7 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
     # trick to provide an option (set to.data.frame=F to get a list)
     # foreign::read.spss auto string->factor (since 0.8-69 you are allowed to pass stringsAsFactors)
     # internally, foreign::read.spss calls as.data.frame which is udner the influence of stringsAsFactors
+    # options() while setting, returns old option if you specify a variable to catch the return
     oldOpts = options(stringsAsFactors=stringsAsFactors)
     result = suppressWarnings(foreign::read.spss(file, use.value.labels = lbl2val, to.data.frame = TRUE,
                                                  max.value.labels = Inf, trim.factor.names = TRUE,

@@ -292,7 +292,7 @@ ez.pause = function(){
 #' sapply(ez.num(d), class)
 #'        char   fake_char         fac    char_fac  mixed_char         num
 #' "character"   "integer"    "factor"    "factor" "character"   "integer"
-ez.num = function(x, col=NULL, force=FALSE, ...){
+ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
         # as.numeric(factor(5:10)) # not what you'd expect
@@ -302,7 +302,11 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
         # ## the same, considerably (for long factors) more efficient:
         # as.numeric(levels(f))[f]
         # you get warning
-       if (force) result = suppressWarnings(as.numeric(levels(x))[x]) else result=x
+        if (force) result = suppressWarnings(as.numeric(levels(x))[x]) else result=x
+        if (print2screen) {
+            newNAs = length(which( (!is.na(x)) & is.na(result) ))
+            if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
+        }
     } else if (is.data.frame(x) && is.null(col)) {
         # check before is.list, because a data frame is a list, but not the other way
         # https://stackoverflow.com/a/33050704/2292993
@@ -332,6 +336,10 @@ ez.num = function(x, col=NULL, force=FALSE, ...){
         # utils::type.convert(c(1,2,'a'), as.is = F) -> fac  ['1' '2' 'a']
         # utils::type.convert(c(1,2,'a'), as.is = T) -> vec  ('1' '2' 'a')
         if (!force) result = utils::type.convert(x, as.is = TRUE, ...) else result=suppressWarnings(as.numeric(x))
+        if (print2screen) {
+            newNAs = length(which( (!is.na(x)) & is.na(result) ))
+            if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
+        }
     }
     return(result)
 }
