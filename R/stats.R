@@ -199,6 +199,10 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     # labels' length should match #variables selected
     if ((!is.null(labels)) & nrow(results)==length(labels)+1) {results['varlbl']=c(labels,''); results=results %>% ez.move('varlbl before class')}
 
+    # add col number in excel style
+    results['excelcol']=ez.xlcolconv(1:(nrow(results)-1))
+    results %<>% ez.move('excelcol first')
+
     ez.savexlist(list('row'=results0,'col'=results,'dat'=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
 
     # give some time to open the file and then on.exit will delete it
