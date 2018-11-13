@@ -340,8 +340,12 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
         cols = if (ncol(v)==0) integer(0) else c(first3cols,last3cols)
         print(v[rows,cols,drop=F])
 
+        cat('\n')
         cat(v.cols)
-        cat(sprintf('\n%-25s\tDim: %d x %d\t#EmptyCols: %d\t#NA: %d\n%s\n', v.class, v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
+        cat('\n')
+
+        cat(sprintf('\nDim: %d x %d\t(#EmptyCols: %d\t#NA: %d)\n%s\n', v.nrow, v.ncol, v.n.colNumsAllNAs, v.missing, v.classes))
+        cat(sprintf('\n%-25s\n',v.class))
         cat(sprintf('attributes: %s\n',v.attrs))
     } else if (is.list(x)) {
         for (l in names(x)) {
