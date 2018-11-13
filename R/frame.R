@@ -562,11 +562,11 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
     } else if (is.data.frame(x) & !is.null(cols)) {
         cols=ez.selcol(x,cols)
         # for (col in cols) { x[[col]] = ez.factorelevel(x[[col]]) }
-        x[cols] = lapply(x[cols],function(e){ez.factorelevel(e)})
+        x[cols] = lapply(x[cols],function(e,print2screen){ez.factorelevel(e,print2screen=print2screen)},print2screen=print2screen)
     } else if (is.data.frame(x) & is.null(cols)) {
         # x = dplyr::mutate_all(x,ez.factorelevel)
         # mutate gets rid of variable labels
-        x[] = lapply(x,ez.factorelevel)
+        x[] = lapply(x,ez.factorelevel,print2screen=print2screen)
     }
     return(x)
 }
@@ -1051,8 +1051,9 @@ ez.count = function(x, val=NA, col=NULL, dim=3) {
     if (is.list(x) & !is.data.frame(x)) x=unlist(x,recursive=T)
     # trimws trick to convert to corresponding character vector
     # https://stackoverflow.com/a/53272969/2292993
-    if (is.factor(x)) x=trimws(x) 
+    if (is.factor(x)) x=trimws(x)
     if (is.vector(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
+    print(class(x))
 
     if (is.data.frame(x) & !is.null(col)) {
         col = (ez.selcol(x,col))
