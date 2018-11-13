@@ -36,6 +36,78 @@ ez.quoted = function(v){
     base::strsplit(paste0('"', v, '"',collapse = '/|||/'), split = '/|||/',fixed = TRUE)[[1]]
 }
 
+#' alias of \code{\link{class}}
+#' @description alias of \code{\link{class}}
+#' @export
+ez.typeof = class
+
+#' alias of \code{\link{Sys.sleep}}, in seconds
+#' @description alias of \code{\link{Sys.sleep}}, in seconds
+#' @seealso \code{\link{ez.pause}}
+#' @export
+ez.sleep = Sys.sleep
+
+#' profile
+#' @description profile
+#' @export
+ez.profile = function(){system("open -a 'Sublime Text' $HOME/.bash_profile")}
+
+#' rprofile
+#' @description rprofile
+#' @export
+ez.rprofile = function(){system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStudio/.Rprofile")}
+
+#' moment
+#' @description current date,time in string
+#' @param format see example or https://www.stat.berkeley.edu/~s133/dates.html
+#' @return returns a string
+#' @examples
+#' # %a  Abbreviated weekday
+#' # %A  Full weekday
+#' # %b  Abbreviated month
+#' # %B  Full month
+#' # %c  Locale-specific date and time
+#' # %d  Decimal date
+#' # %H  Decimal hours (24 hour)
+#' # %I  Decimal hours (12 hour)
+#' # %j  Decimal day of the year
+#' # %m  Decimal month
+#' # %M  Decimal minute
+#' # %p  Locale-specific AM/PM
+#' # %S  Decimal second
+#' # %U  Decimal week of the year (starting on Sunday)
+#' # %w  Decimal Weekday (0=Sunday)
+#' # %W  Decimal week of the year (starting on Monday)
+#' # %x  Locale-specific Date
+#' # %X  Locale-specific Time
+#' # %y  2-digit year
+#' # %Y  4-digit year
+#' # %z  Offset from GMT
+#' # %Z  Time zone (character)
+#' @export
+ez.moment = function(format='%Y-%m-%d_%H-%M-%S') {
+    moment = Sys.time()
+    result = format(moment,format)
+    return(result)
+}
+
+#' pause the execution of an R script until a user presses the Enter key, no parameter () needed
+#' @description pause the execution of an R script until a user presses the Enter key, no parameter () needed
+#' @seealso \code{\link{ez.sleep}}
+#' @export
+ez.pause = function(){
+    # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
+    if (interactive())
+    {
+        invisible(readline(prompt = "Press <Enter> to continue..."))
+    }
+    else
+    {
+        cat("Press <Enter> to continue...")
+        invisible(readLines(file("stdin"), 1))
+    }
+}
+
 #' Empty Value
 #'
 #' Rails-inspired helper that checks if vector values are "empty", i.e. if it's: \code{NULL}, zero-length, \code{NA}, \code{NaN}, \code{FALSE}, an empty string. Note that unlike its native R \code{is.<something>} sibling functions, \code{is.empty} is vectorised (hence the "values").
@@ -122,78 +194,6 @@ ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/
     return((result))
 }
 
-#' alias of \code{\link{class}}
-#' @description alias of \code{\link{class}}
-#' @export
-ez.typeof = class
-
-#' alias of \code{\link{Sys.sleep}}, in seconds
-#' @description alias of \code{\link{Sys.sleep}}, in seconds
-#' @seealso \code{\link{ez.pause}}
-#' @export
-ez.sleep = Sys.sleep
-
-#' profile
-#' @description profile
-#' @export
-ez.profile = function(){system("open -a 'Sublime Text' $HOME/.bash_profile")}
-
-#' rprofile
-#' @description rprofile
-#' @export
-ez.rprofile = function(){system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStudio/.Rprofile")}
-
-#' moment
-#' @description current date,time in string
-#' @param format see example or https://www.stat.berkeley.edu/~s133/dates.html
-#' @return returns a string
-#' @examples
-#' # %a  Abbreviated weekday
-#' # %A  Full weekday
-#' # %b  Abbreviated month
-#' # %B  Full month
-#' # %c  Locale-specific date and time
-#' # %d  Decimal date
-#' # %H  Decimal hours (24 hour)
-#' # %I  Decimal hours (12 hour)
-#' # %j  Decimal day of the year
-#' # %m  Decimal month
-#' # %M  Decimal minute
-#' # %p  Locale-specific AM/PM
-#' # %S  Decimal second
-#' # %U  Decimal week of the year (starting on Sunday)
-#' # %w  Decimal Weekday (0=Sunday)
-#' # %W  Decimal week of the year (starting on Monday)
-#' # %x  Locale-specific Date
-#' # %X  Locale-specific Time
-#' # %y  2-digit year
-#' # %Y  4-digit year
-#' # %z  Offset from GMT
-#' # %Z  Time zone (character)
-#' @export
-ez.moment = function(format='%Y-%m-%d_%H-%M-%S') {
-    moment = Sys.time()
-    result = format(moment,format)
-    return(result)
-}
-
-#' pause the execution of an R script until a user presses the Enter key, no parameter () needed
-#' @description pause the execution of an R script until a user presses the Enter key, no parameter () needed
-#' @seealso \code{\link{ez.sleep}}
-#' @export
-ez.pause = function(){
-    # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
-    if (interactive())
-    {
-        invisible(readline(prompt = "Press <Enter> to continue..."))
-    }
-    else
-    {
-        cat("Press <Enter> to continue...")
-        invisible(readLines(file("stdin"), 1))
-    }
-}
-
 #' convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @description convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric
 #' @param x a character vector, data frame, list, or a factor
@@ -201,9 +201,10 @@ ez.pause = function(){
 #' \cr        if x is a data frame, col is specified (e.g., "cond"), convert that col only
 #' \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 #' \cr        if x is not a data frame, col is ignored
-#' @param force T/F. a string vec/col that only has string of num, eg c('1','2')->c(1,2) will always become num.
-#' \cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce). Otherwise, factor(1:2)-->factor(1:2)
+#' @param force T/F. a string vec/col/factor that only has string of num or na.strings, eg c('1','2')->c(1,2) will always become num.
+#' \cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce).
 #' \cr See example for more
+#' @param na.strings case sensitive strings that will be coverted to NA even if force=F. The function will NOT do a trimws(x,'both') before conversion. 
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
 #' @return returns a converted vector, data frame
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
@@ -213,29 +214,37 @@ ez.pause = function(){
 #' @family data transformation functions
 #' @export
 #' @examples
-#' ez.num(c(1,2,3,NA),force=T)        # -> 1 2 3 NA numeric vector
-#' ez.num(c(1,2,3,NA),force=F)        # -> 1 2 3 NA int vector
-#' ez.num(c(1,'2','a',3,NA))          # -> same chara vector
-#' ez.num(c(1,'2',3,NA))              # -> 1 2 3 NA int vector
-#' ez.num(c(1,'',3))                  # -> 1 NA 3 int vector
-#' ez.num(c(1,'',3),froce=T)          # -> 1 NA 3 numeric vector
-#' ez.num(factor(c(1,'2','a',3,NA)),force=F)  # factor['1','2','a','3', 'NA']
-#' ez.num(factor(c(1,'2','a',3,NA)),force=T)  # -> 1 2 NA 3 NA int (warning is suppressed)
-#' ez.num(factor(c(1,'2',3,NA)),force=F)  # factor['1','2','3', NA]
-#' ez.num(factor(c(1,'2',3,NA)),force=T)  # 1 2 3 NA numeric
-#' ez.num(factor(c(1,2,3,NA)),force=F)  # factor['1','2','3', NA]
-#' ez.num(factor(c(1,2,3,NA)),force=T)  # 1 2 3 NA numeric
+#' ez.num(c(1,2,3,NA),force=T)                        # -> c(1,2,3,NA), no change, directly pass through
+#' ez.num(c(1,2,3,NA),force=F)                        # -> c(1,2,3,NA), no change, directly pass through
+#'         
+#' ez.num(c('1','2','3',NA),force=F)                  # -> c(1,2,3,NA)
+#' ez.num(c('1','2','3',NA),force=T)                  # -> c(1,2,3,NA)
+#' ez.num(c('1','','NA',"N/A",NA),force=F)            # -> c(1,NA,NA,NA,NA)  # na.strings treated as NA even if force=F
+#' ez.num(c('1','','NA',"N/A",NA),force=T)            # -> c(1,NA,NA,NA,NA)
+#'         
+#' ez.num(c('1','N/A','a',"NA",NA),force=F)           # -> same vector # more than na.strings
+#' ez.num(c('1','N/A','a',"NA",NA),force=T)           # -> c(1,NA,NA,NA,NA)
+#'         
+#' ez.num(factor(c(1,2,3,NA)),force=F)                # c(1,2,3,NA), "numeric" factor to numeric vector even if force=F
+#' ez.num(factor(c(1,2,3,NA)),force=T)                # c(1,2,3,NA)
+#' ez.num(factor(c('1','2','3',NA)),force=F)          # -> c(1,2,3,NA), "numeric like" factor to numeric vector even if force=F
+#' ez.num(factor(c('1','2','3',NA)),force=T)          # -> c(1,2,3,NA)
+#' ez.num(factor(c('1','','NA',"N/A",NA)),force=F)    # -> c(1,NA,NA,NA,NA)  # na.strings treated as NA even if force=F
+#' ez.num(factor(c('1','','NA',"N/A",NA)),force=T)    # -> c(1,NA,NA,NA,NA)
+
+#' ez.num(factor(c('1','N/A','a',"NA",NA)),force=F)   # -> same factor # more than na.strings
+#' ez.num(factor(c('1','N/A','a',"NA",NA)),force=T)   # -> c(1,NA,NA,NA,NA)
 #'
 #' d <- data.frame(char = letters[1:5],
 #'                 fake_char = as.character(1:5),
 #'                 fac = factor(1:5),
 #'                 char_fac = factor(letters[1:5]),
-#'                 mixed_char = c(1,2,3,'4','f'),
+#'                 mixed_char = c(1,2,'N/A','4','f'),
 #'                 num = 1:5, stringsAsFactors = FALSE)
 #' #   char fake_char fac char_fac mixed_char num
 #' # 1    a         1   1        a          1   1
 #' # 2    b         2   2        b          2   2
-#' # 3    c         3   3        c          3   3
+#' # 3    c         3   3        c        N/A   3
 #' # 4    d         4   4        d          4   4
 #' # 5    e         5   5        e          f   5
 #' sapply(d, class)
@@ -244,7 +253,13 @@ ez.pause = function(){
 #' sapply(ez.num(d), class)
 #'        char   fake_char         fac    char_fac  mixed_char         num
 #' "character"   "integer"    "factor"    "factor" "character"   "integer"
-ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
+#' ez.num(d,col=NULL,force=F)
+#' ez.num(d,col=NULL,force=T)
+#' ez.num(d,col=c("char","mixed_char"),force=F)
+#' ez.num(d,col=c("char","mixed_char"),force=T)
+ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','.','NA','na','N/A','n/a','NaN','nan'), ...){
+    oldNAs = ez.count(x)
+
     if (is.factor(x)) {
         # http://stackoverflow.com/a/22701462/2292993
         # as.numeric(factor(5:10)) # not what you'd expect
@@ -253,25 +268,33 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
         # as.numeric(as.character(f))
         # ## the same, considerably (for long factors) more efficient:
         # as.numeric(levels(f))[f]
-        # you get warning
-        if (force) result = suppressWarnings(as.numeric(levels(x))[x]) else result=x
-        if (print2screen) {
-            newNAs = length(which( (!is.na(x)) & is.na(result) ))
-            if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
+        if (force) {
+            # you get warning, if there is a non-numeric string
+            result = suppressWarnings(as.numeric(levels(x))[x])
+        } else {
+            if (all(ez.is.numeric.like(x,na.strings=na.strings))) {
+                # numeric like, could still gets warning for na.strings
+                result = suppressWarnings(as.numeric(levels(x))[x])
+            } else {
+                result=x
+            }
         }
+
     } else if (is.data.frame(x) && is.null(col)) {
         # check before is.list, because a data frame is a list, but not the other way
         # https://stackoverflow.com/a/33050704/2292993
         if (!force) {
-            x[] = rapply(x, utils::type.convert, classes = "character", how = "replace", as.is = TRUE)
+            x[] = rapply(x, function(e,as.is,na.strings,...) {
+                if (all(ez.is.numeric.like(e,na.strings=na.strings))){
+                    result = utils::type.convert(e, as.is = as.is, na.strings=na.strings, ...)
+                } else {
+                    result = e
+                }
+                return(result)
+                }, classes = "character", how = "replace", as.is = TRUE, na.strings=na.strings, ...)
         } else {
-            oldNAs = ez.count(x)
             # x = dplyr::mutate_all(x, funs(suppressWarnings(as.numeric(as.character(.)))))
             x[] = lapply( x, function(e){suppressWarnings(as.numeric(as.character(e)))} )
-            if (print2screen) {
-                newNAs = ez.count(x) - oldNAs
-                if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
-            }
         }
         result = x
     } else if (is.data.frame(x) && !is.null(col)) {
@@ -282,26 +305,37 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, ...){
         #     x[col] = ez.num(x[col],force=force)
         #     result=x
         # }
-        oldNAs = ez.count(x[cols])
-        x[cols] = lapply(x[cols],function(e,force){ez.num(e,force=force,print2screen=F)},force=force)
-        if (print2screen) {
-            newNAs = ez.count(x[cols]) - oldNAs
-            if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
-        }
+        x[cols] = lapply(x[cols],function(e,force,na.strings){ez.num(e,force=force,print2screen=F,na.strings=na.strings)},force=force,na.strings=na.strings)
         result = x
     } else if (is.list(x)){
-        result = utils::type.convert(as.character(unlist(x)), as.is = TRUE, ...)
-    } else {
-        # cannot pass factor to type.convert()
-        # utils::type.convert(c(1,2,'3'), as.is = F) -> int
-        # utils::type.convert(c(1,2,'3'), as.is = T) -> int
-        # utils::type.convert(c(1,2,'a'), as.is = F) -> fac  ['1' '2' 'a']
-        # utils::type.convert(c(1,2,'a'), as.is = T) -> vec  ('1' '2' 'a')
-        if (!force) result = utils::type.convert(as.character(x), as.is = TRUE, ...) else result=suppressWarnings(as.numeric(as.character(x)))
-        if (print2screen) {
-            newNAs = length(which( (!is.na(x)) & is.na(result) ))
-            if (newNAs>0) ez.pprint(sprintf('Attention: %d NAs introduced when converting to num', newNAs))
+        result = utils::type.convert(as.character(unlist(x)), as.is = TRUE, na.strings=na.strings, ...)
+    } else if (is.character(x)){
+        # cannot pass factor, numeric, logic to type.convert()
+
+        # utils::type.convert(c(1,'','3',"NA"), as.is = F) -> int c(1,NA,3,NA), because can all be converted to num (default na.strings includes 'NA' and ''), as.is essentially no effect
+        # utils::type.convert(c(1,'','3',"NA"), as.is = T)
+        # utils::type.convert(c(1,2,'3'), as.is = F) -> int, because can all be converted to num, as.is essentially no effect
+        # utils::type.convert(c(1,2,'3'), as.is = T)
+        # utils::type.convert(c(1,'','3',"NA",'a'), as.is = F)  --> factor['1','','3',NA,'a']  '' not considered as NA in character vector
+        # utils::type.convert(c(1,'','3',"NA",'a'), as.is = T)  --> vector('1','','3',NA,'a')  '' not considered as NA in character vector
+        # utils::type.convert(c(1,2,'a'), as.is = F) -> fac  ['1' '2' 'a'], cannot be converted to num, as.is=F gets factor
+        # utils::type.convert(c(1,2,'a'), as.is = T) -> vec  ('1' '2' 'a'), cannot be converted to num
+        if (!force) {
+            if (all(ez.is.numeric.like(x,na.strings=na.strings))){
+                result = utils::type.convert(x, as.is = TRUE, na.strings=na.strings, ...)
+            } else {
+                result = x
+            }
+        } else {
+            result=suppressWarnings(as.numeric(as.character(x)))
         }
+    } else {
+        result=x
+    }
+
+    if (print2screen) {
+        newNAs = ez.count(result) - oldNAs
+        if (newNAs>0) ez.pprint(sprintf('Note: %d NAs introduced when converting to num', newNAs))
     }
     return(result)
 }

@@ -13,6 +13,9 @@ ez.is.empty(x, trim = TRUE, ...)
 
 \item{...}{additional arguments for \code{\link{sapply}}}
 }
+\value{
+a logical vector (vectorized).
+}
 \description{
 Rails-inspired helper that checks if vector values are "empty", i.e. if it's: \code{NULL}, zero-length, \code{NA}, \code{NaN}, \code{FALSE}, an empty string. Note that unlike its native R \code{is.<something>} sibling functions, \code{is.empty} is vectorised (hence the "values").
 }

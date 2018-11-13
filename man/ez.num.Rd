@@ -4,7 +4,8 @@
 \alias{ez.num}
 \title{convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric}
 \usage{
-ez.num(x, col = NULL, force = TRUE, print2screen = TRUE, ...)
+ez.num(x, col = NULL, force = FALSE, print2screen = TRUE,
+  na.strings = c("", ".", "NA", "na", "N/A", "n/a", "NaN", "nan"), ...)
 }
 \arguments{
 \item{x}{a character vector, data frame, list, or a factor}
@@ -14,9 +15,11 @@ ez.num(x, col = NULL, force = TRUE, print2screen = TRUE, ...)
 \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 \cr        if x is not a data frame, col is ignored}
 
-\item{force}{T/F. a string vec/col that only has string of num, eg c('1','2')->c(1,2) will always become num.
-\cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce). Otherwise, factor(1:2)-->factor(1:2)
+\item{force}{T/F. a string vec/col/factor that only has string of num or na.strings, eg c('1','2')->c(1,2) will always become num.
+\cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce).
 \cr See example for more}
+
+\item{na.strings}{case sensitive strings that will be coverted to NA even if force=F. The function will NOT do a trimws(x,'both') before conversion.}
 }
 \value{
 returns a converted vector, data frame
@@ -32,26 +35,36 @@ Both value and variable label attributes will be removed when converting variabl
 see \url{http://stackoverflow.com/a/22701462/2292993}
 }
 \examples{
-ez.num(c(1,'2','a',3,NA))          # -> same chara vector
-ez.num(c(1,'2',3,NA))              # -> 1 2 3 NA int vector
-ez.num(c(1,'',3))                  # -> 1 NA 3 int vector
-ez.num(c(1,'',3),froce=T)          # -> 1 NA 3 numeric vector
-ez.num(factor(c(1,'2','a',3,NA)),force=T)  # -> 1 2 NA 3 NA int (warning is suppressed)
-ez.num(factor(c(1,'2','a',3, NA)),force=F)  # factor['1','2','a','3', 'NA']
-ez.num(factor(c(1,'2',3, NA)),force=F)  # factor['1','2','3', NA]
-ez.num(factor(c(1,2,3, NA)),force=F)  # factor['1','2','3', NA]
-ez.num(factor(c(1,'2',3,NA)),force=T)  # 1 2 3 NA int
+ez.num(c(1,2,3,NA),force=T)                        # -> c(1,2,3,NA), no change, directly pass through
+ez.num(c(1,2,3,NA),force=F)                        # -> c(1,2,3,NA), no change, directly pass through
+        
+ez.num(c('1','2','3',NA),force=F)                  # -> c(1,2,3,NA)
+ez.num(c('1','2','3',NA),force=T)                  # -> c(1,2,3,NA)
+ez.num(c('1','','NA',"N/A",NA),force=F)            # -> c(1,NA,NA,NA,NA)  # na.strings treated as NA even if force=F
+ez.num(c('1','','NA',"N/A",NA),force=T)            # -> c(1,NA,NA,NA,NA)
+        
+ez.num(c('1','N/A','a',"NA",NA),force=F)           # -> same vector # more than na.strings
+ez.num(c('1','N/A','a',"NA",NA),force=T)           # -> c(1,NA,NA,NA,NA)
+        
+ez.num(factor(c(1,2,3,NA)),force=F)                # c(1,2,3,NA), "numeric" factor to numeric vector even if force=F
+ez.num(factor(c(1,2,3,NA)),force=T)                # c(1,2,3,NA)
+ez.num(factor(c('1','2','3',NA)),force=F)          # -> c(1,2,3,NA), "numeric like" factor to numeric vector even if force=F
+ez.num(factor(c('1','2','3',NA)),force=T)          # -> c(1,2,3,NA)
+ez.num(factor(c('1','','NA',"N/A",NA)),force=F)    # -> c(1,NA,NA,NA,NA)  # na.strings treated as NA even if force=F
+ez.num(factor(c('1','','NA',"N/A",NA)),force=T)    # -> c(1,NA,NA,NA,NA)
+ez.num(factor(c('1','N/A','a',"NA",NA)),force=F)   # -> same factor # more than na.strings
+ez.num(factor(c('1','N/A','a',"NA",NA)),force=T)   # -> c(1,NA,NA,NA,NA)
 
 d <- data.frame(char = letters[1:5],
                 fake_char = as.character(1:5),
                 fac = factor(1:5),
                 char_fac = factor(letters[1:5]),
-                mixed_char = c(1,2,3,'4','f'),
+                mixed_char = c(1,2,'N/A','4','f'),
                 num = 1:5, stringsAsFactors = FALSE)
 #   char fake_char fac char_fac mixed_char num
 # 1    a         1   1        a          1   1
 # 2    b         2   2        b          2   2
-# 3    c         3   3        c          3   3
+# 3    c         3   3        c        N/A   3
 # 4    d         4   4        d          4   4
 # 5    e         5   5        e          f   5
 sapply(d, class)
@@ -60,6 +73,10 @@ sapply(d, class)
 sapply(ez.num(d), class)
        char   fake_char         fac    char_fac  mixed_char         num
 "character"   "integer"    "factor"    "factor" "character"   "integer"
+ez.num(d,col=NULL,force=F)
+ez.num(d,col=NULL,force=T)
+ez.num(d,col=c("char","mixed_char"),force=F)
+ez.num(d,col=c("char","mixed_char"),force=T)
 }
 \seealso{
 \code{\link{ez.2value}}
