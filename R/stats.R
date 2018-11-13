@@ -398,10 +398,10 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
         }
 
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts/Levels (Incl NA): \n%s\n',v.levels %>% toString(width=printcn)))
+            cat(sprintf('Counts/Levels (Incl NA): \n%s\n\n',v.levels %>% toString(width=printcn)))
         }
-        cat(sprintf("\nUniques (Incl NA, NA might be printed as 'NA'): \n%s\n", v.elements))
-        cat(sprintf('\n#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Non-NA: %d\t#Total: %d\n', v.unique, v.missing, v.missing*100/v.n, v.n-v.missing, v.n))
+        cat(sprintf("Uniques (Incl NA, NA might be printed as 'NA'): \n%s\n\n", v.elements))
+        cat(sprintf('#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Non-NA: %d\t#Total: %d\n', v.unique, v.missing, v.missing*100/v.n, v.n-v.missing, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
         }
