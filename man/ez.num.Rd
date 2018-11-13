@@ -19,7 +19,7 @@ ez.num(x, col = NULL, force = FALSE, print2screen = TRUE,
 \cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce). Otherwise factor untouched, factor(1:2)->factor(1:2)
 \cr See example for more}
 
-\item{na.strings}{case sensitive strings that will be coverted to NA even if force=F. The function will NOT do a trimws(x,'both') before conversion.}
+\item{na.strings}{case sensitive strings that will be coverted to NA even if force=F. The function will NOT do a trimws(x,'both') before conversion, supposedly up to this step, spaces have already been trimmed.}
 }
 \value{
 returns a converted vector, data frame

@@ -204,7 +204,7 @@ ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/
 #' @param force T/F. a string vec/col that only has string of num or na.strings, eg c('1','2')->c(1,2) will always become num.
 #' \cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce). Otherwise factor untouched, factor(1:2)->factor(1:2)
 #' \cr See example for more
-#' @param na.strings case sensitive strings that will be coverted to NA even if force=F. The function will NOT do a trimws(x,'both') before conversion. 
+#' @param na.strings case sensitive strings that will be coverted to NA even if force=F. The function will NOT do a trimws(x,'both') before conversion, supposedly up to this step, spaces have already been trimmed.
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
 #' @return returns a converted vector, data frame
 #' \cr with \code{\link{ez.2value}} if x is a factor with chars, will be converted to 1 2 3 etc, see its example
