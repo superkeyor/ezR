@@ -5,7 +5,7 @@
 \title{read spss}
 \usage{
 ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = TRUE, blanksAsNA = TRUE, na.strings = c("", "."),
+  stringsAsFactors = FALSE, blanksAsNA = TRUE, na.strings = c("", "."),
   makenames = TRUE, ...)
 }
 \arguments{

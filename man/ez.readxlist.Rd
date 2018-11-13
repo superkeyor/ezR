@@ -5,7 +5,7 @@
 \title{read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package}
 \usage{
 ez.readxlist(file, print2screen = TRUE, tolower = FALSE,
-  stringsAsFactors = TRUE, blanksAsNA = TRUE, na.strings = c("", "."),
+  stringsAsFactors = FALSE, blanksAsNA = TRUE, na.strings = c("", "."),
   makenames = TRUE, ...)
 }
 \arguments{

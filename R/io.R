@@ -117,7 +117,7 @@ ez.readr = readRDS
 #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
 #' @export
-ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
+ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
     result = xlsx::read.xlsx(file, sheetIndex, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -151,7 +151,7 @@ ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=TRUE, b
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
+ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
     result = openxlsx::read.xlsx(file, sheet, detectDates=detectDates, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -185,7 +185,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=TRUE, blanksA
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
+ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
     result = list()
     sheetnames = openxlsx::getSheetNames(file)
     for (i in 1:length(sheetnames)) {
@@ -214,7 +214,7 @@ ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors
 #' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')
 #' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
-ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
+ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
     # internal notes
     # foreign: variable.labels (as df attributes), value.labels
     # haven: label = variable label, labels = value labels
@@ -300,7 +300,7 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 #' @param na.strings only applicable if blanksAsNA=T. e.g., c('','.','NA','na','N/A','n/a','NaN','nan')
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
-ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=TRUE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
+ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
     # internal notes
     # foreign: variable.labels (as df attributes), value.labels
     # haven: label = variable label, labels = value labels
