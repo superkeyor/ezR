@@ -42,6 +42,7 @@ ez.quoted = function(v){
 #' @param x an object to check its emptiness
 #' @param trim trim whitespace? (\code{TRUE} by default)
 #' @param ... additional arguments for \code{\link{sapply}}
+#' @return a logical vector (vectorized).
 #' @examples \dontrun{
 #' is.empty(NULL)     # [1] TRUE
 #' is.empty(c())      # [1] TRUE
@@ -98,53 +99,13 @@ ez.is.empty <- function(x, trim = TRUE, ...) {
         sapply(x, ez.is.empty, trim = trim, ...)
 }
 
-#' Variables
-#'
-#' From \emph{rapport}'s point of view, a \code{variable} is a non-\code{NULL} atomic vector that has no dimension attribute (see \code{dim} for details). This approach bypasses \code{factor} issues with \code{\link{is.vector}}, and also eliminates multidimensional vectors, such as matrices and arrays.
-#' @param x an object to be checked for "variable" format
-#' @return a logical value indicating that provided object is a "variable"
-#' @examples
-#' is.variable(rnorm(100))  # [1] TRUE
-#' is.variable(LETTERS)     # [1] TRUE
-#' is.variable(NULL)        # [1] FALSE
-#' is.variable(mtcars)      # [1] FALSE
-#' is.variable(HairEyeColor[, , 1])  # [1] FALSE
-#' is.variable(list())      # [1] FALSE
-#' @export
-#' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
-ez.is.variable <- function(x){
-    if (base::missing(x))
-        stop('test object not provided')
-    is.atomic(x) & !is.null(x) & is.null(dim(x))
-}
-
-#' Tabular Structure
-#'
-#' Checks if object has "tabular" structure (not to confuse with \code{\link{table}}) - in this particular case, that means \code{\link{matrix}} and \code{\link{data.frame}} objects only.
-#' @param x an object to be checked for "tabular" format
-#' @return a logical value indicating that provided object has tabular structure
-#' @examples
-#' is.tabular(HairEyeColor[, , 1])  # [1] TRUE
-#' is.tabular(mtcars)               # [1] TRUE
-#' is.tabular(table(mtcars$cyl))    # [1] FALSE
-#' is.tabular(rnorm(100))           # [1] FALSE
-#' is.tabular(LETTERS)              # [1] FALSE
-#' is.tabular(pi)                   # [1] FALSE
-#' @export
-#' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
-ez.is.tabular <- function(x){
-    if (base::missing(x))
-        stop('no object to test table')
-    inherits(x, c('matrix', 'data.frame')) && length(dim(x)) == 2
-}
-
 #' Check numeric
 #'
 #' @description check if a str obj is actually numeric
 #' @param x a str vector, or a factor of str vector, or numeric vector. x will be coerced and trimws.
 #' @param na.strings case sensitive strings that will be treated to NA.
 #' @param naAsTrue whether NA (including actual NA and na.strings) will be treated as numeric like
-#' @return a logical value (single value). If all is numeric like, TRUE, otherwise FALSE.
+#' @return a logical vector (vectorized).
 #' @export
 #' @note Using regular expression
 #' \cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","9L",   "1.36e4","1.36E4",    NA, "NA", "","NaN", NaN): 
