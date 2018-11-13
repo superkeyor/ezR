@@ -338,7 +338,7 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','
 
     if (print2screen) {
         newNAs = ez.count(result) - oldNAs
-        if (newNAs>0) ez.pprint(sprintf('Note: %d NAs introduced when converting to num', newNAs))
+        if (newNAs>0) ez.pprint(sprintf('%d NAs introduced when converting to num', newNAs))
     }
     return(result)
 }
