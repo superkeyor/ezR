@@ -15,8 +15,8 @@ ez.num(x, col = NULL, force = FALSE, print2screen = TRUE,
 \cr        if x is a data frame, col is unspecified (i.e., NULL default), convert all cols in x
 \cr        if x is not a data frame, col is ignored}
 
-\item{force}{T/F. a string vec/col/factor that only has string of num or na.strings, eg c('1','2')->c(1,2) will always become num.
-\cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce).
+\item{force}{T/F. a string vec/col that only has string of num or na.strings, eg c('1','2')->c(1,2) will always become num.
+\cr If T, convert everything (factor, etc) to character first then to numeric (no warning for NA coerce). Otherwise factor untouched, factor(1:2)->factor(1:2)
 \cr See example for more}
 
 \item{na.strings}{case sensitive strings that will be coverted to NA even if force=F. The function will NOT do a trimws(x,'both') before conversion.}
@@ -46,11 +46,11 @@ ez.num(c('1','','NA',"N/A",NA),force=T)            # -> c(1,NA,NA,NA,NA)
 ez.num(c('1','N/A','a',"NA",NA),force=F)           # -> same vector # more than na.strings
 ez.num(c('1','N/A','a',"NA",NA),force=T)           # -> c(1,NA,NA,NA,NA)
         
-ez.num(factor(c(1,2,3,NA)),force=F)                # c(1,2,3,NA), "numeric" factor to numeric vector even if force=F
-ez.num(factor(c(1,2,3,NA)),force=T)                # c(1,2,3,NA)
-ez.num(factor(c('1','2','3',NA)),force=F)          # -> c(1,2,3,NA), "numeric like" factor to numeric vector even if force=F
+ez.num(factor(c(1,2,3,NA)),force=F)                # -> factor [1,2,3,NA]
+ez.num(factor(c(1,2,3,NA)),force=T)                # -> c(1,2,3,NA)
+ez.num(factor(c('1','2','3',NA)),force=F)          # -> factor [1,2,3,NA]
 ez.num(factor(c('1','2','3',NA)),force=T)          # -> c(1,2,3,NA)
-ez.num(factor(c('1','','NA',"N/A",NA)),force=F)    # -> c(1,NA,NA,NA,NA)  # na.strings treated as NA even if force=F
+ez.num(factor(c('1','','NA',"N/A",NA)),force=F)    # -> factor ['1','','NA',"N/A",NA]
 ez.num(factor(c('1','','NA',"N/A",NA)),force=T)    # -> c(1,NA,NA,NA,NA)
 ez.num(factor(c('1','N/A','a',"NA",NA)),force=F)   # -> same factor # more than na.strings
 ez.num(factor(c('1','N/A','a',"NA",NA)),force=T)   # -> c(1,NA,NA,NA,NA)
