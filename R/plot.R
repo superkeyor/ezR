@@ -1440,7 +1440,9 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 
           y.labels <- y.labels[brks]
         } else {
-          y.labels <- row.names(obj$imputations[[1]])
+          oldOpts = options(warn=1)
+          y.labels <- suppressWarnings(row.names(obj$imputations[[1]]))
+          options(oldOpts)
           y.at <- seq(1, n, by=15)
           y.labels <- y.labels[y.at]
         }
