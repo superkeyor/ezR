@@ -180,7 +180,7 @@ ez.is.empty <- function(x, trim = TRUE, ...) {
 #' @return a logical vector (vectorized).
 #' @export
 #' @note Using regular expression
-#' \cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","9L",   "1.36e4","1.36E4",    NA, "NA", "","NaN", NaN): 
+#' \cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","9L",   "1.36e4","1.36E4",    NA, "NA", "","NaN", NaN):
 #' \cr positive or negative numbers with no more than one decimal c("-3","+4.4") OR
 #' \cr positive or negative integers (e.g., c("-42","4L","39L")) OR
 #' \cr positive or negative numbers in scientific notation c("1.36e4","1.36E4")
@@ -216,15 +216,15 @@ ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/
 #' @examples
 #' ez.num(c(1,2,3,NA),force=T)                        # -> c(1,2,3,NA), no change, directly pass through
 #' ez.num(c(1,2,3,NA),force=F)                        # -> c(1,2,3,NA), no change, directly pass through
-#'         
+#'
 #' ez.num(c('1','2','3',NA),force=F)                  # -> c(1,2,3,NA)
 #' ez.num(c('1','2','3',NA),force=T)                  # -> c(1,2,3,NA)
 #' ez.num(c('1','','NA',"N/A",NA),force=F)            # -> c(1,NA,NA,NA,NA)  # na.strings treated as NA even if force=F
 #' ez.num(c('1','','NA',"N/A",NA),force=T)            # -> c(1,NA,NA,NA,NA)
-#'         
+#'
 #' ez.num(c('1','N/A','a',"NA",NA),force=F)           # -> same vector # more than na.strings
 #' ez.num(c('1','N/A','a',"NA",NA),force=T)           # -> c(1,NA,NA,NA,NA)
-#'         
+#'
 #' ez.num(factor(c(1,2,3,NA)),force=F)                # -> factor [1,2,3,NA]
 #' ez.num(factor(c(1,2,3,NA)),force=T)                # -> c(1,2,3,NA)
 #' ez.num(factor(c('1','2','3',NA)),force=F)          # -> factor [1,2,3,NA]

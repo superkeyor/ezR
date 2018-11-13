@@ -1052,8 +1052,9 @@ ez.count = function(x, val=NA, col=NULL, dim=3) {
     # trimws trick to convert to corresponding character vector
     # https://stackoverflow.com/a/53272969/2292993
     if (is.factor(x)) x=trimws(x)
-    if (is.vector(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
-    print(class(x))
+    # note: is.vector does not test if is vector as one would think
+    # is.atomic(factor(1:3)) also TRUE
+    if (is.atomic(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
 
     if (is.data.frame(x) & !is.null(col)) {
         col = (ez.selcol(x,col))

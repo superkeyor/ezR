@@ -37,15 +37,15 @@ see \url{http://stackoverflow.com/a/22701462/2292993}
 \examples{
 ez.num(c(1,2,3,NA),force=T)                        # -> c(1,2,3,NA), no change, directly pass through
 ez.num(c(1,2,3,NA),force=F)                        # -> c(1,2,3,NA), no change, directly pass through
-        
+
 ez.num(c('1','2','3',NA),force=F)                  # -> c(1,2,3,NA)
 ez.num(c('1','2','3',NA),force=T)                  # -> c(1,2,3,NA)
 ez.num(c('1','','NA',"N/A",NA),force=F)            # -> c(1,NA,NA,NA,NA)  # na.strings treated as NA even if force=F
 ez.num(c('1','','NA',"N/A",NA),force=T)            # -> c(1,NA,NA,NA,NA)
-        
+
 ez.num(c('1','N/A','a',"NA",NA),force=F)           # -> same vector # more than na.strings
 ez.num(c('1','N/A','a',"NA",NA),force=T)           # -> c(1,NA,NA,NA,NA)
-        
+
 ez.num(factor(c(1,2,3,NA)),force=F)                # -> factor [1,2,3,NA]
 ez.num(factor(c(1,2,3,NA)),force=T)                # -> c(1,2,3,NA)
 ez.num(factor(c('1','2','3',NA)),force=F)          # -> factor [1,2,3,NA]

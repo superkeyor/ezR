@@ -22,7 +22,7 @@ check if a str obj is actually numeric
 }
 \note{
 Using regular expression
-\cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","9L",   "1.36e4","1.36E4",    NA, "NA", "","NaN", NaN): 
+\cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","9L",   "1.36e4","1.36E4",    NA, "NA", "","NaN", NaN):
 \cr positive or negative numbers with no more than one decimal c("-3","+4.4") OR
 \cr positive or negative integers (e.g., c("-42","4L","39L")) OR
 \cr positive or negative numbers in scientific notation c("1.36e4","1.36E4")
