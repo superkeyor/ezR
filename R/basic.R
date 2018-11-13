@@ -286,7 +286,7 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','
         # check before is.list, because a data frame is a list, but not the other way
         # https://stackoverflow.com/a/33050704/2292993
         if (!force) {
-            x[] = rapply(x, function(e,as.is,na.strings,...) {
+            x[] = rapply(x, function(e,as.is,na.strings, ...) {
                 if (all(ez.is.numeric.like(e,na.strings=na.strings))){
                     result = utils::type.convert(e, as.is = as.is, na.strings=na.strings, ...)
                 } else {
@@ -310,9 +310,10 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','
         x[cols] = lapply(x[cols],function(e,force,na.strings){ez.num(e,force=force,print2screen=F,na.strings=na.strings)},force=force,na.strings=na.strings)
         result = x
     } else if (is.list(x)){
+        # maybe to do to improve the codes for list, right now, I do not really care about list
         result = utils::type.convert(as.character(unlist(x)), as.is = TRUE, na.strings=na.strings, ...)
     } else if (is.character(x)){
-        # cannot pass factor, numeric, logic to type.convert()
+        # cannot pass factor, numeric, logic to type.convert(), only character
 
         # utils::type.convert(c(1,'','3',"NA"), as.is = F) -> int c(1,NA,3,NA), because can all be converted to num (default na.strings includes 'NA' and ''), as.is essentially no effect
         # utils::type.convert(c(1,'','3',"NA"), as.is = T)
