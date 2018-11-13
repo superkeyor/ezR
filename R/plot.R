@@ -1379,7 +1379,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
                         y.cex = 0.8, x.cex = 0.8, y.labels, y.at, csvar = NULL,
                         tsvar = NULL, rank.order = TRUE, ...) {
 
-      if (class(obj) == "amelia") {
+      if ("amelia" %in% class(obj)) {
         vnames <- colnames(obj$imputations[[1]])
         n <- nrow(obj$missMatrix)
         p <- ncol(obj$missMatrix)
