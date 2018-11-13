@@ -138,39 +138,27 @@ ez.is.tabular <- function(x){
     inherits(x, c('matrix', 'data.frame')) && length(dim(x)) == 2
 }
 
-#' Check integers
-#'
-#' This function tests if given variable "appears" to be an integer. To qualify as such, two conditions need to be satisfied: it should be stored as \code{\link{numeric}} object, and it should pass regular expression test if it consists only of digits.
-#' @param x a numeric variable that is to be tested
-#' @return a logical value that indicates that tested variable "looks like" integer
-#' @export
-#' @note copied from https://cran.r-project.org/web/packages/rapportools/index.html
-#' \cr The built-in is.integer(x) does not test if x contains integer numbers! For that, use round, as in the function is.wholenumber(x) in its examples.
-ez.is.integer.like <- function(x){
-    if (missing(x))
-        stop('no object to test integer')
-
-    is.numeric(x) & all(grepl('^-?[[:digit:]]+$', x))
-}
-
 #' Check numeric
 #'
 #' @description check if a str obj is actually numeric
-#' @param x a str vector, or a factor of str vector, or numeric vector. non-string will be coerced using as.character
-#' @return a logical vector
+#' @param x a str vector, or a factor of str vector, or numeric vector. x will be coerced and trimws.
+#' @param na.strings case sensitive strings that will be treated to NA.
+#' @param naAsTrue whether NA (including actual NA and na.strings) will be treated as numeric like
+#' @return a logical value (single value). If all is numeric like, TRUE, otherwise FALSE.
 #' @export
-#' @note Using regular expression, https://stackoverflow.com/a/21154566/2292993
-#' \cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","3.9L",   "1.36e4","1.36E4"): 
+#' @note Using regular expression
+#' \cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","9L",   "1.36e4","1.36E4",    NA, "NA", "","NaN", NaN): 
 #' \cr positive or negative numbers with no more than one decimal c("-3","+4.4") OR
-#' \cr positive or negative integers (e.g., c("-42","4L","3.9L")) OR
+#' \cr positive or negative integers (e.g., c("-42","4L","39L")) OR
 #' \cr positive or negative numbers in scientific notation c("1.36e4","1.36E4")
-#' \cr 
-#' \cr Special note:
-#' \cr if naAsTrue=TRUE, c(3,4,NA) or c("3","4",NA), but not c("3","4","NA"), will be treated as numeric as well, ie, returns TRUE.
-ez.is.numeric.like <- function(x,naAsTrue=TRUE){
-    result = grepl("[-]?[0-9]+[.]?[0-9]*|[-]?[0-9]+[L]?|[-]?[0-9]+[.]?[0-9]*[eE][0-9]+",x)
+#' \cr NA, or na.strings
+ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/A','n/a','NaN','nan')){
+    x = trimws(x,'both')
+    x[x %in% na.strings] = NA
+    # https://stackoverflow.com/a/21154566/2292993
+    result = grepl("^[\\-\\+]?[0-9]+[\\.]?[0-9]*$|^[\\-\\+]?[0-9]+[L]?$|^[\\-\\+]?[0-9]+[\\.]?[0-9]*[eE][0-9]+$",x,perl=TRUE)
     if (naAsTrue) result = result | is.na(x)
-    return(result)
+    return((result))
 }
 
 #' alias of \code{\link{class}}
