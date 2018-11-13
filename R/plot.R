@@ -1399,12 +1399,14 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
         stop("y.at must accompany y.labels if there is less than onefor each row")
       }
 
-      if (is.null(csvar)) csvar <- obj$arguments$cs
-      if (is.null(tsvar)) tsvar <- obj$arguments$ts
+      if ("amelia" %in% class(obj)) {
+          if (is.null(csvar)) csvar <- obj$arguments$cs
+          if (is.null(tsvar)) tsvar <- obj$arguments$ts
+      }
 
       if (missing(y.labels)) {
         if (!is.null(csvar)) {
-          if (class(obj) == "amelia") {
+          if ("amelia" %in% class(obj)) {
             cs <- obj$imputations[[1]][,csvar]
           } else {
             cs <- obj[,csvar]
@@ -1417,7 +1419,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 
           if (!is.numeric(cs)) cs <- as.numeric(as.factor(cs))
           if (!is.null(tsvar)) {
-            if (class(obj) == "amelia") {
+            if ("amelia" %in% class(obj)) {
               ts <- as.numeric(obj$imputations[[1]][,tsvar])
             } else {
               ts <- as.numeric(obj[,tsvar])
