@@ -1048,7 +1048,9 @@ ez.replacewhen = function(df, print2screen=T, ...) {
 #' @export
 ez.count = function(x, val=NA, col=NULL, dim=3) {
     # assume a 1d vector
-    if (!is.data.frame(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
+    if (is.list(x) & !is.data.frame(x)) x=unlist(x,recursive=T)
+    if (is.factor(x)) x=trimws(x) # trimws trick to convert to corresponding character vector, https://stackoverflow.com/a/53272969/2292993
+    if (is.vector(x)) return(ifelse(is.na(val),sum(is.na(x)),sum(x==val,na.rm=TRUE)))
 
     if (is.data.frame(x) & !is.null(col)) {
         col = (ez.selcol(x,col))
