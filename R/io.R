@@ -451,7 +451,7 @@ ez.writex2 = ez.savex2
 #' write.xlsx(l, "writeList2.xlsx", startCol = c(1,2,3), startRow = 2,
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 #' @export
-ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=FALSE, rowNames=FALSE, colNames=TRUE, ...){
+ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=TRUE, rowNames=FALSE, colNames=TRUE, ...){
     x = data.frame(x)
     # # openxlsx::write.xlsx does not support (ie, ignore) withFilter, call underlying openxlsx::writeData
     # openxlsx::write.xlsx(x=x, file=file, asTable=FALSE, sheetName=sheetName, ..., rowNames=rowNames, colNames=colNames)
