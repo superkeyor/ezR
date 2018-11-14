@@ -1234,12 +1234,8 @@ ez.move = ez.recol
 
 #' rename all cols, see also \code{\link{ez.rncol}}
 #' @description rename all cols, see also \code{\link{ez.rncol}}
-#' @param newColName c('','',''), number of cols must match. Additionally, if an element contains : or -, internally will translate ez.selcol compatible format to normal col names
+#' @param newColName c('','',''), number of cols must match
 #' @return returns a new df, old one does not change
-#' @examples
-#' c1 = c('Species','Petal.Width'); c2 = sprintf('-c(%s)',paste0(c1,collapse=','))
-#' c1 = 'Species:Petal.Width'; c2 = sprintf('-(%s)',c1)
-#' ez.rncols(iris,c(c1,c2)) %>% names
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1250,15 +1246,6 @@ ez.move = ez.recol
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.rncols = function(df,newColNames){
-    # trick to translate ez.selcol compatible format to normal col names
-    # here, even one uses sapply, may still returns a list because length(x) may vary, so I use lapply and unlist
-    newColNames=lapply(newColNames,function(x,df){
-                    if (grepl('\\:|\\-',x,fixed=FALSE,perl=TRUE)) {
-                        x = ez.selcol(df,x)
-                    } else {x}
-                    return(x)
-                },df=df) %>% unlist()
-
     if (length(colnames(df))!=length(newColNames)) stop('col length not match')
     names(df) = newColNames
     return(df)
