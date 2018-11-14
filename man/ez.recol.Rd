@@ -7,7 +7,7 @@
 ez.recol(df, movecommand)
 }
 \arguments{
-\item{movecommand}{sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first}
+\item{movecommand}{sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first. Multiple variables could be spearated by "," "space" or ", space" (spaces=sapce).}
 }
 \description{
 reorder a single col (sort of, see below), alias of \code{\link{ez.move}}

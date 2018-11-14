@@ -1177,7 +1177,7 @@ ez.recols = function(df,newColOrder,col=NULL){
 
 #' reorder a single col (sort of, see below), alias of \code{\link{ez.move}}
 #' @description reorder a single col (sort of, see below), alias of \code{\link{ez.move}}
-#' @param movecommand sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first
+#' @param movecommand sth like "v17, v18 before v3; v6, v16 last; v5 first", supports before/after, last/first. Multiple variables could be spearated by "," "space" or ", space" (spaces=sapce).
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
