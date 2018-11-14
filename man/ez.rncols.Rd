@@ -7,13 +7,18 @@
 ez.rncols(df, newColNames)
 }
 \arguments{
-\item{newColName}{c('','',''), number of cols must match}
+\item{newColName}{c('','',''), number of cols must match. Additionally, if an element contains : or -, internally will translate ez.selcol compatible format to normal col names}
 }
 \value{
 returns a new df, old one does not change
 }
 \description{
 rename all cols, see also \code{\link{ez.rncol}}
+}
+\examples{
+c1 = c('Species','Petal.Width'); c2 = sprintf('-c(\%s)',paste0(c1,collapse=','))
+c1 = 'Species:Petal.Width'; c2 = sprintf('-(\%s)',c1)
+ez.rncols(iris,c(c1,c2)) \%>\% names
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
