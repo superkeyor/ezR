@@ -4,10 +4,10 @@
 \alias{ez.rncol}
 \title{rename a single or many col, see also \code{\link{ez.rncols}}}
 \usage{
-ez.rncol(x, replace)
+ez.rncol(x, replace_old_equals_new)
 }
 \arguments{
-\item{replace}{c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")}
+\item{replace_old_equals_new}{c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")}
 }
 \value{
 returns a new df, old one does not change

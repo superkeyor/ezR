@@ -1272,7 +1272,7 @@ ez.2lower = function(df){
 
 #' rename a single or many col, see also \code{\link{ez.rncols}}
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rename}}
-#' @param replace c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
+#' @param replace_old_equals_new c("oldColName"="newColName") or c(oldColName="newColName"), c(wt = "weight", cyl = "cylinders")
 #' @return returns a new df, old one does not change
 #' @family data transformation functions
 #' @export
@@ -1283,7 +1283,13 @@ ez.2lower = function(df){
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.rncol = reshape::rename
+ez.rncol = function (x, replace_old_equals_new) {
+    # reshape::rename
+    replace = replace_old_equals_new
+    replacement <- replace[names(x)]
+    names(x)[!is.na(replacement)] <- replacement[!is.na(replacement)]
+    x
+}
 
 #' rename a single or many col
 #' @description alias of \code{\link[reshape]{rename}} \code{\link{ez.rncol}}
