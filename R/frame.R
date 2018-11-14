@@ -1531,8 +1531,8 @@ ez.notduplicated = function(x, col=NULL, vec=TRUE, dim=1, incomparables=FALSE, v
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
 ez.split = dplyr::group_by
 
-#' alias of \code{\link[dplyr]{left_join}}
-#' @description alias of \code{\link[dplyr]{left_join}}
+#' alias of \code{\link[dplyr]{left_join}} with a bit additional summary printout
+#' @description alias of \code{\link[dplyr]{left_join}} with a bit additional summary printout
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -1542,7 +1542,14 @@ ez.split = dplyr::group_by
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.leftjoin = dplyr::left_join
+left_join = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...){
+    z = dplyr::left_join(x, y, by = by, copy = copy, suffix = suffix, ...)
+    ez.pprint('Recommended usage: Z = left_join(X,Y)')
+    ez.pprint(sprintf('X Dim: %5d x %-5d\tNAs: %d', nrow(x), ncol(x), ez.count(x)))
+    ez.pprint(sprintf('Y Dim: %5d x %-5d\tNAs: %d', nrow(y), ncol(y), ez.count(y)))
+    ez.pprint(sprintf('Z Dim: %5d x %-5d\tNAs: %d', nrow(z), ncol(z), ez.count(z)))
+    return(z)
+}
 
 #' delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
 #' @description delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}
