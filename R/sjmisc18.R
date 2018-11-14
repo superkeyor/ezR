@@ -5719,7 +5719,7 @@ set_labels_helper <- function(x, labels, force.labels, force.values) {
   if (is.null(labels) || length(labels) == 0) return(x)
 
   # valid vector?
-  if (is.null(x) || all(is.na(x)) {
+  if ((is.null(x) || all(is.na(x)) {
     # can't add value labels to NULL/NA vectors
     return(x)
   }
