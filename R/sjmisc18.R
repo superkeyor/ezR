@@ -1581,7 +1581,7 @@ get_labels_helper <- function(x, attr.only, include.values, include.non.labelled
       if (is.character(x) || (is.factor(x) && !is_num_fac(x)))
         values <- unname(lab)
       else
-        values <- as.numeric(unname(lab))
+        values <- suppressWarnings( as.numeric(unname(lab)) )
       # retrieve label values in correct order
       labels <- names(lab)
       # do we want to include non-labelled values as well?
