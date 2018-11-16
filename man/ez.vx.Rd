@@ -4,13 +4,13 @@
 \alias{ez.vx}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.vx(df, tempfilename = NULL, id = NULL, file = NULL, width = 300,
+ez.vx(df, temp = NULL, id = NULL, file = NULL, width = 300,
   characterize = TRUE, incomparables = FALSE, debug = NULL, ...)
 }
 \arguments{
 \item{df}{a data frame}
 
-\item{tempfilename}{when file is NULL, the name prefix for the temp excel file. If prefix not provided through this param, auto generate one}
+\item{temp}{when file is NULL, the name prefix for the temp excel file. If prefix not provided through this param, auto generate one}
 
 \item{id}{a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used}
 
