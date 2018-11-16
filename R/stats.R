@@ -46,6 +46,7 @@ ez.compare = function(lh,rh,...) {
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param df a data frame
+#' @param tempfilename when file is NULL, the name prefix for the temp excel file. If prefix not provided through this param, auto generate one
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
@@ -57,7 +58,7 @@ ez.compare = function(lh,rh,...) {
 #' \cr Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @export
-ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
+ez.vx = function(df, tempfilename=NULL, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
     # if temped and not debug, just jump out of the function to save time
     if (is.null(file)) {
         debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
@@ -83,7 +84,8 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
     temped=F
     if(is.null(file)){
         temped=T
-        file=tempfile(pattern = paste0('View_ID_',idString,'_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
+        if (is.null(tempfilename)) tempfilename = paste0('View_ID_',idString)
+        file=tempfile(pattern = paste0(tempfilename, '_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
         on.exit(unlink(file))
     }
 
@@ -232,13 +234,14 @@ ez.vx = function(df, id=NULL, file=NULL, width=300, characterize=TRUE, incompara
 #' @return returns nothing
 #' @note when debug provided, overwrites getOption('debug')
 #' @export
-ez.x = function(...,debug=NULL) {
+ez.x = function(...,tempfilename=NULL,debug=NULL) {
     debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
 
     # overwritten by 'debug' passed to function
     if (is.null(debug)) {
         if (debugMode) {
-            file=tempfile(pattern = paste0('Data_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
+            if (is.null(tempfilename)) tempfilename = paste0('Data_')
+            file=tempfile(pattern = paste0(tempfilename, '_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
             on.exit(unlink(file))
             ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
             ez.open(file)
@@ -246,7 +249,8 @@ ez.x = function(...,debug=NULL) {
         }
     } else {
         if (debug) {
-            file=tempfile(pattern = paste0('Data_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
+            if (is.null(tempfilename)) tempfilename = paste0('Data_')
+            file=tempfile(pattern = paste0(tempfilename, '_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
             on.exit(unlink(file))
             ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
             ez.open(file)

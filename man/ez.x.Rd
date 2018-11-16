@@ -4,7 +4,7 @@
 \alias{ez.x}
 \title{view df in excel (saved to a temp file, auto delete the temp file)}
 \usage{
-ez.x(..., debug = NULL)
+ez.x(..., tempfilename = NULL, debug = NULL)
 }
 \arguments{
 \item{...}{one or more df. df1, df2 becomes Sheet1, Sheet2 etc}
