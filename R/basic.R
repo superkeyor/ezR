@@ -36,6 +36,18 @@ ez.quoted = function(v){
     base::strsplit(paste0('"', v, '"',collapse = '/|||/'), split = '/|||/',fixed = TRUE)[[1]]
 }
 
+#' switch the names and values of a named vector, so that names->values, values->names
+#' @description switch the names and values of a named vector, so that names->values, values->names
+#' @return returns a new named vector, if input is not named vector, return the inital input vector direclty.
+#' @export
+ez.flipflop = function(v){
+    if (is.null(names(v))) return(v)
+    theNames = names(v)
+    theValues = unname(v)
+    names(theNames) = theValues
+    return(theNames)
+}
+
 #' alias of \code{\link{class}}
 #' @description alias of \code{\link{class}}
 #' @export

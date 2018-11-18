@@ -8025,49 +8025,6 @@ sjmisc_write_spss=write_spss
 
 ####************************************************************************************************
                                      ####*export with additional alias*####
-# # example:
-# labs <- ez.getlabels(e)
-# lab <- ez.getlabel(e)
-# ee = as.character(e)
-# ee <- ez.setlabels(ee, labels)  # labels could be NULL or '' = remove labels attr
-# ee <- ez.getlabel(ee, lab)      # lab could be NULL or '' = remove label attr
-
-
-
-# # Or use sjmisc_
-# labs <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
-# lab <- sjmisc_get_label(e, def.value = NULL)
-# ee = as.character(e)
-# ee <- sjmisc_set_labels(ee, labels)  # labels could be NULL or '' = remove labels attr
-# ee <- sjmisc_set_label(ee, lab)      # lab could be NULL or '' = remove label attr
-
-
-
-# # Or manually change attributes:
-# lab = attr(x, 'label', exact = T)
-# labs1 <- attr(x, 'labels', exact = T)
-# labs2 <- attr(x, 'value.labels', exact = T)
-
-# # trimws will convert factor to character
-# x = trimws(x,'both')
-# if (! is.null(lab)) lab = trimws(lab,'both')
-# if (! is.null(labs1)) labs1 = trimws(labs1,'both')
-# if (! is.null(labs2)) labs2 = trimws(labs2,'both')
-
-# if (!is.null(na.strings)) {
-#     # convert to NA
-#     x[x %in% na.strings] = NA
-#     # also remember to remove na.strings from value labels
-#     labs1 = labs1[! labs1 %in% na.strings]
-#     labs2 = labs2[! labs2 %in% na.strings]
-# }
-
-# # the levels will be reset here
-# x = factor(x)
-
-# attr(x, 'label') <- lab             # NULL removes the attr, but '' results in empty attr
-# attr(x, 'labels') <- labs1          # NULL removes the attr, but '' results in empty attr
-# attr(x, 'value.labels') <- labs2    # NULL removes the attr, but '' results in empty attr
 ####************************************************************************************************
 #' sjmisc 1.8 hack
 #' @description sjmisc 1.8 hack, value labels
@@ -8075,6 +8032,7 @@ sjmisc_write_spss=write_spss
 #' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
 #' \cr include.non.labelled, if T, values without labels will also be included in the returned labels
 #' \cr returns NULL if no value labels attribute
+#' \cr returned vector values are the labels with vector names being initial values in x. This is flipped as you would get directly from attr(,"labels",exact=T)
 #' @export
 sjmisc_get_labels=get_labels
 
@@ -8086,6 +8044,7 @@ sjmisc_get_labels=get_labels
 #' \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
 #' \cr include.non.labelled, if T, values without labels (when less labels than values) will also be included in the returned labels
 #' \cr returns NULL if no value labels attribute
+#' @note returned vector values are the labels with vector names being initial values in x. This is flipped as you would get directly from attr(,"labels",exact=T)
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
@@ -8114,6 +8073,7 @@ ez.getlabels=ez.labels.get
 #' \cr 1 4 5 9 do not have to all appear in x, that is, you can assign more labels than values (or vice versa, assign less labels)
 #' \cr notice the particular order and symbol: "strongly agree" <- 1
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
+#' \cr This format is flipped from the results directly from ez.getlabels
 #' \cr
 #' \cr 2) when valuelabels="" or NULL, essentially clear value labels attribute
 #' \cr
@@ -8131,6 +8091,7 @@ sjmisc_set_labels=set_labels
 #' \cr 1 4 5 9 do not have to all appear in x, that is, you can assign more labels than values (or vice versa, assign less labels)
 #' \cr notice the particular order and symbol: "strongly agree" <- 1
 #' \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
+#' \cr This format is flipped from the results directly from ez.getlabels
 #' \cr
 #' \cr 2) when valuelabels="", essentially clear value labels attribute
 #' \cr
