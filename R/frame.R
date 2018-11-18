@@ -219,7 +219,7 @@ ez.2char = function(x, col=NULL){
             labels <- sjmisc_get_labels(e, attr.only = T, include.values = "n", include.non.labelled=F)
             varlab <- sjmisc_get_label(e)
             new_value = as.character(e)
-            new_value <- sjmisc_set_labels(new_value, labels, force.labels = T)
+            new_value <- sjmisc_set_labels(new_value, ez.flipflop(labels), force.labels = T)
             new_value <- sjmisc_set_label(new_value, varlab)
         } else {
             new_value = e
@@ -448,7 +448,7 @@ ez.factorder = function(x, col, ord=NULL, print2screen=F){
         }
         lvls <- levels(df[[col]])
         labels <- labels[lvls]
-        df[[col]] <- sjmisc_set_labels(df[[col]], labels, force.labels = T)
+        df[[col]] <- sjmisc_set_labels(df[[col]], ez.flipflop(labels), force.labels = T)
         attr(df[[col]],'label') <- varlab
         return(df)
 
@@ -473,7 +473,7 @@ ez.factorder = function(x, col, ord=NULL, print2screen=F){
         }
         lvls <- levels(x)
         labels <- labels[lvls]
-        x <- sjmisc_set_labels(x, labels, force.labels = T)
+        x <- sjmisc_set_labels(x, ez.flipflop(labels), force.labels = T)
         attr(x,'label') <- varlab
         return(x)
     }
@@ -557,7 +557,7 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
             labs = ez.getlabels(x)
             x = factor(x, unique(as.character(x)))
             attr(x,'label') <- varlab
-            x = ez.setlabels(x,labs)
+            x = ez.setlabels(x,ez.flipflop(labs))
         }
     } else if (is.data.frame(x) & !is.null(cols)) {
         cols=ez.selcol(x,cols)
@@ -940,7 +940,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
             }
 
             if (factored) {dfcol=as.factor(dfcol)}
-            dfcol = ez.setlabel(dfcol,lab); dfcol = ez.setlabels(dfcol,labs)
+            dfcol = ez.setlabel(dfcol,lab); dfcol = ez.setlabels(dfcol,ez.flipflop(labs))
             return(dfcol)
         }
         df[cols] = lapply(df[cols],thefun,oldval=oldval,newval=newval)
@@ -1023,7 +1023,7 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                 # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
                 df[[col]][theRow2] <- newval
                 if (factored) {df[[col]]=as.factor(df[[col]])}
-                df[[col]] = ez.setlabel(df[[col]],lab); df[[col]] = ez.setlabels(df[[col]],labs)
+                df[[col]] = ez.setlabel(df[[col]],lab); df[[col]] = ez.setlabels(df[[col]],ez.flipflop(labs))
             }
         } # end for
     } # end if

@@ -24,6 +24,9 @@ see also \code{\link{sjmisc_get_values}}
 \cr include.non.labelled, if T, values without labels (when less labels than values) will also be included in the returned labels
 \cr returns NULL if no value labels attribute
 }
+\note{
+returned vector values are the labels with vector names being initial values in x. This is flipped as you would get directly from attr(,"labels",exact=T)
+}
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
 \cr \code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}

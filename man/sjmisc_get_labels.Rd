@@ -15,4 +15,5 @@ include.values, how values are returned: NULL = unnamed vector; as named vector 
 \cr attr.only = T, only search attributes, T desired (if F, also search factor levels, character strings)
 \cr include.non.labelled, if T, values without labels will also be included in the returned labels
 \cr returns NULL if no value labels attribute
+\cr returned vector values are the labels with vector names being initial values in x. This is flipped as you would get directly from attr(,"labels",exact=T)
 }

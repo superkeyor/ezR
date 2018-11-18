@@ -16,6 +16,7 @@ The usage of the original function is a bit confusing. Here, I summarize:
 \cr 1 4 5 9 do not have to all appear in x, that is, you can assign more labels than values (or vice versa, assign less labels)
 \cr notice the particular order and symbol: "strongly agree" <- 1
 \cr sjmisc_set_labels(x, c("strongly agree"=1,"totally disagree"=4,"refused"=5,"missing"=9))
+\cr This format is flipped from the results directly from ez.getlabels
 \cr
 \cr 2) when valuelabels="" or NULL, essentially clear value labels attribute
 \cr
