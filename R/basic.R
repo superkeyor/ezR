@@ -38,9 +38,10 @@ ez.quoted = function(v){
 
 #' switch the names and values of a named vector, so that names->values, values->names
 #' @description switch the names and values of a named vector, so that names->values, values->names
-#' @return returns a new named vector, if input is not named vector, return the inital input vector direclty.
+#' @return returns a new named vector, if input is NULL or not named vector, return the inital input vector direclty.
 #' @export
 ez.flipflop = function(v){
+    # is.null(names(NULL)) -> TRUE
     if (is.null(names(v))) return(v)
     theNames = names(v)
     theValues = unname(v)

@@ -7,7 +7,7 @@
 ez.flipflop(v)
 }
 \value{
-returns a new named vector, if input is not named vector, return the inital input vector direclty.
+returns a new named vector, if input is NULL or not named vector, return the inital input vector direclty.
 }
 \description{
 switch the names and values of a named vector, so that names->values, values->names
