@@ -44,8 +44,8 @@ ez.error = stop
 #' @export
 exit = function() { q("no") }
 
-#' debug mode on/off 1/0. NULL-> getOption('debug')
-#' @description debug mode on/off 1/0. NULL-> getOption('debug')
+#' debug mode on/off 1/0 T/F. NULL-> getOption('debug')
+#' @description debug mode on/off 1/0 T/F. NULL-> getOption('debug')
 #' @export
 ez.debug = function(debugMode=NULL) { 
     if (is.null(debugMode)) {
@@ -56,6 +56,21 @@ ez.debug = function(debugMode=NULL) {
     }
     else if (debugMode==1) {options(debug=T); ez.pprint('Debug Mode Status: On')}
     else if (debugMode==0) {options(debug=F); ez.pprint('Debug Mode Status: Off')}
+    return(invisible(NULL))
+}
+
+#' warn error mode on/off 1/0 T/F. NULL-> getOption('warn')
+#' @description warn error mode on/off 1/0 T/F. NULL-> getOption('warn')
+#' @export
+ez.warn = function(warnErrorMode=NULL) { 
+    if (is.null(warnErrorMode)) {
+        opt = getOption('warn')
+        if (is.null(opt)) ez.pprint('Warn Error Mode Status: Not set yet')
+        else if (opt==2) ez.pprint('Warn Error Mode Status: On')
+        else if (opt==1) ez.pprint('Warn Error Mode Status: Off')
+    }
+    else if (warnErrorMode==1) {options(warn=2); ez.pprint('Warn Error Mode Status: On')}
+    else if (warnErrorMode==0) {options(warn=1); ez.pprint('Warn Error Mode Status: Off')}
     return(invisible(NULL))
 }
 

@@ -2,10 +2,10 @@
 % Please edit documentation in R/os.R
 \name{ez.debug}
 \alias{ez.debug}
-\title{debug mode on/off 1/0. NULL-> getOption('debug')}
+\title{debug mode on/off 1/0 T/F. NULL-> getOption('debug')}
 \usage{
 ez.debug(debugMode = NULL)
 }
 \description{
-debug mode on/off 1/0. NULL-> getOption('debug')
+debug mode on/off 1/0 T/F. NULL-> getOption('debug')
 }
