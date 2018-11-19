@@ -44,6 +44,21 @@ ez.error = stop
 #' @export
 exit = function() { q("no") }
 
+#' debug mode on/off 1/0. NULL-> getOption('debug')
+#' @description debug mode on/off 1/0. NULL-> getOption('debug')
+#' @export
+ez.debug = function(debugMode=NULL) { 
+    if (is.null(debugMode)) {
+        opt = getOption('debug')
+        if (is.null(opt)) ez.pprint('Debug Mode Status: Not set yet')
+        else if (opt==TRUE) ez.pprint('Debug Mode Status: On')
+        else if (opt==FALSE) ez.pprint('Debug Mode Status: Off')
+    }
+    else if (debugMode==1) {options(debug=T); ez.pprint('Debug Mode Status: On')}
+    else if (debugMode==0) {options(debug=F); ez.pprint('Debug Mode Status: Off')}
+    return(invisible(NULL))
+}
+
 #' print out or set the repo
 #' @description print out or set the repo
 #' @param repo NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'
