@@ -452,8 +452,8 @@ ez.csf <- function() {
                 if (pth!='') {
                     return(normalizePath(pth))
                 } else {
-                    # likely RStudio Console
-                    return(getwd())
+                    # likely RStudio Console, returns '', normalizePath('') warning/error
+                    return(pth)
                 }
             }
         }
@@ -466,6 +466,7 @@ ez.csf <- function() {
 #' works with Rscript, source() or in RStudio Run selection
 #' @export
 ez.csd <- function() {
+    if (ez.csf()=='') return(getwd())
     return(dirname(ez.csf()))
 }
 
