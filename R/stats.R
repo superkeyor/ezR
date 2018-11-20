@@ -216,12 +216,12 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
         if (is.null(debug)) {
             if (debugMode) {
                 ez.open(file)
-                ez.sleep(10)
+                ez.sleep(6)
             }
         } else {
             if (debug) {
                 ez.open(file)
-                ez.sleep(10)
+                ez.sleep(6)
             }
         }
     }
@@ -245,7 +245,7 @@ ez.x = function(...,temp=NULL,debug=NULL) {
             on.exit(unlink(file))
             ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
             ez.open(file)
-            ez.sleep(10)
+            ez.sleep(6)
         }
     } else {
         if (debug) {
@@ -254,7 +254,7 @@ ez.x = function(...,temp=NULL,debug=NULL) {
             on.exit(unlink(file))
             ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
             ez.open(file)
-            ez.sleep(10)
+            ez.sleep(6)
         }
     }
 
