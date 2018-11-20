@@ -4,7 +4,7 @@
 \alias{ez.debug}
 \title{debug mode on/off 1/0 T/F. NULL-> getOption('debug')}
 \usage{
-ez.debug(debugMode = NULL)
+ez.debug(debugMode = 1)
 }
 \description{
 debug mode on/off 1/0 T/F. NULL-> getOption('debug')

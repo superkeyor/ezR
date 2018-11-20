@@ -47,7 +47,7 @@ exit = function() { q("no") }
 #' debug mode on/off 1/0 T/F. NULL-> getOption('debug')
 #' @description debug mode on/off 1/0 T/F. NULL-> getOption('debug')
 #' @export
-ez.debug = function(debugMode=NULL) { 
+ez.debug = function(debugMode=1) { 
     if (is.null(debugMode)) {
         opt = getOption('debug')
         if (is.null(opt)) ez.pprint('Debug Mode Status: Not set yet')
