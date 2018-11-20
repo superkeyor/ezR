@@ -411,7 +411,7 @@ ez.pr = ez.parentdir
 #' alias of \code{\link{setwd}}
 #' @description alias of \code{\link{setwd}}
 #' @export
-ez.cd = setwd;
+ez.cd = setwd
 
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
@@ -448,7 +448,13 @@ ez.csf <- function() {
             } else {
                 # RStudio Run Selection
                 # http://stackoverflow.com/a/35842176/2292993
-                return(normalizePath(rstudioapi::getActiveDocumentContext()$path))
+                pth = rstudioapi::getActiveDocumentContext()$path
+                if (pth!='') {
+                    return(normalizePath(pth))
+                } else {
+                    # likely RStudio Console
+                    return(getwd())
+                }
             }
         }
     }
