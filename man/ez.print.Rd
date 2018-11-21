@@ -21,7 +21,7 @@ ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
 
 \item{fill}{a logical or (positive) numeric controlling how the output is
 broken into successive lines. If FALSE (default), only newlines created
-explicitly by "\n" are printed. Otherwise, the output is broken into lines
+explicitly by "\\n" are printed. Otherwise, the output is broken into lines
 with print width equal to the option width if fill is TRUE, or the value of
 fill if this is numeric. Non-positive fill values are ignored, with a
 warning.}
