@@ -13,7 +13,7 @@ ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
 \cr        ez.print(c(pi,'=',3))  --> 3.14159265358979=3
 \cr        ez.print(c('var','\\t','p')) --> var\\tp}
 
-\item{file}{filepath, default ''=print to console; if provided, save to a file and no output in console}
+\item{file}{filepath, default ''=print to console only; if provided, save to a file and print to console}
 
 \item{append}{T/F}
 
