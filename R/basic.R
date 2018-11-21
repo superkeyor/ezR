@@ -843,13 +843,16 @@ ez.join = function(sep='',...){
 #' \cr        ez.print('a=',c(3,'b'))
 #' \cr        ez.print(var,'\\t',p)
 #' \cr        ez.print(c(var,'\\t',p))
-#' @param sep default empty
+#' @param sep default empty. a character vector of strings to append after each element.
+#' @param file filepath if saving to a file. If printed to a file, no output in console
+#' @param append T/F
+#' @examples # cat("hello","world",file="output.txt",sep="\n",append=TRUE)
 #' @return each print generates a new line automatically
 #' @details do not use R \code{\link{print}}, not actually printing \\n
 #' @seealso \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 #' @export
-ez.print = function(...,sep=''){
-    cat(..., "\n", sep = sep)
+ez.print = function(..., file = "", sep='', fill = FALSE, labels = NULL, append = FALSE){
+    cat(..., "\n", file=file, sep=sep, fill=fill, labels=labels, append=append)
 }
 
 #' colorful print

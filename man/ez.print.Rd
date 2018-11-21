@@ -4,7 +4,8 @@
 \alias{ez.print}
 \title{wrapper of \code{\link{cat}}}
 \usage{
-ez.print(..., sep = "")
+ez.print(..., file = "", sep = "", fill = FALSE, labels = NULL,
+  append = FALSE)
 }
 \arguments{
 \item{...}{could be char, num, vector, or mixed (no need to convert type) e.g.,
@@ -14,7 +15,11 @@ ez.print(..., sep = "")
 \cr        ez.print(var,'\\t',p)
 \cr        ez.print(c(var,'\\t',p))}
 
-\item{sep}{default empty}
+\item{file}{filepath if saving to a file. If printed to a file, no output in console}
+
+\item{sep}{default empty. a character vector of strings to append after each element.}
+
+\item{append}{T/F}
 }
 \value{
 each print generates a new line automatically
@@ -24,6 +29,9 @@ wrapper of \code{\link{cat}}
 }
 \details{
 do not use R \code{\link{print}}, not actually printing \\n
+}
+\examples{
+# cat("hello","world",file="output.txt",sep="\\n",append=TRUE)
 }
 \seealso{
 \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
