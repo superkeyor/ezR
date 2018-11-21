@@ -46,13 +46,15 @@ exit = function() { q("no") }
 
 #' debug mode on/off 1/0 T/F. NULL-> getOption('debug')
 #' @description debug mode on/off 1/0 T/F. NULL-> getOption('debug')
+#' @return if debugMode=NULL, returns T/F (unset=T). if debugMode=1/0, returns nothings
 #' @export
-ez.debug = function(debugMode=1) { 
+ez.debug = function(debugMode=NULL) { 
     if (is.null(debugMode)) {
         opt = getOption('debug')
-        if (is.null(opt)) ez.pprint('Debug Mode Status: Not set yet')
+        if (is.null(opt)) ez.pprint('Debug Mode Status: Unset, As On'); opt=TRUE
         else if (opt==TRUE) ez.pprint('Debug Mode Status: On')
         else if (opt==FALSE) ez.pprint('Debug Mode Status: Off')
+        return(opt)
     }
     else if (debugMode==1) {options(debug=T); ez.pprint('Debug Mode Status: On')}
     else if (debugMode==0) {options(debug=F); ez.pprint('Debug Mode Status: Off')}
