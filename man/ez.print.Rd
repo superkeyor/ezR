@@ -2,15 +2,15 @@
 % Please edit documentation in R/basic.R
 \name{ez.print}
 \alias{ez.print}
-\title{wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')}
+\title{wrapper of \code{\link{cat}}, cat(string, "\\n", sep="")}
 \usage{
 ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
   labels = NULL)
 }
 \arguments{
 \item{string}{a single character vector, other types will be auto converted with as.character() by cat()
-\cr        ez.print(factor(4:5)) --> 12
-\cr        ez.print(c(pi,'=',3))  --> 3.14159265358979=3
+\cr        ez.print(factor(4:5))        --> 12
+\cr        ez.print(c(pi,'=',3))        --> 3.14159265358979=3
 \cr        ez.print(c('var','\\t','p')) --> var\\tp}
 
 \item{file}{filepath, default ''=print to console only; if provided, save to a file and print to console}
@@ -18,12 +18,21 @@ ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
 \item{append}{T/F}
 
 \item{sep}{default empty. a character vector of strings to append after each element.}
+
+\item{fill}{a logical or (positive) numeric controlling how the output is
+broken into successive lines. If FALSE (default), only newlines created
+explicitly by "\n" are printed. Otherwise, the output is broken into lines
+with print width equal to the option width if fill is TRUE, or the value of
+fill if this is numeric. Non-positive fill values are ignored, with a
+warning.}
+
+\item{labels}{character vector of labels for the lines printed. Ignored if fill is FALSE.}
 }
 \value{
 each print generates a new line automatically
 }
 \description{
-wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')
+wrapper of \code{\link{cat}}, cat(string, "\\n", sep="")
 }
 \details{
 do not use R \code{\link{print}}, not actually printing \\n

@@ -835,15 +835,22 @@ ez.join = function(sep='',...){
     paste(...,sep=sep)
 }
 
-#' wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')
-#' @description wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')
+#' wrapper of \code{\link{cat}}, cat(string, "\\n", sep="")
+#' @description wrapper of \code{\link{cat}}, cat(string, "\\n", sep="")
 #' @param string a single character vector, other types will be auto converted with as.character() by cat()
-#' \cr        ez.print(factor(4:5)) --> 12
-#' \cr        ez.print(c(pi,'=',3))  --> 3.14159265358979=3
+#' \cr        ez.print(factor(4:5))        --> 12
+#' \cr        ez.print(c(pi,'=',3))        --> 3.14159265358979=3
 #' \cr        ez.print(c('var','\\t','p')) --> var\\tp
-#' @param sep default empty. a character vector of strings to append after each element.
 #' @param file filepath, default ''=print to console only; if provided, save to a file and print to console
 #' @param append T/F
+#' @param sep default empty. a character vector of strings to append after each element.
+#' @param fill a logical or (positive) numeric controlling how the output is
+#' broken into successive lines. If FALSE (default), only newlines created
+#' explicitly by "\n" are printed. Otherwise, the output is broken into lines
+#' with print width equal to the option width if fill is TRUE, or the value of
+#' fill if this is numeric. Non-positive fill values are ignored, with a
+#' warning.
+#' @param labels character vector of labels for the lines printed. Ignored if fill is FALSE.
 #' @examples # cat("hello","world",file="output.txt",sep="\n",append=TRUE)
 #' @return each print generates a new line automatically
 #' @details do not use R \code{\link{print}}, not actually printing \\n
