@@ -51,7 +51,7 @@ exit = function() { q("no") }
 ez.debug = function(debugMode=NULL) { 
     if (is.null(debugMode)) {
         opt = getOption('debug')
-        if (is.null(opt)) ez.pprint('Debug Mode Status: Unset, As On'); opt=TRUE
+        if (is.null(opt)) {ez.pprint('Debug Mode Status: Unset, As On'); opt=TRUE}
         else if (opt==TRUE) ez.pprint('Debug Mode Status: On')
         else if (opt==FALSE) ez.pprint('Debug Mode Status: Off')
         return(opt)
