@@ -858,7 +858,7 @@ ez.join = function(sep='',...){
 #' @export
 # above \\ used, because of Rd compilation, not because the actual syntax
 ez.print = function(string, file = '', append = TRUE, sep='', fill = FALSE, labels = NULL){
-    if (file=='') cat(string, "\n", file=file, sep=sep, fill=fill, labels=labels, append=append)
+    if (file!='') cat(string, "\n", file=file, sep=sep, fill=fill, labels=labels, append=append)
     cat(string, "\n")
 }
 
