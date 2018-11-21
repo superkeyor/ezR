@@ -2,30 +2,28 @@
 % Please edit documentation in R/basic.R
 \name{ez.print}
 \alias{ez.print}
-\title{wrapper of \code{\link{cat}}}
+\title{wrapper of \code{\link{cat}}, cat(string, "\n", sep='')}
 \usage{
-ez.print(..., file = "", sep = "", fill = FALSE, labels = NULL,
-  append = FALSE)
+ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
+  labels = NULL)
 }
 \arguments{
-\item{...}{could be char, num, vector, or mixed (no need to convert type) e.g.,
-\cr        but be careful with factors (in number)--convert with as.character(factor variable)
-\cr        ez.print('a=',3)
-\cr        ez.print('a=',c(3,'b'))
-\cr        ez.print(var,'\\t',p)
-\cr        ez.print(c(var,'\\t',p))}
+\item{string}{a single character vector, other types will be auto converted with as.character() by cat()
+\cr        ez.print(factor(4:5)) --> 12
+\cr        ez.print(c(pi,'=',3))  --> 3.14159265358979=3
+\cr        ez.print(c('var','\\t','p')) --> var\tp}
 
-\item{file}{filepath if saving to a file. If printed to a file, no output in console}
-
-\item{sep}{default empty. a character vector of strings to append after each element.}
+\item{file}{filepath, default ''=print to console; if provided, save to a file and no output in console}
 
 \item{append}{T/F}
+
+\item{sep}{default empty. a character vector of strings to append after each element.}
 }
 \value{
 each print generates a new line automatically
 }
 \description{
-wrapper of \code{\link{cat}}
+wrapper of \code{\link{cat}}, cat(string, "\n", sep='')
 }
 \details{
 do not use R \code{\link{print}}, not actually printing \\n

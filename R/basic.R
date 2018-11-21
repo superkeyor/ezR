@@ -835,24 +835,22 @@ ez.join = function(sep='',...){
     paste(...,sep=sep)
 }
 
-#' wrapper of \code{\link{cat}}
-#' @description wrapper of \code{\link{cat}}
-#' @param ... could be char, num, vector, or mixed (no need to convert type) e.g.,
-#' \cr        but be careful with factors (in number)--convert with as.character(factor variable)
-#' \cr        ez.print('a=',3)
-#' \cr        ez.print('a=',c(3,'b'))
-#' \cr        ez.print(var,'\\t',p)
-#' \cr        ez.print(c(var,'\\t',p))
+#' wrapper of \code{\link{cat}}, cat(string, "\n", sep='')
+#' @description wrapper of \code{\link{cat}}, cat(string, "\n", sep='')
+#' @param string a single character vector, other types will be auto converted with as.character() by cat()
+#' \cr        ez.print(factor(4:5)) --> 12
+#' \cr        ez.print(c(pi,'=',3))  --> 3.14159265358979=3
+#' \cr        ez.print(c('var','\\t','p')) --> var\tp
 #' @param sep default empty. a character vector of strings to append after each element.
-#' @param file filepath if saving to a file. If printed to a file, no output in console
+#' @param file filepath, default ''=print to console; if provided, save to a file and no output in console
 #' @param append T/F
 #' @examples # cat("hello","world",file="output.txt",sep="\n",append=TRUE)
 #' @return each print generates a new line automatically
 #' @details do not use R \code{\link{print}}, not actually printing \\n
 #' @seealso \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 #' @export
-ez.print = function(..., file = "", sep='', fill = FALSE, labels = NULL, append = FALSE){
-    cat(..., "\n", file=file, sep=sep, fill=fill, labels=labels, append=append)
+ez.print = function(string, file = '', append = TRUE, sep='', fill = FALSE, labels = NULL){
+    cat(string, "\n", file=file, sep=sep, fill=fill, labels=labels, append=append)
 }
 
 #' colorful print
