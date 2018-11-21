@@ -835,12 +835,12 @@ ez.join = function(sep='',...){
     paste(...,sep=sep)
 }
 
-#' wrapper of \code{\link{cat}}, cat(string, "\n", sep='')
-#' @description wrapper of \code{\link{cat}}, cat(string, "\n", sep='')
+#' wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')
+#' @description wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')
 #' @param string a single character vector, other types will be auto converted with as.character() by cat()
 #' \cr        ez.print(factor(4:5)) --> 12
 #' \cr        ez.print(c(pi,'=',3))  --> 3.14159265358979=3
-#' \cr        ez.print(c('var','\\t','p')) --> var\tp
+#' \cr        ez.print(c('var','\\t','p')) --> var\\tp
 #' @param sep default empty. a character vector of strings to append after each element.
 #' @param file filepath, default ''=print to console; if provided, save to a file and no output in console
 #' @param append T/F
@@ -849,6 +849,7 @@ ez.join = function(sep='',...){
 #' @details do not use R \code{\link{print}}, not actually printing \\n
 #' @seealso \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}
 #' @export
+# above \\ used, because of Rd compilation
 ez.print = function(string, file = '', append = TRUE, sep='', fill = FALSE, labels = NULL){
     cat(string, "\n", file=file, sep=sep, fill=fill, labels=labels, append=append)
 }

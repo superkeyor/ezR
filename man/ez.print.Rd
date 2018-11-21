@@ -2,7 +2,7 @@
 % Please edit documentation in R/basic.R
 \name{ez.print}
 \alias{ez.print}
-\title{wrapper of \code{\link{cat}}, cat(string, "\n", sep='')}
+\title{wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')}
 \usage{
 ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
   labels = NULL)
@@ -11,7 +11,7 @@ ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
 \item{string}{a single character vector, other types will be auto converted with as.character() by cat()
 \cr        ez.print(factor(4:5)) --> 12
 \cr        ez.print(c(pi,'=',3))  --> 3.14159265358979=3
-\cr        ez.print(c('var','\\t','p')) --> var\tp}
+\cr        ez.print(c('var','\\t','p')) --> var\\tp}
 
 \item{file}{filepath, default ''=print to console; if provided, save to a file and no output in console}
 
@@ -23,7 +23,7 @@ ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
 each print generates a new line automatically
 }
 \description{
-wrapper of \code{\link{cat}}, cat(string, "\n", sep='')
+wrapper of \code{\link{cat}}, cat(string, "\\n", sep='')
 }
 \details{
 do not use R \code{\link{print}}, not actually printing \\n
