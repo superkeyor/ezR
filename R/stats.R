@@ -230,11 +230,12 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
 
 #' view df in excel (saved to a temp file, auto delete the temp file)
 #' @description view df in excel (saved to a temp file, auto delete the temp file)
-#' @param ... one or more df. df1, df2 becomes Sheet1, Sheet2 etc
+#' @param temp when file is NULL, the name prefix for the temp excel file. If prefix not provided through this param, auto generate one
+#' @param label T/F. call ez.2label() 
 #' @return returns nothing
-#' @note when debug provided, overwrites getOption('debug')
+#' @note when debug provided, overwrites getOption('debug'). A trick to use: let View=ez.xl, then you can use GUI to click.
 #' @export
-ez.x = function(...,temp=NULL,debug=NULL) {
+ez.xl = function(df,temp=NULL,debug=NULL,label=TRUE) {
     debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
 
     # overwritten by 'debug' passed to function
@@ -243,7 +244,8 @@ ez.x = function(...,temp=NULL,debug=NULL) {
             if (is.null(temp)) temp = paste0('Data_')
             file=tempfile(pattern = paste0(temp, '_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
             on.exit(unlink(file))
-            ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
+            if (label) df = ez.2label(df)
+            ez.savexlist(list("Sheet1"=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
             ez.open(file)
             ez.sleep(6)
         }
@@ -252,7 +254,8 @@ ez.x = function(...,temp=NULL,debug=NULL) {
             if (is.null(temp)) temp = paste0('Data_')
             file=tempfile(pattern = paste0(temp, '_',ez.moment(),'_'), tmpdir = tempdir(), fileext = ".xlsx")
             on.exit(unlink(file))
-            ez.savexlist(list(...),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
+            if (label) df = ez.2label(df)
+            ez.savexlist(list("Sheet1"=df),file=file,withFilter = TRUE,rowNames = FALSE, colNames = TRUE)
             ez.open(file)
             ez.sleep(6)
         }
@@ -308,9 +311,8 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
 #' @param order vector order for printing out, 'as','az','za'
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
-#' @param printcn Counts/Levels print n
 #' @export
-ez.vi = function(x,printn=35,printcn=600,order='as') {
+ez.vi = function(x,printn=35,order='as') {
     v = x
     if (is.data.frame(v) | is.matrix(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
@@ -406,7 +408,7 @@ ez.vi = function(x,printn=35,printcn=600,order='as') {
         }
 
         if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts/Levels (Incl NA): \n%s\n\n',v.levels %>% toString(width=printcn)))
+            cat(sprintf('Counts/Levels (Incl NA): \n%s\n\n',v.levels %>% toString(width=printn*20)))
         }
         cat(sprintf("Uniques (Incl NA, NA might be printed as 'NA'): \n%s\n\n", v.elements))
         cat(sprintf('#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Non-NA: %d\t#Total: %d\n', v.unique, v.missing, v.missing*100/v.n, v.n-v.missing, v.n))
