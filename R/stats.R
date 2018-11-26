@@ -285,10 +285,10 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
 
     if (quote) {
         if (is.null(printn)){
-            printout=noquote(paste0("'",noquote(paste0(vec,collapse = "',   '")),"'"))
+            printout=noquote(paste0("'",noquote(paste0(vec,collapse = "', '")),"'"))
         } else {
-            header = noquote(paste0("'",noquote(paste0(vec[1:printn],collapse = "',     '")),"'"))
-            tailer = noquote(paste0("'",noquote(paste0(vec[(length(vec)-printn+1):length(vec)],collapse = "',   '")),"'"))
+            header = noquote(paste0("'",noquote(paste0(vec[1:printn],collapse = "', '")),"'"))
+            tailer = noquote(paste0("'",noquote(paste0(vec[(length(vec)-printn+1):length(vec)],collapse = "', '")),"'"))
             printout = noquote(paste(header,tailer,sep=",..................,"))
         }
     } else {
