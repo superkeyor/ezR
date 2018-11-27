@@ -4,7 +4,7 @@
 \alias{ez.cp}
 \title{copy}
 \usage{
-ez.cp(from, to)
+ez.cp(from, to, overwrite = TRUE)
 }
 \description{
 copy

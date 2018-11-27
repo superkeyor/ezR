@@ -590,7 +590,7 @@ ez.rn = function(from,to){
 #' flist <- list.files("patha", "^filea.+[.]csv$", full.names = TRUE)
 #' file.copy(flist, "pathb")
 #' @export
-ez.cp = function(from,to){
+ez.cp = function(from,to,overwrite=TRUE){
     # if from is file
     if (!(file.info(from)$isdir[1])) {
         # both works file.copy('a.txt','folder'), file.copy('a.txt','folder/b.txt')
@@ -606,12 +606,12 @@ ez.cp = function(from,to){
             todir <- dirname(to)
             if (!isTRUE(file.info(todir)$isdir)) dir.create(todir, recursive=TRUE)
         }
-        result = file.copy(from, to, overwrite = TRUE, recursive = FALSE)
+        result = file.copy(from, to, overwrite = overwrite, recursive = FALSE)
     }
     else {
         # if to exist, from becomes a subfolder of to
         if (isTRUE(file.info(to)$isdir)) {
-            result = file.copy(from, to, overwrite = TRUE, recursive = TRUE)
+            result = file.copy(from, to, overwrite = overwrite, recursive = TRUE)
         }
         # else copy each individual file
         else {
@@ -620,7 +620,7 @@ ez.cp = function(from,to){
             result = sapply(allFiles, function(x) {
                 file.copy(from=file.path(from, x),
                           to=file.path(to, x),
-                          overwrite=TRUE) })
+                          overwrite=overwrite) })
         }
     }
 }
