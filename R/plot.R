@@ -5,8 +5,8 @@
 ###**************************************************.
 ###*without ez. in the function name.
 ###**************************************************.
-#' Multiple plot function
-#' @description Multiple plot function
+#' Multiple plot function, accepts a list of ggplot (not plot) objects
+#' @description Multiple plot function, accepts a list of ggplot (not plot) objects
 #' @param plotlist objects can be passed in ..., or to plotlist (as a list of ggplot objects)
 #' (p1,p2,p3), (plotlist=list(p1,p2,p3)), or (p1,plotlist=list(p2,p3))
 #' @param cols:   Number of columns in layout.. If present, 'cols' is ignored. If both cols and layout NULL, auto calculate
@@ -74,8 +74,8 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
     }
 }
 
-#' Multiple plot function
-#' @description Multiple plot function
+#' Multiple plot function, accepts a list of plot (not ggplot) objects
+#' @description Multiple plot function, accepts a list of plot (not ggplot) objects
 #' @param plotlist objects can be passed in ..., or to plotlist (as a list of plot objects)
 #' (p1,p2,p3), (plotlist=list(p1,p2,p3)), or (p1,plotlist=list(p2,p3))
 #' @param cols:   Number of columns in layout. If present, 'cols' is ignored. If both cols and layout NULL, auto calculate
@@ -91,9 +91,9 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
 #'     p1 = qplot(1:10, rnorm(10), main = i)
 #'     plots[[i]] <- p1  # add each plot into plot list
 #' }
-#' gmultiplot(plotlist = plots, cols = 3)
+#' pmultiplot(plotlist = plots, cols = 3)
 #'
-#' gmultiplot(p1,p2,p3, cols = 3)
+#' pmultiplot(p1,p2,p3, cols = 3)
 #'
 #' plots <- list()
 #' for (i in 1:5) {
@@ -101,13 +101,13 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
 #'     plots[[i]] <- p1
 #' }
 #' layout <- matrix(c(1, 1, 2, 3, 4, 5), nrow = 2, byrow = TRUE)
-#' gmultiplot(plotlist = plots, layout = layout)
+#' pmultiplot(plotlist = plots, layout = layout)
 #' layout <- matrix(c(1, NA, 2,
 #'                    3, 4, 5), nrow = 2, byrow = TRUE)  # NA for placeholder
-#' gmultiplot(plotlist = plots, layout = layout)
+#' pmultiplot(plotlist = plots, layout = layout)
 #'
 #' @references inspired by \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
-gmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
+pmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
     # Make a list from the ... arguments and plotlist
     # remove NULL objects from ..., see https://stackoverflow.com/a/48519190/2292993
     plots <- c(Filter(Negate(is.null), list(...)), plotlist)
@@ -724,7 +724,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                          ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=%s)) +
                          geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                          %s +
-                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
+                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
 
                          %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
@@ -751,7 +751,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                             ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=%s)) +
                             geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                             %s +
-                            geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
+                            geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
 
                             %s %s %s
                             %s %s
@@ -782,7 +782,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                                 ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=zzaa)) +
                                 geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                                 %s +
-                                geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
+                                geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
 
                                 %s %s %s
                                 %s %s
@@ -875,7 +875,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                          ggplot2::ggplot(aes(x=%s,y=avgAverage,group=1)) +
                          geom_point() +
                          geom_line(size=%f) +
-                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
+                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
 
                          %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
