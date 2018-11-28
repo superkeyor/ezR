@@ -143,6 +143,7 @@ pmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
 #' @export
 gghistory=function(pp){
   cat(pp$gghistory)
+  return(invisible(pp$gghistory))
 }
 
 #' pass through a ggplot object, see examples

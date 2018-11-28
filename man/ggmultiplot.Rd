@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{ggmultiplot}
 \alias{ggmultiplot}
-\title{Multiple plot function}
+\title{Multiple plot function, accepts a list of ggplot (not plot) objects}
 \usage{
 ggmultiplot(..., plotlist = NULL, file, cols = NULL, layout = NULL)
 }
@@ -21,7 +21,7 @@ ggmultiplot(..., plotlist = NULL, file, cols = NULL, layout = NULL)
 returns nothing (NULL)
 }
 \description{
-Multiple plot function
+Multiple plot function, accepts a list of ggplot (not plot) objects
 }
 \examples{
 plots <- list()  # new empty list
