@@ -235,14 +235,16 @@ theme_apa <- function(plot.box = FALSE, labsize = 18, textsize = 16){
         axis.text.y=element_text(family=RMN, size=textsize, colour="black"),
         axis.ticks=element_line(colour="black"))
 
-    if (!plot.box) {
-        out <- out + theme(panel.background = element_rect(fill = "white",
-                                                           colour = "black"), panel.border = element_rect(fill = NA,
-                                                                                                          colour = "white"), axis.line = element_line())
+    if (plot.box) {
+        # panel.border without axis.line
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+                           panel.border = element_rect(fill = NA, colour = "black"))
+
     } else {
-        out <- out + theme(panel.background = element_rect(fill = "white",
-                                                           colour = "white"), panel.border = element_rect(fill = NA,
-                                                                                                          colour = "grey50"))
+        # no panel.border but axis.line
+        out <- out + theme(panel.background = element_rect(fill = NA,colour = NA), 
+                           panel.border = element_rect(fill = NA, colour = NA), 
+                           axis.line = element_line(colour = "black"))
     }
     out
 
@@ -284,14 +286,16 @@ theme_apa_nosize <- function(plot.box = FALSE){
         axis.text.y=element_text(family=RMN, colour="black"),
         axis.ticks=element_line(colour="black"))
 
-    if (!plot.box) {
-        out <- out + theme(panel.background = element_rect(fill = "white",
-                                                           colour = "black"), panel.border = element_rect(fill = NA,
-                                                                                                          colour = "white"), axis.line = element_line())
+    if (plot.box) {
+        # panel.border without axis.line
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+                           panel.border = element_rect(fill = NA, colour = "black"))
+
     } else {
-        out <- out + theme(panel.background = element_rect(fill = "white",
-                                                           colour = "white"), panel.border = element_rect(fill = NA,
-                                                                                                          colour = "grey50"))
+        # no panel.border but axis.line
+        out <- out + theme(panel.background = element_rect(fill = NA,colour = NA), 
+                           panel.border = element_rect(fill = NA, colour = NA), 
+                           axis.line = element_line(colour = "black"))
     }
     out
 
@@ -720,7 +724,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                          ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=%s)) +
                          geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                          %s +
-                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
 
                          %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
@@ -747,7 +751,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                             ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=%s)) +
                             geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                             %s +
-                            geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+                            geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
 
                             %s %s %s
                             %s %s
@@ -778,7 +782,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
                                 ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=zzaa)) +
                                 geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
                                 %s +
-                                geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+                                geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
 
                                 %s %s %s
                                 %s %s
@@ -871,7 +875,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                          ggplot2::ggplot(aes(x=%s,y=avgAverage,group=1)) +
                          geom_point() +
                          geom_line(size=%f) +
-                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+                         geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, color="grey55", position=position_dodge(width=%f)) +
 
                          %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
