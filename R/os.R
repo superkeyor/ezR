@@ -556,14 +556,14 @@ ez.rm = function(x){
 #' to parent folder must exist already; otherwise error
 #' in case new name exists
 #'       if old and new both folders, move old to new as subfolder
-#'       if old and new both files, overwrite the new file with old file without prompt
+#'       if old and new both files, overwrite the old file with new file without prompt
 #' @export
 ez.rn = function(from,to){
     todir <- dirname(to)
-    if (!isTRUE(file.info(todir)$isdir)) stop("Destination parent folder does not exist")
+    if (!all(file.info(todir)$isdir)) stop("Destination parent folder does not exist")
     # both from and to are exisiting folders
     if ((nchar(tools::file_ext(from)) == 0) && (nchar(tools::file_ext(to)) == 0)) {
-        if ((isTRUE(file.info(from)$isdir)) && (isTRUE(file.info(to)$isdir))) {
+        if ((all(file.info(from)$isdir)) && (all(file.info(to)$isdir))) {
             result = ez.mv(from,to)
         }
         else {
@@ -592,25 +592,25 @@ ez.rn = function(from,to){
 #' @export
 ez.cp = function(from,to,overwrite=TRUE){
     # if from is file
-    if (!(file.info(from)$isdir[1])) {
+    if (!all(file.info(from)$isdir)) {
         # both works file.copy('a.txt','folder'), file.copy('a.txt','folder/b.txt')
         # the former copy still has the same name 'a.txt', the latter copy new name 'b.txt'
 
         # if to is folder-like
         if (nchar(tools::file_ext(to)) == 0) {
             # if to not exist
-            if (!isTRUE(file.info(to)$isdir)) dir.create(to, recursive=TRUE)
+            if (!all(file.info(to)$isdir)) dir.create(to, recursive=TRUE)
         }
         else {
             # if to parent not exist
             todir <- dirname(to)
-            if (!isTRUE(file.info(todir)$isdir)) dir.create(todir, recursive=TRUE)
+            if (!all(file.info(todir)$isdir)) dir.create(todir, recursive=TRUE)
         }
         result = file.copy(from, to, overwrite = overwrite, recursive = FALSE)
     }
     else {
         # if to exist, from becomes a subfolder of to
-        if (isTRUE(file.info(to)$isdir)) {
+        if (all(file.info(to)$isdir)) {
             result = file.copy(from, to, overwrite = overwrite, recursive = TRUE)
         }
         # else copy each individual file
@@ -631,6 +631,7 @@ ez.cp = function(from,to,overwrite=TRUE){
 #' support c('a.txt','b.txt')
 #' to parent folder does not have to exist already
 #' ez.mv('a.txt','folder'), ez.mv('a.txt','folder/a.txt'), ez.mv('a.txt','folder/b.txt')
+#' ez.mv('a.txt','b.txt') # essentially rename, but recommends ez.rn('a.txt','b.txt') for consistencies
 #' ez.mv('a','b')-->get b/a, b now has a as subfolder, regardless of b exists or not
 #'                  use ez.rn('a','b') to change name a->b
 #' @export
@@ -638,13 +639,13 @@ ez.mv = function(from,to){
     # if to is folder-like
     if (nchar(tools::file_ext(to)) == 0) {
         # if to not exist
-        if (!isTRUE(file.info(to)$isdir)) dir.create(to, recursive=TRUE)
+        if (!all(file.info(to)$isdir)) dir.create(to, recursive=TRUE)
         to = file.path(to, basename(from))
     }
     else {
         # if to parent not exist
         todir <- dirname(to)
-        if (!isTRUE(file.info(todir)$isdir)) dir.create(todir, recursive=TRUE)
+        if (!all(file.info(todir)$isdir)) dir.create(todir, recursive=TRUE)
     }
     result = file.rename(from = from, to = to)
 }

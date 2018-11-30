@@ -13,6 +13,7 @@ move
 support c('a.txt','b.txt')
 to parent folder does not have to exist already
 ez.mv('a.txt','folder'), ez.mv('a.txt','folder/a.txt'), ez.mv('a.txt','folder/b.txt')
+ez.mv('a.txt','b.txt') # essentially rename, but recommends ez.rn('a.txt','b.txt') for consistencies
 ez.mv('a','b')-->get b/a, b now has a as subfolder, regardless of b exists or not
                  use ez.rn('a','b') to change name a->b
 }
