@@ -20,7 +20,7 @@ ez.fishers(df, y, x, showerror = T, viewresult = F, plot = T, cols = 3,
 
 \item{plot}{T/F, the dash line is bonferroni p = 0.05}
 
-\item{cols}{number of columns for gmultiplot. NULL=auto calculate}
+\item{cols}{number of columns for ggmultiplot. NULL=auto calculate}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
