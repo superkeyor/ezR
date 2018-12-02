@@ -803,8 +803,8 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
     return(invisible(list(result)))
 }
 
-#' a series of one-way anova, for many y and many x; if many y and many x at the same time, returns a list
-#' @description df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
+#' a series of one-way between-subjects anova, for many y and many x; if many y and many x at the same time, returns a list
+#' @description anova 1b, df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 #' @param df a data frame
 #' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
@@ -820,7 +820,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared.
 #' @export
-ez.anovas = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.anovas1b = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -828,7 +828,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,cols=
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.anovas(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.anovas1b(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
