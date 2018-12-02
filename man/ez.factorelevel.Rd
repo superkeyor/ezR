@@ -17,6 +17,6 @@ returns a new df, factor, vector (has no effect on (ie, make no change to) a non
 \description{
 reset factor levels in a factor, df (all) cols after its levels have been modified (eg, after using dplyr::filter)
 relevel a factor in order to reflect its new levels
-does not change factor label (set factor order as is)
+does not change factor label (try to keep input factor order)
 has not effect on (ie, make no change to) a non-factor object
 }

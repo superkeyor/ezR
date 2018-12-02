@@ -231,7 +231,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
 #' view df in excel (saved to a temp file, auto delete the temp file)
 #' @description view df in excel (saved to a temp file, auto delete the temp file)
 #' @param temp when file is NULL, the name prefix for the temp excel file. If prefix not provided through this param, auto generate one
-#' @param label T/F. call ez.2label() 
+#' @param label T/F. call ez.2label()
 #' @return returns nothing
 #' @note when debug provided, overwrites getOption('debug'). A trick to use: let View=ez.xl, then you can use GUI to click.
 #' @export
@@ -858,7 +858,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','etasq2','degree_of_freedom','mean12_difference','means','counts')
-    result %<>% ez.num() %>% ez.dropna()
+    result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))

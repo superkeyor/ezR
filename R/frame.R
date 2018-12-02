@@ -542,7 +542,7 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
 #' reset factor levels
 #' @description reset factor levels in a factor, df (all) cols after its levels have been modified (eg, after using dplyr::filter)
 #' relevel a factor in order to reflect its new levels
-#' does not change factor label (set factor order as is)
+#' does not change factor label (try to keep input factor order)
 #' has not effect on (ie, make no change to) a non-factor object
 #' @param x data frame or vector, factor
 #' @param cols column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols
@@ -555,7 +555,17 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
             if (print2screen) cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
             varlab <- attr(x,'label',exact=T)
             labs = ez.getlabels(x)
-            x = factor(x, unique(as.character(x)))
+
+            # a bit ugly. 
+            actual = unique(as.character(x))
+            ord = match( actual, levels(x), nomatch=0 )
+            # in case many levels, so 1, 10, 100 order weirdly 
+            ord = paste0('ord',sprintf('%36d',ord))
+            names(actual) = ord
+            ord = actual[sort(ord)]
+            ord = unname(ord)
+
+            x = factor(x, ord)
             attr(x,'label') <- varlab
             x = ez.setlabels(x,ez.flipflop(labs))
         }
