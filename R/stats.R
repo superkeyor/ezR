@@ -18,22 +18,35 @@ ez.describe = function(x){
     # flush.console()
 }
 
-p.apa = function(pvalue){
-    if (pvalue<.001) {
-        pvalue = sprintf("p < .001")
-    } else if (pvalue<.005) {
-        pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
-    } else if (pvalue<.01) {
-        pvalue = sprintf("p = .01")
+p.apa = function(pvalue,pprefix=F){
+    if (pprefix) {
+        if (pvalue<.001) {
+            pvalue = sprintf("p < .001")
+        } else if (pvalue<.005) {
+            pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
+        } else if (pvalue<.01) {
+            pvalue = sprintf("p = .01")
+        } else {
+            pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+        }
     } else {
-        pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+        if (pvalue<.001) {
+            pvalue = sprintf("< .001")
+        } else if (pvalue<.005) {
+            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
+        } else if (pvalue<.01) {
+            pvalue = sprintf(".01")
+        } else {
+            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+        }
     }
     return(pvalue)
 }
 #' format p value according to apa for report
 #' @description format p value according to apa for report
 #' @param pvalue numeric vector
-#' @return character vector (p < .001, p = .003, p = .02)
+#' @param pprefix T/F
+#' @return character vector (< .001, .003, .02) or (p < .001, p = .003, p = .02)
 #' @export
 ez.p.apa = Vectorize(p.apa)
 
@@ -859,30 +872,36 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,cols=
         tryCatch({
         df = ez.dropna(df,c(yy,xx),print2screen=F)
         a = aov(df[[yy]]~df[[xx]])
-        p = summary(a)[[1]][["Pr(>F)"]][[1]]
-        degree_of_freedom = toString(summary(a)[[1]][['Df']])
+        aa = summary(a)[[1]]
+        p = aa[["Pr(>F)"]][[1]]
+        # compare with spss output
+        # https://libguides.library.kent.edu/SPSS/OneWayANOVA
+        F = aa[['F value']][[1]]
+        degree_of_freedom = toString(aa[['Df']])
+        MSE = aa[['Mean Sq']][[2]]
         s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
-        sd = aggregate(df[[yy]]~df[[xx]],FUN=sd)
+        sdev = aggregate(df[[yy]]~df[[xx]],FUN=sd)
         n = aggregate(df[[yy]]~df[[xx]],FUN=length)
-        means = ''; counts = ''
-        for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f (%.2f)',s[i,2],sd[i,2]),sep='\t')}
+        means = ''; means.apa = ''; counts = ''
+        for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
+        for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
         for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
         # https://stats.stackexchange.com/a/78813/100493
         etasq2 = summary.lm(a)$r.squared
         s = aggregate(scale(df[[yy]])~df[[xx]],FUN=mean)
         mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
-        out = c(xx,yy,p,etasq2,degree_of_freedom,mean12_zdifference,means,counts)
+        out = c(xx,yy,p,etasq2,F,degree_of_freedom,MSE,mean12_zdifference,means,counts,means.apa)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
-            return(c(xx,yy,NA,NA,NA,NA,NA,NA))
+            return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA,NA))
         })
     }
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','etasq2','degree_of_freedom','mean12_zdifference','means','counts')
+    names(result) <- c('x','y','p','etasq2','F','degree_of_freedom','MSE','mean12_zdifference','means','counts','means.apa')
     result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot) {
@@ -919,18 +938,24 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,cols=
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
     result$orindex=1:nrow(result)
-    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; means last') %>% dplyr::arrange(p)
+    result$p.apa = ez.p.apa(result$p,pprefix=F)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.apa last') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
     if (reportresult) {
-        report = result %>% dplyr::arrange(orindex) %>% select(x,y,degree_of_freedom,p,etasq2,means)
-        report$p = ez.p.apa(report$p)
+        report = result %>% dplyr::arrange(orindex)
+        ez.print('------')
         for (i in 1:nrow(report)){
-            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means[i],report$p[i]))
+            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.apa[i],ez.p.apa(report$p[i],pprefix=F)))
         }
         ez.print('------')
         for (i in 1:nrow(report)){
-            ez.print(sprintf('%s,%s\tF(%s) = , MSE = , %s, n2 = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$p[i],report$etasq2[i]))
+            if (report$F[i] < 1) {
+                ez.print(sprintf('%s,%s\tF(%s) < 1', report$x[i],report$y[i],report$degree_of_freedom[i]))
+            } else {
+                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, etasq2 = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),report$etasq2[i]))
+            }
         }
+        ez.print('------')
     }
     return(invisible(list(result)))
 }
