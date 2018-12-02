@@ -18,6 +18,25 @@ ez.describe = function(x){
     # flush.console()
 }
 
+p.apa = function(pvalue){
+    if (pvalue<.001) {
+        pvalue = sprintf("p < .001")
+    } else if (pvalue<.005) {
+        pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
+    } else if (pvalue<.01) {
+        pvalue = sprintf("p = .01")
+    } else {
+        pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+    }
+    return(pvalue)
+}
+#' format p value according to apa for report
+#' @description format p value according to apa for report
+#' @param pvalue numeric vector
+#' @return character vector (p < .001, p = .003, p = .02)
+#' @export
+ez.p.apa = Vectorize(p.apa)
+
 #' compare two vectors, two dataframes
 #' @description compare two vectors, two dataframes
 #' @note nrow() for data frame, length() for vector. union/intersect remove duplication
@@ -557,9 +576,11 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
 
         if (is.null(covar)) {
             covar = ''
+            covar2 = NULL
             rcovar = ''
         } else {
             covar=ez.selcol(df,covar)
+            covar2 = covar
             df=ez.2value(df,covar,...)
             rcovar = paste('+',covar,sep='',collapse='')
             covar = paste('+scale(df[["',covar,'"]])',sep='',collapse='')
@@ -584,12 +605,14 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         degree_of_freedom = model$df[2]
 
         # only calculate the one that varies
-        v = if (!swap) df[[yy]] else df[[xx]]
+        v = if (!swap) yy else xx
+        # remove NA (also considering covar)
+        v = ez.dropna(df,c(v,covar2),print2screen=F) %>% .[[v]]
         v.unique=length(unique(v))
-        v.min=min(v,na.rm=TRUE)
-        v.max=max(v,na.rm=TRUE)
-        v.mean=mean(v,na.rm=TRUE)
-        v.sd=sd(v,na.rm=TRUE)
+        v.min=min(v)
+        v.max=max(v)
+        v.mean=mean(v)
+        v.sd=sd(v)
 
         out = c(yy,xx,p,rp,beta,degree_of_freedom,v.unique,v.min,v.max,v.mean,v.sd)
         return(out)
@@ -784,7 +807,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared.
 #' @export
-ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.anovas = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -796,8 +819,8 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
-                if (!all(is.na(result$mean12_difference))) {
-                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
+                if (!all(is.na(result$mean12_zdifference))) {
+                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$mean12_zdifference,
                        xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
                        ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                        scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
@@ -834,19 +857,21 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
         if (swap) {tmp=xx;xx=yy;yy=tmp}
 
         tryCatch({
+        df = ez.dropna(df,c(yy,xx),print2screen=F)
         a = aov(df[[yy]]~df[[xx]])
         p = summary(a)[[1]][["Pr(>F)"]][[1]]
         degree_of_freedom = toString(summary(a)[[1]][['Df']])
         s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
+        sd = aggregate(df[[yy]]~df[[xx]],FUN=sd)
         n = aggregate(df[[yy]]~df[[xx]],FUN=length)
         means = ''; counts = ''
-        for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],s[i,2],sep='\t')}
+        for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f (%.2f)',s[i,2],sd[i,2]),sep='\t')}
         for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
         # https://stats.stackexchange.com/a/78813/100493
         etasq2 = summary.lm(a)$r.squared
         s = aggregate(scale(df[[yy]])~df[[xx]],FUN=mean)
-        mean12_difference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
-        out = c(xx,yy,p,etasq2,degree_of_freedom,mean12_difference,means,counts)
+        mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
+        out = c(xx,yy,p,etasq2,degree_of_freedom,mean12_zdifference,means,counts)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
@@ -857,13 +882,13 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','etasq2','degree_of_freedom','mean12_difference','means','counts')
+    names(result) <- c('x','y','p','etasq2','degree_of_freedom','mean12_zdifference','means','counts')
     result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot) {
         bonferroniP = -log10(0.05/length(result[['p']]))
-        if (!all(is.na(result$mean12_difference))) {
-            pp=lattice::xyplot(-log10(result$p) ~ result$mean12_difference,
+        if (!all(is.na(result$mean12_zdifference))) {
+            pp=lattice::xyplot(-log10(result$p) ~ result$mean12_zdifference,
                        xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
                        ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                        scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
@@ -894,8 +919,19 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
     result$orindex=1:nrow(result)
-    result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; means last') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
+    if (reportresult) {
+        report = result %>% dplyr::arrange(orindex) %>% select(x,y,degree_of_freedom,p,etasq2,means)
+        report$p = ez.p.apa(report$p)
+        for (i in 1:nrow(report)){
+            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means[i],report$p[i]))
+        }
+        ez.print('------')
+        for (i in 1:nrow(report)){
+            ez.print(sprintf('%s,%s\tF(%s) = , MSE = , %s, n2 = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$p[i],report$etasq2[i]))
+        }
+    }
     return(invisible(list(result)))
 }
 
