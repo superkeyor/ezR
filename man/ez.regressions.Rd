@@ -22,7 +22,7 @@ ez.regressions(df, y, x, covar = NULL, showerror = T, viewresult = F,
 
 \item{plot}{T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05}
 
-\item{cols}{number of columns for ggmultiplot. NULL=auto calculate}
+\item{cols}{number of columns for multiplot. NULL=auto calculate}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 

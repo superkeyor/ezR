@@ -502,7 +502,7 @@ ez.zresid = function(model,method=3) {
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05
-#' @param cols number of columns for ggmultiplot. NULL=auto calculate
+#' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible list of data frame
@@ -661,7 +661,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
-#' @param cols number of columns for ggmultiplot. NULL=auto calculate
+#' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible list of data frame
@@ -775,7 +775,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
-#' @param cols number of columns for ggmultiplot. NULL=auto calculate
+#' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df[[yy]],...)
 #' @return an invisible list of data frame
@@ -907,7 +907,7 @@ ez.anovas = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('b
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
-#' @param cols number of columns for ggmultiplot. NULL=auto calculate
+#' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible list of data frame
@@ -1198,7 +1198,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
                   type = "p", pch=16,
                   col="#56b4e9")
     }
-    ggmultiplot(p1,p2,cols=2)
+    multiplot(p1,p2,cols=2)
 
     return(invisible(counts))
 }
