@@ -164,7 +164,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
     for (var in vars) {
         v.variable=var
         v.class=class(df[[var]]) %>% toString(width=width)  # could have multiple classes
-        v.is_all_numeric_like = ez.is.numeric.like(df[[var]])
+        v.is_all_numeric_like = all(ez.is.numeric.like(df[[var]]))
         v.n=length(df[[var]])
         v.missing=sum(is.na(df[[var]]))
         v.unique=length(unique(df[[var]]))
