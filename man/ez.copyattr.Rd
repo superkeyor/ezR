@@ -11,7 +11,7 @@ ez.copyattr(x, col = NULL, attrs = c("label", "labels"), ...)
 
 \item{col}{evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.}
 
-\item{attrs}{variable label: c('variable.labels', 'label'); value labels: c('value.labels', 'labels'). run names(attributes(x)) to see all attributes}
+\item{attrs}{variable label: c('variable.labels', 'label'); value labels: c('value.labels', 'labels'). run names(attributes(x)) to see all attributes. But be cautionous that some attributes are "dangerous" to directly copy and paste this way (eg., levels,class)}
 }
 \value{
 returns a list of list (x is df), or list (x is vector). Works fine even if x, its col, does not have attrs.
