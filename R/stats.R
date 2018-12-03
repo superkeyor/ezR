@@ -155,7 +155,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
 
 
     # col summary
-    results = ez.header(variable=character(),class=character(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
+    results = ez.header(variable=character(),class=character(),is_all_numeric_like=logical(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
                         counts_levels_view1=character(),counts_levels_view2=character(),
                         mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
     vars=colnames(df)
@@ -164,6 +164,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
     for (var in vars) {
         v.variable=var
         v.class=class(df[[var]]) %>% toString(width=width)  # could have multiple classes
+        v.is_all_numeric_like = ez.is.numeric.like(df[[var]])
         v.n=length(df[[var]])
         v.missing=sum(is.na(df[[var]]))
         v.unique=length(unique(df[[var]]))
@@ -206,7 +207,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
         } else {
             v.mean=v.min=v.max=v.sum=NA
         }
-        results = ez.append(results,list(v.variable,v.class,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
+        results = ez.append(results,list(v.variable,v.class,v.is_all_numeric_like,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
     }
     v.duplicated.varname=ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     v.duplicated.varname[which(!v.duplicated.varname)]=NA
