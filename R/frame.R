@@ -557,7 +557,7 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
             labs = ez.getlabels(x)
 
             # UA=c('c','a','b'); UB=c('b','c','d'); # desired output: c('b','c','a')
-            AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!UA %in% UB]))}
+            AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!(UA %in% UB)]))}
             ord = AmatchlikeB(unique(as.character(x)), levels(x))
             x = factor(x, ord)
 
@@ -932,7 +932,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
             factored = ifelse(is.factor(dfcol), TRUE, FALSE)
 
             # UA=c('c','a','b'); UB=c('b','c','d'); # desired output: c('b','c','a')
-            AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!UA %in% UB]))}
+            AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!(UA %in% UB)]))}
             ord = AmatchlikeB(unique(as.character(dfcol)), levels(dfcol))
             ord[which(ord %in% oldval)] <- newval
             ord = unique(ord)
@@ -1039,9 +1039,9 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                 df[[col]][theRow2] <- newval
 
                 # UA=c('c','a','b'); UB=c('b','c','d'); # desired output: c('b','c','a')
-                AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!UA %in% UB]))}
+                AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!(UA %in% UB)]))}
                 ord = AmatchlikeB(unique(as.character(df[[col]])), oldlevels)
-                
+
                 if (factored) {df[[col]]=factor(df[[col]],ord)}
                 df[[col]] = ez.setlabel(df[[col]],lab); df[[col]] = ez.setlabels(df[[col]],ez.flipflop(labs))
             }
