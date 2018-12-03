@@ -1028,7 +1028,7 @@ ez.replacewhen = function(df, print2screen=T, ...) {
 
                 lab = ez.getlabel(df[[col]]); labs = ez.getlabels(df[[col]])
                 factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
-                x = df[[col]]
+                x = df[[col]] 
                 actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord); ord = unique(ord)
                 ord[which(ord %in% oldval)] <- newval
                 ord = unique(ord)
