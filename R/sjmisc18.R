@@ -7162,6 +7162,9 @@ to_label_helper <- function(x, add.non.labelled, prefix, drop.na) {
                    attr.only = TRUE,
                    include.values = iv,
                    include.non.labelled = add.non.labelled)
+  # jerry: if duplicated elements in vl, suggests already (likely) converted to label, but still somehow has attr attached/added
+  # in this case,simply return x
+  if (!is.null(vl)) {if (length(unique(vl))!=length((vl))) return(x)}
   # check if we have any labels, else
   # return variable "as is"
   if (!is.null(vl)) {
