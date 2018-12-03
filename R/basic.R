@@ -196,13 +196,13 @@ ez.is.empty <- function(x, trim = TRUE, ...) {
 #' \cr TRUE for any actual numeric c(3,4,5,9.9) or c("-3","+4.4",   "-42","4L","9L",   "1.36e4","1.36E4",    NA, "NA", "","NaN", NaN):
 #' \cr positive or negative numbers with no more than one decimal c("-3","+4.4") OR
 #' \cr positive or negative integers (e.g., c("-42","4L","39L")) OR
-#' \cr positive or negative numbers in scientific notation c("1.36e4","1.36E4")
+#' \cr positive or negative numbers in scientific notation c("1.36e4","1.36e-4","1.36e+4","1.36E4")
 #' \cr NA, or na.strings
 ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/A','n/a','NaN','nan')){
     x = trimws(x,'both')
     x[x %in% na.strings] = NA
     # https://stackoverflow.com/a/21154566/2292993
-    result = grepl("^[\\-\\+]?[0-9]+[\\.]?[0-9]*$|^[\\-\\+]?[0-9]+[L]?$|^[\\-\\+]?[0-9]+[\\.]?[0-9]*[eE][0-9]+$",x,perl=TRUE)
+    result = grepl("^[\\-\\+]?[0-9]+[\\.]?[0-9]*$|^[\\-\\+]?[0-9]+[L]?$|^[\\-\\+]?[0-9]+[\\.]?[0-9]*[eE][\\-\\+]?[0-9]+$",x,perl=TRUE)
     if (naAsTrue) result = result | is.na(x)
     return((result))
 }
