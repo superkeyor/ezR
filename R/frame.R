@@ -558,7 +558,7 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
 
             # a bit ugly. 
             # in case many levels, where 1, 10, 100 order weirdly 
-            actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord)
+            actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord); ord = unique(ord)
 
             x = factor(x, ord)
             attr(x,'label') <- varlab
@@ -931,8 +931,9 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
             # for factor, you cannot directly assign if the new val is not alredy in the levels, otherwise get "invalid factor level, NA generated"
             factored = ifelse(is.factor(dfcol), TRUE, FALSE)
             x=dfcol
-            actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord)
+            actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord); ord = unique(ord)
             ord[which(ord %in% oldval)] <- newval
+            ord = unique(ord)
             if (is.factor(dfcol)) {dfcol=as.character(dfcol)}
 
             if (is.na(oldval)) {
@@ -1028,8 +1029,9 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                 lab = ez.getlabel(df[[col]]); labs = ez.getlabels(df[[col]])
                 factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
                 x = df[[col]]
-                actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord)
+                actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord); ord = unique(ord)
                 ord[which(ord %in% oldval)] <- newval
+                ord = unique(ord)
                 if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
                 # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
                 df[[col]][theRow2] <- newval
