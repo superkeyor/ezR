@@ -932,6 +932,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
             factored = ifelse(is.factor(dfcol), TRUE, FALSE)
             x=dfcol
             actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord)
+            ord[which(ord %in% oldval)] <- newval
             if (is.factor(dfcol)) {dfcol=as.character(dfcol)}
 
             if (is.na(oldval)) {
@@ -1028,6 +1029,7 @@ ez.replacewhen = function(df, print2screen=T, ...) {
                 factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
                 x = df[[col]]
                 actual = unique(as.character(x)); ord = match( actual, levels(x), nomatch=0 ); ord = paste0('ord',sprintf('%036d',ord)); names(actual) = ord; ord = actual[sort(ord)]; ord = unname(ord)
+                ord[which(ord %in% oldval)] <- newval
                 if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
                 # df[theRow,col]=newval  # this syntax works also, but df[145:146,2,drop=F]=4 says unused arg drop=F
                 df[[col]][theRow2] <- newval
