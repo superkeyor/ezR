@@ -5,7 +5,7 @@
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
 ez.vx(df, temp = NULL, id = NULL, file = NULL, width = 300,
-  characterize = TRUE, incomparables = FALSE, debug = NULL, ...)
+  incomparables = FALSE, debug = NULL, ...)
 }
 \arguments{
 \item{df}{a data frame}
@@ -17,8 +17,6 @@ ez.vx(df, temp = NULL, id = NULL, file = NULL, width = 300,
 \item{file}{a file name, if NULL, a temp generated, will save more detailed variable information to an excel file}
 
 \item{width}{controls if too many factor levels to print, eg 300. NULL=unlimited}
-
-\item{characterize}{T/F count the element freq of character cols or not}
 }
 \value{
 returns a list $row, $col, $dat (input data frame), $pth (file path)

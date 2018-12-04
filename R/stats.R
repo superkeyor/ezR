@@ -82,7 +82,6 @@ ez.compare = function(lh,rh,...) {
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
 #' @param file a file name, if NULL, a temp generated, will save more detailed variable information to an excel file
 #' @param width controls if too many factor levels to print, eg 300. NULL=unlimited
-#' @param characterize T/F count the element freq of character cols or not
 #' @note when file=NULL (which stores to a temp file), debug=NULL, use getOption('debug') which is TRUE if not set up
 #' \cr when file=NULL, debug provided, overwrites getOption('debug')
 #' \cr when file provided, any debug is ignored
@@ -90,7 +89,7 @@ ez.compare = function(lh,rh,...) {
 #' \cr Updated: as of Thu, Nov 30 2017, not any more a wrapper of \code{\link[sjPlot]{view_df}}; can make the html bigger by openning in internet browser
 #' @return returns a list $row, $col, $dat (input data frame), $pth (file path)
 #' @export
-ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE, incomparables=FALSE, debug=NULL, ...){
+ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, incomparables=FALSE, debug=NULL, ...){
     # if temped and not debug, just jump out of the function to save time
     if (is.null(file)) {
         debugMode = if (is.null(getOption('debug'))) TRUE else getOption('debug')
@@ -168,27 +167,23 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, characterize=TRUE
         v.n=length(df[[var]])
         v.missing=sum(is.na(df[[var]]))
         v.unique=length(unique(df[[var]]))
-        # countable as levels
-        if ( is.factor(df[[var]]) | (is.character(df[[var]]) & characterize) | is.logical(df[[var]]) ) {
-            freqtable=dplyr::count_(df,var)
-            vallbl=sjmisc_get_labels(df[[var]],include.values='n',attr.only=T,include.non.labelled=F)
-            if (!is.null(vallbl)){
-                # ez.2label trick here, do not use the results from sjmisc_get_labels
-                vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
-                vallbl = paste("[",vallbl,"]",sep="")
-            } else {
-                vallbl = rep("", nrow(freqtable))
-            }
-
-            v.levels1 = paste("(", paste(freqtable[[1]],vallbl,sep="",collapse=", "),")", " : ", "(", paste(freqtable[[2]],sep="",collapse=", "), ")", sep="") %>% toString(width=width)
-            v.levels2 = paste("(",freqtable[[1]],vallbl,": ",freqtable[[2]],")",sep="",collapse=", ") %>% toString(width=width)
-
-            freqtable=dplyr::count_(df,var)
-            allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
-            allFactorCounts=c(allFactorCounts,freqtable[[2]])
+        # count everything
+        freqtable=dplyr::count_(df,var)
+        vallbl=sjmisc_get_labels(df[[var]],include.values='n',attr.only=T,include.non.labelled=F)
+        if (!is.null(vallbl)){
+            # ez.2label trick here, do not use the results from sjmisc_get_labels
+            vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
+            vallbl = paste("[",vallbl,"]",sep="")
         } else {
-            v.levels1=v.levels2=NA
+            vallbl = rep("", nrow(freqtable))
         }
+
+        v.levels1 = paste("(", paste(freqtable[[1]],vallbl,sep="",collapse=", "),")", " : ", "(", paste(freqtable[[2]],sep="",collapse=", "), ")", sep="") %>% toString(width=width)
+        v.levels2 = paste("(",freqtable[[1]],vallbl,": ",freqtable[[2]],")",sep="",collapse=", ") %>% toString(width=width)
+
+        freqtable=dplyr::count_(df,var)
+        allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
+        allFactorCounts=c(allFactorCounts,freqtable[[2]])
         # calculable
         is.date <- function(x) inherits(x, 'Date')
         # not all NA
@@ -425,24 +420,21 @@ ez.vi = function(x,printn=35,order='as') {
             v.sum=NA
         } else {
             v.mean=v.sd=v.min=v.max=v.sum=NA
-            # count as factor
-            if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-                freqtable=dplyr::count_(data.frame(tmpvar=v),"tmpvar")
-                vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
-                if (!is.null(vallbl)){
-                    # ez.2label trick here, do not use the results from sjmisc_get_labels
-                    vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
-                    vallbl = paste("[",vallbl,"]",sep="")
-                } else {
-                    vallbl = rep("", nrow(freqtable))
-                }
-                v.levels = paste(freqtable[[1]],vallbl,": ",freqtable[[2]],sep="",collapse="\n")
-            }
         }
 
-        if ( is.factor(v) | is.character(v) | is.logical(v) ) {
-            cat(sprintf('Counts/Levels (Incl NA): \n%s\n\n',v.levels %>% toString(width=printn*20)))
+        # count everything, not just is.factor(v) | is.character(v) | is.logical(v)
+        freqtable=dplyr::count_(data.frame(tmpvar=v),"tmpvar")
+        vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
+        if (!is.null(vallbl)){
+            # ez.2label trick here, do not use the results from sjmisc_get_labels
+            vallbl = ez.2label(freqtable[[1]])  # would be in the same order to freqtable
+            vallbl = paste("[",vallbl,"]",sep="")
+        } else {
+            vallbl = rep("", nrow(freqtable))
         }
+        v.levels = paste(freqtable[[1]],vallbl,": ",freqtable[[2]],sep="",collapse="\n")
+
+        cat(sprintf('Counts/Levels (Incl NA): \n%s\n\n',v.levels %>% toString(width=printn*20)))
         cat(sprintf("Uniques (Incl NA, NA might be printed as 'NA'): \n%s\n\n", v.elements))
         cat(sprintf('#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Non-NA: %d\t#Total: %d\n', v.unique, v.missing, v.missing*100/v.n, v.n-v.missing, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
