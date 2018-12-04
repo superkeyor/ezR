@@ -181,7 +181,6 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, incomparables=FAL
         v.levels1 = paste("(", paste(freqtable[[1]],vallbl,sep="",collapse=", "),")", " : ", "(", paste(freqtable[[2]],sep="",collapse=", "), ")", sep="") %>% toString(width=width)
         v.levels2 = paste("(",freqtable[[1]],vallbl,": ",freqtable[[2]],")",sep="",collapse=", ") %>% toString(width=width)
 
-        freqtable=dplyr::count_(df,var)
         allFactorUniqueValues=unique(c(allFactorUniqueValues,unique(freqtable[[1]]) %>% as.character()))
         allFactorCounts=c(allFactorCounts,freqtable[[2]])
         # calculable
