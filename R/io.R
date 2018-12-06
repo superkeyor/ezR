@@ -540,7 +540,7 @@ ez.writexlist = ez.savexlist
 #' @author Christoph Schmidt <christoph.schmidt@@med.uni-jena.de>
 # 17.12.15
 ez.savem <- function(file, vars){
-    fn=fileName
+    fn=file
     if(!stringr::str_detect(fn, "^.*\\.mat$")){
         fn <- paste(fn, ".mat", sep = "")
     }
