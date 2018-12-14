@@ -356,6 +356,10 @@ ez.path = search
 #' @export
 ez.execute = system
 
+#' abspath, alias of \code{\link{normalizePath}}
+#' @description abspath, alias of \code{\link{normalizePath}}
+ez.abspath = normalizePath
+
 #' join path
 #' @description join path
 #' @note \code{\link{file.path}} cannot handle/ignore trailing slash,
