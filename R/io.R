@@ -378,18 +378,34 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
 }
 
 #' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.writes}}
-#' @description potentially keep variable labels and value labels. (df, path)
+#' @description potentially keep variable labels and value labels.
+# @param df \code{data.frame} that should be saved as file.
+# @param path File path of the output file.
+# @param enc.to.utf8 Logical, if \code{TRUE}, character encoding of variable and
+#          value labels will be converted to UTF-8.
 #' @export
-ez.saves = function(...){
-    sjmisc_write_spss(...)
+ez.saves = function(df, path, enc.to.utf8=FALSE){
+    # http://www-01.ibm.com/support/docview.wss?uid=swg21476969
+    # the spss format using an older version format (likely from pspp)
+    # For SPSS Version 12 and below, The maximum numeric width is 16 and the maximum string width is 255
+    # The maximum string width on SPSS versions V13 and later is now 32767. 
+    # The maximum numeric width on SPSS versions V13 and later is now 40. 
+
+    tmp = apply(df,2,nchar) 
+    # max(c(NA,NA),na.rm=T) --> -Inf gives out warning
+    tmp = suppressWarnings(apply(tmp,2,max,na.rm=T))
+    cols = names(df)[which(tmp>255)]
+    for (col in cols) {
+        ez.pprint(sprintf('some values in col %s truncated to 255 characters'))
+        # works fine if less than 255
+        df[[col]] = substr(df[[col]],1,255)
+    }
+    sjmisc_write_spss(df, path, enc.to.utf8)
 }
 
-#' alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.saves}}
-#' @description potentially keep variable labels and value labels. (df, path)
+#' @rdname ez.saves
 #' @export
-ez.writes = function(...){
-    sjmisc_write_spss(...)
-}
+ez.writes = ez.saves
 
 #' save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package
 #' @description save an xlsx file, alias of \code{\link{ez.writex2}}, wrapper of \code{\link[xlsx]{write.xlsx}} from the xlsx package

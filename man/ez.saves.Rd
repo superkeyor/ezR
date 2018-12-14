@@ -2,10 +2,13 @@
 % Please edit documentation in R/io.R
 \name{ez.saves}
 \alias{ez.saves}
+\alias{ez.writes}
 \title{alias of \code{\link{sjmisc_write_spss}}, \code{\link{ez.writes}}}
 \usage{
-ez.saves(...)
+ez.saves(df, path, enc.to.utf8 = FALSE)
+
+ez.writes(df, path, enc.to.utf8 = FALSE)
 }
 \description{
-potentially keep variable labels and value labels. (df, path)
+potentially keep variable labels and value labels.
 }
