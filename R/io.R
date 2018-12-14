@@ -396,7 +396,7 @@ ez.saves = function(df, path, enc.to.utf8=FALSE){
     tmp = suppressWarnings(apply(tmp,2,max,na.rm=T))
     cols = names(df)[which(tmp>255)]
     for (col in cols) {
-        ez.pprint(sprintf('some values in col %s truncated to 255 characters'))
+        ez.pprint(sprintf('%s: some values in this col truncated to 255 characters',col))
         # works fine if less than 255
         df[[col]] = substr(df[[col]],1,255)
     }
