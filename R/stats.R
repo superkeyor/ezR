@@ -801,6 +801,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
+#' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
@@ -812,7 +813,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared.
 #' @export
-ez.anovas1b = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -820,7 +821,7 @@ ez.anovas1b = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,col
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.anovas1b(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -856,32 +857,64 @@ ez.anovas1b = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,col
 
     df = ez.2value(df,y,...); df = ez.2factor(df,x)
 
-    getStats = function(y,x,swap=F,data,...){
+    getStats = function(y,x,covar,swap=F,data,...){
         df=data; yy=y; xx=x
         # for single y but multiple x using lapply
         if (swap) {tmp=xx;xx=yy;yy=tmp}
 
+        if (is.null(covar)) {
+            covar = ''
+            covar2 = NULL
+        } else {
+            covar=ez.selcol(df,covar)
+            covar2 = covar
+            df=ez.2value(df,covar,...)
+            covar = paste('+',covar,sep='',collapse='')
+        }
+
         tryCatch({
         df = ez.dropna(df,c(yy,xx),print2screen=F)
-        a = aov(df[[yy]]~df[[xx]])
-        aa = summary(a)[[1]]
-        p = aa[["Pr(>F)"]][[1]]
-        # compare with spss output
-        # https://libguides.library.kent.edu/SPSS/OneWayANOVA
-        F = aa[['F value']][[1]]
-        degree_of_freedom = toString(aa[['Df']])
-        MSE = aa[['Mean Sq']][[2]]
-        s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
-        sdev = aggregate(df[[yy]]~df[[xx]],FUN=sd)
-        n = aggregate(df[[yy]]~df[[xx]],FUN=length)
-        means = ''; means.apa = ''; counts = ''
-        for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
-        for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
-        for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
-        # https://stats.stackexchange.com/a/78813/100493
-        etasq2 = summary.lm(a)$r.squared
-        s = aggregate(scale(df[[yy]])~df[[xx]],FUN=mean)
-        mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
+        if (covar!='') {
+            a = aov(df[[yy]]~df[[xx]])
+            aa = summary(a)[[1]]
+            p = aa[["Pr(>F)"]][[1]]
+            # compare with spss output
+            # https://libguides.library.kent.edu/SPSS/OneWayANOVA
+            F = aa[['F value']][[1]]
+            degree_of_freedom = toString(aa[['Df']])
+            MSE = aa[['Mean Sq']][[2]]
+            s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
+            sdev = aggregate(df[[yy]]~df[[xx]],FUN=sd)
+            n = aggregate(df[[yy]]~df[[xx]],FUN=length)
+            means = ''; means.apa = ''; counts = ''
+            for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
+            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
+            for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
+            # https://stats.stackexchange.com/a/78813/100493
+            etasq2 = summary.lm(a)$r.squared
+            s = aggregate(scale(df[[yy]])~df[[xx]],FUN=mean)
+            mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
+        } else {
+            a = ez.eval(sprintf('aov(%s~%s%s,data=df)',yy,xx,covar))
+            aa = car::Anova(a,type="III")
+            aa = aa[c(2,nrow(aa)),]  # remove (Intercept)
+            aa[['Mean Sq']] = aa[['Sum Sq']]/aa[['Df']]
+            s = data.frame(effects::effect(xx,a))
+            p = aa[["Pr(>F)"]][[1]]
+            F = aa[['F value']][[1]]
+            degree_of_freedom = toString(aa[['Df']])
+            MSE = aa[['Mean Sq']][[2]]
+            df2 = ez.dropna(df,c(yy,xx,covar2),print2screen=F)
+            n = aggregate(df2[[yy]]~df2[[xx]],FUN=length)
+            means = ''; means.apa = ''; counts = ''
+            for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
+            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],s[i,3]),sep='\t')}
+            for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
+            # page 523 in Discovering Stats using R 1st
+            # etasq2 = SSeffect/SStotal; partial etasq2 = SSeffect/(SSeffect+SSresidual)
+            etasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
+            mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
+        }
         out = c(xx,yy,p,etasq2,F,degree_of_freedom,MSE,mean12_zdifference,means,counts,means.apa)
         return(out)
         }, error = function(e) {
@@ -890,8 +923,8 @@ ez.anovas1b = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,col
         })
     }
 
-    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,data=df,...)
-    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df,...)
+    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
+    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','etasq2','F','degree_of_freedom','MSE','mean12_zdifference','means','counts','means.apa')
     result %<>% ez.num() %>% ez.dropna(col='p')
@@ -935,6 +968,8 @@ ez.anovas1b = function(df,y,x,showerror=T,viewresult=F,reportresult=F,plot=T,col
     if (viewresult) {View(result)}
     if (reportresult) {
         report = result %>% dplyr::arrange(orindex)
+        ez.print('------')
+        ez.print('If covariates provided, adjusted mean (se), partial eta squared, sd=se*sqrt(n); otherwise, mean (sd)')
         ez.print('------')
         for (i in 1:nrow(report)){
             ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.apa[i],ez.p.apa(report$p[i],pprefix=F)))
