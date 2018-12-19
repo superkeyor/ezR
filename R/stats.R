@@ -912,7 +912,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             for (i in 1:ez.size(s,1)) {means.sd.se = paste(means.sd.se,sprintf('%.2f (%.2f)',s[i,2],s[i,3]),sep='\t')}
             for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
             # page 523 in Discovering Stats using R 1st
-            # petasq2 = SSeffect/SStotal; partial petasq2 = SSeffect/(SSeffect+SSresidual)
+            # petasq2 = SSeffect/SStotal; partial etasq2 = SSeffect/(SSeffect+SSresidual)
             petasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
             a = ez.eval(sprintf('aov(scale(%s)~%s%s,data=df)',yy,xx,covar))
             s = data.frame(effects::effect(xx,a))
@@ -981,7 +981,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             if (report$F[i] < 1) {
                 ez.print(sprintf('%s,%s\tF(%s) < 1', report$x[i],report$y[i],report$degree_of_freedom[i]))
             } else {
-                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),ifelse(is.null(covar),'etasq2','partial petasq2'),report$petasq2[i]))
+                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),ifelse(is.null(covar),'etasq2','partial etasq2'),report$petasq2[i]))
             }
         }
         ez.print('------')
