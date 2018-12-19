@@ -825,10 +825,9 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
-                bonferroniP = -log10(0.05/length(result[['p']]))
-                if (!all(is.na(result$mean12_zdifference))) {
-                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$mean12_zdifference,
-                       xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
+                bonferroniP = -log10(0.05/length(result[['p']]))                
+                plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
+                       xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
                        ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                        scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                        type = "p", pch=16,
@@ -836,19 +835,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
                        col = "#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-                    )
-                } else {
-                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
-                           xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
-                           ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-                           scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                           type = "p", pch=16,
-                           main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
-                           col = "#e69f00",
-                           ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                           abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-                    )
-                }
+                )
             }
             xlist[[xx]] = result
         }
@@ -887,14 +874,12 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
             sdev = aggregate(df[[yy]]~df[[xx]],FUN=sd)
             n = aggregate(df[[yy]]~df[[xx]],FUN=length)
-            means = ''; means.sd.se = ''; counts = ''
+            means = ''; means.apa = ''; counts = ''
             for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
-            for (i in 1:ez.size(s,1)) {means.sd.se = paste(means.sd.se,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
+            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
             for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
             # https://stats.stackexchange.com/a/78813/100493
             petasq2 = summary.lm(a)$r.squared
-            s = aggregate(scale(df[[yy]])~df[[xx]],FUN=mean)
-            mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
         } else {
             a = ez.eval(sprintf('aov(%s~%s%s,data=df)',yy,xx,covar))
             aa = car::Anova(a,type="III")
@@ -907,56 +892,40 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             MSE = aa[['Mean Sq']][[2]]
             df2 = ez.dropna(df,c(yy,xx,covar2),print2screen=F)
             n = aggregate(df2[[yy]]~df2[[xx]],FUN=length)
-            means = ''; means.sd.se = ''; counts = ''
+            means = ''; means.apa = ''; counts = ''
             for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
-            for (i in 1:ez.size(s,1)) {means.sd.se = paste(means.sd.se,sprintf('%.2f (%.2f)',s[i,2],s[i,3]),sep='\t')}
+            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],s[i,3]),sep='\t')}
             for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
             # page 523 in Discovering Stats using R 1st
             # petasq2 = SSeffect/SStotal; partial etasq2 = SSeffect/(SSeffect+SSresidual)
             petasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
-            a = ez.eval(sprintf('aov(scale(%s)~%s%s,data=df)',yy,xx,covar))
-            s = data.frame(effects::effect(xx,a))
-            mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
         }
-        out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,mean12_zdifference,means,counts,means.sd.se)
+        out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,means,counts,means.apa)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
-            return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA,NA))
+            return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA))
         })
     }
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','mean12_zdifference','means','counts','means.sd.se')
+    names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se')
     result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot) {
-        bonferroniP = -log10(0.05/length(result[['p']]))
-        if (!all(is.na(result$mean12_zdifference))) {
-            pp=lattice::xyplot(-log10(result$p) ~ result$mean12_zdifference,
-                       xlab = list("Difference in Standardized Group Means", cex=labsize, fontfamily="Times New Roman"),
-                       ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-                       scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                       type = "p", pch=16,
-                       main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
-                       col = "#e69f00",
-                       ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                       abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-            )
-        } else {
-            pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
-                   xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
-                   type = "p", pch=16,
-                   main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
-                   col = "#e69f00",
-                   ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-                   abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-            )
-        }
+        bonferroniP = -log10(0.05/length(result[['p']]))        
+        pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
+               xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
+               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+               type = "p", pch=16,
+               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
+               col = "#e69f00",
+               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+               abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+        )
         print(pp)
     }
 
@@ -967,14 +936,16 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
     result$orindex=1:nrow(result)
     result$p.apa = ez.p.apa(result$p,pprefix=F)
-    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd.se last') %>% dplyr::arrange(p)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd_or_adjmeans.se last') %>% dplyr::arrange(p)
+
     if (viewresult) {View(result)}
+
     if (reportresult) {
         report = result %>% dplyr::arrange(orindex)
         ez.print('------')
         ez.print(ifelse(is.null(covar), 'mean (sd)', 'adjusted mean (se), sd=se*sqrt(n)'))
         for (i in 1:nrow(report)){
-            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.sd.se[i],ez.p.apa(report$p[i],pprefix=F)))
+            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.sd_or_adjmeans.se[i],ez.p.apa(report$p[i],pprefix=F)))
         }
         ez.print('------')
         for (i in 1:nrow(report)){
