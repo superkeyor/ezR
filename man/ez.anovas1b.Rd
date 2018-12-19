@@ -4,9 +4,9 @@
 \alias{ez.anovas1b}
 \title{a series of one-way between-subjects anova, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
-ez.anovas1b(df, y, x, showerror = T, viewresult = F, reportresult = F,
-  plot = T, cols = 3, pmethods = c("bonferroni", "fdr"), labsize = 2,
-  textsize = 1.5, titlesize = 3, ...)
+ez.anovas1b(df, y, x, covar = NULL, showerror = T, viewresult = F,
+  reportresult = F, plot = T, cols = 3, pmethods = c("bonferroni",
+  "fdr"), labsize = 2, textsize = 1.5, titlesize = 3, ...)
 }
 \arguments{
 \item{df}{a data frame
@@ -15,6 +15,8 @@ ez.anovas1b(df, y, x, showerror = T, viewresult = F, reportresult = F,
 \item{y}{internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))}
 
 \item{x}{internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable}
+
+\item{covar}{NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'}
 
 \item{showerror}{whether show error message when error occurs}
 
@@ -36,5 +38,6 @@ anova 1b, df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]]
 }
 \note{
 Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
-\cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared.
+\cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis)
+\cr If covariates provided, adjusted means with SE, partial eta squared. Otherwise, mean SD, and eta squared.
 }

@@ -14,7 +14,8 @@ ez.barplot(df, cmd, color = "color", bar.gap = 0.7, bar.width = 0.7,
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
 
-\item{cmd}{like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)}
+\item{cmd}{like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
+\cr or "y|x+covar1+covar2+..." (currently only supports anova1b)}
 
 \item{color}{"bw" or "color"  black/white or colorblind-friendly color}
 

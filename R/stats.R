@@ -825,7 +825,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
             if (plot) {
-                bonferroniP = -log10(0.05/length(result[['p']]))                
+                bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
                        xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
                        ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
@@ -880,6 +880,8 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
             # https://stats.stackexchange.com/a/78813/100493
             petasq2 = summary.lm(a)$r.squared
+            posthoc = ez.eval(sprintf('summary(multcomp::glht(a, linfct = multcomp::mcp("%s" = "Tukey")))', 'df[[xx]]'))
+            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,TRUE),'; ',collapse='')
         } else {
             a = ez.eval(sprintf('aov(%s~%s%s,data=df)',yy,xx,covar))
             aa = car::Anova(a,type="III")
@@ -899,23 +901,25 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             # page 523 in Discovering Stats using R 1st
             # petasq2 = SSeffect/SStotal; partial etasq2 = SSeffect/(SSeffect+SSresidual)
             petasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
+            posthoc = ez.eval(sprintf('summary(multcomp::glht(a, linfct = multcomp::mcp(%s = "Tukey")))', xx))
+            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,TRUE),'; ',collapse='')
         }
-        out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,means,counts,means.apa)
+        out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,means,counts,means.apa,posthoc_tukey)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
-            return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA))
+            return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA,NA))
         })
     }
 
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se')
+    names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se','posthoc_tukey')
     result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot) {
-        bonferroniP = -log10(0.05/length(result[['p']]))        
+        bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
                xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
@@ -936,7 +940,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
     result$orindex=1:nrow(result)
     result$p.apa = ez.p.apa(result$p,pprefix=F)
-    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd_or_adjmeans.se last') %>% dplyr::arrange(p)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd_or_adjmeans.se, posthoc_tukey last') %>% dplyr::arrange(p)
 
     if (viewresult) {View(result)}
 
@@ -946,6 +950,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
         ez.print(ifelse(is.null(covar), 'mean (sd)', 'adjusted mean (se), sd=se*sqrt(n)'))
         for (i in 1:nrow(report)){
             ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.sd_or_adjmeans.se[i],ez.p.apa(report$p[i],pprefix=F)))
+        }
+        ez.print('------')
+        ez.print('posthoc Tukey')
+        for (i in 1:nrow(report)){
+            ez.print(sprintf('%s', report$posthoc_tukey[i]))
         }
         ez.print('------')
         for (i in 1:nrow(report)){
