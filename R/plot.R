@@ -239,13 +239,13 @@ theme_apa <- function(plot.box = FALSE, labsize = 18, textsize = 16){
 
     if (plot.box) {
         # panel.border without axis.line
-        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "black"))
 
     } else {
         # no panel.border but axis.line
-        out <- out + theme(panel.background = element_rect(fill = NA,colour = NA), 
-                           panel.border = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA,colour = NA),
+                           panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "black"))
     }
     out
@@ -290,13 +290,13 @@ theme_apa_nosize <- function(plot.box = FALSE){
 
     if (plot.box) {
         # panel.border without axis.line
-        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "black"))
 
     } else {
         # no panel.border but axis.line
-        out <- out + theme(panel.background = element_rect(fill = NA,colour = NA), 
-                           panel.border = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA,colour = NA),
+                           panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "black"))
     }
     out
@@ -331,7 +331,7 @@ theme_apa_nosize <- function(plot.box = FALSE){
 #'     scale_fill_gradient(low="grey10", high="white")
 #' }
 theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
-    
+
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
     }
@@ -374,17 +374,17 @@ theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
     )
 
     if (plot.box) {
-        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "grey55"))
     } else {
-        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
-    
+
     ez.pprint("geom_point/line/errorbar/bar color cannot be changed with theme; modify original codes: color='grey55'")
     out
-    
+
 }
 
 #' A ggplot2 theme with no background and no gridlines.
@@ -413,7 +413,7 @@ theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
 #'     scale_fill_gradient(low="grey10", high="white")
 #' }
 theme_blackapa_nosize <- function(plot.box = TRUE) {
-    
+
     if (Sys.info()["sysname"] != "Windows") {
         windowsFonts <- NULL
     }
@@ -456,17 +456,17 @@ theme_blackapa_nosize <- function(plot.box = TRUE) {
     )
 
     if (plot.box) {
-        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "grey55"))
     } else {
-        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA), 
+        out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
-    
+
     ez.pprint("geom_point/line/errorbar/bar color cannot be changed with theme; modify original codes: color='grey55'")
     out
-    
+
 }
 
 #' "see" color
@@ -513,14 +513,14 @@ ggcolor = function(n=NULL){
 
         # also visit http://colorbrewer2.org/
         scale_color_manual(values=c("#fdae61","#2b83ba","#d7191c","#abdda4","#ffffbf")) #printer-friendly
-        scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100)) #colorblind-friendly
-        
+        scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#0"),100)) #colorblind-friendly
+
         # c("#984EA3","#377EB8","#4DAF4A","#FF7F00","#E41A1C","#FFFF33","#A65628","#F781BF","#999999")
 
         RColorBrewer::display.brewer.all()
         # Y1OrRd...Blues (Sequential palettes): interval data
         # Set3...Accent (Qualitative palettes): nominal or categorical data
-        # Spectral...BrBG (Diverging palettes): 
+        # Spectral...BrBG (Diverging palettes):
 
         # returns 8 colors from Set3 (which supports up to 12 colors)
         cols <- RColorBrewer::brewer.pal(8,"Set3")
@@ -528,7 +528,7 @@ ggcolor = function(n=NULL){
 
         # generates 100 colors based on the 9 from the Blues palette
         colorRampPalette(brewer.pal(9,"Blues"))(100)
-        \n') 
+        \n')
 }
 
 #' change plot continous color to matlab like
@@ -828,7 +828,8 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
 #' barplot with ggplot
 #' @description barplot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
-#' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
+#' @param cmd like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
+#' \cr or "y|x+covar1+covar2+..." (currently only supports anova1b)
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param bar.gap  the gap between bars
 #' @param bar.width  the width of bar itself
@@ -874,6 +875,48 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
 
     vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
+
+####************************************************************************************************
+                                     ####*covaraite start*####
+####************************************************************************************************
+    # y|x+covar1+covar2 (anova1b)
+    if (grepl('+',cmd,fixed=TRUE)) {
+        cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+        cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+        yy = cmd[1]
+        xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
+        xx = strsplit(xx,"+",fixed=TRUE)[[1]] %>% sapply(trimws) %>% unname()
+        covar = xx[-1]
+        xx = xx[1]
+
+        tt = sprintf('
+                    pp=aov(%s~%s%s,data=df) %%>%%
+                    effects::effect("%s",.) %%>%%
+                    data.frame() %%>%% ez.rncol(c("fit"="avgAverage")) %%>%% ez.factorder("%s",ord="as") %%>%%
+
+                    ggplot2::ggplot(aes(x=%s,y=avgAverage,fill=%s)) +
+                    geom_bar(position=position_dodge(width=%f), stat="identity", width=%f, color="black") +
+                    %s +
+                    geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
+
+                    %s %s %s %s
+                    theme(axis.text.x=element_text(angle=%f %s %s)) +
+                    theme(legend.direction="%s") +
+                    theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
+                    ,yy, xx, paste('+',covar,sep='',collapse=''), xx, xx, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                    )
+        gghistory=paste(gghistory,
+                  sprintf('df=ez.dropna(df,c("%s","%s", "%s"))',yy,xx,paste(covar,sep='',collapse='","')),
+                  tt,sep='\n')
+
+        eval(parse(text = tt))
+        pp$gghistory=paste0(gghistory,'\nprint(pp)')
+        pp$df=df__copy
+        return(pp)
+    }
+####************************************************************************************************
+                                     ####*covariate end*####
+####************************************************************************************************
 
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
