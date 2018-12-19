@@ -874,7 +874,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
 
         tryCatch({
         df = ez.dropna(df,c(yy,xx),print2screen=F)
-        if (covar!='') {
+        if (covar=='') {
             a = aov(df[[yy]]~df[[xx]])
             aa = summary(a)[[1]]
             p = aa[["Pr(>F)"]][[1]]
