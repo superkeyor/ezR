@@ -839,7 +839,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
                     )
                 } else {
                     plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
-                           xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
+                           xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
                            ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                            scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                            type = "p", pch=16,
@@ -947,7 +947,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             )
         } else {
             pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
-                   xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
+                   xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                    scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
                    type = "p", pch=16,
