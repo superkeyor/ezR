@@ -812,6 +812,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' \cr degree_of_freedom: from F-statistic
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out. The development of these measures is described and their characteristics compared.
+#' \cr If covariates provided, adjusted means with SE, partial eta squared. Otherwise, mean SD, and eta squared.
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
@@ -837,7 +838,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                     )
                 } else {
-                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$etasq2,
+                    plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
                            xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
                            ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                            scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
@@ -886,12 +887,12 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
             sdev = aggregate(df[[yy]]~df[[xx]],FUN=sd)
             n = aggregate(df[[yy]]~df[[xx]],FUN=length)
-            means = ''; means.apa = ''; counts = ''
+            means = ''; means.sd.se = ''; counts = ''
             for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
-            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
+            for (i in 1:ez.size(s,1)) {means.sd.se = paste(means.sd.se,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
             for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
             # https://stats.stackexchange.com/a/78813/100493
-            etasq2 = summary.lm(a)$r.squared
+            petasq2 = summary.lm(a)$r.squared
             s = aggregate(scale(df[[yy]])~df[[xx]],FUN=mean)
             mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
         } else {
@@ -906,16 +907,18 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             MSE = aa[['Mean Sq']][[2]]
             df2 = ez.dropna(df,c(yy,xx,covar2),print2screen=F)
             n = aggregate(df2[[yy]]~df2[[xx]],FUN=length)
-            means = ''; means.apa = ''; counts = ''
+            means = ''; means.sd.se = ''; counts = ''
             for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
-            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],s[i,3]),sep='\t')}
+            for (i in 1:ez.size(s,1)) {means.sd.se = paste(means.sd.se,sprintf('%.2f (%.2f)',s[i,2],s[i,3]),sep='\t')}
             for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
             # page 523 in Discovering Stats using R 1st
-            # etasq2 = SSeffect/SStotal; partial etasq2 = SSeffect/(SSeffect+SSresidual)
-            etasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
+            # petasq2 = SSeffect/SStotal; partial petasq2 = SSeffect/(SSeffect+SSresidual)
+            petasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
+            a = ez.eval(sprintf('aov(scale(%s)~%s%s,data=df)',yy,xx,covar))
+            s = data.frame(effects::effect(xx,a))
             mean12_zdifference = if (nrow(s)==2) s[1,2]-s[2,2] else NA
         }
-        out = c(xx,yy,p,etasq2,F,degree_of_freedom,MSE,mean12_zdifference,means,counts,means.apa)
+        out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,mean12_zdifference,means,counts,means.sd.se)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
@@ -926,7 +929,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','etasq2','F','degree_of_freedom','MSE','mean12_zdifference','means','counts','means.apa')
+    names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','mean12_zdifference','means','counts','means.sd.se')
     result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot) {
@@ -943,7 +946,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
             )
         } else {
-            pp=lattice::xyplot(-log10(result$p) ~ result$etasq2,
+            pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
                    xlab = list(expression(eta^2), cex=labsize, fontfamily="Times New Roman"),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
                    scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
@@ -964,21 +967,21 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=ylbl; result$xlbl=xlbl
     result$orindex=1:nrow(result)
     result$p.apa = ez.p.apa(result$p,pprefix=F)
-    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.apa last') %>% dplyr::arrange(p)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd.se last') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
     if (reportresult) {
         report = result %>% dplyr::arrange(orindex)
         ez.print('------')
         ez.print(ifelse(is.null(covar), 'mean (sd)', 'adjusted mean (se), sd=se*sqrt(n)'))
         for (i in 1:nrow(report)){
-            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.apa[i],ez.p.apa(report$p[i],pprefix=F)))
+            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.sd.se[i],ez.p.apa(report$p[i],pprefix=F)))
         }
         ez.print('------')
         for (i in 1:nrow(report)){
             if (report$F[i] < 1) {
                 ez.print(sprintf('%s,%s\tF(%s) < 1', report$x[i],report$y[i],report$degree_of_freedom[i]))
             } else {
-                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),ifelse(is.null(covar),'etasq2','partial etasq2'),report$etasq2[i]))
+                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),ifelse(is.null(covar),'etasq2','partial petasq2'),report$petasq2[i]))
             }
         }
         ez.print('------')
