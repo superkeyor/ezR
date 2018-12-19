@@ -969,8 +969,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     if (reportresult) {
         report = result %>% dplyr::arrange(orindex)
         ez.print('------')
-        ez.print('If covariates provided, adjusted mean (se), partial eta squared, sd=se*sqrt(n); otherwise, mean (sd)')
-        ez.print('------')
+        ez.print(ifelse(is.null(covar), 'mean (sd)', 'adjusted mean (se), sd=se*sqrt(n)'))
         for (i in 1:nrow(report)){
             ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.apa[i],ez.p.apa(report$p[i],pprefix=F)))
         }
@@ -979,7 +978,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             if (report$F[i] < 1) {
                 ez.print(sprintf('%s,%s\tF(%s) < 1', report$x[i],report$y[i],report$degree_of_freedom[i]))
             } else {
-                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, etasq2 = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),report$etasq2[i]))
+                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),ifelse(is.null(covar),'etasq2','partial etasq2'),report$etasq2[i]))
             }
         }
         ez.print('------')
