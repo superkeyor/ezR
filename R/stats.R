@@ -75,6 +75,13 @@ ez.compare = function(lh,rh,...) {
     cat('\n')
 }
 
+#' setdiff2(x,y)=setdiff(y,x)
+#' @description setdiff2(x,y)=setdiff(y,x)
+#' @export
+setdiff2 = function(x, y, ...) {
+    return(dplyr::setdiff(y,x,...))
+}
+
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param df a data frame
