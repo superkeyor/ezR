@@ -493,21 +493,19 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
 
     sheetNames = if (!is.null(names(xlist))) names(xlist) else paste0("Sheet",1:length(xlist))
     wb <- openxlsx::createWorkbook(creator = 'openxlsx')
-    LibreOffice = '/Applications/LibreOffice.app/Contents/MacOS/soffice'
 
     for (i in 1:length(xlist)) {
         sheet = data.frame(xlist[[i]])
 
-        if (!file.exists(LibreOffice)){
-            # openxlsx 3.0 seems to have a bug when saving TRUE/FALSE
-            # convert to 1/0
-            # https://stackoverflow.com/a/30943225/2292993
-            cols <- sapply(sheet, is.logical)
-            if (length(which(cols))>1) {
-                ez.pprint(sprintf('%s: TRUE/FALSE converted to 1/0',toString(names(which(cols)))))
-            }
-            sheet[,cols] <- lapply(sheet[,cols], as.numeric)
-        }
+        # not use
+        # # openxlsx 3.0 seems to have a bug when saving TRUE/FALSE
+        # # convert to 1/0
+        # # https://stackoverflow.com/a/30943225/2292993
+        # cols <- sapply(sheet, is.logical)
+        # if (length(which(cols))>1) {
+        #     ez.pprint(sprintf('%s: TRUE/FALSE converted to 1/0',toString(names(which(cols)))))
+        # }
+        # sheet[,cols] <- lapply(sheet[,cols], as.numeric)
         
         # the default rowNames=T has no col name for rowNames, and rowNames saved as string of numbers (not ideal for sorting, ie, '1', '10', '11', '2')
         # hack
@@ -525,15 +523,39 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
     }
     openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
 
-    # sometimes, openxlsx are not saved well
-    # let the xlsx file go through libre office to make sure contents are saved OK.
-    if (file.exists(LibreOffice)) {
-        tmpdir = tempdir()
-        cmd = paste0(LibreOffice, ' --headless --convert-to xlsx ', file, ' --outdir ', tmpdir)
-        system(cmd, ignore.stdout=T)
-        file.rename(from=file.path(tmpdir,basename(file)),to=file)
-    }
+    # not use
+    # # sometimes, openxlsx are not saved well
+    # # let the xlsx file go through libre office to make sure contents are saved OK.
+    # LibreOffice = '/Applications/LibreOffice.app/Contents/MacOS/soffice'
+    # if (file.exists(LibreOffice)) {
+    #     tmpdir = tempdir()
+    #     cmd = paste0(LibreOffice, ' --headless --convert-to xlsx ', file, ' --outdir ', tmpdir)
+    #     system(cmd, ignore.stdout=T)
+    #     file.rename(from=file.path(tmpdir,basename(file)),to=file)
+    # }
 
+    # hey, why not just call ms office to open and save
+    # it will also correct the T/F issue above
+    if (file.exists('/Applications/Microsoft Office 2011')) {
+    # https://stackoverflow.com/a/30858839/2292993
+    cmd = sprintf('
+osascript <<\'EOF\'        
+set file_Name to "%s"
+
+--https://stackoverflow.com/a/24431548/2292993
+tell application "Macintosh HD:Applications:Microsoft Office 2011:Microsoft Excel.app"
+    activate
+    open file_Name
+    set wkbk_name to get full name of active workbook
+    save workbook as workbook wkbk_name filename file_Name file format Excel XML file format with overwrite
+    close workbooks
+    quit
+end tell
+EOF
+    ', file)
+    system(cmd)
+    }
+    
     return(invisible(file))
 }
 
