@@ -524,7 +524,7 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
     }
     openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
 
-    # not use
+    # not use, because libre will save as =TRUE() =FALSE()
     # # sometimes, openxlsx are not saved well
     # # let the xlsx file go through libre office to make sure contents are saved OK.
     # LibreOffice = '/Applications/LibreOffice.app/Contents/MacOS/soffice'
