@@ -493,17 +493,21 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
 
     sheetNames = if (!is.null(names(xlist))) names(xlist) else paste0("Sheet",1:length(xlist))
     wb <- openxlsx::createWorkbook(creator = 'openxlsx')
+    LibreOffice = '/Applications/LibreOffice.app/Contents/MacOS/soffice'
+
     for (i in 1:length(xlist)) {
         sheet = data.frame(xlist[[i]])
 
-        # openxlsx 3.0 seems to have a bug when saving TRUE/FALSE
-        # convert to 1/0
-        # https://stackoverflow.com/a/30943225/2292993
-        cols <- sapply(sheet, is.logical)
-        if (length(which(cols))>1) {
-            ez.pprint(sprintf('%s: TRUE/FALSE converted to 1/0',toString(names(which(cols)))))
+        if (!file.exists(LibreOffice)){
+            # openxlsx 3.0 seems to have a bug when saving TRUE/FALSE
+            # convert to 1/0
+            # https://stackoverflow.com/a/30943225/2292993
+            cols <- sapply(sheet, is.logical)
+            if (length(which(cols))>1) {
+                ez.pprint(sprintf('%s: TRUE/FALSE converted to 1/0',toString(names(which(cols)))))
+            }
+            sheet[,cols] <- lapply(sheet[,cols], as.numeric)
         }
-        sheet[,cols] <- lapply(sheet[,cols], as.numeric)
         
         # the default rowNames=T has no col name for rowNames, and rowNames saved as string of numbers (not ideal for sorting, ie, '1', '10', '11', '2')
         # hack
@@ -520,6 +524,16 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
           withFilter = withFilter, ...)
     }
     openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+
+    # sometimes, openxlsx are not saved well
+    # let the xlsx file go through libre office to make sure contents are saved OK.
+    if (file.exists(LibreOffice)) {
+        tmpdir = tempdir()
+        cmd = paste0(LibreOffice, ' --headless --convert-to xlsx ', file, ' --outdir ', tmpdir)
+        system(cmd, ignore.stdout=T)
+        file.rename(from=file.path(tmpdir,basename(file)),to=file)
+    }
+
     return(invisible(file))
 }
 
