@@ -358,6 +358,7 @@ ez.execute = system
 
 #' abspath, alias of \code{\link{normalizePath}}
 #' @description abspath, alias of \code{\link{normalizePath}}
+#' @export
 ez.abspath = normalizePath
 
 #' join path
