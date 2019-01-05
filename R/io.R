@@ -495,6 +495,15 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
     wb <- openxlsx::createWorkbook(creator = 'openxlsx')
     for (i in 1:length(xlist)) {
         sheet = data.frame(xlist[[i]])
+
+        # openxlsx 3.0 seems to have a bug when saving TRUE/FALSE
+        # convert to 1/0
+        # https://stackoverflow.com/a/30943225/2292993
+        cols <- sapply(sheet, is.logical)
+        if (length(which(cols))>1) {
+            ez.pprint(sprintf('%s: TRUE/FALSE converted to 1/0',toString(names(which(cols)))))
+        }
+        sheet[,cols] <- lapply(sheet[,cols], as.numeric)
         # the default rowNames=T has no col name for rowNames, and rowNames saved as string of numbers (not ideal for sorting, ie, '1', '10', '11', '2')
         # hack
         if (rowNames) {
