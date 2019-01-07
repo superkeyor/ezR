@@ -540,6 +540,7 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
     if (file.exists('/Applications/Microsoft Excel.app')) {
     # https://stackoverflow.com/a/30858839/2292993
     # https://stackoverflow.com/a/24431548/2292993
+    # https://apple.stackexchange.com/questions/253705
     cmd = sprintf('
 osascript <<\'EOF\'        
 set file_Name to "%s"
