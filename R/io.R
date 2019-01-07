@@ -497,16 +497,14 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
     for (i in 1:length(xlist)) {
         sheet = data.frame(xlist[[i]])
 
-        if (!file.exists('/Applications/Microsoft Excel.app')) {
-            # openxlsx 3.0 seems to have a bug when saving TRUE/FALSE
-            # convert to 1/0
-            # https://stackoverflow.com/a/30943225/2292993
-            cols <- sapply(sheet, is.logical)
-            if (length(which(cols))>1) {
-                ez.pprint(sprintf('%s: TRUE/FALSE converted to 1/0',toString(names(which(cols)))))
-            }
-            sheet[,cols] <- lapply(sheet[,cols], as.numeric)
+        # openxlsx 3.0 seems to have a bug when saving TRUE/FALSE
+        # convert to 1/0
+        # https://stackoverflow.com/a/30943225/2292993
+        cols <- sapply(sheet, is.logical)
+        if (length(which(cols))>1) {
+            ez.pprint(sprintf('%s: TRUE/FALSE converted to 1/0',toString(names(which(cols)))))
         }
+        sheet[,cols] <- lapply(sheet[,cols], as.numeric)
         
         # the default rowNames=T has no col name for rowNames, and rowNames saved as string of numbers (not ideal for sorting, ie, '1', '10', '11', '2')
         # hack
@@ -523,62 +521,6 @@ ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TR
           withFilter = withFilter, ...)
     }
     openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
-
-    # not use, because libre will save as =TRUE() =FALSE()
-    # # sometimes, openxlsx are not saved well
-    # # let the xlsx file go through libre office to make sure contents are saved OK.
-    # LibreOffice = '/Applications/LibreOffice.app/Contents/MacOS/soffice'
-    # if (file.exists(LibreOffice)) {
-    #     tmpdir = tempdir()
-    #     cmd = paste0(LibreOffice, ' --headless --convert-to xlsx ', file, ' --outdir ', tmpdir)
-    #     system(cmd, ignore.stdout=T)
-    #     file.rename(from=file.path(tmpdir,basename(file)),to=file)
-    # }
-
-    # hey, why not just call ms office to open and save
-    # it will also correct the T/F issue above
-    if (file.exists('/Applications/Microsoft Excel.app')) {
-    # https://stackoverflow.com/a/30858839/2292993
-    # https://stackoverflow.com/a/24431548/2292993
-    # https://apple.stackexchange.com/questions/253705
-    cmd = sprintf('
-osascript <<\'EOF\'        
-set file_Name to "%s"
-
-on is_running(appName)
-    tell application "System Events" to (name of processes) contains appName
-end is_running
-set xlsRunning to is_running("Microsoft Excel")
-
-tell application "Microsoft Excel"
-    activate
-    open (file_Name as POSIX file)
-end tell
-
-do shell script "rm -f " & quoted form of file_Name
-
-tell application "Microsoft Excel"
-    activate
-    save active workbook in file_Name
-    close active workbook
-end tell
-
-if xlsRunning then
-    
-else
-    tell application "Microsoft Excel"
-        activate
-        quit
-    end tell
-end if
-
-tell application "RStudio"
-    activate
-end tell
-EOF
-    ', normalizePath(file))
-    system(cmd)
-    }
 
     return(invisible(file))
 }
@@ -800,3 +742,63 @@ xlcolconv = function(col){
 #' @export
 # Vectorize in case you want to pass more than one column name in a single call
 ez.xlcolconv = Vectorize(xlcolconv)
+
+#' Open xls file in App and resave
+#' @description Open xls file in App and resave
+#' @param file file path to xls file
+#' @export
+ez.resavex = function(file){
+    # not use, because libre will save as =TRUE() =FALSE()
+    # # sometimes, openxlsx are not saved well
+    # # let the xlsx file go through libre office to make sure contents are saved OK.
+    # LibreOffice = '/Applications/LibreOffice.app/Contents/MacOS/soffice'
+    # if (file.exists(LibreOffice)) {
+    #     tmpdir = tempdir()
+    #     cmd = paste0(LibreOffice, ' --headless --convert-to xlsx ', file, ' --outdir ', tmpdir)
+    #     system(cmd, ignore.stdout=T)
+    #     file.rename(from=file.path(tmpdir,basename(file)),to=file)
+    # }
+
+    # hey, why not just call ms office to open and save
+    # https://stackoverflow.com/a/30858839/2292993
+    # https://stackoverflow.com/a/24431548/2292993
+    # https://apple.stackexchange.com/questions/253705
+    cmd = sprintf('
+osascript <<\'EOF\'        
+set file_Name to "%s"
+
+on is_running(appName)
+    tell application "System Events" to (name of processes) contains appName
+end is_running
+set xlsRunning to is_running("Microsoft Excel")
+
+tell application "Microsoft Excel"
+    activate
+    open (file_Name as POSIX file)
+end tell
+
+do shell script "rm -f " & quoted form of file_Name
+
+tell application "Microsoft Excel"
+    activate
+    save active workbook in file_Name
+    close active workbook
+end tell
+
+if xlsRunning then
+    
+else
+    tell application "Microsoft Excel"
+        activate
+        quit
+    end tell
+end if
+
+-- tell application "RStudio"
+--     activate
+-- end tell
+EOF
+    ', normalizePath(file))
+    system(cmd)
+    return(invisible(NULL))
+}
