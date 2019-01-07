@@ -549,10 +549,12 @@ on is_running(appName)
 end is_running
 set xlsRunning to is_running("Microsoft Excel")
 
-tell application "Microsoft Excel"
-    activate
-    open file_Name
-end tell
+-- tell application "Microsoft Excel"
+--     activate
+--     open file_Name
+-- end tell
+
+do shell script "open " & quoted form of file_Name
 
 do shell script "rm -f " & quoted form of file_Name
 
