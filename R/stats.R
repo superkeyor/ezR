@@ -681,7 +681,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
     }
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
-    result$orindex=ifelse(nrow(result)==0, numeric(0), 1:nrow(result))
+    result$orindex=ifelse(nrow(result)==0, rep(numeric(0),0), 1:nrow(result))
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
     return(invisible(list(result)))
@@ -796,7 +796,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
     }
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
-    result$orindex=ifelse(nrow(result)==0, numeric(0), 1:nrow(result))
+    result$orindex=ifelse(nrow(result)==0, rep(numeric(0),0), 1:nrow(result))
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
     return(invisible(list(result)))
@@ -945,7 +945,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     }
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
-    result$orindex=ifelse(nrow(result)==0, numeric(0), 1:nrow(result))
+    result$orindex=ifelse(nrow(result)==0, rep(numeric(0),0), 1:nrow(result))
     result$p.apa = ez.p.apa(result$p,pprefix=F)
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd_or_adjmeans.se, posthoc_tukey last') %>% dplyr::arrange(p)
 
@@ -1089,7 +1089,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
     }
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
-    result$orindex=ifelse(nrow(result)==0, numeric(0), 1:nrow(result))
+    result$orindex=ifelse(nrow(result)==0, rep(numeric(0),0), 1:nrow(result))
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
     return(invisible(list(result)))
