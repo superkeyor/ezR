@@ -12,13 +12,16 @@ ez.date(x, ori = "Excel", format = "\%m/\%d/\%Y", ...)
 
 \item{ori}{one of 'Excel', 'Matlab', 'R', 'SPSS'. Ignored when x is character}
 
-\item{format}{specify in date format. Ignored when x is numeric. one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits}
+\item{format}{specify in date format. Ignored when x is numeric. See examples (cannot have percentage sign here for documentation)}
 }
 \value{
 returns a vector
 }
 \description{
 convert to date with friendly ori (no need to remember exact origin date)
+}
+\examples{
+# format one of c("\%d/\%m/\%Y", "\%d-\%m-\%Y", "\%Y/\%m/\%d", "\%m/\%d/\%Y", "\%Y-\%m-\%d"). \%y for two year digits
 }
 \seealso{
 \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} \code{\link{ez.time}}
