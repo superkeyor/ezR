@@ -63,6 +63,3 @@ a ggplot object (+theme_apa() to get apa format plot)
 \description{
 scatter plot with ggplot
 }
-\note{
-
-}
