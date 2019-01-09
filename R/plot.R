@@ -499,7 +499,7 @@ ggcolor = function(n=NULL){
         colors()
 
         # rgb 2 hex
-        rgb(r,g,b)
+        rgb(r,g,b,maxColorValue=255)
 
         # hex 2 rgb
         col2rgb("red"); col2rgb("#000d00")
@@ -1792,6 +1792,9 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @description scatter plot with ggplot
 #' @param df data frame
 #' @param cmd like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
+#' @param line.color only applicable when y~x, regression line color
+#' @param point.color only applicable when y~x
+#' @param point.shape only applicable when y~x
 #' @param point.alpha  if overplot for points, reduce alpha
 #' @param point.size if less point, increase size
 #' @param rug.size rug size
@@ -1811,8 +1814,10 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param rug marginal rug indicating univariate distribution
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @note
+#'  
 #' @export
-ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
+ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B22',point.color='#76AEC8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1950,13 +1955,13 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,point.alpha=0.95,
       # legend is ignored, but because lab might be empty, better to keep the legend commands here
       tt = sprintf('
                   pp=ggplot(df, aes(x=%s, y=%s)) +
-                  geom_point(alpha=%f,size=%f,aes(color="blue")) + %s
-                  geom_smooth(method=lm,se=%s,aes(color="red")) + %s %s
+                  geom_point(alpha=%f,size=%f,color="%s",shape=%d) + %s
+                  geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   # scale_color_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)) +
                   %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,rp,se,rug,ellipse,ylab,xlab,'theme(legend.position="none")',legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,point.alpha,point.size,point.color,point.shape,rp,se,line.color,rug,ellipse,ylab,xlab,'theme(legend.position="none")',legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),

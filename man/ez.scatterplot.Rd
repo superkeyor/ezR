@@ -5,6 +5,7 @@
 \title{scatter plot with ggplot}
 \usage{
 ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
+  line.color = "#BE1B22", point.color = "#76AEC8", point.shape = 16,
   point.alpha = 0.95, point.size = 3, rug.size = 0.5, ylab = NULL,
   xlab = NULL, zlab = NULL, legend.position = "top",
   legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
@@ -20,6 +21,12 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
 \item{rp.x}{r p values x position (0-1, relative to top left, big-->right), ignored if rp=FALSE. Internally, convert to geom_label(x,y) where x,y refers to actually x,y axis value}
 
 \item{rp.y}{r p values y position (0-1, relative to top left, big-->bottom), ignored if rp=FALSE}
+
+\item{line.color}{only applicable when y~x, regression line color}
+
+\item{point.color}{only applicable when y~x}
+
+\item{point.shape}{only applicable when y~x}
 
 \item{point.alpha}{if overplot for points, reduce alpha}
 
@@ -55,4 +62,7 @@ a ggplot object (+theme_apa() to get apa format plot)
 }
 \description{
 scatter plot with ggplot
+}
+\note{
+
 }
