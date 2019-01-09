@@ -128,6 +128,24 @@ ez.env=function(env=NULL){
 #' @export
 ez.envr = ez.env
 
+#' wrapper of \code{\link{eval}}
+#' @description wrapper of \code{\link{eval}}
+#' @param cmd an R cmd in text, e.g., constructed with sprintf()
+#' @param env caller's envir, could be environment(), .GlobalEnv (same as globalenv()), default is parent.frame()
+#'        if default parent.frame() does not work properly, try passing environment()
+#'        tricky/hard to hard-code/default it in this wrapper function, R does not support call stack well.
+#' @return this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
+#' @examples
+#' ez.eval('z=9',environment())
+#' @export
+ez.eval = function(cmd,env = parent.frame()){
+    eval(parse(text = cmd),envir = env)
+}
+
+#' @rdname ez.eval
+#' @export
+ez.evaluate = ez.eval
+
 #' update ez package itself
 #' @description update ez package itself
 #' @export

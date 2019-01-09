@@ -861,32 +861,6 @@ ez.pprint = function(string,color='green') {
     eval(parse(text = cmd))
 }
 
-#' wrapper of \code{\link{eval}}
-#' @description wrapper of \code{\link{eval}}
-#' @param cmd an R cmd in text, e.g., constructed with sprintf()
-#' @param env caller's envir, could be environment(), default is parent.frame()
-#'        if default parent.frame() does not work properly, try passing environment()
-#'        tricky/hard to hard-code/default it in this wrapper function, R does not support call stack well.
-#' @return this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
-#' @examples
-#' ez.eval('z=9',environment())
-#' @export
-ez.eval = function(cmd,env = parent.frame()){
-    eval(parse(text = cmd),envir = env)
-}
-
-#' wrapper of \code{\link{eval}}
-#' @description wrapper of \code{\link{eval}}
-#' @param cmd an R cmd in text, e.g., constructed with sprintf()
-#' @param env caller's envir, could be environment(), default is parent.frame()
-#'        if default parent.frame() does not work properly, try passing environment()
-#'        tricky/hard to hard-code/default it in this wrapper function, R does not support call stack well.
-#' @return this function evaluates the cmd in the caller's envir, so the actual return depends on the caller/cmd
-#' @examples
-#' ez.eval('z=9',environment())
-#' @export
-ez.evaluate = ez.eval
-
 age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
     if (!inherits(dob, "Date") | !inherits(enddate, "Date")) {
         stop("Both dob and enddate must be Date class objects")
