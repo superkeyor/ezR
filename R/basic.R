@@ -60,16 +60,6 @@ ez.typeof = class
 #' @export
 ez.sleep = Sys.sleep
 
-#' profile
-#' @description profile
-#' @export
-ez.profile = function(){system("open -a 'Sublime Text' $HOME/.bash_profile")}
-
-#' rprofile
-#' @description rprofile
-#' @export
-ez.rprofile = function(){system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStudio/.Rprofile")}
-
 #' moment
 #' @description current date,time in string
 #' @param format see example or https://www.stat.berkeley.edu/~s133/dates.html

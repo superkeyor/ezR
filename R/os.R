@@ -430,10 +430,27 @@ ez.cwd = getwd
 #' @export
 ez.pwd = getwd
 
+#' sedit
+#' @description sedit
+#' @export
+sedit <- function(file=ez.csf()) {
+    system(sprintf("open -a 'Sublime Text' '%s'", file))
+}
+
+#' profile
+#' @description profile
+#' @export
+profile = function(){system("open -a 'Sublime Text' $HOME/.bash_profile")}
+
+#' rprofile
+#' @description rprofile
+#' @export
+rprofile = function(){system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStudio/.Rprofile")}
+
 #' current script file (in full path)
 #' @description current script file (in full path)
 #' @examples
-#' works with Rscript, source() or in RStudio Run selection
+#' works with Rscript, source() or in RStudio Run selection, RStudio Console
 #' @export
 ez.csf <- function() {
     # http://stackoverflow.com/a/32016824/2292993

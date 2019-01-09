@@ -10,5 +10,5 @@ ez.csf()
 current script file (in full path)
 }
 \examples{
-works with Rscript, source() or in RStudio Run selection
+works with Rscript, source() or in RStudio Run selection, RStudio Console
 }
