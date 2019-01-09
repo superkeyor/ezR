@@ -22,7 +22,7 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
 
 \item{rp.y}{r p values y position (0-1, relative to top left, big-->bottom), ignored if rp=FALSE}
 
-\item{line.color}{only applicable when y~x, regression line color}
+\item{line.color}{only applicable when y~x and y~x|z, regression line color}
 
 \item{point.color}{only applicable when y~x}
 

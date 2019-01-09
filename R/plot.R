@@ -1792,7 +1792,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @description scatter plot with ggplot
 #' @param df data frame
 #' @param cmd like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
-#' @param line.color only applicable when y~x, regression line color
+#' @param line.color only applicable when y~x and y~x|z, regression line color
 #' @param point.color only applicable when y~x
 #' @param point.shape only applicable when y~x
 #' @param point.alpha  if overplot for points, reduce alpha
@@ -1927,12 +1927,12 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B
       tt = sprintf('
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
-                  geom_smooth(method=lm,se=%s) + %s %s
+                  geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   scale_color_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)) +
                   %s %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,zz,zz,rp,se,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,point.alpha,point.size,zz,zz,rp,se,line.color,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
