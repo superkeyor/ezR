@@ -459,7 +459,15 @@ ez.csf <- function() {
                 if (pth!='') {
                     return(normalizePath(pth))
                 } else {
-                    # likely RStudio Console, returns '', normalizePath('') warning/error
+                    # RStudio Console
+                    tryCatch({
+                            pth = rstudioapi::getSourceEditorContext()$path
+                            pth = normalizePath(pth)
+                        }, error = function(e) {
+                            # normalizePath('') issues warning/error
+                            pth = ''
+                        }
+                    )
                     return(pth)
                 }
             }
