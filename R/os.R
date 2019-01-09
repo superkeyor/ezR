@@ -440,6 +440,15 @@ ez.pr = ez.parentdir
 #' @export
 ez.cd = setwd
 
+#' cd(csd)
+#' @description cd(csd)
+#' @export
+ez.ce = function(){setwd(ez.csd())}
+
+#' @rdname ez.ce
+#' @export
+ez.cf = ez.ce
+
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
 #' @export
