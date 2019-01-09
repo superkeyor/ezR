@@ -560,7 +560,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
             # plot = F; no need for sepearte plotlist
             result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
-            if (plot & nrow(result)>0) {
+            if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
                    xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
@@ -638,9 +638,9 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','rp','beta','degree_of_freedom','uniques_incl_na','min','max','mean','sd')
-    result %<>% ez.num() %>% ez.dropna(col='p')
+    result %<>% ez.num()
 
-    if (plot & nrow(result)>0) {
+    if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         # if (length(y)==1 & length(x)>1) {
         #     tt = sprintf('
@@ -717,7 +717,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
             # plot = F; no need for sepearte plotlist
             result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
-            if (plot & nrow(result)>0) {
+            if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
                    xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
@@ -774,9 +774,9 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','odds_ratio','degree_of_freedom')
-    result %<>% ez.num() %>% ez.dropna(col='p')
+    result %<>% ez.num()
 
-    if (plot & nrow(result)>0) {
+    if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
                xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
@@ -831,7 +831,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
             # plot = F; no need for sepearte plotlist
             result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result[[1]]
-            if (plot & nrow(result)>0) {
+            if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
                        xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
@@ -923,9 +923,9 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se','posthoc_tukey')
-    result %<>% ez.num() %>% ez.dropna(col='p')
+    result %<>% ez.num()
 
-    if (plot & nrow(result)>0) {
+    if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
                xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
@@ -1000,7 +1000,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
             # plot = F; no need for sepearte plotlist
             result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
             result = result[[1]]
-            if (plot & nrow(result)>0) {
+            if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
                    xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
@@ -1048,9 +1048,9 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','odds_ratio','counts','total')
-    result %<>% ez.num() %>% ez.dropna(col='p')
+    result %<>% ez.num()
 
-    if (plot & nrow(result)>0) {
+    if (plot & nrow(result %>% ez.dropna(col='p'))>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         if (length(y)>=1 & length(x)==1) {
             pp=lattice::barchart(-log10(result$p) ~ result$y,
