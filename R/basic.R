@@ -358,12 +358,10 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','
 
 #' convert to date
 #' @description convert to date with friendly ori (no need to remember exact origin date)
-#' @param x a vector of char, num. param format for class 'character' (ignore ori); param ori for class 'numeric' (ignore format)
+#' @param x a vector of char or num. 
 #' \cr a string factor treated as char (ie, using param format), a num factor cannot be processed
-#' @param ori one of 'Excel', 'Matlab', 'R', 'SPSS'
-#' @param format specify in date format. see examples
-#' @examples
-#' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
+#' @param ori one of 'Excel', 'Matlab', 'R', 'SPSS'. Ignored when x is character
+#' @param format specify in date format. Ignored when x is numeric. one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
 #' @return returns a vector
 #' @seealso \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} \code{\link{ez.time}}
 #' @export
