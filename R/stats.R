@@ -635,7 +635,6 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         rp = rtest$p.value
         }, error = function(e) {
             if (showerror) message(sprintf('EZ Error (rlm): %s %s. NA returned.',yy,xx))
-            rp = 3
         })
 
         out = c(yy,xx,p,rp,beta,degree_of_freedom,v.unique,v.min,v.max,v.mean,v.sd)
