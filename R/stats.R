@@ -607,11 +607,16 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         ez.eval(cmd)
         p = model$coefficients[2,4]
 
-        cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
-        ez.eval(cmd)
-        # https://stats.stackexchange.com/a/205615/100493
-        rtest = sfsmisc::f.robftest(rmodel,var=xx)
-        rp = rtest$p.value
+        tryCatch({
+            cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
+            ez.eval(cmd)
+            # https://stats.stackexchange.com/a/205615/100493
+            rtest = sfsmisc::f.robftest(rmodel,var=xx)
+            rp = rtest$p.value
+        }, error = function(e) {
+            if (showerror) message(sprintf('EZ Error (rlm): %s %s. NA returned.',yy,xx))
+            rp = NA
+        })
 
         beta = model$coefficients[2,1]
         degree_of_freedom = model$df[2]
@@ -629,7 +634,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         out = c(yy,xx,p,rp,beta,degree_of_freedom,v.unique,v.min,v.max,v.mean,v.sd)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
+            if (showerror) message(sprintf('EZ Error (lm): %s %s. NA returned.',yy,xx))
             return(c(yy,xx,NA,NA,NA,NA,NA,NA,NA,NA,NA))
         })
     }
