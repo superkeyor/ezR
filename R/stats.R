@@ -645,7 +645,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','rp','beta','degree_of_freedom','uniques_incl_na','min','max','mean','sd')
-    result %<>% ez.num() %>% ez.dropna(col='p',print2screen=F)
+    result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
@@ -781,7 +781,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('y','x','p','odds_ratio','degree_of_freedom')
-    result %<>% ez.num() %>% ez.dropna(col='p',print2screen=F)
+    result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
@@ -930,7 +930,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se','posthoc_tukey')
-    result %<>% ez.num() %>% ez.dropna(col='p',print2screen=F)
+    result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
@@ -1055,7 +1055,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','odds_ratio','counts','total')
-    result %<>% ez.num() %>% ez.dropna(col='p',print2screen=F)
+    result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
