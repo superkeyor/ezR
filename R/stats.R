@@ -625,11 +625,11 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         })
 
         tryCatch({
-            cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
-            ez.eval(cmd)
-            # https://stats.stackexchange.com/a/205615/100493
-            rtest = sfsmisc::f.robftest(rmodel,var=xx)
-            rp = rtest$p.value
+        cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
+        ez.eval(cmd)
+        # https://stats.stackexchange.com/a/205615/100493
+        rtest = sfsmisc::f.robftest(rmodel,var=xx)
+        rp = rtest$p.value
         }, error = function(e) {
             if (showerror) message(sprintf('EZ Error (rlm): %s %s. NA returned.',yy,xx))
             rp = NA
@@ -770,7 +770,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
         out = c(yy,xx,p,odds_ratio,degree_of_freedom)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('Error: %s %s. NA returned.',yy,xx))
+            if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',yy,xx))
             return(c(yy,xx,NA,NA,NA))
         })
     }
@@ -919,7 +919,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F
         out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,means,counts,means.apa,posthoc_tukey)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
+            if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
             return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA,NA))
         })
     }
@@ -1044,7 +1044,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('
         out = c(xx,yy,p,odds_ratio,counts,total)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('Error: %s %s. NA returned.',xx,yy))
+            if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
             return(c(xx,yy,NA,NA,NA,NA))
         })
     }
