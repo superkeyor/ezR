@@ -20,7 +20,7 @@ Opens a help web page.
 Open Help Pages for ggplot2
 
 \code{gghelp} - Open Hadely Wickham's ggplot2
-\href{http://docs.ggplot2.org/current/}{web page}.
+\href{https://ggplot2.tidyverse.org/reference/}{web page}.
 
 Open Help Pages for ggplot2
 

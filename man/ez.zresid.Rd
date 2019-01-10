@@ -2,17 +2,21 @@
 % Please edit documentation in R/stats.R
 \name{ez.zresid}
 \alias{ez.zresid}
-\title{z residual}
+\title{(z) residual}
 \usage{
 ez.zresid(model, method = 3)
 }
 \arguments{
-\item{method}{1=scale(resid), 2=stats::rstandard, 3=MASS::stdres}
+\item{method}{1=scale(resid), 2=resid (unstandarized), 3=stats::rstandard}
 }
 \description{
-z residual, as.vector(scale(resid(model),center=T,scale=T))
+(z) residual
 }
 \note{
 according to jerry's test, \code{\link[stats]{rstandard}} and \code{\link[MASS]{stdres}} give the same results, both of which are slightly different from (but very close to, highly correlated with) method 1
-\cr all three methods give different results from spss: linear regression->save->residuals, standarized
+\cr SPSS linear regression->save->residuals (menu)
+\cr r z score of resid or residuals = SPSS z score of unstandardized residual
+\cr r resid or residuals = SPSS unstandardized residual
+\cr r stats::rstandard = MASS::stdres = SPSS studentized residual
+\cr \href{https://stackoverflow.com/q/40062482/2292993}{https://stackoverflow.com/q/40062482/2292993}
 }

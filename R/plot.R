@@ -166,7 +166,7 @@ ggpass=function(pp){
 #' @description Open Help Pages for ggplot2
 #'
 #' \code{gghelp} - Open Hadely Wickham's ggplot2
-#' \href{http://docs.ggplot2.org/current/}{web page}.
+#' \href{https://ggplot2.tidyverse.org/reference/}{web page}.
 #'
 #' @param FUN A particular ggplot function to reference.  Default is the index
 #' page.
@@ -183,7 +183,7 @@ ggpass=function(pp){
 #' }
 gghelp <- function(FUN) {
     if(missing(FUN)) FUN <- "" else FUN <- paste0(FUN, ".html")
-    browseURL(sprintf("http://docs.ggplot2.org/current/%s", FUN))
+    browseURL(sprintf("https://ggplot2.tidyverse.org/reference/%s", FUN))
 }
 
 #' Open Help Pages for ggplot2
@@ -1791,7 +1791,8 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' scatter plot with ggplot
 #' @description scatter plot with ggplot
 #' @param df data frame
-#' @param cmd like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z), +a+b optional for covariates residualization
+#' @param cmd like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z", "y~x+a+b|||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z--gives interaction p value), +a+b optional for covariates residualization
+#' \cr y~x+a+b|||z an invisible plotlist returned, call ggmultiplot(plotlist)
 #' @param line.color only applicable when y~x and y~x|z (ie, not auto varied with aes()), regression line color
 #' @param point.color only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*
 #' @param point.shape only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*
@@ -1815,7 +1816,29 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
+ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
+####************************************************************************************************
+                                     ####*recursive call*####
+####************************************************************************************************
+if (grepl("|||",cmd,fixed=TRUE)) {
+    tmp = strsplit(cmd,"|||",fixed=T)[[1]]
+    cmd = tmp[1]; z = tmp[2]
+    lvls =  levels(df[[z]])
+    pplist = list()
+    shapes = rep(c(16,17,15,3,7,8),100)
+    colors = rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)
+    for (i in 1:length(lvls)) {
+        dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
+        pplist[[i]] = ez.scatterplot(df = dftmp,
+            cmd=cmd, line.color=colors[i], point.color=colors[i], point.shape=shapes[i], 
+            rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse)
+    }
+    ez.pprint('an invisible plotlist returned, call ggmultiplot(plotlist)')
+    return(invisible(pplist))
+}
+####************************************************************************************************
+                                     ####**####
+####************************************************************************************************
     df__copy=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1917,18 +1940,19 @@ if (grepl("+",cmd,fixed=TRUE)) {
         v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
-        df %<>% mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
+        df %<>% dplyr::mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
         "
         cmd = ez.sprintf('{y}~{x}|{z}')
     } else if (grepl("*",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+*]")[[1]]
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; v = tmp[3:(length(tmp)-1)]
         v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
+        # grouping changes df data type which would fail lme4::lmList below
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
-        df %<>% group_by({z}) %>%
-            mutate({y} = ez.zresid( lm({y}~{v2}) )) %>%
-            ungroup()
+        df %<>% dplyr::group_by({z}) %>%
+            dplyr::mutate({y} = ez.zresid( lm({y}~{v2}) )) %>%
+            dplyr::ungroup() %>% data.frame()
         "
         cmd = ez.sprintf('{y}~{x}*{z}')
     } else {
@@ -1937,7 +1961,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', {v1}))
-        df %<>% mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
+        df %<>% dplyr::mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
         "
         cmd = ez.sprintf('{y}~{x}')
     }

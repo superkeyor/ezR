@@ -6,7 +6,7 @@
 \usage{
 ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
   line.color = "#BE1B22", point.color = "#0086B8", point.shape = 16,
-  point.alpha = 0.95, point.size = 3, rug.size = 0.5, ylab = NULL,
+  point.alpha = 0.95, point.size = 3, rug.size = 0.25, ylab = NULL,
   xlab = NULL, zlab = NULL, legend.position = "top",
   legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
   rp = TRUE, se = TRUE, rug = FALSE, ellipse = FALSE)
@@ -14,7 +14,8 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
 \arguments{
 \item{df}{data frame}
 
-\item{cmd}{like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)}
+\item{cmd}{like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z", "y~x+a+b|||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z--gives interaction p value), +a+b optional for covariates residualization
+\cr y~x+a+b|||z an invisible plotlist returned, call ggmultiplot(plotlist)}
 
 \item{rp.size}{r p values font size, ignored if rp=FALSE}
 

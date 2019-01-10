@@ -5,7 +5,7 @@
 \title{a series of one-way between-subjects anova, for many y and many x; if many y and many x at the same time, returns a list}
 \usage{
 ez.anovas1b(df, y, x, covar = NULL, showerror = T, viewresult = F,
-  reportresult = F, plot = T, cols = 3, pmethods = c("bonferroni",
+  reportresult = T, plot = T, cols = 3, pmethods = c("bonferroni",
   "fdr"), labsize = 2, textsize = 1.5, titlesize = 3, ...)
 }
 \arguments{

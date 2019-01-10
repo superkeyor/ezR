@@ -554,7 +554,7 @@ ez.zresid = function(model,method=3) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -695,6 +695,18 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
+
+    # todo: format as APA
+    if (reportresult) {
+        report = result %>% dplyr::arrange(orindex)
+        ez.print('------')
+        ez.print(ifelse(is.null(covar), 'beta=r', 'beta closed to residualized correlation'))
+        for (i in 1:nrow(report)){
+            ez.print(sprintf('%s ~ %s, beta = %.2f, %s, r%s', report$y[i],report$x[i],report$beta[i],ez.p.apa(report$p[i],pprefix=T),ez.p.apa(report$rp[i],pprefix=T)))
+        }
+        ez.print('------')
+    }
+
     return(invisible(list(result)))
 }
 
@@ -832,7 +844,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols=3
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis)
 #' \cr If covariates provided, adjusted means with SE, partial eta squared. Otherwise, mean SD, and eta squared.
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=F,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot=T,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
