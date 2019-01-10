@@ -620,7 +620,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         v.mean=mean(v)
         v.sd=sd(v)
         }, error = function(e) {
-            if (showerror) message(sprintf('EZ Error (lm): %s %s. NA returned.',yy,xx))
+            if (showerror) {message(sprintf('EZ Error (lm): %s %s. NA returned.',yy,xx))}
             p=NA;beta=NA;degree_of_freedom=NA;v.unique=NA;v.min=NA;v.max=NA;v.mean=NA;v.sd=NA
         })
 
@@ -631,7 +631,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=T,cols
         rtest = sfsmisc::f.robftest(rmodel,var=xx)
         rp = rtest$p.value
         }, error = function(e) {
-            if (showerror) message(sprintf('EZ Error (rlm): %s %s. NA returned.',yy,xx))
+            if (showerror) {message(sprintf('EZ Error (rlm): %s %s. NA returned.',yy,xx))}
             rp = NA
         })
 
