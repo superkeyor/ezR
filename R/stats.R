@@ -511,16 +511,20 @@ ez.r = function(x,col=NULL,type="pearson",print2screen=T) {
     return(result)
 }
 
-#' z residual
-#' @description z residual, as.vector(scale(resid(model),center=T,scale=T))
-#' @param method 1=scale(resid), 2=stats::rstandard, 3=MASS::stdres
+#' (z) residual
+#' @description (z) residual
+#' @param method 1=scale(resid), 2=resid (unstandarized), 3=stats::rstandard
 #' @note according to jerry's test, \code{\link[stats]{rstandard}} and \code{\link[MASS]{stdres}} give the same results, both of which are slightly different from (but very close to, highly correlated with) method 1
-#' \cr all three methods give different results from spss: linear regression->save->residuals, standarized
+#' \cr SPSS linear regression->save->residuals (menu)
+#' \cr r z score of resid or residuals = SPSS z score of unstandardized residual
+#' \cr r resid or residuals = SPSS unstandardized residual
+#' \cr r stats::rstandard = MASS::stdres = SPSS studentized residual
+#' \cr \href{https://stackoverflow.com/q/40062482/2292993}{https://stackoverflow.com/q/40062482/2292993}
 #' @export
 ez.zresid = function(model,method=3) {
     if (method==1) {result=as.vector(scale(resid(model),center=TRUE,scale=TRUE))}
-    if (method==2) {result=stats::rstandard(model)}
-    if (method==3) {result=MASS::stdres(model)}
+    if (method==2) {result=resid(model)}
+    if (method==3) {result=stats::rstandard(model)}
     return(result)
 }
 

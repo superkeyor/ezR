@@ -1791,7 +1791,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' scatter plot with ggplot
 #' @description scatter plot with ggplot
 #' @param df data frame
-#' @param cmd like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
+#' @param cmd like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z), +a+b optional for covariates residualization
 #' @param line.color only applicable when y~x and y~x|z (ie, not auto varied with aes()), regression line color
 #' @param point.color only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*
 #' @param point.shape only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*
@@ -1906,6 +1906,47 @@ ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B
         '
     eval(parse(text = tt))
     gghistory=paste(gghistory,tt,sep='\n')
+
+####************************************************************************************************
+                              ####*covariate residualize begin*####
+####************************************************************************************************
+if (grepl("+",cmd,fixed=TRUE)) {
+    if (grepl("|",cmd,fixed=TRUE)) {
+        tmp = strsplit(cmd,"[~+|]")[[1]]
+        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; v = tmp[3:(length(tmp)-1)]
+        v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
+        tt = "
+        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
+        df %<>% mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
+        "
+        cmd = ez.sprintf('{y}~{x}|{z}')
+    } else if (grepl("*",cmd,fixed=TRUE)) {
+        tmp = strsplit(cmd,"[~+*]")[[1]]
+        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; v = tmp[3:(length(tmp)-1)]
+        v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
+        tt = "
+        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
+        df %<>% group_by({z}) %>%
+            mutate({y} = ez.zresid( lm({y}~{v2}) )) %>%
+            ungroup()
+        "
+        cmd = ez.sprintf('{y}~{x}*{z}')
+    } else {
+        tmp = strsplit(cmd,"[~+]")[[1]]
+        y = tmp[1]; x = tmp[2]; v = tmp[3:length(tmp)]
+        v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
+        tt = "
+        df = ez.dropna(df,c('{y}', '{x}', {v1}))
+        df %<>% mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
+        "
+        cmd = ez.sprintf('{y}~{x}')
+    }
+    ez.esp(tt)
+    gghistory=paste(gghistory,ez.sprintf(tt),sep='\n')
+}
+####************************************************************************************************
+                              ####*covariate residualize end*####
+####************************************************************************************************
 
     if (grepl("|",cmd,fixed=TRUE)) {
       cmd = strsplit(cmd,"[~|]")[[1]]

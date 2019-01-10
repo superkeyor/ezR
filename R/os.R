@@ -163,6 +163,14 @@ ez.eval = function(cmd,env = parent.frame()){
 #' @export
 ez.evaluate = ez.eval
 
+#' eval sprintf
+#' @description eval sprintf
+#' @export
+ez.esp = function(cmd,env = parent.frame()){
+    cmd = glue::glue(cmd,.envir=env)
+    eval(parse(text = cmd),envir = env)
+}
+
 #' update ez package itself
 #' @description update ez package itself
 #' @export
