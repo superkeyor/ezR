@@ -22,11 +22,11 @@ ez.scatterplot(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
 
 \item{rp.y}{r p values y position (0-1, relative to top left, big-->bottom), ignored if rp=FALSE}
 
-\item{line.color}{only applicable when y~x and y~x|z, regression line color}
+\item{line.color}{only applicable when y~x and y~x|z (ie, not auto varied with aes()), regression line color}
 
-\item{point.color}{only applicable when y~x}
+\item{point.color}{only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*}
 
-\item{point.shape}{only applicable when y~x}
+\item{point.shape}{only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*}
 
 \item{point.alpha}{if overplot for points, reduce alpha}
 

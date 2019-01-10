@@ -1792,9 +1792,9 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @description scatter plot with ggplot
 #' @param df data frame
 #' @param cmd like "y~x", "y~x|z", "y~x||z" where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z)
-#' @param line.color only applicable when y~x and y~x|z, regression line color
-#' @param point.color only applicable when y~x
-#' @param point.shape only applicable when y~x
+#' @param line.color only applicable when y~x and y~x|z (ie, not auto varied with aes()), regression line color
+#' @param point.color only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*
+#' @param point.shape only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*
 #' @param point.alpha  if overplot for points, reduce alpha
 #' @param point.size if less point, increase size
 #' @param rug.size rug size
