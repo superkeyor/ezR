@@ -4,15 +4,15 @@
 \alias{ez.p.apa}
 \title{format p value according to apa for report}
 \usage{
-ez.p.apa(pvalue, pprefix = F)
+ez.p.apa(pvalue, prefix = 0)
 }
 \arguments{
 \item{pvalue}{numeric vector}
 
-\item{pprefix}{T/F}
+\item{prefix}{0,1,2}
 }
 \value{
-character vector (< .001, .003, .02) or (p < .001, p = .003, p = .02)
+character vector prefix 0 (< .001, .003, .02); prefix 1 (< .001, = .003, = .02); prefix 2 (p < .001, p = .003, p = .02)
 }
 \description{
 format p value according to apa for report

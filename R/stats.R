@@ -18,8 +18,9 @@ ez.describe = function(x){
     # flush.console()
 }
 
-p.apa = function(pvalue,pprefix=F){
-    if (pprefix) {
+p.apa = function(pvalue,prefix=0){
+    if (is.na(pvalue)) {return(NA_character_)}
+    if (prefix==0) {
         if (pvalue<.001) {
             pvalue = sprintf("p < .001")
         } else if (pvalue<.005) {
@@ -29,7 +30,17 @@ p.apa = function(pvalue,pprefix=F){
         } else {
             pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
         }
-    } else {
+    } else if (prefix==1) {
+        if (pvalue<.001) {
+            pvalue = sprintf("< .001")
+        } else if (pvalue<.005) {
+            pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
+        } else if (pvalue<.01) {
+            pvalue = sprintf("= .01")
+        } else {
+            pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+        }
+    } else if (prefix==2){
         if (pvalue<.001) {
             pvalue = sprintf("< .001")
         } else if (pvalue<.005) {
@@ -45,8 +56,8 @@ p.apa = function(pvalue,pprefix=F){
 #' format p value according to apa for report
 #' @description format p value according to apa for report
 #' @param pvalue numeric vector
-#' @param pprefix T/F
-#' @return character vector (< .001, .003, .02) or (p < .001, p = .003, p = .02)
+#' @param prefix 0,1,2
+#' @return character vector prefix 0 (< .001, .003, .02); prefix 1 (< .001, = .003, = .02); prefix 2 (p < .001, p = .003, p = .02)
 #' @export
 ez.p.apa = Vectorize(p.apa)
 
@@ -702,7 +713,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresul
         ez.print('------')
         ez.print(ifelse(is.null(covar), 'beta=r', 'beta closed to residualized correlation'))
         for (i in 1:nrow(report)){
-            ez.print(sprintf('%s ~ %s, beta = %.2f, %s, r%s', report$y[i],report$x[i],report$beta[i],ez.p.apa(report$p[i],pprefix=T),ez.p.apa(report$rp[i],pprefix=T)))
+            ez.print(sprintf('%s ~ %s, beta = %.2f, %s, r%s', report$y[i],report$x[i],report$beta[i],ez.p.apa(report$p[i],prefix=2),ez.p.apa(report$rp[i],prefix=2)))
         }
         ez.print('------')
     }
@@ -911,7 +922,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
             # https://stats.stackexchange.com/a/78813/100493
             petasq2 = summary.lm(a)$r.squared
             posthoc = ez.eval(sprintf('summary(multcomp::glht(a, linfct = multcomp::mcp("%s" = "Tukey")))', 'df[[xx]]'))
-            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,TRUE),'; ',collapse='')
+            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,prefix=2),'; ',collapse='')
         } else {
             a = ez.eval(sprintf('aov(%s~%s%s,data=df)',yy,xx,covar))
             aa = car::Anova(a,type="III")
@@ -932,7 +943,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
             # petasq2 = SSeffect/SStotal; partial etasq2 = SSeffect/(SSeffect+SSresidual)
             petasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
             posthoc = ez.eval(sprintf('summary(multcomp::glht(a, linfct = multcomp::mcp(%s = "Tukey")))', xx))
-            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,TRUE),'; ',collapse='')
+            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,prefix=2),'; ',collapse='')
         }
         out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,means,counts,means.apa,posthoc_tukey)
         return(out)
@@ -969,7 +980,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
-    result$p.apa = ez.p.apa(result$p,pprefix=F)
+    result$p.apa = ez.p.apa(result$p,prefix=0)
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd_or_adjmeans.se, posthoc_tukey last') %>% dplyr::arrange(p)
 
     if (viewresult) {View(result)}
@@ -979,7 +990,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
         ez.print('------')
         ez.print(ifelse(is.null(covar), 'mean (sd)', 'adjusted mean (se), sd=se*sqrt(n)'))
         for (i in 1:nrow(report)){
-            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.sd_or_adjmeans.se[i],ez.p.apa(report$p[i],pprefix=F)))
+            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.sd_or_adjmeans.se[i],ez.p.apa(report$p[i],prefix=0)))
         }
         ez.print('------')
         ez.print('posthoc Tukey')
@@ -991,7 +1002,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
             if (report$F[i] < 1) {
                 ez.print(sprintf('%s,%s\tF(%s) < 1', report$x[i],report$y[i],report$degree_of_freedom[i]))
             } else {
-                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],pprefix=T),ifelse(is.null(covar),'etasq2','partial etasq2'),report$petasq2[i]))
+                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),report$petasq2[i]))
             }
         }
         ez.print('------')
