@@ -20,7 +20,7 @@ ez.describe = function(x){
 
 p.apa = function(pvalue,prefix=0){
     if (is.na(pvalue)) {return(NA_character_)}
-    if (prefix==0) {
+    if (prefix==2) {
         if (pvalue<.001) {
             pvalue = sprintf("p < .001")
         } else if (pvalue<.005) {
@@ -40,7 +40,7 @@ p.apa = function(pvalue,prefix=0){
         } else {
             pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
         }
-    } else if (prefix==2){
+    } else if (prefix==0){
         if (pvalue<.001) {
             pvalue = sprintf("< .001")
         } else if (pvalue<.005) {
