@@ -1382,9 +1382,14 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param corr.type "pearson" or "spearman", pairwise deletion for NA
 #' @param sig.level sig.level. make it 1 to essentially ignore param insig
 #' @param insig how to treat insig values, one of "pch"(show x, corrplot default),"p-value","blank", "n"(no change, as is)
+#' @param type Character, "full" (default), "upper" or "lower", display full matrix, lower triangular or upper triangular matrix.
 #' @param tl.col color of text label
 #' @param tl.cex size of text label (can still be increased to gain some margins for the map when tl.pos='n')
 #' @param tl.pos 'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.
+#' @param tl.srt Numeric, for text label string rotation in degrees.
+#' @param addgrid.col grid color. The color of the grid. If NA, don't add grid. If NULL the default value is chosen. The default value depends on method, if method is color or shade, the color of the grid is NA, that is, not draw grid; otherwise "grey".
+#' @param addCoef.col Color of coefficients added on the graph. If NULL (default), add no coefficients. 
+#' @param diag Logical, whether display the correlation coefficients on the principal diagonal 
 #' @param method "circle", "square", "ellipse", "number", "pie", "shade" and "color". The areas of circles or squares show the absolute value of corresponding correlation coefficients. "color" = same areas
 #' @param order "original" for original order (default).
 #' \cr "AOE" for the angular order of the eigenvectors.
@@ -1395,9 +1400,10 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param ... see \code{\link[corrplot]{corrplot}} for more parameters
 #' @return returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 #' @export
-ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
-                     method ="circle",tl.col="black",tl.cex=0.4,tl.pos=NULL,
-                     order = c("original", "AOE", "FPC", "hclust", "alphabet"),
+ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="lower",
+                     method="circle",tl.col="black",tl.cex=0.4,tl.pos=NULL,tl.srt=45,
+                     addgrid.col=rgb(1,1,1,.01),addCoef.col="black",diag=FALSE,
+                     order=c("original", "AOE", "FPC", "hclust", "alphabet"),
                      col=NULL,...){
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1424,7 +1430,7 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",
     corr = corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
                        tl.col = tl.col, tl.cex = tl.cex, tl.pos = tl.pos,
                        order = order,
-                       col = col, addgrid.col = rgb(1,1,1,.01), ...)
+                       col = col, addgrid.col = addgrid.col, ...)
 
     ind = which(p.mat > sig.level, arr.ind = TRUE)
     corr[ind] = NA

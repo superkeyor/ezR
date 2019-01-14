@@ -5,9 +5,10 @@
 \title{plot a correlation matrix map}
 \usage{
 ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
-  method = "circle", tl.col = "black", tl.cex = 0.4, tl.pos = NULL,
-  order = c("original", "AOE", "FPC", "hclust", "alphabet"), col = NULL,
-  ...)
+  type = "lower", method = "circle", tl.col = "black", tl.cex = 0.4,
+  tl.pos = NULL, tl.srt = 45, addgrid.col = rgb(1, 1, 1, 0.01),
+  addCoef.col = "black", diag = FALSE, order = c("original", "AOE", "FPC",
+  "hclust", "alphabet"), col = NULL, ...)
 }
 \arguments{
 \item{df}{data frame in wide format, should be all numeric}
@@ -18,6 +19,8 @@ ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 
 \item{insig}{how to treat insig values, one of "pch"(show x, corrplot default),"p-value","blank", "n"(no change, as is)}
 
+\item{type}{Character, "full" (default), "upper" or "lower", display full matrix, lower triangular or upper triangular matrix.}
+
 \item{method}{"circle", "square", "ellipse", "number", "pie", "shade" and "color". The areas of circles or squares show the absolute value of corresponding correlation coefficients. "color" = same areas}
 
 \item{tl.col}{color of text label}
@@ -25,6 +28,14 @@ ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 \item{tl.cex}{size of text label (can still be increased to gain some margins for the map when tl.pos='n')}
 
 \item{tl.pos}{'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.}
+
+\item{tl.srt}{Numeric, for text label string rotation in degrees.}
+
+\item{addgrid.col}{grid color. The color of the grid. If NA, don't add grid. If NULL the default value is chosen. The default value depends on method, if method is color or shade, the color of the grid is NA, that is, not draw grid; otherwise "grey".}
+
+\item{addCoef.col}{Color of coefficients added on the graph. If NULL (default), add no coefficients.}
+
+\item{diag}{Logical, whether display the correlation coefficients on the principal diagonal}
 
 \item{order}{"original" for original order (default).
 \cr "AOE" for the angular order of the eigenvectors.
