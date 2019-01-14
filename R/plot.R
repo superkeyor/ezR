@@ -1430,7 +1430,7 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
     corr = corrplot::corrplot(M, method = method, p.mat = p.mat, sig.level = sig.level,  insig = insig,
                        tl.col = tl.col, tl.cex = tl.cex, tl.pos = tl.pos,
                        order = order,
-                       col = col, addgrid.col = addgrid.col, ...)
+                       col = col, addgrid.col = addgrid.col, type=type, tl.srt=tl.srt, addCoef.col=addCoef.col, diag=diag, ...)
 
     ind = which(p.mat > sig.level, arr.ind = TRUE)
     corr[ind] = NA
