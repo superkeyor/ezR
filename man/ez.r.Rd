@@ -13,11 +13,15 @@ ez.r(x, col = NULL, type = "pearson", print2screen = T)
 
 \item{type}{"pearson" or "spearman"}
 
-\item{viewresult}{no effect if there is no NA}
+\item{print2screen}{print attention message, if NA present in r matrix; no effect if there is no NA}
 }
 \value{
-r matrix (you may get some NAs in the marix without warning)
+r matrix
 }
 \description{
 r correlation
+}
+\note{
+underlying uses \code{\link[Hmisc]{rcorr}}, which uses pairwise deletion. Pairs with fewer than 2 non-missing values, or too small variance, have the r values set to NA
+\crIn the r matrix you get, you may get some NAs in the marix without warning)
 }

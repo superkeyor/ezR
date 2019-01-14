@@ -496,27 +496,36 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
 #' @param x df or matrix
 #' @param col col included for calculation, ignored if x is not a df
 #' @param type "pearson" or "spearman"
-#' @param viewresult no effect if there is no NA
-#' @return r matrix (you may get some NAs in the marix without warning)
+#' @param print2screen print attention message, if NA present in r matrix; no effect if there is no NA
+#' @note underlying uses \code{\link[Hmisc]{rcorr}}, which uses pairwise deletion. Pairs with fewer than 2 non-missing values, or too small variance, have the r values set to NA
+#' \crIn the r matrix you get, you may get some NAs in the marix without warning)
+#' @return r matrix
 #' @export
 ez.r = function(x,col=NULL,type="pearson",print2screen=T) {
     if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
         x=x[col]
     }
-    # rcorr uses pairwise deletion; however, you may still get warnings/errors/NAs for calcuating r, p
-    # because too few samples, or too small variance (close to 0) after deletion
+    
     # https://www.statmethods.net/stats/correlations.html
-    # stats::cor(Matrix or data frame, use=) use has
+    # stats::cor(x, use, method)
+    # x: Matrix or data frame
+    # use:
     #   all.obs (assumes no missing data - missing data will produce an error),
     #   complete.obs (listwise deletion), and
     #   pairwise.complete.obs (pairwise deletion)
+    # method:
+    #   Options are pearson, spearman or kendall.
+    # cor() does not produce tests of significance, although you can use the cor.test( ) function to test a single correlation coefficient.
+
+    # rcorr uses pairwise deletion; however, you may still get warnings/errors/NAs for calcuating r, p
+    # because too few samples, or too small variance (close to 0) after deletion
     result = Hmisc::rcorr(data.matrix(x),type=type)$r
     CorrNACounts = data.frame(result) %>% ez.count(val=NA,dim=1) %>% tibble::rownames_to_column(var='variable') %>% dplyr::arrange(desc(count))
     NAs = sum(CorrNACounts$count)
 
     if (NAs > 0) {
-        if (print2screen) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see CorrNACounts).', NAs), color='red')}
+        if (print2screen) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see CorrNACounts in workspace).', NAs), color='red')}
         assign("CorrNACounts", CorrNACounts, envir = .GlobalEnv)
     }
     return(result)
