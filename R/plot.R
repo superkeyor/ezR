@@ -1401,7 +1401,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @return returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 #' @export
 ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="lower",
-                     method="circle",tl.col="black",tl.cex=0.4,tl.pos=NULL,tl.srt=45,
+                     method="ellipse",tl.col="black",tl.cex=0.4,tl.pos=NULL,tl.srt=45,
                      addgrid.col=rgb(1,1,1,.01),addCoef.col=NULL,diag=FALSE,
                      order=c("original", "AOE", "FPC", "hclust", "alphabet"),
                      col=NULL,...){
@@ -1436,6 +1436,45 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
     corr[ind] = NA
 
     return(invisible(list(r=corr,p=p.mat)))
+}
+
+#' corrmap with scatterplot
+#' @description corrmap with scatterplot
+#' @param x a data.frame or matrix (pairwise deletion for NA)
+#' @param group factor col name, eg 'Species', to show different groups with different colors in scatterplot
+#' @param smooth TRUE draws loess smooths  
+#' @param scale  TRUE scales the correlation font by the size of the absolute correlation.  
+#' @param density TRUE shows the density plots as well as histograms 
+#' @param ellipses TRUE draws correlation ellipses 
+#' @param lm Plot the linear fit rather than the LOESS smoothed fits. 
+#' @param digits  the number of digits to show 
+#' @param method method parameter for the correlation ("pearson","spearman","kendall") 
+#' @param pch The plot character (defaults to 20 which is a '.'). 
+#' @param cor If plotting regressions, should correlations be reported? 
+#' @param jiggle Should the points be jittered before plotting? 
+#' @param factor factor for jittering (1-5) 
+#' @param hist.col What color should the histogram on the diagonal be? eg, cyan, light grey
+#' @param show.points If FALSE, do not show the data points, just the data ellipses and smoothed functions 
+#' @param rug if TRUE (default) draw a rug under the histogram, if FALSE, don't draw the rug 
+#' @param breaks If specified, allows control for the number of breaks in the histogram (see the hist function) 
+#' @param cex.cor If this is specified, this will change the size of the text in the correlations. this allows one to also change the size of the points in the plot by specifying the normal cex values. If just specifying cex, it will change the character size, if cex.cor is specified, then cex will function to change the point size. 
+#' @param wt If specified, then weight the correlations by a weights matrix (see note for some comments) 
+#' @param smoother If TRUE, then smooth.scatter the data points  -- slow but pretty with lots of subjects  
+#' @param stars For those people who like to show the significance of correlations by using magic astricks, set stars=TRUE p-values(0, 0.001, 0.01, 0.05, 1) <=> symbols("***", "**", "*", ".", " ")
+#' @param ci Draw confidence intervals for the linear model or for the loess fit, defaults to ci=FALSE. If confidence intervals are not drawn, the fitting function is lowess. 
+#' @param alpha The alpha level for the confidence regions, defaults to .05 
+#' @param ... other options for pairs  
+#' @export 
+ez.corrmap2 = function(x,group=NULL,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=20,
+lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="#00AFBB",show.points=TRUE,rug=TRUE,breaks="Sturges",cex.cor=2,wt=NULL,smoother=FALSE,stars=TRUE,ci=FALSE,alpha=.05,...) {
+    # To show different groups with different colors, use a plot character (pch) between 21 and 25 and then set the background color to vary by group
+    bg = 'black'  # color for data point
+    if (!is.null(group)) {
+        colors = c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072")
+        bg=colors[1:nlevels(as.factor(x[[group]]))][as.factor(x[[group]])]
+        pch=pch+as.numeric(x[[group]])
+    }
+    psych::pairs.panels(x=x, smooth=smooth, scale=scale, density=density, ellipses=ellipses, digits=digits, method=method, pch=pch, lm=lm, cor=cor, jiggle=jiggle, factor=factor, hist.col=hist.col, show.points=show.points, rug=rug, breaks=breaks, cex.cor=cex.cor, wt=wt, smoother=smoother, stars=stars, ci=ci, alpha=alpha, bg=bg, ...)
 }
 
 
