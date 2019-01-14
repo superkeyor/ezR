@@ -1465,7 +1465,7 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
 #' @param alpha The alpha level for the confidence regions, defaults to .05 
 #' @param ... other options for pairs  
 #' @export 
-ez.corrmap2 = function(x,group=NULL,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=16,
+ez.scatterplots = function(x,group=NULL,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=16,
 lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,rug=TRUE,breaks="Sturges",cex.cor=2,wt=NULL,smoother=FALSE,stars=TRUE,ci=FALSE,alpha=.05,...) {
     # To show different groups with different colors, use a plot character (pch) between 21 and 25 and then set the background color to vary by group
     bg = 'black'  # color for data point
