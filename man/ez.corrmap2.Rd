@@ -6,15 +6,15 @@
 \usage{
 ez.corrmap2(x, group = NULL, smooth = TRUE, scale = TRUE,
   density = TRUE, ellipses = FALSE, digits = 2, method = "pearson",
-  pch = 20, lm = FALSE, cor = TRUE, jiggle = FALSE, factor = 2,
-  hist.col = "#00AFBB", show.points = TRUE, rug = TRUE,
+  pch = 16, lm = FALSE, cor = TRUE, jiggle = FALSE, factor = 2,
+  hist.col = "light grey", show.points = TRUE, rug = TRUE,
   breaks = "Sturges", cex.cor = 2, wt = NULL, smoother = FALSE,
   stars = TRUE, ci = FALSE, alpha = 0.05, ...)
 }
 \arguments{
 \item{x}{a data.frame or matrix (pairwise deletion for NA)}
 
-\item{group}{factor col name, eg 'Species', to show different groups with different colors in scatterplot}
+\item{group}{factor col name, eg 'Species', to show different groups with different colors in scatterplot. This col will be excluded in the calcuation of r and scatterplot}
 
 \item{smooth}{TRUE draws loess smooths}
 
@@ -28,7 +28,7 @@ ez.corrmap2(x, group = NULL, smooth = TRUE, scale = TRUE,
 
 \item{method}{method parameter for the correlation ("pearson","spearman","kendall")}
 
-\item{pch}{The plot character (defaults to 20 which is a '.').}
+\item{pch}{The plot character (defaults to 16 which is a '.').}
 
 \item{lm}{Plot the linear fit rather than the LOESS smoothed fits.}
 
@@ -38,7 +38,7 @@ ez.corrmap2(x, group = NULL, smooth = TRUE, scale = TRUE,
 
 \item{factor}{factor for jittering (1-5)}
 
-\item{hist.col}{What color should the histogram on the diagonal be? eg, cyan, light grey}
+\item{hist.col}{What color should the histogram on the diagonal be? eg, cyan, light grey, "#00AFBB"}
 
 \item{show.points}{If FALSE, do not show the data points, just the data ellipses and smoothed functions}
 
