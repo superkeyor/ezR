@@ -7,7 +7,7 @@
 ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
   type = "lower", method = "circle", tl.col = "black", tl.cex = 0.4,
   tl.pos = NULL, tl.srt = 45, addgrid.col = rgb(1, 1, 1, 0.01),
-  addCoef.col = "black", diag = FALSE, order = c("original", "AOE", "FPC",
+  addCoef.col = NULL, diag = FALSE, order = c("original", "AOE", "FPC",
   "hclust", "alphabet"), col = NULL, ...)
 }
 \arguments{
@@ -33,7 +33,7 @@ ez.corrmap(df, corr.type = "pearson", sig.level = 0.05, insig = "blank",
 
 \item{addgrid.col}{grid color. The color of the grid. If NA, don't add grid. If NULL the default value is chosen. The default value depends on method, if method is color or shade, the color of the grid is NA, that is, not draw grid; otherwise "grey".}
 
-\item{addCoef.col}{Color of coefficients added on the graph. If NULL (default), add no coefficients.}
+\item{addCoef.col}{Color of coefficients added on the graph (eg, 'black'). If NULL (default), add no coefficients.}
 
 \item{diag}{Logical, whether display the correlation coefficients on the principal diagonal}
 

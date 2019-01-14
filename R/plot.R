@@ -1388,7 +1388,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param tl.pos 'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.
 #' @param tl.srt Numeric, for text label string rotation in degrees.
 #' @param addgrid.col grid color. The color of the grid. If NA, don't add grid. If NULL the default value is chosen. The default value depends on method, if method is color or shade, the color of the grid is NA, that is, not draw grid; otherwise "grey".
-#' @param addCoef.col Color of coefficients added on the graph. If NULL (default), add no coefficients. 
+#' @param addCoef.col Color of coefficients added on the graph (eg, 'black'). If NULL (default), add no coefficients. 
 #' @param diag Logical, whether display the correlation coefficients on the principal diagonal 
 #' @param method "circle", "square", "ellipse", "number", "pie", "shade" and "color". The areas of circles or squares show the absolute value of corresponding correlation coefficients. "color" = same areas
 #' @param order "original" for original order (default).
@@ -1402,7 +1402,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @export
 ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="lower",
                      method="circle",tl.col="black",tl.cex=0.4,tl.pos=NULL,tl.srt=45,
-                     addgrid.col=rgb(1,1,1,.01),addCoef.col="black",diag=FALSE,
+                     addgrid.col=rgb(1,1,1,.01),addCoef.col=NULL,diag=FALSE,
                      order=c("original", "AOE", "FPC", "hclust", "alphabet"),
                      col=NULL,...){
     # https://stackoverflow.com/a/25215323/2292993
