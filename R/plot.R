@@ -38,10 +38,12 @@
 #' ggmultiplot(plotlist = plots, layout = layout)
 #'
 #' @references \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
-ggmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
+ggmultiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
     # Make a list from the ... arguments and plotlist
     # remove NULL objects from ..., see https://stackoverflow.com/a/48519190/2292993
     plots <- c(Filter(Negate(is.null), list(...)), plotlist)
+
+    if (!ggplot2::is.ggplot(plots[[1]])) {return(multiplot(...,plotlist=plotlist,cols=cols,layout=layout))}
 
     numPlots = length(plots)
     if (is.null(cols)) {cols=floor(sqrt(length(plots)))}
@@ -108,10 +110,12 @@ ggmultiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
 #' ggmultiplot(plotlist = plots, layout = layout)
 #'
 #' @references inspired by \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
-multiplot <- function(..., plotlist=NULL, file, cols=NULL, layout=NULL) {
+multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
     # Make a list from the ... arguments and plotlist
     # remove NULL objects from ..., see https://stackoverflow.com/a/48519190/2292993
     plots <- c(Filter(Negate(is.null), list(...)), plotlist)
+
+    if (ggplot2::is.ggplot(plots[[1]])) {return(ggmultiplot(...,plotlist=plotlist,cols=cols,layout=layout))}
 
     numPlots = length(plots)
     if (is.null(cols)) {cols=floor(sqrt(length(plots)))}
