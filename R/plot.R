@@ -1444,6 +1444,7 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
 #' @param group factor col name, eg 'Species', to show different groups with different colors in scatterplot. This col will be excluded in the calcuation of r and scatterplot
 #' @param cex.cor If this is specified, this will change the size of the text in the correlations. this allows one to also change the size of the points in the plot by specifying the normal cex values. If just specifying cex, it will change the character size, if cex.cor is specified, then cex will function to change the point size. 
 #' @param lm Plot the linear fit rather than the LOESS smoothed fits. 
+#' @param histogram Plot the middle diagonal histogram or show only variable name
 #' @param smooth TRUE draws loess smooths  
 #' @param scale  TRUE scales the correlation font by the size of the absolute correlation.  
 #' @param density TRUE shows the density plots as well as histograms 
@@ -1458,15 +1459,14 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
 #' @param show.points If FALSE, do not show the data points, just the data ellipses and smoothed functions 
 #' @param rug if TRUE (default) draw a rug under the histogram, if FALSE, don't draw the rug 
 #' @param breaks If specified, allows control for the number of breaks in the histogram (see the hist function) 
-#' @param wt If specified, then weight the correlations by a weights matrix (see note for some comments) 
 #' @param smoother If TRUE, then smooth.scatter the data points  -- slow but pretty with lots of subjects  
 #' @param stars For those people who like to show the significance of correlations by using magic astricks, set stars=TRUE p-values(0, 0.001, 0.01, 0.05, 1) <=> symbols("***", "**", "*", ".", " ")
 #' @param ci Draw confidence intervals for the linear model or for the loess fit, defaults to ci=FALSE. If confidence intervals are not drawn, the fitting function is lowess. 
 #' @param alpha The alpha level for the confidence regions, defaults to .05 
 #' @param ... other options for pairs  
 #' @export 
-ez.scatterplots = function(x,group=NULL,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=16,
-lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,rug=TRUE,breaks="Sturges",cex.cor=2,wt=NULL,smoother=FALSE,stars=TRUE,ci=FALSE,alpha=.05,...) {
+ez.scatterplots = function(x,group=NULL,histogram=TRUE,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=16,
+lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,rug=TRUE,breaks="Sturges",cex.cor=2,smoother=FALSE,stars=TRUE,ci=FALSE,alpha=.05,...) {
     # To show different groups with different colors, use a plot character (pch) between 21 and 25 and then set the background color to vary by group
     bg = 'black'  # color for data point
     if (!is.null(group)) {
@@ -1475,7 +1475,307 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
         pch = 20+as.numeric(x[[group]])
         x[group] <- NULL
     }
-    psych::pairs.panels(x=x, smooth=smooth, scale=scale, density=density, ellipses=ellipses, digits=digits, method=method, pch=pch, lm=lm, cor=cor, jiggle=jiggle, factor=factor, hist.col=hist.col, show.points=show.points, rug=rug, breaks=breaks, cex.cor=cex.cor, wt=wt, smoother=smoother, stars=stars, ci=ci, alpha=alpha, bg=bg, ...)
+
+    ####************************************************************************************************
+                                     ####*begin*####
+    ####************************************************************************************************
+    # removed wt parameter
+    # modified stars
+    # added histogram=T/F
+    # swapped upper and lower panels
+    # modified from https://cran.r-project.org/src/contrib/psych_1.8.12.tar.gz
+    "fisherz" <-
+    function(rho)  {0.5*log((1+rho)/(1-rho)) }   #converts r to z  
+
+    "fisherz2r" <-
+      function(z) {(exp(2*z)-1)/(1+exp(2*z)) }   #converts back again 
+
+    "r.con" <- 
+      function(rho,n,p=.95,twotailed=TRUE) {
+       z <- fisherz(rho)
+       if(n<4) {stop("number of subjects must be greater than 3")}
+       se <- 1/sqrt(n-3)
+       p <- 1-p 
+       if(twotailed) p<- p/2
+       dif <- qnorm(p)
+       zlow <- z + dif*se
+       zhigh <- z - dif*se
+       ci <- c(zlow,zhigh)
+       ci <- fisherz2r(ci)
+       return(ci)
+       }
+      
+     "r.test" <- 
+     function(n,r12, r34=NULL, r23=NULL,r13=NULL,r14=NULL,r24=NULL,n2=NULL,pooled=TRUE, twotailed=TRUE) {
+      cl <- match.call()
+      if(is.null(r34) & is.null(r13) & is.null(r23)) {  #test for significance of r
+         
+         t <- r12*sqrt(n-2)/sqrt(1-r12^2) 
+         p <- 1-pt(abs(t),n-2) 
+         if(twotailed) p <- 2*p
+         ci <- r.con(r12,n)
+          result <-  list(Call=cl,Test="Test of significance of a  correlation",t=t,p=p,ci=ci)
+      } else {if(is.null(r23)) { #compare two independent correlations
+          if(is.null(r34)) {stop("You seem to be testing two dependent correlations, but have not specified the other correlation(s)  correctly.")}
+           if(!is.null(r13)) {stop("You seem to be testing two dependent correlations, but have not specified the correlation(s)  correctly.")}
+            xy.z <- 0.5*log((1+r12)/(1-r12))
+            xz.z <- 0.5*log((1+r34)/(1-r34))
+            if(is.null(n2)) n2 <- n
+            se.diff.r <- sqrt(1/(n-3) + 1/(n2-3))
+            diff <- xy.z - xz.z
+            z <- abs(diff/se.diff.r)
+             p <- (1-pnorm(z ))
+              if(twotailed) p <- 2*p
+          result <-  list(Call=cl,Test="Test of difference between two independent correlations",z=z,p=p)
+                                 }  else { if (is.null(r14)) {#compare two dependent correlations case 1
+          
+            
+            #here we do two tests of dependent correlations
+           #figure out whether correlations are being specified by name or order
+            if(!is.null(r34)) {if(is.null(r13)) {r13 <- r34} }
+            if(is.null(r13)) {stop("You seem to be trying to test two dependent correlations, but have not specified the other correlation(s)")}
+           diff <- r12-r13
+           determin=1-r12*r12 - r23*r23 - r13*r13 + 2*r12*r23*r13
+           av=(r12+r13)/2
+           cube= (1-r23)*(1-r23)*(1-r23)
+           t2 = diff * sqrt((n-1)*(1+r23)/(((2*(n-1)/(n-3))*determin+av*av*cube)))
+           p <- pt(abs(t2),n-3,lower.tail=FALSE)  #changed to n-3 on 30/11/14
+            if(twotailed) p <- 2*p
+            #the call is ambiguous, we need to clarify it
+            cl <- paste("r.test(n = ",n, ",  r12 = ",r12,",  r23 = ",r23,",  r13 = ",r13, ")")
+          result <- list(Call=cl,Test="Test of difference between two correlated  correlations",t=t2,p=p)                                  
+          } else { #compare two dependent correlations, case 2
+           z12 <- fisherz(r12)
+        z34 <- fisherz(r34)
+        pooledr <- (r12+r34)/2  
+        if (pooled) { r1234=  1/2 * ((r13 - pooledr*r23)*(r24 - r23*pooledr) + (r14 - r13*pooledr)*(r23 - pooledr*r13)   +(r13 - r14*pooledr)*(r24 - pooledr*r14) + (r14 - pooledr*r24)*(r23 - r24*pooledr))
+                   z1234 <- r1234/((1-pooledr^2)*(1-pooledr^2))} else {
+     
+         r1234=  1/2 * ((r13 - r12*r23)*(r24 - r23*r34) + (r14 - r13*r34)*(r23 - r12*r13)   +(r13 - r14*r34)*(r24 - r12*r14) + (r14 - r12*r24)*(r23 - r24*r34))
+         z1234 <- r1234/((1-r12^2)*(1-r34^2))}
+          ztest  <- (z12-z34)* sqrt(n-3) /sqrt(2*(1-z1234))
+          z <- ztest
+           p <- (1-pnorm(abs(z) ))
+              if(twotailed) p <- 2*p
+           result <-  list(Call=cl,Test="Test of difference between two dependent correlations",z=z,p=p)
+          
+                                  }
+               }
+        } 
+        class(result) <- c("psych", "r.test")
+        return(result)
+       }
+       #Modified August 8, 2018 to flag improper input 
+
+
+    "my.pairs.panels" <-
+    function (x, smooth = TRUE, scale = FALSE, histogram=TRUE, density=TRUE,ellipses=TRUE,digits = 2, method="pearson",pch = 20,lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="cyan",show.points=TRUE,rug=TRUE, breaks="Sturges", cex.cor = 1 ,wt=NULL,smoother=FALSE,stars=FALSE,ci=FALSE,alpha=.05,...)   #combines a splom, histograms, and correlations
+    {
+
+    #First define all the "little functions" that are internal to pairs.panels.  This allows easier coding later
+
+
+    "panel.hist.density" <-    
+    function(x,...) {
+     if (!histogram) {return(NULL)}
+     usr <- par("usr"); on.exit(par(usr))
+      # par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) )  
+         par(usr = c(usr[1] ,usr[2]  , 0, 1.5) )  
+       tax <- table(x)
+       if(length(tax) < 11) {breaks <- as.numeric(names(tax))
+        y <- tax/max(tax)
+        interbreak <- min(diff(breaks))*(length(tax)-1)/41
+        rect(breaks-interbreak,0,breaks + interbreak,y,col=hist.col)
+        } else {
+       
+        h <- hist(x,breaks=breaks, plot = FALSE)
+        breaks <- h$breaks; nB <- length(breaks)
+      y <- h$counts; y <- y/max(y)
+        rect(breaks[-nB], 0, breaks[-1], y,col=hist.col)
+        }
+     if(density) { tryd <- try( d <- density(x,na.rm=TRUE,bw="nrd",adjust=1.2),silent=TRUE)
+      if(class(tryd) != "try-error") {
+         d$y <- d$y/max(d$y)
+       lines(d)}}
+      if(rug) rug(x)
+    }
+
+
+    "panel.cor" <-
+    function(x, y, prefix="",...)  {
+         
+             usr <- par("usr"); on.exit(par(usr))
+             par(usr = c(0, 1, 0, 1))
+            if(is.null(wt)) { r  <- cor(x, y,use="pairwise",method=method)} else {
+            r <- cor.wt(data.frame(x,y),w=wt[,c(1:2)])$r[1,2]}
+             txt <- format(c(round(r,digits), 0.123456789), digits=digits)[1]
+             txt <- paste(prefix, txt, sep="")
+             # if(stars) {pval <- r.test(sum(!is.na(x*y)),r)$p
+             #          symp <- symnum(pval, corr = FALSE,cutpoints = c(0,  .001,.01,.05, 1),
+             #        symbols = c("***","**","*"," "),legend=FALSE)
+             #        txt <- paste0(txt,symp)}
+             cex <- cex.cor*0.8/(max(strwidth("0.12***"),strwidth(txt)))
+             # https://github.com/braverock/PerformanceAnalytics/blob/master/R/chart.Correlation.R
+             # no scale for stars
+             if(stars) {pval <- r.test(sum(!is.na(x*y)),r)$p
+                      symp <- symnum(pval, corr = FALSE,cutpoints = c(0,  .001,.01,.05, 1),
+                    symbols = c("***","**","*"," "),legend=FALSE)
+                    text(.8, .8, symp, cex=cex, col=2)}
+             if(scale)  {cex1 <- cex  * abs(r)
+             if(cex1 < .25) cex1 <- .25 #otherwise they just vanish
+             text(0.5, 0.5, txt, cex = cex1) } else {
+             text(0.5, 0.5, txt,cex=cex)}
+         }
+            
+    "panel.smoother" <- 
+    function (x, y,pch = par("pch"), 
+        col.smooth = "red", span = 2/3, iter = 3, ...) 
+    {
+      # usr <- par("usr"); on.exit(par(usr))
+     #  par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , usr[3],usr[4]) )     #doensn't affect the axis correctly
+      xm <- mean(x,na.rm=TRUE)
+      ym <- mean(y,na.rm=TRUE)
+      xs <- sd(x,na.rm=TRUE)
+      ys <- sd(y,na.rm=TRUE)
+      r = cor(x, y,use="pairwise",method=method)
+     if(jiggle) { x <- jitter(x,factor=factor)
+      y <- jitter(y,factor=factor)}
+     if(smoother) {smoothScatter(x,y,add=TRUE, nrpoints=0)} else {if(show.points)  points(x, y, pch = pch, ...)}
+     
+        ok <- is.finite(x) & is.finite(y)
+        if (any(ok)) {   
+         if(smooth & ci) {   lml <- loess(y~x ,degree=1,family="symmetric") 
+         tempx <- data.frame(x = seq(min(x,na.rm=TRUE),max(x,na.rm=TRUE),length.out=47))
+           pred <-  predict(lml,newdata=tempx,se=TRUE ) 
+
+     if(ci) {  upperci <- pred$fit + confid*pred$se.fit
+           lowerci <- pred$fit - confid*pred$se.fit 
+          polygon(c(tempx$x,rev(tempx$x)),c(lowerci,rev(upperci)),col=adjustcolor("light grey", alpha.f=0.8), border=NA)
+            }
+         lines(tempx$x,pred$fit,  col = col.smooth, ...)   #this is the loess fit
+    }  else {if(smooth)  lines(stats::lowess(x[ok],y[ok],f=span,iter=iter),col=col.smooth) }}
+     if(ellipses)  draw.ellipse(xm,ym,xs,ys,r,col.smooth=col.smooth,...)  #this just draws the ellipse 
+    }
+
+     "panel.lm" <- 
+    function (x, y,  pch = par("pch"), 
+        col.lm = "red",  ...) 
+    {   ymin <- min(y)
+        ymax <- max(y)
+        xmin <- min(x)
+        xmax <- max(x)
+        ylim <- c(min(ymin,xmin),max(ymax,xmax))
+        xlim <- ylim
+        if(jiggle) { x <- jitter(x,factor=factor)
+                     y <- jitter(y,factor=factor)}
+      if(smoother) {smoothScatter(x,y,add=TRUE, nrpoints=0)} else {if(show.points) {points(x, y, pch = pch,ylim = ylim, xlim= xlim, ...)}}# if(show.points) points(x, y, pch = pch,ylim = ylim, xlim= xlim,...)
+        ok <- is.finite(x) & is.finite(y)
+        if (any(ok)) {
+          lml <- lm(y ~ x)  
+        
+           
+        if(ci) {
+             tempx <- data.frame(x = seq(min(x,na.rm=TRUE),max(x,na.rm=TRUE),length.out=47))
+             pred <-  predict.lm(lml,newdata=tempx,se.fit=TRUE)  #from Julian Martins 
+             upperci <- pred$fit + confid*pred$se.fit
+             lowerci <- pred$fit - confid*pred$se.fit
+             polygon(c(tempx$x,rev(tempx$x)),c(lowerci,rev(upperci)),col=adjustcolor("light grey", alpha.f=0.8), border=NA)
+               }
+        if(ellipses) {
+            xm <- mean(x,na.rm=TRUE)
+            ym <- mean(y,na.rm=TRUE)
+            xs <- sd(x,na.rm=TRUE)
+            ys <- sd(y,na.rm=TRUE)
+            r = cor(x, y,use="pairwise",method=method)
+            draw.ellipse(xm,ym,xs,ys,r,col.smooth=col.lm,...)   #just draw the ellipse
+                    }
+             abline(lml, col = col.lm, ...)
+      }
+    }
+
+
+     "draw.ellipse" <-  function(x=0,y=0,xs=1,ys=1,r=0,col.smooth,add=TRUE,segments=51,...) {
+                         #based upon John Fox's ellipse functions
+     angles <- (0:segments) * 2 * pi/segments
+         unit.circle <- cbind(cos(angles), sin(angles))
+       if(!is.na(r)) {
+       if (abs(r)>0 )theta <- sign(r)/sqrt(2) else theta=1/sqrt(2) 
+     
+     shape <- diag(c(sqrt(1+r),sqrt(1-r))) %*% matrix(c(theta,theta,-theta,theta),ncol=2,byrow=TRUE)
+        ellipse <- unit.circle %*% shape 
+        ellipse[,1] <- ellipse[,1]*xs + x
+        ellipse[,2] <- ellipse[,2]*ys + y
+        if(show.points) points(x,y,pch=19,col=col.smooth,cex=1.5 )  #draw the mean
+        lines(ellipse, ...)   }    
+     }
+
+    "panel.ellipse" <-
+    function (x, y,   pch = par("pch"), 
+         col.smooth = "red", ...) 
+     { segments=51
+      usr <- par("usr"); on.exit(par(usr))
+      par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) ) 
+     xm <- mean(x,na.rm=TRUE)
+      ym <- mean(y,na.rm=TRUE)
+      xs <- sd(x,na.rm=TRUE)
+      ys <- sd(y,na.rm=TRUE)
+       r = cor(x, y,use="pairwise",method=method)
+       if(jiggle) { x <- jitter(x,factor=factor)
+      y <- jitter(y,factor=factor)}
+      if(smoother) {smoothScatter(x,y,add=TRUE, nrpoints=0)} else {if(show.points) {points(x, y, pch = pch, ...)}}
+        
+     angles <- (0:segments) * 2 * pi/segments
+        unit.circle <- cbind(cos(angles), sin(angles))
+         if(!is.na(r)) {
+      if (abs(r)>0 ) theta <- sign(r)/sqrt(2) else theta=1/sqrt(2) 
+
+      shape <- diag(c(sqrt(1+r),sqrt(1-r))) %*% matrix(c(theta,theta,-theta,theta),ncol=2,byrow=TRUE)
+       ellipse <- unit.circle %*% shape 
+       ellipse[,1] <- ellipse[,1]*xs + xm
+       ellipse[,2] <- ellipse[,2]*ys + ym
+       points(xm,ym,pch=19,col=col.smooth,cex=1.5 )  #draw the mean
+      if(ellipses) lines(ellipse, ...) 
+         }    
+    }
+    #######
+
+     #Beginning of the main function
+    ######
+    #The original organization was very clunky, but has finally been cleaned up with lots of extra comments removed  (8/13/17)
+
+    old.par <- par(no.readonly = TRUE) # save default, for resetting... 
+    on.exit(par(old.par))     #and when we quit the function, restore to original values
+
+
+    if(missing(cex.cor)) cex.cor <- 1   #this allows us to scale the points separately from the correlations 
+
+    for(i in 1:ncol(x)) {  #treat character data as numeric
+            if(is.character(x[[i]] ))  { x[[i]] <- as.numeric(as.factor(x[[i]]) )
+                                colnames(x)[i] <- paste(colnames(x)[i],"*",sep="")}
+               }
+     n.obs <- nrow(x)     
+     confid <- qt(1-alpha/2,n.obs-2)   #used in finding confidence intervals for regressions and loess
+      
+     if(!lm) { #the basic default is here
+               if(cor) {
+                pairs(x, diag.panel = panel.hist.density, lower.panel = panel.cor
+                , upper.panel = panel.smoother, pch=pch, ...)} else {
+                pairs(x, diag.panel = panel.hist.density, lower.panel = panel.smoother, upper.panel = panel.smoother, pch=pch, ...)} 
+        
+        } else { #lm is TRUE
+            if(!cor)  { #this case does not show the correlations, but rather shows the regression lines above and below the diagonal
+                        pairs(x, diag.panel = panel.hist.density, lower.panel = panel.lm, upper.panel = panel.lm, pch=pch, ...)   
+                      } else {  #the normal case is to show the regressions below and the rs above
+                        pairs(x, diag.panel = panel.hist.density, lower.panel = panel.cor, upper.panel = panel.lm,pch=pch,  ...)   
+            
+            }
+                   }
+
+    }   #end of pairs.panels 
+    ####************************************************************************************************
+                                     ####*end*####
+    ####************************************************************************************************
+    my.pairs.panels(x=x, smooth=smooth, scale=scale, density=density, ellipses=ellipses, digits=digits, method=method, pch=pch, lm=lm, cor=cor, jiggle=jiggle, factor=factor, hist.col=hist.col, show.points=show.points, rug=rug, breaks=breaks, cex.cor=cex.cor, smoother=smoother, stars=stars, ci=ci, alpha=alpha, bg=bg, ...)
 }
 
 

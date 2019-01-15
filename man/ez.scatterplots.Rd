@@ -4,17 +4,19 @@
 \alias{ez.scatterplots}
 \title{corrmap with scatterplot}
 \usage{
-ez.scatterplots(x, group = NULL, smooth = TRUE, scale = TRUE,
-  density = TRUE, ellipses = FALSE, digits = 2, method = "pearson",
-  pch = 16, lm = FALSE, cor = TRUE, jiggle = FALSE, factor = 2,
-  hist.col = "light grey", show.points = TRUE, rug = TRUE,
-  breaks = "Sturges", cex.cor = 2, wt = NULL, smoother = FALSE,
-  stars = TRUE, ci = FALSE, alpha = 0.05, ...)
+ez.scatterplots(x, group = NULL, histogram = TRUE, smooth = TRUE,
+  scale = TRUE, density = TRUE, ellipses = FALSE, digits = 2,
+  method = "pearson", pch = 16, lm = FALSE, cor = TRUE,
+  jiggle = FALSE, factor = 2, hist.col = "light grey",
+  show.points = TRUE, rug = TRUE, breaks = "Sturges", cex.cor = 2,
+  smoother = FALSE, stars = TRUE, ci = FALSE, alpha = 0.05, ...)
 }
 \arguments{
 \item{x}{a data.frame or matrix (pairwise deletion for NA)}
 
 \item{group}{factor col name, eg 'Species', to show different groups with different colors in scatterplot. This col will be excluded in the calcuation of r and scatterplot}
+
+\item{histogram}{Plot the middle diagonal histogram or show only variable name}
 
 \item{smooth}{TRUE draws loess smooths}
 
@@ -47,8 +49,6 @@ ez.scatterplots(x, group = NULL, smooth = TRUE, scale = TRUE,
 \item{breaks}{If specified, allows control for the number of breaks in the histogram (see the hist function)}
 
 \item{cex.cor}{If this is specified, this will change the size of the text in the correlations. this allows one to also change the size of the points in the plot by specifying the normal cex values. If just specifying cex, it will change the character size, if cex.cor is specified, then cex will function to change the point size.}
-
-\item{wt}{If specified, then weight the correlations by a weights matrix (see note for some comments)}
 
 \item{smoother}{If TRUE, then smooth.scatter the data points  -- slow but pretty with lots of subjects}
 
