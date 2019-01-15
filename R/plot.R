@@ -1775,7 +1775,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     ####************************************************************************************************
                                      ####*end*####
     ####************************************************************************************************
-    my.pairs.panels(x=x, smooth=smooth, scale=scale, density=density, ellipses=ellipses, digits=digits, method=method, pch=pch, lm=lm, cor=cor, jiggle=jiggle, factor=factor, hist.col=hist.col, show.points=show.points, rug=rug, breaks=breaks, cex.cor=cex.cor, smoother=smoother, stars=stars, ci=ci, alpha=alpha, bg=bg, ...)
+    my.pairs.panels(x=x, smooth=smooth, histogram=histogram, scale=scale, density=density, ellipses=ellipses, digits=digits, method=method, pch=pch, lm=lm, cor=cor, jiggle=jiggle, factor=factor, hist.col=hist.col, show.points=show.points, rug=rug, breaks=breaks, cex.cor=cex.cor, smoother=smoother, stars=stars, ci=ci, alpha=alpha, bg=bg, ...)
 }
 
 
