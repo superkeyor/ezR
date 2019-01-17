@@ -652,8 +652,9 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresul
         # do not assign new variables in error = function(e), because statements will not be returned
         rp = NA
         tryCatch({
-        cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df)', yy,xx,rcovar)
-        ez.eval(cmd)
+        cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df,maxit=500)', yy,xx,rcovar)
+        # suppress 'rlm' failed to converge in xx steps
+        suppressWarnings(ez.eval(cmd))
         # https://stats.stackexchange.com/a/205615/100493
         rtest = sfsmisc::f.robftest(rmodel,var=xx)
         rp = rtest$p.value
@@ -720,9 +721,9 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresul
     if (reportresult) {
         report = result %>% dplyr::arrange(orindex)
         ez.print('------')
-        ez.print(ifelse(is.null(covar), 'beta=r', 'beta closed to residualized correlation'))
+        ez.print(ifelse(is.null(covar), 'std_beta=r', 'std_beta closed to residualized correlation, and semi-partial'))
         for (i in 1:nrow(report)){
-            ez.print(sprintf('%s ~ %s, beta = %.2f, %s, r%s', report$y[i],report$x[i],report$beta[i],ez.p.apa(report$p[i],prefix=2),ez.p.apa(report$rp[i],prefix=2)))
+            ez.print(sprintf('%s ~ %s, std_beta = %.2f, %s, r%s', report$y[i],report$x[i],report$beta[i],ez.p.apa(report$p[i],prefix=2),ez.p.apa(report$rp[i],prefix=2)))
         }
         ez.print('------')
     }
