@@ -553,12 +553,12 @@ ez.zresid = function(model,method=3) {
 #' @description residualize variable, returning it changed in-place (i.e under its original column name)
 #' @param var dependent var
 #' @param covs covariates
-#' @param method for residualize 1=scale(resid), 2=resid (unstandarized), 3=stats::rstandard
 #' @param model 'lm', 'lmrob' (MM-type Estimators, robustbase), 'lmRob' (automatically chooses, robust), 'rlm' (MASS)
+#' @param scale  unstandarize or standardize residual
 #' @param ... additional param passed to the specified model 
-#' @return dataframe with var residualized in place (i.e under its original column name)
+#' @return dataframe with var residualized in place (i.e under its original column name). If covs have NA, then that row for var will be NA.
 #' @export
-ez.zresidize = function(data,var,covs,method=3,model='lm',...){
+ez.zresidize = function(data,var,covs,model='lm',scale=TRUE,...){
     var = ez.selcol(data,var); covs = ez.selcol(data,covs)
     # borrowed codes from https://cran.r-project.org/web/packages/umx/index.html
     form = paste0(var, " ~ ", paste(covs, collapse = " + "))
@@ -573,7 +573,14 @@ ez.zresidize = function(data,var,covs,method=3,model='lm',...){
     # increased maxit from 20, because sometimes, rlm fails
     # suppress 'rlm' failed to converge in xx steps
     if (model=='rlm') m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action,...))
-    tmp <- ez.zresid(m,method=method)
+    # can only use resid, robust lms do not support stats::rstandard
+    tmp <- resid(m)
+    if (scale) tmp = as.vector(scale(tmp,center=T,scale=T))
+    oldNAs = sum(is.na(data[, var]))
+    newNAs = sum(is.na(tmp))
+    if(newNAs > oldNAs){
+        ez.pprint(sprintf('%d cases of var %s lost due to missing covariates', newNAs - oldNAs, var))
+    }
     data[, var] = tmp
     return(data)
 }
