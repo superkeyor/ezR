@@ -561,7 +561,7 @@ ez.zresid = function(model,method=3) {
 #' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible list of data frame
+#' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
@@ -575,7 +575,7 @@ ez.zresid = function(model,method=3) {
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.lms = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -583,8 +583,8 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresul
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.regressions(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
-            result = result[[1]]
+            result = ez.lms(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
@@ -729,8 +729,11 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresul
         ez.print('------')
     }
 
-    return(invisible(list(result)))
+    return(invisible(result))
 }
+#' @rdname ez.lms
+#' @export
+ez.regressions=ez.lms
 
 #' a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
@@ -744,7 +747,7 @@ ez.regressions = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresul
 #' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
-#' @return an invisible list of data frame
+#' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 #' \cr so that the variances of dependent and independent variables are 1.
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
@@ -761,7 +764,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
             result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
-            result = result[[1]]
+            result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
@@ -844,7 +847,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
-    return(invisible(list(result)))
+    return(invisible(result))
 }
 
 #' a series of one-way between-subjects anova, for many y and many x; if many y and many x at the same time, returns a list
@@ -859,7 +862,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
 #' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df[[yy]],...)
-#' @return an invisible list of data frame
+#' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr degree_of_freedom: from F-statistic
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
@@ -875,7 +878,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
             result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
-            result = result[[1]]
+            result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
@@ -1018,7 +1021,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
         }
         ez.print('------')
     }
-    return(invisible(list(result)))
+    return(invisible(result))
 }
 
 #' a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list
@@ -1032,7 +1035,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
 #' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param showerror whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
-#' @return an invisible list of data frame
+#' @return an invisible data frame or list of data frame (if many y and many x)
 #' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 #' @export
 ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
@@ -1044,7 +1047,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
             result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
-            result = result[[1]]
+            result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
@@ -1137,7 +1140,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
     if (viewresult) {View(result)}
-    return(invisible(list(result)))
+    return(invisible(result))
 }
 
 #' table xy
