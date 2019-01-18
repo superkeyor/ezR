@@ -549,6 +549,35 @@ ez.zresid = function(model,method=3) {
     return(result)
 }
 
+#' residualize variable, returning it changed in-place (i.e under its original column name)
+#' @description residualize variable, returning it changed in-place (i.e under its original column name)
+#' @param var dependent var
+#' @param covs covariates
+#' @param method for residualize 1=scale(resid), 2=resid (unstandarized), 3=stats::rstandard
+#' @param model 'lm', 'lmrob' (MM-type Estimators, robustbase), 'lmRob' (automatically chooses, robust), 'rlm' (MASS)
+#' @param ... additional param passed to the specified model 
+#' @return dataframe with var residualized in place (i.e under its original column name)
+#' @export
+ez.zresidize = function(data,var,covs,method=3,model='lm',...){
+    var = ez.selcol(data,var); covs = ez.selcol(data,covs)
+    # borrowed codes from https://cran.r-project.org/web/packages/umx/index.html
+    form = paste0(var, " ~ ", paste(covs, collapse = " + "))
+    form = as.formula(form)
+    na.action = na.exclude
+    if (model=='lm') m = stats::lm(form,data,na.action=na.action,...)
+    # MM-type Estimators
+    # for some reason, robustbase::lmrob.control() cannot have see with a single value, like seed=1313
+    if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
+    # lmRob function automatically chooses an appropriate algorithm to compute a final robust estimate with high breakdown point and high efficiency
+    if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
+    # increased maxit from 20, because sometimes, rlm fails
+    # suppress 'rlm' failed to converge in xx steps
+    if (model=='rlm') m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action,...))
+    tmp <- ez.zresid(m,method=method)
+    data[, var] = tmp
+    return(data)
+}
+
 #' a series of regression, for many y and many x; if many y and many x at the same time, returns a list
 #' @description df=ez.2value(df,y,...), df[[x]]=ez.2value(df[[x]],...), lm(scale(df[[y]])~scale(df[[x]]+scale(df[[covar]])))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
