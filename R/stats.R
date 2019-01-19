@@ -590,18 +590,20 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
     return(data)
 }
 
-#' a series of regression, for many y and many x; if many y and many x at the same time, returns a list
-#' @description df=ez.2value(df,y,...), df[[x]]=ez.2value(df[[x]],...), lm(scale(df[[y]])~scale(df[[x]]+scale(df[[covar]])))
-#' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
-#' \cr NA in df will be auto excluded in lm(), reflected by dof
-#' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
-#' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
-#' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
-#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
-#' @param plot T/F, the black dash line is bonferroni p = 0.05, the grey black dash is uncorrected p = 0.05
+#' lm, for many y and/or many x
+#' @description lm, for many y and/or many x
+#' @param df a data frame. Internally go through dropna-->ez.2value-->scale
+#' @param y compatible with \code{\link{ez.selcol}}
+#' @param x compatible with \code{\link{ez.selcol}}
+#' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
+#' @param report print results (in APA format)
+#' @param model vector c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
+#' @param view call View(result)
+#' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction is based on the total number of tests that successfully generate p values
+#' @param plot T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
-#' @param showerror whether show error message when error occurs
-#' @param ... dots passed to ez.2value(df,...)
+#' @param error whether show error message when error occurs (also result will have an empty row when error occurs)
+#' @param ... additional parameters to the specified model. if more than one model specified, ... may not be OK for all models, because diff models have diff parameters
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr beta: standardized beta coefficients (simple or multiple regression) are the estimates resulting from a regression analysis that have been standardized
 #' \cr so that the variances of dependent and independent variables are 1.
@@ -610,13 +612,13 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 #' \cr For multiple regression (with covar), the value of the standardized coefficient (beta) is close to semi-partial correlation
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
-#' \cr
+#' \cr 
 #' \cr dof: from F-statistic
-#' \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
+#' \cr residualization, say, y ~ x + a + b, y ~ a + b is residualized first and then y ~ x. If no covar, y ~ x, although labelled residualized, actually non-residualized
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('lm', 'lmrob', 'lmRob', 'rlm'),cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,labsize=2,textsize=1.5,titlesize=3,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     model = unique(c('lm',model)) # always include lm
 
@@ -625,16 +627,16 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.lms(df,yy,x,covar=covar,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.lms(df,yy,x,covar=covar,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ result$beta,
-                   xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+                   xlab = list("Standardized Coefficient", cex=labsize, fontfamily=TNR()),
+                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+                   scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                    type = "p", pch=16,
-                   main = list(yy, cex=3, fontfamily="Times New Roman"),
+                   main = list(yy, cex=3, fontfamily=TNR()),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -651,28 +653,29 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('
     # default, if not specified, na.action from options('na.action')
     # otherwise scale results would be different
     # if covar NULL, c() auto gets rid of it
-    data = ez.dropna(df,c(y,x,covar))
+    df = df[, c(y,x,covar), drop=F] %>% ez.dropna()
     # also convert factor to value
     for (vv in c(y,x,covar)){
         # nonfactor nleves returns 0
-        if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... instead dummy coding?', vv))
-        df[[vv]]=ez.2value(df[[vv]],...)
+        if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... dummy coding instead?', vv))
+        df[[vv]]=ez.2value(df[[vv]])
     }
-    data[] = lapply(data[, c(y,x,covar), drop=F], scale)
+    df.bak = df
+    df[] = lapply(df, scale)
 
     # processing lm to return something (like r n p)
     # @description processing lm to return something (like r n p)
     # @param y compatible with ez.selcol
     # @param x compatible with ez.selcol
     # @param covar optional, compatible with ez.selcol
-    # @param data data frame
+    # @param df data frame
     # @param model vector c('lm', 'lmrob', 'lmRob', 'rlm')  robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm
     # @param ... additional parameters to the specified model. if more than one model specified, ... may not be OK for all models, because diff models have diff parameters
     # @return a data frame
     # @export
-    getStats = function(y,x,covar,data,model=c('lm', 'lmrob', 'lmRob', 'rlm'),...){
+    getStats = function(y,x,covar,df,model=c('lm', 'lmrob', 'lmRob', 'rlm'),...){
         # for one model
-        get.stats = function(y,x,covar,data,model,...){
+        get.stats = function(y,x,covar,df,model,...){
             tryCatch({
             set.seed(20190117)
             # na.exclude better than na.omit. extractor functions like residuals() or fitted() will pad their
@@ -680,16 +683,16 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('
             # the input variables.
             na.action=na.exclude
             form = as.formula( paste0(y, " ~ ", paste(c(x,covar), collapse = " + ")) )
-            if (model=='lm') m = stats::lm(form,data,na.action=na.action,...)
+            if (model=='lm') m = stats::lm(form,df,na.action=na.action,...)
             # MM-type Estimators
             # for some reason, robustbase::lmrob.control() cannot have see with a single value, like seed=1313
-            if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
+            if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,df,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
             # lmRob function automatically chooses an appropriate algorithm to compute a final robust estimate
             # with high breakdown point and high efficiency
-            if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
+            if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,df,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
             # increased maxit from 20, because sometimes, rlm fails
             # suppress 'rlm' failed to converge in xx steps
-            if (model=='rlm') m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action,...))
+            if (model=='rlm') m = suppressWarnings(MASS::rlm(form,df,maxit=500,na.action=na.action,...))
             # can only use resid, robust lms do not support stats::rstandard
 
             sm = summary(m)
@@ -717,37 +720,37 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('
                 r.residized = sign(sm$coefficients[2,1])*sqrt(sm$r.squared)
                 p.residized = p
             } else {
-                data.residized = ez.zresidize(data, y, covar, model=model, scale=TRUE)
-                tmp = get.stats(y=y, x=x, covar=NULL, data=data.residized, model=model, ...)
+                df.residized = ez.zresidize(df, y, covar, model=model, scale=TRUE)
+                tmp = get.stats(y=y, x=x, covar=NULL, df=df.residized, model=model, ...)
                 r.residized = tmp$r.residized
                 p.residized = tmp$p.residized
             }
 
+            # toString(NULL) -> ''
             return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.residized=r.residized, p.residized=p.residized))
             }, error=function(e){
-                if (showerror) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
-                return(list(y=NA, x=NA, covar=NA, n=NA, df=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA))
+                if (error) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
+                return(list(y=NA, x=NA, covar=NA, n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA))
             }) # end try catch
         }
 
-        rnp = mapply(get.stats,model=model,MoreArgs=list(y=y, x=x, covar=covar, data=data,...))
-        rnp = data.frame(t(rnp))
-        rnp[] = lapply(rnp,unlist)
-        rnp = tibble::rownames_to_column(rnp)
-        rnp['bestp'] = rnp$rowname[which.min(rnp$p)]
-        rnp = ez.2wide(rnp,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
-        rnp = ez.recols(rnp,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','')
-
-        out = rnp
+        out = mapply(get.stats,model=model,MoreArgs=list(y=y, x=x, covar=covar, df=df,...))
+        out = data.frame(t(out))
+        out[] = lapply(out,unlist)
+        out = tibble::rownames_to_column(out)
+        out['bestp'] = out$rowname[which.min(out$p)]
+        out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
+        out = ez.recols(out,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','')
         return(out)
     }
 
-    result = mapply(getStats,y=y,x=x,MoreArgs=list(covar=covar, data=data, model=model,...),USE.NAMES=F)
+    result = mapply(getStats,y=y,x=x,MoreArgs=list(covar=covar, df=df, model=model,...),USE.NAMES=F)
     result = data.frame(t(result))
     result[] = lapply(result,unlist)
 
-    if (length(y)>=1 & length(x)==1) v = df[[y]]
-    if (length(y)==1 & length(x)>1)  v = df[[x]]
+    # df.bak with dropna, but not scaled yet
+    if (length(y)>=1 & length(x)==1) v = df.bak[[y]]
+    if (length(y)==1 & length(x)>1)  v = df.bak[[x]]
     result['uniques_incl_na']=length(unique(v))
     result['min']=min(v)
     result['max']=max(v)
@@ -757,11 +760,11 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ result$beta,
-               xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+               xlab = list("Standardized Coefficient", cex=labsize, fontfamily=TNR()),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+               scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                type = "p", pch=16,
-               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
+               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily=TNR()),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -786,9 +789,9 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('
         ez.print('------')
         ez.print(ifelse(is.null(covar), 'r, p', 'r, p residualized (kinda semi-partial)'))
         for (i in 1:nrow(result.report)){
-            Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse=" + ")
+            Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-            ez.print(sprintf('lm(%s ~ %s): r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+            ez.print(sprintf('lm(%s~%s): r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
         }
         ez.print('------')
     }
@@ -809,7 +812,7 @@ ez.regressions=ez.lms
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
-#' @param showerror whether show error message when error occurs
+#' @param error whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df,...)
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
@@ -819,7 +822,7 @@ ez.regressions=ez.lms
 #' \cr
 #' \cr dof
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.logistics = function(df,y,x,covar=NULL,error=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -827,16 +830,16 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,view=F,plot=F,cols=3,pmeth
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.logistics(df,yy,x,covar=covar,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
-                   xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+                   xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily=TNR()),
+                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+                   scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                    type = "p", pch=16,
-                   main = list(yy, cex=3, fontfamily="Times New Roman"),
+                   main = list(yy, cex=3, fontfamily=TNR()),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -877,7 +880,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,view=F,plot=F,cols=3,pmeth
         out = c(yy,xx,p,odds_ratio,dof)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',yy,xx))
+            if (error) message(sprintf('EZ Error: %s %s. NA returned.',yy,xx))
             return(c(yy,xx,NA,NA,NA))
         })
     }
@@ -890,11 +893,11 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,view=F,plot=F,cols=3,pmeth
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ log2(result$odds_ratio),
-               xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+               xlab = list("log2(Odds Ratio)", cex=labsize, fontfamily=TNR()),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+               scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                type = "p", pch=16,
-               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
+               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily=TNR()),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -923,7 +926,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,view=F,plot=F,cols=3,pmeth
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
-#' @param showerror whether show error message when error occurs
+#' @param error whether show error message when error occurs
 #' @param ... dots passed to ez.2value(df[[yy]],...)
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
@@ -932,7 +935,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,view=F,plot=F,cols=3,pmeth
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis)
 #' \cr If covariates provided, adjusted means with SE, partial eta squared. Otherwise, mean SD, and eta squared.
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,view=F,report=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,error=T,view=F,report=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -940,16 +943,16 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,view=F,report=T,plot=F,cols
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.anovas1b(df,y,xx,covar=covar,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
-                       xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
-                       ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-                       scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+                       xlab = list(expression(eta[p]^2), cex=labsize, fontfamily=TNR()),
+                       ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+                       scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                        type = "p", pch=16,
-                       main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
+                       main = list(xx, cex=titlesize, fontfamily=TNR()),
                        col = "#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -1025,7 +1028,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,view=F,report=T,plot=F,cols
         out = c(xx,yy,p,petasq2,F,dof,MSE,means,counts,means.apa,posthoc_tukey)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
+            if (error) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
             return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA,NA))
         })
     }
@@ -1038,11 +1041,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,view=F,report=T,plot=F,cols
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
         pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
-               xlab = list(expression(eta[p]^2), cex=labsize, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+               xlab = list(expression(eta[p]^2), cex=labsize, fontfamily=TNR()),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+               scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                type = "p", pch=16,
-               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily="Times New Roman"),
+               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily=TNR()),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
@@ -1095,12 +1098,12 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,view=F,report=T,plot=F,cols
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
 #' @param plot T/F, the dash line is bonferroni p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
-#' @param showerror whether show error message when error occurs
+#' @param error whether show error message when error occurs
 #' @param width width for toString(countTable,width=width)
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 #' @export
-ez.fishers = function(df,y,x,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
+ez.fishers = function(df,y,x,error=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -1108,16 +1111,16 @@ ez.fishers = function(df,y,x,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonfer
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.fishers(df,y,xx,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
+            result = ez.fishers(df,y,xx,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
                 plist[[xx]] = lattice::barchart(-log10(result$p) ~ result$y,
-                   xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
-                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-                   scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+                   xlab = list("Variable", cex=labsize, fontfamily=TNR()),
+                   ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+                   scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                    type = "p", pch=16,
-                   main = list(xx, cex=titlesize, fontfamily="Times New Roman"),
+                   main = list(xx, cex=titlesize, fontfamily=TNR()),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                    panel=function(x,y,...){
@@ -1149,7 +1152,7 @@ ez.fishers = function(df,y,x,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonfer
         out = c(xx,yy,p,odds_ratio,counts,total)
         return(out)
         }, error = function(e) {
-            if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
+            if (error) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
             return(c(xx,yy,NA,NA,NA,NA))
         })
     }
@@ -1163,11 +1166,11 @@ ez.fishers = function(df,y,x,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonfer
         bonferroniP = -log10(0.05/length(result[['p']]))
         if (length(y)>=1 & length(x)==1) {
             pp=lattice::barchart(-log10(result$p) ~ result$y,
-               xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+               xlab = list("Variable", cex=labsize, fontfamily=TNR()),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+               scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                type = "p", pch=16,
-               main = list(x, cex=3, fontfamily="Times New Roman"),
+               main = list(x, cex=3, fontfamily=TNR()),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                panel=function(x,y,...){
@@ -1177,11 +1180,11 @@ ez.fishers = function(df,y,x,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonfer
             )
         } else {
             pp=lattice::barchart(-log10(result$p) ~ result$x,
-               xlab = list("Variable", cex=labsize, fontfamily="Times New Roman"),
-               ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
-               scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+               xlab = list("Variable", cex=labsize, fontfamily=TNR()),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+               scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                type = "p", pch=16,
-               main = list(y, cex=3, fontfamily="Times New Roman"),
+               main = list(y, cex=3, fontfamily=TNR()),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
                panel=function(x,y,...){
@@ -1370,17 +1373,17 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,labsize=2.5,textsize=1.5) {
     # the plot() will not return an object. plot directly, hard to capture to an object
     # graphics::plot(x = variableNum, y = sampleNum)
     p1=lattice::xyplot(counts$sampleNum ~ counts$variableNum,
-                  xlab = list("Number of Variables Kept", cex=labsize, fontfamily="Times New Roman"),
-                  ylab = list("Sample Size Without Missing Values", cex=labsize, fontfamily="Times New Roman"),
-                  scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+                  xlab = list("Number of Variables Kept", cex=labsize, fontfamily=TNR()),
+                  ylab = list("Sample Size Without Missing Values", cex=labsize, fontfamily=TNR()),
+                  scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                   type = "p", pch=16,
                   col="#e69f00")
     p2=NULL
     if (!all(is.na(counts$targetMean))) {
         p2=lattice::xyplot(counts$targetMean ~ counts$variableNum,
-                  xlab = list("Number of Variables Kept", cex=labsize, fontfamily="Times New Roman"),
-                  ylab = list(sprintf("Mean Value of %s",targetVar), cex=labsize, fontfamily="Times New Roman"),
-                  scales = list( x=list(cex=textsize, fontfamily="Times New Roman"), y=list(cex=textsize, fontfamily="Times New Roman") ),
+                  xlab = list("Number of Variables Kept", cex=labsize, fontfamily=TNR()),
+                  ylab = list(sprintf("Mean Value of %s",targetVar), cex=labsize, fontfamily=TNR()),
+                  scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                   type = "p", pch=16,
                   col="#56b4e9")
     }
