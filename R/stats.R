@@ -1057,7 +1057,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         return(list(y=y,x=x,covar=toString(covar),p=p,odds_ratio=odds_ratio,dof=dof))
         }, error = function(e) {
             if (error) ez.pprint(sprintf('EZ Error: glm(%s ~ %s). NA returned.',y,paste(c(x,covar), collapse = " + ")),color='red')
-            return(list((y=y,x=x,covar=toString(covar),p=NA,odds_ratio=NA_ratio,dof=NA))
+            return(list(y=y,x=x,covar=toString(covar),p=NA,odds_ratio=NA_ratio,dof=NA))
         }) # end try catch
     }
 
@@ -1179,7 +1179,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         out = list(y=y,x=x,p=p,odds_ratio=odds_ratio,counts=counts,total=total)
         return(out)
         }, error = function(e) {
-            if (error) ez.pprint(sprintf('EZ Error: fisher.test(%s, %s). NA returned.',y,x,color='red')
+            if (error) ez.pprint(sprintf('EZ Error: fisher.test(%s, %s). NA returned.',y,x,color='red'))
             return(list(y=y,x=x,p=NA,odds_ratio=NA,counts=NA,total=NA))
         }) # end try catch
     }
