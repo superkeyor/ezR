@@ -1868,7 +1868,7 @@ ez.selcol = function(df,col=NULL, ...) {
     } else if (all(col %in% colnames(df))) {
         result = col
     } else if (is.numeric(col)) {
-        result = names(df)[col]
+        result = colnames(df)[col]
     } else {
         df = df[1,,drop=F]
         cmd=sprintf('dplyr::select(df,%s, ...)',toString(col))
