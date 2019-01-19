@@ -479,7 +479,7 @@ ez.se = function(x) {
 }
 
 #' scale
-#' @description similar to base::scale, but 1d vector in and 1d vector out, NA ignored/returned in place
+#' @description similar to base::scale, but 1d vector in and 1d vector out, NA ignored/returned in place. suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
 #' @export
 ez.scale = function(x,center = TRUE, scale = TRUE) {
     as.vector(scale(x,center=center,scale=scale))
@@ -787,7 +787,14 @@ ez.anovas1b = function(df,y,x,covar=NULL,error=T,view=F,report=T,plot=F,cols=3,p
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
 #' \cr 
 #' \cr dof: from F-statistic
-#' \cr residualization, say, y ~ x + a + b, y ~ a + b is residualized first and then y ~ x. If no covar, y ~ x, although labelled residualized, actually non-residualized
+#' \cr residualization, say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized
+#' \cr 
+#' \cr 
+#' \cr !!!important note!!!
+#' \cr the r, p(.lm), p.lmrob etc in result data frame refer to r p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
+#' \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when view=T
+#' \cr 
+#' \cr 
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
@@ -806,8 +813,8 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
             result.plot = result %>% ez.dropna('p')
             if (plot & nrow(result.plot)>0) {
                 bonferroniP = -log10(0.05/length(result.plot[['p']]))
-                plist[[yy]] = lattice::xyplot(-log10(result.plot$p) ~ result.plot$beta,
-                   xlab = list("Standardized Coefficient", cex=labsize, fontfamily=TNR()),
+                plist[[yy]] = lattice::xyplot(-log10(result.plot$p) ~ result.plot$r,
+                   xlab = list("Correlation Coefficient", cex=labsize, fontfamily=TNR()),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
                    scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                    type = "p", pch=16,
@@ -827,7 +834,8 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     # default, if not specified, na.action from options('na.action')
     # otherwise scale results would be different
     # if covar NULL, c() auto gets rid of it
-    df = df[, c(y,x,covar), drop=F] %>% ez.dropna()
+    df = df[, c(y,x,covar), drop=F]
+    df = ez.dropna(df)
     # also convert factor to value
     for (vv in c(y,x,covar)){
         # nonfactor nleves returns 0
@@ -835,7 +843,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         df[[vv]]=ez.2value(df[[vv]])
     }
     df.bak = df
-    df[] = lapply(df, scale)
+    df[] = lapply(df, ez.scale)
 
     # processing lm to return something (like r n p)
     # @description processing lm to return something (like r n p)
@@ -894,7 +902,9 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
                 r.residized = sign(sm$coefficients[2,1])*sqrt(sm$r.squared)
                 p.residized = p
             } else {
-                df.residized = ez.zresidize(df, y, covar, model=model, scale=TRUE)
+                # df.residized = ez.zresidize(df, y, covar, model=model, scale=TRUE)
+                # this is semi-partial (residualize x) as would be done in multiple regression
+                df.residized = ez.zresidize(df, x, covar, model=model, scale=TRUE)
                 tmp = get.stats(y=y, x=x, covar=NULL, df=df.residized, model=model, ...)
                 r.residized = tmp$r.residized
                 p.residized = tmp$p.residized
@@ -947,11 +957,10 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     result.report = result %>% ez.dropna('p') %>% dplyr::arrange(orindex)
     if (report & nrow(result.report)>0) {
         ez.print('------')
-        ez.print(ifelse(is.null(covar), 'r, p', 'r, p residualized (kinda semi-partial)'))
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-            ez.print(sprintf('lm(%s~%s): r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+            ez.print(sprintf('lm(%s~%s): semi r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
         }
         ez.print('------')
     }
@@ -959,8 +968,8 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     result.plot = result %>% ez.dropna('p')
     if (plot & nrow(result.plot)>0) {
         bonferroniP = -log10(0.05/length(result.plot[['p']]))
-        pp=lattice::xyplot(-log10(result.plot$p) ~ result.plot$beta,
-               xlab = list("Standardized Coefficient", cex=labsize, fontfamily=TNR()),
+        pp=lattice::xyplot(-log10(result.plot$p) ~ result.plot$r,
+               xlab = list("Correlation Coefficient", cex=labsize, fontfamily=TNR()),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
                scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                type = "p", pch=16,
@@ -1033,7 +1042,8 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
     # default, if not specified, na.action from options('na.action')
     # otherwise scale results would be different
     # if covar NULL, c() auto gets rid of it
-    df = df[, c(y,x,covar), drop=F] %>% ez.dropna()
+    df = df[, c(y,x,covar), drop=F]
+    df = ez.dropna(df)
     # also convert factor to value
     for (vv in c(y,x,covar)){
         # nonfactor nleves returns 0
@@ -1041,7 +1051,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         df[[vv]]=ez.2value(df[[vv]])
     }
     df.bak = df
-    df[] = lapply(df, scale)
+    df[] = lapply(df, ez.scale)
 
     getStats = function(y,x,covar,df,...){
         tryCatch({
@@ -1164,7 +1174,8 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         return(invisible(xlist))
     }
 
-    df = df[, c(y,x), drop=F] %>% ez.dropna()
+    df = df[, c(y,x), drop=F]
+    df = ez.dropna(df)
     df = ez.2factor(df)
 
     getStats = function(y,x,df){
