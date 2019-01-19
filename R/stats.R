@@ -913,11 +913,21 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
                 p.residized = tmp$p.residized
             }
 
+            # df.bak with dropna, but not scaled yet, so na.rm needed
+            uniques_incl_na.x=length(unique(df.bak[[x]])); min.x=min(df.bak[[x]]); max.x=max(df.bak[[x]]); mean.x=mean(df.bak[[x]]); sd.x=sd(df.bak[[x]])
+            uniques_incl_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
+
             # toString(NULL) -> ''
-            return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.residized=r.residized, p.residized=p.residized))
+            return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.residized=r.residized, p.residized=p.residized,
+                uniques_incl_na.x=uniques_incl_na.x,min.x=min.x,max.x=max.x,mean.x=mean.x,sd.x=sd.x,
+                uniques_incl_na.y=uniques_incl_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
+                ))
             }, error=function(e){
                 if (error) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
-                return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA))
+                return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA,
+                    uniques_incl_na.x=NA,min.x=NA,max.x=NA,mean.x=NA,sd.x=NA,
+                    uniques_incl_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
+                    ))
             }) # end try catch
         }
 
@@ -927,7 +937,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         out = tibble::rownames_to_column(out)
         out['bestp'] = out$rowname[which.min(out$p)]
         out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
-        out = ez.recols(out,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','')
+        out = ez.recols(out,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','') %>% ez.move('uniques_incl_na.x,min.x,max.x,mean.x,sd.x,uniques_incl_na.y,min.y,max.y,mean.y,sd.y last')
         return(out)
     }
 
@@ -935,20 +945,12 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     result = data.frame(t(result))
     result[] = lapply(result,unlist)
 
-    # df.bak with dropna, but not scaled yet
-    if (length(y)>=1 & length(x)==1) v = df.bak[[y]]
-    if (length(y)==1 & length(x)>1)  v = df.bak[[x]]
-    result['uniques_incl_na']=length(unique(v))
-    result['min']=min(v)
-    result['max']=max(v)
-    result['mean']=mean(v)
-    result['sd']=sd(v)
-
     for (method in pmethods) {
         # only adjust for non-na p values
         ind = which(!is.na(result[['p']]))
         result[[method]][ind]=stats::p.adjust(result[['p']][ind],method=method)
     }
+
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
