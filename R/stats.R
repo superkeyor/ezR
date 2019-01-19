@@ -766,6 +766,9 @@ ez.anovas1b = function(df,y,x,covar=NULL,error=T,view=F,report=T,plot=F,cols=3,p
 #' lm(y~x+cov), for many y and/or many x
 #' @description lm(y~x+cov), for many y and/or many x
 #' @param df a data frame. Internally go through dropna-->ez.2value-->scale
+#' \cr because of this, this function is not friendly to factors with 3 or more levels, although the default lm can handel factors nicely (yet complicatedly--eg, not easy to test significance)
+#' \cr by design, ez.2value to convert factors with 2 levels, such as sex, this generates the same results as lm by default, see note and example below for more
+#' \cr scale to get standarized beta as effect size for comparison across different variables
 #' @param y compatible with \code{\link{ez.selcol}}
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
@@ -790,6 +793,8 @@ ez.anovas1b = function(df,y,x,covar=NULL,error=T,view=F,report=T,plot=F,cols=3,p
 #' \cr residualization: say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized
 #' \cr as far as semi-partial concerned, y ~ x + a + b, x ~ y + a + b are two different models. ppcor::spcor.test(iris[,1],iris[,2],iris[,c(3,4)]) != ppcor::spcor.test(iris[,2],iris[,1],iris[,c(3,4)])
 #' \cr but for partial correlation, partial(y,x) is the same as partial(x,y), ppcor::pcor.test(iris[,1],iris[,2],iris[,c(3,4)]) = ppcor::pcor.test(iris[,2],iris[,1],iris[,c(3,4)])
+#' \cr On a related note, y ~ x + a + b, generates the same results as y ~ b + a + x (the order does not matter). 
+#' \cr For coding purpose, I put x as x, and (a,b) as cov. stdbeta, p returned refer to x, values referring to a,b were discarded during the process.
 #' \cr 
 #' \cr 
 #' \cr !!!important note!!!
@@ -800,6 +805,36 @@ ez.anovas1b = function(df,y,x,covar=NULL,error=T,view=F,report=T,plot=F,cols=3,p
 #' \cr 
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
+#' @example
+#' y = c(1,2,3,4,5,6)
+#' x = c(2,4,15,20,25,36)
+#' z=factor(c('m','m','m','f','f','f'))
+#' 
+#' lm(y~x+z) %>% summary
+#' lm(y~x+ez.2value(z)) %>% summary
+#' lm(y~x+ez.2value(z,start.at=2)) %>% summary
+#' # same beta, p but diff Intercept
+#' 
+#' 
+#' y = c(1,2,3,4,5,6)
+#' x = c(2,4,15,20,25,36)
+#' f=factor(c('m','m','u','u','f','f'))
+#' lm(y~x+f) %>% summary
+#' lm(y~x+ez.2value(f)) %>% summary
+#' lm(y~x+ez.2value(f,start.at=2)) %>% summary
+#' # the first is diff from the rest, changes p value
+#' 
+#' 
+#' y = c(1,2,3,4,5,6)
+#' x = c(2,4,15,20,25,36)
+#' z=c(0,0,0,1,1,1)
+#' zz=c(-1,-1,-1,1,1,1)
+#' zzz=c(-3,-3,-3,1,1,1)
+#' lm(y~x+z) %>% summary
+#' lm(y~x+scale(z)) %>% summary
+#' lm(y~x+zz) %>% summary
+#' lm(y~x+zzz) %>% summary
+#' # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
 #' @export
 ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,labsize=2,textsize=1.5,titlesize=3,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
@@ -914,19 +949,19 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
             }
 
             # df.bak with dropna, but not scaled yet, so na.rm needed
-            uniques_incl_na.x=length(unique(df.bak[[x]])); min.x=min(df.bak[[x]]); max.x=max(df.bak[[x]]); mean.x=mean(df.bak[[x]]); sd.x=sd(df.bak[[x]])
-            uniques_incl_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
+            uniques_drop_na.x=length(unique(df.bak[[x]])); min.x=min(df.bak[[x]]); max.x=max(df.bak[[x]]); mean.x=mean(df.bak[[x]]); sd.x=sd(df.bak[[x]])
+            uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
 
             # toString(NULL) -> ''
             return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.residized=r.residized, p.residized=p.residized,
-                uniques_incl_na.x=uniques_incl_na.x,min.x=min.x,max.x=max.x,mean.x=mean.x,sd.x=sd.x,
-                uniques_incl_na.y=uniques_incl_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
+                uniques_drop_na.x=uniques_drop_na.x,min.x=min.x,max.x=max.x,mean.x=mean.x,sd.x=sd.x,
+                uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
                 ))
             }, error=function(e){
                 if (error) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
                 return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA,
-                    uniques_incl_na.x=NA,min.x=NA,max.x=NA,mean.x=NA,sd.x=NA,
-                    uniques_incl_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
+                    uniques_drop_na.x=NA,min.x=NA,max.x=NA,mean.x=NA,sd.x=NA,
+                    uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
                     ))
             }) # end try catch
         }
@@ -937,7 +972,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         out = tibble::rownames_to_column(out)
         out['bestp'] = out$rowname[which.min(out$p)]
         out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
-        out = ez.recols(out,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','') %>% ez.move('uniques_incl_na.x,min.x,max.x,mean.x,sd.x,uniques_incl_na.y,min.y,max.y,mean.y,sd.y last')
+        out = ez.recols(out,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','') %>% ez.move('uniques_drop_na.x,min.x,max.x,mean.x,sd.x,uniques_drop_na.y,min.y,max.y,mean.y,sd.y last')
         return(out)
     }
 
@@ -994,7 +1029,13 @@ ez.regressions=ez.lms
 
 #' glm(y~x+cov,family=binomial), for many y and/or many x
 #' @description glm(y~x+cov,family=binomial), for many y and/or many x
-#' @param df a data frame. Internally go through dropna-->ez.2value-->scale
+#' @param df a data frame. Internally go through dropna (no ez.2value, scale)
+#' \cr glm can handel factor by default (dummy coding)
+#' \cr I do not do standarization here, because 
+#' \cr While standardized coefficients in classic linear regression are well-defined, 
+#' \cr logistic regression, like other generalized linear models, present additional complexity as a result of
+#' \cr the non-linear link function (logit), and non-normal error function (binomial).
+#' \cr https://think-lab.github.io/d/205/
 #' @param y compatible with \code{\link{ez.selcol}}
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
@@ -1049,18 +1090,11 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
     # if covar NULL, c() auto gets rid of it
     df = df[, c(y,x,covar), drop=F]
     df = ez.dropna(df)
-    # also convert factor to value
-    for (vv in c(y,x,covar)){
-        # nonfactor nleves returns 0
-        if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... dummy coding instead?', vv))
-        df[[vv]]=ez.2value(df[[vv]])
-    }
     df.bak = df
-    df[] = lapply(df, ez.scale)
 
     getStats = function(y,x,covar,df,...){
         tryCatch({
-        set.seed(20190117)
+        set.seed(20190117)   # may not need
         na.action=na.exclude
         form = as.formula( paste0(y, " ~ ", paste(c(x,covar), collapse = " + ")) )
         m = glm(form,df,na.action=na.action,family=binomial(link="logit"),...)
@@ -1069,25 +1103,27 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         odds_ratio = exp(sm$coefficients[2,1])
         dof = sm$df[2]
 
-        return(list(y=y,x=x,covar=toString(covar),p=p,odds_ratio=odds_ratio,dof=dof))
+        # df.bak with dropna, so na.rm needed
+        # y all 0,1, but ok to have
+        uniques_drop_na.x=length(unique(df.bak[[x]])); min.x=min(df.bak[[x]]); max.x=max(df.bak[[x]]); mean.x=mean(df.bak[[x]]); sd.x=sd(df.bak[[x]])
+        uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
+
+        return(list(y=y,x=x,covar=toString(covar),p=p,odds_ratio=odds_ratio,dof=dof,
+            uniques_drop_na.x=uniques_drop_na.x,min.x=min.x,max.x=max.x,mean.x=mean.x,sd.x=sd.x,
+            uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
+            ))
         }, error = function(e) {
             if (error) ez.pprint(sprintf('EZ Error: glm(%s ~ %s). NA returned.',y,paste(c(x,covar), collapse = " + ")),color='red')
-            return(list(y=y,x=x,covar=toString(covar),p=NA,odds_ratio=NA_ratio,dof=NA))
+            return(list(y=y,x=x,covar=toString(covar),p=NA,odds_ratio=NA,dof=NA,
+                uniques_drop_na.x=NA,min.x=NA,max.x=NA,mean.x=NA,sd.x=NA,
+                uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
+                ))
         }) # end try catch
     }
 
     result = mapply(getStats,y=y,x=x,MoreArgs=list(covar=covar, df=df, ...),USE.NAMES=F)
     result = data.frame(t(result))
     result[] = lapply(result,unlist)
-
-    # df.bak with dropna, but not scaled yet
-    if (length(y)>=1 & length(x)==1) v = df.bak[[y]]
-    if (length(y)==1 & length(x)>1)  v = df.bak[[x]]
-    result['uniques_incl_na']=length(unique(v))
-    result['min']=min(v)
-    result['max']=max(v)
-    result['mean']=mean(v)
-    result['sd']=sd(v)
 
     for (method in pmethods) {
         ind = which(!is.na(result[['p']]))
@@ -1106,7 +1142,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         ez.print('------')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.print(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
+            ez.print(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p,prefix=2)))
         }
         ez.print('------')
     }
