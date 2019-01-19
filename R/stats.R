@@ -787,12 +787,15 @@ ez.anovas1b = function(df,y,x,covar=NULL,error=T,view=F,report=T,plot=F,cols=3,p
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
 #' \cr 
 #' \cr dof: from F-statistic
-#' \cr residualization, say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized
+#' \cr residualization: say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized
+#' \cr as far as semi-partial concerned, y ~ x + a + b, x ~ y + a + b are two different models. ppcor::spcor.test(iris[,1],iris[,2],iris[,c(3,4)]) != ppcor::spcor.test(iris[,2],iris[,1],iris[,c(3,4)])
+#' \cr but for partial correlation, partial(y,x) is the same as partial(x,y), ppcor::pcor.test(iris[,1],iris[,2],iris[,c(3,4)]) = ppcor::pcor.test(iris[,2],iris[,1],iris[,c(3,4)])
 #' \cr 
 #' \cr 
 #' \cr !!!important note!!!
-#' \cr the r, p(.lm), p.lmrob etc in result data frame refer to r p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
+#' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
 #' \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when view=T
+#' \cr no column named r, r.lm, r.lmrob etc in the result data frame
 #' \cr 
 #' \cr 
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
@@ -813,8 +816,8 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
             result.plot = result %>% ez.dropna('p')
             if (plot & nrow(result.plot)>0) {
                 bonferroniP = -log10(0.05/length(result.plot[['p']]))
-                plist[[yy]] = lattice::xyplot(-log10(result.plot$p) ~ result.plot$r,
-                   xlab = list("Correlation Coefficient", cex=labsize, fontfamily=TNR()),
+                plist[[yy]] = lattice::xyplot(-log10(result.plot$p) ~ result.plot$stdbeta,
+                   xlab = list("Standardized Coefficient", cex=labsize, fontfamily=TNR()),
                    ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
                    scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                    type = "p", pch=16,
@@ -968,8 +971,8 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     result.plot = result %>% ez.dropna('p')
     if (plot & nrow(result.plot)>0) {
         bonferroniP = -log10(0.05/length(result.plot[['p']]))
-        pp=lattice::xyplot(-log10(result.plot$p) ~ result.plot$r,
-               xlab = list("Correlation Coefficient", cex=labsize, fontfamily=TNR()),
+        pp=lattice::xyplot(-log10(result.plot$p) ~ result.plot$stdbeta,
+               xlab = list("Standardized Coefficient", cex=labsize, fontfamily=TNR()),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
                scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                type = "p", pch=16,
