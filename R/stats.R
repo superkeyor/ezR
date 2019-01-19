@@ -1179,9 +1179,9 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' @param width width for toString(countTable,width=width)
 #' @param error whether show error message when error occurs
 #' @return an invisible data frame or list of data frame (if many y and many x)
-#' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
+#' @note odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
 #' @export
-ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,labsize=2,textsize=1.5,titlesize=3,width=300,error=T) {
+ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,labsize=2,textsize=1.5,titlesize=3,width=300,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x)
 
     # patch to handle multiple y, multiple x
@@ -1219,12 +1219,12 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
     df = ez.dropna(df)
     df = ez.2factor(df)
 
-    getStats = function(y,x,df){
+    getStats = function(y,x,df,...){
         tryCatch({
-        fisher.test(df[[y]],df[[x]]) -> model # by default, pairwise NA auto removed
-        p = model$p.value
+        m = fisher.test(df[[y]],df[[x]],...) # by default, pairwise NA auto removed
+        p = m$p.value
         # OR only exist for 2x2 table
-        odds_ratio = if (is.null(model$estimate)) 0 else model$estimate  
+        odds_ratio = if (is.null(m$estimate)) NA else m$estimate  
         countTable = table(df[[y]],df[[x]])   # by default, pairwise NA auto removed
         counts = toString(countTable,width=width)
         total = sum(countTable)
@@ -1256,7 +1256,8 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
     if (report & nrow(result.report)>0) {
         ez.print('------')
         for (i in 1:nrow(result.report)){
-            ez.print(sprintf('fisher.test(%s,%s): OR = %.2f, %s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2)))
+            # sprintf('%.2e',NA) OK
+            ez.print(sprintf('fisher.test(%s,%s): OR = %.2e, %s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2)))
         }
         ez.print('------')
     }
