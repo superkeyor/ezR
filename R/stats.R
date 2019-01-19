@@ -507,7 +507,7 @@ ez.r = function(x,col=NULL,type="pearson",print2screen=T) {
         col=(ez.selcol(x,col))
         x=x[col]
     }
-    
+
     # https://www.statmethods.net/stats/correlations.html
     # stats::cor(x, use, method)
     # x: Matrix or data frame
@@ -552,17 +552,22 @@ ez.zresid = function(model,method=3) {
 #' residualize variable, returning it changed in-place (i.e under its original column name)
 #' @description residualize variable, returning it changed in-place (i.e under its original column name)
 #' @param var dependent var
-#' @param covs covariates
+#' @param covar covariates
 #' @param model 'lm', 'lmrob' (MM-type Estimators, robustbase), 'lmRob' (automatically chooses, robust), 'rlm' (MASS)
 #' @param scale  unstandarize or standardize residual
-#' @param ... additional param passed to the specified model 
-#' @return dataframe with var residualized in place (i.e under its original column name). If covs have NA, then that row for var will be NA.
+#' @param ... additional param passed to the specified model
+#' @return dataframe with var residualized in place (i.e under its original column name). If covar have NA, then that row for var will be NA.
 #' @export
-ez.zresidize = function(data,var,covs,model='lm',scale=TRUE,...){
-    var = ez.selcol(data,var); covs = ez.selcol(data,covs)
+ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
+    data = data.frame(data)
+    var = ez.selcol(data,var); covar = ez.selcol(data,covar)
     # borrowed codes from https://cran.r-project.org/web/packages/umx/index.html
-    form = paste0(var, " ~ ", paste(covs, collapse = " + "))
+    form = paste0(var, " ~ ", paste(covar, collapse = " + "))
     form = as.formula(form)
+    set.seed(20190117)
+    # na.exclude better than na.omit. extractor functions like residuals() or fitted() will pad their
+    # output with NAs for the omitted cases with na.exclude, thus having an output of the same length as
+    # the input variables.
     na.action = na.exclude
     if (model=='lm') m = stats::lm(form,data,na.action=na.action,...)
     # MM-type Estimators
@@ -576,19 +581,19 @@ ez.zresidize = function(data,var,covs,model='lm',scale=TRUE,...){
     # can only use resid, robust lms do not support stats::rstandard
     tmp <- resid(m)
     if (scale) tmp = as.vector(scale(tmp,center=T,scale=T))
-    oldNAs = sum(is.na(data[, var]))
+    oldNAs = sum(is.na(data[[var]]))
     newNAs = sum(is.na(tmp))
     if(newNAs > oldNAs){
         ez.pprint(sprintf('%d cases of var %s lost due to missing covariates', newNAs - oldNAs, var))
     }
-    data[, var] = tmp
+    data[[var]] = tmp
     return(data)
 }
 
 #' a series of regression, for many y and many x; if many y and many x at the same time, returns a list
 #' @description df=ez.2value(df,y,...), df[[x]]=ez.2value(df[[x]],...), lm(scale(df[[y]])~scale(df[[x]]+scale(df[[covar]])))
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
-#' \cr NA in df will be auto excluded in lm(), reflected by degree_of_freedom
+#' \cr NA in df will be auto excluded in lm(), reflected by dof
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
@@ -606,20 +611,21 @@ ez.zresidize = function(data,var,covs,model='lm',scale=TRUE,...){
 #' \cr For multiple regression (with covar), the value of the standardized coefficient (beta) is close to semi-partial correlation
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
 #' \cr
-#' \cr degree_of_freedom: from F-statistic
+#' \cr dof: from F-statistic
 #' \cr rp is robust regression (MASS::rlm) p value (see codes for more detail)
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @export
-ez.lms = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
-    y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
+ez.lms = function(df,y,x,covar=NULL,showerror=T,report=T,view=F,plot=F,model=c('lm', 'lmrob', 'lmRob', 'rlm'),cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+    y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
+    model = unique(c('lm',model)) # always include lm
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.lms(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.lms(df,yy,x,covar=covar,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -640,98 +646,116 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot
         return(invisible(xlist))
     }
 
-    df=ez.2value(df,y,...)
+    # drop na before scale, although all lm models below deal with na.action
+    # https://stats.stackexchange.com/a/11028/100493
+    # default, if not specified, na.action from options('na.action')
+    # otherwise scale results would be different
+    # if covar NULL, c() auto gets rid of it
+    data = ez.dropna(df,c(y,x,covar))
+    # also convert factor to value
+    for (vv in c(y,x,covar)){
+        # nonfactor nleves returns 0
+        if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... instead dummy coding?', vv))
+        df[[vv]]=ez.2value(df[[vv]],...)
+    }
+    data[] = lapply(data[, c(y,x,covar), drop=F], scale)
 
-    getStats = function(y,x,covar,swap=F,data,...){
-        df=data; yy=y; xx=x
-        # for single y but multiple x using lapply
-        if (swap) {tmp=xx;xx=yy;yy=tmp}
+    # processing lm to return something (like r n p)
+    # @description processing lm to return something (like r n p)
+    # @param y compatible with ez.selcol
+    # @param x compatible with ez.selcol
+    # @param covar optional, compatible with ez.selcol
+    # @param data data frame
+    # @param model vector c('lm', 'lmrob', 'lmRob', 'rlm')  robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm
+    # @param ... additional parameters to the specified model. if more than one model specified, ... may not be OK for all models, because diff models have diff parameters
+    # @return a data frame
+    # @export
+    getStats = function(y,x,covar,data,model=c('lm', 'lmrob', 'lmRob', 'rlm'),...){
+        # for one model
+        get.stats = function(y,x,covar,data,model,...){
+            tryCatch({
+            set.seed(20190117)
+            # na.exclude better than na.omit. extractor functions like residuals() or fitted() will pad their
+            # output with NAs for the omitted cases with na.exclude, thus having an output of the same length as
+            # the input variables.
+            na.action=na.exclude
+            form = as.formula( paste0(y, " ~ ", paste(c(x,covar), collapse = " + ")) )
+            if (model=='lm') m = stats::lm(form,data,na.action=na.action,...)
+            # MM-type Estimators
+            # for some reason, robustbase::lmrob.control() cannot have see with a single value, like seed=1313
+            if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
+            # lmRob function automatically chooses an appropriate algorithm to compute a final robust estimate
+            # with high breakdown point and high efficiency
+            if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
+            # increased maxit from 20, because sometimes, rlm fails
+            # suppress 'rlm' failed to converge in xx steps
+            if (model=='rlm') m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action,...))
+            # can only use resid, robust lms do not support stats::rstandard
 
-        if (is.null(covar)) {
-            covar = ''
-            covar2 = NULL
-            rcovar = ''
-        } else {
-            covar=ez.selcol(df,covar)
-            covar2 = covar
-            df=ez.2value(df,covar,...)
-            rcovar = paste('+',covar,sep='',collapse='')
-            covar = paste('+scale(df[["',covar,'"]])',sep='',collapse='')
+            sm = summary(m)
+            ## n = m$df.residual + 2 # (2 is X + 1), not considering covariates
+            # better way to calculate n, considering missing values excluded
+            n = nrow(m$model)
+            # for rlm, r2 is NA
+            r2 = sm$r.squared
+            stdbeta = sm$coefficients[2,1]
+            # I have seen people use the anova thing which might be for the whole model (kinda F test)
+            # For individual predictor, use the p value from summary() --I think, jerry
+            # coef(m) the same as sm$coefficients
+            if (!'rlm' %in% attr(m,"class",exact=T)){
+                p = sm$coefficients[2,4]
+                dof = m$df.residual
+            } else {
+                # https://stats.stackexchange.com/a/205615/100493
+                p = sfsmisc::f.robftest(m,var=x)$p.value  # var Either their names or their indices
+                dof = sm$df[2]
+            }
+
+            # residualized
+            if (is.null(covar)) {
+                # for rlm, r returns NA
+                r.residized = sign(sm$coefficients[2,1])*sqrt(sm$r.squared)
+                p.residized = p
+            } else {
+                data.residized = ez.zresidize(data, y, covar, model=model, scale=TRUE)
+                tmp = get.stats(y=y, x=x, covar=NULL, data=data.residized, model=model, ...)
+                r.residized = tmp$r.residized
+                p.residized = tmp$p.residized
+            }
+
+            return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.residized=r.residized, p.residized=p.residized))
+            }, error=function(e){
+                if (showerror) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
+                return(list(y=NA, x=NA, covar=NA, n=NA, df=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA))
+            }) # end try catch
         }
 
-        # do not assign new variables in error = function(e), because statements will not be returned
-        p=NA;beta=NA;degree_of_freedom=NA;v.unique=NA;v.min=NA;v.max=NA;v.mean=NA;v.sd=NA
-        tryCatch({
-        if (nlevels(df[[xx]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, consider dummy coding instead of ez.2value.', xx), color='red')
-        df[[xx]]=ez.2value(df[[xx]],...)
+        rnp = mapply(get.stats,model=model,MoreArgs=list(y=y, x=x, covar=covar, data=data,...))
+        rnp = data.frame(t(rnp))
+        rnp[] = lapply(rnp,unlist)
+        rnp = tibble::rownames_to_column(rnp)
+        rnp['bestp'] = rnp$rowname[which.min(rnp$p)]
+        rnp = ez.2wide(rnp,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
+        rnp = ez.recols(rnp,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','')
 
-        # according to my own testing, scale or not for x,y or covar, does not change p values for predictors, although intercept would differ
-        cmd = sprintf('model = summary( lm( scale(df[[yy]])~scale(df[[xx]])%s ) )', covar)
-        ez.eval(cmd)
-        p = model$coefficients[2,4]
-
-        beta = model$coefficients[2,1]
-        degree_of_freedom = model$df[2]
-
-        # only calculate the one that varies
-        v = if (!swap) yy else xx
-        # remove NA (also considering covar)
-        v = ez.dropna(df,c(v,covar2),print2screen=F) %>% .[[v]]
-        v.unique=length(unique(v))
-        v.min=min(v)
-        v.max=max(v)
-        v.mean=mean(v)
-        v.sd=sd(v)
-        }, error = function(e) {
-            if (showerror) message(sprintf('EZ Error (lm): %s %s. NA returned.',yy,xx))
-        })
-
-        # do not assign new variables in error = function(e), because statements will not be returned
-        rp = NA
-        tryCatch({
-        cmd = sprintf('rmodel = MASS::rlm(%s~%s%s,data=df,maxit=500)', yy,xx,rcovar)
-        # suppress 'rlm' failed to converge in xx steps
-        suppressWarnings(ez.eval(cmd))
-        # https://stats.stackexchange.com/a/205615/100493
-        rtest = sfsmisc::f.robftest(rmodel,var=xx)
-        rp = rtest$p.value
-        }, error = function(e) {
-            if (showerror) message(sprintf('EZ Error (rlm): %s %s. NA returned.',yy,xx))
-        })
-
-        out = c(yy,xx,p,rp,beta,degree_of_freedom,v.unique,v.min,v.max,v.mean,v.sd)
+        out = rnp
         return(out)
     }
 
-    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
-    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
-    result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('y','x','p','rp','beta','degree_of_freedom','uniques_incl_na','min','max','mean','sd')
-    result %<>% ez.num() %>% ez.dropna(col='p')
+    result = mapply(getStats,y=y,x=x,MoreArgs=list(covar=covar, data=data, model=model,...),USE.NAMES=F)
+    result = data.frame(t(result))
+    result[] = lapply(result,unlist)
+
+    if (length(y)>=1 & length(x)==1) v = df[[y]]
+    if (length(y)==1 & length(x)>1)  v = df[[x]]
+    result['uniques_incl_na']=length(unique(v))
+    result['min']=min(v)
+    result['max']=max(v)
+    result['mean']=mean(v)
+    result['sd']=sd(v)
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
-        # if (length(y)==1 & length(x)>1) {
-        #     tt = sprintf('
-        #     pp = result %%>%% ez.dropna() %%>%% ez.factorder("x",ord="as") %%>%% ggplot(aes(x=x,y=-log10(p),fill=y))+
-        #         geom_bar(stat="identity")+
-        #         geom_hline(yintercept = %f,color="black",linetype=5)+
-        #         geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-        #         scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-        #         theme(legend.position="none")+
-        #         %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'y') )
-        # } else {
-        #     tt = sprintf('
-        #     pp = result %%>%% ez.dropna() %%>%% ez.factorder("y",ord="as") %%>%% ggplot(aes(x=y,y=-log10(p),fill=x))+
-        #         geom_bar(stat="identity")+
-        #         geom_hline(yintercept = %f,color="black",linetype=5)+
-        #         geom_hline(yintercept = -log10(0.05),color="grey",linetype=5)+
-        #         scale_fill_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#000000"),100))+
-        #         theme(legend.position="none")+
-        #         %s', bonferroniP, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),'x') )
-        # }
-        # eval(parse(text = tt))
-        # print(pp)
         pp=lattice::xyplot(-log10(result$p) ~ result$beta,
                xlab = list("Standardized Coefficient", cex=labsize, fontfamily="Times New Roman"),
                ylab = list("-log10(p-Value)", cex=labsize, fontfamily="Times New Roman"),
@@ -746,21 +770,25 @@ ez.lms = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot
     }
 
     for (method in pmethods) {
-        result[[method]]=stats::p.adjust(result[['p']],method=method)
+        # only adjust for non-na p values
+        ind = which(!is.na(result[['p']]))
+        result[[method]][ind]=stats::p.adjust(result[['p']][ind],method=method)
     }
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
-    if (viewresult) {View(result)}
+    if (view) {View(result)}
 
     # todo: format as APA
-    if (reportresult) {
-        report = result %>% dplyr::arrange(orindex)
+    if (report) {
+        result.report = result %>% dplyr::arrange(orindex)
         ez.print('------')
-        ez.print(ifelse(is.null(covar), 'std_beta=r', 'std_beta closed to residualized correlation, and semi-partial'))
-        for (i in 1:nrow(report)){
-            ez.print(sprintf('%s ~ %s, std_beta = %.2f, %s, r%s', report$y[i],report$x[i],report$beta[i],ez.p.apa(report$p[i],prefix=2),ez.p.apa(report$rp[i],prefix=2)))
+        ez.print(ifelse(is.null(covar), 'r, p', 'r, p residualized (kinda semi-partial)'))
+        for (i in 1:nrow(result.report)){
+            Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse=" + ")
+            robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
+            ez.print(sprintf('lm(%s ~ %s): r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
         }
         ez.print('------')
     }
@@ -774,7 +802,7 @@ ez.regressions=ez.lms
 #' a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list
 #' @description df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
 #' @param df a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
-#' \cr NA in df will be auto excluded in glm(), reflected by degree_of_freedom
+#' \cr NA in df will be auto excluded in glm(), reflected by dof
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
@@ -789,9 +817,9 @@ ez.regressions=ez.lms
 #' \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
 #' \cr per standard deviation increase in the predictor variable.
 #' \cr
-#' \cr degree_of_freedom
+#' \cr dof
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.logistics = function(df,y,x,covar=NULL,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -799,7 +827,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.logistics(df,yy,x,covar=covar,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -844,9 +872,9 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
 
         p = model$coefficients[2,4]
         odds_ratio = exp(model$coefficients[2,1])
-        degree_of_freedom = model$df[2]
+        dof = model$df[2]
 
-        out = c(yy,xx,p,odds_ratio,degree_of_freedom)
+        out = c(yy,xx,p,odds_ratio,dof)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',yy,xx))
@@ -857,8 +885,7 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('y','x','p','odds_ratio','degree_of_freedom')
-    result %<>% ez.num() %>% ez.dropna(col='p')
+    names(result) <- c('y','x','p','odds_ratio','dof')
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
@@ -882,14 +909,14 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
-    if (viewresult) {View(result)}
+    if (view) {View(result)}
     return(invisible(result))
 }
 
 #' a series of one-way between-subjects anova, for many y and many x; if many y and many x at the same time, returns a list
 #' @description anova 1b, df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
 #' @param df a data frame
-#' \cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom
+#' \cr NA in df will be auto excluded in aov(), reflected by dof
 #' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
 #' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
 #' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
@@ -900,12 +927,12 @@ ez.logistics = function(df,y,x,covar=NULL,showerror=T,viewresult=F,plot=F,cols=3
 #' @param ... dots passed to ez.2value(df[[yy]],...)
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
-#' \cr degree_of_freedom: from F-statistic
+#' \cr dof: from F-statistic
 #' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis)
 #' \cr If covariates provided, adjusted means with SE, partial eta squared. Otherwise, mean SD, and eta squared.
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,view=F,report=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -913,7 +940,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
+            result = ez.anovas1b(df,y,xx,covar=covar,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -960,7 +987,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
             # compare with spss output
             # https://libguides.library.kent.edu/SPSS/OneWayANOVA
             F = aa[['F value']][[1]]
-            degree_of_freedom = toString(aa[['Df']])
+            dof = toString(aa[['Df']])
             MSE = aa[['Mean Sq']][[2]]
             s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
             sdev = aggregate(df[[yy]]~df[[xx]],FUN=sd)
@@ -981,7 +1008,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
             s = data.frame(effects::effect(xx,a))
             p = aa[["Pr(>F)"]][[1]]
             F = aa[['F value']][[1]]
-            degree_of_freedom = toString(aa[['Df']])
+            dof = toString(aa[['Df']])
             MSE = aa[['Mean Sq']][[2]]
             df2 = ez.dropna(df,c(yy,xx,covar2),print2screen=F)
             n = aggregate(df2[[yy]]~df2[[xx]],FUN=length)
@@ -995,7 +1022,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
             posthoc = ez.eval(sprintf('summary(multcomp::glht(a, linfct = multcomp::mcp(%s = "Tukey")))', xx))
             posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,prefix=2),'; ',collapse='')
         }
-        out = c(xx,yy,p,petasq2,F,degree_of_freedom,MSE,means,counts,means.apa,posthoc_tukey)
+        out = c(xx,yy,p,petasq2,F,dof,MSE,means,counts,means.apa,posthoc_tukey)
         return(out)
         }, error = function(e) {
             if (showerror) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
@@ -1006,8 +1033,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
     if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
     result = result %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','petasq2','F','degree_of_freedom','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se','posthoc_tukey')
-    result %<>% ez.num() %>% ez.dropna(col='p')
+    names(result) <- c('x','y','p','petasq2','F','dof','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se','posthoc_tukey')
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
@@ -1033,26 +1059,26 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
     result$p.apa = ez.p.apa(result$p,prefix=0)
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd_or_adjmeans.se, posthoc_tukey last') %>% dplyr::arrange(p)
 
-    if (viewresult) {View(result)}
+    if (view) {View(result)}
 
-    if (reportresult) {
-        report = result %>% dplyr::arrange(orindex)
+    if (report) {
+        result.report = result %>% dplyr::arrange(orindex)
         ez.print('------')
         ez.print(ifelse(is.null(covar), 'mean (sd)', 'adjusted mean (se), sd=se*sqrt(n)'))
-        for (i in 1:nrow(report)){
-            ez.print(sprintf('%s,%s %s\t%s', report$x[i],report$y[i],report$means.sd_or_adjmeans.se[i],ez.p.apa(report$p[i],prefix=0)))
+        for (i in 1:nrow(result.report)){
+            ez.print(sprintf('%s,%s %s\t%s', result.report$x[i],result.report$y[i],result.report$means.sd_or_adjmeans.se[i],ez.p.apa(result.report$p[i],prefix=0)))
         }
         ez.print('------')
         ez.print('posthoc Tukey')
-        for (i in 1:nrow(report)){
-            ez.print(sprintf('%s', report$posthoc_tukey[i]))
+        for (i in 1:nrow(result.report)){
+            ez.print(sprintf('%s', result.report$posthoc_tukey[i]))
         }
         ez.print('------')
-        for (i in 1:nrow(report)){
-            if (report$F[i] < 1) {
-                ez.print(sprintf('%s,%s\tF(%s) < 1', report$x[i],report$y[i],report$degree_of_freedom[i]))
+        for (i in 1:nrow(result.report)){
+            if (result.report$F[i] < 1) {
+                ez.print(sprintf('%s,%s\tF(%s) < 1', result.report$x[i],result.report$y[i],result.report$dof[i]))
             } else {
-                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', report$x[i],report$y[i],report$degree_of_freedom[i],report$F[i],report$MSE[i],ez.p.apa(report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),report$petasq2[i]))
+                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', result.report$x[i],result.report$y[i],result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]))
             }
         }
         ez.print('------')
@@ -1074,7 +1100,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,showerror=T,viewresult=F,reportresult=T
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' @note odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
 #' @export
-ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
+ez.fishers = function(df,y,x,showerror=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,width=300) {
     y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
 
     # patch to handle multiple y, multiple x
@@ -1082,7 +1108,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.fishers(df,y,xx,showerror=showerror,viewresult=viewresult,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
+            result = ez.fishers(df,y,xx,showerror=showerror,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,width=width)
             result = result
             if (plot & nrow(result)>0) {
                 bonferroniP = -log10(0.05/length(result[['p']]))
@@ -1132,7 +1158,6 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('
     if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,data=df)
     result = result %>% data.frame() %>% data.table::transpose()
     names(result) <- c('x','y','p','odds_ratio','counts','total')
-    result %<>% ez.num() %>% ez.dropna(col='p')
 
     if (plot & nrow(result)>0) {
         bonferroniP = -log10(0.05/length(result[['p']]))
@@ -1175,7 +1200,7 @@ ez.fishers = function(df,y,x,showerror=T,viewresult=F,plot=F,cols=3,pmethods=c('
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
-    if (viewresult) {View(result)}
+    if (view) {View(result)}
     return(invisible(result))
 }
 
