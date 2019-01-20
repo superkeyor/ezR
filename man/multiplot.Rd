@@ -4,7 +4,7 @@
 \alias{multiplot}
 \title{Multiple plot function, accepts a list of lattice plot (not ggplot) objects}
 \usage{
-multiplot(..., plotlist = NULL, file, cols = NULL, layout = NULL)
+multiplot(..., plotlist = NULL, cols = NULL, layout = NULL)
 }
 \arguments{
 \item{plotlist}{objects can be passed in ..., or to plotlist (as a list of plot objects)

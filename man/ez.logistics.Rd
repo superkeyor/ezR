@@ -2,41 +2,48 @@
 % Please edit documentation in R/stats.R
 \name{ez.logistics}
 \alias{ez.logistics}
-\title{a series of simple logistic regression, for many y and many x; if many y and many x at the same time, returns a list}
+\title{glm(y~x+covar,family=binomial), for many y and/or many x}
 \usage{
-ez.logistics(df, y, x, covar = NULL, showerror = T, viewresult = F,
-  plot = T, cols = 3, pmethods = c("bonferroni", "fdr"), labsize = 2,
-  textsize = 1.5, titlesize = 3, ...)
+ez.logistics(df, y, x, covar = NULL, report = T, view = F, plot = F,
+  pmethods = c("bonferroni", "fdr"), cols = 3, labsize = 2,
+  textsize = 1.5, titlesize = 3, error = T, ...)
 }
 \arguments{
-\item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2value(df))
-\cr NA in df will be auto excluded in glm(), reflected by degree_of_freedom}
+\item{df}{a data frame. Internally go through dropna (no ez.2value, scale)
+\cr glm can handel factor by default (dummy coding)
+\cr I do not do standarization here, because 
+\cr While standardized coefficients in classic linear regression are well-defined, 
+\cr logistic regression, like other generalized linear models, present additional complexity as a result of
+\cr the non-linear link function (logit), and non-normal error function (binomial).
+\cr https://think-lab.github.io/d/205/}
 
-\item{y}{internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'}
+\item{y}{compatible with \code{\link{ez.selcol}}}
 
-\item{x}{internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)}
+\item{x}{compatible with \code{\link{ez.selcol}}}
 
-\item{covar}{NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'}
+\item{covar}{NULL=no covar, compatible with \code{\link{ez.selcol}}}
 
-\item{showerror}{whether show error message when error occurs}
+\item{report}{print results (in APA format)}
 
-\item{plot}{T/F, the dash line is bonferroni p = 0.05}
+\item{view}{call View(result)}
 
-\item{cols}{number of columns for multiplot. NULL=auto calculate}
+\item{plot}{T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
-\item{...}{dots passed to ez.2value(df,...)}
+\item{cols}{number of columns for multiplot. NULL=auto calculate}
+
+\item{error}{whether show error message when error occurs}
 }
 \value{
-an invisible list of data frame
+an invisible data frame or list of data frame (if many y and many x)
 \cr odds_ratio: odds ratio=exp(b), one unit increase in x result in the odds of being 1 for y "OR" times the odds of being 0 for y
 \cr so that the variances of dependent and independent variables are 1.
 \cr Therefore, standardized coefficients refer to how many standard deviations a dependent variable will change,
 \cr per standard deviation increase in the predictor variable.
 \cr
-\cr degree_of_freedom
+\cr dof
 }
 \description{
-df=ez.2value(df,y,...), df[[xx]]=ez.2value(df[[xx]],...), glm(df[[yy]]~df[[xx]],family=binomial)
+glm(y~x+covar,family=binomial), for many y and/or many x
 }

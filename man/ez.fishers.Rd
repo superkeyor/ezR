@@ -2,36 +2,39 @@
 % Please edit documentation in R/stats.R
 \name{ez.fishers}
 \alias{ez.fishers}
-\title{a series of fisher.test, for many y and many x; if many y and many x at the same time, returns a list}
+\title{fisher.test(y,x), for many y and/or many x}
 \usage{
-ez.fishers(df, y, x, showerror = T, viewresult = F, plot = T, cols = 3,
-  pmethods = c("bonferroni", "fdr"), labsize = 2, textsize = 1.5,
-  titlesize = 3, width = 300)
+ez.fishers(df, y, x, report = T, view = F, plot = F,
+  pmethods = c("bonferroni", "fdr"), cols = 3, labsize = 2,
+  textsize = 1.5, titlesize = 3, width = 300, error = T, ...)
 }
 \arguments{
-\item{df}{a data frame, if its column is factor, auto converts to numeric (internally call ez.2factor(df))
-\cr NA in df will be auto excluded in fisher.test(), reflected by total}
+\item{df}{a data frame, internal go through dropna-->ez.2factor}
 
-\item{y}{internally evaluated by eval('dplyr::select()'), a vector of outcome variables c('var1','var2'), or a single variable 'var1'}
+\item{y}{compatible with \code{\link{ez.selcol}}}
 
-\item{x}{internally evaluated by eval('dplyr::select()'), a vector of predictors, or a single predictor, (eg, names(select(beta,Gender:dmce)), but both mulitple/single x, only simple regression)}
+\item{x}{compatible with \code{\link{ez.selcol}}}
 
-\item{showerror}{whether show error message when error occurs}
+\item{report}{print results (in APA format)}
 
-\item{plot}{T/F, the dash line is bonferroni p = 0.05}
+\item{view}{call View(result)}
 
-\item{cols}{number of columns for multiplot. NULL=auto calculate}
+\item{plot}{T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
+\item{cols}{number of columns for multiplot. NULL=auto calculate}
+
 \item{width}{width for toString(countTable,width=width)}
+
+\item{error}{whether show error message when error occurs}
 }
 \value{
-an invisible list of data frame
+an invisible data frame or list of data frame (if many y and many x)
 }
 \description{
-df=ez.2factor(df,c(x,y)), fisher.test(df[[xx]],df[[yy]])
+fisher.test(y,x), for many y and/or many x
 }
 \note{
-odds ratio only exist for 2x2 table, otherwise 0 (arbitrary assigned by jerry)
+odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
 }

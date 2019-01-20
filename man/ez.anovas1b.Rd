@@ -2,42 +2,49 @@
 % Please edit documentation in R/stats.R
 \name{ez.anovas1b}
 \alias{ez.anovas1b}
-\title{a series of one-way between-subjects anova, for many y and many x; if many y and many x at the same time, returns a list}
+\title{anova or ancova 1b, aov(y~x+covar), for many y and/or many x}
 \usage{
-ez.anovas1b(df, y, x, covar = NULL, showerror = T, viewresult = F,
-  reportresult = T, plot = T, cols = 3, pmethods = c("bonferroni",
-  "fdr"), labsize = 2, textsize = 1.5, titlesize = 3, ...)
+ez.anovas1b(df, y, x, covar = NULL, report = T, view = F, plot = F,
+  cols = 3, pmethods = c("bonferroni", "fdr"), labsize = 2,
+  textsize = 1.5, titlesize = 3, error = T, ...)
 }
 \arguments{
-\item{df}{a data frame
-\cr NA in df will be auto excluded in aov(), reflected by degree_of_freedom}
+\item{df}{a data frame, Internally go through dropna-->ez.2value(y),ez.2factor(x),ez.2value(covar)}
 
-\item{y}{internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))}
+\item{y}{compatible with \code{\link{ez.selcol}}}
 
-\item{x}{internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable}
+\item{x}{compatible with \code{\link{ez.selcol}}}
 
-\item{covar}{NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'}
+\item{covar}{NULL=no covar, compatible with \code{\link{ez.selcol}}}
 
-\item{showerror}{whether show error message when error occurs}
+\item{view}{call View(result)}
 
-\item{plot}{T/F, the dash line is bonferroni p = 0.05}
+\item{plot}{T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05}
 
 \item{cols}{number of columns for multiplot. NULL=auto calculate}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
-\item{...}{dots passed to ez.2value(df[[yy]],...)}
+\item{error}{whether show error message when error occurs (also result will have an empty row when error occurs)}
 }
 \value{
-an invisible list of data frame
+an invisible data frame or list of data frame (if many y and many x)
 \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
-\cr degree_of_freedom: from F-statistic
+\cr dof: from F-statistic
 }
 \description{
-anova 1b, df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
+anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 }
 \note{
-Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
-\cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis)
-\cr If covariates provided, adjusted means with SE, partial eta squared. Otherwise, mean SD, and eta squared.
+In R, \code{\link[stats]{aov}} for 1- or mutiple- way (use : * syntax to include interactions--not implemented in this function yet) between anova, it takes the output from \code{\link[stats]{lm}} and returns it to us in a way that is more in keeping with a traditional ANOVA approach.
+\cr 
+\cr \code{\link[car]{Anova}} calculates type-II or type-III analysis-of-variance tables for model objects. Also, \code{\link[stats]{anova}} analyses the result of a model, producing type I (sequential) ANOVA table.
+\cr 
+\cr Within and mixed anova use \code{\link[nlme]{lme}}, because Repeated-measures designs have dependent data, therefore dependent residuals, which can be handled by nlme::lme
+\cr 
+\cr Eta squared measures the proportion of the total variance in a dependent variable Y that can be accounted for by knowledge of X (ie, the membership of different groups defined by an independent variable). For one-way anova, eta squared is the same as partial eta squared, and the same as R2 (these are true only for one-way anova, not the case for ancova or two-way anova). Eta squared is analogous to R2 in lm. Both are biased and have the weakness that each adding additional variable will automatically increase the value of Eta squared or R2. Eta squared for factor1 = SSfactor1/SStotal, where SStotal = SSfactor1 + SSfactor2 + SSinteraction + SSerror
+\cr 
+\cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
+\cr 
+\cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 }

@@ -7,5 +7,5 @@
 ez.scale(x, center = TRUE, scale = TRUE)
 }
 \description{
-similar to base::scale, but 1d vector in and 1d vector out, NA ignored/returned in place
+similar to base::scale, but 1d vector in and 1d vector out, NA ignored/returned in place. suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
 }
