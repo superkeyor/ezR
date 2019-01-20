@@ -590,181 +590,194 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
     return(data)
 }
 
-#' a series of one-way between-subjects anova, for many y and many x; if many y and many x at the same time, returns a list
-#' @description anova 1b, df = ez.2value(df,y,...); df = ez.2factor(df,x); aov(df[[yy]]~df[[xx]])
-#' @param df a data frame
-#' \cr NA in df will be auto excluded in aov(), reflected by dof
-#' @param y internally evaluated by eval('dplyr::select()'), a vector of continous variables c('var1','var2'), or a single variable 'var1', if it is a factor, auto converts to numeric (internally call ez.2value(df[[yy]]), (eg, names(select(beta,Gender:dmce)))
-#' @param x internally evaluated by eval('dplyr::select()'), a vector of categorical variables, or a single categorical variable
-#' @param covar NULL=no covar, internally evaluated by eval('dplyr::select()'), a vector of covariates c('var1','var2'), or a single variable 'var1'
+#' anova or ancova 1b, aov(y~x+covar), for many y and/or many x
+#' @description anova or ancova 1b, aov(y~x+covar), for many y and/or many x
+#' @param df a data frame, Internally go through dropna-->ez.2value(y),ez.2factor(x),ez.2value(covar)
+#' @param y compatible with \code{\link{ez.selcol}}
+#' @param x compatible with \code{\link{ez.selcol}}
+#' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
+#' @param view call View(result)
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
-#' @param plot T/F, the dash line is bonferroni p = 0.05
+#' @param plot T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
-#' @param error whether show error message when error occurs
-#' @param ... dots passed to ez.2value(df[[yy]],...)
+#' @param error whether show error message when error occurs (also result will have an empty row when error occurs)
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr dof: from F-statistic
-#' @note Eta squared measures the proportion of the total variance in a dependent variable that is associated with the membership of different groups defined by an independent variable.
-#' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis)
-#' \cr If covariates provided, adjusted means with SE, partial eta squared. Otherwise, mean SD, and eta squared.
+#' @note In R, \code{\link[stats]{aov}} for 1- or mutiple- way (use : * syntax to include interactions--not implemented in this function yet) between anova, it takes the output from \code{\link[stats]{lm}} and returns it to us in a way that is more in keeping with a traditional ANOVA approach.
+#' \cr 
+#' \cr \code{\link[car]{Anova}} calculates type-II or type-III analysis-of-variance tables for model objects. Also, \code{\link[stats]{anova}} analyses the result of a model, producing type I (sequential) ANOVA table.
+#' \cr 
+#' \cr Within and mixed anova use \code{\link[nlme]{lme}}, because Repeated-measures designs have dependent data, therefore dependent residuals, which can be handled by nlme::lme
+#' \cr 
+#' \cr Eta squared measures the proportion of the total variance in a dependent variable Y that can be accounted for by knowledge of X (ie, the membership of different groups defined by an independent variable). For one-way anova, eta squared is the same as partial eta squared, and the same as R2 (these are true only for one-way anova, not the case for ancova or two-way anova). Eta squared is analogous to R2 in lm. Both are biased and have the weakness that each adding additional variable will automatically increase the value of Eta squared or R2. Eta squared for factor1 = SSfactor1/SStotal, where SStotal = SSfactor1 + SSfactor2 + SSinteraction + SSerror
+#' \cr 
+#' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
+#' \cr 
+#' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared.
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,error=T,view=F,report=T,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,...) {
-    y=(ez.selcol(df,y)); x=(ez.selcol(df,x))
+ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,error=T,...) {
+    y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.anovas1b(df,y,xx,covar=covar,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,labsize=labsize,textsize=textsize,titlesize=titlesize,...)
-            result = result %>% ez.dropna('p')
-            if (plot & nrow(result)>0) {
-                bonferroniP = -log10(0.05/length(result[['p']]))
-                plist[[xx]] = lattice::xyplot(-log10(result$p) ~ result$petasq2,
+            result = ez.anovas1b(df,y,xx,covar=covar,report=report,view=F,plot=F,pmethods=pmethods,error=error,...)
+            xlist[[xx]] = result
+
+            result.plot = result %>% ez.dropna('p')
+            if (plot & nrow(result.plot)>0) {
+                bonferroniP = -log10(0.05/length(result.plot[['p']]))
+                plist[[xx]] = lattice::xyplot(-log10(result.plot$p) ~ result.plot$petasq2,
                        xlab = list(expression(eta[p]^2), cex=labsize, fontfamily=TNR()),
                        ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
                        scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
                        type = "p", pch=16,
                        main = list(xx, cex=titlesize, fontfamily=TNR()),
                        col = "#e69f00",
-                       ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
+                       ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
                        abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
                 )
             }
-            xlist[[xx]] = result
         }
         if (plot & length(plist)>0) {if (is.null(cols)) {cols=floor(sqrt(length(plist)))}; gridExtra::grid.arrange(grobs=plist,ncol=cols)}
         return(invisible(xlist))
     }
 
-    df = ez.2value(df,y,...); df = ez.2factor(df,x)
-
-    getStats = function(y,x,covar,swap=F,data,...){
-        df=data; yy=y; xx=x
-        # for single y but multiple x using lapply
-        if (swap) {tmp=xx;xx=yy;yy=tmp}
-
-        if (is.null(covar)) {
-            covar = ''
-            covar2 = NULL
-        } else {
-            covar=ez.selcol(df,covar)
-            covar2 = covar
-            df=ez.2value(df,covar,...)
-            covar = paste('+',covar,sep='',collapse='')
+    df = df[, c(y,x,covar), drop=F]
+    df = ez.dropna(df)
+    df.bak = df
+    df = ez.2value(df,y); df = ez.2factor(df,x)
+    if (!is.null(covar)){
+        for (vv in c(covar)){
+            # nonfactor nleves returns 0
+            if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... dummy coding instead?', vv))
+            df[[vv]]=ez.2value(df[[vv]])
         }
+    }
 
+    getStats = function(y,x,covar,df,...){
         tryCatch({
-        df = ez.dropna(df,c(yy,xx),print2screen=F)
-        if (covar=='') {
-            a = aov(df[[yy]]~df[[xx]])
-            aa = summary(a)[[1]]
-            p = aa[["Pr(>F)"]][[1]]
-            # compare with spss output
-            # https://libguides.library.kent.edu/SPSS/OneWayANOVA
-            F = aa[['F value']][[1]]
-            dof = toString(aa[['Df']])
-            MSE = aa[['Mean Sq']][[2]]
-            s = aggregate(df[[yy]]~df[[xx]],FUN=mean)
-            sdev = aggregate(df[[yy]]~df[[xx]],FUN=sd)
-            n = aggregate(df[[yy]]~df[[xx]],FUN=length)
-            means = ''; means.apa = ''; counts = ''
-            for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
-            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],sdev[i,2]),sep='\t')}
-            for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
-            # https://stats.stackexchange.com/a/78813/100493
-            petasq2 = summary.lm(a)$r.squared
-            posthoc = ez.eval(sprintf('summary(multcomp::glht(a, linfct = multcomp::mcp("%s" = "Tukey")))', 'df[[xx]]'))
-            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,prefix=2),'; ',collapse='')
+        # aov is wrapper of lm, so also accept na.action
+        na.action=na.exclude
+        form = as.formula( paste0(y, " ~ ", paste(c(x,covar), collapse = " + ")) )
+        # by default R use dummy coding (ie, contr.treatment), not orthogonal, not OK for type III
+        # options('contrasts')
+        # factory-default ones
+        # options('contrasts' = c("contr.treatment", "contr.poly"))
+        oldcons = options('contrasts' = c("contr.helmert", "contr.poly"))
+        m = aov(form,df,na.action=na.action,...)
+        sm = car::Anova(m,type="III")
+        # restore contrasts
+        options(oldcons)
+
+        # have fun now
+        p = sm[2,"Pr(>F)"]
+        F = sm[2,'F value']
+        dof = toString(sm[['Df']][c(2,length(sm[['Df']]))]) 
+        MSE = sm[2,'Sum Sq']/sm[2,'Df']
+        n = aggregate(df[[y]]~df[[x]],FUN=length)
+        counts = sprintf('%s\t%d',n[[1]],n[[2]]) %>% paste0(collapse='\t')
+        # no covar, no adjustment
+        if (is.null(covar)) {
+            avg = aggregate(df[[y]]~df[[x]],FUN=mean)
+            dev = aggregate(df[[y]]~df[[x]],FUN=sd)
         } else {
-            a = ez.eval(sprintf('aov(%s~%s%s,data=df)',yy,xx,covar))
-            aa = car::Anova(a,type="III")
-            aa = aa[c(2,nrow(aa)),]  # remove (Intercept)
-            aa[['Mean Sq']] = aa[['Sum Sq']]/aa[['Df']]
-            s = data.frame(effects::effect(xx,a))
-            p = aa[["Pr(>F)"]][[1]]
-            F = aa[['F value']][[1]]
-            dof = toString(aa[['Df']])
-            MSE = aa[['Mean Sq']][[2]]
-            df2 = ez.dropna(df,c(yy,xx,covar2),print2screen=F)
-            n = aggregate(df2[[yy]]~df2[[xx]],FUN=length)
-            means = ''; means.apa = ''; counts = ''
-            for (i in 1:ez.size(s,1)) {means = paste(means,s[i,1],sprintf('%.2f',s[i,2]),sep='\t')}
-            for (i in 1:ez.size(s,1)) {means.apa = paste(means.apa,sprintf('%.2f (%.2f)',s[i,2],s[i,3]),sep='\t')}
-            for (i in 1:ez.size(n,1)) {counts = paste(counts,n[i,1],n[i,2],sep='\t')}
-            # page 523 in Discovering Stats using R 1st
-            # petasq2 = SSeffect/SStotal; partial etasq2 = SSeffect/(SSeffect+SSresidual)
-            petasq2 = aa[['Sum Sq']][1]/(aa[['Sum Sq']][1]+aa[['Sum Sq']][2])
-            posthoc = ez.eval(sprintf('summary(multcomp::glht(a, linfct = multcomp::mcp(%s = "Tukey")))', xx))
-            posthoc_tukey = paste0('(',names(posthoc$test$tstat),') ', ez.p.apa(posthoc$test$pvalues,prefix=2),'; ',collapse='')
+            # adjusted mean, sd
+            avg = data.frame(effects::effect(x,m))
+            # sd=se*sqrt(n)
+            dev = data.frame(avg[[1]],avg$se*sqrt(n[[2]]))
         }
-        out = c(xx,yy,p,petasq2,F,dof,MSE,means,counts,means.apa,posthoc_tukey)
-        return(out)
+        means = sprintf('%s\t%.2f',avg[[1]],avg[[2]]) %>% paste0(collapse='\t')
+        raw.adj.mean.sd = sprintf('%.2f (%.2f)',avg[[2]],dev[[2]]) %>% paste0(collapse='\t')
+        # page 523 in Discovering Stats using R 1st
+        ss = sm[['Sum Sq']]
+        petasq2 = ss[2]/(ss[2]+ss[length(ss)])
+        ph = ez.esp('summary( multcomp::glht(m, linfct=multcomp::mcp("{x}" = "Tukey")) )')
+        posthoc_tukey = paste0('(',names(ph$test$tstat),') ', ez.p.apa(ph$test$pvalues,prefix=2),'; ',collapse='')
+
+        # df.bak with dropna, so na.rm needed
+        uniques_drop_na.x=length(unique(df.bak[[x]])); nlevels.x=nlevels(df.bak[[x]])
+        uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
+
+        return(list(y=y,x=x,covar=toString(covar),p=p,petasq2=petasq2,F=F,dof=dof,MSE=MSE,means=means,counts=counts,raw.adj.mean.sd=raw.adj.mean.sd,posthoc_tukey=posthoc_tukey,
+            uniques_drop_na.x=uniques_drop_na.x,nlevels.x=nlevels.x,
+            uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
+            ))
         }, error = function(e) {
-            if (error) message(sprintf('EZ Error: %s %s. NA returned.',xx,yy))
-            return(c(xx,yy,NA,NA,NA,NA,NA,NA,NA,NA,NA))
-        })
+            options(oldcons)  # make sure restore
+            if (error) ez.pprint(sprintf('EZ Error: aov(%s ~ %s). NA returned.',y,paste(c(x,covar), collapse = " + ")),color='red')
+            return(list(y=y,x=x,covar=toString(covar),p=NA_real_,petasq2=NA_real_,F=NA_real_,dof=NA_character_,MSE=NA_real_,means=NA_character_,counts=NA_character_,raw.adj.mean.sd=NA_character_,posthoc_tukey=NA_character_,
+                uniques_drop_na.x=NA,nlevels.x=NA,
+                uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
+                ))
+        }) # end tryCatch
     }
 
-    if (length(y)>=1 & length(x)==1) result = lapply(y,getStats,x=x,covar=covar,data=df,...)
-    if (length(y)==1 & length(x)>1) result = lapply(x,getStats,x=y,swap=T,covar=covar,data=df,...)
-    result = result %>% ez.dropna() %>% data.frame() %>% data.table::transpose()
-    names(result) <- c('x','y','p','petasq2','F','dof','MSE','means_or_adjmeans','counts','means.sd_or_adjmeans.se','posthoc_tukey')
-
-    if (plot & nrow(result)>0) {
-        bonferroniP = -log10(0.05/length(result[['p']]))
-        pp=lattice::xyplot(-log10(result$p) ~ result$petasq2,
-               xlab = list(expression(eta[p]^2), cex=labsize, fontfamily=TNR()),
-               ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
-               scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
-               type = "p", pch=16,
-               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily=TNR()),
-               col = "#e69f00",
-               ylim=c(-0.5,max(c(bonferroniP,-log10(result$p)))+0.5),
-               abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
-        )
-        print(pp)
-    }
+    result = mapply(getStats,y=y,x=x,MoreArgs=list(covar=covar, df=df,...),USE.NAMES=F)
+    result = data.frame(t(result))
+    result[] = lapply(result,unlist)
 
     for (method in pmethods) {
+        ind = which(!is.na(result[['p']]))
         result[[method]]=stats::p.adjust(result[['p']],method=method)
     }
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result$p.apa = ez.p.apa(result$p,prefix=0)
-    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, means.sd_or_adjmeans.se, posthoc_tukey last') %>% dplyr::arrange(p)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, raw.adj.mean.sd, posthoc_tukey last') %>% dplyr::arrange(p)
 
     if (view) {View(result)}
 
+    result.report = result %>% ez.dropna('p') %>% dplyr::arrange(orindex)
     if (report) {
-        result.report = result %>% dplyr::arrange(orindex)
         ez.print('------')
-        ez.print(ifelse(is.null(covar), 'mean (sd)', 'adjusted mean (se), sd=se*sqrt(n)'))
+        # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
         for (i in 1:nrow(result.report)){
-            ez.print(sprintf('%s,%s %s\t%s', result.report$x[i],result.report$y[i],result.report$means.sd_or_adjmeans.se[i],ez.p.apa(result.report$p[i],prefix=0)))
+            Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
+            ez.print(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0)))
         }
-        ez.print('------')
-        ez.print('posthoc Tukey')
+        ez.print('>>>>>>')
+        ez.print('Posthoc Tukey')
         for (i in 1:nrow(result.report)){
             ez.print(sprintf('%s', result.report$posthoc_tukey[i]))
         }
-        ez.print('------')
+        ez.print('<<<<<<')
         for (i in 1:nrow(result.report)){
+            Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (result.report$F[i] < 1) {
-                ez.print(sprintf('%s,%s\tF(%s) < 1', result.report$x[i],result.report$y[i],result.report$dof[i]))
+                ez.print(sprintf('aov(%s~%s): \tF(%s) < 1',Y,X,result.report$dof[i]))
             } else {
-                ez.print(sprintf('%s,%s\tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f', result.report$x[i],result.report$y[i],result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]))
+                ez.print(sprintf('aov(%s~%s): \tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]))
             }
         }
         ez.print('------')
     }
+
+    result.plot = result %>% ez.dropna('p')
+    if (plot & nrow(result.plot)>0) {
+        bonferroniP = -log10(0.05/length(result.plot[['p']]))
+        pp=lattice::xyplot(-log10(result.plot$p) ~ result.plot$petasq2,
+               xlab = list(expression(eta[p]^2), cex=labsize, fontfamily=TNR()),
+               ylab = list("-log10(p-Value)", cex=labsize, fontfamily=TNR()),
+               scales = list( x=list(cex=textsize, fontfamily=TNR()), y=list(cex=textsize, fontfamily=TNR()) ),
+               type = "p", pch=16,
+               main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=3, fontfamily=TNR()),
+               col = "#e69f00",
+               ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
+               abline=list(h=c(bonferroniP,-log10(0.05)),lty=2,lwd=2,col=c('black','darkgrey'))
+        )
+        print(pp)
+    }
+    
     return(invisible(result))
 }
 
-#' lm(y~x+cov), for many y and/or many x
-#' @description lm(y~x+cov), for many y and/or many x
+#' lm(y~x+covar), for many y and/or many x
+#' @description lm(y~x+covar), for many y and/or many x
 #' @param df a data frame. Internally go through dropna-->ez.2value-->scale
 #' \cr because of this, this function is not friendly to factors with 3 or more levels, although the default lm can handel factors nicely (yet complicatedly--eg, not easy to test significance)
 #' \cr by design, ez.2value to convert factors with 2 levels, such as sex, this generates the same results as lm by default, see note and example below for more
@@ -1000,7 +1013,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-            ez.print(sprintf('lm(%s~%s): semi r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+            ez.print(sprintf('lm(%s~%s): (semi) r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
         }
         ez.print('------')
     }
@@ -1027,8 +1040,8 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
 #' @export
 ez.regressions=ez.lms
 
-#' glm(y~x+cov,family=binomial), for many y and/or many x
-#' @description glm(y~x+cov,family=binomial), for many y and/or many x
+#' glm(y~x+covar,family=binomial), for many y and/or many x
+#' @description glm(y~x+covar,family=binomial), for many y and/or many x
 #' @param df a data frame. Internally go through dropna (no ez.2value, scale)
 #' \cr glm can handel factor by default (dummy coding)
 #' \cr I do not do standarization here, because 
