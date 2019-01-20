@@ -614,7 +614,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr 
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
 #' \cr 
-#' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared.
+#' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),labsize=2,textsize=1.5,titlesize=3,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
