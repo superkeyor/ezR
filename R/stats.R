@@ -499,7 +499,7 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
 #' @param type "pearson" or "spearman"
 #' @param print2screen print attention message, if NA present in r matrix; no effect if there is no NA
 #' @note underlying uses \code{\link[Hmisc]{rcorr}}, which uses pairwise deletion. Pairs with fewer than 2 non-missing values, or too small variance, have the r values set to NA
-#' \crIn the r matrix you get, you may get some NAs in the marix without warning)
+#' \cr In the r matrix you get, you may get some NAs in the marix without warning)
 #' @return r matrix
 #' @export
 ez.r = function(x,col=NULL,type="pearson",print2screen=T) {

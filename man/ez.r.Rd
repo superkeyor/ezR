@@ -23,5 +23,5 @@ r correlation
 }
 \note{
 underlying uses \code{\link[Hmisc]{rcorr}}, which uses pairwise deletion. Pairs with fewer than 2 non-missing values, or too small variance, have the r values set to NA
-\crIn the r matrix you get, you may get some NAs in the marix without warning)
+\cr In the r matrix you get, you may get some NAs in the marix without warning)
 }
