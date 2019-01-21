@@ -89,7 +89,7 @@ show.color = function(v,name,label=T){
         # list all color names (grDevices::colors())
         colors()
 
-        # rgb 2 hex
+        # rgb 2 hex 
         rgb(r,g,b,maxColorValue=255)
 
         # hex 2 rgb
