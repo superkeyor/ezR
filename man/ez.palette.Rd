@@ -7,7 +7,8 @@
 ez.palette(name, n, type = c("discrete", "continuous"), nn = 10)
 }
 \arguments{
-\item{name}{Name of desired palette. To see all names, call ez.palette() with no parameter}
+\item{name}{Name of desired palette. To see all names, call ez.palette() with no parameter. 
+To see all colors, call show.color()}
 
 \item{n}{Number of colors desired. Unfortunately most palettes now only
 have 4 or 5 colors. But hopefully we'll add more palettes soon. All color

@@ -133,7 +133,8 @@ show.color = function(v,name,label=T){
 
 #' palette generator
 #' @description palette generator
-#' @param name Name of desired palette. To see all names, call ez.palette() with no parameter
+#' @param name Name of desired palette. To see all names, call ez.palette() with no parameter. 
+#' To see all colors, call show.color()
 #' @param n Number of colors desired. Unfortunately most palettes now only
 #'   have 4 or 5 colors. But hopefully we'll add more palettes soon. All color
 #'   schemes are derived from the most excellent Tumblr blog:
