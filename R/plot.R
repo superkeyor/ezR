@@ -814,7 +814,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
     # also see trimws()--remove trailing/leading spaces
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
 
     violin = ifelse(violin, 'geom_violin() +', '')
@@ -994,7 +994,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
 ####************************************************************************************************
     # y|x+covar1+covar2 (anova1b)
     if (grepl('+',cmd,fixed=TRUE)) {
-        cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+        cmd = ez.trim(cmd)
         cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
         yy = cmd[1]
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
@@ -1034,7 +1034,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
     # also see trimws()--remove trailing/leading spaces
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
@@ -1185,7 +1185,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
     # also see trimws()--remove trailing/leading spaces
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
@@ -1310,7 +1310,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,f
     on.exit(options(oldOpts))
     # http://stackoverflow.com/a/25734388/2292993
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
 
     cmd = strsplit(cmd,"[|,]")[[1]]
     yy = trimws(cmd[1])
@@ -2306,7 +2306,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
     # play a trick
     cmd = gsub("||","*",cmd,fixed=TRUE)
 
@@ -2562,7 +2562,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
     n.type.stack = c('n.str','pct.str','n.pct.str','pct.n.str')[n.type]
     n.type.fill = c('pct.str','n.str','pct.n.str','n.pct.str')[n.type]
 
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
     # c("x1", "x2", "x3")
     if (length(cmd)>1) cmd=paste0(cmd,collapse='/')
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
@@ -2775,7 +2775,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
     n.type.fill = c('pct.str','n.str','pct.n.str','n.pct.str')[n.type]
 
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
     xx = cmd
     # note that xylab internally twised because of coord_polar()
     if (ylab=='') ylab=xx
@@ -2871,7 +2871,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
     hist.type=ifelse(!density, sprintf('geom_histogram(position="stack",stat="bin",alpha=%f,bins=%d,...)',alpha,bins), sprintf('geom_density(stat = "density",position = "identity",alpha=%f,...)',alpha))
 
-    cmd = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd, perl=TRUE)
+    cmd = ez.trim(cmd)
     cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
     # xx
     if (length(cmd)==1) {
