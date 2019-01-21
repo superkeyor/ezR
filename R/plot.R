@@ -974,7 +974,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -1235,7 +1235,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)) +
+                            scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
 
                             %s %s %s
                             %s %s
@@ -1263,7 +1263,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)) +
+                            scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
 
                             %s %s %s
                             %s %s
@@ -1583,7 +1583,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     # To show different groups with different colors, use a plot character (pch) between 21 and 25 and then set the background color to vary by group
     bg = 'black'  # color for data point
     if (!is.null(group)) {
-        colors = c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072")
+        colors = ez.palette("Zhu")
         bg=colors[1:nlevels(as.factor(x[[group]]))][as.factor(x[[group]])]
         pch = 20+as.numeric(x[[group]])
         x[group] <- NULL
@@ -2285,7 +2285,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
     lvls =  levels(df[[z]])
     pplist = list()
     shapes = rep(c(16,17,15,3,7,8),100)
-    colors = rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)
+    colors = rep(ez.palette("Zhu"),100)
     for (i in 1:length(lvls)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
         pplist[[i]] = ez.scatterplot(df = dftmp,
@@ -2438,7 +2438,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
-                  scale_color_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)) +
+                  scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
                   %s %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -2467,7 +2467,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,color="%s",shape=%d) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
-                  # scale_color_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)) +
+                  # scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
                   %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -2492,7 +2492,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                       pp=ggplot(df, aes(x=%s, y=%s)) +
                       geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
                       geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
-                      scale_color_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100)) +
+                      scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
                       %s %s %s %s
                       theme(legend.direction="%s") +
                       theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -2551,7 +2551,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
@@ -2766,7 +2766,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
@@ -2860,7 +2860,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
