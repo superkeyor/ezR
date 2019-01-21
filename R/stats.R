@@ -729,8 +729,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
     ylbl = ez.label.get(df,result$y); xlbl = ez.label.get(df,result$x)
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
-    result$p.apa = ez.p.apa(result$p,prefix=0)
-    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; p.apa, raw.adj.mean.sd, posthoc_tukey last') %>% dplyr::arrange(p)
+    result = ez.move(result,'orindex first; ylbl after y; xlbl after x; raw.adj.mean.sd, posthoc_tukey last') %>% dplyr::arrange(p)
 
     if (view) {View(result)}
 
