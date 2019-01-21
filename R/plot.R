@@ -117,7 +117,7 @@ show.color = function(v,name,label=T){
         p + scale_fill_gradientn(colors=ez.palette("matlabcolor2",nn=100)) 
     '))
 
-    palnames = ez.palette(); palcolors = lapply(palnames,ez.palette); names(palcolors) = palnames
+    palnames = ez.palette(); palcolors = lapply(palnames,ez.palette)
     # codes borrowed from ColorBrewer
     nr = length(palcolors); n = sapply(palcolors,length); nc = max(n)
     opar <- par(mgp=c(2,0.25,0))
