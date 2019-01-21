@@ -5,12 +5,12 @@
 \alias{ggcook}
 \title{Open Help Pages for ggplot2}
 \usage{
-gghelp(FUN)
+gghelp(ggfun)
 
 ggcook()
 }
 \arguments{
-\item{FUN}{A particular ggplot function to reference.  Default is the index
+\item{ggfun}{string, A particular ggplot function to reference.  Default is the index
 page.}
 }
 \value{

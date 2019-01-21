@@ -5,6 +5,299 @@
 ###**************************************************.
 ###*without ez. in the function name.
 ###**************************************************.
+#' creat shorthand for Times New Roman cross-platform
+#' @description creat shorthand for Times New Roman cross-platform
+#' @export
+# from https://github.com/trinker/plotflow/
+RMN = if (Sys.info()["sysname"]=="Windows") {windowsFonts(RMN=windowsFont("Times New Roman")); "RMN"} else "Times New Roman"
+
+#' show shape
+#' @description show shape
+#' @export
+show.shape = function(){
+    # http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r
+    print(ez.sprintf('
+    Use the pch= option to specify symbols to use when plotting points. 
+    Specify border color (col=) and fill color (bg=, for symbols 21 through 25).
+    ggplot2 default shapes (only 6): c(16,17,15,3,7,8)
+    '))
+
+    opar<-par()
+    par(font=2, mar=c(0.5,0,0,0))
+    y=rev(c(rep(1,6),rep(2,5), rep(3,5), rep(4,5), rep(5,5)))
+    x=c(rep(1:5,5),6)
+    plot(x, y, pch = 0:25, cex=1.5, ylim=c(1,5.5), xlim=c(1,6.5), 
+       axes=FALSE, xlab="", ylab="", col='red', bg="green")
+    text(x, y, labels=0:25, pos=3)
+    par(mar=opar$mar,font=opar$font)
+}
+
+#' show line
+#' @description show line
+#' @export
+show.line = function(){
+    print(ez.sprintf('
+    Use the lty= option to specify line types, lwd= width.
+    '))
+    # http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
+    par(mar=c(0,0,0,0))
+    # Set up the plotting area
+    plot(NA, xlim=c(0,1), ylim=c(6.5, -0.5),
+        xaxt="n", yaxt="n",
+        xlab=NA, ylab=NA )
+    # Draw the lines
+    for (i in 0:6) {
+        points(c(0.25,1), c(i,i), lty=i, lwd=2, type="l")
+    }
+    # Add labels
+    text(0, 0, "0. 'blank'"   ,  adj=c(0,.5))
+    text(0, 1, "1. 'solid'"   ,  adj=c(0,.5))
+    text(0, 2, "2. 'dashed'"  ,  adj=c(0,.5))
+    text(0, 3, "3. 'dotted'"  ,  adj=c(0,.5))
+    text(0, 4, "4. 'dotdash'" ,  adj=c(0,.5))
+    text(0, 5, "5. 'longdash'",  adj=c(0,.5))
+    text(0, 6, "6. 'twodash'" ,  adj=c(0,.5))
+}
+
+#' show color
+#' @description show color
+#' @param v color vector to show, if not provided, show all colors in ez.palette 
+#' @param name display name for the color v
+#' @param label T/F display actual color code for each v
+#' @export
+#' @examples
+#' show.color(ez.palette('Zhu'),'Current')
+show.color = function(v,name,label=T){
+    if (!missing(v)) {
+        # codes modified from https://github.com/karthik/wesanderson/blob/master/R/colors.R
+        n <- length(v)
+        opar <- par(mar = c(0.5, 0.5, 0.5, 0.5))
+        on.exit(par(opar))
+        image(1:n, 1, as.matrix(1:n), col = v,
+        xlab = "", ylab = "", xaxt = "n", yaxt = "n", bty = "n")
+        rect(0, 0.9, n + 1, 1.1, col = rgb(1, 1, 1, 0.8), border = NA)
+        if (label) text(1:n, 0.955, labels = v, cex = 1, family = "serif", col="dark grey")
+        if (!missing(name)) text((n + 1) / 2, 1, labels = name, cex = 1, family = "serif")
+        return(invisible(NULL))
+    }
+
+    print(ez.sprintf('
+        Tips on color:
+        # to see the color in a gg plot
+        ggplot_build(p)$data
+
+        # list all color names (grDevices::colors())
+        colors()
+
+        # rgb 2 hex
+        rgb(r,g,b,maxColorValue=255)
+
+        # hex 2 rgb
+        col2rgb("red"); col2rgb("#000d00")
+
+        # scale_color_manual (for points, lines, and outlines)
+        # scale_fill_manual (for boxes, bars, and ribbons)
+        scale_color_manual(values=cols,breaks=c("4","6","8"),labels=c("four","six","eight"))
+
+
+        # RColorBrewer or visit http://colorbrewer2.org/
+        RColorBrewer::display.brewer.all()
+        # Y1OrRd...Blues (Sequential palettes): interval data
+        # Set3...Accent (Qualitative palettes): nominal or categorical data
+        # Spectral...BrBG (Diverging palettes):
+
+        # returns 8 colors from Set3 (which supports up to 12 colors)
+        cols <- RColorBrewer::brewer.pal(8,"Set3")
+
+        # generates 100 colors based on the 9 from the Blues palette
+        colorRampPalette(brewer.pal(9,"Blues"))(100)
+
+        # Finally, ez.palette for my own color collections!
+        # note the "n" scale_fill_gradientn
+        p + scale_fill_gradientn(colors=ez.palette("matlabcolor2",nn=100)) 
+    '))
+
+    palnames = ez.palette(); palcolors = lapply(palnames,ez.palette); names(palcolors) = palnames
+    # codes borrowed from ColorBrewer
+    nr = length(palcolors); n = sapply(palcolors,length); nc = max(n)
+    opar <- par(mgp=c(2,0.25,0))
+    on.exit(par(opar))
+    plot(1,1,xlim=c(0,nc),ylim=c(0,nr), type="n", axes=FALSE, bty="n", xlab="",ylab="")
+    for(i in 1:nr){
+    nj <- n[i]
+    color = palcolors[[i]]
+    rect(xleft=0:(nj-1), ybottom=i-1, xright=1:nj, ytop=i-0.2, col=color, border="light grey")
+    }
+    text(rep(-0.1,nr),(1:nr)-0.6, labels=palnames, xpd=TRUE, adj=1)
+}
+
+#' palette generator
+#' @description palette generator
+#' @param name Name of desired palette. To see all names, call ez.palette() with no parameter
+#' @param n Number of colors desired. Unfortunately most palettes now only
+#'   have 4 or 5 colors. But hopefully we'll add more palettes soon. All color
+#'   schemes are derived from the most excellent Tumblr blog:
+#'   \href{http://wesandersonpalettes.tumblr.com/}{Wes Anderson Palettes}.
+#'   If omitted, uses all colours.
+#' @param type Either "continuous" or "discrete". Use continuous if you want
+#'   to automatically interpolate between colours.
+#' @param nn For a few palettes that natively support color interpolatation. See example below.
+#' @importFrom graphics rgb rect par image text
+#' @return A vector of colours.
+#' @export
+#' @examples
+#' ez.palette("Royal1")
+#' ez.palette("GrandBudapest1")
+#' ez.palette("Cavalcanti1")
+#' ez.palette("Cavalcanti1", 3)
+#'
+#' # If you need more colours than normally found in a palette, you
+#' # can use a continuous palette to interpolate between existing
+#' # colours
+#' pal <- ez.palette(name = "Zissou1", 21, type = "continuous")
+#' image(volcano, col = pal)
+#' 
+#' ez.palette('matlabcolor',nn=100)  # do not specify n and type
+#' ez.palette('matlabcolor2',nn=100)
+#' ez.palette('ggcolor',nn=10)
+#' rep(ez.palette('ggcolor',nn=10),2)
+#' 
+#' # in action
+#' qplot(Sepal.Length,
+#'       Petal.Length,
+#'       data = iris,
+#'       color = Species,
+#'       size = Petal.Width)+
+#'   theme_bw()+
+#'   scale_color_manual(values = ez.palette("Budapest1",3))
+ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
+    # codes modified from https://github.com/karthik/wesanderson/blob/master/R/colors.R
+    palettes <- list(
+        BottleRocket1 = c("#A42820", "#5F5647", "#9B110E", "#3F5151", "#4E2A1E", "#550307", "#0C1707"),
+        BottleRocket2 = c("#FAD510", "#CB2314", "#273046", "#354823", "#1E1E1E"),
+        Rushmore1 = c("#E1BD6D", "#EABE94", "#0B775E", "#35274A" ,"#F2300F"),
+        Rushmore = c("#E1BD6D", "#EABE94", "#0B775E", "#35274A" ,"#F2300F"),
+        Royal1 = c("#899DA4", "#C93312", "#FAEFD1", "#DC863B"),
+        Royal2 = c("#9A8822", "#F5CDB4", "#F8AFA8", "#FDDDA0", "#74A089"),
+        Zissou1 = c("#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00"),
+        Darjeeling1 = c("#FF0000", "#00A08A", "#F2AD00", "#F98400", "#5BBCD6"),
+        Darjeeling2 = c("#ECCBAE", "#046C9A", "#D69C4E", "#ABDDDE", "#000000"),
+        Chevalier1 = c("#446455", "#FDD262", "#D3DDDC", "#C7B19C"),
+        FantasticFox1 = c("#DD8D29", "#E2D200", "#46ACC8", "#E58601", "#B40F20"),
+        Moonrise1 = c("#F3DF6C", "#CEAB07", "#D5D5D3", "#24281A"),
+        Moonrise2 = c("#798E87", "#C27D38", "#CCC591", "#29211F"),
+        Moonrise3 = c("#85D4E3", "#F4B5BD", "#9C964A", "#CDC08C", "#FAD77B"),
+        Cavalcanti1 = c("#D8B70A", "#02401B", "#A2A475", "#81A88D", "#972D15"),
+        Budapest1 = c("#F1BB7B", "#FD6467", "#5B1A18", "#D67236"),
+        Budapest2 = c("#E6A0C4", "#C6CDF7", "#D8A499", "#7294D4"),
+        IsleofDogs1 = c("#9986A5", "#79402E", "#CCBA72", "#0F0D0E", "#D9D0D3", "#8D8680"),
+        IsleofDogs2 = c("#EAD3BF", "#AA9486", "#B6854D", "#39312F", "#1C1718"),
+        matlabcolor1 = colorRamps::matlab.like(nn),
+        matlabcolor2 = colorRamps::matlab.like2(nn),
+        # default ggplot color
+        ggcolor = hcl(h=seq(15,375,length=nn+1),l=65,c=100)[1:nn],
+        # from RColorBrewer
+        # f <- function(pal) RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[pal, "maxcolors"], pal)
+        # f("Set1")
+        Set3 = c('#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9', '#BC80BD', '#CCEBC5', '#FFED6F'),
+        Set2 = c('#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3', '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3'),
+        Set1 = c('#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF', '#999999'),
+        Pastel2 = c('#B3E2CD', '#FDCDAC', '#CBD5E8', '#F4CAE4', '#E6F5C9', '#FFF2AE', '#F1E2CC', '#CCCCCC'),
+        Pastel1 = c('#FBB4AE', '#B3CDE3', '#CCEBC5', '#DECBE4', '#FED9A6', '#FFFFCC', '#E5D8BD', '#FDDAEC', '#F2F2F2'),
+        Paired = c('#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C', '#FB9A99', '#E31A1C', '#FDBF6F', '#FF7F00', '#CAB2D6', '#6A3D9A', '#FFFF99', '#B15928'),
+        Dark2 = c('#1B9E77', '#D95F02', '#7570B3', '#E7298A', '#66A61E', '#E6AB02', '#A6761D', '#666666'),
+        Accent = c('#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'),
+        Set1Remix = c("#984EA3","#377EB8","#4DAF4A","#FF7F00","#E41A1C","#FFFF33","#A65628","#F781BF"),
+        # Jerry remixed from Set 3
+        Zhu = c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),
+        Printer = c("#FDAE61","#2B83BA","#D7191C","#ABDDA4","#FFFFBF"),
+        Colorblind = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00","#CC79A7","#000000")
+    )
+    if (missing(name)) {return(names(palettes))}
+
+    # use first one
+    type <- match.arg(type)
+
+    pal <- palettes[[name]]
+    if (is.null(pal))
+    stop("Palette not found.")
+
+    if (missing(n)) {
+    n <- length(pal)
+    }
+
+    if (type == "discrete" && n > length(pal)) {
+    stop("Number of requested colors greater than what palette can offer")
+    }
+
+    out <- switch(type,
+    continuous = grDevices::colorRampPalette(pal)(n),
+    discrete = pal[1:n]
+    )
+    out
+    # structure(out, class = "palette", name = name)
+}
+
+#' print out a ggplot object's history, cat(pp$gghistory)
+#' @description print out a ggplot object's history, cat(pp$gghistory)
+#' @export
+gghistory=function(pp){
+  cat(pp$gghistory)
+  return(invisible(pp$gghistory))
+}
+
+#' pass through a ggplot object, see examples
+#' @description pass through a ggplot object, see examples
+#' @note Assuming pp has $df (preferred to $data), or $data. Make sure $df/$data is what you intend to plot
+#' @examples df %>% ggplot1() %>% ggpass() %>% ggplot2()
+#' #however, if "+" is used in ggplot, use the following format
+#' df %>% {ggplot1(.,)+xlab('')} %>% ggpass() %>% {ggplot2(.,)+ylab('')}
+#' @export
+ggpass=function(pp){
+    if ('ggplot' %in% class(pp)) {
+        df=if (is.null(pp[['df']])) pp[['data']] else pp[['df']]
+        print(pp)
+        return(df)
+    }
+}
+
+#' Open Help Pages for ggplot2
+#' @description Open Help Pages for ggplot2
+#'
+#' \code{gghelp} - Open Hadely Wickham's ggplot2
+#' \href{https://ggplot2.tidyverse.org/reference/}{web page}.
+#'
+#' @param ggfun string, A particular ggplot function to reference.  Default is the index
+#' page.
+#' @return Opens a help web page.
+#' @rdname help
+#' @export
+#' @author \href{https://github.com/trinker/plotflow}{trinker/plotflow}
+#' @seealso \code{\link[utils]{browseURL}}
+#' @examples
+#' \dontrun{
+#' gghelp()
+#' gghelp("theme")
+#' ggcook()
+#' }
+gghelp <- function(ggfun) {
+    if(missing(ggfun)) ggfun <- "" else ggfun <- paste0(ggfun, ".html")
+    browseURL(sprintf("https://ggplot2.tidyverse.org/reference/%s", ggfun))
+}
+
+#' Open Help Pages for ggplot2
+#' @description Open Help Pages for ggplot2
+#'
+#' \code{ggcook} - Open Winston Chang's ggplot2
+#' \href{http://www.cookbook-r.com/Graphs/}{Cookbook for R page}.
+#'
+#' @rdname help
+#' @export
+ggcook <- function() {
+    ## browseURL("http://www.cookbook-r.com/Graphs/#graphs-with-ggplot2")
+    browseURL("http://www.cookbook-r.com/Graphs/")
+}
+
 #' Multiple plot function, accepts a list of ggplot (not plot) objects
 #' @description Multiple plot function, accepts a list of ggplot (not plot) objects
 #' @param plotlist objects can be passed in ..., or to plotlist (as a list of ggplot objects)
@@ -143,84 +436,6 @@ multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
     }
 }
 
-#' creat shorthand for Times New Roman cross-platform
-#' @description creat shorthand for Times New Roman cross-platform
-#' @export
-TNR = function(){
-    # from https://github.com/trinker/plotflow/
-    if (Sys.info()["sysname"] != "Windows") {
-        windowsFonts <- NULL
-    }
-
-    if (Sys.info()["sysname"] == "Windows") {
-        windowsFonts(RMN=windowsFont("Times New Roman"))
-        RMN <- "RMN"
-    } else {
-        RMN <- "Times New Roman"
-    }
-    return(RMN)
-}
-
-#' print out a ggplot object's history, cat(pp$gghistory)
-#' @description print out a ggplot object's history, cat(pp$gghistory)
-#' @export
-gghistory=function(pp){
-  cat(pp$gghistory)
-  return(invisible(pp$gghistory))
-}
-
-#' pass through a ggplot object, see examples
-#' @description pass through a ggplot object, see examples
-#' @note Assuming pp has $df (preferred to $data), or $data. Make sure $df/$data is what you intend to plot
-#' @examples df %>% ggplot1() %>% ggpass() %>% ggplot2()
-#' #however, if "+" is used in ggplot, use the following format
-#' df %>% {ggplot1(.,)+xlab('')} %>% ggpass() %>% {ggplot2(.,)+ylab('')}
-#' @export
-ggpass=function(pp){
-    if ('ggplot' %in% class(pp)) {
-        df=if (is.null(pp[['df']])) pp[['data']] else pp[['df']]
-        print(pp)
-        return(df)
-    }
-}
-
-#' Open Help Pages for ggplot2
-#' @description Open Help Pages for ggplot2
-#'
-#' \code{gghelp} - Open Hadely Wickham's ggplot2
-#' \href{https://ggplot2.tidyverse.org/reference/}{web page}.
-#'
-#' @param FUN A particular ggplot function to reference.  Default is the index
-#' page.
-#' @return Opens a help web page.
-#' @rdname help
-#' @export
-#' @author \href{https://github.com/trinker/plotflow}{trinker/plotflow}
-#' @seealso \code{\link[utils]{browseURL}}
-#' @examples
-#' \dontrun{
-#' gghelp()
-#' gghelp("theme")
-#' ggcook()
-#' }
-gghelp <- function(FUN) {
-    if(missing(FUN)) FUN <- "" else FUN <- paste0(FUN, ".html")
-    browseURL(sprintf("https://ggplot2.tidyverse.org/reference/%s", FUN))
-}
-
-#' Open Help Pages for ggplot2
-#' @description Open Help Pages for ggplot2
-#'
-#' \code{ggcook} - Open Winston Chang's ggplot2
-#' \href{http://www.cookbook-r.com/Graphs/}{Cookbook for R page}.
-#'
-#' @rdname help
-#' @export
-ggcook <- function() {
-    ## browseURL("http://www.cookbook-r.com/Graphs/#graphs-with-ggplot2")
-    browseURL("http://www.cookbook-r.com/Graphs/")
-}
-
 #' ggplot2 Theme for APA Publications
 #' @description ggplot2 Theme for APA Publications
 #'
@@ -235,24 +450,21 @@ ggcook <- function() {
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 theme_apa <- function(plot.box = FALSE, labsize = 18, textsize = 16){
-
     out <- theme(
-        plot.title=element_text(family=TNR(), size=labsize+2, face="bold", colour="black"),
-        legend.title = element_text(family=TNR(), colour="black"),
-        legend.text = element_text(family=TNR(), colour="black"),
-        strip.text.x = element_text(family=TNR(), size=textsize, colour="black"),
-        strip.text.y = element_text(family=TNR(), size=textsize, colour="black"),
-        axis.title.x=element_text(family=TNR(), size=labsize, face="bold", colour="black"),
-        axis.title.y=element_text(family=TNR(), size=labsize, face="bold", angle=90, colour="black"),
-        axis.text.x=element_text(family=TNR(), size=textsize, colour="black"),
-        axis.text.y=element_text(family=TNR(), size=textsize, colour="black"),
+        plot.title=element_text(family=RMN, size=labsize+2, face="bold", colour="black"),
+        legend.title = element_text(family=RMN, colour="black"),
+        legend.text = element_text(family=RMN, colour="black"),
+        strip.text.x = element_text(family=RMN, size=textsize, colour="black"),
+        strip.text.y = element_text(family=RMN, size=textsize, colour="black"),
+        axis.title.x=element_text(family=RMN, size=labsize, face="bold", colour="black"),
+        axis.title.y=element_text(family=RMN, size=labsize, face="bold", angle=90, colour="black"),
+        axis.text.x=element_text(family=RMN, size=textsize, colour="black"),
+        axis.text.y=element_text(family=RMN, size=textsize, colour="black"),
         axis.ticks=element_line(colour="black"))
-
     if (plot.box) {
         # panel.border without axis.line
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "black"))
-
     } else {
         # no panel.border but axis.line
         out <- out + theme(panel.background = element_rect(fill = NA,colour = NA),
@@ -260,7 +472,6 @@ theme_apa <- function(plot.box = FALSE, labsize = 18, textsize = 16){
                            axis.line = element_line(colour = "black"))
     }
     out
-
 }
 
 #' ggplot2 Theme for APA Publications
@@ -275,24 +486,21 @@ theme_apa <- function(plot.box = FALSE, labsize = 18, textsize = 16){
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 theme_apa_nosize <- function(plot.box = FALSE){
-
     out <- theme(
-        plot.title=element_text(family=TNR(), face="bold", colour="black"),
-        legend.title = element_text(family=TNR(), colour="black"),
-        legend.text = element_text(family=TNR(), colour="black"),
-        strip.text.x = element_text(family=TNR(), colour="black"),
-        strip.text.y = element_text(family=TNR(), colour="black"),
-        axis.title.x=element_text(family=TNR(), colour="black"),
-        axis.title.y=element_text(family=TNR(), angle=90, colour="black"),
-        axis.text.x=element_text(family=TNR(), colour="black"),
-        axis.text.y=element_text(family=TNR(), colour="black"),
+        plot.title=element_text(family=RMN, face="bold", colour="black"),
+        legend.title = element_text(family=RMN, colour="black"),
+        legend.text = element_text(family=RMN, colour="black"),
+        strip.text.x = element_text(family=RMN, colour="black"),
+        strip.text.y = element_text(family=RMN, colour="black"),
+        axis.title.x=element_text(family=RMN, colour="black"),
+        axis.title.y=element_text(family=RMN, angle=90, colour="black"),
+        axis.text.x=element_text(family=RMN, colour="black"),
+        axis.text.y=element_text(family=RMN, colour="black"),
         axis.ticks=element_line(colour="black"))
-
     if (plot.box) {
         # panel.border without axis.line
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "black"))
-
     } else {
         # no panel.border but axis.line
         out <- out + theme(panel.background = element_rect(fill = NA,colour = NA),
@@ -300,7 +508,6 @@ theme_apa_nosize <- function(plot.box = FALSE){
                            axis.line = element_line(colour = "black"))
     }
     out
-
 }
 
 #' A ggplot2 theme with no background and no gridlines.
@@ -331,36 +538,30 @@ theme_apa_nosize <- function(plot.box = FALSE){
 #'     scale_fill_gradient(low="grey10", high="white")
 #' }
 theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
-
     out <- theme(
             # Specify axis options
-            axis.text.x=element_text(family=TNR(), size=textsize, colour="grey55"),
-            axis.text.y=element_text(family=TNR(), size=textsize, colour="grey55"),
+            axis.text.x=element_text(family=RMN, size=textsize, colour="grey55"),
+            axis.text.y=element_text(family=RMN, size=textsize, colour="grey55"),
             axis.ticks=element_line(colour="grey55"),
-            axis.title.x=element_text(family=TNR(), size=labsize, face="bold", colour="grey55"),
-            axis.title.y=element_text(family=TNR(), size=labsize, face="bold", angle=90, colour="grey55"),
-
+            axis.title.x=element_text(family=RMN, size=labsize, face="bold", colour="grey55"),
+            axis.title.y=element_text(family=RMN, size=labsize, face="bold", angle=90, colour="grey55"),
             # Specify legend options
             legend.background=element_rect(color=NA, fill="black"),
             legend.key=element_rect(color=NA, fill="black"),
-            legend.title = element_text(family=TNR(), colour="grey55"),
-            legend.text = element_text(family=TNR(), colour="grey55"),
+            legend.title = element_text(family=RMN, colour="grey55"),
+            legend.text = element_text(family=RMN, colour="grey55"),
             legend.box.background = element_rect(colour = "grey55"),
-
             # Specify panel options
             panel.grid.major=element_blank(),
             panel.grid.minor=element_blank(),
-
             # Specify facetting options
             strip.background=element_rect(fill="grey30", color="grey10"),
-            strip.text.x = element_text(family=TNR(), size=textsize, colour="grey55"),
-            strip.text.y = element_text(family=TNR(), size=textsize, colour="grey55"),
-
+            strip.text.x = element_text(family=RMN, size=textsize, colour="grey55"),
+            strip.text.y = element_text(family=RMN, size=textsize, colour="grey55"),
             # Specify plot options
             plot.background=element_rect(color="black", fill="black"),
-            plot.title=element_text(family=TNR(), size=labsize+2, face="bold", colour="grey55")
+            plot.title=element_text(family=RMN, size=labsize+2, face="bold", colour="grey55")
     )
-
     if (plot.box) {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "grey55"))
@@ -369,7 +570,6 @@ theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
-
     ez.pprint("geom_point/line/errorbar/bar color cannot be changed with theme; modify original codes: color='grey55'")
     out
 
@@ -401,36 +601,30 @@ theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
 #'     scale_fill_gradient(low="grey10", high="white")
 #' }
 theme_blackapa_nosize <- function(plot.box = TRUE) {
-
     out <- theme(
             # Specify axis options
-            axis.text.x=element_text(family=TNR(), colour="grey55"),
-            axis.text.y=element_text(family=TNR(), colour="grey55"),
+            axis.text.x=element_text(family=RMN, colour="grey55"),
+            axis.text.y=element_text(family=RMN, colour="grey55"),
             axis.ticks=element_line(colour="grey55"),
-            axis.title.x=element_text(family=TNR(), face="bold", colour="grey55"),
-            axis.title.y=element_text(family=TNR(), face="bold", angle=90, colour="grey55"),
-
+            axis.title.x=element_text(family=RMN, face="bold", colour="grey55"),
+            axis.title.y=element_text(family=RMN, face="bold", angle=90, colour="grey55"),
             # Specify legend options
             legend.background=element_rect(color=NA, fill="black"),
             legend.key=element_rect(color=NA, fill="black"),
-            legend.title = element_text(family=TNR(), colour="grey55"),
-            legend.text = element_text(family=TNR(), colour="grey55"),
+            legend.title = element_text(family=RMN, colour="grey55"),
+            legend.text = element_text(family=RMN, colour="grey55"),
             legend.box.background = element_rect(colour = "grey55"),
-
             # Specify panel options
             panel.grid.major=element_blank(),
             panel.grid.minor=element_blank(),
-
             # Specify facetting options
             strip.background=element_rect(fill="grey30", color="grey10"),
-            strip.text.x = element_text(family=TNR(), colour="grey55"),
-            strip.text.y = element_text(family=TNR(), colour="grey55"),
-
+            strip.text.x = element_text(family=RMN, colour="grey55"),
+            strip.text.y = element_text(family=RMN, colour="grey55"),
             # Specify plot options
             plot.background=element_rect(color="black", fill="black"),
-            plot.title=element_text(family=TNR(), face="bold", colour="grey55")
+            plot.title=element_text(family=RMN, face="bold", colour="grey55")
     )
-
     if (plot.box) {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.border = element_rect(fill = NA, colour = "grey55"))
@@ -439,90 +633,8 @@ theme_blackapa_nosize <- function(plot.box = TRUE) {
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
-
     ez.pprint("geom_point/line/errorbar/bar color cannot be changed with theme; modify original codes: color='grey55'")
     out
-
-}
-
-#' "see" color
-#' @description "see" color
-#' @export
-ggshowcolor = function(vec){barplot(rep(1,length(vec)),axes=F,col=vec,names.arg=vec)}
-
-#' show some help info on color, run ggcolor() for usage
-#' @description show some help info on color, run ggcolor() for usage
-#' @export
-ggcolor = function(n=NULL){
-    if (!is.null(n)) {
-        # default ggplot colors
-        hues=seq(15,375,length=n+1)
-        return(hcl(h=hues,l=65,c=100)[1:n])
-    }
-
-    if (!require("RColorBrewer")) {
-        install.packages("RColorBrewer")
-    }
-    RColorBrewer::display.brewer.all()
-    cat('usage:
-        # to see the color in a gg plot
-        ggplot_build(p)$data
-
-        # default color
-        ggcolor(n)
-
-        # list all color names
-        colors()
-
-        # rgb 2 hex
-        rgb(r,g,b,maxColorValue=255)
-
-        # hex 2 rgb
-        col2rgb("red"); col2rgb("#000d00")
-
-        # "see" a color
-        ggshowcolor(vec)
-
-        # scale_color_manual (for points, lines, and outlines)
-        # scale_fill_manual (for boxes, bars, and ribbons)
-        scale_color_manual(values = cols, breaks = c("4", "6", "8"), labels = c("four", "six", "eight"))
-
-        # also visit http://colorbrewer2.org/
-        scale_color_manual(values=c("#fdae61","#2b83ba","#d7191c","#abdda4","#ffffbf")) #printer-friendly
-        scale_color_manual(values=rep(c("#e69f00", "#56b4e9", "#009e73", "#f0e442", "#0072b2", "#d55e00","#cc79a7","#0"),100)) #colorblind-friendly
-
-        # c("#984EA3","#377EB8","#4DAF4A","#FF7F00","#E41A1C","#FFFF33","#A65628","#F781BF","#999999")
-
-        RColorBrewer::display.brewer.all()
-        # Y1OrRd...Blues (Sequential palettes): interval data
-        # Set3...Accent (Qualitative palettes): nominal or categorical data
-        # Spectral...BrBG (Diverging palettes):
-
-        # returns 8 colors from Set3 (which supports up to 12 colors)
-        cols <- RColorBrewer::brewer.pal(8,"Set3")
-        c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072")
-
-        # generates 100 colors based on the 9 from the Blues palette
-        colorRampPalette(brewer.pal(9,"Blues"))(100)
-        \n')
-}
-
-#' change plot continous color to matlab like
-#' @description change plot continous color to matlab like
-#' @param n how many colors, e.g., 100 (default)
-#' @export
-#' @rdname matlabcolor
-#' @examples p + matlabcolor(), p + matlabcolor2()
-matlabcolor <- function(n=100){
-    out = scale_fill_gradientn(colors=colorRamps::matlab.like(n))
-    return(out)
-}
-
-#' @rdname matlabcolor
-#' @export
-matlabcolor2 <- function(n=100){
-    out = scale_fill_gradientn(colors=colorRamps::matlab.like2(n))
-    return(out)
 }
 
 ###**************************************************.
@@ -1364,8 +1476,8 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param tl.pos 'n' for no text label. NULL=corrplot default=auto(??). Character or logical, position of text labels. If character, it must be one of "lt", "ld", "td", "d" or "n". "lt"(default if type=="full") means left and top, "ld"(default if type=="lower") means left and diagonal, "td"(default if type=="upper") means top and diagonal(near), "d" means diagonal, "n" means don't add textlabel.
 #' @param tl.srt Numeric, for text label string rotation in degrees.
 #' @param addgrid.col grid color. The color of the grid. If NA, don't add grid. If NULL the default value is chosen. The default value depends on method, if method is color or shade, the color of the grid is NA, that is, not draw grid; otherwise "grey".
-#' @param addCoef.col Color of coefficients added on the graph (eg, 'black'). If NULL (default), add no coefficients. 
-#' @param diag Logical, whether display the correlation coefficients on the principal diagonal 
+#' @param addCoef.col Color of coefficients added on the graph (eg, 'black'). If NULL (default), add no coefficients.
+#' @param diag Logical, whether display the correlation coefficients on the principal diagonal
 #' @param method "circle", "square", "ellipse", "number", "pie", "shade" and "color". The areas of circles or squares show the absolute value of corresponding correlation coefficients. "color" = same areas
 #' @param order "original" for original order (default).
 #' \cr "AOE" for the angular order of the eigenvectors.
@@ -1418,29 +1530,29 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
 #' @description corrmap with scatterplot
 #' @param x a data.frame or matrix (pairwise deletion for NA)
 #' @param group factor col name, eg 'Species', to show different groups with different colors in scatterplot. This col will be excluded in the calcuation of r and scatterplot
-#' @param cex.cor If this is specified, this will change the size of the text in the correlations. this allows one to also change the size of the points in the plot by specifying the normal cex values. If just specifying cex, it will change the character size, if cex.cor is specified, then cex will function to change the point size. 
-#' @param lm Plot the linear fit rather than the LOESS smoothed fits. 
+#' @param cex.cor If this is specified, this will change the size of the text in the correlations. this allows one to also change the size of the points in the plot by specifying the normal cex values. If just specifying cex, it will change the character size, if cex.cor is specified, then cex will function to change the point size.
+#' @param lm Plot the linear fit rather than the LOESS smoothed fits.
 #' @param histogram Plot the middle diagonal histogram or show only variable name
-#' @param smooth TRUE draws loess smooths  
-#' @param scale  TRUE scales the correlation font by the size of the absolute correlation.  
-#' @param density TRUE shows the density plots as well as histograms 
-#' @param ellipses TRUE draws correlation ellipses 
-#' @param digits  the number of digits to show 
-#' @param method method parameter for the correlation ("pearson","spearman","kendall") 
-#' @param pch The plot character (defaults to 16 which is a '.'). 
-#' @param cor If plotting regressions, should correlations be reported? 
-#' @param jiggle Should the points be jittered before plotting? 
-#' @param factor factor for jittering (1-5) 
+#' @param smooth TRUE draws loess smooths
+#' @param scale  TRUE scales the correlation font by the size of the absolute correlation.
+#' @param density TRUE shows the density plots as well as histograms
+#' @param ellipses TRUE draws correlation ellipses
+#' @param digits  the number of digits to show
+#' @param method method parameter for the correlation ("pearson","spearman","kendall")
+#' @param pch The plot character (defaults to 16 which is a '.').
+#' @param cor If plotting regressions, should correlations be reported?
+#' @param jiggle Should the points be jittered before plotting?
+#' @param factor factor for jittering (1-5)
 #' @param hist.col What color should the histogram on the diagonal be? eg, cyan, light grey, "#00AFBB"
-#' @param show.points If FALSE, do not show the data points, just the data ellipses and smoothed functions 
-#' @param rug if TRUE (default) draw a rug under the histogram, if FALSE, don't draw the rug 
-#' @param breaks If specified, allows control for the number of breaks in the histogram (see the hist function) 
-#' @param smoother If TRUE, then smooth.scatter the data points  -- slow but pretty with lots of subjects  
+#' @param show.points If FALSE, do not show the data points, just the data ellipses and smoothed functions
+#' @param rug if TRUE (default) draw a rug under the histogram, if FALSE, don't draw the rug
+#' @param breaks If specified, allows control for the number of breaks in the histogram (see the hist function)
+#' @param smoother If TRUE, then smooth.scatter the data points  -- slow but pretty with lots of subjects
 #' @param stars For those people who like to show the significance of correlations by using magic astricks, set stars=TRUE p-values(0, 0.001, 0.01, 0.05, 1) <=> symbols("***", "**", "*", ".", " ")
-#' @param ci Draw confidence intervals for the linear model or for the loess fit, defaults to ci=FALSE. If confidence intervals are not drawn, the fitting function is lowess. 
-#' @param alpha The alpha level for the confidence regions, defaults to .05 
-#' @param ... other options for pairs  
-#' @export 
+#' @param ci Draw confidence intervals for the linear model or for the loess fit, defaults to ci=FALSE. If confidence intervals are not drawn, the fitting function is lowess.
+#' @param alpha The alpha level for the confidence regions, defaults to .05
+#' @param ... other options for pairs
+#' @export
 ez.scatterplots = function(x,group=NULL,histogram=TRUE,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=16,
 lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,rug=TRUE,breaks="Sturges",cex.cor=2,smoother=FALSE,stars=TRUE,ci=FALSE,alpha=.05,...) {
     # To show different groups with different colors, use a plot character (pch) between 21 and 25 and then set the background color to vary by group
@@ -1461,17 +1573,17 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     # swapped upper and lower panels
     # modified from https://cran.r-project.org/src/contrib/psych_1.8.12.tar.gz
     "fisherz" <-
-    function(rho)  {0.5*log((1+rho)/(1-rho)) }   #converts r to z  
+    function(rho)  {0.5*log((1+rho)/(1-rho)) }   #converts r to z
 
     "fisherz2r" <-
-      function(z) {(exp(2*z)-1)/(1+exp(2*z)) }   #converts back again 
+      function(z) {(exp(2*z)-1)/(1+exp(2*z)) }   #converts back again
 
-    "r.con" <- 
+    "r.con" <-
       function(rho,n,p=.95,twotailed=TRUE) {
        z <- fisherz(rho)
        if(n<4) {stop("number of subjects must be greater than 3")}
        se <- 1/sqrt(n-3)
-       p <- 1-p 
+       p <- 1-p
        if(twotailed) p<- p/2
        dif <- qnorm(p)
        zlow <- z + dif*se
@@ -1480,14 +1592,14 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
        ci <- fisherz2r(ci)
        return(ci)
        }
-      
-     "r.test" <- 
+
+     "r.test" <-
      function(n,r12, r34=NULL, r23=NULL,r13=NULL,r14=NULL,r24=NULL,n2=NULL,pooled=TRUE, twotailed=TRUE) {
       cl <- match.call()
       if(is.null(r34) & is.null(r13) & is.null(r23)) {  #test for significance of r
-         
-         t <- r12*sqrt(n-2)/sqrt(1-r12^2) 
-         p <- 1-pt(abs(t),n-2) 
+
+         t <- r12*sqrt(n-2)/sqrt(1-r12^2)
+         p <- 1-pt(abs(t),n-2)
          if(twotailed) p <- 2*p
          ci <- r.con(r12,n)
           result <-  list(Call=cl,Test="Test of significance of a  correlation",t=t,p=p,ci=ci)
@@ -1504,8 +1616,8 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
               if(twotailed) p <- 2*p
           result <-  list(Call=cl,Test="Test of difference between two independent correlations",z=z,p=p)
                                  }  else { if (is.null(r14)) {#compare two dependent correlations case 1
-          
-            
+
+
             #here we do two tests of dependent correlations
            #figure out whether correlations are being specified by name or order
             if(!is.null(r34)) {if(is.null(r13)) {r13 <- r34} }
@@ -1519,14 +1631,14 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
             if(twotailed) p <- 2*p
             #the call is ambiguous, we need to clarify it
             cl <- paste("r.test(n = ",n, ",  r12 = ",r12,",  r23 = ",r23,",  r13 = ",r13, ")")
-          result <- list(Call=cl,Test="Test of difference between two correlated  correlations",t=t2,p=p)                                  
+          result <- list(Call=cl,Test="Test of difference between two correlated  correlations",t=t2,p=p)
           } else { #compare two dependent correlations, case 2
            z12 <- fisherz(r12)
         z34 <- fisherz(r34)
-        pooledr <- (r12+r34)/2  
+        pooledr <- (r12+r34)/2
         if (pooled) { r1234=  1/2 * ((r13 - pooledr*r23)*(r24 - r23*pooledr) + (r14 - r13*pooledr)*(r23 - pooledr*r13)   +(r13 - r14*pooledr)*(r24 - pooledr*r14) + (r14 - pooledr*r24)*(r23 - r24*pooledr))
                    z1234 <- r1234/((1-pooledr^2)*(1-pooledr^2))} else {
-     
+
          r1234=  1/2 * ((r13 - r12*r23)*(r24 - r23*r34) + (r14 - r13*r34)*(r23 - r12*r13)   +(r13 - r14*r34)*(r24 - r12*r14) + (r14 - r12*r24)*(r23 - r24*r34))
          z1234 <- r1234/((1-r12^2)*(1-r34^2))}
           ztest  <- (z12-z34)* sqrt(n-3) /sqrt(2*(1-z1234))
@@ -1534,14 +1646,14 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
            p <- (1-pnorm(abs(z) ))
               if(twotailed) p <- 2*p
            result <-  list(Call=cl,Test="Test of difference between two dependent correlations",z=z,p=p)
-          
+
                                   }
                }
-        } 
+        }
         class(result) <- c("psych", "r.test")
         return(result)
        }
-       #Modified August 8, 2018 to flag improper input 
+       #Modified August 8, 2018 to flag improper input
 
 
     "my.pairs.panels" <-
@@ -1551,19 +1663,19 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     #First define all the "little functions" that are internal to pairs.panels.  This allows easier coding later
 
 
-    "panel.hist.density" <-    
+    "panel.hist.density" <-
     function(x,...) {
      if (!histogram) {return(NULL)}
      usr <- par("usr"); on.exit(par(usr))
-      # par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) )  
-         par(usr = c(usr[1] ,usr[2]  , 0, 1.5) )  
+      # par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) )
+         par(usr = c(usr[1] ,usr[2]  , 0, 1.5) )
        tax <- table(x)
        if(length(tax) < 11) {breaks <- as.numeric(names(tax))
         y <- tax/max(tax)
         interbreak <- min(diff(breaks))*(length(tax)-1)/41
         rect(breaks-interbreak,0,breaks + interbreak,y,col=hist.col)
         } else {
-       
+
         h <- hist(x,breaks=breaks, plot = FALSE)
         breaks <- h$breaks; nB <- length(breaks)
       y <- h$counts; y <- y/max(y)
@@ -1579,7 +1691,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
 
     "panel.cor" <-
     function(x, y, prefix="",...)  {
-         
+
              usr <- par("usr"); on.exit(par(usr))
              par(usr = c(0, 1, 0, 1))
             if(is.null(wt)) { r  <- cor(x, y,use="pairwise",method=method)} else {
@@ -1602,10 +1714,10 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
              text(0.5, 0.5, txt, cex = cex1) } else {
              text(0.5, 0.5, txt,cex=cex)}
          }
-            
-    "panel.smoother" <- 
-    function (x, y,pch = par("pch"), 
-        col.smooth = "red", span = 2/3, iter = 3, ...) 
+
+    "panel.smoother" <-
+    function (x, y,pch = par("pch"),
+        col.smooth = "red", span = 2/3, iter = 3, ...)
     {
       # usr <- par("usr"); on.exit(par(usr))
      #  par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , usr[3],usr[4]) )     #doensn't affect the axis correctly
@@ -1617,25 +1729,25 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
      if(jiggle) { x <- jitter(x,factor=factor)
       y <- jitter(y,factor=factor)}
      if(smoother) {smoothScatter(x,y,add=TRUE, nrpoints=0)} else {if(show.points)  points(x, y, pch = pch, ...)}
-     
+
         ok <- is.finite(x) & is.finite(y)
-        if (any(ok)) {   
-         if(smooth & ci) {   lml <- loess(y~x ,degree=1,family="symmetric") 
+        if (any(ok)) {
+         if(smooth & ci) {   lml <- loess(y~x ,degree=1,family="symmetric")
          tempx <- data.frame(x = seq(min(x,na.rm=TRUE),max(x,na.rm=TRUE),length.out=47))
-           pred <-  predict(lml,newdata=tempx,se=TRUE ) 
+           pred <-  predict(lml,newdata=tempx,se=TRUE )
 
      if(ci) {  upperci <- pred$fit + confid*pred$se.fit
-           lowerci <- pred$fit - confid*pred$se.fit 
+           lowerci <- pred$fit - confid*pred$se.fit
           polygon(c(tempx$x,rev(tempx$x)),c(lowerci,rev(upperci)),col=adjustcolor("light grey", alpha.f=0.8), border=NA)
             }
          lines(tempx$x,pred$fit,  col = col.smooth, ...)   #this is the loess fit
     }  else {if(smooth)  lines(stats::lowess(x[ok],y[ok],f=span,iter=iter),col=col.smooth) }}
-     if(ellipses)  draw.ellipse(xm,ym,xs,ys,r,col.smooth=col.smooth,...)  #this just draws the ellipse 
+     if(ellipses)  draw.ellipse(xm,ym,xs,ys,r,col.smooth=col.smooth,...)  #this just draws the ellipse
     }
 
-     "panel.lm" <- 
-    function (x, y,  pch = par("pch"), 
-        col.lm = "red",  ...) 
+     "panel.lm" <-
+    function (x, y,  pch = par("pch"),
+        col.lm = "red",  ...)
     {   ymin <- min(y)
         ymax <- max(y)
         xmin <- min(x)
@@ -1647,12 +1759,12 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
       if(smoother) {smoothScatter(x,y,add=TRUE, nrpoints=0)} else {if(show.points) {points(x, y, pch = pch,ylim = ylim, xlim= xlim, ...)}}# if(show.points) points(x, y, pch = pch,ylim = ylim, xlim= xlim,...)
         ok <- is.finite(x) & is.finite(y)
         if (any(ok)) {
-          lml <- lm(y ~ x)  
-        
-           
+          lml <- lm(y ~ x)
+
+
         if(ci) {
              tempx <- data.frame(x = seq(min(x,na.rm=TRUE),max(x,na.rm=TRUE),length.out=47))
-             pred <-  predict.lm(lml,newdata=tempx,se.fit=TRUE)  #from Julian Martins 
+             pred <-  predict.lm(lml,newdata=tempx,se.fit=TRUE)  #from Julian Martins
              upperci <- pred$fit + confid*pred$se.fit
              lowerci <- pred$fit - confid*pred$se.fit
              polygon(c(tempx$x,rev(tempx$x)),c(lowerci,rev(upperci)),col=adjustcolor("light grey", alpha.f=0.8), border=NA)
@@ -1675,22 +1787,22 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
      angles <- (0:segments) * 2 * pi/segments
          unit.circle <- cbind(cos(angles), sin(angles))
        if(!is.na(r)) {
-       if (abs(r)>0 )theta <- sign(r)/sqrt(2) else theta=1/sqrt(2) 
-     
+       if (abs(r)>0 )theta <- sign(r)/sqrt(2) else theta=1/sqrt(2)
+
      shape <- diag(c(sqrt(1+r),sqrt(1-r))) %*% matrix(c(theta,theta,-theta,theta),ncol=2,byrow=TRUE)
-        ellipse <- unit.circle %*% shape 
+        ellipse <- unit.circle %*% shape
         ellipse[,1] <- ellipse[,1]*xs + x
         ellipse[,2] <- ellipse[,2]*ys + y
         if(show.points) points(x,y,pch=19,col=col.smooth,cex=1.5 )  #draw the mean
-        lines(ellipse, ...)   }    
+        lines(ellipse, ...)   }
      }
 
     "panel.ellipse" <-
-    function (x, y,   pch = par("pch"), 
-         col.smooth = "red", ...) 
+    function (x, y,   pch = par("pch"),
+         col.smooth = "red", ...)
      { segments=51
       usr <- par("usr"); on.exit(par(usr))
-      par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) ) 
+      par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) )
      xm <- mean(x,na.rm=TRUE)
       ym <- mean(y,na.rm=TRUE)
       xs <- sd(x,na.rm=TRUE)
@@ -1699,19 +1811,19 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
        if(jiggle) { x <- jitter(x,factor=factor)
       y <- jitter(y,factor=factor)}
       if(smoother) {smoothScatter(x,y,add=TRUE, nrpoints=0)} else {if(show.points) {points(x, y, pch = pch, ...)}}
-        
+
      angles <- (0:segments) * 2 * pi/segments
         unit.circle <- cbind(cos(angles), sin(angles))
          if(!is.na(r)) {
-      if (abs(r)>0 ) theta <- sign(r)/sqrt(2) else theta=1/sqrt(2) 
+      if (abs(r)>0 ) theta <- sign(r)/sqrt(2) else theta=1/sqrt(2)
 
       shape <- diag(c(sqrt(1+r),sqrt(1-r))) %*% matrix(c(theta,theta,-theta,theta),ncol=2,byrow=TRUE)
-       ellipse <- unit.circle %*% shape 
+       ellipse <- unit.circle %*% shape
        ellipse[,1] <- ellipse[,1]*xs + xm
        ellipse[,2] <- ellipse[,2]*ys + ym
        points(xm,ym,pch=19,col=col.smooth,cex=1.5 )  #draw the mean
-      if(ellipses) lines(ellipse, ...) 
-         }    
+      if(ellipses) lines(ellipse, ...)
+         }
     }
     #######
 
@@ -1719,35 +1831,35 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     ######
     #The original organization was very clunky, but has finally been cleaned up with lots of extra comments removed  (8/13/17)
 
-    old.par <- par(no.readonly = TRUE) # save default, for resetting... 
+    old.par <- par(no.readonly = TRUE) # save default, for resetting...
     on.exit(par(old.par))     #and when we quit the function, restore to original values
 
 
-    if(missing(cex.cor)) cex.cor <- 1   #this allows us to scale the points separately from the correlations 
+    if(missing(cex.cor)) cex.cor <- 1   #this allows us to scale the points separately from the correlations
 
     for(i in 1:ncol(x)) {  #treat character data as numeric
             if(is.character(x[[i]] ))  { x[[i]] <- as.numeric(as.factor(x[[i]]) )
                                 colnames(x)[i] <- paste(colnames(x)[i],"*",sep="")}
                }
-     n.obs <- nrow(x)     
+     n.obs <- nrow(x)
      confid <- qt(1-alpha/2,n.obs-2)   #used in finding confidence intervals for regressions and loess
-      
+
      if(!lm) { #the basic default is here
                if(cor) {
                 pairs(x, diag.panel = panel.hist.density, lower.panel = panel.cor
                 , upper.panel = panel.smoother, pch=pch, ...)} else {
-                pairs(x, diag.panel = panel.hist.density, lower.panel = panel.smoother, upper.panel = panel.smoother, pch=pch, ...)} 
-        
+                pairs(x, diag.panel = panel.hist.density, lower.panel = panel.smoother, upper.panel = panel.smoother, pch=pch, ...)}
+
         } else { #lm is TRUE
             if(!cor)  { #this case does not show the correlations, but rather shows the regression lines above and below the diagonal
-                        pairs(x, diag.panel = panel.hist.density, lower.panel = panel.lm, upper.panel = panel.lm, pch=pch, ...)   
+                        pairs(x, diag.panel = panel.hist.density, lower.panel = panel.lm, upper.panel = panel.lm, pch=pch, ...)
                       } else {  #the normal case is to show the regressions below and the rs above
-                        pairs(x, diag.panel = panel.hist.density, lower.panel = panel.cor, upper.panel = panel.lm,pch=pch,  ...)   
-            
+                        pairs(x, diag.panel = panel.hist.density, lower.panel = panel.cor, upper.panel = panel.lm,pch=pch,  ...)
+
             }
                    }
 
-    }   #end of pairs.panels 
+    }   #end of pairs.panels
     ####************************************************************************************************
                                      ####*end*####
     ####************************************************************************************************
@@ -2152,7 +2264,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
     for (i in 1:length(lvls)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
         pplist[[i]] = ez.scatterplot(df = dftmp,
-            cmd=cmd, line.color=colors[i], point.color=colors[i], point.shape=shapes[i], 
+            cmd=cmd, line.color=colors[i], point.color=colors[i], point.shape=shapes[i],
             rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse)
     }
     ez.pprint('an invisible plotlist returned, call ggmultiplot(plotlist)')
@@ -2293,7 +2405,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
       rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
       rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
       # http://stackoverflow.com/a/27959418/2292993
-      rp = ifelse(rp,sprintf('geom_label(family = TNR(),size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
+      rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
       rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
       ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
@@ -2321,7 +2433,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
       rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
       rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
       # http://stackoverflow.com/a/27959418/2292993
-      rp = ifelse(rp,sprintf('geom_label(family = TNR(),size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
+      rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
       rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f) +',rug.size),'')
       ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm") +'),'')
@@ -2347,7 +2459,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
           df=ez.dropna(df,c(yy,xx,zz))
           rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
           rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
-          rp = ifelse(rp,sprintf('geom_label(family = TNR(),size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
+          rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
           se = ifelse(se,'TRUE','FALSE')
           rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
           ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
