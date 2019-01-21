@@ -9,7 +9,7 @@ show.color(v, name, label = T)
 \arguments{
 \item{v}{color vector to show, if not provided, show all colors in ez.palette}
 
-\item{name}{display name for the color v}
+\item{name}{display name for the color v (optional)}
 
 \item{label}{T/F display actual color code for each v}
 }

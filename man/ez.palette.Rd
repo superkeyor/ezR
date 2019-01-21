@@ -7,31 +7,31 @@
 ez.palette(name, n, type = c("discrete", "continuous"), nn = 10)
 }
 \arguments{
-\item{name}{Name of desired palette. To see all names, call ez.palette() with no parameter. 
-To see all colors, call show.color()}
+\item{name}{Name of desired palette. To see all colors, call ez.palette() with no parameter.}
 
 \item{n}{Number of colors desired. Unfortunately most palettes now only
 have 4 or 5 colors. But hopefully we'll add more palettes soon. All color
 schemes are derived from the most excellent Tumblr blog:
 \href{http://wesandersonpalettes.tumblr.com/}{Wes Anderson Palettes}.
-If omitted, uses all colours.}
+If omitted, uses all colors}
 
 \item{type}{Either "continuous" or "discrete". Use continuous if you want
-to automatically interpolate between colours.}
+to automatically interpolate between colors}
 
 \item{nn}{For a few palettes that natively support color interpolatation. See example below.}
 }
 \value{
-A vector of colours.
+A vector of colors. To see the colors, call show.color()
 }
 \description{
 palette generator
 }
 \examples{
 ez.palette("Royal1")
-ez.palette("Budapest1")
+ez.palette("GrandBudapest1")
 ez.palette("Cavalcanti1")
 ez.palette("Cavalcanti1", 3)
+show.color(ez.palette("Cavalcanti1", 3))
 
 # If you need more colours than normally found in a palette, you
 # can use a continuous palette to interpolate between existing
@@ -51,5 +51,5 @@ qplot(Sepal.Length,
       color = Species,
       size = Petal.Width)+
 theme_bw()+
-scale_color_manual(values = ez.palette("Budapest1",3))
+scale_color_manual(values = ez.palette("GrandBudapest1",3))
 }

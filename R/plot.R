@@ -21,7 +21,6 @@ show.shape = function(){
     Specify border color (col=) and fill color (bg=, for symbols 21 through 25).
     ggplot2 default shapes (only 6): c(16,17,15,3,7,8)
     '))
-
     opar<-par()
     par(font=2, mar=c(0.5,0,0,0))
     y=rev(c(rep(1,6),rep(2,5), rep(3,5), rep(4,5), rep(5,5)))
@@ -30,6 +29,7 @@ show.shape = function(){
        axes=FALSE, xlab="", ylab="", col='red', bg="green")
     text(x, y, labels=0:25, pos=3)
     par(mar=opar$mar,font=opar$font)
+    par(opar)
 }
 
 #' show line
@@ -40,7 +40,7 @@ show.line = function(){
     Use the lty= option to specify line types, lwd= width.
     '))
     # http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
-    par(mar=c(0,0,0,0))
+    opar = par(mar=c(0,0,0,0))
     # Set up the plotting area
     plot(NA, xlim=c(0,1), ylim=c(6.5, -0.5),
         xaxt="n", yaxt="n",
@@ -57,12 +57,13 @@ show.line = function(){
     text(0, 4, "4. 'dotdash'" ,  adj=c(0,.5))
     text(0, 5, "5. 'longdash'",  adj=c(0,.5))
     text(0, 6, "6. 'twodash'" ,  adj=c(0,.5))
+    par(opar)
 }
 
 #' show color
 #' @description show color
 #' @param v color vector to show, if not provided, show all colors in ez.palette 
-#' @param name display name for the color v
+#' @param name display name for the color v (optional)
 #' @param label T/F display actual color code for each v
 #' @export
 #' @examples
@@ -82,74 +83,54 @@ show.color = function(v,name,label=T){
     }
 
     print(ez.sprintf('
-        Tips on color:
-        # to see the color in a gg plot
-        ggplot_build(p)$data
-
-        # list all color names (grDevices::colors())
-        colors()
-
-        # rgb 2 hex 
-        rgb(r,g,b,maxColorValue=255)
-
-        # hex 2 rgb
-        col2rgb("red"); col2rgb("#000d00")
+    Tips on color:
+        # list all color names                      | # to see the color in a gg plot
+            colors()                                |     ggplot_build(p)$data
+        # rgb 2 hex                                 | # hex 2 rgb
+            rgb(r,g,b,maxColorValue=255)            |     col2rgb("red"); col2rgb("#000d00")
+        # Generates/Interpolates n colors           | # rgb to grey
+            colorRampPalette(c("black","white"))(36)|     col2grey(col)
 
         # scale_color_manual (for points, lines, and outlines)
         # scale_fill_manual (for boxes, bars, and ribbons)
         scale_color_manual(values=cols,breaks=c("4","6","8"),labels=c("four","six","eight"))
-
 
         # RColorBrewer or visit http://colorbrewer2.org/
         RColorBrewer::display.brewer.all()
         # Y1OrRd...Blues (Sequential palettes): interval data
         # Set3...Accent (Qualitative palettes): nominal or categorical data
         # Spectral...BrBG (Diverging palettes):
-
-        # returns 8 colors from Set3 (which supports up to 12 colors)
+        # Returns 8 colors from Set3 (which supports up to 12 colors)
         cols <- RColorBrewer::brewer.pal(8,"Set3")
-
-        # generates 100 colors based on the 9 from the Blues palette
-        colorRampPalette(brewer.pal(9,"Blues"))(100)
 
         # Finally, ez.palette for my own color collections!
         # note the "n" scale_fill_gradientn
         p + scale_fill_gradientn(colors=ez.palette("matlabcolor2",nn=100)) 
     '))
 
-    palnames = ez.palette(); palcolors = lapply(palnames,ez.palette)
-    # codes borrowed from ColorBrewer
-    nr = length(palcolors); n = sapply(palcolors,length); nc = max(n)
-    opar <- par(mgp=c(2,0.25,0))
-    on.exit(par(opar))
-    plot(1,1,xlim=c(0,nc),ylim=c(0,nr), type="n", axes=FALSE, bty="n", xlab="",ylab="")
-    for(i in 1:nr){
-    nj <- n[i]
-    color = palcolors[[i]]
-    rect(xleft=0:(nj-1), ybottom=i-1, xright=1:nj, ytop=i-0.2, col=color, border="light grey")
-    }
-    text(rep(-0.1,nr),(1:nr)-0.6, labels=palnames, xpd=TRUE, adj=1)
+    print(ez.palette())
+    return(invisible(NULL))
 }
 
 #' palette generator
 #' @description palette generator
-#' @param name Name of desired palette. To see all names, call ez.palette() with no parameter. 
-#' To see all colors, call show.color()
+#' @param name Name of desired palette. To see all colors, call ez.palette() with no parameter. 
 #' @param n Number of colors desired. Unfortunately most palettes now only
 #'   have 4 or 5 colors. But hopefully we'll add more palettes soon. All color
 #'   schemes are derived from the most excellent Tumblr blog:
 #'   \href{http://wesandersonpalettes.tumblr.com/}{Wes Anderson Palettes}.
-#'   If omitted, uses all colours.
+#'   If omitted, uses all colors
 #' @param type Either "continuous" or "discrete". Use continuous if you want
-#'   to automatically interpolate between colours.
+#'   to automatically interpolate between colors
 #' @param nn For a few palettes that natively support color interpolatation. See example below.
-#' @return A vector of colours.
+#' @return A vector of colors. To see the colors, call show.color()
 #' @export
 #' @examples
 #' ez.palette("Royal1")
-#' ez.palette("Budapest1")
+#' ez.palette("GrandBudapest1")
 #' ez.palette("Cavalcanti1")
 #' ez.palette("Cavalcanti1", 3)
+#' show.color(ez.palette("Cavalcanti1", 3))
 #'
 #' # If you need more colours than normally found in a palette, you
 #' # can use a continuous palette to interpolate between existing
@@ -169,7 +150,7 @@ show.color = function(v,name,label=T){
 #'       color = Species,
 #'       size = Petal.Width)+
 #' theme_bw()+
-#' scale_color_manual(values = ez.palette("Budapest1",3))
+#' scale_color_manual(values = ez.palette("GrandBudapest1",3))
 ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
     # codes modified from https://github.com/karthik/wesanderson/blob/master/R/colors.R
     palettes <- list(
@@ -188,8 +169,8 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
         Moonrise2 = c("#798E87", "#C27D38", "#CCC591", "#29211F"),
         Moonrise3 = c("#85D4E3", "#F4B5BD", "#9C964A", "#CDC08C", "#FAD77B"),
         Cavalcanti1 = c("#D8B70A", "#02401B", "#A2A475", "#81A88D", "#972D15"),
-        Budapest1 = c("#F1BB7B", "#FD6467", "#5B1A18", "#D67236"),
-        Budapest2 = c("#E6A0C4", "#C6CDF7", "#D8A499", "#7294D4"),
+        GrandBudapest1 = c("#F1BB7B", "#FD6467", "#5B1A18", "#D67236"),
+        GrandBudapest2 = c("#E6A0C4", "#C6CDF7", "#D8A499", "#7294D4"),
         IsleofDogs1 = c("#9986A5", "#79402E", "#CCBA72", "#0F0D0E", "#D9D0D3", "#8D8680"),
         IsleofDogs2 = c("#EAD3BF", "#AA9486", "#B6854D", "#39312F", "#1C1718"),
         matlabcolor1 = colorRamps::matlab.like(nn),
@@ -210,10 +191,27 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
         Set1Remix = c("#984EA3","#377EB8","#4DAF4A","#FF7F00","#E41A1C","#FFFF33","#A65628","#F781BF"),
         # Jerry remixed from Set 3
         Zhu = c("#B3DE69","#80B1D3","#BC80BD","#FFED6F","#FB8072"),
+        # well, I tested with col2grey(), not so true. Not sure about actual bw printer
         Printer = c("#FDAE61","#2B83BA","#D7191C","#ABDDA4","#FFFFBF"),
         Colorblind = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00","#CC79A7","#000000")
     )
-    if (missing(name)) {return(names(palettes))}
+    if (missing(name)) {
+        palnames = names(palettes); palcolors = palettes
+        # codes borrowed from ColorBrewer
+        # nr row, nc col
+        nr = length(palcolors); n = sapply(palcolors,length); nc = max(n)
+        opar <- par(mgp=c(2,0.25,0))
+        on.exit(par(opar))
+        plot(1, 1, xlim=c(0,(nc+1)), ylim=c(0,nr), type="n", axes=FALSE, bty="n", xlab="",ylab="")
+        for(i in 1:nr){
+        nj <- n[i]
+        color = palcolors[[i]]
+        rect(xleft=1:nj, ybottom=i-1, xright=2:(nj+1), ytop=i-0.2, col=color, border="light grey")
+        }
+        # (x,nr); (1:nr)-y, where y between ybottom and ytop
+        text(rep(0.8,nr),(1:nr)-0.6, labels=palnames, xpd=TRUE, adj=1)
+        return(palnames)
+    }
 
     # use first one
     type <- match.arg(type)
@@ -237,6 +235,33 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
     out
     # structure(out, class = "palette", name = name)
 }
+
+#' Convert colors to grey/grayscale so that you can see how your plot will look after photocopying or printing to a non-color printer.
+#' @description Convert colors to grey/grayscale so that you can see how your plot will look after photocopying or printing to a non-color printer.
+#' @param col vector of any of the three kind of R colors, i.e., either a color name (an element of colors()), a hexadecimal string of the form "#rrggbb" or "#rrggbbaa" (see rgb), or an integer i meaning palette()[i]. Non-string values are coerced to integer.
+#' @return A vector of colors (greys) corresponding to the input colors.
+#' @note Converts colors to greyscale using the formula grey = 0.3*red + 0.59*green + 0.11*blue. This allows you to see how your color plot will approximately look when printed on a non-color printer or photocopied.
+#' @examples
+#' par(mfcol=c(2,2))
+#' tmp <- 1:3
+#' names(tmp) <- c('red','green','blue')
+#' 
+#' barplot(tmp, col=c('red','green','blue'))
+#' barplot(tmp, col=ColToGrey(c('red','green','blue')))
+#' 
+#' barplot(tmp, col=c('red','#008100','#3636ff'))
+#' barplot(tmp, col=ColToGrey(c('red','#008100','#3636ff')))
+#' @export
+col2grey <- function(col){
+    # https://github.com/cran/DescTools/blob/master/R/DescTools.r
+    rgb <- col2rgb(col)
+    g <- rbind( c(0.3, 0.59, 0.11) ) %*% rgb
+    rgb(g, g, g, maxColorValue=255)
+}
+
+#' @rdname col2grey
+#' @export
+col2gray = col2grey
 
 #' print out a ggplot object's history, cat(pp$gghistory)
 #' @description print out a ggplot object's history, cat(pp$gghistory)

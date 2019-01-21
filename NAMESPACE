@@ -3,6 +3,8 @@
 export("%!in%")
 export(RMN)
 export(and)
+export(col2gray)
+export(col2grey)
 export(coord_radar)
 export(exit)
 export(ez.2char)
