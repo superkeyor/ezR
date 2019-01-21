@@ -616,10 +616,10 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr 
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),lab.size=18,text.size=16,error=T,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
-    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
+    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt ; point.size = point.size/bp
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
@@ -636,7 +636,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
                        xlab = list(expression(eta[p]^2), cex=lab.size, fontfamily=RMN),
                        ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                        scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-                       type = "p", pch=16,
+                       type = "p", pch=point.shape, cex=point.size,
                        main = list(xx, cex=title.size, fontfamily=RMN),
                        col = "#e69f00",
                        ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -766,7 +766,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
                xlab = list(expression(eta[p]^2), cex=lab.size, fontfamily=RMN),
                ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-               type = "p", pch=16,
+               type = "p", pch=point.shape, cex=point.size,
                main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=title.size, fontfamily=RMN),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -851,11 +851,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' lm(y~x+zzz) %>% summary
 #' # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
 #' @export
-ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,error=T,...) {
+ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     model = unique(c('lm',model)) # always include lm
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
-    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
+    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt ; point.size = point.size/bp
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
@@ -872,7 +872,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
                    xlab = list("Standardized Coefficient", cex=lab.size, fontfamily=RMN),
                    ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                    scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-                   type = "p", pch=16,
+                   type = "p", pch=point.shape, cex=point.size,
                    main = list(yy, cex=title.size, fontfamily=RMN),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -1029,7 +1029,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
                xlab = list("Standardized Coefficient", cex=lab.size, fontfamily=RMN),
                ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-               type = "p", pch=16,
+               type = "p", pch=point.shape, cex=point.size,
                main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=title.size, fontfamily=RMN),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -1070,10 +1070,10 @@ ez.regressions=ez.lms
 #' \cr
 #' \cr dof
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,error=T,...) {
+ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
-    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
+    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt ; point.size = point.size/bp
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
@@ -1090,7 +1090,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
                    xlab = list("log2(Odds Ratio)", cex=lab.size, fontfamily=RMN),
                    ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                    scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-                   type = "p", pch=16,
+                   type = "p", pch=point.shape, cex=point.size,
                    main = list(yy, cex=title.size, fontfamily=RMN),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -1173,7 +1173,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
                xlab = list("log2(Odds Ratio)", cex=lab.size, fontfamily=RMN),
                ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-               type = "p", pch=16,
+               type = "p", pch=point.shape, cex=point.size,
                main = list(ifelse((length(y)>=1 & length(x)==1),x,y), cex=title.size, fontfamily=RMN),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -1221,7 +1221,6 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
                    xlab = list("Variable", cex=lab.size, fontfamily=RMN),
                    ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                    scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-                   type = "p", pch=16,
                    main = list(xx, cex=title.size, fontfamily=RMN),
                    col = "#e69f00",
                    ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -1291,7 +1290,6 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
                xlab = list("Variable", cex=lab.size, fontfamily=RMN),
                ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-               type = "p", pch=16,
                main = list(x, cex=title.size, fontfamily=RMN),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -1305,7 +1303,6 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
                xlab = list("Variable", cex=lab.size, fontfamily=RMN),
                ylab = list("-log10(p-Value)", cex=lab.size, fontfamily=RMN),
                scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-               type = "p", pch=16,
                main = list(y, cex=title.size, fontfamily=RMN),
                col = "#e69f00",
                ylim=c(-0.5,max(c(bonferroniP,-log10(result.plot$p)))+0.5),
@@ -1415,7 +1412,7 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
 #' @param fixedVars vars you must have remained. (does not matter if it includes targetVar or not)
 #' @return returns a new data frame
 #' @export
-ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,lab.size=2.5,text.size=1.5) {
+ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,point.size=10,point.shape=16,lab.size=18,text.size=16) {
     if (!is.null(targetVar)) {targetVar=ez.selcol(df,targetVar); df %<>% ez.move(sprintf('%s first',targetVar))}
     if (!is.null(fixedVars)) {fixedVars = ez.selcol(df,fixedVars); fixedVars = dplyr::setdiff(fixedVars,targetVar)}
 
@@ -1490,7 +1487,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,lab.size=2.5,text.size=1.5)
                   xlab = list("Number of Variables Kept", cex=lab.size, fontfamily=RMN),
                   ylab = list("Sample Size Without Missing Values", cex=lab.size, fontfamily=RMN),
                   scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-                  type = "p", pch=16,
+                  type = "p", pch=point.shape, cex=point.size,
                   col="#e69f00")
     p2=NULL
     if (!all(is.na(counts$targetMean))) {
@@ -1498,7 +1495,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,lab.size=2.5,text.size=1.5)
                   xlab = list("Number of Variables Kept", cex=lab.size, fontfamily=RMN),
                   ylab = list(sprintf("Mean Value of %s",targetVar), cex=lab.size, fontfamily=RMN),
                   scales = list( x=list(cex=text.size, fontfamily=RMN), y=list(cex=text.size, fontfamily=RMN) ),
-                  type = "p", pch=16,
+                  type = "p", pch=point.shape, cex=point.size,
                   col="#56b4e9")
     }
     multiplot(p1,p2,cols=2)
