@@ -147,7 +147,7 @@ show.color = function(v,name,label=T){
 #' @export
 #' @examples
 #' ez.palette("Royal1")
-#' ez.palette("GrandBudapest1")
+#' ez.palette("Budapest1")
 #' ez.palette("Cavalcanti1")
 #' ez.palette("Cavalcanti1", 3)
 #'
@@ -168,8 +168,8 @@ show.color = function(v,name,label=T){
 #'       data = iris,
 #'       color = Species,
 #'       size = Petal.Width)+
-#'   theme_bw()+
-#'   scale_color_manual(values = ez.palette("Budapest1",3))
+#' theme_bw()+
+#' scale_color_manual(values = ez.palette("Budapest1",3))
 ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
     # codes modified from https://github.com/karthik/wesanderson/blob/master/R/colors.R
     palettes <- list(

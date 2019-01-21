@@ -29,7 +29,7 @@ palette generator
 }
 \examples{
 ez.palette("Royal1")
-ez.palette("GrandBudapest1")
+ez.palette("Budapest1")
 ez.palette("Cavalcanti1")
 ez.palette("Cavalcanti1", 3)
 
@@ -50,6 +50,6 @@ qplot(Sepal.Length,
       data = iris,
       color = Species,
       size = Petal.Width)+
-  theme_bw()+
-  scale_color_manual(values = ez.palette("Budapest1",3))
+theme_bw()+
+scale_color_manual(values = ez.palette("Budapest1",3))
 }
