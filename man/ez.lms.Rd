@@ -75,3 +75,34 @@ lm(y~x+covar), for many y and/or many x
 To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 }
+\examples{
+y = c(1,2,3,4,5,6)
+x = c(2,4,15,20,25,36)
+z=factor(c('m','m','m','f','f','f'))
+
+lm(y~x+z) \%>\% summary
+lm(y~x+ez.2value(z)) \%>\% summary
+lm(y~x+ez.2value(z,start.at=2)) \%>\% summary
+# same beta, p but diff Intercept
+
+
+y = c(1,2,3,4,5,6)
+x = c(2,4,15,20,25,36)
+f=factor(c('m','m','u','u','f','f'))
+lm(y~x+f) \%>\% summary
+lm(y~x+ez.2value(f)) \%>\% summary
+lm(y~x+ez.2value(f,start.at=2)) \%>\% summary
+# the first is diff from the rest, changes p value
+
+
+y = c(1,2,3,4,5,6)
+x = c(2,4,15,20,25,36)
+z=c(0,0,0,1,1,1)
+zz=c(-1,-1,-1,1,1,1)
+zzz=c(-3,-3,-3,1,1,1)
+lm(y~x+z) \%>\% summary
+lm(y~x+scale(z)) \%>\% summary
+lm(y~x+zz) \%>\% summary
+lm(y~x+zzz) \%>\% summary
+# again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
+}
