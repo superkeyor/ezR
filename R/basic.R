@@ -260,7 +260,7 @@ ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/
 #' ez.num(d,col=NULL,force=T)
 #' ez.num(d,col=c("char","mixed_char"),force=F)
 #' ez.num(d,col=c("char","mixed_char"),force=T)
-ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','.','NA','na','N/A','n/a','NaN','nan'), ...){
+ez.num = function(x, col=NULL, force=FALSE, print2scr=TRUE, na.strings=c('','.','NA','na','N/A','n/a','NaN','nan'), ...){
     oldNAs = ez.count(x)
 
     if (is.factor(x)) {
@@ -310,7 +310,7 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','
         #     x[col] = ez.num(x[col],force=force)
         #     result=x
         # }
-        x[cols] = lapply(x[cols],function(e,force,na.strings){ez.num(e,force=force,print2screen=F,na.strings=na.strings)},force=force,na.strings=na.strings)
+        x[cols] = lapply(x[cols],function(e,force,na.strings){ez.num(e,force=force,print2scr=F,na.strings=na.strings)},force=force,na.strings=na.strings)
         result = x
     } else if (is.list(x)){
         # maybe to do to improve the codes for list, right now, I do not really care about list
@@ -339,7 +339,7 @@ ez.num = function(x, col=NULL, force=FALSE, print2screen=TRUE, na.strings=c('','
         result=x
     }
 
-    if (print2screen) {
+    if (print2scr) {
         newNAs = ez.count(result) - oldNAs
         if (newNAs>0) ez.pprint(sprintf('%d NAs introduced when converting to num', newNAs))
     }

@@ -171,7 +171,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=FALSE, blanks
 
 #' read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
 #' @description read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package
-#' @param print2screen print out sheet indices and names, default TRUE
+#' @param print2scr print out sheet indices and names, default TRUE
 #' @param tolower whether to convert all column names to lower case
 #' @param stringsAsFactors T/F
 #' @param blanksAsNA T/F, converts factor or character vector elements to NA if matching na.strings
@@ -185,12 +185,12 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=FALSE, blanks
 #'          rowNames = FALSE, detectDates = FALSE, skipEmptyRows = TRUE,
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
-ez.readxlist = function(file, print2screen=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
+ez.readxlist = function(file, print2scr=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
     result = list()
     sheetnames = openxlsx::getSheetNames(file)
     for (i in 1:length(sheetnames)) {
         result[[sheetnames[i]]] = ez.readx(file, sheet=i, tolower=tolower, stringsAsFactors=stringsAsFactors, blanksAsNA=blanksAsNA, na.strings=na.strings, makenames=makenames, ...)
-        if (print2screen) {cat(i, '\t', sheetnames[i], '\n')}
+        if (print2scr) {cat(i, '\t', sheetnames[i], '\n')}
     }
     return(result)
 }

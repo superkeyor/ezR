@@ -2384,7 +2384,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
     if (grepl("|",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+|]")[[1]]
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; v = tmp[3:(length(tmp)-1)]
-        v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
+        v1 = ez.vv(v,print2scr=F); v2=paste0(v,collapse='+')
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
         df %<>% dplyr::mutate({y} = ez.zresid( lm({x}~{v2}, data=df) ))
@@ -2393,7 +2393,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
     } else if (grepl("*",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+*]")[[1]]
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; v = tmp[3:(length(tmp)-1)]
-        v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
+        v1 = ez.vv(v,print2scr=F); v2=paste0(v,collapse='+')
         # grouping changes df data type which would fail lme4::lmList below
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
@@ -2405,7 +2405,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
     } else {
         tmp = strsplit(cmd,"[~+]")[[1]]
         y = tmp[1]; x = tmp[2]; v = tmp[3:length(tmp)]
-        v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
+        v1 = ez.vv(v,print2scr=F); v2=paste0(v,collapse='+')
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', {v1}))
         df %<>% dplyr::mutate({y} = ez.zresid( lm({x}~{v2}, data=df) ))
@@ -2611,7 +2611,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
             )
         }
         gghistory=paste(gghistory,
-                 sprintf('xx=c(%s)',ez.vv(xx,print2screen=FALSE)),
+                 sprintf('xx=c(%s)',ez.vv(xx,print2scr=FALSE)),
                  sprintf('df=ez.dropna(df,xx)'),
                  'dfdf = df %>% tidyr::gather_("theKey","theValue",xx)',
                  '# first compute pos

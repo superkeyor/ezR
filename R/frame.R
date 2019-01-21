@@ -410,7 +410,7 @@ ez.2value = function(x, col=NULL, start.at=0, keep.labels=TRUE, ...){
 #' @return returns a new df, factor (non-factor->factor)
 #' @note if x df, pass (x,col,ord);  if x not df, pass (x,ord), or (x,ord=)
 #' @export
-ez.factorder = function(x, col, ord=NULL, print2screen=F){
+ez.factorder = function(x, col, ord=NULL, print2scr=F){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
@@ -419,7 +419,7 @@ ez.factorder = function(x, col, ord=NULL, print2screen=F){
         varlab <- attr(df[[col]],'label',exact=T)
         if (length(ord)==1) {
             if (!is.factor(df[[col]])) {
-                if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
+                if (print2scr) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
                 df[[col]] = factor(df[[col]])
             }
             if (!is.factor(df[[col]])) {df[[col]] = factor(df[[col]])}
@@ -457,7 +457,7 @@ ez.factorder = function(x, col, ord=NULL, print2screen=F){
         labels <- sjmisc_get_labels(x, attr.only = T, include.values = "n")
         varlab <- attr(x,'label',exact=T)
         if (!is.factor(x)) {
-            if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
+            if (print2scr) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
             x = factor(x)
         }
         if (length(ord)==1) {
@@ -488,21 +488,21 @@ ez.factorder = function(x, col, ord=NULL, print2screen=F){
 #' @references \href{http://www.cookbook-r.com/Manipulating_data/Renaming_levels_of_a_factor/}{Cookbook R: Renaming levels of a factor}
 #' @seealso \code{\link{ez.recode}}, \code{\link{ez.recode2}}, \code{\link{ez.replace}}, \code{\link{ez.replacewhen}}, \code{\link{ez.2label}}, \code{\link{ez.factorname}}, \code{\link{ez.strreplace}}, \code{\link{ez.strrev}}, \code{\link{ez.regexprep}}, \code{\link{ez.regexprepi}}
 #' @export
-ez.factorname = function(x, col, orn=NULL, print2screen=T){
+ez.factorname = function(x, col, orn=NULL, print2scr=T){
     if (is.data.frame(x)) {
         df = x
         if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
 
         varlab <- attr(df[[col]],'label',exact=T); labs=ez.getlabels(df[[col]]); firstTwo=df[[col]][1:2]
         if (!is.factor(df[[col]])){
-            if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
+            if (print2scr) cat(sprintf('converting %s to factor via factor()...\n',class(df[[col]])))
             df[[col]] = factor(df[[col]])
         }
 
         labs=labs[levels(df[[col]])]
         df[[col]] = factor(df[[col]])  # factor() removes value labels, if exist
         levels(df[[col]]) = orn
-        if (print2screen) {
+        if (print2scr) {
             labs = paste0(names(labs), '[', labs, ']')
             labs = sprintf('%-36s',labs)
             cat('Renamed level names: \n')
@@ -518,14 +518,14 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
         if (is.null(orn)) orn = col
         varlab <- attr(x,'label',exact=T); labs=ez.getlabels(x); firstTwo=x[1:2]
         if (!is.factor(x)){
-            if (print2screen) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
+            if (print2scr) cat(sprintf('converting %s to factor via factor()...\n',class(x)))
             x = factor(x)
         }
 
         labs=labs[levels(x)]
         x = factor(x)   # factor() removes value labels, if exist
         levels(x) = orn
-        if (print2screen) {
+        if (print2scr) {
             labs = paste0(names(labs), '[', labs, ']')
             labs = sprintf('%-36s',labs)
             cat('Renamed level names: \n')
@@ -548,11 +548,11 @@ ez.factorname = function(x, col, orn=NULL, print2screen=T){
 #' @param cols column name(s) to eval('dplyr::select()'); ignored when x is not a data frame. NULL=all cols
 #' @return returns a new df, factor, vector (has no effect on (ie, make no change to) a non-factor object)
 #' @export
-ez.factorelevel = function(x, cols=NULL, print2screen=F) {
+ez.factorelevel = function(x, cols=NULL, print2scr=F) {
     if (is.factor(x)) {
         # for nonfactor, length(levels(x)) returns 0
         if (length(levels(x))!=length(levels(factor(x,unique(as.character(x)))))) {
-            if (print2screen) cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
+            if (print2scr) cat(sprintf('resetting factor levels for factor %s...\n',deparse(substitute(x))))
             varlab <- attr(x,'label',exact=T)
             labs = ez.getlabels(x)
 
@@ -567,11 +567,11 @@ ez.factorelevel = function(x, cols=NULL, print2screen=F) {
     } else if (is.data.frame(x) & !is.null(cols)) {
         cols=ez.selcol(x,cols)
         # for (col in cols) { x[[col]] = ez.factorelevel(x[[col]]) }
-        x[cols] = lapply(x[cols],function(e,print2screen){ez.factorelevel(e,print2screen=print2screen)},print2screen=print2screen)
+        x[cols] = lapply(x[cols],function(e,print2scr){ez.factorelevel(e,print2scr=print2scr)},print2scr=print2scr)
     } else if (is.data.frame(x) & is.null(cols)) {
         # x = dplyr::mutate_all(x,ez.factorelevel)
         # mutate gets rid of variable labels
-        x[] = lapply(x,ez.factorelevel,print2screen=print2screen)
+        x[] = lapply(x,ez.factorelevel,print2scr=print2scr)
     }
     return(x)
 }
@@ -899,7 +899,7 @@ ez.recode2 = function(df, col, recodes){
 #'           # TV was char, now is still char
 #' ez.replace(data,'setosa','flower')
 #'           # Species was factor, now is still factor (notice, levels changed)
-ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
+ez.replace = function(df, col, oldval, newval=NULL, print2scr=T){
     # four parameters passed
     if (!is.null(newval)) {
         col=(ez.selcol(df,col))
@@ -911,12 +911,12 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 
         #     if (is.na(oldval)) {
         #         if (length(which(is.na(df[[col]]))) > 0) {
-        #             if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
+        #             if (print2scr) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(df[[col]])), col, as.character(oldval), as.character(newval)))
         #             df[[col]][which(is.na(df[[col]]))] <- newval
         #         }
         #     } else {
         #         if (length(which(df[[col]]==oldval)) > 0) {
-        #             if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
+        #             if (print2scr) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(df[[col]]==oldval)), col, as.character(oldval), as.character(newval)))
         #             df[[col]][which(df[[col]]==oldval)] <- newval
         #         }
         #     }
@@ -941,12 +941,12 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 
             if (is.na(oldval)) {
                 if (length(which(is.na(dfcol))) > 0) {
-                    if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(dfcol)), col, as.character(oldval), as.character(newval)))
+                    if (print2scr) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', sum(is.na(dfcol)), col, as.character(oldval), as.character(newval)))
                     dfcol[which(is.na(dfcol))] <- newval
                 }
             } else {
                 if (length(which(dfcol==oldval)) > 0) {
-                    if (print2screen) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(dfcol==oldval)), col, as.character(oldval), as.character(newval)))
+                    if (print2scr) cat(sprintf('%5.0f values replaced in column %s (%s -> %s)\n', length(which(dfcol==oldval)), col, as.character(oldval), as.character(newval)))
                     dfcol[which(dfcol==oldval)] <- newval
                 }
             }
@@ -962,12 +962,12 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
         # trick to recognize parameters
         newval=oldval;oldval=col
         if (is.na(oldval)) {
-            if (print2screen) cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(is.na(df))), as.character(oldval), as.character(newval)))
+            if (print2scr) cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(is.na(df))), as.character(oldval), as.character(newval)))
             # the dot here, I think, refers to each column, not related to . for %>%
             # mutate() will somehow auto convert columns of factor but in a bad way. Use my own function to convert factor to char
             # df = dplyr::mutate_all(df,funs(ifelse(is.na(.),newval,.)))
         } else {
-            if (print2screen) cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(df==oldval,na.rm=TRUE)), as.character(oldval), as.character(newval)))
+            if (print2scr) cat(sprintf('%5.0f values replaced in data frame (%s -> %s)\n', sum(colSums(df==oldval,na.rm=TRUE)), as.character(oldval), as.character(newval)))
             # df = dplyr::mutate_all(df,funs(ifelse(.==oldval,newval,.)))
         }
         # recursive call, but suppress output
@@ -994,7 +994,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2screen=T){
 #' @seealso \code{\link{ez.replace}}
 #' @examples df=ez.replacewhen(nicu,pt_num=1220,baby_num=3,baby_name='Ben')
 #' @export
-ez.replacewhen = function(df, print2screen=T, ...) {
+ez.replacewhen = function(df, print2scr=T, ...) {
     theList = list(...)
     theCols = names(theList)
     theID = theCols[1]; theValue = theList[[1]]
@@ -1024,9 +1024,9 @@ ez.replacewhen = function(df, print2screen=T, ...) {
 
             if (toReplace) {
                 if (length(theRow2)==1) {
-                    if (print2screen) ez.print(theString)
+                    if (print2scr) ez.print(theString)
                 } else if (length(theRow2)>1) {
-                    if (print2screen) ez.pprint(theString)
+                    if (print2scr) ez.pprint(theString)
                 }
 
                 lab = ez.getlabel(df[[col]]); labs = ez.getlabels(df[[col]])
@@ -1584,7 +1584,7 @@ left_join = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 #' \cr \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{left_join}}, \code{\link[dplyr]{right_join}}, \code{\link[dplyr]{inner_join}}, \code{\link[dplyr]{full_join}}, \code{\link[dplyr]{semi_join}}, \code{\link[dplyr]{anti_join}}
 #' \cr \code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}
 #' \cr \code{\link[dplyr]{bind_rows}}, \code{\link[dplyr]{bind_cols}}
-ez.del = function(df,cols=NULL,print2screen=T){
+ez.del = function(df,cols=NULL,print2scr=T){
     if (is.null(cols)) {
         # cols all empty
         # convert  all cols to string first, in order to compare with ""
@@ -1595,7 +1595,7 @@ ez.del = function(df,cols=NULL,print2screen=T){
 
         colNumsAllTogether = dplyr::union(colNumsAllNAs,colNumsAllEmpty)
         if (length(colNumsAllTogether)>0) {
-            if (print2screen) {
+            if (print2scr) {
                 cat(sprintf( '%s\n\n%d cols removed that contain all empty or NAs\n', toString(colnames(df)[colNumsAllTogether]), length(colNumsAllTogether) ))
             }
             df = dplyr::select(df,-colNumsAllTogether)
@@ -1605,7 +1605,7 @@ ez.del = function(df,cols=NULL,print2screen=T){
         colNumsLessThan = which(nonMissingRate<cols)
 
         if (length(colNumsLessThan)>0) {
-            if (print2screen) {
+            if (print2scr) {
                 cat(sprintf( '%s\n\n%d cols removed less than the least non-missing rate\n', toString(colnames(df)[colNumsLessThan]), length(colNumsLessThan) ))
             }
             df = dplyr::select(df,-colNumsLessThan)
@@ -1617,7 +1617,7 @@ ez.del = function(df,cols=NULL,print2screen=T){
         },error = function(e) {})
         existCols = cols[(cols %in% colnames(df))]
         if (length(existCols)>0) {
-            if (print2screen) {
+            if (print2scr) {
                 cat(sprintf( '%s\n\n%d columns deleted\n',toString(existCols),length(existCols) ))
             }
             df[existCols] = NULL
@@ -1651,15 +1651,15 @@ ez.rmcol = ez.del
 #' \cr eg, original row.names() is 1, 2, 3, then drop row 2
 #' \cr if not reindex, new index is 1, 3
 #' \cr if reindex, new index is 1, 2
-#' @param print2screen T/F. if T, print out rows containing NAs dropped (In: -> Out: )
+#' @param print2scr T/F. if T, print out rows containing NAs dropped (In: -> Out: )
 #' @return returns a new df with rows that have NA(s) removed, or a new vector/factor without NAs
 #' @export
-ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
+ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2scr=TRUE){
     df=x
     if (is.factor(x)) x=as.character(x)
     if (is.vector(x)) {
         x=x[!is.na(x)]
-        if ((length(df)-length(x)>0) & print2screen) cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
+        if ((length(df)-length(x)>0) & print2scr) cat(sprintf('%d NAs dropped (In: %d -> Out: %d).\n', length(df)-length(x), length(df), length(x)))
         if (is.factor(df)) x=as.factor(x)
         return(x)
     }
@@ -1705,7 +1705,7 @@ ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2screen=TRUE){
     if (reindex) {row.names(result) <- NULL}
 
     nafter=nrow(result)
-    if ((nbefore-nafter>0) & print2screen) cat(sprintf('%d rows containing NAs dropped (In: %d -> Out: %d).\n', nbefore-nafter, nbefore, nafter))
+    if ((nbefore-nafter>0) & print2scr) cat(sprintf('%d rows containing NAs dropped (In: %d -> Out: %d).\n', nbefore-nafter, nbefore, nafter))
 
     return(result)
 }
@@ -1764,7 +1764,7 @@ ez.header = function(..., cols=NULL, stringsAsFactors=FALSE){
 #' @description could be slow, commonly use together with \code{\link{ez.header}}
 #' @param df df to be appended
 #' @param newrow a list, e.g.,  list("Ted", 25)  <-- use list can preserve element data type
-#' @param print2screen whether to print the new row to string (auto separated by tab), default TRUE
+#' @param print2scr whether to print the new row to string (auto separated by tab), default TRUE
 #' @return returns a new df, old passed df does not change
 #' @seealso \code{\link{ez.header}}
 #' @note although passing in newrow as a vector is fine, c(char,numeric) converts everything to char, bit when saving in excel, num formated as text
@@ -1780,10 +1780,10 @@ ez.header = function(..., cols=NULL, stringsAsFactors=FALSE){
 #' }
 #' ez.savex(results,'x.xlsx')
 #' @export
-ez.append = function(df, newrow, print2screen=TRUE){
+ez.append = function(df, newrow, print2scr=TRUE){
     # http://vitalflux.com/learn-r-append-rows-data-frame/
     df[nrow(df)+1,] <- newrow
-    if (print2screen) {cat(unlist(newrow), '\n', sep='\t')}
+    if (print2scr) {cat(unlist(newrow), '\n', sep='\t')}
     return(df)
 }
 

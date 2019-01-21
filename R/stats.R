@@ -220,7 +220,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, incomparables=FAL
         } else {
             v.mean=v.min=v.max=v.sum=NA
         }
-        results = ez.append(results,list(v.variable,v.class,v.is_all_numeric_like,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2screen=FALSE)
+        results = ez.append(results,list(v.variable,v.class,v.is_all_numeric_like,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2scr=FALSE)
     }
     v.duplicated.varname=ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     v.duplicated.varname[which(!v.duplicated.varname)]=NA
@@ -321,7 +321,7 @@ ez.xl = function(df,temp=NULL,debug=NULL,label=TRUE) {
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
+ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=TRUE){
     if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
 
     if (2*printn >= length(vec)) {printn=NULL}
@@ -346,7 +346,7 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2screen=TRUE){
             printout = noquote(paste(header,tailer,sep=",..................,"))
         }
     }
-    if (print2screen) {
+    if (print2scr) {
         print(printout)
         cat(sprintf("Total elements: %d\n",length(vec)))
     }
@@ -366,7 +366,7 @@ ez.vi = function(x,printn=35,order='as') {
         }
         v.class = if (is.matrix(v)) 'matrix' else class(v) %>% toString()
         if (is.matrix(v)) {v = data.frame(v)}
-        v.cols = colnames(v) %>% ez.vv(print2screen=F,printn=printn,order=order)
+        v.cols = colnames(v) %>% ez.vv(print2scr=F,printn=printn,order=order)
         v.nrow = nrow(v)
         v.ncol = ncol(v)
         v.missing=ez.count(v,NA,dim=3)
@@ -405,7 +405,7 @@ ez.vi = function(x,printn=35,order='as') {
         }
         cat(sprintf('List of %d\n',length(x)))
     } else {
-        v.elements = unique(v) %>% ez.vv(print2screen=F,printn=printn,order=order)
+        v.elements = unique(v) %>% ez.vv(print2scr=F,printn=printn,order=order)
         v.class=class(v) %>% toString()
         if (!is.null(names(v))) v.class=paste0('Named ',v.class)
         v.n=length(v)
@@ -497,12 +497,12 @@ ez.z = function(x,center = TRUE, scale = TRUE) {
 #' @param x df or matrix
 #' @param col col included for calculation, ignored if x is not a df
 #' @param type "pearson" or "spearman"
-#' @param print2screen print attention message, if NA present in r matrix; no effect if there is no NA
+#' @param print2scr print attention message, if NA present in r matrix; no effect if there is no NA
 #' @note underlying uses \code{\link[Hmisc]{rcorr}}, which uses pairwise deletion. Pairs with fewer than 2 non-missing values, or too small variance, have the r values set to NA
 #' \cr In the r matrix you get, you may get some NAs in the marix without warning)
 #' @return r matrix
 #' @export
-ez.r = function(x,col=NULL,type="pearson",print2screen=T) {
+ez.r = function(x,col=NULL,type="pearson",print2scr=T) {
     if (is.data.frame(x) & !is.null(col)) {
         col=(ez.selcol(x,col))
         x=x[col]
@@ -526,7 +526,7 @@ ez.r = function(x,col=NULL,type="pearson",print2screen=T) {
     NAs = sum(CorrNACounts$count)
 
     if (NAs > 0) {
-        if (print2screen) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see CorrNACounts in workspace).', NAs), color='red')}
+        if (print2scr) {ez.pprint(sprintf('Attention: %s NAs contained in the correlation matrix (see CorrNACounts in workspace).', NAs), color='red')}
         assign("CorrNACounts", CorrNACounts, envir = .GlobalEnv)
     }
     return(result)
@@ -1463,7 +1463,7 @@ ez.maxnp = function(df,targetVar=NULL,fixedVars=NULL,point.size=10,point.shape=1
     # chop from the last var
     for (i in length(allvars):1) {
         vars = allvars[1:i]
-        df %>% select(vars) %>% ez.dropna(print2screen = F) -> df3
+        df %>% select(vars) %>% ez.dropna(print2scr = F) -> df3
         counts[i,1] = nrow(df3)
         counts[i,2] = ncol(df3)
 
