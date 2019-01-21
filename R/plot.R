@@ -466,25 +466,25 @@ multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
 #'
 #' A ggplot2 theme with no background and Times New Roman font (legend size not affected).
 #'
-#' @param labsize default 18
-#' @param textsize default 16
+#' @param lab.size default 18
+#' @param text.size default 16
 #' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
 #' @export
 #' @note In order for R (at least on Mac) to recognize Times New Roman font, \href{https://github.com/wch/extrafont/}{extrafont} required
 #' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa_nosize}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
-theme_apa <- function(plot.box = FALSE, labsize = 18, textsize = 16){
+theme_apa <- function(plot.box = FALSE, lab.size = 18, text.size = 16){
     out <- theme(
-        plot.title=element_text(family=RMN, size=labsize+2, face="bold", colour="black"),
+        plot.title=element_text(family=RMN, size=lab.size+2, face="bold", colour="black"),
         legend.title = element_text(family=RMN, colour="black"),
         legend.text = element_text(family=RMN, colour="black"),
-        strip.text.x = element_text(family=RMN, size=textsize, colour="black"),
-        strip.text.y = element_text(family=RMN, size=textsize, colour="black"),
-        axis.title.x=element_text(family=RMN, size=labsize, face="bold", colour="black"),
-        axis.title.y=element_text(family=RMN, size=labsize, face="bold", angle=90, colour="black"),
-        axis.text.x=element_text(family=RMN, size=textsize, colour="black"),
-        axis.text.y=element_text(family=RMN, size=textsize, colour="black"),
+        strip.text.x = element_text(family=RMN, size=text.size, colour="black"),
+        strip.text.y = element_text(family=RMN, size=text.size, colour="black"),
+        axis.title.x=element_text(family=RMN, size=lab.size, face="bold", colour="black"),
+        axis.title.y=element_text(family=RMN, size=lab.size, face="bold", angle=90, colour="black"),
+        axis.text.x=element_text(family=RMN, size=text.size, colour="black"),
+        axis.text.y=element_text(family=RMN, size=text.size, colour="black"),
         axis.ticks=element_line(colour="black"))
     if (plot.box) {
         # panel.border without axis.line
@@ -537,8 +537,8 @@ theme_apa_nosize <- function(plot.box = FALSE){
 
 #' A ggplot2 theme with no background and no gridlines.
 #' @description A ggplot2 theme with no background and no gridlines.
-#' @param labsize default 18
-#' @param textsize default 16
+#' @param lab.size default 18
+#' @param text.size default 16
 #' @param plot.box logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.
 #' @author Jon Lefcheck (\url{http://jonlefcheck.net}) Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
 #' @references \url{http://jonlefcheck.net/2013/03/11/black-theme-for-ggplot2-2} \url{https://gist.github.com/jslefche/eff85ef06b4705e6efbc}
@@ -562,14 +562,14 @@ theme_apa_nosize <- function(plot.box = FALSE){
 #'     theme_black() +
 #'     scale_fill_gradient(low="grey10", high="white")
 #' }
-theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
+theme_blackapa <- function(plot.box = TRUE, lab.size = 18, text.size = 16) {
     out <- theme(
             # Specify axis options
-            axis.text.x=element_text(family=RMN, size=textsize, colour="grey55"),
-            axis.text.y=element_text(family=RMN, size=textsize, colour="grey55"),
+            axis.text.x=element_text(family=RMN, size=text.size, colour="grey55"),
+            axis.text.y=element_text(family=RMN, size=text.size, colour="grey55"),
             axis.ticks=element_line(colour="grey55"),
-            axis.title.x=element_text(family=RMN, size=labsize, face="bold", colour="grey55"),
-            axis.title.y=element_text(family=RMN, size=labsize, face="bold", angle=90, colour="grey55"),
+            axis.title.x=element_text(family=RMN, size=lab.size, face="bold", colour="grey55"),
+            axis.title.y=element_text(family=RMN, size=lab.size, face="bold", angle=90, colour="grey55"),
             # Specify legend options
             legend.background=element_rect(color=NA, fill="black"),
             legend.key=element_rect(color=NA, fill="black"),
@@ -581,11 +581,11 @@ theme_blackapa <- function(plot.box = TRUE, labsize = 18, textsize = 16) {
             panel.grid.minor=element_blank(),
             # Specify facetting options
             strip.background=element_rect(fill="grey30", color="grey10"),
-            strip.text.x = element_text(family=RMN, size=textsize, colour="grey55"),
-            strip.text.y = element_text(family=RMN, size=textsize, colour="grey55"),
+            strip.text.x = element_text(family=RMN, size=text.size, colour="grey55"),
+            strip.text.y = element_text(family=RMN, size=text.size, colour="grey55"),
             # Specify plot options
             plot.background=element_rect(color="black", fill="black"),
-            plot.title=element_text(family=RMN, size=labsize+2, face="bold", colour="grey55")
+            plot.title=element_text(family=RMN, size=lab.size+2, face="bold", colour="grey55")
     )
     if (plot.box) {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
