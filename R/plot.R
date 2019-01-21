@@ -2275,7 +2275,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
+ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
 ####************************************************************************************************
                                      ####*recursive call*####
 ####************************************************************************************************
@@ -2288,7 +2288,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
     colors = rep(ez.palette("Zhu"),100)
     for (i in 1:length(lvls)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
-        pplist[[i]] = ez.scatterplot(df = dftmp,
+        pplist[[i]] = ez.scatterplot2(df = dftmp,
             cmd=cmd, line.color=colors[i], point.color=colors[i], point.shape=shapes[i],
             rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse)
     }
@@ -2387,7 +2387,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
-        df %<>% dplyr::mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
+        df %<>% dplyr::mutate({y} = ez.zresid( lm({x}~{v2}, data=df) ))
         "
         cmd = ez.sprintf('{y}~{x}|{z}')
     } else if (grepl("*",cmd,fixed=TRUE)) {
@@ -2398,7 +2398,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
         df %<>% dplyr::group_by({z}) %>%
-            dplyr::mutate({y} = ez.zresid( lm({y}~{v2}) )) %>%
+            dplyr::mutate({y} = ez.zresid( lm({x}~{v2}) )) %>%
             dplyr::ungroup() %>% data.frame()
         "
         cmd = ez.sprintf('{y}~{x}*{z}')
@@ -2408,7 +2408,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         v1 = ez.vv(v,print2screen=F); v2=paste0(v,collapse='+')
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', {v1}))
-        df %<>% dplyr::mutate({y} = ez.zresid( lm({y}~{v2}, data=df) ))
+        df %<>% dplyr::mutate({y} = ez.zresid( lm({x}~{v2}, data=df) ))
         "
         cmd = ez.sprintf('{y}~{x}')
     }
