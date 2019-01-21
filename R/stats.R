@@ -619,7 +619,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),lab.size=18,text.size=16,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
-    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size
+    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
@@ -855,7 +855,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     model = unique(c('lm',model)) # always include lm
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
-    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size
+    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
@@ -1073,7 +1073,7 @@ ez.regressions=ez.lms
 ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
-    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size
+    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
@@ -1203,7 +1203,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,width=300,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
-    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size
+    text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
 
     # patch to handle multiple y, multiple x
     if (length(y)>1 & length(x)>1) {
