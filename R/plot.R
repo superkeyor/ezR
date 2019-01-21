@@ -142,7 +142,6 @@ show.color = function(v,name,label=T){
 #' @param type Either "continuous" or "discrete". Use continuous if you want
 #'   to automatically interpolate between colours.
 #' @param nn For a few palettes that natively support color interpolatation. See example below.
-#' @importFrom graphics rgb rect par image text
 #' @return A vector of colours.
 #' @export
 #' @examples
