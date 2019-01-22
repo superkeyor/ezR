@@ -2412,8 +2412,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # y~x|z
         tmp = strsplit(cmd,"[~|]")[[1]]
         y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
-        df=ez.dropna(df,c(y,x,z))
-        n = nlevels(as.factor(df[[z]]))
+        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
+        n = nlevels(df[[z]])
 
         if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
         if (is.null(zlab)) zlab = z ; if (is.null(title)) title = ''
@@ -2463,14 +2463,14 @@ if (grepl("+",cmd,fixed=TRUE)) {
         )
         ') # end sprintf
         gghistory=paste(gghistory,
-               sprintf('df=ez.dropna(df,c("%s","%s","%s"))',y,x,z),
+               sprintf('df=ez.dropna(df,c("%s","%s","%s")) %%>%% ez.factorelevel("%s")',y,x,z,z),
                tt,sep='\n')
     } else if (grepl("*",cmd,fixed=T)) {
         # y~x||z
         tmp = strsplit(cmd,"[~*]")[[1]]
         y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
-        df=ez.dropna(df,c(y,x,z))
-        n = nlevels(as.factor(df[[z]]))
+        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
+        n = nlevels(df[[z]])
 
         if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
         if (is.null(zlab)) zlab = z ; if (is.null(title)) title = ''
@@ -2521,14 +2521,14 @@ if (grepl("+",cmd,fixed=TRUE)) {
         )
         ') # end sprintf
         gghistory=paste(gghistory,
-               sprintf('df=ez.dropna(df,c("%s","%s","%s"))',y,x,z),
+               sprintf('df=ez.dropna(df,c("%s","%s","%s")) %%>%% ez.factorelevel("%s")',y,x,z,z),
                tt,sep='\n')
     } else if (grepl("@",cmd,fixed=T)) {
         # y~x|||z
         tmp = strsplit(cmd,"[~@]")[[1]]
         y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
-        df=ez.dropna(df,c(y,x,z))
-        n = nlevels(as.factor(df[[z]]))
+        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
+        n = nlevels(df[[z]])
 
         if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
         if (is.null(zlab)) zlab = z ; if (is.null(title)) title = ''
@@ -2575,7 +2575,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         )
         ') # end sprintf
         gghistory=paste(gghistory,
-               sprintf('df=ez.dropna(df,c("%s","%s","%s"))',y,x,z),
+               sprintf('df=ez.dropna(df,c("%s","%s","%s")) %%>%% ez.factorelevel("%s")',y,x,z,z),
                tt,sep='\n')
     } else {
         # y~x
