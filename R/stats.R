@@ -321,7 +321,7 @@ ez.xl = function(df,temp=NULL,debug=NULL,label=TRUE) {
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
 #' @export
-ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=TRUE){
+ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
     if(is.null(quote)) {quote = if (is.numeric(vec)) FALSE else TRUE}
 
     if (2*printn >= length(vec)) {printn=NULL}
@@ -347,10 +347,9 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=TRUE){
         }
     }
     if (print2scr) {
-        print(printout)
         cat(sprintf("Total elements: %d\n",length(vec)))
     }
-    return(invisible(printout))
+    return(printout)
 }
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
