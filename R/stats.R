@@ -809,11 +809,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr On a related note, y ~ x + a + b, generates the same results as y ~ b + a + x (the order does not matter). 
 #' \cr For coding purpose, I put x as x, and (a,b) as cov. stdbeta, p returned refer to x, values referring to a,b were discarded during the process.
 #' \cr 
-#' \cr 
-#' \cr !!!important note!!!
+#' \cr ++++++++++!!!important note!!!++++++++++
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
-#' \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when view=T
-#' \cr no column named r, r.lm, r.lmrob etc in the result data frame
+#' \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T
+#' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
+#' \cr all r or r2 value for rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 #' \cr 
 #' \cr 
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
