@@ -14,7 +14,7 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
   y.lab.size = 18, x.tick.number = 5, y.tick.number = 5, title = NULL,
   title.size = 20, zlab = NULL, legend.box = FALSE,
   legend.position = "top", legend.direction = "horizontal",
-  legend.size = c(0, 14), ...)
+  legend.size = c(0, 14), multiplot = FALSE, ...)
 }
 \arguments{
 \item{df}{data frame}
@@ -64,6 +64,8 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 \item{legend.direction}{horizontal or vertical}
 
 \item{legend.size}{c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
+
+\item{multiplot}{T/F if more than 1 model specified, plot all in one plot}
 
 \item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)}
 }

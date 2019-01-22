@@ -2305,6 +2305,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr y~x+a+b|||z plots separated by z groups
 #' @param loess T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))
 #' @param model one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
+#' @param multiplot T/F if more than 1 model specified, plot all in one plot
 #' @param scale when having covariates, z transform residuals
 #' @param rp show r (signed) and p values
 #' @param rp.size  r p values font size, ignored if rp=FALSE
@@ -2334,7 +2335,20 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
     point.color='#0086B8',point.shape=16,point.alpha=0.90,point.size=14,
     ylab=NULL,xlab=NULL,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,x.tick.number=5,y.tick.number=5,
     title=NULL,title.size=20,
-    zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",legend.size=c(0,14),...){
+    zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",legend.size=c(0,14),multiplot=FALSE,...){
+
+    if (length(model)>1 & multiplot){
+        out = mapply(ez.scatterplot,model=model,title=model,MoreArgs=list(df=df, cmd=cmd, loess=loess, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
+                    layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
+                    loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
+                    point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, ylab=ylab, xlab=xlab,
+                    x.axis.size=x.axis.size, y.axis.size=y.axis.size, x.lab.size=x.lab.size, y.lab.size=y.lab.size,
+                    x.tick.number=x.tick.number, y.tick.number=y.tick.number, title.size=title.size,
+                    zlab=zlab, legend.box=legend.box, legend.position=legend.position,
+                    legend.direction=legend.direction, legend.size=legend.size, multiplot=FALSE, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
+        multiplot(plotlist=out)
+        return(invisible(out))
+    }
 
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
