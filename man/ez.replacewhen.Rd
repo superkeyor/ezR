@@ -4,7 +4,7 @@
 \alias{ez.replacewhen}
 \title{replace when}
 \usage{
-ez.replacewhen(df, print2screen = T, ...)
+ez.replacewhen(df, print2scr = T, ...)
 }
 \arguments{
 \item{df}{df}

@@ -4,7 +4,7 @@
 \alias{ez.r}
 \title{r correlation}
 \usage{
-ez.r(x, col = NULL, type = "pearson", print2screen = T)
+ez.r(x, col = NULL, type = "pearson", print2scr = T)
 }
 \arguments{
 \item{x}{df or matrix}
@@ -13,7 +13,7 @@ ez.r(x, col = NULL, type = "pearson", print2screen = T)
 
 \item{type}{"pearson" or "spearman"}
 
-\item{print2screen}{print attention message, if NA present in r matrix; no effect if there is no NA}
+\item{print2scr}{print attention message, if NA present in r matrix; no effect if there is no NA}
 }
 \value{
 r matrix

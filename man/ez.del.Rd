@@ -7,13 +7,13 @@
 \alias{ez.rmcol}
 \title{delete/remove one or many cols, may use \code{\link[dplyr]{select}} instead, alias of \code{\link{ez.del}} \code{\link{ez.delete}} \code{\link{ez.rmcol}} \code{\link{ez.rmcols}}}
 \usage{
-ez.del(df, cols = NULL, print2screen = T)
+ez.del(df, cols = NULL, print2scr = T)
 
-ez.delete(df, cols = NULL, print2screen = T)
+ez.delete(df, cols = NULL, print2scr = T)
 
-ez.rmcols(df, cols = NULL, print2screen = T)
+ez.rmcols(df, cols = NULL, print2scr = T)
 
-ez.rmcol(df, cols = NULL, print2screen = T)
+ez.rmcol(df, cols = NULL, print2scr = T)
 }
 \arguments{
 \item{cols}{evaluated by eval('dplyr::select()'), sth like 'Month' or c('Month','Day'). If not existing in df, nothing happens. Special situations: If NULL, auto delete/remove cols that are all empty or NAs. If a single decimal number less than 1 (NOT 1), any column whose non-missing rate less than the specified number will be removed (eg, cols=0.85, keep >=0.85; or cols=0.9999, remove <0.9999, essentially keep only completed cols)}

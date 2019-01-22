@@ -4,14 +4,14 @@
 \alias{theme_blackapa}
 \title{A ggplot2 theme with no background and no gridlines.}
 \usage{
-theme_blackapa(plot.box = TRUE, labsize = 18, textsize = 16)
+theme_blackapa(plot.box = TRUE, lab.size = 18, text.size = 16)
 }
 \arguments{
 \item{plot.box}{logical.  If \code{TRUE} a full box surrounds the plot area.  If \code{FALSE} only the x and y axis are shown.}
 
-\item{labsize}{default 18}
+\item{lab.size}{default 18}
 
-\item{textsize}{default 16}
+\item{text.size}{default 16}
 }
 \description{
 A ggplot2 theme with no background and no gridlines.

@@ -4,8 +4,7 @@
 \alias{ez.vv}
 \title{format a vector for easy manual copy/processing.}
 \usage{
-ez.vv(vec, printn = Inf, order = "as", quote = NULL,
-  print2screen = TRUE)
+ez.vv(vec, printn = Inf, order = "as", quote = NULL, print2scr = TRUE)
 }
 \arguments{
 \item{vec}{a vector}

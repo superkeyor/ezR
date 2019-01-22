@@ -4,7 +4,7 @@
 \alias{ez.replace}
 \title{replace a single value in data frame with another value}
 \usage{
-ez.replace(df, col, oldval, newval = NULL, print2screen = T)
+ez.replace(df, col, oldval, newval = NULL, print2scr = T)
 }
 \arguments{
 \item{df}{data frame}

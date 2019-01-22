@@ -4,12 +4,12 @@
 \alias{ez.readxlist}
 \title{read all sheets in an xlsx file, optionally prints sheet names, same syntax as \code{\link{ez.readx}}, wrapper of \code{\link[openxlsx]{getSheetNames}} from the openxlsx package}
 \usage{
-ez.readxlist(file, print2screen = TRUE, tolower = FALSE,
+ez.readxlist(file, print2scr = TRUE, tolower = FALSE,
   stringsAsFactors = FALSE, blanksAsNA = TRUE, na.strings = c("", "."),
   makenames = TRUE, ...)
 }
 \arguments{
-\item{print2screen}{print out sheet indices and names, default TRUE}
+\item{print2scr}{print out sheet indices and names, default TRUE}
 
 \item{tolower}{whether to convert all column names to lower case}
 

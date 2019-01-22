@@ -4,14 +4,14 @@
 \alias{ez.append}
 \title{append a row to an exisiting data frame}
 \usage{
-ez.append(df, newrow, print2screen = TRUE)
+ez.append(df, newrow, print2scr = TRUE)
 }
 \arguments{
 \item{df}{df to be appended}
 
 \item{newrow}{a list, e.g.,  list("Ted", 25)  <-- use list can preserve element data type}
 
-\item{print2screen}{whether to print the new row to string (auto separated by tab), default TRUE}
+\item{print2scr}{whether to print the new row to string (auto separated by tab), default TRUE}
 }
 \value{
 returns a new df, old passed df does not change

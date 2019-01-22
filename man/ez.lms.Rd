@@ -7,13 +7,13 @@
 \usage{
 ez.lms(df, y, x, covar = NULL, report = T, model = c("lm", "lmrob",
   "lmRob", "rlm"), view = F, plot = F, pmethods = c("bonferroni", "fdr"),
-  cols = 3, labsize = 2, textsize = 1.5, titlesize = 3, error = T,
-  ...)
+  cols = 3, point.size = 10, point.shape = 16, lab.size = 18,
+  text.size = 16, error = T, ...)
 
 ez.regressions(df, y, x, covar = NULL, report = T, model = c("lm",
   "lmrob", "lmRob", "rlm"), view = F, plot = F, pmethods = c("bonferroni",
-  "fdr"), cols = 3, labsize = 2, textsize = 1.5, titlesize = 3,
-  error = T, ...)
+  "fdr"), cols = 3, point.size = 10, point.shape = 16, lab.size = 18,
+  text.size = 16, error = T, ...)
 }
 \arguments{
 \item{df}{a data frame. Internally go through dropna-->ez.2value-->scale

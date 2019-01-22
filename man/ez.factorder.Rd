@@ -4,7 +4,7 @@
 \alias{ez.factorder}
 \title{change factor level order in a df}
 \usage{
-ez.factorder(x, col, ord = NULL, print2screen = F)
+ez.factorder(x, col, ord = NULL, print2scr = F)
 }
 \arguments{
 \item{x}{data frame or vector, factor or non-factor}

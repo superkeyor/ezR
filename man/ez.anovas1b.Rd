@@ -5,8 +5,8 @@
 \title{anova or ancova 1b, aov(y~x+covar), for many y and/or many x}
 \usage{
 ez.anovas1b(df, y, x, covar = NULL, report = T, view = F, plot = F,
-  cols = 3, pmethods = c("bonferroni", "fdr"), labsize = 2,
-  textsize = 1.5, titlesize = 3, error = T, ...)
+  cols = 3, pmethods = c("bonferroni", "fdr"), point.size = 10,
+  point.shape = 16, lab.size = 18, text.size = 16, error = T, ...)
 }
 \arguments{
 \item{df}{a data frame, Internally go through dropna-->ez.2value(y),ez.2factor(x),ez.2value(covar)}

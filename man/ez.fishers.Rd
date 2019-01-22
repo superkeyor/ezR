@@ -5,8 +5,8 @@
 \title{fisher.test(y,x), for many y and/or many x}
 \usage{
 ez.fishers(df, y, x, report = T, view = F, plot = F,
-  pmethods = c("bonferroni", "fdr"), cols = 3, labsize = 2,
-  textsize = 1.5, titlesize = 3, width = 300, error = T, ...)
+  pmethods = c("bonferroni", "fdr"), cols = 3, lab.size = 18,
+  text.size = 16, width = 300, error = T, ...)
 }
 \arguments{
 \item{df}{a data frame, internal go through dropna-->ez.2factor}

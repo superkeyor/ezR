@@ -4,7 +4,7 @@
 \alias{ez.dropna}
 \title{keep rows that have a certain number (range) of NAs anywhere/somewhere and delete others}
 \usage{
-ez.dropna(x, col = NULL, n = 0, reindex = TRUE, print2screen = TRUE)
+ez.dropna(x, col = NULL, n = 0, reindex = TRUE, print2scr = TRUE)
 }
 \arguments{
 \item{x}{a data frame, or a vector}
@@ -22,7 +22,7 @@ ez.dropna(x, col = NULL, n = 0, reindex = TRUE, print2screen = TRUE)
 \cr if not reindex, new index is 1, 3
 \cr if reindex, new index is 1, 2}
 
-\item{print2screen}{T/F. if T, print out rows containing NAs dropped (In: -> Out: )}
+\item{print2scr}{T/F. if T, print out rows containing NAs dropped (In: -> Out: )}
 }
 \value{
 returns a new df with rows that have NA(s) removed, or a new vector/factor without NAs
