@@ -2251,11 +2251,11 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' scatter plot internal function
 #' @description scatter plot internal function
 #' @export
-.scatterplot.rnp = function(...){
+.scatterplot.rnp = function(df, y, x, model,...){
     # https://gist.github.com/kdauria/524eade46135f6348140
     # http://stackoverflow.com/a/7549819/2292993
     # http://stackoverflow.com/a/13451587/2292993
-    result = ez.lms(...,report=F,plot=F,view=F)
+    result = ez.lms(df=df,y=y,x=x,model=model,covar = NULL,report=F,plot=F,view=F,...)
     if (model=="lm") {
         rvalue = result$r.residized
         nvalue = result$n
@@ -2494,7 +2494,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                 title = "{zlab}", cex.title = {legend.size[1]},
                 points = list(pch = c({point.shape}), col = c({point.color}), cex = {legend.size[2]}),
                 columns = {nkeycol}),
-            panel = function(x, y, ...){"{"}
+            panel = function(x, y, ...,model=model){"{"}
             # cross groups
             panel.xyplot(x, y, ...)
             if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}"))),
@@ -2554,7 +2554,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                 title = "{zlab}", cex.title = {legend.size[1]},
                 points = list(pch = c({point.shape}), col = c({point.color}), cex = {legend.size[2]}),
                 columns = {nkeycol}),
-            panel = function(x, y, ...){"{"}
+            panel = function(x, y, ...,model=model){"{"}
             panel.superpose(x, y, ...,
             panel.groups = function(x, y, ..., col){"{"}
             panel.xyplot(x, y, ...)
