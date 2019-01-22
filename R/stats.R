@@ -993,7 +993,17 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         out = tibble::rownames_to_column(out)
         out['bestp'] = out$rowname[which.min(out$p)]
         out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
-        out = ez.recols(out,'az','-c(y,x,covar,bestp)') %>% ez.clcolnames('\\.lm$','') %>% ez.move('uniques_drop_na.x,min.x,max.x,mean.x,sd.x,uniques_drop_na.y,min.y,max.y,mean.y,sd.y last')
+        out = ez.clcolnames('\\.lm$','')
+        # UA=c('c','a','b'); UB=c('b','c','d'); # desired output: c('b','c','a')
+        AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!(UA %in% UB)]))}
+        desiredOrd = c('orindex', 'y', 'ylbl', 'x', 'xlbl', 'covar', 'bestp', 'n', 'n.lmrob', 'n.lmRob', 'n.rlm',
+                        'stdbeta', 'stdbeta.lmrob', 'stdbeta.lmRob', 'stdbeta.rlm', 'p', 'p.lmrob', 'p.lmRob', 'p.rlm',
+                        'r2', 'r2.lmrob', 'r2.lmRob', 'r2.rlm', 'r.residized', 'r.residized.lmrob', 'r.residized.lmRob',
+                        'r.residized.rlm', 'p.residized', 'p.residized.lmrob', 'p.residized.lmRob', 'p.residized.rlm',
+                        'uniques_drop_na.x', 'min.x', 'max.x', 'mean.x', 'sd.x', 'uniques_drop_na.y', 'min.y', 'max.y',
+                        'mean.y', 'sd.y', 'dof', 'dof.lmrob', 'dof.lmRob', 'dof.rlm', 'bonferroni', 'fdr')
+        newOrd = AmatchlikeB(names(out), desiredOrd)
+        out = out[,newOrd]
         return(out)
     }
 
