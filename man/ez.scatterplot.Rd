@@ -67,7 +67,7 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 
 \item{multiplot}{T/F if more than 1 model specified, plot all in one plot}
 
-\item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)}
+\item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit weird}
 }
 \value{
 a lattice plot

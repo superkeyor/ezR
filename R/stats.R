@@ -463,18 +463,120 @@ ez.vi = function(x,printn=35,order='as') {
     return(invisible(NULL))
 }
 
+#' univariate outlier cleanup
+#' @description univariate outlier cleanup
+#' @param x a data frame or a vector
+#' @param col passed to \code{\link{ez.selcol}}. colwise processing
+#' \cr        if x is a data frame, col specified, process that col only.
+#' \cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
+#' \cr        if x is not a data frame, col is ignored
+#' \cr        could be multiple cols
+#' @param method z score or IQR (John Tukey)
+#' @param cutoff abs() > cutoff will be treated as outliers. Default values(if NULL):
+#' \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
+#' \cr mad 2.5, which is the standard recommendation, or 5.2
+#' \cr iqr 1.5
+#' @param plot boxplot and hist before and after outlier processing. Only works for vector (imagine plot for dataframe)
+#' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame)
+#' @return returns a new data frame or vector
+#' @note univariate outlier approach
+#' The Z-score method relies on the mean and standard deviation of a group of data to measure central
+#' tendency and dispersion. This is troublesome, because the mean and standard deviation are highly
+#' affected by outliers – they are not robust. In fact, the skewing that outliers bring is one of the
+#' biggest reasons for finding and removing outliers from a dataset!
+#' Another drawback of the Z-score method is that it behaves strangely in small datasets – in fact,
+#' the Z-score method will never detect an outlier if the dataset has fewer than 12 items in it.
+#' \cr
+#' Median absolute deviation, modified z-score. The median and MAD are robust measures of central tendency and dispersion, respectively.
+#' \cr
+#' Interquartile range method is that, like the modified Z-score method, it uses a robust measure of dispersion.
+#' \cr
+#' @examples
+#' set.seed(1234)
+#' x = rnorm(10)
+#'
+#'
+#'
+#' @export
+ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NULL, plot=TRUE, fillout=c('na','mean','median'), na.rm=TRUE, print2scr=TRUE) {
+    # https://datascienceplus.com/rscript/outlier.R
+    # https://cran.r-project.org/web/packages/outliers/index.html
+    # https://rpubs.com/hauselin/outliersDetect
+
+    if (!is.data.frame(x)) {
+        method = match.arg(method); fillout = match.arg(fillout)
+        if (fillout=='na') {
+            replacement = NA
+        } else if (fillout=='mean') {
+            replacement = mean(x, na.rm=na.rm)
+        } else if (fillout=='median') {
+            replacement = median(x, na.rm=na.rm)
+        }
+        x.bak.count = x; oldNAs = ez.count(x.bak.count,NA)
+        x.bak.plot = x
+
+        if (method=='z'){
+            if(is.null(cutoff)) cutoff = qnorm(0.025,lower.tail=F)
+            absz = abs((x - mean(x, na.rm=na.rm))/sd(x, na.rm=na.rm))
+            x[absz > cutoff] <- replacement
+            x.bak.count[absz > cutoff] <- NA
+        } else if (method=='mad'){
+            if(is.null(cutoff)) cutoff = 2.5
+            absmad <- abs((x - median(x, na.rm=na.rm))/mad(x, na.rm=na.rm))
+            x[absmad > cutoff] <- replacement
+            x.bak.count[absmad > cutoff] <- NA
+        } else if (method=='iqr'){
+            # https://stackoverflow.com/a/4788102/2292993
+            if(is.null(cutoff)) cutoff = 1.5
+            q1 <- quantile(x, 0.25, na.rm=na.rm)
+            q3 <- quantile(x, 0.75, na.rm=na.rm)
+            # alternatively iqr = q3-q1
+            iqr = IQR(x, na.rm = na.rm)
+            lower_bound = q1 - (iqr * cutoff)
+            upper_bound = q3 + (iqr * cutoff)
+            x[(x > upper_bound) | (x < lower_bound)] <- replacement
+            x.bak.count[(x > upper_bound) | (x < lower_bound)] <- NA
+        }
+
+        if (plot){
+            opar = par(mfrow=c(2, 2), oma=c(0,0,3,0))
+            on.exit(par(opar))
+            boxplot(x.bak.plot, main="With outliers")
+            hist(x.bak.plot, main="With outliers", xlab=NA, ylab=NA)
+
+            boxplot(x, main="Without outliers")
+            hist(x, main="Without outliers", xlab=NA, ylab=NA)
+            title("Outlier Check", outer=TRUE)
+        }
+    } else if (is.data.frame(x) & is.null(col)) {
+        x.bak.count = x; oldNAs = ez.count(x.bak.count,NA)
+        x[] = lapply(x,ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
+        x.bak.count[] = lapply(x.bak.count,ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
+    } else if (is.data.frame(x) & !is.null(col)) {
+        col = ez.selcol(x,col)
+        x.bak.count = x; oldNAs = ez.count(x.bak.count,NA,col)
+        x[col] = lapply(x[col],ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
+        x.bak.count[col] = lapply(x.bak.count[col],ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
+    } # end if
+    newNAs = ez.count(x.bak.count,NA,col) - oldNAs
+    if (print2scr) {
+        ez.pprint(sprintf('%s outliers found and replaced', newNAs))
+    }
+    return(invisible(x))
+}
+
 #' standard error of mean
 #' @description standard error of mean
 #' @param x a vector
 #' @note
 #' \cr na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
-#' \cr 
+#' \cr
 #' \cr \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations.
-#' \cr 
+#' \cr
 #' \cr se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
-#' \cr 
+#' \cr
 #' \cr I wrote ez.se, ez.sd = \code{\link[stats]{sd}}
-#' \cr 
+#' \cr
 #' \cr\cr For zscore, (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{ez.scale}}(x,center=TRUE,scale=TRUE) demean: ez.scale(x,center=TRUE,scale=FALSE). (ez.scale() auto NA ignored/returned in place. )
 #' \cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way.
 #' see https://www.spss-tutorials.com/z-scores-what-and-why/
@@ -488,9 +590,9 @@ ez.se = function(x) {
 #' @export
 ez.sd = stats::sd
 
-#' z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place. 
-#' @description z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place. 
-#' @note 
+#' z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.
+#' @description z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.
+#' @note
 #' similar to base::scale, but 1d vector in and 1d vector out
 #' suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
 #' alias: \code{\link{ez.z}} and \code{\link{ez.scale}}
