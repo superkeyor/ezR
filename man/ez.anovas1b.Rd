@@ -37,14 +37,14 @@ anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 }
 \note{
 In R, \code{\link[stats]{aov}} for 1- or mutiple- way (use : * syntax to include interactions--not implemented in this function yet) between anova, it takes the output from \code{\link[stats]{lm}} and returns it to us in a way that is more in keeping with a traditional ANOVA approach.
-\cr 
+\cr
 \cr \code{\link[car]{Anova}} calculates type-II or type-III analysis-of-variance tables for model objects. Also, \code{\link[stats]{anova}} analyses the result of a model, producing type I (sequential) ANOVA table.
-\cr 
+\cr
 \cr Within and mixed anova use \code{\link[nlme]{lme}}, because Repeated-measures designs have dependent data, therefore dependent residuals, which can be handled by nlme::lme
-\cr 
+\cr
 \cr Eta squared measures the proportion of the total variance in a dependent variable Y that can be accounted for by knowledge of X (ie, the membership of different groups defined by an independent variable). For one-way anova, eta squared is the same as partial eta squared, and the same as R2 (these are true only for one-way anova, not the case for ancova or two-way anova). Eta squared is analogous to R2 in lm. Both are biased and have the weakness that each adding additional variable will automatically increase the value of Eta squared or R2. Eta squared for factor1 = SSfactor1/SStotal, where SStotal = SSfactor1 + SSfactor2 + SSinteraction + SSerror
-\cr 
+\cr
 \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
-\cr 
+\cr
 \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 }

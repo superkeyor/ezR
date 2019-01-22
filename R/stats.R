@@ -604,15 +604,15 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr the means column in excel can be split into mulitiple columns using Data >Text to Columns
 #' \cr dof: from F-statistic
 #' @note In R, \code{\link[stats]{aov}} for 1- or mutiple- way (use : * syntax to include interactions--not implemented in this function yet) between anova, it takes the output from \code{\link[stats]{lm}} and returns it to us in a way that is more in keeping with a traditional ANOVA approach.
-#' \cr 
+#' \cr
 #' \cr \code{\link[car]{Anova}} calculates type-II or type-III analysis-of-variance tables for model objects. Also, \code{\link[stats]{anova}} analyses the result of a model, producing type I (sequential) ANOVA table.
-#' \cr 
+#' \cr
 #' \cr Within and mixed anova use \code{\link[nlme]{lme}}, because Repeated-measures designs have dependent data, therefore dependent residuals, which can be handled by nlme::lme
-#' \cr 
+#' \cr
 #' \cr Eta squared measures the proportion of the total variance in a dependent variable Y that can be accounted for by knowledge of X (ie, the membership of different groups defined by an independent variable). For one-way anova, eta squared is the same as partial eta squared, and the same as R2 (these are true only for one-way anova, not the case for ancova or two-way anova). Eta squared is analogous to R2 in lm. Both are biased and have the weakness that each adding additional variable will automatically increase the value of Eta squared or R2. Eta squared for factor1 = SSfactor1/SStotal, where SStotal = SSfactor1 + SSfactor2 + SSinteraction + SSerror
-#' \cr 
+#' \cr
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
-#' \cr 
+#' \cr
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
@@ -677,7 +677,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         # have fun now
         p = sm[2,"Pr(>F)"]
         F = sm[2,'F value']
-        dof = toString(sm[['Df']][c(2,length(sm[['Df']]))]) 
+        dof = toString(sm[['Df']][c(2,length(sm[['Df']]))])
         MSE = sm[2,'Sum Sq']/sm[2,'Df']
         n = aggregate(df[[y]]~df[[x]],FUN=length)
         counts = sprintf('%s\t%d',n[[1]],n[[2]]) %>% paste0(collapse='\t')
@@ -772,7 +772,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         )
         print(pp)
     }
-    
+
     return(invisible(result))
 }
 
@@ -801,34 +801,34 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 #' \cr For multiple regression (with covar), the value of the standardized coefficient (beta) is close to semi-partial correlation
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
-#' \cr 
+#' \cr
 #' \cr dof: from F-statistic
 #' \cr residualization: say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized
 #' \cr as far as semi-partial concerned, y ~ x + a + b, x ~ y + a + b are two different models. ppcor::spcor.test(iris[,1],iris[,2],iris[,c(3,4)]) != ppcor::spcor.test(iris[,2],iris[,1],iris[,c(3,4)])
 #' \cr but for partial correlation, partial(y,x) is the same as partial(x,y), ppcor::pcor.test(iris[,1],iris[,2],iris[,c(3,4)]) = ppcor::pcor.test(iris[,2],iris[,1],iris[,c(3,4)])
-#' \cr On a related note, y ~ x + a + b, generates the same results as y ~ b + a + x (the order does not matter). 
+#' \cr On a related note, y ~ x + a + b, generates the same results as y ~ b + a + x (the order does not matter).
 #' \cr For coding purpose, I put x as x, and (a,b) as cov. stdbeta, p returned refer to x, values referring to a,b were discarded during the process.
-#' \cr 
+#' \cr
 #' \cr ++++++++++!!!important note!!!++++++++++
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
 #' \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 #' \cr all r or r2 value for rlm are NA, but p values are available, because I do not know how to get them from rlm yet
-#' \cr 
-#' \cr 
+#' \cr
+#' \cr
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @examples
 #' y = c(1,2,3,4,5,6)
 #' x = c(2,4,15,20,25,36)
 #' z=factor(c('m','m','m','f','f','f'))
-#' 
+#'
 #' lm(y~x+z) %>% summary
 #' lm(y~x+ez.2value(z)) %>% summary
 #' lm(y~x+ez.2value(z,start.at=2)) %>% summary
 #' # same beta, p but diff Intercept
-#' 
-#' 
+#'
+#'
 #' y = c(1,2,3,4,5,6)
 #' x = c(2,4,15,20,25,36)
 #' f=factor(c('m','m','u','u','f','f'))
@@ -836,8 +836,8 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' lm(y~x+ez.2value(f)) %>% summary
 #' lm(y~x+ez.2value(f,start.at=2)) %>% summary
 #' # the first is diff from the rest, changes p value
-#' 
-#' 
+#'
+#'
 #' y = c(1,2,3,4,5,6)
 #' x = c(2,4,15,20,25,36)
 #' z=c(0,0,0,1,1,1)
@@ -862,7 +862,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
             # plot = F; no need for sepearte plotlist
             result = ez.lms(df,yy,x,covar,report=report,model=model,view=F,plot=F,pmethods=pmethods,error=error,...)
             xlist[[yy]] = result
-            
+
             result.plot = result %>% ez.dropna('p')
             if (plot & nrow(result.plot)>0) {
                 bonferroniP = -log10(0.05/length(result.plot[['p']]))
@@ -1005,7 +1005,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
-    
+
     if (view) {View(result)}
 
     # todo: format as APA
@@ -1014,8 +1014,12 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         ez.print('------')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-            ez.print(sprintf('lm(%s~%s): (semi) r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+            if (!is.null(ez.selcol(result.report,'starts_with("p.residized.")'))){
+                robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
+                ez.print(sprintf('lm(%s~%s): (semi) r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+            } else {
+                ez.print(sprintf('lm(%s~%s): (semi) r = %.2f, %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
+            }
         }
         ez.print('------')
     }
@@ -1046,8 +1050,8 @@ ez.regressions=ez.lms
 #' @description glm(y~x+covar,family=binomial), for many y and/or many x
 #' @param df a data frame. Internally go through dropna (no ez.2value, scale)
 #' \cr glm can handel factor by default (dummy coding)
-#' \cr I do not do standarization here, because 
-#' \cr While standardized coefficients in classic linear regression are well-defined, 
+#' \cr I do not do standarization here, because
+#' \cr While standardized coefficients in classic linear regression are well-defined,
 #' \cr logistic regression, like other generalized linear models, present additional complexity as a result of
 #' \cr the non-linear link function (logit), and non-normal error function (binomial).
 #' \cr https://think-lab.github.io/d/205/
@@ -1150,7 +1154,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
-    
+
     if (view) {View(result)}
 
     # todo: format as APA
@@ -1242,7 +1246,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         m = fisher.test(df[[y]],df[[x]],...) # by default, pairwise NA auto removed
         p = m$p.value
         # OR only exist for 2x2 table
-        odds_ratio = if (is.null(m$estimate)) NA else m$estimate  
+        odds_ratio = if (is.null(m$estimate)) NA else m$estimate
         countTable = table(df[[y]],df[[x]])   # by default, pairwise NA auto removed
         counts = toString(countTable,width=width)
         total = sum(countTable)
@@ -1266,7 +1270,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
     if (is.null(ylbl)) {ylbl=''}; if (is.null(xlbl)) {xlbl=''}; result$ylbl=rep(ylbl,nrow(result)); result$xlbl=rep(xlbl,nrow(result))
     if (nrow(result)==0){result$orindex=integer(0)} else {result$orindex=1:nrow(result)}
     result = ez.move(result,'orindex first; ylbl after y; xlbl after x') %>% dplyr::arrange(p)
-    
+
     if (view) {View(result)}
 
     # todo: format as APA

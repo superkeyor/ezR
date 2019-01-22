@@ -52,20 +52,20 @@ an invisible data frame or list of data frame (if many y and many x)
 \cr For simple regression (1 y ~ 1 x), the value of the standardized coefficient (beta) equals the correlation coefficient (r) (beta=r).
 \cr For multiple regression (with covar), the value of the standardized coefficient (beta) is close to semi-partial correlation
 \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
-\cr 
+\cr
 \cr dof: from F-statistic
 \cr residualization: say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized
 \cr as far as semi-partial concerned, y ~ x + a + b, x ~ y + a + b are two different models. ppcor::spcor.test(iris[,1],iris[,2],iris[,c(3,4)]) != ppcor::spcor.test(iris[,2],iris[,1],iris[,c(3,4)])
 \cr but for partial correlation, partial(y,x) is the same as partial(x,y), ppcor::pcor.test(iris[,1],iris[,2],iris[,c(3,4)]) = ppcor::pcor.test(iris[,2],iris[,1],iris[,c(3,4)])
-\cr On a related note, y ~ x + a + b, generates the same results as y ~ b + a + x (the order does not matter). 
+\cr On a related note, y ~ x + a + b, generates the same results as y ~ b + a + x (the order does not matter).
 \cr For coding purpose, I put x as x, and (a,b) as cov. stdbeta, p returned refer to x, values referring to a,b were discarded during the process.
-\cr 
+\cr
 \cr ++++++++++!!!important note!!!++++++++++
 \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
 \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T
 \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 \cr all r or r2 value for rlm are NA, but p values are available, because I do not know how to get them from rlm yet
-\cr 
+\cr
 \cr
 }
 \description{
