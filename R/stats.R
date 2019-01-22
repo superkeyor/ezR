@@ -487,7 +487,9 @@ ez.vi = function(x,printn=35,order='as') {
 #' Another drawback of the Z-score method is that it behaves strangely in small datasets – in fact,
 #' the Z-score method will never detect an outlier if the dataset has fewer than 12 items in it.
 #' \cr
+#' \cr
 #' Median absolute deviation, modified z-score. The median and MAD are robust measures of central tendency and dispersion, respectively.
+#' \cr
 #' \cr
 #' Interquartile range method is that, like the modified Z-score method, it uses a robust measure of dispersion.
 #' \cr
