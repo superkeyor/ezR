@@ -2265,7 +2265,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
         rvalue = result$r.residized.{model}
         nvalue = result$n.{model}
         pvalue = result$p.residized.{model}
-        '}
+        ')
     }
     rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
     if (pvalue<.001) {
