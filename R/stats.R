@@ -464,11 +464,18 @@ ez.vi = function(x,printn=35,order='as') {
 }
 
 #' standard error of mean
-#' @description na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
+#' @description standard error of mean
 #' @param x a vector
-#' @note \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations.
-#' se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
-#' \cr\cr For zscore (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{ez.scale}}(x, center = TRUE, scale = TRUE) demean: ez.scale(x,center=TRUE,scale=FALSE). (ez.scale() auto omits NAs)
+#' @note 
+#' \cr na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
+#' \cr 
+#' \cr \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations.
+#' \cr 
+#' \cr se = sd/sqrt(n). see https://www.statsdirect.com/help/basic_descriptive_statistics/standard_deviation.htm
+#' \cr 
+#' \cr I wrote ez.se, ez.sd = \code{\link[stats]{sd}}
+#' \cr 
+#' \cr\cr For zscore, (x-mean(x,na.rm=T))/sd(x,na.rm=T), or use \code{\link{ez.scale}}(x,center=TRUE,scale=TRUE) demean: ez.scale(x,center=TRUE,scale=FALSE). (ez.scale() auto NA ignored/returned in place. )
 #' \cr z-scores indeed have a mean of zero and a standard deviation of 1. Other than that, however, z-scores follow the exact same distribution as original scores. That is, standardizing scores doesn't make their distribution more or less "normal" in any way.
 #' see https://www.spss-tutorials.com/z-scores-what-and-why/
 #' @export
@@ -477,19 +484,25 @@ ez.se = function(x) {
     sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
 }
 
-#' scale
-#' @description similar to base::scale, but 1d vector in and 1d vector out, NA ignored/returned in place. suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
+#' @rdname ez.se
+#' @export
+ez.sd = stats::sd
+
+#' z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place. 
+#' @description z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place. 
+#' @note 
+#' similar to base::scale, but 1d vector in and 1d vector out
+#' suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
+#' alias: \code{\link{ez.z}} and \code{\link{ez.scale}}
+#' @seealso \code{\link{ez.se}} \code{\link{ez.sd}}
 #' @export
 ez.scale = function(x,center = TRUE, scale = TRUE) {
     as.vector(scale(x,center=center,scale=scale))
 }
 
-#' z score
-#' @description z score, 1d vector in and 1d vector out, NA ignored/returned in place
+#' @rdname ez.scale
 #' @export
-ez.z = function(x,center = TRUE, scale = TRUE) {
-    as.vector(scale(x,center=center,scale=scale))
-}
+ez.z = ez.scale
 
 #' r correlation
 #' @description r correlation
