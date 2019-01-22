@@ -1,3 +1,52 @@
+
+#' scatter plot internal function
+#' @description scatter plot internal function
+#' @export
+.scatterplot.rnp = function(...){
+    # https://gist.github.com/kdauria/524eade46135f6348140
+    # http://stackoverflow.com/a/7549819/2292993
+    # http://stackoverflow.com/a/13451587/2292993
+    result = ez.lms(...,report=F,plot=F,view=F)
+    if (model=="lm") {
+        rvalue = result$r.residized
+        nvalue = result$n
+        pvalue = result$p.residized
+    } else {
+        ez.esp('
+        rvalue = result$r.residized.{model}
+        nvalue = result$n.{model}
+        pvalue = result$p.residized.{model}
+        '}
+    }
+    rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
+    if (pvalue<.001) {
+        pvalue = sprintf("%.2e", pvalue)
+    } else if (pvalue<.01) {
+        pvalue = sprintf("%.3f", pvalue)
+    } else {
+        pvalue = sprintf("%.2f", pvalue)
+    }
+    eq <- substitute(italic(r)~"="~rvalue*","~italic(n)~"="~nvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,nvalue = nvalue,pvalue = pvalue))
+    as.character(as.expression(eq))
+}
+
+#' scatter plot internal function
+#' @description scatter plot internal function
+#' @export
+.scatterplot.ablinemethod = function(form,data,model){
+    # for latticeExtra::panel.smoother(method), it has se, proper line range
+    # better than panel.abline
+    # this function has to be exported, cannot be found within scatterplot function, maybe because
+    # the do.call() in latticeExtra::panel.smoother
+    set.seed(20190117)
+    na.action=na.exclude
+    if (model=="lm") m = stats::lm(form,data,na.action=na.action)
+    if (model=="lmrob") m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action))
+    if (model=="lmRob") m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action))
+    if (model=="rlm") m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action))
+    return(m)
+}
+
 #' scatter plot with lattice
 #' @description scatter plot with lattice
 #' @param df data frame
@@ -47,85 +96,6 @@ ez.scatterplot = function(df,cmd,loess=TRUE,model=c('lm', 'lmrob', 'lmRob', 'rlm
     model = match.arg(model)
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=legend.size[2]}  # change default legend title size 0
     if (is.character(legend.position)) legend.position = ez.sprintf('space="{legend.position}"') else legend.position = ez.sprintf('corner=c({ez.vv(legend.position,print2scr=F)})')
-
-    # https://gist.github.com/kdauria/524eade46135f6348140
-    # http://stackoverflow.com/a/7549819/2292993
-    # http://stackoverflow.com/a/13451587/2292993
-    tt = ez.sprintf('
-        .scatterplot.rnp = function(...){
-            result = ez.lms(...,report=F,plot=F,view=F)
-            if (model=="lm") {
-                rvalue = result$r.residized
-                nvalue = result$n
-                pvalue = result$p.residized
-            } else {
-                rvalue = result$r.residized.<<model>>
-                nvalue = result$n.<<model>>
-                pvalue = result$p.residized.<<model>>
-            }
-            rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
-            if (pvalue<.001) {
-                pvalue = sprintf("%.2e", pvalue)
-            } else if (pvalue<.01) {
-                pvalue = sprintf("%.3f", pvalue)
-            } else {
-                pvalue = sprintf("%.2f", pvalue)
-            }
-            eq <- substitute(italic(r)~"="~rvalue*","~italic(n)~"="~nvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,nvalue = nvalue,pvalue = pvalue))
-            as.character(as.expression(eq))
-        }
-
-        .scatterplot.ablinemethod = function(form,data,model){
-            # for latticeExtra::panel.smoother(method), it has se, proper line range
-            # better than panel.abline
-            # this function has to be exported, cannot be found within scatterplot function, maybe because
-            # the do.call() in latticeExtra::panel.smoother
-            set.seed(20190117)
-            na.action=na.exclude
-            if (model=="lm") m = stats::lm(form,data,na.action=na.action)
-            if (model=="lmrob") m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action))
-            if (model=="lmRob") m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action))
-            if (model=="rlm") m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action))
-            return(m)
-        }
-
-        # lmList: Fit a list of lm objects with a common model for different subgroups of the data
-        lmrnp2 = function(y,x,z,df) {
-            m = eval(parse(text=sprintf("lme4::lmList(%s ~ %s|%s, df)",y,x,z)))
-            rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
-            rvalue = apply(rvalue,1,function(rval) ifelse(abs(rval)>=.005, sprintf("%.2f",rval), sprintf("%.2e", rval)))
-
-            # separate p values
-            # pvalue = summary(m)$coefficients[,4,2]
-            # pvalue = sapply(pvalue,function(pval) {
-            #                 if (pval<.001) {
-            #                 sprintf("%.2e", pval)
-            #                 } else if (pval<.01) {
-            #                 sprintf("%.3f", pval)
-            #                 } else {
-            #                 sprintf("%.2f", pval)
-            #                 }
-            #                 })
-            # eq <- substitute(italic(r[levs])~"="~rvalue*","~italic(p)~"="~pvalue,list(levs=paste0("(", paste(names(rvalue),collapse=", "), ")"),rvalue = paste0("(", paste(rvalue,collapse=", "), ")"),pvalue = paste0("(", paste(pvalue,collapse=", "), ")")))
-
-            # interaction p value
-            mm = eval(parse(text=sprintf("lm(%s ~ %s*%s, df)",y,x,z)))
-            pvalue = summary(mm)$coefficients[4,4]
-            if (pvalue<.001) {
-                pvalue = sprintf("%.2e", pvalue)
-            } else if (pvalue<.01) {
-                pvalue = sprintf("%.3f", pvalue)
-            } else {
-                pvalue = sprintf("%.2f", pvalue)
-            }
-
-            eq <- substitute(italic(r[levs])~"="~rvalue*","~italic(p)~"="~pvalue,list(levs=paste0("(", paste(names(rvalue),collapse=", "), ")"),rvalue = paste0("(", paste(rvalue,collapse=", "), ")"),pvalue = pvalue))
-            as.character(as.expression(eq));
-        }
-
-        ',.open="<<",".close"=">>")
-    eval(parse(text = tt))
-    gghistory=paste(gghistory,tt,sep='\n')
 
     cmd = ez.trim(cmd) %>% gsub("|||","@",.,fixed=TRUE) %>% gsub("||","*",.,fixed=TRUE)
 ####************************************************************************************************
