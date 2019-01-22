@@ -816,7 +816,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr "r2"          | "r2.lmrob"          | "r2.lmRob"          | "r2.rlm" (NA)
 #' \cr "r.residized" | "r.residized.lmrob" | "r.residized.lmRob" | "r.residized.rlm" (NA)
 #' \cr "p.residized" | "p.residized.lmrob" | "p.residized.lmRob" | "p.residized.rlm"
-#' \cr 
+#' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
 #' \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T and also to be used in ez.scatterplot
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
@@ -993,7 +993,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         out = tibble::rownames_to_column(out)
         out['bestp'] = out$rowname[which.min(out$p)]
         out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
-        out = ez.clcolnames('\\.lm$','')
+        out = ez.clcolnames(out, '\\.lm$','')
         # UA=c('c','a','b'); UB=c('b','c','d'); # desired output: c('b','c','a')
         AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!(UA %in% UB)]))}
         desiredOrd = c('orindex', 'y', 'ylbl', 'x', 'xlbl', 'covar', 'bestp', 'n', 'n.lmrob', 'n.lmRob', 'n.rlm',
