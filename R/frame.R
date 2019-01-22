@@ -978,7 +978,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2scr=T){
         df = ez.replace(df,allcols,oldval,newval)
         sink()
     }
-    return(df)
+    return(invisible(df))
 }
 
 #' replace when
@@ -1031,7 +1031,7 @@ ez.replacewhen = function(df, print2scr=T, ...) {
 
                 lab = ez.getlabel(df[[col]]); labs = ez.getlabels(df[[col]])
                 factored = ifelse(is.factor(df[[col]]), TRUE, FALSE)
-                
+
                 oldlevels = levels(df[[col]])
 
                 if (is.factor(df[[col]])) {df[[col]]=as.character(df[[col]])}
@@ -1047,7 +1047,7 @@ ez.replacewhen = function(df, print2scr=T, ...) {
             }
         } # end for
     } # end if
-    return(df)
+    return(invisible(df))
 }
 
 #' Count the occurrence of a single value in data frame columnwise, or rowwise, or both
@@ -1707,7 +1707,7 @@ ez.dropna = function(x, col=NULL, n=0, reindex=TRUE, print2scr=TRUE){
     nafter=nrow(result)
     if ((nbefore-nafter>0) & print2scr) cat(sprintf('%d rows containing NAs dropped (In: %d -> Out: %d).\n', nbefore-nafter, nbefore, nafter))
 
-    return(result)
+    return(invisible(result))
 }
 
 #' reset the index of a data frame from 1...N
