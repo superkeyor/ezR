@@ -61,11 +61,17 @@ an invisible data frame or list of data frame (if many y and many x)
 \cr For coding purpose, I put x as x, and (a,b) as cov. stdbeta, p returned refer to x, values referring to a,b were discarded during the process.
 \cr
 \cr ++++++++++!!!important note!!!++++++++++
+\cr "n"           | "n.lmrob"           | "n.lmRob"           | "n.rlm"
+\cr "stdbeta"     | "stdbeta.lmrob"     | "stdbeta.lmRob"     | "stdbeta.rlm"
+\cr "p"           | "p.lmrob"           | "p.lmRob"           | "p.rlm"
+\cr "r2"          | "r2.lmrob"          | "r2.lmRob"          | "r2.rlm" (NA)
+\cr "r.residized" | "r.residized.lmrob" | "r.residized.lmRob" | "r.residized.rlm" (NA)
+\cr "p.residized" | "p.residized.lmrob" | "p.residized.lmRob" | "p.residized.rlm"
+\cr 
 \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
-\cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T
+\cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T and also to be used in ez.scatterplot
 \cr no column named r, r(.lm), r.lmrob etc in the result data frame
-\cr all r or r2 value for rlm are NA, but p values are available, because I do not know how to get them from rlm yet
-\cr
+\cr r2.rlm or r.residized.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 \cr
 }
 \description{
