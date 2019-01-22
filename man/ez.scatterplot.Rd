@@ -4,7 +4,7 @@
 \alias{ez.scatterplot}
 \title{scatter plot with lattice}
 \usage{
-ez.scatterplot(df, cmd, loess = TRUE, model = c("lm", "lmrob", "lmRob",
+ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
   "rlm"), scale = TRUE, rp = TRUE, rp.size = 14, rp.x = 0.025,
   rp.y = 0.025, se = TRUE, layout = NULL, line.color = "#BE1B22",
   line.width = 3, line.style = 1, loess.color = "dark grey",
@@ -25,6 +25,8 @@ ez.scatterplot(df, cmd, loess = TRUE, model = c("lm", "lmrob", "lmRob",
 \item{loess}{T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))}
 
 \item{model}{one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified}
+
+\item{scale}{when having covariates, z transform residuals}
 
 \item{rp}{show r (signed) and p values}
 

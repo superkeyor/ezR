@@ -2247,7 +2247,6 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     return(p)
 }
 
-
 #' scatter plot internal function
 #' @description scatter plot internal function
 #' @export
@@ -2268,6 +2267,8 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
         ')
     }
     rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
+    # N/A for rlm, do not know how to calculate it yet
+    if (model=='rlm') rvalue='N/A'
     if (pvalue<.001) {
         pvalue = sprintf("%.2e", pvalue)
     } else if (pvalue<.01) {
@@ -2287,6 +2288,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     # better than panel.abline
     # this function has to be exported, cannot be found within scatterplot function, maybe because
     # the do.call() in latticeExtra::panel.smoother
+    # essentially same procedure as ez.lms
     set.seed(20190117)
     na.action=na.exclude
     if (model=="lm") m = stats::lm(form,data,na.action=na.action)
@@ -2303,6 +2305,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr y~x+a+b|||z plots separated by z groups
 #' @param loess T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))
 #' @param model one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
+#' @param scale when having covariates, z transform residuals
 #' @param rp show r (signed) and p values
 #' @param rp.size  r p values font size, ignored if rp=FALSE
 #' @param rp.x  r p values x position (0-1, relative to top left, big-->right), ignored if rp=FALSE.
@@ -2325,7 +2328,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)
 #' @return a lattice plot
 #' @export
-ez.scatterplot = function(df,cmd,loess=TRUE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=TRUE,rp=TRUE,rp.size=14,rp.x=0.025,rp.y=0.025,se=TRUE,layout=NULL,
+ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=TRUE,rp=TRUE,rp.size=14,rp.x=0.025,rp.y=0.025,se=TRUE,layout=NULL,
     line.color='#BE1B22',line.width=3,line.style=1,
     loess.color='dark grey',loess.width=3,loess.style=2,
     point.color='#0086B8',point.shape=16,point.alpha=0.90,point.size=14,
