@@ -466,7 +466,7 @@ ez.vi = function(x,printn=35,order='as') {
 #' standard error of mean
 #' @description standard error of mean
 #' @param x a vector
-#' @note 
+#' @note
 #' \cr na will be omitted before calculation, the formula is sqrt(var(x,na.rm=TRUE)/length(na.omit(x))) (equivalent to sd(x,na.rm=TRUE)/sqrt(length(na.omit(x))))
 #' \cr 
 #' \cr \code{\link[stats]{sd}}, standard deviation (sigma or sd, s) is simply the (positive) square root of the variance (sigma^2, or s^2), \code{\link[stats]{var}}. Both sd(), var() use denominator n - 1, which gives an unbiased estimator of the (co)variance for i.i.d. observations.

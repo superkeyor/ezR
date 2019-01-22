@@ -2,10 +2,21 @@
 % Please edit documentation in R/stats.R
 \name{ez.scale}
 \alias{ez.scale}
-\title{scale}
+\alias{ez.z}
+\title{z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.}
 \usage{
 ez.scale(x, center = TRUE, scale = TRUE)
+
+ez.z(x, center = TRUE, scale = TRUE)
 }
 \description{
-similar to base::scale, but 1d vector in and 1d vector out, NA ignored/returned in place. suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
+z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.
+}
+\note{
+similar to base::scale, but 1d vector in and 1d vector out
+suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
+alias: \code{\link{ez.z}} and \code{\link{ez.scale}}
+}
+\seealso{
+\code{\link{ez.se}} \code{\link{ez.sd}}
 }
