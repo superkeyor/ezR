@@ -2467,60 +2467,6 @@ if (grepl("+",cmd,fixed=TRUE)) {
                tt,sep='\n')
     } else if (grepl("*",cmd,fixed=T)) {
         # y~x||z
-        tmp = strsplit(cmd,"[~@]")[[1]]
-        y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
-        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
-        n = nlevels(df[[z]])
-
-        if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
-        if (is.null(zlab)) zlab = z ; if (is.null(title)) title = ''
-        if (is.null(layout)) layout = c(n,1);
-        point.shape = ez.vv(shapes[1:n],print2scr=F); point.color = ez.vv(colors[1:n],print2scr=F)
-        layout = ez.vv(layout,print2scr=F);
-        if (legend.direction=='vertical') nkeycol=1 else nkeycol = n
-        # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
-        # pass any additional parameters to xyplot(... )
-        tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}|{z}, df, grid=F, type="p",
-            groups = {z},pch = c({point.shape}), col = c({point.color}),
-            ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
-            main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
-            par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
-            par.strip.text = list(cex={legend.size[2]}, fontfamily="{RMN}"),
-            scales = list(
-                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={x.tick.number}, tck=c(1,0)),
-                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={y.tick.number}, tck=c(1,0))
-                ),
-            key = list(
-                fontfamily="{RMN}",
-                text = list(levels(df[["{z}"]]), cex = {legend.size[2]}),
-                border = {legend.box},
-                {legend.position},
-                title = "{zlab}", cex.title = {legend.size[1]},
-                points = list(pch = c({point.shape}), col = c({point.color}), cex = {legend.size[2]}),
-                columns = {nkeycol}),
-            panel = function(x, y, ...,model=model){"{"}
-            panel.superpose(x, y, ...,
-            panel.groups = function(x, y, ..., col){"{"}
-            panel.xyplot(x, y, ...)
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(data.frame({x}=x,{y}=y), "{y}", "{x}", model = "{model}"))),
-                            x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
-                            gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
-                            just = c("left", "bottom"))
-            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col=col)
-            if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
-            # print(names(list(...)))   # a lot
-            # do not add ... to panel.points
-            #panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
-            {"}"})
-            {"}"}, layout=c({layout}), ...
-        )
-        ') # end sprintf
-        gghistory=paste(gghistory,
-               sprintf('df=ez.dropna(df,c("%s","%s","%s")) %%>%% ez.factorelevel("%s")',y,x,z,z),
-               tt,sep='\n')
-    } else if (grepl("@",cmd,fixed=T)) {
-        # y~x|||z
         tmp = strsplit(cmd,"[~*]")[[1]]
         y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
         df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
@@ -2572,6 +2518,60 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
             {"}"}, ...
+        )
+        ') # end sprintf
+        gghistory=paste(gghistory,
+               sprintf('df=ez.dropna(df,c("%s","%s","%s")) %%>%% ez.factorelevel("%s")',y,x,z,z),
+               tt,sep='\n')
+    } else if (grepl("@",cmd,fixed=T)) {
+        # y~x|||z
+        tmp = strsplit(cmd,"[~@]")[[1]]
+        y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
+        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
+        n = nlevels(df[[z]])
+
+        if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
+        if (is.null(zlab)) zlab = z ; if (is.null(title)) title = ''
+        if (is.null(layout)) layout = c(n,1);
+        point.shape = ez.vv(shapes[1:n],print2scr=F); point.color = ez.vv(colors[1:n],print2scr=F)
+        layout = ez.vv(layout,print2scr=F);
+        if (legend.direction=='vertical') nkeycol=1 else nkeycol = n
+        # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
+        # pass any additional parameters to xyplot(... )
+        tt = ez.sprintf('
+        pp = lattice::xyplot({y}~{x}|{z}, df, grid=F, type="p",
+            groups = {z},pch = c({point.shape}), col = c({point.color}),
+            ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
+            main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
+            par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
+            par.strip.text = list(cex={legend.size[2]}, fontfamily="{RMN}"),
+            scales = list(
+                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={x.tick.number}, tck=c(1,0)),
+                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={y.tick.number}, tck=c(1,0))
+                ),
+            key = list(
+                fontfamily="{RMN}",
+                text = list(levels(df[["{z}"]]), cex = {legend.size[2]}),
+                border = {legend.box},
+                {legend.position},
+                title = "{zlab}", cex.title = {legend.size[1]},
+                points = list(pch = c({point.shape}), col = c({point.color}), cex = {legend.size[2]}),
+                columns = {nkeycol}),
+            panel = function(x, y, ...,model=model){"{"}
+            panel.superpose(x, y, ...,
+            panel.groups = function(x, y, ..., col){"{"}
+            panel.xyplot(x, y, ...)
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(data.frame({x}=x,{y}=y), "{y}", "{x}", model = "{model}"))),
+                            x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
+                            gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
+                            just = c("left", "bottom"))
+            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col=col)
+            if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
+            # print(names(list(...)))   # a lot
+            # do not add ... to panel.points
+            #panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
+            {"}"})
+            {"}"}, layout=c({layout}), ...
         )
         ') # end sprintf
         gghistory=paste(gghistory,
