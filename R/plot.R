@@ -974,7 +974,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -983,7 +983,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=colors)')
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
@@ -1169,7 +1169,7 @@ ez.barplot = function(df,cmd,color='color',bar.gap=0.7,bar.width=0.7,error.size=
 #' @return a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1244,7 +1244,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
+                            scale_color_manual(values=colors) +
 
                             %s %s %s
                             %s %s
@@ -1272,7 +1272,7 @@ ez.lineplot = function(df,cmd,line.size=0.7,error.size=0.7,error.gap=0,error.wid
                             geom_point(aes(shape=%s,color=%s)) +
                             geom_line(aes(linetype=%s,color=%s), size=%f) +
                             geom_errorbar(aes(ymin=%s, ymax=%s, linetype=%s, color=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
-                            scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
+                            scale_color_manual(values=colors) +
 
                             %s %s %s
                             %s %s
@@ -1587,12 +1587,12 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
 #' @param alpha The alpha level for the confidence regions, defaults to .05
 #' @param ... other options for pairs
 #' @export
-ez.scatterplots = function(x,group=NULL,histogram=TRUE,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=16,
+ez.scatterplots = function(x,group=NULL,histogram=TRUE,smooth=TRUE,scale=TRUE,density=TRUE,ellipses=FALSE,digits=2,method="pearson",pch=16,colors=ez.palette("Zhu"),
 lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,rug=TRUE,breaks="Sturges",cex.cor=2,smoother=FALSE,stars=TRUE,ci=FALSE,alpha=.05,...) {
     # To show different groups with different colors, use a plot character (pch) between 21 and 25 and then set the background color to vary by group
     bg = 'black'  # color for data point
     if (!is.null(group)) {
-        colors = ez.palette("Zhu")
+        
         bg=colors[1:nlevels(as.factor(x[[group]]))][as.factor(x[[group]])]
         pch = 20+as.numeric(x[[group]])
         x[group] <- NULL
@@ -2314,14 +2314,14 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr y~x+a+b|||z plots separated by z groups
 #' @param loess T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))
 #' @param model one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
-#' @param multiplot T/F if more than 1 model specified, plot all in one plot
+#' @param hack T/F if more than 1 model specified, plot all in one plot
 #' @param scale when having covariates, z transform residuals
 #' @param rp show r (signed) and p values
 #' @param rp.size  r p values font size, ignored if rp=FALSE
 #' @param rp.x  r p values x position (0-1, relative to top left, big-->right), ignored if rp=FALSE.
 #' @param rp.y  r p values y position (0-1, relative to top left, big-->up), ignored if rp=FALSE.
 #' @param se standard error of linear regression line
-#' @param line.color only applicable when not auto varied, regression line color
+#' @param line.color only applicable when not auto varied, regression line color.
 #' @param point.color only applicable when not auto varied
 #' @param point.shape only applicable when not auto varied
 #' @param point.alpha  if overplot for points, one can reduce alpha
@@ -2337,31 +2337,34 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param legend.size c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
 #' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit weird
 #' @return a lattice plot
+#' @note specify auto through param colors, shapes
 #' @export
 ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=TRUE,rp=TRUE,rp.size=14,rp.x=0.025,rp.y=0.025,se=TRUE,layout=NULL,
     line.color='#BE1B22',line.width=3,line.style=1,
     loess.color='dark grey',loess.width=3,loess.style=2,
     point.color='#0086B8',point.shape=16,point.alpha=0.90,point.size=14,
+    colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),
     ylab=NULL,xlab=NULL,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,x.tick.number=5,y.tick.number=5,
     title=NULL,title.size=20,
-    zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",legend.size=c(0,14),multiplot=FALSE,...){
+    zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",legend.size=c(0,14),hack=FALSE,...){
 
-    if (length(model)>1 & multiplot){
+    if (length(model)>1 & hack){
         out = mapply(ez.scatterplot,model=model,title=model,MoreArgs=list(df=df, cmd=cmd, loess=loess, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
                     layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
                     loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
-                    point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, ylab=ylab, xlab=xlab,
+                    point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, 
+                    colors=colors, shapes=shapes, 
+                    ylab=ylab, xlab=xlab,
                     x.axis.size=x.axis.size, y.axis.size=y.axis.size, x.lab.size=x.lab.size, y.lab.size=y.lab.size,
                     x.tick.number=x.tick.number, y.tick.number=y.tick.number, title.size=title.size,
                     zlab=zlab, legend.box=legend.box, legend.position=legend.position,
-                    legend.direction=legend.direction, legend.size=legend.size, multiplot=FALSE, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
+                    legend.direction=legend.direction, legend.size=legend.size, hack=FALSE, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
         multiplot(plotlist=out,title=title)
         return(invisible(out))
     }
 
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
-    shapes = rep(c(16,17,15,3,7,8),100)   ; colors = rep(ez.palette("Zhu"),100)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
     rp.size = rp.size/bt                  ; point.size = point.size/bt
     title.size = title.size/bt            ; legend.size = legend.size/bt
@@ -2673,7 +2676,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
+ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
 ####************************************************************************************************
                                      ####*recursive call*####
 ####************************************************************************************************
@@ -2682,8 +2685,8 @@ if (grepl("|||",cmd,fixed=TRUE)) {
     cmd = tmp[1]; z = tmp[2]
     lvls =  levels(df[[z]])
     pplist = list()
-    shapes = rep(c(16,17,15,3,7,8),100)
-    colors = rep(ez.palette("Zhu"),100)
+    
+    
     for (i in 1:length(lvls)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
         pplist[[i]] = ez.scatterplot2(df = dftmp,
@@ -2836,7 +2839,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
-                  scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
+                  scale_color_manual(values=colors) + scale_shape_manual(values=shapes) + 
                   %s %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -2865,7 +2868,6 @@ if (grepl("+",cmd,fixed=TRUE)) {
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,color="%s",shape=%d) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
-                  # scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
                   %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -2890,7 +2892,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                       pp=ggplot(df, aes(x=%s, y=%s)) +
                       geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
                       geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
-                      scale_color_manual(values=rep(ez.palette("Zhu"),100)) +
+                      scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                       %s %s %s %s
                       theme(legend.direction="%s") +
                       theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -2933,7 +2935,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols') {
+ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols') {
     df.bak=df
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust)
@@ -2949,7 +2951,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=colors)')
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
@@ -3154,7 +3156,7 @@ ez.countplot = function(df,cmd,position='both',color='color',alpha=1,n.size=5.5,
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -3164,7 +3166,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=colors)')
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
@@ -3240,7 +3242,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',alpha=1,n.size=5
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',...) {
+ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',colors=ez.palette("Zhu"),alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',...) {
     if (!is.data.frame(x)) {
         var=deparse(substitute(x))
         dfcmd=sprintf('df=data.frame("%s"=x)',var)
@@ -3258,7 +3260,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',alpha=0.
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
 
-    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=rep(ez.palette("Zhu"),100))')
+    color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=colors)')
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
