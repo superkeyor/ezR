@@ -5,6 +5,7 @@
 \title{scatter plot with ggplot}
 \usage{
 ez.scatterplot2(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
+  colors = ez.palette("Zhu"), shapes = c(16, 17, 15, 3, 7, 8),
   line.color = "#BE1B22", point.color = "#0086B8", point.shape = 16,
   point.alpha = 0.95, point.size = 3, rug.size = 0.25, ylab = NULL,
   xlab = NULL, zlab = NULL, legend.position = "top",

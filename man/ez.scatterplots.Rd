@@ -6,8 +6,8 @@
 \usage{
 ez.scatterplots(x, group = NULL, histogram = TRUE, smooth = TRUE,
   scale = TRUE, density = TRUE, ellipses = FALSE, digits = 2,
-  method = "pearson", pch = 16, lm = FALSE, cor = TRUE,
-  jiggle = FALSE, factor = 2, hist.col = "light grey",
+  method = "pearson", pch = 16, colors = ez.palette("Zhu"), lm = FALSE,
+  cor = TRUE, jiggle = FALSE, factor = 2, hist.col = "light grey",
   show.points = TRUE, rug = TRUE, breaks = "Sturges", cex.cor = 2,
   smoother = FALSE, stars = TRUE, ci = FALSE, alpha = 0.05, ...)
 }

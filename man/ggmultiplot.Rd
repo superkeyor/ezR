@@ -4,15 +4,18 @@
 \alias{ggmultiplot}
 \title{Multiple plot function, accepts a list of ggplot (not plot) objects}
 \usage{
-ggmultiplot(..., plotlist = NULL, cols = NULL, layout = NULL)
+ggmultiplot(..., plotlist = NULL, cols = NULL, layout = NULL,
+  title = "", title.size = 20)
 }
 \arguments{
 \item{plotlist}{objects can be passed in ..., or to plotlist (as a list of ggplot objects)
 (p1,p2,p3), (plotlist=list(p1,p2,p3)), or (p1,plotlist=list(p2,p3))}
 
-\item{cols:}{Number of columns in layout.. If present, 'cols' is ignored. If both cols and layout NULL, auto calculate}
+\item{cols}{Number of columns in layout.. If present, 'cols' is ignored. If both cols and layout NULL, auto calculate}
 
-\item{layout:}{A matrix specifying the layout.
+\item{layout}{A matrix specifying the layout.}
+
+\item{title}{string, NULL or '' both fine
 \cr If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
 \cr then plot 1 will go in the upper left, 2 will go in the upper right, and
 \cr 3 will go all the way across the bottom.}

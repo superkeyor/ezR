@@ -4,9 +4,10 @@
 \alias{ez.countplot}
 \title{plot count data}
 \usage{
-ez.countplot(df, cmd, position = "both", color = "color", alpha = 1,
-  n.size = 5.5, n.type = 3, width = 0.7, ylab = NULL, xlab = NULL,
-  zlab = NULL, legend.position = "top", legend.direction = "horizontal",
+ez.countplot(df, cmd, position = "both", color = "color",
+  colors = ez.palette("Zhu"), alpha = 1, n.size = 5.5, n.type = 3,
+  width = 0.7, ylab = NULL, xlab = NULL, zlab = NULL,
+  legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
   hjust = NULL, facet = "cols")
 }

@@ -9,12 +9,14 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
   rp.y = 0.025, se = TRUE, layout = NULL, line.color = "#BE1B22",
   line.width = 3, line.style = 1, loess.color = "dark grey",
   loess.width = 3, loess.style = 2, point.color = "#0086B8",
-  point.shape = 16, point.alpha = 0.9, point.size = 14, ylab = NULL,
-  xlab = NULL, x.axis.size = 16, y.axis.size = 16, x.lab.size = 18,
-  y.lab.size = 18, x.tick.number = 5, y.tick.number = 5, title = NULL,
-  title.size = 20, zlab = NULL, legend.box = FALSE,
-  legend.position = "top", legend.direction = "horizontal",
-  legend.size = c(0, 14), multiplot = FALSE, ...)
+  point.shape = 16, point.alpha = 0.9, point.size = 14,
+  colors = ez.palette("Zhu"), shapes = c(16, 17, 15, 3, 7, 8),
+  ylab = NULL, xlab = NULL, x.axis.size = 16, y.axis.size = 16,
+  x.lab.size = 18, y.lab.size = 18, x.tick.number = 5,
+  y.tick.number = 5, title = NULL, title.size = 20, zlab = NULL,
+  legend.box = FALSE, legend.position = "top",
+  legend.direction = "horizontal", legend.size = c(0, 14), hack = FALSE,
+  ...)
 }
 \arguments{
 \item{df}{data frame}
@@ -38,7 +40,7 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 
 \item{se}{standard error of linear regression line}
 
-\item{line.color}{only applicable when not auto varied, regression line color}
+\item{line.color}{only applicable when not auto varied, regression line color.}
 
 \item{point.color}{only applicable when not auto varied}
 
@@ -65,7 +67,7 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 
 \item{legend.size}{c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
-\item{multiplot}{T/F if more than 1 model specified, plot all in one plot}
+\item{hack}{T/F if more than 1 model specified, plot all in one plot}
 
 \item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit weird}
 }
@@ -74,4 +76,7 @@ a lattice plot
 }
 \description{
 scatter plot with lattice
+}
+\note{
+specify auto through param colors, shapes
 }

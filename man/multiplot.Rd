@@ -4,11 +4,14 @@
 \alias{multiplot}
 \title{Multiple plot function, accepts a list of lattice plot (not ggplot) objects}
 \usage{
-multiplot(..., plotlist = NULL, cols = NULL, layout = NULL)
+multiplot(..., plotlist = NULL, cols = NULL, layout = NULL, title = "",
+  title.size = 20)
 }
 \arguments{
 \item{plotlist}{objects can be passed in ..., or to plotlist (as a list of plot objects)
 (p1,p2,p3), (plotlist=list(p1,p2,p3)), or (p1,plotlist=list(p2,p3))}
+
+\item{title}{string, NULL or '' both fine}
 
 \item{cols:}{Number of columns in layout. If present, 'cols' is ignored. If both cols and layout NULL, auto calculate}
 

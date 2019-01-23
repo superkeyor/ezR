@@ -4,10 +4,10 @@
 \alias{ez.barplot}
 \title{barplot with ggplot}
 \usage{
-ez.barplot(df, cmd, color = "color", bar.gap = 0.7, bar.width = 0.7,
-  error.size = 0.7, error.gap = 0.7, error.width = 0.3,
-  error.direction = "both", ylab = NULL, xlab = NULL, zlab = NULL,
-  legend.position = "top", legend.direction = "horizontal",
+ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
+  bar.gap = 0.7, bar.width = 0.7, error.size = 0.7, error.gap = 0.7,
+  error.width = 0.3, error.direction = "both", ylab = NULL, xlab = NULL,
+  zlab = NULL, legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
   hjust = NULL)
 }

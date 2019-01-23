@@ -5,10 +5,10 @@
 \title{plot continous data}
 \usage{
 ez.hist(x, cmd, bins = 60, density = FALSE, xline = NULL,
-  color = "color", alpha = 0.5, ylab = NULL, xlab = NULL, zlab = NULL,
-  legend.position = "top", legend.direction = "horizontal",
-  legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
-  hjust = NULL, facet = "cols", ...)
+  color = "color", colors = ez.palette("Zhu"), alpha = 0.5, ylab = NULL,
+  xlab = NULL, zlab = NULL, legend.position = "top",
+  legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
+  xangle = 0, vjust = NULL, hjust = NULL, facet = "cols", ...)
 }
 \arguments{
 \item{x}{df or vector, if vector cmd ignored}

@@ -4,9 +4,10 @@
 \alias{ez.lineplot}
 \title{line plot with ggplot}
 \usage{
-ez.lineplot(df, cmd, line.size = 0.7, error.size = 0.7, error.gap = 0,
-  error.width = 0.3, error.direction = "both", ylab = NULL, xlab = NULL,
-  zlab = NULL, legend.position = "top", legend.direction = "horizontal",
+ez.lineplot(df, cmd, colors = ez.palette("Zhu"), line.size = 0.7,
+  error.size = 0.7, error.gap = 0, error.width = 0.3,
+  error.direction = "both", ylab = NULL, xlab = NULL, zlab = NULL,
+  legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
   hjust = NULL)
 }

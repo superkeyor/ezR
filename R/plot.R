@@ -173,10 +173,10 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
         GrandBudapest2 = c("#E6A0C4", "#C6CDF7", "#D8A499", "#7294D4"),
         IsleofDogs1 = c("#9986A5", "#79402E", "#CCBA72", "#0F0D0E", "#D9D0D3", "#8D8680"),
         IsleofDogs2 = c("#EAD3BF", "#AA9486", "#B6854D", "#39312F", "#1C1718"),
-        matlabcolor1 = colorRamps::matlab.like(nn),
-        matlabcolor2 = colorRamps::matlab.like2(nn),
+        matlab1 = colorRamps::matlab.like(nn),
+        matlab2 = colorRamps::matlab.like2(nn),
         # default ggplot color
-        ggcolor = hcl(h=seq(15,375,length=nn+1),l=65,c=100)[1:nn],
+        ggplot2 = hcl(h=seq(15,375,length=nn+1),l=65,c=100)[1:nn],
         # from RColorBrewer
         # f <- function(pal) RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[pal, "maxcolors"], pal)
         # f("Set1")
