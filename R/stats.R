@@ -472,11 +472,12 @@ ez.vi = function(x,printn=35,order='as') {
 #' \cr        if x is not a data frame, col is ignored
 #' \cr        could be multiple cols
 #' @param method z score or IQR (John Tukey)
-#' @param cutoff abs() > cutoff will be treated as outliers. Default values(if NULL):
+#' @param cutoff abs() > cutoff will be treated as outliers. Default/auto values(if NA):
 #' \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
 #' \cr mad 2.5, which is the standard recommendation, or 5.2
 #' \cr iqr 1.5
-#' @param plot boxplot and hist before and after outlier processing. Only works for vector (imagine plot for dataframe)
+#' @param hack call mapply to try all method and cutoff (which should have same length, if cutoff is not NA). Only works if x is vector
+#' @param plot boxplot and hist before and after outlier processing. Only works if x is vector (imagine plot for dataframe)
 #' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame)
 #' @return returns a new data frame or vector
 #' @note univariate outlier approach
@@ -500,12 +501,19 @@ ez.vi = function(x,printn=35,order='as') {
 #'
 #'
 #' @export
-ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NULL, plot=TRUE, fillout=c('na','mean','median'), na.rm=TRUE, print2scr=TRUE) {
+ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=TRUE, cutoff=NA, plot=TRUE, fillout=c('na','mean','median'), na.rm=TRUE, print2scr=TRUE) {
     # https://datascienceplus.com/rscript/outlier.R
     # https://cran.r-project.org/web/packages/outliers/index.html
     # https://rpubs.com/hauselin/outliersDetect
 
     if (!is.data.frame(x)) {
+        if (length(method)>1 & hack==T){
+            # here for programming reason, for mapply, 
+            # cutoff could not be NULL, use NA, because length(NULL)=0, but length(NA)=1
+            mapply(ez.outlier,method=method,cutoff=cutoff,MoreArgs=list(x=x,col=col,hack=F,plot=plot,fillout=fillout,na.rm=na.rm,print2scr=print2scr),SIMPLIFY=F,USE.NAMES=F)
+            return(invisible(NULL))
+        }
+
         method = match.arg(method); fillout = match.arg(fillout)
         if (fillout=='na') {
             replacement = NA
@@ -518,18 +526,18 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NULL, plot=
         x.bak.plot = x
 
         if (method=='z'){
-            if(is.null(cutoff)) cutoff = qnorm(0.025,lower.tail=F)
+            if(is.na(cutoff)) cutoff = qnorm(0.025,lower.tail=F)
             absz = abs((x - mean(x, na.rm=na.rm))/sd(x, na.rm=na.rm))
             x[absz > cutoff] <- replacement
             x.bak.count[absz > cutoff] <- NA
         } else if (method=='mad'){
-            if(is.null(cutoff)) cutoff = 2.5
+            if(is.na(cutoff)) cutoff = 2.5
             absmad <- abs((x - median(x, na.rm=na.rm))/mad(x, na.rm=na.rm))
             x[absmad > cutoff] <- replacement
             x.bak.count[absmad > cutoff] <- NA
         } else if (method=='iqr'){
             # https://stackoverflow.com/a/4788102/2292993
-            if(is.null(cutoff)) cutoff = 1.5
+            if(is.na(cutoff)) cutoff = 1.5
             q1 <- quantile(x, 0.25, na.rm=na.rm)
             q3 <- quantile(x, 0.75, na.rm=na.rm)
             # alternatively iqr = q3-q1
@@ -537,32 +545,34 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NULL, plot=
             lower_bound = q1 - (iqr * cutoff)
             upper_bound = q3 + (iqr * cutoff)
             x[(x > upper_bound) | (x < lower_bound)] <- replacement
-            x.bak.count[(x > upper_bound) | (x < lower_bound)] <- NA
+            x.bak.count[(x.bak.count > upper_bound) | (x.bak.count < lower_bound)] <- NA
         }
 
         if (plot){
-            opar = par(mfrow=c(2, 2), oma=c(0,0,3,0))
+            # mar controls margin size for individual plot it goes c(bottom, left, top, right)
+            # oma is margin for the whole?
+            opar = par(mfrow=c(2, 2), oma=c(0,0,1.5,0), mar = c(2,2,1.5,0.5))
             on.exit(par(opar))
             boxplot(x.bak.plot, main="With outliers")
-            hist(x.bak.plot, main="With outliers", xlab=NA, ylab=NA)
+            hist(x.bak.plot, main="With outliers", xlab=NULL, ylab=NULL)
 
             boxplot(x, main="Without outliers")
-            hist(x, main="Without outliers", xlab=NA, ylab=NA)
-            title("Outlier Check", outer=TRUE)
+            hist(x, main="Without outliers", xlab=NULL, ylab=NULL)
+            title(paste0("Outlier Check: ",toupper(method)), outer=TRUE)
         }
     } else if (is.data.frame(x) & is.null(col)) {
         x.bak.count = x; oldNAs = ez.count(x.bak.count,NA)
-        x[] = lapply(x,ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
-        x.bak.count[] = lapply(x.bak.count,ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
+        x[] = lapply(x,ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
+        x.bak.count[] = lapply(x.bak.count,ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         x.bak.count = x; oldNAs = ez.count(x.bak.count,NA,col)
-        x[col] = lapply(x[col],ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
-        x.bak.count[col] = lapply(x.bak.count[col],ez.outlierm,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
+        x[col] = lapply(x[col],ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
+        x.bak.count[col] = lapply(x.bak.count[col],ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
     } # end if
     newNAs = ez.count(x.bak.count,NA,col) - oldNAs
     if (print2scr) {
-        ez.pprint(sprintf('%s outliers found and replaced', newNAs))
+        ez.pprint(sprintf('%s: %d outliers found and replaced', toupper(method), newNAs))
     }
     return(invisible(x))
 }

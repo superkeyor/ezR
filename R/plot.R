@@ -327,8 +327,9 @@ ggcook <- function() {
 #' @description Multiple plot function, accepts a list of ggplot (not plot) objects
 #' @param plotlist objects can be passed in ..., or to plotlist (as a list of ggplot objects)
 #' (p1,p2,p3), (plotlist=list(p1,p2,p3)), or (p1,plotlist=list(p2,p3))
-#' @param cols:   Number of columns in layout.. If present, 'cols' is ignored. If both cols and layout NULL, auto calculate
-#' @param layout: A matrix specifying the layout.
+#' @param cols   Number of columns in layout.. If present, 'cols' is ignored. If both cols and layout NULL, auto calculate
+#' @param layout A matrix specifying the layout.
+#' @param title string, NULL or '' both fine
 #' \cr If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
 #' \cr then plot 1 will go in the upper left, 2 will go in the upper right, and
 #' \cr 3 will go all the way across the bottom.
@@ -356,12 +357,12 @@ ggcook <- function() {
 #' ggmultiplot(plotlist = plots, layout = layout)
 #'
 #' @references \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
-ggmultiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
+ggmultiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL, title='', title.size=20) {
     # Make a list from the ... arguments and plotlist
     # remove NULL objects from ..., see https://stackoverflow.com/a/48519190/2292993
     plots <- c(Filter(Negate(is.null), list(...)), plotlist)
 
-    if (!ggplot2::is.ggplot(plots[[1]])) {return(multiplot(...,plotlist=plotlist,cols=cols,layout=layout))}
+    if (!ggplot2::is.ggplot(plots[[1]])) {return(multiplot(...,plotlist=plotlist,cols=cols,layout=layout,title=title,title.size=title.size))}
 
     numPlots = length(plots)
     if (is.null(cols)) {cols=floor(sqrt(length(plots)))}
@@ -379,18 +380,23 @@ ggmultiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
         print(plots[[1]])
 
     } else {
-        # Set up the page
-        grid::grid.newpage()
-        grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
+        # alternative solution with grid
+        # # Set up the page
+        # grid::grid.newpage()
+        # grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
 
-        # Make each plot, in the correct location
-        for (i in 1:numPlots) {
-            # Get the i,j matrix positions of the regions that contain this subplot
-            matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+        # # Make each plot, in the correct location
+        # for (i in 1:numPlots) {
+        #     # Get the i,j matrix positions of the regions that contain this subplot
+        #     matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
 
-            print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
-                                                  layout.pos.col = matchidx$col))
-        }
+        #     print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
+        #                                           layout.pos.col = matchidx$col))
+        # }
+
+        # wow, gridExtra works for ggplot objects, just with one function call!
+        gridExtra::grid.arrange(grobs=plots,layout_matrix=layout,
+            top=grid::textGrob(title,gp=grid::gpar(fontsize=title.size,fontface=2,fontfamily=RMN)))
     }
 }
 
@@ -403,6 +409,7 @@ ggmultiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
 #' \cr If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
 #' \cr then plot 1 will go in the upper left, 2 will go in the upper right, and
 #' \cr 3 will go all the way across the bottom.
+#' @param title string, NULL or '' both fine
 #' @return returns nothing (NULL)
 #' @export
 #' @examples
@@ -428,12 +435,12 @@ ggmultiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
 #' ggmultiplot(plotlist = plots, layout = layout)
 #'
 #' @references inspired by \href{http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/}{Cookbook R}
-multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
+multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL, title='', title.size=20) {
     # Make a list from the ... arguments and plotlist
     # remove NULL objects from ..., see https://stackoverflow.com/a/48519190/2292993
     plots <- c(Filter(Negate(is.null), list(...)), plotlist)
 
-    if (ggplot2::is.ggplot(plots[[1]])) {return(ggmultiplot(...,plotlist=plotlist,cols=cols,layout=layout))}
+    if (ggplot2::is.ggplot(plots[[1]])) {return(ggmultiplot(...,plotlist=plotlist,cols=cols,layout=layout,title=title,title.size=title.size))}
 
     numPlots = length(plots)
     if (is.null(cols)) {cols=floor(sqrt(length(plots)))}
@@ -451,7 +458,9 @@ multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL) {
         print(plots[[1]])
 
     } else {
-        gridExtra::grid.arrange(grobs=plots,layout_matrix=layout)
+        gridExtra::grid.arrange(grobs=plots,layout_matrix=layout,
+            top=grid::textGrob(title,gp=grid::gpar(fontsize=title.size,fontface=2,fontfamily=RMN)))
+        
         # # other example usage for reference:
         # gridExtra::grid.arrange(p1,p2,p3,layout_matrix=matrix(c(NA,1,2,3,4,5), nrow=2, byrow=TRUE) )
         # gridExtra::grid.arrange(p1,p2,p3,ncol=2)
@@ -2346,7 +2355,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
                     x.tick.number=x.tick.number, y.tick.number=y.tick.number, title.size=title.size,
                     zlab=zlab, legend.box=legend.box, legend.position=legend.position,
                     legend.direction=legend.direction, legend.size=legend.size, multiplot=FALSE, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
-        multiplot(plotlist=out)
+        multiplot(plotlist=out,title=title)
         return(invisible(out))
     }
 
