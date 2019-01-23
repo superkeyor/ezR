@@ -4,7 +4,7 @@
 \alias{ez.zresid}
 \title{(z) residual}
 \usage{
-ez.zresid(model, method = 3)
+ez.zresid(model, method = 1)
 }
 \arguments{
 \item{method}{1=scale(resid), 2=resid (unstandarized), 3=stats::rstandard}

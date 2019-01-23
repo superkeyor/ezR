@@ -658,7 +658,7 @@ ez.r = function(x,col=NULL,type="pearson",print2scr=T) {
 #' \cr r stats::rstandard = MASS::stdres = SPSS studentized residual
 #' \cr \href{https://stackoverflow.com/q/40062482/2292993}{https://stackoverflow.com/q/40062482/2292993}
 #' @export
-ez.zresid = function(model,method=3) {
+ez.zresid = function(model,method=1) {
     if (method==1) {result=as.vector(scale(resid(model),center=TRUE,scale=TRUE))}
     if (method==2) {result=resid(model)}
     if (method==3) {result=stats::rstandard(model)}
