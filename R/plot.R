@@ -998,9 +998,9 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
 
 ####************************************************************************************************
-                                     ####*covaraite start*####
+                                     ####*ancova start*####
 ####************************************************************************************************
-    # y|x+covar1+covar2 (anova1b)
+    # y|x+covar1+covar2 (ancova)
     if (grepl('+',cmd,fixed=TRUE)) {
         cmd = ez.trim(cmd)
         cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
@@ -1036,7 +1036,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         return(pp)
     }
 ####************************************************************************************************
-                                     ####*covariate end*####
+                                     ####*ancova end*####
 ####************************************************************************************************
 
     # http://stackoverflow.com/a/25734388/2292993
@@ -2394,11 +2394,13 @@ if (grepl("+",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+*]")[[1]]
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
-        # grouping changes df data type which would fail lme4::lmList below
+        # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
+        # https://stackoverflow.com/a/40061201/2292993
+        # group_by has no effects for ez.zresidize directly
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
              dplyr::group_by({z}) %>%
-             ez.zresidize('{x}',c({v}),model='{model}',scale={scale}) %>%
+             dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
              dplyr::ungroup() %>% data.frame()
         "
         cmd = ez.sprintf('{y}~{x}*{z}')
@@ -2407,11 +2409,10 @@ if (grepl("+",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+@]")[[1]]
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
-        # grouping changes df data type which would fail lme4::lmList below
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-             dplyr::group_by({z}) %>%
-             ez.zresidize('{x}',c({v}),model='{model}',scale={scale}) %>%
+             dplyr::group_by({z}) %>% 
+             dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
              dplyr::ungroup() %>% data.frame()
         "
         cmd = ez.sprintf('{y}~{x}@{z}')
@@ -2783,32 +2784,31 @@ if (grepl("|||",cmd,fixed=TRUE)) {
 if (grepl("+",cmd,fixed=TRUE)) {
     if (grepl("|",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+|]")[[1]]
-        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; v = tmp[3:(length(tmp)-1)]
-        v1 = ez.vv(v,print2scr=F); v2=paste0(v,collapse='+')
+        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; 
+        v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
-        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
-        df %<>% dplyr::mutate({y} = ez.zresid( lm({x}~{v2}, data=df) ))
+        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
+        df %<>% ez.zresidize('{x}',c({v}),model='lm',scale=TRUE)
         "
         cmd = ez.sprintf('{y}~{x}|{z}')
     } else if (grepl("*",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+*]")[[1]]
-        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; v = tmp[3:(length(tmp)-1)]
-        v1 = ez.vv(v,print2scr=F); v2=paste0(v,collapse='+')
-        # grouping changes df data type which would fail lme4::lmList below
+        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; 
+        v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
-        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v1}))
+        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
         df %<>% dplyr::group_by({z}) %>%
-            dplyr::mutate({y} = ez.zresid( lm({x}~{v2}) )) %>%
+            dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='lm',scale=TRUE){'}'}) %>%
             dplyr::ungroup() %>% data.frame()
         "
         cmd = ez.sprintf('{y}~{x}*{z}')
     } else {
         tmp = strsplit(cmd,"[~+]")[[1]]
-        y = tmp[1]; x = tmp[2]; v = tmp[3:length(tmp)]
-        v1 = ez.vv(v,print2scr=F); v2=paste0(v,collapse='+')
+        y = tmp[1]; x = tmp[2]; 
+        v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
-        df = ez.dropna(df,c('{y}', '{x}', {v1}))
-        df %<>% dplyr::mutate({y} = ez.zresid( lm({x}~{v2}, data=df) ))
+        df = ez.dropna(df,c('{y}', '{x}', {v}))
+        df %<>% ez.zresidize('{x}',c({v}),model='lm',scale=TRUE)
         "
         cmd = ez.sprintf('{y}~{x}')
     }
