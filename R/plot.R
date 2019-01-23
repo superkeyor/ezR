@@ -195,7 +195,7 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
         Printer = c("#FDAE61","#2B83BA","#D7191C","#ABDDA4","#FFFFBF"),
         Colorblind = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00","#CC79A7","#000000")
     )
-    if (missing(name)) {
+    if (missing(name)){
         palnames = names(palettes); palcolors = palettes
         # codes borrowed from ColorBrewer
         # nr row, nc col
