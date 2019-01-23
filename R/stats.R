@@ -508,7 +508,7 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=TRUE, cutoff=
 
     if (!is.data.frame(x)) {
         if (length(method)>1 & hack==T){
-            # here for programming reason, for mapply, 
+            # here for programming reason, for mapply,
             # cutoff could not be NULL, use NA, because length(NULL)=0, but length(NA)=1
             mapply(ez.outlier,method=method,cutoff=cutoff,MoreArgs=list(x=x,col=col,hack=F,plot=plot,fillout=fillout,na.rm=na.rm,print2scr=print2scr),SIMPLIFY=F,USE.NAMES=F)
             return(invisible(NULL))
@@ -562,16 +562,16 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=TRUE, cutoff=
         }
     } else if (is.data.frame(x) & is.null(col)) {
         x.bak.count = x; oldNAs = ez.count(x.bak.count,NA)
-        x[] = lapply(x,ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
-        x.bak.count[] = lapply(x.bak.count,ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
+        x[] = lapply(x,ez.outlier,col=NULL,method=method,cutoff=cutoff,plot=F,hack=F,fillout=fillout,na.rm=na.rm,print2scr=F)
+        x.bak.count[] = lapply(x.bak.count,ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,hack=F,fillout='na',na.rm=na.rm,print2scr=F)
     } else if (is.data.frame(x) & !is.null(col)) {
         col = ez.selcol(x,col)
         x.bak.count = x; oldNAs = ez.count(x.bak.count,NA,col)
-        x[col] = lapply(x[col],ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout=fillout,na.rm=na.rm,print2scr=F)
-        x.bak.count[col] = lapply(x.bak.count[col],ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,fillout='na',na.rm=na.rm,print2scr=F)
+        x[col] = lapply(x[col],ez.outlier,col=NULL,method=method,cutoff=cutoff,plot=F,hack=F,fillout=fillout,na.rm=na.rm,print2scr=F)
+        x.bak.count[col] = lapply(x.bak.count[col],ez.outlier,col=col,method=method,cutoff=cutoff,plot=F,hack=F,fillout='na',na.rm=na.rm,print2scr=F)
     } # end if
-    newNAs = ez.count(x.bak.count,NA,col) - oldNAs
     if (print2scr) {
+        newNAs = ez.count(x.bak.count,NA,col) - oldNAs
         ez.pprint(sprintf('%s: %d outliers found and replaced', toupper(method), newNAs))
     }
     return(invisible(x))
