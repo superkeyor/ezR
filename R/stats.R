@@ -517,9 +517,10 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout
             return(invisible(NULL))
     }
 
+    # todropna is an internal workaround for data frame with single col passed in
+    method = match.arg(method); cutoff=cutoff[1]; fillout = match.arg(fillout,c(fillout,'todropna'))
+
     if (!is.data.frame(x)) {
-        # todropna is a workaround for data frame with single col passed in
-        method = match.arg(method); fillout = match.arg(fillout,c(fillout,'todropna')); cutoff=cutoff[1]
         x.bak.plot = x; x.replace.na = x; oldNAs = ez.count(x.replace.na,NA)
         if (fillout=='na' | fillout=='todropna') {
             replacement = NA
@@ -573,12 +574,12 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout
             x.replace.na[(x.replace.na > upper_bound) | (x.replace.na < lower_bound)] <- NA
         }
 
-        newNAs = ez.count(x.replace.na,NA,col) - oldNAs
+        nOutliers = ez.count(x.replace.na,NA,col) - oldNAs
         if (print2scr) {
             if (!is.null(col)) {
-                ez.pprint(sprintf('%-15s %5s(%.2f): %3d outliers found and %s.', toString(col), toupper(method), cutoff, newNAs, ifelse((is.null(replacement)|fillout=='todropna'),'REMOVED','REPLACED')))
+                ez.pprint(sprintf('%-15s %5s(%.2f): %3d outliers found and %s.', toString(col), toupper(method), cutoff, nOutliers, ifelse((is.null(replacement)|fillout=='todropna'),'REMOVED','REPLACED')))
             } else {
-                ez.pprint(sprintf('%5s(%.2f): %3d outliers found and %s.', toupper(method), cutoff, newNAs, ifelse((is.null(replacement)|fillout=='todropna'),'REMOVED','REPLACED')))
+                ez.pprint(sprintf('%5s(%.2f): %3d outliers found and %s.', toupper(method), cutoff, nOutliers, ifelse((is.null(replacement)|fillout=='todropna'),'REMOVED','REPLACED')))
             }
         }
 
@@ -590,8 +591,8 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout
             boxplot(x.bak.plot, main=sprintf("With outliers (n=%d)",length(x.bak.plot)))
             hist(x.bak.plot, main=sprintf("With outliers (n=%d)",length(x.bak.plot)), xlab=NULL, ylab=NULL)
 
-            boxplot(x, main=sprintf("With outliers (n=%d)",length(x.bak.plot)-newNAs))
-            hist(x, main=sprintf("With outliers (n=%d)",length(x.bak.plot)-newNAs), xlab=NULL, ylab=NULL)
+            boxplot(x, main=sprintf("With outliers (n=%d)",length(x.bak.plot)-nOutliers))
+            hist(x, main=sprintf("With outliers (n=%d)",length(x.bak.plot)-nOutliers), xlab=NULL, ylab=NULL)
             title(sprintf("%s Outlier Check: %s(%.2f)",toString(col), toupper(method), cutoff), outer=TRUE)
         }
     } else if (is.data.frame(x)) {
