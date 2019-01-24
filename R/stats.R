@@ -504,7 +504,7 @@ ez.vi = function(x,printn=35,order='as') {
 #' iris %>% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=c(3,5,1.5))
 #' iris %>% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=NA)
 #' @export
-ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout=c('na','null','mean','median'), hack=FALSE, plot=FALSE, na.rm=TRUE, print2scr=TRUE) {
+ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout=c('null','na','mean','median'), hack=FALSE, plot=FALSE, na.rm=TRUE, print2scr=TRUE) {
     # https://datascienceplus.com/rscript/outlier.R
     # https://cran.r-project.org/web/packages/outliers/index.html
     # https://rpubs.com/hauselin/outliersDetect

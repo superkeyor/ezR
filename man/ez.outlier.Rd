@@ -5,7 +5,7 @@
 \title{univariate outlier cleanup}
 \usage{
 ez.outlier(x, col = NULL, method = c("z", "mad", "iqr"), cutoff = NA,
-  fillout = c("na", "null", "mean", "median"), hack = FALSE, plot = FALSE,
+  fillout = c("null", "na", "mean", "median"), hack = FALSE, plot = FALSE,
   na.rm = TRUE, print2scr = TRUE)
 }
 \arguments{
