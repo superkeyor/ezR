@@ -9,7 +9,7 @@ ez.fishers(df, y, x, report = T, view = F, plot = F,
   text.size = 16, width = 300, error = T, ...)
 }
 \arguments{
-\item{df}{a data frame, internal go through dropna-->ez.2factor}
+\item{df}{a data frame, internal go through dropna --> ez.2factor}
 
 \item{y}{compatible with \code{\link{ez.selcol}}}
 

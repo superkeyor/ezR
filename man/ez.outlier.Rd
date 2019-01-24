@@ -17,18 +17,19 @@ ez.outlier(x, col = NULL, method = c("z", "mad", "iqr"), cutoff = NA,
 \cr        if x is not a data frame, col is ignored
 \cr        could be multiple cols}
 
-\item{method}{z score or IQR (John Tukey)}
+\item{method}{z score, mad, or IQR (John Tukey)}
 
-\item{cutoff}{abs() > cutoff will be treated as outliers. Default/auto values(if NA):
+\item{cutoff}{abs() > cutoff will be treated as outliers. Default/auto values (i.e. if NA):
 \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
 \cr mad 2.5, which is the standard recommendation, or 5.2
 \cr iqr 1.5
 \cr if multiple values specified, use the first one (an exception is hack=T, during which method and cutoff same length or scalar)}
 
-\item{fillout}{how to process outlier, fill with na, mean, median (columnwise for data frame). 
-null-->remove outlier (only for vector or df with single col specified)}
+\item{fillout}{how to process outlier, fill with na, mean, median (columnwise for data frame), or 
+null --> remove outlier (only for vector or df with single col specified)}
 
-\item{hack}{call mapply to try all method and cutoff (same length or scalar).}
+\item{hack}{call mapply to try all method and cutoff (same length or scalar, ie, different methods with 
+corresponding cutoff, or same method with different cutoff).}
 
 \item{plot}{boxplot and hist before and after outlier processing.}
 }
@@ -57,7 +58,7 @@ Interquartile range method is that, like the modified Z-score method, it uses a 
 \examples{
 set.seed(1234)
 x = rnorm(10)
-
-
-
+iris \%>\% ez.outlier(1,fill='na',plot=T,hack=T,method=c('mad'),cutoff=c(1,3,2)) 
+iris \%>\% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=c(3,5,1.5)) 
+iris \%>\% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=NA)
 }

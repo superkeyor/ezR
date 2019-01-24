@@ -16,7 +16,7 @@ ez.regressions(df, y, x, covar = NULL, report = T, model = c("lm",
   text.size = 16, error = T, ...)
 }
 \arguments{
-\item{df}{a data frame. Internally go through dropna-->ez.2value-->scale
+\item{df}{a data frame. Internally go through dropna --> ez.2value --> scale
 \cr because of this, this function is not friendly to factors with 3 or more levels, although the default lm can handel factors nicely (yet complicatedly--eg, not easy to test significance)
 \cr by design, ez.2value to convert factors with 2 levels, such as sex, this generates the same results as lm by default, see note and example below for more
 \cr scale to get standarized beta as effect size for comparison across different variables}

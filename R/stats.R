@@ -471,16 +471,17 @@ ez.vi = function(x,printn=35,order='as') {
 #' \cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
 #' \cr        if x is not a data frame, col is ignored
 #' \cr        could be multiple cols
-#' @param method z score or IQR (John Tukey)
-#' @param cutoff abs() > cutoff will be treated as outliers. Default/auto values(if NA):
+#' @param method z score, mad, or IQR (John Tukey)
+#' @param cutoff abs() > cutoff will be treated as outliers. Default/auto values (i.e. if NA):
 #' \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
 #' \cr mad 2.5, which is the standard recommendation, or 5.2
 #' \cr iqr 1.5
 #' \cr if multiple values specified, use the first one (an exception is hack=T, during which method and cutoff same length or scalar)
-#' @param hack call mapply to try all method and cutoff (same length or scalar).
+#' @param hack call mapply to try all method and cutoff (same length or scalar, ie, different methods with 
+#' corresponding cutoff, or same method with different cutoff).
 #' @param plot boxplot and hist before and after outlier processing.
-#' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame). 
-#' null-->remove outlier (only for vector or df with single col specified)
+#' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame), or 
+#' null --> remove outlier (only for vector or df with single col specified)
 #' @return returns a new data frame or vector. If hack=T, returns nothings
 #' @note univariate outlier approach
 #' The Z-score method relies on the mean and standard deviation of a group of data to measure central
@@ -499,9 +500,9 @@ ez.vi = function(x,printn=35,order='as') {
 #' @examples
 #' set.seed(1234)
 #' x = rnorm(10)
-#'
-#'
-#'
+#' iris %>% ez.outlier(1,fill='na',plot=T,hack=T,method=c('mad'),cutoff=c(1,3,2)) 
+#' iris %>% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=c(3,5,1.5)) 
+#' iris %>% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=NA)
 #' @export
 ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout=c('na','null','mean','median'), hack=FALSE, plot=FALSE, na.rm=TRUE, print2scr=TRUE) {
     # https://datascienceplus.com/rscript/outlier.R
@@ -596,7 +597,7 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout
     } else if (is.data.frame(x)) {
         col = ez.selcol(x,col)
         if (length(col)>1 & fillout=='null') {
-            ez.pprint('I do not know how to remove outliers in multiple cols. fillout: null-->na ...','red')
+            ez.pprint('I do not know how to remove univariate outliers in multiple cols. fillout: null --> na ...','red')
             fillout='na'
         } else if (fillout=='null') {
             fillout='todropna'
@@ -749,7 +750,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 
 #' anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 #' @description anova or ancova 1b, aov(y~x+covar), for many y and/or many x
-#' @param df a data frame, Internally go through dropna-->ez.2value(y),ez.2factor(x),ez.2value(covar)
+#' @param df a data frame, Internally go through dropna --> ez.2value(y),ez.2factor(x),ez.2value(covar)
 #' @param y compatible with \code{\link{ez.selcol}}
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
@@ -936,7 +937,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 
 #' lm(y~x+covar), for many y and/or many x
 #' @description lm(y~x+covar), for many y and/or many x
-#' @param df a data frame. Internally go through dropna-->ez.2value-->scale
+#' @param df a data frame. Internally go through dropna --> ez.2value --> scale
 #' \cr because of this, this function is not friendly to factors with 3 or more levels, although the default lm can handel factors nicely (yet complicatedly--eg, not easy to test significance)
 #' \cr by design, ez.2value to convert factors with 2 levels, such as sex, this generates the same results as lm by default, see note and example below for more
 #' \cr scale to get standarized beta as effect size for comparison across different variables
@@ -1363,7 +1364,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 
 #' fisher.test(y,x), for many y and/or many x
 #' @description fisher.test(y,x), for many y and/or many x
-#' @param df a data frame, internal go through dropna-->ez.2factor
+#' @param df a data frame, internal go through dropna --> ez.2factor
 #' @param y compatible with \code{\link{ez.selcol}}
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param report print results (in APA format)

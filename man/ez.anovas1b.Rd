@@ -9,7 +9,7 @@ ez.anovas1b(df, y, x, covar = NULL, report = T, view = F, plot = F,
   point.shape = 16, lab.size = 18, text.size = 16, error = T, ...)
 }
 \arguments{
-\item{df}{a data frame, Internally go through dropna-->ez.2value(y),ez.2factor(x),ez.2value(covar)}
+\item{df}{a data frame, Internally go through dropna --> ez.2value(y),ez.2factor(x),ez.2value(covar)}
 
 \item{y}{compatible with \code{\link{ez.selcol}}}
 
