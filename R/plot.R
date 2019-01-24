@@ -2334,7 +2334,9 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr    c(x,y,two-element fractional numeric vector)     c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position, but within the plot box.
 #' @param legend.direction  horizontal or vertical
 #' @param legend.size c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit weird
+#' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit
+#' weird. lattice orders panels from the bottom up. To get what you want either use as.table = TRUE or
+#' reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))
 #' @return a lattice plot
 #' @note specify auto through param colors, shapes
 #' @export
@@ -2360,6 +2362,33 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
                     legend.direction=legend.direction, legend.size=legend.size, hack=FALSE, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
         multiplot(plotlist=out,title=title)
         return(invisible(out))
+    }
+
+    if (grepl("||||",cmd,fixed=TRUE)){
+        p1 = ez.scatterplot(df,gsub("||||","|",cmd,fixed=TRUE),
+            loess=loess, model=model, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
+            layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
+            loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
+            point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, colors=colors,
+            shapes=shapes, ylab=ylab, xlab=xlab, x.axis.size=x.axis.size, y.axis.size=y.axis.size,
+            x.lab.size=x.lab.size, y.lab.size=y.lab.size, x.tick.number=x.tick.number,
+            y.tick.number=y.tick.number, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
+            legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
+            hack=hack, ...)
+        p2 = ez.scatterplot(df,gsub("||||","|||",cmd,fixed=TRUE),
+            loess=loess, model=model, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
+            layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
+            loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
+            point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, colors=colors,
+            shapes=shapes, ylab=ylab, xlab=xlab, x.axis.size=x.axis.size, y.axis.size=y.axis.size,
+            x.lab.size=x.lab.size, y.lab.size=y.lab.size, x.tick.number=x.tick.number,
+            y.tick.number=y.tick.number, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
+            legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
+            hack=hack, ...)
+        # a bit ugly hack
+        p1strip = paste0(p2$condlevels[[1]],collapse='+')
+        pp = ez.esp('latticeExtra:::c.trellis("{p1strip}"=p1,p2,y.same=TRUE,layout=c(dim(p1)+dim(p2),1))') 
+        return(pp)
     }
 
     df.bak=df
@@ -2485,7 +2514,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # do not add ... to panel.points
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, ...
+            {"}"}, as.table=TRUE, ...
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2543,7 +2572,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, ...
+            {"}"}, as.table=TRUE, ...
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2597,7 +2626,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # do not add ... to panel.points
             #panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, layout=c({layout}), ...
+            {"}"}, as.table=TRUE, layout=c({layout}), ...
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2635,7 +2664,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
             if ({loess}) panel.loess(x, y, col.line = "{loess.color}", lwd = {loess.width}, lty = {loess.style})
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}")
-            {"}"}, ...
+            {"}"}, as.table=TRUE, ...
         )
         ') # end sprintf
         gghistory=paste(gghistory,

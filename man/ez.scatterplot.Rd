@@ -69,7 +69,9 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 
 \item{hack}{T/F if more than 1 model specified, plot all in one plot}
 
-\item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit weird}
+\item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit
+weird. lattice orders panels from the bottom up. To get what you want either use as.table = TRUE or
+reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))}
 }
 \value{
 a lattice plot
