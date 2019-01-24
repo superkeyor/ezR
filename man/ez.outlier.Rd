@@ -4,8 +4,8 @@
 \alias{ez.outlier}
 \title{univariate outlier cleanup}
 \usage{
-ez.outlier(x, col = NULL, method = c("z", "mad", "iqr"), hack = TRUE,
-  cutoff = NA, plot = TRUE, fillout = c("na", "mean", "median"),
+ez.outlier(x, col = NULL, method = c("z", "mad", "iqr"), hack = FALSE,
+  cutoff = NA, plot = FALSE, fillout = c("na", "mean", "median"),
   na.rm = TRUE, print2scr = TRUE)
 }
 \arguments{
@@ -19,19 +19,19 @@ ez.outlier(x, col = NULL, method = c("z", "mad", "iqr"), hack = TRUE,
 
 \item{method}{z score or IQR (John Tukey)}
 
-\item{hack}{call mapply to try all method and cutoff (which should have same length, if cutoff is not NA). Only works if x is vector}
+\item{hack}{call mapply to try all method and cutoff (which should have same length, if cutoff is not NA).}
 
 \item{cutoff}{abs() > cutoff will be treated as outliers. Default/auto values(if NA):
 \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
 \cr mad 2.5, which is the standard recommendation, or 5.2
 \cr iqr 1.5}
 
-\item{plot}{boxplot and hist before and after outlier processing. Only works if x is vector (imagine plot for dataframe)}
+\item{plot}{boxplot and hist before and after outlier processing.}
 
 \item{fillout}{how to process outlier, fill with na, mean, median (columnwise for data frame)}
 }
 \value{
-returns a new data frame or vector
+returns a new data frame or vector. If hack=T, returns nothings
 }
 \description{
 univariate outlier cleanup
