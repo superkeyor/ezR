@@ -477,10 +477,10 @@ ez.vi = function(x,printn=35,order='as') {
 #' \cr mad 2.5, which is the standard recommendation, or 5.2
 #' \cr iqr 1.5
 #' \cr if multiple values specified, use the first one (an exception is hack=T, during which method and cutoff same length or scalar)
-#' @param hack call mapply to try all method and cutoff (same length or scalar, ie, different methods with 
+#' @param hack call mapply to try all method and cutoff (same length or scalar, ie, different methods with
 #' corresponding cutoff, or same method with different cutoff).
 #' @param plot boxplot and hist before and after outlier processing.
-#' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame), or 
+#' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame), or
 #' null --> remove outlier (only for vector or df with single col specified)
 #' @return returns a new data frame or vector. If hack=T, returns nothings
 #' @note univariate outlier approach
@@ -500,8 +500,8 @@ ez.vi = function(x,printn=35,order='as') {
 #' @examples
 #' set.seed(1234)
 #' x = rnorm(10)
-#' iris %>% ez.outlier(1,fill='na',plot=T,hack=T,method=c('mad'),cutoff=c(1,3,2)) 
-#' iris %>% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=c(3,5,1.5)) 
+#' iris %>% ez.outlier(1,fill='na',plot=T,hack=T,method=c('mad'),cutoff=c(1,3,2))
+#' iris %>% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=c(3,5,1.5))
 #' iris %>% ez.outlier(1,fill='null',plot=T,hack=T,method=c('z','mad','iqr'),cutoff=NA)
 #' @export
 ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout=c('na','null','mean','median'), hack=FALSE, plot=FALSE, na.rm=TRUE, print2scr=TRUE) {
@@ -517,8 +517,8 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout
             return(invisible(NULL))
     }
 
-    # todropna is an internal workaround for data frame with single col passed in
-    method = match.arg(method); cutoff=cutoff[1]; fillout = match.arg(fillout,c(fillout,'todropna'))
+    # fillout=todropna is an internal workaround for data frame with single col passed in
+    method = match.arg(method); cutoff = cutoff[1]; fillout = fillout[1]
 
     if (!is.data.frame(x)) {
         x.bak.plot = x; x.replace.na = x; oldNAs = ez.count(x.replace.na,NA)
