@@ -1192,9 +1192,9 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.residized.")'))){
                 robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.print(sprintf('lm(%s~%s): (semi) r = %.2f, %s, robust ps %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+                ez.print(sprintf('lm(%s~%s): n = %d, r = %.2f, %s, robust ps %s', Y,X,result.report$n,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
             } else {
-                ez.print(sprintf('lm(%s~%s): (semi) r = %.2f, %s', Y,X,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
+                ez.print(sprintf('lm(%s~%s): n = %d, r = %.2f, %s', Y,X,result.report$n,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
             }
         }
         ez.print('------')
