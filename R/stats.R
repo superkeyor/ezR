@@ -1077,7 +1077,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     getStats = function(y,x,covar,df,model=c('lm', 'lmrob', 'lmRob', 'rlm'),...){
         # for one model
         get.stats = function(y,x,covar,df,model,...){
-            tryCatch({
+            tryCatch(suppressWarnings({
             set.seed(20190117)
             # na.exclude better than na.omit. extractor functions like residuals() or fitted() will pad their
             # output with NAs for the omitted cases with na.exclude, thus having an output of the same length as
@@ -1138,7 +1138,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
                 uniques_drop_na.x=uniques_drop_na.x,min.x=min.x,max.x=max.x,mean.x=mean.x,sd.x=sd.x,
                 uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
                 ))
-            }, error=function(e){
+            }), error=function(e){
                 if (error) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
                 return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA,
                     uniques_drop_na.x=NA,min.x=NA,max.x=NA,mean.x=NA,sd.x=NA,
