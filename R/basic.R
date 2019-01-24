@@ -100,6 +100,11 @@ ez.moment = function(format='%Y-%m-%d_%H-%M-%S') {
 #' @export
 ez.pause = function(){
     # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
+
+    # https://support.rstudio.com/hc/en-us/articles/200713843?version=1.1.463&mode=desktop
+    # from rstudio debug help page
+    op = options(error = NULL)
+    on.exit(options(op))
     if (interactive())
     {
         invisible(readline(prompt = "Press <Enter> to continue..."))
