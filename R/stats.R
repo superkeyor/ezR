@@ -563,7 +563,11 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=FALSE, cutoff
 
         if (print2scr) {
             newNAs = ez.count(x.replace.na,NA,col) - oldNAs
-            ez.pprint(sprintf('%-10s %5s: %3d outliers found and replaced.', toString(col), toupper(method), newNAs))
+            if (!is.null(col)) {
+                ez.pprint(sprintf('%-10s %5s: %3d outliers found and replaced.', toString(col), toupper(method), newNAs))
+            } else {
+                ez.pprint(sprintf('%5s: %3d outliers found and replaced.', toupper(method), newNAs))
+            }
         }
     } else if (is.data.frame(x)) {
         col = ez.selcol(x,col)
