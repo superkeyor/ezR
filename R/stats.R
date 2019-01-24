@@ -476,9 +476,11 @@ ez.vi = function(x,printn=35,order='as') {
 #' \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
 #' \cr mad 2.5, which is the standard recommendation, or 5.2
 #' \cr iqr 1.5
-#' @param hack call mapply to try all method and cutoff (which should have same length, if cutoff is not NA).
+#' \cr if multiple values specified, use the first one (an exception is hack=T, during which method and cutoff same length or scalar)
+#' @param hack call mapply to try all method and cutoff (same length or scalar).
 #' @param plot boxplot and hist before and after outlier processing.
-#' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame)
+#' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame). 
+#' null-->remove outlier (only for vector or df with single col specified)
 #' @return returns a new data frame or vector. If hack=T, returns nothings
 #' @note univariate outlier approach
 #' The Z-score method relies on the mean and standard deviation of a group of data to measure central
@@ -501,12 +503,12 @@ ez.vi = function(x,printn=35,order='as') {
 #'
 #'
 #' @export
-ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=FALSE, cutoff=NA, plot=FALSE, fillout=c('na','mean','median'), na.rm=TRUE, print2scr=TRUE) {
+ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout=c('na','null','mean','median'), hack=FALSE, plot=FALSE, na.rm=TRUE, print2scr=TRUE) {
     # https://datascienceplus.com/rscript/outlier.R
     # https://cran.r-project.org/web/packages/outliers/index.html
     # https://rpubs.com/hauselin/outliersDetect
 
-    if (length(method)>1 & hack==T){
+    if (hack==T){
             # here for programming reason, for mapply,
             # cutoff could not be NULL, use NA, because length(NULL)=0, but length(NA)=1
             mapply(ez.outlier,method=method,cutoff=cutoff,MoreArgs=list(x=x,col=col,hack=F,plot=plot,fillout=fillout,na.rm=na.rm,print2scr=print2scr),SIMPLIFY=F,USE.NAMES=F)
@@ -515,25 +517,41 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=FALSE, cutoff
     }
 
     if (!is.data.frame(x)) {
-        method = match.arg(method); fillout = match.arg(fillout)
+        # todropna is a workaround for data frame with single col passed in
+        method = match.arg(method); fillout = match.arg(fillout,c(fillout,'todropna')); cutoff=cutoff[1]
         x.bak.plot = x; x.replace.na = x; oldNAs = ez.count(x.replace.na,NA)
-        if (fillout=='na') {
+        if (fillout=='na' | fillout=='todropna') {
             replacement = NA
         } else if (fillout=='mean') {
             replacement = mean(x, na.rm=na.rm)
         } else if (fillout=='median') {
             replacement = median(x, na.rm=na.rm)
+        } else if (fillout=='null') {
+            replacement = NULL
         }
 
         if (method=='z'){
             if(is.na(cutoff)) cutoff = qnorm(0.025,lower.tail=F)
             absz = abs((x - mean(x, na.rm=na.rm))/sd(x, na.rm=na.rm))
-            x[absz > cutoff] <- replacement
+            if (!is.null(replacement)) {
+                x[absz > cutoff] <- replacement
+                } else {
+                    # if nothing above cutoff, x is untouched
+                    if (length(which(absz > cutoff)) > 0) {
+                        x = x[-which(absz > cutoff)]
+                    }
+                }
             x.replace.na[absz > cutoff] <- NA
         } else if (method=='mad'){
             if(is.na(cutoff)) cutoff = 2.5
             absmad <- abs((x - median(x, na.rm=na.rm))/mad(x, na.rm=na.rm))
-            x[absmad > cutoff] <- replacement
+            if (!is.null(replacement)) {
+                x[absmad > cutoff] <- replacement
+                } else {
+                    if (length(which(absmad > cutoff)) > 0) {
+                        x = x[-which(absmad > cutoff)]
+                    }
+                }
             x.replace.na[absmad > cutoff] <- NA
         } else if (method=='iqr'){
             # https://stackoverflow.com/a/4788102/2292993
@@ -544,8 +562,23 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=FALSE, cutoff
             iqr = IQR(x, na.rm = na.rm)
             lower_bound = q1 - (iqr * cutoff)
             upper_bound = q3 + (iqr * cutoff)
-            x[(x > upper_bound) | (x < lower_bound)] <- replacement
+            if (!is.null(replacement)) {
+                x[(x > upper_bound) | (x < lower_bound)] <- replacement
+                } else {
+                    if (length(which((x > upper_bound) | (x < lower_bound))) > 0) {
+                        x = x[-which((x > upper_bound) | (x < lower_bound))]
+                    }
+                }
             x.replace.na[(x.replace.na > upper_bound) | (x.replace.na < lower_bound)] <- NA
+        }
+
+        newNAs = ez.count(x.replace.na,NA,col) - oldNAs
+        if (print2scr) {
+            if (!is.null(col)) {
+                ez.pprint(sprintf('%-15s %5s(%.2f): %3d outliers found and %s.', toString(col), toupper(method), cutoff, newNAs, ifelse((is.null(replacement)|fillout=='todropna'),'REMOVED','REPLACED')))
+            } else {
+                ez.pprint(sprintf('%5s(%.2f): %3d outliers found and %s.', toupper(method), cutoff, newNAs, ifelse((is.null(replacement)|fillout=='todropna'),'REMOVED','REPLACED')))
+            }
         }
 
         if (plot){
@@ -553,26 +586,24 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), hack=FALSE, cutoff
             # oma is margin for the whole?
             opar = par(mfrow=c(2, 2), oma=c(0,0,1.5,0), mar = c(2,2,1.5,0.5))
             on.exit(par(opar))
-            boxplot(x.bak.plot, main="With outliers")
-            hist(x.bak.plot, main="With outliers", xlab=NULL, ylab=NULL)
+            boxplot(x.bak.plot, main=sprintf("With outliers (n=%d)",length(x.bak.plot)))
+            hist(x.bak.plot, main=sprintf("With outliers (n=%d)",length(x.bak.plot)), xlab=NULL, ylab=NULL)
 
-            boxplot(x, main="Without outliers")
-            hist(x, main="Without outliers", xlab=NULL, ylab=NULL)
-            title(sprintf("%s Outlier Check: %s",toString(col), toupper(method)), outer=TRUE)
-        }
-
-        if (print2scr) {
-            newNAs = ez.count(x.replace.na,NA,col) - oldNAs
-            if (!is.null(col)) {
-                ez.pprint(sprintf('%-10s %5s: %3d outliers found and replaced.', toString(col), toupper(method), newNAs))
-            } else {
-                ez.pprint(sprintf('%5s: %3d outliers found and replaced.', toupper(method), newNAs))
-            }
+            boxplot(x, main=sprintf("With outliers (n=%d)",length(x.bak.plot)-newNAs))
+            hist(x, main=sprintf("With outliers (n=%d)",length(x.bak.plot)-newNAs), xlab=NULL, ylab=NULL)
+            title(sprintf("%s Outlier Check: %s(%.2f)",toString(col), toupper(method), cutoff), outer=TRUE)
         }
     } else if (is.data.frame(x)) {
         col = ez.selcol(x,col)
+        if (length(col)>1 & fillout=='null') {
+            ez.pprint('I do not know how to remove outliers in multiple cols. fillout: null-->na ...','red')
+            fillout='na'
+        } else if (fillout=='null') {
+            fillout='todropna'
+        }
         # trick to pass actual col name
         x[col] = lapply(1:length(col), function(j) {ez.outlier(x=x[col][[j]],col=col[j],method=method,cutoff=cutoff,plot=plot,hack=hack,fillout=fillout,na.rm=na.rm,print2scr=print2scr)})
+        if (fillout=='todropna') x = ez.dropna(x,col,print2scr=F)
     } # end if
     return(invisible(x))
 }
