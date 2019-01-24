@@ -102,7 +102,8 @@ ez.pause = function(){
     # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
 
     # https://support.rstudio.com/hc/en-us/articles/200713843?version=1.1.463&mode=desktop
-    # from rstudio debug help page
+    # from rstudio debug help page: Menu Debug-->On Error-->
+    # set debug level, so that one can escape to cancel without invoking debug
     op = options(error = NULL)
     on.exit(options(op))
     if (interactive())
