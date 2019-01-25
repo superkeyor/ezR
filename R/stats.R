@@ -978,7 +978,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr "p.residized" | "p.residized.lmrob" | "p.residized.lmRob" | "p.residized.rlm"
 #' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
-#' \cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T and also to be used in ez.scatterplot
+#' \cr the r.residualized, p.residualized refers to semi-partial correlation (r.residualized is the same as ppcor::spcor.test result, p.residualized very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T and also to be used in ez.scatterplot
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 #' \cr r2.rlm or r.residized.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 #' \cr
@@ -1192,9 +1192,9 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.residized.")'))){
                 robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.print(sprintf('lm(%s~%s): n = %d, r = %.2f, %s, robust ps %s', Y,X,result.report$n,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+                ez.print(sprintf('lm(%s~%s): \nn = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p.residized[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
             } else {
-                ez.print(sprintf('lm(%s~%s): n = %d, r = %.2f, %s', Y,X,result.report$n,result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
+                ez.print(sprintf('lm(%s~%s): \nn = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p.residized[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
             }
         }
         ez.print('------')

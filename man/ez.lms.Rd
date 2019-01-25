@@ -69,7 +69,7 @@ an invisible data frame or list of data frame (if many y and many x)
 \cr "p.residized" | "p.residized.lmrob" | "p.residized.lmRob" | "p.residized.rlm"
 \cr
 \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
-\cr the r.residualized, p.residualized refers to semi-partial correlation, which are printed out when report=T and also to be used in ez.scatterplot
+\cr the r.residualized, p.residualized refers to semi-partial correlation (r.residualized is the same as ppcor::spcor.test result, p.residualized very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T and also to be used in ez.scatterplot
 \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 \cr r2.rlm or r.residized.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 \cr
