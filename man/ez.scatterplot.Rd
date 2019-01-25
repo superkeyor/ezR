@@ -5,8 +5,8 @@
 \title{scatter plot with lattice}
 \usage{
 ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
-  "rlm"), scale = TRUE, rp = TRUE, rp.size = 14, rp.x = 0.025,
-  rp.y = 0.025, se = TRUE, layout = NULL, line.color = "#BE1B22",
+  "rlm"), scale = FALSE, rp = TRUE, rp.size = 14, rp.x = 0.025,
+  rp.y = 0.05, se = TRUE, layout = NULL, line.color = "#BE1B22",
   line.width = 3, line.style = 1, loess.color = "dark grey",
   loess.width = 3, loess.style = 2, point.color = "#0086B8",
   point.shape = 16, point.alpha = 0.9, point.size = 14,

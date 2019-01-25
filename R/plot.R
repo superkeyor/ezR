@@ -2340,7 +2340,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @return a lattice plot
 #' @note specify auto through param colors, shapes
 #' @export
-ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=TRUE,rp=TRUE,rp.size=14,rp.x=0.025,rp.y=0.025,se=TRUE,layout=NULL,
+ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=FALSE,rp=TRUE,rp.size=14,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
     line.color='#BE1B22',line.width=3,line.style=1,
     loess.color='dark grey',loess.width=3,loess.style=2,
     point.color='#0086B8',point.shape=16,point.alpha=0.90,point.size=14,
