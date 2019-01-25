@@ -963,11 +963,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr According to jerry testing, scale() or not for x,y or covar, does not change p values for predictors, although intercept would differ
 #' \cr
 #' \cr dof: from F-statistic
-#' \cr residualization: say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized
+#' \cr residualization: say, y ~ x + a + b, first x ~ a + b is residualized and then y ~ x (ie, semi-partial). If no covar, y ~ x, although labelled residualized in result data frame, actually non-residualized, because nothing to residualize
 #' \cr as far as semi-partial concerned, y ~ x + a + b, x ~ y + a + b are two different models. ppcor::spcor.test(iris[,1],iris[,2],iris[,c(3,4)]) != ppcor::spcor.test(iris[,2],iris[,1],iris[,c(3,4)])
 #' \cr but for partial correlation, partial(y,x) is the same as partial(x,y), ppcor::pcor.test(iris[,1],iris[,2],iris[,c(3,4)]) = ppcor::pcor.test(iris[,2],iris[,1],iris[,c(3,4)])
 #' \cr On a related note, y ~ x + a + b, generates the same results as y ~ b + a + x (the order does not matter).
-#' \cr For coding purpose, I put x as x, and (a,b) as cov. stdbeta, p returned refer to x, values referring to a,b were discarded during the process.
+#' \cr For coding purpose, I put x as x, and (a,b) as cov. stdbeta, p returned refer to x in MLR (multiple linear regression), values referring to a,b were discarded during the process.
 #' \cr
 #' \cr ++++++++++!!!important note!!!++++++++++
 #' \cr "n"           | "n.lmrob"           | "n.lmRob"           | "n.rlm"
@@ -977,8 +977,8 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr "r.residized" | "r.residized.lmrob" | "r.residized.lmRob" | "r.residized.rlm" (NA)
 #' \cr "p.residized" | "p.residized.lmrob" | "p.residized.lmRob" | "p.residized.rlm"
 #' \cr
-#' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in a (multiple) regression, which are plotted when plot=T. the bestp is also selected based on this p value
-#' \cr the r.residualized, p.residualized refers to semi-partial correlation (r.residualized is the same as ppcor::spcor.test result, p.residualized very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T and also to be used in ez.scatterplot
+#' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
+#' \cr the r.residualized, p.residualized refers to semi-partial correlation (r.residualized is the same as ppcor::spcor.test result, p.residualized very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T (together with MLR p) and also to be used in ez.scatterplot
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 #' \cr r2.rlm or r.residized.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 #' \cr
@@ -1192,9 +1192,9 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.residized.")'))){
                 robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.print(sprintf('lm(%s~%s): \nn = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p.residized[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+                ez.print(sprintf('lm(%s~%s): \nn = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
             } else {
-                ez.print(sprintf('lm(%s~%s): \nn = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p.residized[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
+                ez.print(sprintf('lm(%s~%s): \nn = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
             }
         }
         ez.print('------')
