@@ -1021,8 +1021,8 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
 
     # another path to handle by groups
     if (!is.null(by)){
-        # for all and for groups
-        tmp = df; tmp[[by]] = factor('all'); df = base::rbind(tmp,df)
+        # for all and for groups, assuming no factor level named ALL
+        tmp = df; tmp[[by]] = factor('ALL'); df = base::rbind(tmp,df)
         ez.print( sprintf('%s ...', toString(levels(ez.factorelevel(df[[by]])))) )
         out = lapply(base::split(df, ez.factorelevel(df[[by]]), drop=TRUE), ez.lms, y=y,x=x,covar=covar,by=NULL,report=report,model=model,view=view,plot=plot,pmethods=pmethods,cols=cols,point.size=point.size,point.shape=point.shape,lab.size=lab.size,text.size=text.size,error=error, ...)
         return(invisible(out))
