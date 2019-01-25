@@ -945,6 +945,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' @param y compatible with \code{\link{ez.selcol}}
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
+#' @param by NULL. if specified with a factor col, do the model on all subjects, and groups in that col separately. In this case returns a list of result data frame
 #' @param report print results (in APA format)
 #' @param model vector c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
 #' @param view call View(result)
@@ -1015,8 +1016,18 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' lm(y~x+zzz) %>% summary
 #' # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
 #' @export
-ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
-    y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
+ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
+    y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar); if (!is.null(by)) by=ez.selcol(df,by)
+
+    # another path to handle by groups
+    if (!is.null(by)){
+        # for all and for groups
+        tmp = df; tmp[[by]] = factor('all'); df = base::rbind(tmp,df)
+        ez.print( sprintf('%s ...', toString(levels(ez.factorelevel(df[[by]])))) )
+        out = lapply(base::split(df, ez.factorelevel(df[[by]]), drop=TRUE), ez.lms, y=y,x=x,covar=covar,by=NULL,report=report,model=model,view=view,plot=plot,pmethods=pmethods,cols=cols,point.size=point.size,point.shape=point.shape,lab.size=lab.size,text.size=text.size,error=error, ...)
+        return(invisible(out))
+    }
+
     model = unique(c('lm',model)) # always include lm
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
     text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt ; point.size = point.size/bp
@@ -1026,7 +1037,7 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
         xlist = list(); plist = list()
         for (yy in y) {
             # plot = F; no need for sepearte plotlist
-            result = ez.lms(df,yy,x,covar,report=report,model=model,view=F,plot=F,pmethods=pmethods,error=error,...)
+            result = ez.lms(df,yy,x,covar,report=report,model=model,by=by,view=F,plot=F,pmethods=pmethods,error=error,...)
             xlist[[yy]] = result
 
             result.plot = result %>% ez.dropna('p')
@@ -1189,12 +1200,12 @@ ez.lms = function(df,y,x,covar=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rl
     if (report & nrow(result.report)>0) {
         ez.print('------')
         for (i in 1:nrow(result.report)){
-            Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse=" + ")
+            Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.residized.")'))){
                 robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.print(sprintf('lm(%s ~ %s): \nn = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+                ez.print(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
             } else {
-                ez.print(sprintf('lm(%s ~ %s): \nn = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
+                ez.print(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
             }
         }
         ez.print('------')

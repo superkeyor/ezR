@@ -5,15 +5,15 @@
 \alias{ez.regressions}
 \title{lm(y~x+covar), for many y and/or many x}
 \usage{
-ez.lms(df, y, x, covar = NULL, report = T, model = c("lm", "lmrob",
-  "lmRob", "rlm"), view = F, plot = F, pmethods = c("bonferroni", "fdr"),
-  cols = 3, point.size = 10, point.shape = 16, lab.size = 18,
-  text.size = 16, error = T, ...)
-
-ez.regressions(df, y, x, covar = NULL, report = T, model = c("lm",
+ez.lms(df, y, x, covar = NULL, by = NULL, report = T, model = c("lm",
   "lmrob", "lmRob", "rlm"), view = F, plot = F, pmethods = c("bonferroni",
   "fdr"), cols = 3, point.size = 10, point.shape = 16, lab.size = 18,
   text.size = 16, error = T, ...)
+
+ez.regressions(df, y, x, covar = NULL, by = NULL, report = T,
+  model = c("lm", "lmrob", "lmRob", "rlm"), view = F, plot = F,
+  pmethods = c("bonferroni", "fdr"), cols = 3, point.size = 10,
+  point.shape = 16, lab.size = 18, text.size = 16, error = T, ...)
 }
 \arguments{
 \item{df}{a data frame. Internally go through dropna --> ez.2value --> scale
@@ -26,6 +26,8 @@ ez.regressions(df, y, x, covar = NULL, report = T, model = c("lm",
 \item{x}{compatible with \code{\link{ez.selcol}}}
 
 \item{covar}{NULL=no covar, compatible with \code{\link{ez.selcol}}}
+
+\item{by}{NULL. if specified with a factor col, do the model on all subjects, and groups in that col separately. In this case returns a list of result data frame}
 
 \item{report}{print results (in APA format)}
 
