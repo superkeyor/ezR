@@ -186,7 +186,7 @@ ez.updateself = function(force=F) {
         cat('Please restart RStudio to make the change take effect!\n')
         cat('Enter will restore env. #+shift+Q simply restart.\n')
         ez.pause()
-        savehistory("~/.Rhistory") # since to kill RStudio soon. save by hand, will be auto restored by RStudio
+        savehistory(".Rhistory") # since to kill RStudio soon. save by hand, will be auto restored by RStudio
         cmd = 'pththismoment = getwd()'
         eval(parse(text=cmd), envir=.GlobalEnv)
         save.image('~/Downloads/tmp.rda')
