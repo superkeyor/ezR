@@ -2340,14 +2340,15 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @return a lattice plot
 #' @note specify auto through param colors, shapes
 #' @export
-ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=FALSE,rp=TRUE,rp.size=14,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
-    line.color='#BE1B22',line.width=3,line.style=1,
+ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=FALSE,rp=TRUE,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
+    rp.size=14,line.width=3,point.size=14,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,title.size=20,legend.size=c(0,14),
+    line.color='#BE1B22',line.style=1,
     loess.color='dark grey',loess.width=3,loess.style=2,
-    point.color='#0086B8',point.shape=16,point.alpha=0.90,point.size=14,
+    point.color='#0086B8',point.shape=16,point.alpha=0.90,
     colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),
-    ylab=NULL,xlab=NULL,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,x.tick.number=5,y.tick.number=5,
-    title=NULL,title.size=20,
-    zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",legend.size=c(0,14),hack=FALSE,...){
+    ylab=NULL,xlab=NULL,x.tick.number=5,y.tick.number=5,
+    title=NULL,
+    zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",hack=FALSE,...){
 
     if (length(model)>1 & hack){
         out = mapply(ez.scatterplot,model=model,title=model,MoreArgs=list(df=df, cmd=cmd, loess=loess, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,

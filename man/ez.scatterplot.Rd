@@ -5,18 +5,17 @@
 \title{scatter plot with lattice}
 \usage{
 ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
-  "rlm"), scale = FALSE, rp = TRUE, rp.size = 14, rp.x = 0.025,
-  rp.y = 0.05, se = TRUE, layout = NULL, line.color = "#BE1B22",
-  line.width = 3, line.style = 1, loess.color = "dark grey",
+  "rlm"), scale = FALSE, rp = TRUE, rp.x = 0.025, rp.y = 0.05,
+  se = TRUE, layout = NULL, rp.size = 14, line.width = 3,
+  point.size = 14, x.axis.size = 16, y.axis.size = 16, x.lab.size = 18,
+  y.lab.size = 18, title.size = 20, legend.size = c(0, 14),
+  line.color = "#BE1B22", line.style = 1, loess.color = "dark grey",
   loess.width = 3, loess.style = 2, point.color = "#0086B8",
-  point.shape = 16, point.alpha = 0.9, point.size = 14,
-  colors = ez.palette("Zhu"), shapes = c(16, 17, 15, 3, 7, 8),
-  ylab = NULL, xlab = NULL, x.axis.size = 16, y.axis.size = 16,
-  x.lab.size = 18, y.lab.size = 18, x.tick.number = 5,
-  y.tick.number = 5, title = NULL, title.size = 20, zlab = NULL,
+  point.shape = 16, point.alpha = 0.9, colors = ez.palette("Zhu"),
+  shapes = c(16, 17, 15, 3, 7, 8), ylab = NULL, xlab = NULL,
+  x.tick.number = 5, y.tick.number = 5, title = NULL, zlab = NULL,
   legend.box = FALSE, legend.position = "top",
-  legend.direction = "horizontal", legend.size = c(0, 14), hack = FALSE,
-  ...)
+  legend.direction = "horizontal", hack = FALSE, ...)
 }
 \arguments{
 \item{df}{data frame}
@@ -32,13 +31,17 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 
 \item{rp}{show r (signed) and p values}
 
-\item{rp.size}{r p values font size, ignored if rp=FALSE}
-
 \item{rp.x}{r p values x position (0-1, relative to top left, big-->right), ignored if rp=FALSE.}
 
 \item{rp.y}{r p values y position (0-1, relative to top left, big-->up), ignored if rp=FALSE.}
 
 \item{se}{standard error of linear regression line}
+
+\item{rp.size}{r p values font size, ignored if rp=FALSE}
+
+\item{point.size}{if less point, oen can increase size}
+
+\item{legend.size}{c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
 \item{line.color}{only applicable when not auto varied, regression line color.}
 
@@ -47,8 +50,6 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 \item{point.shape}{only applicable when not auto varied}
 
 \item{point.alpha}{if overplot for points, one can reduce alpha}
-
-\item{point.size}{if less point, oen can increase size}
 
 \item{ylab}{y label. NULL}
 
@@ -64,8 +65,6 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 \cr    c(x,y,two-element fractional numeric vector)     c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position, but within the plot box.}
 
 \item{legend.direction}{horizontal or vertical}
-
-\item{legend.size}{c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
 \item{hack}{T/F if more than 1 model specified, plot all in one plot}
 
