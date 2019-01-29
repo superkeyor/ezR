@@ -911,20 +911,20 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.print(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0)))
+            ez.pprint(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0)),color='underline')
         }
         ez.print('------')
         ez.print('Posthoc Tukey')
         for (i in 1:nrow(result.report)){
-            ez.print(sprintf('%s', result.report$posthoc_tukey[i]))
+            ez.pprint(sprintf('%s', result.report$posthoc_tukey[i]),color='underline')
         }
         ez.print('------')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (result.report$F[i] < 1) {
-                ez.print(sprintf('aov(%s~%s): \tF(%s) < 1',Y,X,result.report$dof[i]))
+                ez.pprint(sprintf('aov(%s~%s): \tF(%s) < 1',Y,X,result.report$dof[i]),color='underline')
             } else {
-                ez.print(sprintf('aov(%s~%s): \tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]))
+                ez.pprint(sprintf('aov(%s~%s): \tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='underline')
             }
         }
         ez.pprint('<<<<<<')
@@ -1235,9 +1235,9 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.residized.")'))){
                 robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.print(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp))
+                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp),color='underline')
             } else {
-                ez.print(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)))
+                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)),color='underline')
             }
         }
         ez.pprint('<<<<<<')
@@ -1382,7 +1382,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.print(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p,prefix=2)))
+            ez.pprint(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p,prefix=2)),color='underline')
         }
         ez.pprint('<<<<<<')
     }
@@ -1498,7 +1498,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             # sprintf('%.2e',NA) OK
-            ez.print(sprintf('fisher.test(%s,%s): OR = %.2e, %s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2)))
+            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e, %s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2)),color='underline')
         }
         ez.pprint('<<<<<<')
     }
