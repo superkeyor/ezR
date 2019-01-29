@@ -2352,8 +2352,6 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
     title=NULL,
     zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",hack=FALSE,print2scr=TRUE,...){
 
-    if (print2scr) {ez.lms(df,cmd,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,error=T)}
-
     if (length(model)>1 & hack){
         out = mapply(ez.scatterplot,model=model,title=model,MoreArgs=list(df=df, cmd=cmd, loess=loess, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
                     layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
@@ -2364,7 +2362,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
                     x.axis.size=x.axis.size, y.axis.size=y.axis.size, x.lab.size=x.lab.size, y.lab.size=y.lab.size,
                     x.tick.number=x.tick.number, y.tick.number=y.tick.number, title.size=title.size,
                     zlab=zlab, legend.box=legend.box, legend.position=legend.position,
-                    legend.direction=legend.direction, legend.size=legend.size, hack=FALSE, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
+                    legend.direction=legend.direction, legend.size=legend.size, hack=FALSE, print2scr=print2scr, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
         multiplot(plotlist=out,title=title)
         return(invisible(out))
     }
@@ -2379,7 +2377,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
             x.lab.size=x.lab.size, y.lab.size=y.lab.size, x.tick.number=x.tick.number,
             y.tick.number=y.tick.number, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
             legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
-            hack=hack, ...)
+            hack=hack, print2scr=F, ...)
         p2 = ez.scatterplot(df,gsub("||||","|||",cmd,fixed=TRUE),
             loess=loess, model=model, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
             layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
@@ -2389,13 +2387,15 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
             x.lab.size=x.lab.size, y.lab.size=y.lab.size, x.tick.number=x.tick.number,
             y.tick.number=y.tick.number, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
             legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
-            hack=hack, ...)
+            hack=hack, print2scr=T, ...)
         # a bit ugly hack
         p1strip = paste0(p2$condlevels[[1]],collapse='+')
         pp = ez.esp('latticeExtra:::c.trellis("{p1strip}"=p1,p2,x.same=TRUE,y.same=TRUE,layout=c(dim(p1)+dim(p2),1))') 
         if (!missing(layout)) pp$layout = layout
         return(pp)
     }
+
+    if (print2scr) {ez.lms(df,cmd,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,error=T)}
 
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
