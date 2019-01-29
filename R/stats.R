@@ -752,7 +752,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 #' @description anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 #' @param df a data frame, Internally go through dropna --> ez.2value(y),ez.2factor(x),ez.2value(covar)
-#' @param y compatible with \code{\link{ez.selcol}}
+#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.barplot}} where not necessary to specify x, covar. y|x or y|x+covar. cmd format can only handel 1 y, 1 x
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
 #' @param view call View(result)
@@ -776,6 +776,19 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
+    # yet another patch for cmd input
+    if (grepl('|',y,fixed=TRUE)){
+        # peel the onion
+        if (grepl('+',y,fixed=TRUE)) {
+            tmp = strsplit(ez.trim(y),"+",fixed=TRUE)[[1]]
+            covar = ez.trim(tmp[2:length(tmp)])
+            y = tmp[1]
+        }
+
+        tmp = strsplit(ez.trim(y),"|",fixed=TRUE)[[1]]
+        y = ez.trim(tmp[1]); x = ez.trim(tmp[2])
+    }
+
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
     text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt ; point.size = point.size/bp
@@ -942,7 +955,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr because of this, this function is not friendly to factors with 3 or more levels, although the default lm can handel factors nicely (yet complicatedly--eg, not easy to test significance)
 #' \cr by design, ez.2value to convert factors with 2 levels, such as sex, this generates the same results as lm by default, see note and example below for more
 #' \cr scale to get standarized beta as effect size for comparison across different variables
-#' @param y compatible with \code{\link{ez.selcol}}
+#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.scatterplot}} where not necessary to specify x, covar, by. y~x+covar|by (|{1,4}). cmd format can only handel 1 y, 1 x
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
 #' @param by NULL. if specified with a factor col, do the model on all subjects, and groups in that col separately. In this case returns a list of result data frame
@@ -1017,9 +1030,28 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
 #' @export
 ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
+    # yet another patch for cmd input
+    if (grepl('~',y,fixed=TRUE)){
+        # peel the onion
+        if (grepl('|',y,fixed=TRUE)) {
+            tmp = strsplit(ez.trim(y),"|",fixed=TRUE)[[1]]
+            by = ez.trim(tmp[length(tmp)])
+            y = tmp[1]
+        }
+
+        if (grepl('+',y,fixed=TRUE)) {
+            tmp = strsplit(ez.trim(y),"+",fixed=TRUE)[[1]]
+            covar = ez.trim(tmp[2:length(tmp)])
+            y = tmp[1]
+        }
+
+        tmp = strsplit(ez.trim(y),"~",fixed=TRUE)[[1]]
+        y = ez.trim(tmp[1]); x = ez.trim(tmp[2])
+    }
+
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar); if (!is.null(by)) by=ez.selcol(df,by)
 
-    # another path to handle by groups
+    # another patch to handle by groups
     if (!is.null(by)){
         # for all and for groups, assuming no factor level named ALL
         tmp = df; tmp[[by]] = factor('ALL'); df = base::rbind(tmp,df)

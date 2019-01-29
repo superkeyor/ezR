@@ -21,7 +21,7 @@ ez.regressions(df, y, x, covar = NULL, by = NULL, report = T,
 \cr by design, ez.2value to convert factors with 2 levels, such as sex, this generates the same results as lm by default, see note and example below for more
 \cr scale to get standarized beta as effect size for comparison across different variables}
 
-\item{y}{compatible with \code{\link{ez.selcol}}}
+\item{y}{compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.scatterplot}} where not necessary to specify x, covar, by. y~x+covar|by (|{1,4}). cmd format can only handel 1 y, 1 x}
 
 \item{x}{compatible with \code{\link{ez.selcol}}}
 
