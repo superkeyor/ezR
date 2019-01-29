@@ -2387,7 +2387,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
             x.lab.size=x.lab.size, y.lab.size=y.lab.size, x.tick.number=x.tick.number,
             y.tick.number=y.tick.number, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
             legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
-            hack=hack, print2scr=T, ...)
+            hack=hack, print2scr=print2scr, ...)
         # a bit ugly hack
         p1strip = paste0(p2$condlevels[[1]],collapse='+')
         pp = ez.esp('latticeExtra:::c.trellis("{p1strip}"=p1,p2,x.same=TRUE,y.same=TRUE,layout=c(dim(p1)+dim(p2),1))') 
