@@ -1033,9 +1033,9 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
     # yet another patch for cmd input
     if (grepl('~',y,fixed=TRUE)){
         # peel the onion
-        if (grepl('|||',y,fixed=TRUE)) {
+        if (grepl('|',y,fixed=TRUE)) {
             tmp = strsplit(ez.trim(y),"|",fixed=TRUE)[[1]]
-            by = ez.trim(tmp[length(tmp)])
+            if (grepl('|||',y,fixed=TRUE)) {by = ez.trim(tmp[length(tmp)])}
             y = tmp[1]
         }
 
