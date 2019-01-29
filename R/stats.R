@@ -913,11 +913,13 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             ez.pprint(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0)),color='cyan')
         }
-        ez.print('>>>>>>Posthoc Tukey<<<<<<')
+
+        ez.print('>>>>>> Posthoc Tukey <<<<<<')
         for (i in 1:nrow(result.report)){
             ez.pprint(sprintf('%s', result.report$posthoc_tukey[i]),color='cyan')
         }
-        ez.print('>>>>>>APA Format<<<<<<')
+        
+        ez.print('>>>>>> APA Formatted <<<<<<')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (result.report$F[i] < 1) {
