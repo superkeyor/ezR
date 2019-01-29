@@ -777,7 +777,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
     # yet another patch for cmd input
-    if (grepl('|',y,fixed=TRUE)){
+    if (grepl('|',y[1],fixed=TRUE)){
         # peel the onion
         if (grepl('+',y,fixed=TRUE)) {
             tmp = strsplit(ez.trim(y),"+",fixed=TRUE)[[1]]
@@ -913,12 +913,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             ez.pprint(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0)),color='cyan')
         }
-        ez.print('------')
-        ez.print('Posthoc Tukey')
+        ez.print('>>>>>>Posthoc Tukey<<<<<<')
         for (i in 1:nrow(result.report)){
             ez.pprint(sprintf('%s', result.report$posthoc_tukey[i]),color='cyan')
         }
-        ez.print('------')
+        ez.print('>>>>>>APA Format<<<<<<')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (result.report$F[i] < 1) {
@@ -1031,7 +1030,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' @export
 ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
     # yet another patch for cmd input
-    if (grepl('~',y,fixed=TRUE)){
+    if (grepl('~',y[1],fixed=TRUE)){
         # peel the onion
         if (grepl('|',y,fixed=TRUE)) {
             tmp = strsplit(ez.trim(y),"|",fixed=TRUE)[[1]]
