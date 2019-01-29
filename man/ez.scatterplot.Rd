@@ -15,7 +15,7 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
   shapes = c(16, 17, 15, 3, 7, 8), ylab = NULL, xlab = NULL,
   x.tick.number = 5, y.tick.number = 5, title = NULL, zlab = NULL,
   legend.box = FALSE, legend.position = "top",
-  legend.direction = "horizontal", hack = FALSE, ...)
+  legend.direction = "horizontal", hack = FALSE, print2scr = TRUE, ...)
 }
 \arguments{
 \item{df}{data frame}

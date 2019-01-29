@@ -955,7 +955,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr because of this, this function is not friendly to factors with 3 or more levels, although the default lm can handel factors nicely (yet complicatedly--eg, not easy to test significance)
 #' \cr by design, ez.2value to convert factors with 2 levels, such as sex, this generates the same results as lm by default, see note and example below for more
 #' \cr scale to get standarized beta as effect size for comparison across different variables
-#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.scatterplot}} where not necessary to specify x, covar, by. y~x+covar|by (|{1,4}). cmd format can only handel 1 y, 1 x
+#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.scatterplot}} where not necessary to specify x, covar, by. y~x+covar|||by, or y~x+covar||||by. cmd format can only handel 1 y, 1 x
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
 #' @param by NULL. if specified with a factor col, do the model on all subjects, and groups in that col separately. In this case returns a list of result data frame
@@ -1033,7 +1033,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
     # yet another patch for cmd input
     if (grepl('~',y,fixed=TRUE)){
         # peel the onion
-        if (grepl('|',y,fixed=TRUE)) {
+        if (grepl('|||',y,fixed=TRUE)) {
             tmp = strsplit(ez.trim(y),"|",fixed=TRUE)[[1]]
             by = ez.trim(tmp[length(tmp)])
             y = tmp[1]
