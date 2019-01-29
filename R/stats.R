@@ -801,7 +801,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
             result = ez.anovas1b(df,y,xx,covar=covar,report=report,view=F,plot=F,pmethods=pmethods,error=error,...)
             xlist[[xx]] = result
 
-            result.plot = result %>% ez.dropna('p')
+            result.plot = result %>% ez.dropna('p',print2scr=F)
             if (plot & nrow(result.plot)>0) {
                 bonferroniP = -log10(0.05/length(result.plot[['p']]))
                 plist[[xx]] = lattice::xyplot(-log10(result.plot$p) ~ result.plot$petasq2,
@@ -821,7 +821,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
     }
 
     df = df[, c(y,x,covar), drop=F]
-    df = ez.dropna(df)
+    df = ez.dropna(df,print2scr=F)
     df.bak = df
     df = ez.2value(df,y); df = ez.2factor(df,x)
     if (!is.null(covar)){
@@ -905,7 +905,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 
     if (view) {View(result)}
 
-    result.report = result %>% ez.dropna('p') %>% dplyr::arrange(orindex)
+    result.report = result %>% ez.dropna('p',print2scr=F) %>% dplyr::arrange(orindex)
     if (report & nrow(result.report)>0) {
         ez.pprint('>>>>>>')
         # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
@@ -930,7 +930,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         ez.pprint('<<<<<<')
     }
 
-    result.plot = result %>% ez.dropna('p')
+    result.plot = result %>% ez.dropna('p',print2scr=F)
     if (plot & nrow(result.plot)>0) {
         bonferroniP = -log10(0.05/length(result.plot[['p']]))
         pp=lattice::xyplot(-log10(result.plot$p) ~ result.plot$petasq2,
@@ -1072,7 +1072,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             result = ez.lms(df,yy,x,covar,report=report,model=model,by=by,view=F,plot=F,pmethods=pmethods,error=error,...)
             xlist[[yy]] = result
 
-            result.plot = result %>% ez.dropna('p')
+            result.plot = result %>% ez.dropna('p',print2scr=F)
             if (plot & nrow(result.plot)>0) {
                 bonferroniP = -log10(0.05/length(result.plot[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result.plot$p) ~ result.plot$stdbeta,
@@ -1097,7 +1097,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
     # otherwise scale results would be different
     # if covar NULL, c() auto gets rid of it
     df = df[, c(y,x,covar), drop=F]
-    df = ez.dropna(df)
+    df = ez.dropna(df,print2scr=F)
     # also convert factor to value
     for (vv in c(y,x,covar)){
         # nonfactor nleves returns 0
@@ -1228,7 +1228,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
     if (view) {View(result)}
 
     # todo: format as APA
-    result.report = result %>% ez.dropna('p') %>% dplyr::arrange(orindex)
+    result.report = result %>% ez.dropna('p',print2scr=F) %>% dplyr::arrange(orindex)
     if (report & nrow(result.report)>0) {
         ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
@@ -1243,7 +1243,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
         ez.pprint('<<<<<<')
     }
 
-    result.plot = result %>% ez.dropna('p')
+    result.plot = result %>% ez.dropna('p',print2scr=F)
     if (plot & nrow(result.plot)>0) {
         bonferroniP = -log10(0.05/length(result.plot[['p']]))
         pp=lattice::xyplot(-log10(result.plot$p) ~ result.plot$stdbeta,
@@ -1304,7 +1304,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
             result = ez.logistics(df,yy,x,covar=covar,report=report,view=F,plot=F,pmethods=pmethods,error=error,...)
             xlist[[yy]] = result
 
-            result.plot = result %>% ez.dropna('p')
+            result.plot = result %>% ez.dropna('p',print2scr=F)
             if (plot & nrow(result.plot)>0) {
                 bonferroniP = -log10(0.05/length(result.plot[['p']]))
                 plist[[yy]] = lattice::xyplot(-log10(result.plot$p) ~ log2(result.plot$odds_ratio),
@@ -1329,7 +1329,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
     # otherwise scale results would be different
     # if covar NULL, c() auto gets rid of it
     df = df[, c(y,x,covar), drop=F]
-    df = ez.dropna(df)
+    df = ez.dropna(df,print2scr=F)
     df.bak = df
 
     getStats = function(y,x,covar,df,...){
@@ -1377,7 +1377,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
     if (view) {View(result)}
 
     # todo: format as APA
-    result.report = result %>% ez.dropna('p') %>% dplyr::arrange(orindex)
+    result.report = result %>% ez.dropna('p',print2scr=F) %>% dplyr::arrange(orindex)
     if (report & nrow(result.report)>0) {
         ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
@@ -1387,7 +1387,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         ez.pprint('<<<<<<')
     }
 
-    result.plot = result %>% ez.dropna('p')
+    result.plot = result %>% ez.dropna('p',print2scr=F)
     if (plot & nrow(result.plot)>0) {
         bonferroniP = -log10(0.05/length(result.plot[['p']]))
         pp=lattice::xyplot(-log10(result.plot$p) ~ log2(result.plot$odds_ratio),
@@ -1432,10 +1432,10 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
             result = ez.fishers(df,y,xx,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,lab.size=lab.size,text.size=text.size,title.size=title.size,width=width)
-            result = result %>% ez.dropna('p')
+            result = result %>% ez.dropna('p',print2scr=F)
             xlist[[xx]] = result
 
-            result.plot = result %>% ez.dropna('p')
+            result.plot = result %>% ez.dropna('p',print2scr=F)
             if (plot & nrow(result.plot)>0) {
                 bonferroniP = -log10(0.05/length(result.plot[['p']]))
                 plist[[xx]] = lattice::barchart(-log10(result.plot$p) ~ result.plot$y,
@@ -1457,7 +1457,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
     }
 
     df = df[, c(y,x), drop=F]
-    df = ez.dropna(df)
+    df = ez.dropna(df,print2scr=F)
     df = ez.2factor(df)
 
     getStats = function(y,x,df,...){
@@ -1493,7 +1493,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
     if (view) {View(result)}
 
     # todo: format as APA
-    result.report = result %>% ez.dropna('p') %>% dplyr::arrange(orindex)
+    result.report = result %>% ez.dropna('p',print2scr=F) %>% dplyr::arrange(orindex)
     if (report & nrow(result.report)>0) {
         ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
@@ -1503,7 +1503,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         ez.pprint('<<<<<<')
     }
 
-    result.plot = result %>% ez.dropna('p')
+    result.plot = result %>% ez.dropna('p',print2scr=F)
     if (plot & nrow(result.plot)>0) {
         bonferroniP = -log10(0.05/length(result.plot[['p']]))
         if (length(y)>=1 & length(x)==1) {
