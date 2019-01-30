@@ -823,7 +823,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
     # also see trimws()--remove trailing/leading spaces
     cmd = ez.trim(cmd)
-    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+    cmd = strsplit(cmd,'[~|]')[[1]]
 
     violin = ifelse(violin, 'geom_violin() +', '')
     # yy
@@ -1005,7 +1005,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     # y|x+covar1+covar2 (ancova)
     if (grepl('+',cmd,fixed=TRUE)) {
         cmd = ez.trim(cmd)
-        cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+        cmd = strsplit(cmd,'[~|]')[[1]]
         yy = cmd[1]
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx,"+",fixed=TRUE)[[1]] %>% sapply(trimws) %>% unname()
@@ -1045,7 +1045,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
     # also see trimws()--remove trailing/leading spaces
     cmd = ez.trim(cmd)
-    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+    cmd = strsplit(cmd,'[~|]')[[1]]
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
         yy = cmd[1]
@@ -1196,7 +1196,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
     # Merge Multiple spaces to single space, and remove trailing/leading spaces
     # also see trimws()--remove trailing/leading spaces
     cmd = ez.trim(cmd)
-    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+    cmd = strsplit(cmd,'[~|]')[[1]]
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
         yy = cmd[1]
@@ -2999,7 +2999,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
     cmd = ez.trim(cmd)
     # c("x1", "x2", "x3")
     if (length(cmd)>1) cmd=paste0(cmd,collapse='/')
-    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+    cmd = strsplit(cmd,'[~|]')[[1]]
     # xx
     if (length(cmd)==1) {
         xx = cmd[1]
@@ -3306,7 +3306,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',colors=e
     hist.type=ifelse(!density, sprintf('geom_histogram(position="stack",stat="bin",alpha=%f,bins=%d,...)',alpha,bins), sprintf('geom_density(stat = "density",position = "identity",alpha=%f,...)',alpha))
 
     cmd = ez.trim(cmd)
-    cmd = strsplit(cmd,"|",fixed=TRUE)[[1]]
+    cmd = strsplit(cmd,'[~|]')[[1]]
     # xx
     if (length(cmd)==1) {
         xx = cmd[1]
