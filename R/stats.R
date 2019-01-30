@@ -914,9 +914,8 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
             ez.pprint(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0)),color='cyan')
         }
 
-        ez.print('>>>>>> Posthoc Tukey <<<<<<')
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('%s', result.report$posthoc_tukey[i]),color='cyan')
+            ez.pprint(sprintf('Tukey: %s', result.report$posthoc_tukey[i]),color='cyan')
         }
         
         for (i in 1:nrow(result.report)){
