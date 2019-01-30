@@ -21,15 +21,14 @@ show.shape = function(){
     Specify border color (col=) and fill color (bg=, for symbols 21 through 25).
     ggplot2 default shapes (only 6): c(16,17,15,3,7,8)
     '))
-    opar<-par()
-    par(font=2, mar=c(0.5,0,0,0))
+    opar<-par(font=2, mar=c(0.5,0,0,0))
+    on.exit(par(opar))
     y=rev(c(rep(1,6),rep(2,5), rep(3,5), rep(4,5), rep(5,5)))
     x=c(rep(1:5,5),6)
     plot(x, y, pch = 0:25, cex=1.5, ylim=c(1,5.5), xlim=c(1,6.5), 
        axes=FALSE, xlab="", ylab="", col='red', bg="green")
     text(x, y, labels=0:25, pos=3)
     par(mar=opar$mar,font=opar$font)
-    par(opar)
 }
 
 #' show line
@@ -41,6 +40,7 @@ show.line = function(){
     '))
     # http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
     opar = par(mar=c(0,0,0,0))
+    on.exit(par(opar))
     # Set up the plotting area
     plot(NA, xlim=c(0,1), ylim=c(6.5, -0.5),
         xaxt="n", yaxt="n",
@@ -57,7 +57,6 @@ show.line = function(){
     text(0, 4, "4. 'dotdash'" ,  adj=c(0,.5))
     text(0, 5, "5. 'longdash'",  adj=c(0,.5))
     text(0, 6, "6. 'twodash'" ,  adj=c(0,.5))
-    par(opar)
 }
 
 #' show color
