@@ -919,7 +919,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         }
         
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('Counts: %s', result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('n: %s', result.report$counts[i]),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
