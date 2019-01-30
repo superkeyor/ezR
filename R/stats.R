@@ -919,12 +919,10 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
             ez.pprint(sprintf('%s', result.report$posthoc_tukey[i]),color='cyan')
         }
         
-        ez.print('>>>>>>    Counts    <<<<<<')
         for (i in 1:nrow(result.report)){
             ez.pprint(sprintf('%s', result.report$counts[i]),color='cyan')
         }
 
-        ez.print('>>>>>> APA Formatted <<<<<<')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (result.report$F[i] < 1) {
