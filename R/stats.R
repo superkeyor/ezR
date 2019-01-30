@@ -465,7 +465,7 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
             plot(v, type='b', pch=20, col='#56B4E9', axes=FALSE,...)
             axis(side=1); axis(side=3)
             axis(side=2); axis(side=4)
-            abline(h = v.mean, col = "#F0E442", lwd = 3)
+            abline(h = v.mean, col = "#F0E442", lty = 3)
         }
     }
     return(invisible(NULL))
