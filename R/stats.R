@@ -461,7 +461,7 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
         cat(sprintf('\n%-25s\n',v.class))
         cat(sprintf('attributes: %s\n',v.attrs))
 
-        if (plot) {
+        if (plot & is.numeric(v) & !all(is.na(v)) {
             plot(v, type='b', pch=20, col='#56B4E9', axes=FALSE,...)
             axis(side=1); axis(side=3)
             axis(side=2); axis(side=4)
