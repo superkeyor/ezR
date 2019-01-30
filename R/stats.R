@@ -752,7 +752,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 #' @description anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 #' @param df a data frame, Internally go through dropna --> ez.2value(y),ez.2factor(x),ez.2value(covar)
-#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.barplot}} where not necessary to specify x, covar. y|x or y|x+covar. cmd format can only handel 1 y, 1 x
+#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.barplot}} where not necessary to specify x, covar. y|x or y|x+covar, y~x or y~x+covar. cmd format can only handel 1 y, 1 x
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
 #' @param view call View(result)
@@ -777,7 +777,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
     # yet another patch for cmd input
-    if (grepl('|',y[1],fixed=TRUE)){
+    if (grepl('[~|]',y[1],perl=TRUE)){
         # peel the onion
         if (grepl('+',y,fixed=TRUE)) {
             tmp = strsplit(ez.trim(y),"+",fixed=TRUE)[[1]]
@@ -785,7 +785,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
             y = tmp[1]
         }
 
-        tmp = strsplit(ez.trim(y),"|",fixed=TRUE)[[1]]
+        tmp = strsplit(ez.trim(y),'[~|]',perl=TRUE)[[1]]
         y = ez.trim(tmp[1]); x = ez.trim(tmp[2])
     }
 
@@ -1035,7 +1035,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
     if (grepl('~',y[1],fixed=TRUE)){
         # peel the onion
         if (grepl('|',y,fixed=TRUE)) {
-            tmp = strsplit(ez.trim(y),"|",fixed=TRUE)[[1]]
+            tmp = strsplit(ez.trim(y),'|',fixed=TRUE)[[1]]
             by = ez.trim(tmp[length(tmp)])
             y = tmp[1]
         }
