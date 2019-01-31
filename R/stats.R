@@ -462,7 +462,7 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
         cat(sprintf('attributes: %s\n',v.attrs))
 
         if (plot & is.numeric(v) & !all(is.na(v))) {
-            opar = par(mfrow=c(2, 1), oma=c(0,0,0,0), mar = c(2,2.2,0,0.5))
+            opar = par(mfrow=c(2, 1), oma=c(0,0,0,0), mar = c(2,2,0.5,0.5))
             on.exit(par(opar))
             plot(v, type='b', pch=20, col='#56B4E9', ...)
             abline(h = v.mean, col = "#E69F00", lty = 3, lwd = 2)
