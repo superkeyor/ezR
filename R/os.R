@@ -604,6 +604,11 @@ ez.mkdir = function(path){
 #' @export
 ez.exists = file.exists
 
+#' alias of \code{\link{file.symlink}}
+#' @description alias of \code{\link{file.symlink}}
+#' @export
+ez.lns = file.symlink
+
 #' remove a file, wrapper of \code{\link{unlink}}
 #' @description remove a file, wrapper of \code{\link{unlink}}
 #' @examples
