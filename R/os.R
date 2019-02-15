@@ -48,7 +48,7 @@ exit = function() { q("no") }
 #' @description debug mode on/off 1/0 T/F. NULL-> getOption('debug')
 #' @return if debugMode=NULL, returns invisible T/F (unset=T). if debugMode=1/0, returns nothings
 #' @export
-ez.debug = function(debugMode=NULL) { 
+ez.debug = function(debugMode=NULL) {
     if (is.null(debugMode)) {
         opt = getOption('debug')
         if (is.null(opt)) {ez.pprint('Debug Mode Status: Unset, As ON'); opt=TRUE}
@@ -64,7 +64,7 @@ ez.debug = function(debugMode=NULL) {
 #' warn error mode on/off 1/0 T/F. NULL-> getOption('warn')
 #' @description warn error mode on/off 1/0 T/F. NULL-> getOption('warn')
 #' @export
-ez.warn = function(warnErrorMode=NULL) { 
+ez.warn = function(warnErrorMode=NULL) {
     if (is.null(warnErrorMode)) {
         opt = getOption('warn')
         if (is.null(opt)) ez.pprint('Warn Error Mode Status: Not set yet')
@@ -649,25 +649,25 @@ ez.rn = function(from,to){
 
 .cp = function(from,to,overwrite=TRUE){
     # if from is file
-    if (!all(file.info(from)$isdir)) {
+    if (!all(file.info(from)$isdir %in% TRUE)) {
         # both works file.copy('a.txt','folder'), file.copy('a.txt','folder/b.txt')
         # the former copy still has the same name 'a.txt', the latter copy new name 'b.txt'
 
         # if to is folder-like
         if (nchar(tools::file_ext(to)) == 0) {
             # if to not exist
-            if (!all(file.info(to)$isdir)) dir.create(to, recursive=TRUE)
+            if (!all(file.info(to)$isdir %in% TRUE)) dir.create(to, recursive=TRUE)
         }
         else {
             # if to parent not exist
             todir <- dirname(to)
-            if (!all(file.info(todir)$isdir)) dir.create(todir, recursive=TRUE)
+            if (!all(file.info(todir)$isdir %in% TRUE)) dir.create(todir, recursive=TRUE)
         }
         result = file.copy(from, to, overwrite = overwrite, recursive = FALSE)
     }
     else {
         # if to exist, from becomes a subfolder of to
-        if (all(file.info(to)$isdir)) {
+        if (all(file.info(to)$isdir %in% TRUE)) {
             result = file.copy(from, to, overwrite = overwrite, recursive = TRUE)
         }
         # else copy each individual file
