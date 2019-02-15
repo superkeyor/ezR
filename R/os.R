@@ -647,22 +647,7 @@ ez.rn = function(from,to){
     }
 }
 
-#' copy
-#' @description copy
-#' @examples
-#' support c('a.txt','b.txt')
-#' to folder does not have to exist already
-#' e.g.,
-#' 1) both works ez.cp('a.txt','folder'), ez.cp('a.txt','folder/b.txt')
-#' the former copy still has the same name 'a.txt', the latter copy new name 'b.txt'
-#' also ez.cp(c('a.txt','b.txt'),'folder')
-#' 2) folder: ez.cp('a','b')-->if b not exists, cp contents of a to b; if b exist, a becomes subfolder of b
-#' kinda combines rn and mv
-#' 3) regular expression
-#' flist <- list.files("patha", "^filea.+[.]csv$", full.names = TRUE)
-#' file.copy(flist, "pathb")
-#' @export
-ez.cp = function(from,to,overwrite=TRUE){
+.cp = function(from,to,overwrite=TRUE){
     # if from is file
     if (!all(file.info(from)$isdir)) {
         # both works file.copy('a.txt','folder'), file.copy('a.txt','folder/b.txt')
@@ -696,6 +681,23 @@ ez.cp = function(from,to,overwrite=TRUE){
         }
     }
 }
+
+#' copy
+#' @description copy
+#' @examples
+#' support c('a.txt','b.txt')
+#' to folder does not have to exist already
+#' e.g.,
+#' 1) both works ez.cp('a.txt','folder'), ez.cp('a.txt','folder/b.txt')
+#' the former copy still has the same name 'a.txt', the latter copy new name 'b.txt'
+#' also ez.cp(c('a.txt','b.txt'),'folder')
+#' 2) folder: ez.cp('a','b')-->if b not exists, cp contents of a to b; if b exist, a becomes subfolder of b
+#' kinda combines rn and mv
+#' 3) regular expression
+#' flist <- list.files("patha", "^filea.+[.]csv$", full.names = TRUE)
+#' file.copy(flist, "pathb")
+#' @export
+ez.cp = Vectorize(.cp)
 
 #' move
 #' @description move
