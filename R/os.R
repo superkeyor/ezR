@@ -621,21 +621,12 @@ ez.rm = function(x){
     result = unlink(x, recursive = TRUE, force = TRUE)
 }
 
-#' rename
-#' @description rename
-#' @examples
-#' support c('a.txt','b.txt'), c('d.txt','e.txt')
-#' to parent folder must exist already; otherwise error
-#' in case new name exists
-#'       if old and new both folders, move old to new as subfolder
-#'       if old and new both files, overwrite the old file with new file without prompt
-#' @export
-ez.rn = function(from,to){
+.rn = function(from,to){
     todir <- dirname(to)
-    if (!all(file.info(todir)$isdir)) stop("Destination parent folder does not exist")
+    if (!all(file.info(todir)$isdir %in% TRUE)) stop("Destination parent folder does not exist")
     # both from and to are exisiting folders
     if ((nchar(tools::file_ext(from)) == 0) && (nchar(tools::file_ext(to)) == 0)) {
-        if ((all(file.info(from)$isdir)) && (all(file.info(to)$isdir))) {
+        if ((all(file.info(from)$isdir %in% TRUE)) && (all(file.info(to)$isdir %in% TRUE))) {
             result = ez.mv(from,to)
         }
         else {
@@ -645,7 +636,19 @@ ez.rn = function(from,to){
     else {
         result = file.rename(from,to)
     }
+    return(invisible(NULL))
 }
+
+#' rename
+#' @description rename
+#' @examples
+#' support c('a.txt','b.txt'), c('d.txt','e.txt')
+#' to parent folder must exist already; otherwise error
+#' in case new name exists
+#'       if old and new both folders, move old to new as subfolder
+#'       if old and new both files, overwrite the old file with new file without prompt
+#' @export
+ez.rn = Vectorize(.rn)
 
 .cp = function(from,to,overwrite=TRUE){
     # if from is file
@@ -680,6 +683,7 @@ ez.rn = function(from,to){
                           overwrite=overwrite) })
         }
     }
+    return(invisible(NULL))
 }
 
 #' copy
@@ -699,6 +703,22 @@ ez.rn = function(from,to){
 #' @export
 ez.cp = Vectorize(.cp)
 
+.mv = function(from,to){
+    # if to is folder-like
+    if (nchar(tools::file_ext(to)) == 0) {
+        # if to not exist
+        if (!all(file.info(to)$isdir %in% TRUE)) dir.create(to, recursive=TRUE)
+        to = file.path(to, basename(from))
+    }
+    else {
+        # if to parent not exist
+        todir <- dirname(to)
+        if (!all(file.info(todir)$isdir %in% TRUE)) dir.create(todir, recursive=TRUE)
+    }
+    result = file.rename(from = from, to = to)
+    return(invisible(NULL))
+}
+
 #' move
 #' @description move
 #' @examples
@@ -709,20 +729,7 @@ ez.cp = Vectorize(.cp)
 #' ez.mv('a','b')-->get b/a, b now has a as subfolder, regardless of b exists or not
 #'                  use ez.rn('a','b') to change name a->b
 #' @export
-ez.mv = function(from,to){
-    # if to is folder-like
-    if (nchar(tools::file_ext(to)) == 0) {
-        # if to not exist
-        if (!all(file.info(to)$isdir)) dir.create(to, recursive=TRUE)
-        to = file.path(to, basename(from))
-    }
-    else {
-        # if to parent not exist
-        todir <- dirname(to)
-        if (!all(file.info(todir)$isdir)) dir.create(todir, recursive=TRUE)
-    }
-    result = file.rename(from = from, to = to)
-}
+ez.mv = Vectorize(.mv)
 
 #' Send mail with Gmail
 #' @description Send mail with Gmail
