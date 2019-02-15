@@ -16,7 +16,7 @@ ez.vv(vec, printn = Inf, order = "as", quote = NULL, print2scr = FALSE)
 \item{quote}{TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)}
 }
 \value{
-nothing, only print out.
+returns the printout.
 \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
 \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 }

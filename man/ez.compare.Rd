@@ -4,7 +4,10 @@
 \alias{ez.compare}
 \title{compare two vectors, two dataframes}
 \usage{
-ez.compare(lh, rh, ...)
+ez.compare(lh, rh, value = FALSE, ...)
+}
+\arguments{
+\item{value}{T/F, print out setdiff results}
 }
 \description{
 compare two vectors, two dataframes

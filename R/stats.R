@@ -64,9 +64,10 @@ ez.p.apa = Vectorize(p.apa)
 
 #' compare two vectors, two dataframes
 #' @description compare two vectors, two dataframes
+#' @param value T/F, print out setdiff results
 #' @note nrow() for data frame, length() for vector. union/intersect remove duplication
 #' @export
-ez.compare = function(lh,rh,...) {
+ez.compare = function(lh,rh,value=FALSE,...) {
     if (is.data.frame(lh)) {
             len=nrow
             cat(sprintf('comparing nrow for two data frame uniques: %s\t%s\n\n',deparse(substitute(lh)),deparse(substitute(rh)) ))
@@ -84,7 +85,15 @@ ez.compare = function(lh,rh,...) {
     cat( sprintf('\t\tLH>: %4.0f\t\t\t\t<RH: %4.0f\n',len(dplyr::setdiff(lh,rh,...)),len(dplyr::setdiff(rh,lh,...))) )
     cat('set equal?\n')
     cat(dplyr::setequal(lh,rh,...))
-    cat('\n')
+    cat('\n\n')
+
+    if (value) {
+        cat('LH>: \n')
+        dplyr::setdiff(lh,rh,...) %>% ez.vv(print2scr=FALSE) %>% cat('\n')
+        cat('RH>: \n')
+        dplyr::setdiff(rh,lh,...) %>% ez.vv(print2scr=FALSE) %>% cat('\n')
+    }
+    return(invisible(NULL))
 }
 
 #' setdiff2(x,y)=setdiff(y,x)
@@ -316,7 +325,7 @@ ez.xl = function(df,temp=NULL,debug=NULL,label=TRUE) {
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
 #' @param order vector order for printing out, 'as','az','za'
-#' @return nothing, only print out.
+#' @return returns the printout.
 #' \cr By default in R when you type a variable name, you get [1] "rs171440fwd" "rs1800497fwd"
 #' \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 #' @seealso \code{\link{ez.print}} \code{\link{ez.pprint}}
