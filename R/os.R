@@ -468,7 +468,15 @@ ez.cd = setwd
 #' cd(csd); source("shared.R")
 #' @description cd(csd); source("shared.R")
 #' @export
-ez.cg = function(){setwd(ez.csd());try(source('shared.R'));return(invisible(NULL))}
+ez.cg = function(){
+    setwd(ez.csd())
+    tryCatch({
+        source('shared.R')
+        },
+        error=function(e) {}, 
+        warning = function(w) {})
+    return(invisible(NULL))
+}
 
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
