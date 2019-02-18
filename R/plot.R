@@ -835,7 +835,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                      pp = ggplot2::ggplot(df, aes(x=factor(1), y=%s)) +
                      stat_boxplot(geom = "errorbar", width = 0.5) +
                      %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
-                     geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                     geom_point(position=position_jitter(seed=20190218, width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                      coord_flip() + theme(legend.position="none", axis.ticks.y=element_blank(), axis.text.y=element_blank()) +
                      xlab("") +
@@ -872,7 +872,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                          stat_boxplot(geom = "errorbar", width = 0.5) +
                          %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
-                         geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                         geom_point(position=position_jitter(seed=20190218, width=0.2, height=0), size=1) +
                          stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                          coord_flip() + theme(legend.position="none") +
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
@@ -897,7 +897,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
-                             geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                             geom_point(position=position_jitter(seed=20190218, width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              %s +
                              coord_flip() + theme(legend.position="none") +
@@ -923,7 +923,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
-                             geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                             geom_point(position=position_jitter(seed=20190218, width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              facet_grid(%s~%s) +
                              coord_flip() + theme(legend.position="none") +
@@ -978,7 +978,6 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
 
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
-    set.seed(20190218)
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1014,7 +1013,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         xx = xx[1]
 
         if (point) {
-            points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
+            points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(seed=20190218, width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
             ez.pprint('Attention: Point values are not adjusted! Mean (SE) are.','red')
         } else {
             points = ''
@@ -1069,7 +1068,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
             
             if (point) {
-                points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
+                points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(seed=20190218, width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
             } else {
                 points = ''
             }
