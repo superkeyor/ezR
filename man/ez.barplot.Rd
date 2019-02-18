@@ -9,7 +9,8 @@ ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
   error.width = 0.3, error.direction = "both", ylab = NULL, xlab = NULL,
   zlab = NULL, legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
-  hjust = NULL, print2scr = TRUE, ...)
+  hjust = NULL, print2scr = TRUE, point = FALSE, point.jitter = 0.15,
+  point.size = 1.5, point.alpha = 0.8, ...)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}

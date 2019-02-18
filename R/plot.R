@@ -972,11 +972,13 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,...) {
+ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
+    point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=0.8,...) {
     if (print2scr) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
 
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
+    set.seed(20190218)
 
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
@@ -1011,6 +1013,13 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         covar = xx[-1]
         xx = xx[1]
 
+        if (point) {
+            points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
+            ez.pprint('Attention: Point values are not adjusted! Mean (SE) are.','red')
+        } else {
+            points = ''
+        }
+
         tt = sprintf('
                     pp=aov(%s~%s%s,data=df) %%>%%
                     effects::effect("%s",.) %%>%%
@@ -1021,11 +1030,11 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                     %s +
                     geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
 
-                    %s %s %s %s
+                    %s %s %s %s %s
                     theme(axis.text.x=element_text(angle=%f %s %s)) +
                     theme(legend.direction="%s") +
                     theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                    ,yy, xx, paste('+',covar,sep='',collapse=''), xx, xx, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                    ,yy, xx, paste('+',covar,sep='',collapse=''), xx, xx, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                     )
         gghistory=paste(gghistory,
                   sprintf('df=ez.dropna(df,c("%s","%s", "%s"))',yy,xx,paste(covar,sep='',collapse='","')),
@@ -1058,6 +1067,13 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
             # color = outline color of bar
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
+            
+            if (point) {
+                points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
+            } else {
+                points = ''
+            }
+
             tt = sprintf('
                          pp=group_by(df,%s) %%>%%
                          summarise(avgAverage=mean(%s),se=sd(%s)/sqrt(n())) %%>%%
@@ -1067,11 +1083,11 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                          %s +
                          geom_errorbar(aes(ymin=%s, ymax=%s), size=%f, width=%f, position=position_dodge(width=%f)) +
 
-                         %s %s %s %s
+                         %s %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, yy, yy, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                         , xx, yy, yy, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
                          )
             gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
