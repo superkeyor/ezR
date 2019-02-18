@@ -465,14 +465,10 @@ ez.pr = ez.parentdir
 #' @export
 ez.cd = setwd
 
-#' cd(csd)
-#' @description cd(csd)
+#' cd(csd); source("shared.R")
+#' @description cd(csd); source("shared.R")
 #' @export
-ez.ce = function(){setwd(ez.csd())}
-
-#' @rdname ez.ce
-#' @export
-ez.cf = ez.ce
+ez.cg = function(){setwd(ez.csd());try(source('shared.R'));return(invisible(NULL))}
 
 #' alias of \code{\link{getwd}}
 #' @description alias of \code{\link{getwd}}
