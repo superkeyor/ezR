@@ -479,7 +479,7 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
             abline(h = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             hist(v, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = v.mean, col = "#E69F00", lty = 3, lwd = 2)
-            boxplot(v, col='#56B4E9');abline(h=v.mean,lty=3,lwd = 2,col='#E69F00')
+            boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
         }
     }
     return(invisible(NULL))
