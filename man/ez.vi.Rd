@@ -4,12 +4,10 @@
 \alias{ez.vi}
 \title{print sorted uniques of a df col or a vector (NA last) and other information}
 \usage{
-ez.vi(x, printn = 35, order = "as", plot = TRUE, ...)
+ez.vi(x, printn = 35, plot = TRUE, ...)
 }
 \arguments{
 \item{printn}{print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all}
-
-\item{order}{vector order for printing out, 'as','az','za'}
 
 \item{plot}{plot single vector (call generic/default \code{\link[graphics]{plot}})}
 }

@@ -363,11 +363,10 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
-#' @param order vector order for printing out, 'as','az','za'
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param plot plot single vector (call generic/default \code{\link[graphics]{plot}})
 #' @export
-ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
+ez.vi = function(x,printn=35,plot=TRUE,...) {
     v = x
     if (is.data.frame(v) | is.matrix(v)) {
         if ( sum(ez.duplicated(colnames(v),vec=TRUE,dim=1))>0 ) {
@@ -375,7 +374,8 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
         }
         v.class = if (is.matrix(v)) 'matrix' else class(v) %>% toString()
         if (is.matrix(v)) {v = data.frame(v)}
-        v.cols = colnames(v) %>% ez.vv(print2scr=F,printn=printn,order=order)
+        v.cols = colnames(v) %>% ez.vv(print2scr=F,printn=printn,order='as')
+        v.cols2 = colnames(v) %>% ez.vv(print2scr=F,printn=printn,order='az')
         v.nrow = nrow(v)
         v.ncol = ncol(v)
         v.missing=ez.count(v,NA,dim=3)
@@ -401,7 +401,11 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
         cols = if (ncol(v)==0) integer(0) else c(first3cols,last3cols)
         print(v[rows,cols,drop=F])
 
+        cat('\n#col names, az:\n')
+        cat(v.cols2)
         cat('\n')
+
+        cat('\n#col names, as:\n')
         cat(v.cols)
         cat('\n')
 
@@ -414,7 +418,8 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
         }
         cat(sprintf('List of %d\n',length(x)))
     } else {
-        v.elements = unique(v) %>% ez.vv(print2scr=F,printn=printn,order=order)
+        v.elements = unique(v) %>% ez.vv(print2scr=F,printn=printn,order='as')
+        v.elements2 = unique(v) %>% ez.vv(print2scr=F,printn=printn,order='az')
         v.class=class(v) %>% toString()
         if (!is.null(names(v))) v.class=paste0('Named ',v.class)
         v.n=length(v)
@@ -462,7 +467,8 @@ ez.vi = function(x,printn=35,order='as',plot=TRUE,...) {
         v.levels = paste(freqtable[[1]],vallbl,": ",freqtable[[2]],sep="",collapse="\n")
 
         cat(sprintf('Counts/Levels (Incl NA): \n%s\n\n',v.levels %>% toString(width=printn*20)))
-        cat(sprintf("Uniques (Incl NA, NA might be printed as 'NA'): \n%s\n\n", v.elements))
+        cat(sprintf("Uniques (Incl NA, NA might be printed as 'NA', as): \n%s\n\n", v.elements))
+        cat(sprintf("Uniques (Incl NA, NA might be printed as 'NA', az): \n%s\n\n", v.elements2))
         cat(sprintf('#Unique (Incl NA): %d\t#NA: %d (%.0f%%)\t#Non-NA: %d\t#Total: %d\n', v.unique, v.missing, v.missing*100/v.n, v.n-v.missing, v.n))
         if ( (is.numeric(v) | is.date(v)) & !all(is.na(v)) ) {
             cat(sprintf('M = %.2f\tSD = %.2f\tRange = (%.2f,%.2f)\tSum = %.2f\n', v.mean, v.sd, v.min, v.max, v.sum))
