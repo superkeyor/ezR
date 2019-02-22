@@ -809,8 +809,8 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
-    color = sprintf("c(%s)",ez.vv(color))
+ez.plot = function(df,cmd,violin=FALSE,colors=ez.palette('Zhu'),n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
+    colors = sprintf("c(%s)",ez.vv(colors))
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -882,7 +882,7 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
             )
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
-            tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',color))
+            tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',colors))
             gghistory=paste(gghistory,
                      sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                      sprintf('df=ez.2factor(df,c("%s"))',xx),
@@ -909,7 +909,7 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
-                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',color))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',colors))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                          sprintf('df=ez.2factor(df,c("%s","%s"))',xx,zz),
@@ -937,7 +937,7 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
                
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
-                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',color))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',colors))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
                          sprintf('df=ez.2factor(df,c("%s","%s","%s"))',xx,zz,aa),
@@ -961,9 +961,9 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param bar.gap  the gap between bars
 #' @param bar.width  the width of bar itself
-#' @param error.size  the thickness of error bar line
+#' @param error.size  the thickness of error bar (vertical and horizontal lines)
 #' @param error.gap  the location of errorbar, should be equal to bar.width(?)
-#' @param error.width the width of the bar of error
+#' @param error.width the width of error bar (horizontal lines), could be 0 to show only vertical lines
 #' @param error.direction  "both", "max", "min"
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL
@@ -981,7 +981,7 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab='Mean',xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
-    point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=0.8,theme.apa=TRUE,...) {
+    point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=1,point.color='grey55',theme.apa=TRUE,...) {
     if (print2scr & !grepl('+',cmd,fixed=TRUE) & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
 
     df.bak=df
@@ -1021,7 +1021,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         xx = xx[1]
 
         if (point) {
-            points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
+            points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha},color="{point.color}")+')
             ez.pprint('Attention: Point values are not adjusted! Mean (SE) are.','red')
         } else {
             points = ''
@@ -1077,7 +1077,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
 
             if (point) {
-                points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
+                points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha},color="{point.color}")+')
             } else {
                 points = ''
             }

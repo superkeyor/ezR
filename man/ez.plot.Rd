@@ -4,7 +4,7 @@
 \alias{ez.plot}
 \title{plot a customized boxplot with jittered stripplot, violin, and mean}
 \usage{
-ez.plot(df, cmd, violin = FALSE, color = ez.palette("Zhu"), n.size = 4.5,
+ez.plot(df, cmd, violin = FALSE, colors = ez.palette("Zhu"), n.size = 4.5,
   m.size = 4.5, alpha = 0.7, facet = "cols", theme.apa = TRUE)
 }
 \arguments{

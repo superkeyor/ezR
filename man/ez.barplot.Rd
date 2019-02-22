@@ -10,8 +10,8 @@ ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
   xlab = NULL, zlab = NULL, legend.position = "top",
   legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
   xangle = 0, vjust = NULL, hjust = NULL, print2scr = TRUE,
-  point = FALSE, point.jitter = 0.15, point.size = 1.5,
-  point.alpha = 0.8, theme.apa = TRUE, ...)
+  point = FALSE, point.jitter = 0.15, point.size = 1.5, point.alpha = 1,
+  point.color = "grey55", theme.apa = TRUE, ...)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
@@ -25,11 +25,11 @@ ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
 
 \item{bar.width}{the width of bar itself}
 
-\item{error.size}{the thickness of error bar line}
+\item{error.size}{the thickness of error bar (vertical and horizontal lines)}
 
 \item{error.gap}{the location of errorbar, should be equal to bar.width(?)}
 
-\item{error.width}{the width of the bar of error}
+\item{error.width}{the width of error bar (horizontal lines), could be 0 to show only vertical lines}
 
 \item{error.direction}{"both", "max", "min"}
 
