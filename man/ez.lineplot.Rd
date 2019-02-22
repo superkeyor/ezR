@@ -9,7 +9,7 @@ ez.lineplot(df, cmd, colors = ez.palette("Zhu"), line.size = 0.7,
   error.direction = "both", ylab = "Mean", xlab = NULL, zlab = NULL,
   legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
-  hjust = NULL)
+  hjust = NULL, theme.apa = TRUE)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}

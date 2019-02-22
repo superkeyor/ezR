@@ -17,7 +17,7 @@ RMN = if (Sys.info()["sysname"]=="Windows") {windowsFonts(RMN=windowsFont("Times
 show.shape = function(){
     # http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r
     print(ez.sprintf('
-    Use the pch= option to specify symbols to use when plotting points. 
+    Use the pch= option to specify symbols to use when plotting points.
     Specify border color (col=) and fill color (bg=, for symbols 21 through 25).
     ggplot2 default shapes (only 6): c(16,17,15,3,7,8)
     '))
@@ -25,7 +25,7 @@ show.shape = function(){
     on.exit(par(opar))
     y=rev(c(rep(1,6),rep(2,5), rep(3,5), rep(4,5), rep(5,5)))
     x=c(rep(1:5,5),6)
-    plot(x, y, pch = 0:25, cex=1.5, ylim=c(1,5.5), xlim=c(1,6.5), 
+    plot(x, y, pch = 0:25, cex=1.5, ylim=c(1,5.5), xlim=c(1,6.5),
        axes=FALSE, xlab="", ylab="", col='red', bg="green")
     text(x, y, labels=0:25, pos=3)
     par(mar=opar$mar,font=opar$font)
@@ -61,7 +61,7 @@ show.line = function(){
 
 #' show color
 #' @description show color
-#' @param v color vector to show, if not provided, show all colors in ez.palette 
+#' @param v color vector to show, if not provided, show all colors in ez.palette
 #' @param name display name for the color v (optional)
 #' @param label T/F display actual color code for each v
 #' @export
@@ -104,7 +104,7 @@ show.color = function(v,name,label=T){
 
         # Finally, ez.palette for my own color collections!
         # note the "n" scale_fill_gradientn
-        p + scale_fill_gradientn(colors=ez.palette("matlabcolor2",nn=100)) 
+        p + scale_fill_gradientn(colors=ez.palette("matlabcolor2",nn=100))
     '))
 
     print(ez.palette())
@@ -113,7 +113,7 @@ show.color = function(v,name,label=T){
 
 #' palette generator
 #' @description palette generator
-#' @param name Name of desired palette. To see all colors, call ez.palette() with no parameter. 
+#' @param name Name of desired palette. To see all colors, call ez.palette() with no parameter.
 #' @param n Number of colors desired. Unfortunately most palettes now only
 #'   have 4 or 5 colors. But hopefully we'll add more palettes soon. All color
 #'   schemes are derived from the most excellent Tumblr blog:
@@ -136,12 +136,12 @@ show.color = function(v,name,label=T){
 #' # colours
 #' pal <- ez.palette(name = "Zissou1", 21, type = "continuous")
 #' image(volcano, col = pal)
-#' 
+#'
 #' ez.palette('matlabcolor',nn=100)  # do not specify n and type
 #' ez.palette('matlabcolor2',nn=100)
 #' ez.palette('ggcolor',nn=10)
 #' rep(ez.palette('ggcolor',nn=10),2)
-#' 
+#'
 #' # in action
 #' qplot(Sepal.Length,
 #'       Petal.Length,
@@ -243,10 +243,10 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
 #' par(mfcol=c(2,2))
 #' tmp <- 1:3
 #' names(tmp) <- c('red','green','blue')
-#' 
+#'
 #' barplot(tmp, col=c('red','green','blue'))
 #' barplot(tmp, col=ColToGrey(c('red','green','blue')))
-#' 
+#'
 #' barplot(tmp, col=c('red','#008100','#3636ff'))
 #' barplot(tmp, col=ColToGrey(c('red','#008100','#3636ff')))
 #' @export
@@ -458,7 +458,7 @@ multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL, title='', titl
     } else {
         gridExtra::grid.arrange(grobs=plots,layout_matrix=layout,
             top=grid::textGrob(title,gp=grid::gpar(fontsize=title.size,fontface=2,fontfamily=RMN)))
-        
+
         # # other example usage for reference:
         # gridExtra::grid.arrange(p1,p2,p3,layout_matrix=matrix(c(NA,1,2,3,4,5), nrow=2, byrow=TRUE) )
         # gridExtra::grid.arrange(p1,p2,p3,ncol=2)
@@ -809,7 +809,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='cols'){
+ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -939,6 +939,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
             }
         }
     }
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -973,7 +974,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab='Mean',xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
-    point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=0.8,...) {
+    point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=0.8,theme.apa=TRUE,...) {
     if (print2scr & !grepl('+',cmd,fixed=TRUE) & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
 
     df.bak=df
@@ -1039,6 +1040,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                   sprintf('df=ez.dropna(df,c("%s","%s", "%s"))',yy,xx,paste(covar,sep='',collapse='","')),
                   tt,sep='\n')
 
+        if (theme.apa) tt = paste0(tt,'+theme_apa()')
         eval(parse(text = tt))
         pp$gghistory=paste0(gghistory,'\nprint(pp)')
         pp$df=df.bak
@@ -1066,7 +1068,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.
             # color = outline color of bar
             # legend is ignored, but because lab might be empty, better to keep the legend commands here
-            
+
             if (point) {
                 points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha})+')
             } else {
@@ -1154,6 +1156,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             }
         }
     }
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -1184,7 +1187,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
 #' @return a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab='Mean',xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab='Mean',xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1303,6 +1306,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
             }
         }
     }
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -1323,7 +1327,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,facet='cols'){
+ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE){
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1414,6 +1418,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,f
         }
     }
 
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -1435,7 +1440,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,f
 #' @param legend.position "bottom", "top", "left", "right", "none"
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right"){
+ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right",theme.apa=TRUE){
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1452,7 +1457,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 
     x = "key"; y = id; z = "value"
     if (show.values) {
-        t = sprintf('
+        tt = sprintf('
                     # helper function to remove leading 0 in correlation
                     remove0 <- function(value, remove.zero=T, prefix=""){  # format string more concisely
                         if (remove.zero) {
@@ -1491,7 +1496,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
                     , x, y, z, colors[1], colors[2], colors[3], z, z, remove.zero, basesize, legend.position, angle, xsize, ysize
         )
     } else {
-        t = sprintf('
+        tt = sprintf('
                     p = ggplot(df, aes(%s, %s)) +
                     geom_tile(aes(fill = %s)) +
                     scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
@@ -1505,8 +1510,9 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
                     , x, y, z, colors[1], colors[2], colors[3], basesize, legend.position, angle, xsize, ysize
         )
     }
-    eval(parse(text = t))
-    gghistory=paste(gghistory,t,sep='\n')
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    eval(parse(text = tt))
+    gghistory=paste(gghistory,tt,sep='\n')
     pp=p
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -1607,7 +1613,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     # To show different groups with different colors, use a plot character (pch) between 21 and 25 and then set the background color to vary by group
     bg = 'black'  # color for data point
     if (!is.null(group)) {
-        
+
         bg=colors[1:nlevels(as.factor(x[[group]]))][as.factor(x[[group]])]
         pch = 20+as.numeric(x[[group]])
         x[group] <- NULL
@@ -1967,7 +1973,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
-ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
+ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL,theme.apa=TRUE){
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -2040,11 +2046,13 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     if (is.null(color)) {
         cmd = sprintf('p = p + scale_color_manual(values=rep("black",nlevels(factor(df$%s))))
                       ',id)
+        if (theme.apa) cmd = paste0(cmd,'+theme_apa()')
         eval(parse(text = cmd))
     }
     if (is.null(linetype)) {
         cmd = sprintf('p = p + scale_linetype_manual(values=rep("solid",nlevels(factor(df$%s))))
                       ',id)
+        if (theme.apa) cmd = paste0(cmd,'+theme_apa()')
         eval(parse(text = cmd))
     }
     gghistory=paste(gghistory,cmd,sep='\n')
@@ -2370,8 +2378,8 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
         out = mapply(ez.scatterplot,model=model,title=model,MoreArgs=list(df=df, cmd=cmd, loess=loess, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
                     layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
                     loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
-                    point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, 
-                    colors=colors, shapes=shapes, 
+                    point.shape=point.shape, point.alpha=point.alpha, point.size=point.size,
+                    colors=colors, shapes=shapes,
                     ylab=ylab, xlab=xlab,
                     x.axis.size=x.axis.size, y.axis.size=y.axis.size, x.lab.size=x.lab.size, y.lab.size=y.lab.size,
                     x.tick.number=x.tick.number, y.tick.number=y.tick.number, title.size=title.size,
@@ -2404,7 +2412,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
             hack=hack, print2scr=print2scr, ...)
         # a bit ugly hack
         p1strip = paste0(p2$condlevels[[1]],collapse='+')
-        pp = ez.esp('latticeExtra:::c.trellis("{p1strip}"=p1,p2,x.same=TRUE,y.same=TRUE,layout=c(dim(p1)+dim(p2),1))') 
+        pp = ez.esp('latticeExtra:::c.trellis("{p1strip}"=p1,p2,x.same=TRUE,y.same=TRUE,layout=c(dim(p1)+dim(p2),1))')
         if (!missing(layout)) pp$layout = layout
         return(pp)
     }
@@ -2460,7 +2468,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-             dplyr::group_by({z}) %>% 
+             dplyr::group_by({z}) %>%
              dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
              dplyr::ungroup() %>% data.frame()
         "
@@ -2725,7 +2733,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE){
+ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
 ####************************************************************************************************
                                      ####*recursive call*####
 ####************************************************************************************************
@@ -2734,8 +2742,8 @@ if (grepl("|||",cmd,fixed=TRUE)) {
     cmd = tmp[1]; z = tmp[2]
     lvls =  levels(df[[z]])
     pplist = list()
-    
-    
+
+
     for (i in 1:length(lvls)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
         pplist[[i]] = ez.scatterplot2(df = dftmp,
@@ -2824,6 +2832,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         }
         ####################################################### subfunction /
         '
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     gghistory=paste(gghistory,tt,sep='\n')
 
@@ -2833,7 +2842,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
 if (grepl("+",cmd,fixed=TRUE)) {
     if (grepl("|",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+|]")[[1]]
-        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; 
+        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)];
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
@@ -2842,7 +2851,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         cmd = ez.sprintf('{y}~{x}|{z}')
     } else if (grepl("*",cmd,fixed=TRUE)) {
         tmp = strsplit(cmd,"[~+*]")[[1]]
-        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]; 
+        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)];
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
@@ -2853,7 +2862,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         cmd = ez.sprintf('{y}~{x}*{z}')
     } else {
         tmp = strsplit(cmd,"[~+]")[[1]]
-        y = tmp[1]; x = tmp[2]; 
+        y = tmp[1]; x = tmp[2];
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
         df = ez.dropna(df,c('{y}', '{x}', {v}))
@@ -2887,7 +2896,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                   pp=ggplot(df, aes(x=%s, y=%s)) +
                   geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
-                  scale_color_manual(values=colors) + scale_shape_manual(values=shapes) + 
+                  scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                   %s %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
@@ -2951,6 +2960,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                    tt,sep='\n')
       }
     }
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -2983,7 +2993,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols') {
+ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
     df.bak=df
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust)
@@ -3173,6 +3183,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             }
         }
     }
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -3204,7 +3215,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL) {
+ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -3258,6 +3269,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palett
          sprintf('xx="%s"',xx),
          'dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
          tt,sep='\n')
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -3290,7 +3302,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palett
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',colors=ez.palette("Zhu"),alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',...) {
+ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',colors=ez.palette("Zhu"),alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE,...) {
     if (!is.data.frame(x)) {
         var=deparse(substitute(x))
         dfcmd=sprintf('df=data.frame("%s"=x)',var)
@@ -3389,6 +3401,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',colors=e
             }
         }
     }
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak

@@ -6,7 +6,7 @@
 \usage{
 ez.heatmap(df, id, show.values = F, remove.zero = T, angle = 270,
   colors = c("blue", "white", "red"), basesize = 9, xsize = 1,
-  ysize = 1, legend.position = "right")
+  ysize = 1, legend.position = "right", theme.apa = TRUE)
 }
 \arguments{
 \item{df}{data frame in wide format, like a correlation matrix}

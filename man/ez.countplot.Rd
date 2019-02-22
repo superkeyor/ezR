@@ -9,7 +9,7 @@ ez.countplot(df, cmd, position = "both", color = "color",
   width = 0.7, ylab = NULL, xlab = NULL, zlab = NULL,
   legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
-  hjust = NULL, facet = "cols")
+  hjust = NULL, facet = "cols", theme.apa = TRUE)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
