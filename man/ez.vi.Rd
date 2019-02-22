@@ -12,5 +12,5 @@ ez.vi(x, printn = 35, plot = TRUE, ...)
 \item{plot}{plot single vector (call generic/default \code{\link[graphics]{plot}})}
 }
 \description{
-vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }

@@ -21,7 +21,7 @@ returns the printout.
 \cr now with this function you get 'rs171440fwd','rs1800497fwd','rs180043'
 }
 \description{
-vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }
 \seealso{
 \code{\link{ez.print}} \code{\link{ez.pprint}}

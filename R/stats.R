@@ -104,7 +104,7 @@ setdiff2 = function(x, y, ...) {
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
-#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+#' @description vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param df a data frame
 #' @param temp when file is NULL, the name prefix for the temp excel file. If prefix not provided through this param, auto generate one
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
@@ -320,7 +320,7 @@ ez.xl = function(df,temp=NULL,debug=NULL,label=TRUE) {
 }
 
 #' format a vector for easy manual copy/processing.
-#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+#' @description vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param vec a vector
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
@@ -362,7 +362,7 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 }
 
 #' format a vector for constructing a sprintf command.
-#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+#' @description vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param vec a vector
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
@@ -375,7 +375,7 @@ ez.vc = function(vec,...){
 }
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
-#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+#' @description vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param plot plot single vector (call generic/default \code{\link[graphics]{plot}})
 #' @export

@@ -19,7 +19,7 @@ ez.vc(vec, ...)
 returns string
 }
 \description{
-vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }
 \note{
 sprintf("c(%s)",ez.vv(vec,...))
