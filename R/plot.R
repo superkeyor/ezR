@@ -809,7 +809,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.plot = function(df,cmd,violin=FALSE,colors=ez.palette('Zhu'),n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
+ez.plot = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
     colors = sprintf("c(%s)",ez.vv(colors))
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
@@ -834,14 +834,14 @@ ez.plot = function(df,cmd,violin=FALSE,colors=ez.palette('Zhu'),n.size=4.5,m.siz
         # http://stackoverflow.com/a/15720769/2292993
         tt = sprintf('
                      fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
-                     pp = ggplot2::ggplot(df, aes(x=factor(1), y=%s)) +
+                     pp = ggplot2::ggplot(df, aes(x=factor(""), y=%s)) +
                      stat_boxplot(geom = "errorbar", width = 0.5) +
                      %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
                      geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                      coord_flip() + theme(legend.position="none", axis.ticks.y=element_blank(), axis.text.y=element_blank()) +
                      xlab("") +
-                     ggtitle(paste0("N = ",nrow(df)))'
+                     ggtitle(paste0("N (nrow) = ",nrow(df)))'
                      , yy, violin
         )
         tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
@@ -904,7 +904,7 @@ ez.plot = function(df,cmd,violin=FALSE,colors=ez.palette('Zhu'),n.size=4.5,m.siz
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              %s +
                              coord_flip() + theme(legend.position="none") +
-                             ggtitle(paste0("N = ",nrow(df)))'
+                             ggtitle(paste0("N (nrow) = ",nrow(df)))'
                              , xx, yy, xx, violin, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),zz)
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
@@ -931,7 +931,7 @@ ez.plot = function(df,cmd,violin=FALSE,colors=ez.palette('Zhu'),n.size=4.5,m.siz
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              facet_grid(%s~%s) +
                              coord_flip() + theme(legend.position="none") +
-                             ggtitle(paste0("N = ",nrow(df)))'
+                             ggtitle(paste0("N (nrow) = ",nrow(df)))'
                              , xx, yy, xx, violin, zz, aa
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
@@ -949,7 +949,6 @@ ez.plot = function(df,cmd,violin=FALSE,colors=ez.palette('Zhu'),n.size=4.5,m.siz
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
-    ez.pprint('Note: N is nrow(df)')
     return(pp)
 }
 
