@@ -19,7 +19,7 @@ ez.vc(vec, ...)
 returns string
 }
 \description{
-vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
+vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }
 \note{
 sprintf("c(%s)",ez.vv(vec,...))

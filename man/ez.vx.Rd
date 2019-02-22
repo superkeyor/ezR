@@ -22,7 +22,7 @@ ez.vx(df, temp = NULL, id = NULL, file = NULL, width = 300,
 returns a list $row, $col, $dat (input data frame), $pth (file path)
 }
 \description{
-vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }
 \note{
 when file=NULL (which stores to a temp file), debug=NULL, use getOption('debug') which is TRUE if not set up

@@ -12,5 +12,5 @@ ez.vi(x, printn = 35, plot = TRUE, ...)
 \item{plot}{plot single vector (call generic/default \code{\link[graphics]{plot}})}
 }
 \description{
-vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
+vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }

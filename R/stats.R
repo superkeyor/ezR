@@ -104,7 +104,7 @@ setdiff2 = function(x, y, ...) {
 }
 
 #' view the overview of a data frame or similar object (like spss variable view, but with much more information)
-#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param df a data frame
 #' @param temp when file is NULL, the name prefix for the temp excel file. If prefix not provided through this param, auto generate one
 #' @param id a single col name in string or number (eg, 'age' or 3), that serves as (potentially unique) id, except which duplicated rows will be checked against. If NULL, rownames() will be auto used
@@ -320,7 +320,7 @@ ez.xl = function(df,temp=NULL,debug=NULL,label=TRUE) {
 }
 
 #' format a vector for easy manual copy/processing.
-#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
+#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param vec a vector
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
@@ -362,7 +362,7 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 }
 
 #' format a vector for constructing a sprintf command.
-#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
+#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param vec a vector
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
@@ -375,7 +375,7 @@ ez.vc = function(vec,...){
 }
 
 #' print sorted uniques of a df col or a vector (NA last) and other information
-#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
+#' @description vc(c(v)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param plot plot single vector (call generic/default \code{\link[graphics]{plot}})
 #' @export
@@ -502,6 +502,159 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
         }
     }
     return(invisible(NULL))
+}
+
+#' generic plot a customized boxplot with jittered stripplot, violin, and mean
+#' @description generic plot a customized boxplot with jittered stripplot, violin, and mean
+#' @param df data frame in long format
+#' @param cmd like "y", "y|x", "y|x z", "y|x z a" where y is continous, x z a are discrete
+#' @param violin plot violin or not
+#' @param n.size font size of stat n, 0 to hide
+#' @param m.size font size of stat M, 0 to hide
+#' @param facet  one of 'cols', 'rows', 'wrap'
+#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @export
+ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
+    colors = sprintf("c(%s)",ez.vv(colors))
+    df.bak=df
+    gghistory=sprintf('df=%s',deparse(substitute(df)))
+
+    # https://stackoverflow.com/a/25215323/2292993
+    # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
+    # finally on exit the function, set it back to old value
+    oldOpts = options(warn=1)
+    on.exit(options(oldOpts))
+    # http://stackoverflow.com/a/25734388/2292993
+    # Merge Multiple spaces to single space, and remove trailing/leading spaces
+    # also see trimws()--remove trailing/leading spaces
+    cmd = ez.trim(cmd)
+    cmd = strsplit(cmd,'[~|]')[[1]]
+
+    violin = ifelse(violin, 'geom_violin() +', '')
+    # yy
+    if (length(cmd)==1) {
+        yy = cmd[1]
+        df=ez.dropna(df,yy)
+        # hide x axis label in this case
+        # http://stackoverflow.com/a/15720769/2292993
+        tt = sprintf('
+                     fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
+                     pp = ggplot2::ggplot(df, aes(x=factor(""), y=%s)) +
+                     stat_boxplot(geom = "errorbar", width = 0.5) +
+                     %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                     geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                     stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
+                     coord_flip() + theme(legend.position="none", axis.ticks.y=element_blank(), axis.text.y=element_blank()) +
+                     xlab("") +
+                     ggtitle(paste0("N (nrow) = ",nrow(df)))'
+                     , yy, violin
+        )
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+        gghistory=paste(gghistory,
+                 sprintf('df=ez.dropna(df,"%s")',yy),
+                 tt,sep='\n')
+    # yy|xx or yy|xx zz
+    } else {
+        yy = cmd[1]
+        xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
+        xx = strsplit(xx," ",fixed=TRUE)[[1]]
+        # yy|xx
+        if (length(xx)==1) {
+            xx = xx[1]
+            df=ez.dropna(df,c(yy,xx))
+            df=ez.2factor(df,xx)
+
+            pvalue=summary(aov(df[[yy]] ~ df[[xx]]))[[1]][["Pr(>F)"]][[1]]
+            if (pvalue<.001) {
+                pvalue = sprintf(", p = %.2e", pvalue)
+            } else if (pvalue<.01) {
+                pvalue = sprintf(", p = %.3f", pvalue)
+            } else {
+                pvalue = sprintf(", p = %.2f", pvalue)
+            }
+
+            tt = sprintf('
+                         fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
+                         pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
+                         stat_boxplot(geom = "errorbar", width = 0.5) +
+                         %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                         geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                         stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
+                         coord_flip() + theme(legend.position="none") +
+                         ggtitle(paste0("N = ",nrow(df), "%s"))'
+                         , xx, yy, xx, violin, pvalue
+            )
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+            tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',colors))
+            gghistory=paste(gghistory,
+                     sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
+                     sprintf('df=ez.2factor(df,c("%s"))',xx),
+                     tt,sep='\n')
+        # yy|xx zz
+        } else {
+            if (length(xx)==2) {
+                zz = xx[2]
+                xx = xx[1]
+                df=ez.dropna(df,c(yy,xx,zz))
+                df=ez.2factor(df,c(xx,zz))
+
+                tt = sprintf('
+                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
+                             stat_boxplot(geom = "errorbar", width = 0.5) +
+                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                             geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                             stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
+                             %s +
+                             coord_flip() + theme(legend.position="none") +
+                             ggtitle(paste0("N (nrow) = ",nrow(df)))'
+                             , xx, yy, xx, violin, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),zz)
+                )
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',colors))
+                gghistory=paste(gghistory,
+                         sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
+                         sprintf('df=ez.2factor(df,c("%s","%s"))',xx,zz),
+                         tt,sep='\n')
+            # yy|xx zz aa
+            } else {
+                aa = xx[3]
+                zz = xx[2]
+                xx = xx[1]
+                df=ez.dropna(df,c(yy,xx,zz,aa))
+                df=ez.2factor(df,c(xx,zz,aa))
+
+                tt = sprintf('
+                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
+                             pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
+                             stat_boxplot(geom = "errorbar", width = 0.5) +
+                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                             geom_point(position=position_jitter(width=0.2, height=0), size=1) +
+                             stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
+                             facet_grid(%s~%s) +
+                             coord_flip() + theme(legend.position="none") +
+                             ggtitle(paste0("N (nrow) = ",nrow(df)))'
+                             , xx, yy, xx, violin, zz, aa
+                )
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
+               
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',colors))
+                gghistory=paste(gghistory,
+                         sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
+                         sprintf('df=ez.2factor(df,c("%s","%s","%s"))',xx,zz,aa),
+                         tt,sep='\n')
+            }
+        }
+    }
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    eval(parse(text = tt))
+    pp$gghistory=paste0(gghistory,'\nprint(pp)')
+    pp$df=df.bak
+    return(pp)
 }
 
 #' univariate outlier cleanup
