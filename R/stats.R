@@ -361,6 +361,19 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
     return(printout)
 }
 
+#' format a vector for constructing a sprintf command.
+#' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
+#' @param vec a vector
+#' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
+#' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
+#' @param order vector order for printing out, 'as','az','za'
+#' @return returns string
+#' @note sprintf("c(%s)",ez.vv(vec,...))
+#' @export
+ez.vc = function(vec,...){
+    return(sprintf("c(%s)",ez.vv(vec,...)))
+}
+
 #' print sorted uniques of a df col or a vector (NA last) and other information
 #' @description vi (view everything print out), vv (view format vector), vx (view excel), View (built-in). print sorted uniques of a df col or a vector (NA last) and other information
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all

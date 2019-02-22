@@ -810,6 +810,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
 ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
+    color = sprintf("c(%s)",ez.vv(color))
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
