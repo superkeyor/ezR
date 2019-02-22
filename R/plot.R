@@ -882,7 +882,7 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
             )
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
-            tt = paste0(tt, sprintf(' + \nscale_fill_manual(values="%s")',color))
+            tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',color))
             gghistory=paste(gghistory,
                      sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                      sprintf('df=ez.2factor(df,c("%s"))',xx),
@@ -909,7 +909,7 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
-                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values="%s")',color))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',color))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                          sprintf('df=ez.2factor(df,c("%s","%s"))',xx,zz),
@@ -937,7 +937,7 @@ ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
                
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
-                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values="%s")',color))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',color))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
                          sprintf('df=ez.2factor(df,c("%s","%s","%s"))',xx,zz,aa),
