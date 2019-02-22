@@ -809,7 +809,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
+ez.plot = function(df,cmd,violin=FALSE,color=ez.palette('Zhu'),n.size=4.5,m.size=4.5,alpha=0.7,facet='cols',theme.apa=TRUE){
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -843,8 +843,8 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                      ggtitle(paste0("N = ",nrow(df)))'
                      , yy, violin
         )
-        tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, face="bold", color="grey", geom="text",vjust=1.4,size=%f)',n.size))
-        tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
         gghistory=paste(gghistory,
                  sprintf('df=ez.dropna(df,"%s")',yy),
                  tt,sep='\n')
@@ -879,8 +879,9 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                          ggtitle(paste0("N = ",nrow(df), "%s"))'
                          , xx, yy, xx, violin, pvalue
             )
-            tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, face="bold", color="grey", geom="text",vjust=1.4,size=%f)',n.size))
-            tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, face="bold", color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+            tt = paste0(tt, sprintf(' + \nscale_fill_manual(values="%s")',color))
             gghistory=paste(gghistory,
                      sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                      sprintf('df=ez.2factor(df,c("%s"))',xx),
@@ -905,8 +906,9 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),zz)
                 )
-                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, face="bold", color="grey", geom="text",vjust=1.4,size=%f)',n.size))
-                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, face="bold", color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values="%s")',color))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                          sprintf('df=ez.2factor(df,c("%s","%s"))',xx,zz),
@@ -931,9 +933,10 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                              ggtitle(paste0("N = ",nrow(df)))'
                              , xx, yy, xx, violin, zz, aa
                 )
-                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, face="bold", color="grey", geom="text",vjust=1.4,size=%f)',n.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
                
-                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, face="bold", color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
+                tt = paste0(tt, sprintf(' + \nscale_fill_manual(values="%s")',color))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
                          sprintf('df=ez.2factor(df,c("%s","%s","%s"))',xx,zz,aa),
@@ -945,6 +948,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
+    ez.pprint('Note: N is nrow(df)')
     return(pp)
 }
 
