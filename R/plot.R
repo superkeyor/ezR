@@ -830,8 +830,9 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
         yy = cmd[1]
         df=ez.dropna(df,yy)
         # hide x axis label in this case
+        # http://stackoverflow.com/a/15720769/2292993
         tt = sprintf('
-                     fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                     fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                      pp = ggplot2::ggplot(df, aes(x=factor(1), y=%s)) +
                      stat_boxplot(geom = "errorbar", width = 0.5) +
                      %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
@@ -843,7 +844,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                      , yy, violin
         )
         tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
-        tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
+        tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="darkred", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
         gghistory=paste(gghistory,
                  sprintf('df=ez.dropna(df,"%s")',yy),
                  tt,sep='\n')
@@ -868,7 +869,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
             }
 
             tt = sprintf('
-                         fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                         fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                          stat_boxplot(geom = "errorbar", width = 0.5) +
                          %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
@@ -879,7 +880,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                          , xx, yy, xx, violin, pvalue
             )
             tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
-            tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
+            tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
             gghistory=paste(gghistory,
                      sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
                      sprintf('df=ez.2factor(df,c("%s"))',xx),
@@ -893,7 +894,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                 df=ez.2factor(df,c(xx,zz))
 
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
@@ -905,7 +906,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                              , xx, yy, xx, violin, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),zz)
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
-                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1) # ..y.. internal variable computed mean',m.size))
+                tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                          sprintf('df=ez.2factor(df,c("%s","%s"))',xx,zz),
@@ -919,7 +920,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                 df=ez.2factor(df,c(xx,zz,aa))
 
                 tt = sprintf('
-                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}  # http://stackoverflow.com/a/15720769/2292993
+                             fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
                              %s geom_boxplot(outlier.shape=NA,alpha=alpha) + # avoid plotting outliers twice from geom_jitter
@@ -931,7 +932,7 @@ ez.plot = function(df,cmd,violin=FALSE,n.size=4.5,m.size=4.5,alpha=0.7,facet='co
                              , xx, yy, xx, violin, zz, aa
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=1.4,size=%f)',n.size))
-                # ..y.. internal variable computed mean
+               
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=-0.7, aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
