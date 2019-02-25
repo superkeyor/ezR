@@ -2312,7 +2312,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         lambda.raw = sbc$result[[1]]
         # lambda, p.lambda are for rounded lambda
         lambda = sbc$result[[2]]
-        p.lambda = car::testTransform(bc,lambda=lambda)
+        p.lambda = car::testTransform(bc,lambda=lambda)$pval
         gamma = sbc$result.gamma[[1]]
         if (is.null(gamma)) gamma = NA
 
