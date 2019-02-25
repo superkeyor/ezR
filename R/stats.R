@@ -2260,6 +2260,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param value.method boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}
 #' @param value.lambda use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force)
+#' @importFrom car basicPower bcPower bcnPower
 #' @export
 ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, print2scr = TRUE,
     value = TRUE, value.force = TRUE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
@@ -2295,7 +2296,7 @@ ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, prin
     gamma = sbc$result.gamma[[1]]
     if (is.null(gamma)) gamma = NA
 
-    if (plot) car:::boxCox.formula(y ~ x, family = family, 
+    if (plot) car::boxCox(y ~ x, family = family, 
         xlab = as.expression(substitute(lambda~"(rounded)"~"="~lambda.value*", "~italic(p)~"(rounded)"~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value,
             list(lambda.value=sprintf("%s",lambda),
                 p.lambda.value=sprintf("%f",p.lambda),
