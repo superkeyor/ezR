@@ -34,3 +34,8 @@ returns transformed y, or a list of transformation parameters, otherwise origina
 \description{
 box-cox power transformation
 }
+\note{
+Box and Cox (1964) generally deals with non-negative responses. This funciton can handle (a few) negative responses (Hawkins and Weisberg (2017))
+\cr while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
+\cr essentially estimate/add a number (ie, gamma) to y to make it positive
+}

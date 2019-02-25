@@ -2264,6 +2264,9 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param value.lambda use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force)
 #' @importFrom car basicPower bcPower bcnPower
+#' @note Box and Cox (1964) generally deals with non-negative responses. This funciton can handle (a few) negative responses (Hawkins and Weisberg (2017))
+#' \cr while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
+#' \cr essentially estimate/add a number (ie, gamma) to y to make it positive
 #' @export
 ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, print2scr = TRUE,
     value = TRUE, value.force = FALSE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
@@ -2300,13 +2303,14 @@ ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, prin
     if (is.null(gamma)) gamma = NA
 
     if (plot) car::boxCox(y ~ x, family = family, 
-        xlab = as.expression(substitute(lambda~"(rounded)"~"="~lambda.value*", "~italic(p)~"(rounded)"~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value,
+        xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*italic(n)~"="~n.value,
             list(lambda.value=sprintf("%s",lambda),
                 p.lambda.value=sprintf("%f",p.lambda),
                 gamma.value=sprintf("%f",gamma),
-                lambda.raw.value=sprintf("%f",lambda.raw)
+                lambda.raw.value=sprintf("%f",lambda.raw),
+                n.value=sprintf("%d",length(y))
                 ))))
-    if (print2scr) cat(sprintf('Est: lambda (rounded) = %s, p.lambda (rounded) = %f, gamma = %f, lambda.raw = %f\n', lambda, p.lambda, gamma, lambda.raw))
+    if (print2scr) cat(sprintf('Est: lambda (rounded) = %s, p.lambda (rounded) = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
 
     if (value) {
         if (value.force | p.lambda < .05){
