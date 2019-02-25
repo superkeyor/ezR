@@ -2286,6 +2286,8 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         if (!is.numeric(y) | is.factor(y) | is.character(y)) 
             stop("y must be numeric")
         
+        value.method = match.arg(value.method)
+        value.lambda = match.arg(value.lambda)
         if (any(y <= 0)) {
             family = "bcnPower"
             if (value.method=='tukey.modified') {
@@ -2325,9 +2327,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         if (value) {
             if (value.force | p.lambda < .05){
                 if (print2scr) cat(sprintf('Box-Cox: lambda = %s, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
-
-                value.method = match.arg(value.method)
-                value.lambda = match.arg(value.lambda)
+                
                 if (value.lambda=='raw') {
                     lambda = lambda.raw
                 } else {
