@@ -490,7 +490,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
         cat(sprintf('attributes: %s\n',v.attrs))
 
         if (plot & is.numeric(v) & !all(is.na(v))) {
-            opar = par(mfrow=c(2, 2), oma=c(0,0,0,0), mar = c(2,2,0.5,0.5))
+            opar = par(mfrow=c(3, 2), oma=c(0,0,0,0), mar = c(2,2,0.5,0.5))
             on.exit(par(opar))
             plot(v, type='b', pch=20, col='#56B4E9', ...)
             abline(h = v.mean, col = "#E69F00", lty = 3, lwd = 2)
@@ -499,6 +499,9 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             hist(v, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
+            vv = ez.boxcox(v, plot=TRUE, print2scr = FALSE, value = TRUE, value.force = TRUE)
+            hist(vv, col='#56B4E9',main=NULL,xlab=NULL)
+            abline(v = mean(vv,na.rm=TRUE), col = "#E69F00", lty = 3, lwd = 2)
         }
     }
     return(invisible(NULL))
@@ -2263,7 +2266,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @importFrom car basicPower bcPower bcnPower
 #' @export
 ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-    value = TRUE, value.force = TRUE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
+    value = TRUE, value.force = FALSE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
 
     if (na.rm && (any(is.na(y)) | any(is.na(x)))) {
         rmv <- is.na(y) | is.na(x)
