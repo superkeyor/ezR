@@ -40,4 +40,5 @@ Imports:
     chron,
     gmailr,
     XML,
-    rentrez
+    rentrez,
+    car
