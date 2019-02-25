@@ -22,11 +22,11 @@ ez.boxcox(y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE,
 
 \item{value}{return transformed y, or a list of transformation parameters}
 
-\item{value.force}{transform regardless or only if p.lambda rounded is less than .05. otherwise original y}
+\item{value.force}{transform regardless or only if p.lambda rounded is less than .05. otherwise returns original y}
 
 \item{value.method}{boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}}
 
-\item{value.lambda}{use rounded lambda one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda}
+\item{value.lambda}{use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda}
 }
 \value{
 returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force)

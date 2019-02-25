@@ -2256,9 +2256,9 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param plot boxcox plot 
 #' @param print2scr print out transformation parameters
 #' @param value return transformed y, or a list of transformation parameters
-#' @param value.force transform regardless or only if p.lambda rounded is less than .05. otherwise original y
+#' @param value.force transform regardless or only if p.lambda rounded is less than .05. otherwise returns original y
 #' @param value.method boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}
-#' @param value.lambda use rounded lambda one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
+#' @param value.lambda use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force)
 #' @export
 ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, print2scr = TRUE,
