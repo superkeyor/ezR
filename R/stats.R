@@ -2303,7 +2303,7 @@ ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, prin
     if (is.null(gamma)) gamma = NA
 
     if (plot) car::boxCox(y ~ x, family = family, 
-        xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*italic(n)~"="~n.value,
+        xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
             list(lambda.value=sprintf("%s",lambda),
                 p.lambda.value=sprintf("%f",p.lambda),
                 gamma.value=sprintf("%f",gamma),
