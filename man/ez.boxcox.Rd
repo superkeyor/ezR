@@ -4,12 +4,18 @@
 \alias{ez.boxcox}
 \title{box-cox power transformation}
 \usage{
-ez.boxcox(y, na.rm = FALSE, plot = TRUE, print2scr = TRUE, value = TRUE,
-  value.force = FALSE, value.method = c("boxcox", "tukey.modified"),
-  value.lambda = c("rounded", "raw"), ...)
+ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
+  value = TRUE, value.force = FALSE, value.method = c("boxcox",
+  "tukey.modified"), value.lambda = c("rounded", "raw"), ...)
 }
 \arguments{
 \item{y}{a data frame or a vector}
+
+\item{col}{passed to \code{\link{ez.selcol}}
+\cr        if x is a data frame, col specified, process that col only.
+\cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
+\cr        if x is not a data frame, col is ignored
+\cr        could be multiple cols}
 
 \item{na.rm}{rm na from y,x (pairwise), if not, NA stays as is.}
 
@@ -24,12 +30,6 @@ ez.boxcox(y, na.rm = FALSE, plot = TRUE, print2scr = TRUE, value = TRUE,
 \item{value.method}{boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}}
 
 \item{value.lambda}{use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda}
-
-\item{col}{passed to \code{\link{ez.selcol}}
-\cr        if x is a data frame, col specified, process that col only.
-\cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
-\cr        if x is not a data frame, col is ignored
-\cr        could be multiple cols}
 }
 \value{
 returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force). 

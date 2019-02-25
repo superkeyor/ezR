@@ -2273,7 +2273,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' \cr while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
 #' \cr essentially estimate/add a number (ie, gamma) to y to make it positive
 #' @export
-ez.boxcox = function (y, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
+ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
     value = TRUE, value.force = FALSE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
 
     if (!is.data.frame(y)) {
