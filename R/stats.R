@@ -2253,94 +2253,111 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 
 #' box-cox power transformation
 #' @description box-cox power transformation
-#' @param y a vector
-#' @param x rep(1, length(y))
+#' @param y a data frame or a vector
+#' @param col passed to \code{\link{ez.selcol}}
+#' \cr        if x is a data frame, col specified, process that col only.
+#' \cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
+#' \cr        if x is not a data frame, col is ignored
+#' \cr        could be multiple cols
 #' @param na.rm rm na from y,x (pairwise), if not, NA stays as is.
 #' @param plot boxcox plot 
-#' @param print2scr print out transformation parameters
-#' @param value return transformed y, or a list of transformation parameters
+#' @param print2scr print out transformation parameters, only when there is an actual transformation
+#' @param value return transformed y, or a list of transformation parameters. If y is a data frame, value will be always (internally) set to TRUE
 #' @param value.force transform regardless or only if p.lambda rounded is less than .05. otherwise returns original y
 #' @param value.method boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}
 #' @param value.lambda use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
-#' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force)
+#' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force). 
+#' \cr If y is a data frame, always return a potentially transformed data frame, and no printout, no plot
 #' @importFrom car basicPower bcPower bcnPower
 #' @note Box and Cox (1964) generally deals with non-negative responses. This funciton can handle (a few) negative responses (Hawkins and Weisberg (2017))
 #' \cr while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
 #' \cr essentially estimate/add a number (ie, gamma) to y to make it positive
 #' @export
-ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, print2scr = TRUE,
+ez.boxcox = function (y, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
     value = TRUE, value.force = FALSE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
 
-    if (na.rm && (any(is.na(y)) | any(is.na(x)))) {
-        rmv <- is.na(y) | is.na(x)
-        y <- y[!rmv]
-        x <- x[!rmv]
-    }
-    if (!is.numeric(y) | is.factor(y) | is.character(y)) 
-        stop("y must be numeric")
-    
-    if (any(y <= 0)) {
-        family = "bcnPower"
-    }
-    else {
-        family = "bcPower"
-    }
-    # powerTransform: Finding Univariate or Multivariate Power Transformations
-    # "bcPower" for the default for the Box-Cox power family
-    # "bcnPower" for a two-parameter modification of the Box-Cox family that allows (a few) negative responses (Hawkins and Weisberg (2017))
-    #        while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
-    #        essentially estimate/add a number to y to make it positive
-    # "yjPower" family (Yeo and Johnson(2000)), another modifiation of the Box-Cox family that allows a few negative values.
-    #       not use
-    #       Because of the unusual constraints on the powers for positive and negative data, this transformation is not used very often, as results are difficult to interpret
-    # If the "object" argument is of class "lm" or "lmerMod", the Box-Cox procedure is applied to the conditional distribution of the response given the predictors. 
-    bc = suppressWarnings(car::powerTransform(y ~ x, family = family))
-    sbc = suppressWarnings(summary(bc))
-    lambda.raw = sbc$result[[1]]
-    lambda = substring(rownames(sbc$tests)[1], 20, nchar(rownames(sbc$tests)[1])-1)
-    p.lambda = sbc$tests$pval[1]
-    gamma = sbc$result.gamma[[1]]
-    if (is.null(gamma)) gamma = NA
-
-    if (plot) car::boxCox(y ~ x, family = family, 
-        xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
-            list(lambda.value=sprintf("%s",lambda),
-                p.lambda.value=sprintf("%f",p.lambda),
-                gamma.value=sprintf("%f",gamma),
-                lambda.raw.value=sprintf("%f",lambda.raw),
-                n.value=sprintf("%d",length(y))
-                ))))
-    if (print2scr) cat(sprintf('Est: lambda (rounded) = %s, p.lambda (rounded) = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
-
-    if (value) {
-        if (value.force | p.lambda < .05){
-            value.method = match.arg(value.method)
-
-            value.lambda = match.arg(value.lambda)
-            if (value.lambda=='raw') {
-                lambda = lambda.raw
-            } else {
-                lambda=as.numeric(lambda)
-            }
-
-            if (value.method=='boxcox') {
-                if (family=='bcnPower') {
-                    out = car::bcnPower(y, lambda=lambda, jacobian.adjusted = FALSE, gamma=gamma)
-                } else if (family=='bcPower') {
-                    out = car::bcPower(y, lambda=lambda, jacobian.adjusted = FALSE, gamma=NULL)
-                }
-            # modified tukey to keep ordering    
-            } else if (value.method=='tukey.modified') {
-                out = car::basicPower(y,lambda=lambda, gamma=NULL)
-                if (lambda<0) out = -1*out
-            }
-        # no transformation    
-        } else {
-            out = y
+    if (!is.data.frame(y)) {
+        x = rep(1, length(y))
+        if (na.rm && (any(is.na(y)) | any(is.na(x)))) {
+            rmv <- is.na(y) | is.na(x)
+            y <- y[!rmv]
+            x <- x[!rmv]
         }
-    # return parameters        
-    } else {
-        out = list(lambda=as.numeric(lambda),p.lambda=p.lambda,gamma=gamma,lambda.raw=lambda.raw)
+        if (!is.numeric(y) | is.factor(y) | is.character(y)) 
+            stop("y must be numeric")
+        
+        if (any(y <= 0)) {
+            family = "bcnPower"
+        }
+        else {
+            family = "bcPower"
+        }
+        # powerTransform: Finding Univariate or Multivariate Power Transformations
+        # "bcPower" for the default for the Box-Cox power family
+        # "bcnPower" for a two-parameter modification of the Box-Cox family that allows (a few) negative responses (Hawkins and Weisberg (2017))
+        #        while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
+        #        essentially estimate/add a number to y to make it positive
+        # "yjPower" family (Yeo and Johnson(2000)), another modifiation of the Box-Cox family that allows a few negative values.
+        #       not use
+        #       Because of the unusual constraints on the powers for positive and negative data, this transformation is not used very often, as results are difficult to interpret
+        # If the "object" argument is of class "lm" or "lmerMod", the Box-Cox procedure is applied to the conditional distribution of the response given the predictors. 
+        bc = suppressWarnings(car::powerTransform(y ~ x, family = family))
+        sbc = suppressWarnings(summary(bc))
+        lambda.raw = sbc$result[[1]]
+        lambda = substring(rownames(sbc$tests)[1], 20, nchar(rownames(sbc$tests)[1])-1)
+        p.lambda = sbc$tests$pval[1]
+        gamma = sbc$result.gamma[[1]]
+        if (is.null(gamma)) gamma = NA
+
+        if (plot) car::boxCox(y ~ x, family = family, 
+            xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
+                list(lambda.value=sprintf("%s",lambda),
+                    p.lambda.value=sprintf("%f",p.lambda),
+                    gamma.value=sprintf("%f",gamma),
+                    lambda.raw.value=sprintf("%f",lambda.raw),
+                    n.value=sprintf("%d",length(y))
+                    ))))
+
+        if (value) {
+            if (value.force | p.lambda < .05){
+                if (print2scr) cat(sprintf('Box-Cox: lambda = %s, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
+
+                value.method = match.arg(value.method)
+
+                value.lambda = match.arg(value.lambda)
+                if (value.lambda=='raw') {
+                    lambda = lambda.raw
+                } else {
+                    lambda=as.numeric(lambda)
+                }
+
+                if (value.method=='boxcox') {
+                    if (family=='bcnPower') {
+                        out = car::bcnPower(y, lambda=lambda, jacobian.adjusted = FALSE, gamma=gamma)
+                    } else if (family=='bcPower') {
+                        out = car::bcPower(y, lambda=lambda, jacobian.adjusted = FALSE, gamma=NULL)
+                    }
+                # modified tukey to keep ordering    
+                } else if (value.method=='tukey.modified') {
+                    out = car::basicPower(y,lambda=lambda, gamma=NULL)
+                    if (lambda<0) out = -1*out
+                }
+            # no transformation    
+            } else {
+                out = y
+            }
+        # return parameters
+        } else {
+            out = list(lambda=as.numeric(lambda),p.lambda=p.lambda,gamma=gamma,lambda.raw=lambda.raw,n=length(y))
+        }
+
+    } else if (is.data.frame(y) & is.null(col)) {
+        y[] = lapply(y,ez.boxcox,na.rm=na.rm,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        out = y
+    } else if (is.data.frame(y) & !is.null(col)) {
+        col = ez.selcol(y,col)
+        y[col] = lapply(y[col],ez.boxcox,na.rm=na.rm,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        out = y
     }
     return(invisible(out))
 }
