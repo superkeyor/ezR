@@ -17,9 +17,9 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 \cr        if x is not a data frame, col is ignored
 \cr        could be multiple cols}
 
-\item{na.rm}{rm na from y,x (pairwise), if not, NA stays as is.}
+\item{na.rm}{rm na from y,x (pairwise), if not, NA stays as is. applicable only if y is a vector.}
 
-\item{plot}{boxcox plot}
+\item{plot}{boxcox plot. applicable only if y is a vector.}
 
 \item{print2scr}{print out transformation parameters, only when there is an actual transformation}
 

@@ -2259,8 +2259,8 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' \cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
 #' \cr        if x is not a data frame, col is ignored
 #' \cr        could be multiple cols
-#' @param na.rm rm na from y,x (pairwise), if not, NA stays as is.
-#' @param plot boxcox plot 
+#' @param na.rm rm na from y,x (pairwise), if not, NA stays as is. applicable only if y is a vector.
+#' @param plot boxcox plot. applicable only if y is a vector.
 #' @param print2scr print out transformation parameters, only when there is an actual transformation
 #' @param value return transformed y, or a list of transformation parameters. If y is a data frame, value will be always (internally) set to TRUE
 #' @param value.force transform regardless or only if p.lambda rounded is less than .05. otherwise returns original y
@@ -2288,6 +2288,10 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         
         if (any(y <= 0)) {
             family = "bcnPower"
+            if (value.method=='tukey.modified') {
+                ez.pprint('non-positive value exists, switching from tukey.modified to boxcox...')
+                value.method='boxcox'
+            }
         }
         else {
             family = "bcPower"
@@ -2323,7 +2327,6 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                 if (print2scr) cat(sprintf('Box-Cox: lambda = %s, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
 
                 value.method = match.arg(value.method)
-
                 value.lambda = match.arg(value.lambda)
                 if (value.lambda=='raw') {
                     lambda = lambda.raw
@@ -2352,11 +2355,11 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         }
 
     } else if (is.data.frame(y) & is.null(col)) {
-        y[] = lapply(y,ez.boxcox,na.rm=na.rm,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        y[] = lapply(y,ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
         out = y
     } else if (is.data.frame(y) & !is.null(col)) {
         col = ez.selcol(y,col)
-        y[col] = lapply(y[col],ez.boxcox,na.rm=na.rm,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        y[col] = lapply(y[col],ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
         out = y
     }
     return(invisible(out))
