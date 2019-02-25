@@ -2295,7 +2295,7 @@ ez.boxcox = function (y, x = rep(1, length(y)), na.rm = FALSE, plot = TRUE, prin
     gamma = sbc$result.gamma[[1]]
     if (is.null(gamma)) gamma = NA
 
-    if (plot) car::boxCox(y ~ x, family = family, 
+    if (plot) car:::boxCox.formula(y ~ x, family = family, 
         xlab = as.expression(substitute(lambda~"(rounded)"~"="~lambda.value*", "~italic(p)~"(rounded)"~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value,
             list(lambda.value=sprintf("%s",lambda),
                 p.lambda.value=sprintf("%f",p.lambda),
