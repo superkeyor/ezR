@@ -499,7 +499,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             hist(v, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
-            vv = ez.boxcox(v, plot=TRUE, print2scr = FALSE, value = TRUE, value.force = TRUE)
+            vv = ez.boxcox(v, plot=TRUE, print2scr = TRUE, value = TRUE, value.force = TRUE)
             hist(vv, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = mean(vv,na.rm=TRUE), col = "#E69F00", lty = 3, lwd = 2)
         }
