@@ -1,8 +1,8 @@
 Package: ezR
 Type: Package
 Title: ez Zhu's miscellaneous functions
-Version: 2016.1.22
-Date: 2019-02-25
+Version: 1.22
+Date: 2016-01-22
 Author: Jerry Zhu <jerryzhujian9@gmail.com>
 Maintainer: Jerry Zhu <jerryzhujian9@gmail.com>
 Description: This package represents an attempt to mimic/port relevant SPSS
