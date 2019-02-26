@@ -17,7 +17,10 @@ ez.selcol(df, col = NULL, ...)
 \cr '-(ABCB1_c1236t:pgp_rs2032582)', '-c(neonate_admit_NICU,BDNF)' (quoted)
 \cr
 \cr OK usage:
-\cr 'c(sample_num,mother_num)', 'sample_num,mother_num', '1, col3:col5, col7:col8'}
+\cr 'c(sample_num,mother_num)', 'sample_num,mother_num', '1, col3:col5, col7:col8'
+\cr 
+\cr regular expression should use four slashes \\\\
+\cr 'matches("cci[i]?\\\\d\\\\d$")'}
 }
 \value{
 returns vector of col names (if no col matched, resturn NULL, for easy later use with c(NULL,'a col') -> c('a col'))
