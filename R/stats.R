@@ -1217,12 +1217,18 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
 #' \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T (together with MLR p) and also to be used in ez.scatterplot
+#' \cr According to my own demo (see examples iris), MLR p is the same as ppcor::pcor.test and SPSS Analyze->Correlate->Partial! very close to manual calculation with correlation(y.residual, x.residual)
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 #' \cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 #' \cr
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
 #' @examples
+#' y=ez.zresidize(iris,'Sepal.Length','Petal.Width',scale=F)
+#' x=ez.zresidize(iris,'Sepal.Width','Petal.Width',scale=F)
+#' z=data.frame(Sepal.Length=y$Sepal.Length,Sepal.Width=x$Sepal.Width)
+#' ez.lms(z,'Sepal.Length','Sepal.Width')
+#' 
 #' y = c(1,2,3,4,5,6)
 #' x = c(2,4,15,20,25,36)
 #' z=factor(c('m','m','m','f','f','f'))
@@ -1459,9 +1465,9 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.spartial.")'))){
                 robustp = result.report[i,ez.selcol(result.report,'starts_with("p.spartial.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2),robustp),color='cyan')
+                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, SP r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2),robustp),color='cyan')
             } else {
-                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2)),color='cyan')
+                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, SP r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2)),color='cyan')
             }
         }
         # ez.pprint('<<<<<<')
