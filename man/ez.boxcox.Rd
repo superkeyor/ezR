@@ -32,7 +32,7 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 \item{value.lambda}{use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda}
 }
 \value{
-returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force). 
+returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force).
 \cr If y is a data frame, always return a potentially transformed data frame, and no printout, no plot
 }
 \description{

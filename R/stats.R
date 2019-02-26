@@ -544,7 +544,7 @@ ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=
                      fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                      pp = ggplot2::ggplot(df, aes(x=factor(""), y=%s)) +
                      stat_boxplot(geom = "errorbar", width = 0.5) +
-                     %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                     %s geom_boxplot(outlier.shape=NA,alpha=alpha) +
                      geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                      stat_summary(fun.y=mean, color="darkred", geom="point", shape=18, size=3) +
                      coord_flip() + theme(legend.position="none", axis.ticks.y=element_blank(), axis.text.y=element_blank()) +
@@ -581,7 +581,7 @@ ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=
                          fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                          pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                          stat_boxplot(geom = "errorbar", width = 0.5) +
-                         %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                         %s geom_boxplot(outlier.shape=NA,alpha=alpha) +
                          geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                          stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                          coord_flip() + theme(legend.position="none") +
@@ -607,7 +607,7 @@ ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=
                              fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
-                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) +
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              %s +
@@ -634,7 +634,7 @@ ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=
                              fun_length <- function(x){return(data.frame(y=mean(x),label= paste0(length(x)," (n)")))}
                              pp = ggplot2::ggplot(df, aes(x=%s, y=%s, fill=%s)) +
                              stat_boxplot(geom = "errorbar", width = 0.5) +
-                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) + 
+                             %s geom_boxplot(outlier.shape=NA,alpha=alpha) +
                              geom_point(position=position_jitter(width=0.2, height=0), size=1) +
                              stat_summary(fun.y=mean, color="royalblue", geom="point", shape=18, size=3) +
                              facet_grid(%s~%s) +
@@ -643,7 +643,7 @@ ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=
                              , xx, yy, xx, violin, zz, aa
                 )
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.data = fun_length, color="grey", geom="text",vjust=8,hjust=-0.1,size=%f)',n.size))
-               
+
                 tt = paste0(tt, sprintf(' + \nstat_summary(fun.y=mean, size=%f, color="royalblue", geom="text",vjust=8,hjust=1,aes(label=sprintf("%%.2f (M)", ..y..)), alpha=1)',m.size))
                 tt = paste0(tt, sprintf(' + \nscale_fill_manual(values=%s)',colors))
                 gghistory=paste(gghistory,
@@ -781,8 +781,8 @@ ez.outlier = function(x, col=NULL, method=c('z','mad','iqr'), cutoff=NA, fillout
         }
 
         if (plot){
+            # oma is margin for the whole
             # mar controls margin size for individual plot it goes c(bottom, left, top, right)
-            # oma is margin for the whole?
             opar = par(mfrow=c(2, 2), oma=c(0,0,1.5,0), mar = c(2,2,1.5,0.5))
             on.exit(par(opar))
             boxplot(x.bak.plot, main=sprintf("With outliers (n=%d)",length(x.bak.plot)))
@@ -1114,7 +1114,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         for (i in 1:nrow(result.report)){
             ez.pprint(sprintf('Tukey: %s', result.report$posthoc_tukey[i]),color='cyan')
         }
-        
+
         for (i in 1:nrow(result.report)){
             ez.pprint(sprintf('n: %s', result.report$counts[i]),color='cyan')
         }
@@ -2266,7 +2266,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param value.force transform regardless or only if p.lambda rounded is less than .05. otherwise returns original y
 #' @param value.method boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}
 #' @param value.lambda use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
-#' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force). 
+#' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force).
 #' \cr If y is a data frame, always return a potentially transformed data frame, and no printout, no plot
 #' @importFrom car basicPower bcPower bcnPower
 #' @note Box and Cox (1964) generally deals with non-negative responses. This funciton can handle (a few) negative responses (Hawkins and Weisberg (2017))
@@ -2283,9 +2283,9 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
             y <- y[!rmv]
             x <- x[!rmv]
         }
-        if (!is.numeric(y) | is.factor(y) | is.character(y)) 
+        if (!is.numeric(y) | is.factor(y) | is.character(y))
             stop("y must be numeric")
-        
+
         value.method = match.arg(value.method)
         value.lambda = match.arg(value.lambda)
         if (any(y <= 0)) {
@@ -2306,7 +2306,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         # "yjPower" family (Yeo and Johnson(2000)), another modifiation of the Box-Cox family that allows a few negative values.
         #       not use
         #       Because of the unusual constraints on the powers for positive and negative data, this transformation is not used very often, as results are difficult to interpret
-        # If the "object" argument is of class "lm" or "lmerMod", the Box-Cox procedure is applied to the conditional distribution of the response given the predictors. 
+        # If the "object" argument is of class "lm" or "lmerMod", the Box-Cox procedure is applied to the conditional distribution of the response given the predictors.
         bc = suppressWarnings(car::powerTransform(y ~ x, family = family))
         sbc = suppressWarnings(summary(bc))
         lambda.raw = sbc$result[[1]]
@@ -2319,9 +2319,11 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         if (value) {
             if (value.force | p.lambda < .05){
                 if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
-                
+
                 if (value.lambda=='raw') {
                     lambda.in.use = lambda.raw
+                } else {
+                    lambda.in.use = lambda
                 }
 
                 if (value.method=='boxcox') {
@@ -2335,18 +2337,19 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                     out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL)
                     if (lambda.in.use<0) out = -1*out
                 }
-            # no transformation    
+            # no transformation
             } else {
                 out = y
             }
         }
 
         if (plot) {
-            opar = par(mfrow=c(3, 1), oma=c(0,0,0,0), mar = c(2,2,0.5,0.5))
+            graphics::layout(matrix(c(1,2,0,0,2,3), 3))
+            opar = par(oma=c(0,0,0,0), mar = c(4,2,0.5,0.5))
             on.exit(par(opar))
             hist(y, col='#56B4E9',main=NULL,xlab=NULL)
-            abline(y = mean(y,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
-            car::boxCox(y ~ x, family = family, 
+            abline(v = mean(y,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+            car::boxCox(y ~ x, family = family,
             xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
                 list(lambda.value=sprintf("%.2f",lambda),
                     p.lambda.value=sprintf("%f",p.lambda),
@@ -2355,7 +2358,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                     n.value=sprintf("%d",length(y))
                     ))))
             hist(out, col='#56B4E9',main=NULL,xlab=NULL)
-            abline(out = mean(out,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+            abline(v = mean(out,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
         }
 
         if (!value){
