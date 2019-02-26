@@ -1146,9 +1146,9 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (result.report$F[i] < 1) {
-                ez.pprint(sprintf('aov(%s~%s): \tF(%s) < 1',Y,X,result.report$dof[i]),color='cyan')
+                ez.pprint(sprintf('aov(%s~%s): F(%s) < 1',Y,X,result.report$dof[i]),color='cyan')
             } else {
-                ez.pprint(sprintf('aov(%s~%s): \tF(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
+                ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
             }
         }
         # ez.pprint('<<<<<<')
