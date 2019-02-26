@@ -2194,7 +2194,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr y~x+a+b|||z plots separated by z groups
 #' @param loess T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))
 #' @param model one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
-#' @param type one of c('partial','spartial'), plot partial or semi-partial correlation
+#' @param type one of c('partial','spartial'), plot partial or semi-partial correlation. Only applicable when covar exists
 #' @param hack T/F if more than 1 model specified, plot all in one plot
 #' @param scale when having covariates, z transform residuals
 #' @param rp show r (signed) and p values

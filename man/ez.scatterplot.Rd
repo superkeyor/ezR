@@ -27,7 +27,7 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 
 \item{model}{one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified}
 
-\item{type}{one of c('partial','spartial'), plot partial or semi-partial correlation}
+\item{type}{one of c('partial','spartial'), plot partial or semi-partial correlation. Only applicable when covar exists}
 
 \item{scale}{when having covariates, z transform residuals}
 
