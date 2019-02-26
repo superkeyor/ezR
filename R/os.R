@@ -552,13 +552,13 @@ ez.lsd = function(path='.', pattern=NULL, full=FALSE, hidden=FALSE){
     # all.files--hidden files, include.dirs--subdirs, no..--. and .. folders
     folders = dir(path=path, pattern=pattern, all.files=hidden, full.name=FALSE,
                   recursive = FALSE, ignore.case = FALSE, include.dirs = FALSE, no.. = TRUE)
-    fullFolders = file.path(path,folders)
+    fullFolders = ez.joinpath(path,folders)
     infos = file.info(fullFolders)
     isdirs = infos$isdir
 
     if (full) {
         result=folders[isdirs]
-        result=file.path(path,result)
+        result=ez.joinpath(path,result)
     } else {
         result=folders[isdirs]
     }
@@ -652,7 +652,7 @@ ez.rm = function(x){
 #'       if old and new both folders, move old to new as subfolder
 #'       if old and new both files, overwrite the old file with new file without prompt
 #' @export
-ez.rn = Vectorize(.rn)
+ez.rn = Vectorize(.rn, SIMPLIFY = FALSE)
 
 .cp = function(from,to,overwrite=TRUE){
     # if from is file
@@ -682,8 +682,8 @@ ez.rn = Vectorize(.rn)
             dir.create(to, recursive=TRUE)
             allFiles = dir(from)
             result = sapply(allFiles, function(x) {
-                file.copy(from=file.path(from, x),
-                          to=file.path(to, x),
+                file.copy(from=ez.joinpath(from, x),
+                          to=ez.joinpath(to, x),
                           overwrite=overwrite) })
         }
     }
@@ -705,14 +705,14 @@ ez.rn = Vectorize(.rn)
 #' flist <- list.files("patha", "^filea.+[.]csv$", full.names = TRUE)
 #' file.copy(flist, "pathb")
 #' @export
-ez.cp = Vectorize(.cp)
+ez.cp = Vectorize(.cp, SIMPLIFY = FALSE)
 
 .mv = function(from,to){
     # if to is folder-like
     if (nchar(tools::file_ext(to)) == 0) {
         # if to not exist
         if (!all(file.info(to)$isdir %in% TRUE)) dir.create(to, recursive=TRUE)
-        to = file.path(to, basename(from))
+        to = ez.joinpath(to, basename(from))
     }
     else {
         # if to parent not exist
@@ -733,7 +733,7 @@ ez.cp = Vectorize(.cp)
 #' ez.mv('a','b')-->get b/a, b now has a as subfolder, regardless of b exists or not
 #'                  use ez.rn('a','b') to change name a->b
 #' @export
-ez.mv = Vectorize(.mv)
+ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 
 #' Send mail with Gmail
 #' @description Send mail with Gmail
