@@ -25,7 +25,7 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
 \item{value.force}{T = transform regardless, or F = only if p.lambda rounded is less than .05.}
 
-\item{value.method}{boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.}
+\item{value.method}{boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.}
 
 \item{value.lambda}{use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda}
 }

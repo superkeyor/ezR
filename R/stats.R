@@ -2263,7 +2263,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param plot boxcox plot. applicable only if y is a vector, only when there is an actual transformation
 #' @param print2scr print out transformation parameters, only when there is an actual transformation
 #' @param value.force T = transform regardless, or F = only if p.lambda rounded is less than .05.
-#' @param value.method boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.
+#' @param value.method boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.
 #' @param value.lambda use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or original y.
 #' @importFrom car basicPower bcPower bcnPower
