@@ -503,7 +503,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
 
             # boxcox
             family = ifelse(any(v <= 0), "bcnPower", "bcPower")
-            bc = suppressWarnings(car::powerTransform(v ~ rep(1,length(v)), family = family))
+            bc = suppressWarnings(car::powerTransform(v ~ 1, family = family))
             sbc = suppressWarnings(summary(bc))
             lambda.raw = sbc$result[[1]]
             lambda = sbc$result[[2]]
@@ -516,7 +516,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             } else if (family=='bcPower') {
                 vv = car::bcPower(v, lambda=lambda, jacobian.adjusted = FALSE, gamma=NULL)
             }
-            car::boxCox(v ~ x, family = family,
+            car::boxCox(v ~ 1, family = family,
             xlab = as.expression(substitute(lambda~"(raw)"~"="~lambda.raw.value*", "~lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~italic(n)~"="~n.value,
                 list(lambda.value=sprintf("%.2f",lambda),
                     p.lambda.value=sprintf("%f",p.lambda),
