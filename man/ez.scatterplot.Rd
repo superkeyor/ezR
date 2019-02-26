@@ -5,7 +5,7 @@
 \title{scatter plot with lattice}
 \usage{
 ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
-  "rlm"), type = c("partial", "spartial"), scale = FALSE, rp = TRUE,
+  "rlm"), type = c("spartial", "partial"), scale = FALSE, rp = TRUE,
   rp.x = 0.025, rp.y = 0.05, se = TRUE, layout = NULL, rp.size = 14,
   line.width = 3, point.size = 14, x.axis.size = 16, y.axis.size = 16,
   x.lab.size = 18, y.lab.size = 18, title.size = 20, legend.size = c(0,
