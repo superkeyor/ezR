@@ -69,14 +69,18 @@ an invisible data frame or list of data frame (if many y and many x)
 \cr "r2"          | "r2.lmrob"          | "r2.lmRob"          | "r2.rlm" (NA)
 \cr "r.spartial"  | "r.spartial.lmrob"  | "r.spartial.lmRob"  | "r.spartial.rlm" (NA)
 \cr "p.spartial"  | "p.spartial.lmrob"  | "p.spartial.lmRob"  | "p.spartial.rlm"
+\cr "r.partial"   | "r.partial.lmrob"   | "r.partial.lmRob"   | "r.partial.rlm" (NA)
+\cr "p.partial"   | "p.partial.lmrob"   | "p.partial.lmRob"   | "p.partial.rlm"
 \cr
-\cr The absolute value of the semipartial correlation of X with Y is always less than or equal to that of the partial correlation of X with Y.
+\cr Summary: The absolute value of the semipartial correlation of X with Y is always less than or equal to that of the partial correlation of X with Y.
+\cr MLR p = ppcor::pcor.test ~>= p.partial = (y.residual, x.residual)
+\cr ppcor::spcor.test ~>= p.spartial = (y, x.residual)
 \cr
 \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
 \cr 
-\cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r (not implemented in this function yet) the same in all cases.
+\cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r the same in all cases.
 \cr 
-\cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result. This r.spartial, p.spartial are to be used in ez.scatterplot
+\cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result.
 \cr 
 \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 \cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet

@@ -2137,20 +2137,22 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' scatter plot internal function
 #' @description scatter plot internal function
 #' @export
-.scatterplot.rnp = function(df, y, x, model,...){
+.scatterplot.rnp = function(df, y, x, model, type, ...){
     # https://gist.github.com/kdauria/524eade46135f6348140
     # http://stackoverflow.com/a/7549819/2292993
     # http://stackoverflow.com/a/13451587/2292993
     result = ez.lms(df=df,y=y,x=x,model=model,covar = NULL,report=F,plot=F,view=F,...)
     if (model=="lm") {
-        rvalue = result$r.spartial
+        ez.esp('
+        rvalue = result$r.{type}
         nvalue = result$n
-        pvalue = result$p.spartial
+        pvalue = result$p.{type}
+        ')
     } else {
         ez.esp('
-        rvalue = result$r.spartial.{model}
+        rvalue = result$r.{type}.{model}
         nvalue = result$n.{model}
-        pvalue = result$p.spartial.{model}
+        pvalue = result$p.{type}.{model}
         ')
     }
     rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
@@ -2192,6 +2194,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr y~x+a+b|||z plots separated by z groups
 #' @param loess T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))
 #' @param model one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
+#' @param type one of c('partial','spartial'), plot partial or semi-partial correlation
 #' @param hack T/F if more than 1 model specified, plot all in one plot
 #' @param scale when having covariates, z transform residuals
 #' @param rp show r (signed) and p values
@@ -2219,7 +2222,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @return a lattice plot
 #' @note specify auto through param colors, shapes
 #' @export
-ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),scale=FALSE,rp=TRUE,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
+ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),type=c('partial','spartial'),scale=FALSE,rp=TRUE,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
     rp.size=14,line.width=3,point.size=14,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,title.size=20,legend.size=c(0,14),
     line.color='#BE1B22',line.style=1,
     loess.color='dark grey',loess.width=3,loess.style=2,
@@ -2230,7 +2233,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
     zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",hack=FALSE,print2scr=TRUE,...){
 
     if (length(model)>1 & hack){
-        out = mapply(ez.scatterplot,model=model,title=model,MoreArgs=list(df=df, cmd=cmd, loess=loess, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
+        out = mapply(ez.scatterplot,model=model,title=model,MoreArgs=list(df=df, cmd=cmd, loess=loess, type=type, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
                     layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
                     loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
                     point.shape=point.shape, point.alpha=point.alpha, point.size=point.size,
@@ -2246,7 +2249,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
 
     if (grepl("||||",cmd,fixed=TRUE)){
         p1 = ez.scatterplot(df,gsub("||||","|",cmd,fixed=TRUE),
-            loess=loess, model=model, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
+            loess=loess, model=model, type=type, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
             layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
             loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
             point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, colors=colors,
@@ -2256,7 +2259,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
             legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
             hack=hack, print2scr=F, ...)
         p2 = ez.scatterplot(df,gsub("||||","|||",cmd,fixed=TRUE),
-            loess=loess, model=model, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
+            loess=loess, model=model, type=type, scale=scale, rp=rp, rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, se=se,
             layout=layout, line.color=line.color, line.width=line.width, line.style=line.style,
             loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
             point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, colors=colors,
@@ -2291,53 +2294,105 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
                               ####*covariate residualize begin*####
 ####************************************************************************************************
 if (grepl("+",cmd,fixed=TRUE)) {
-    if (grepl("|",cmd,fixed=TRUE)) {
-        # y~x+a+b|z
-        tmp = strsplit(cmd,"[~+|]")[[1]]
-        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
-        v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
-        tt = "
-        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-             ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
-        "
-        cmd = ez.sprintf('{y}~{x}|{z}')
-    } else if (grepl("*",cmd,fixed=TRUE)) {
-        # y~x+a+b||z
-        tmp = strsplit(cmd,"[~+*]")[[1]]
-        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
-        v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
-        # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
-        # https://stackoverflow.com/a/40061201/2292993
-        # group_by has no effects for ez.zresidize directly
-        tt = "
-        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-             dplyr::group_by({z}) %>%
-             dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
-             dplyr::ungroup() %>% data.frame()
-        "
-        cmd = ez.sprintf('{y}~{x}*{z}')
-    } else if (grepl("@",cmd,fixed=TRUE)) {
-        # y~x+a+b|||z
-        tmp = strsplit(cmd,"[~+@]")[[1]]
-        y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
-        v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
-        tt = "
-        df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-             dplyr::group_by({z}) %>%
-             dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
-             dplyr::ungroup() %>% data.frame()
-        "
-        cmd = ez.sprintf('{y}~{x}@{z}')
-    } else {
-        # y~x+a+b
-        tmp = strsplit(cmd,"[~+]")[[1]]
-        y = tmp[1]; x = tmp[2]
-        v = tmp[3:length(tmp)]; v = ez.vv(v,print2scr=F)
-        tt = "
-        df = ez.dropna(df,c('{y}', '{x}', {v})) %>%
-             ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
-        "
-        cmd = ez.sprintf('{y}~{x}')
+    type = match.arg(type)
+    if (type=='spartial') {
+        if (grepl("|",cmd,fixed=TRUE)) {
+            # y~x+a+b|z
+            tmp = strsplit(cmd,"[~+|]")[[1]]
+            y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
+            v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+                 ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
+            "
+            cmd = ez.sprintf('{y}~{x}|{z}')
+        } else if (grepl("*",cmd,fixed=TRUE)) {
+            # y~x+a+b||z
+            tmp = strsplit(cmd,"[~+*]")[[1]]
+            y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
+            v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
+            # https://stackoverflow.com/a/40061201/2292993
+            # group_by has no effects for ez.zresidize directly
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+                 dplyr::group_by({z}) %>%
+                 dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
+                 dplyr::ungroup() %>% data.frame()
+            "
+            cmd = ez.sprintf('{y}~{x}*{z}')
+        } else if (grepl("@",cmd,fixed=TRUE)) {
+            # y~x+a+b|||z
+            tmp = strsplit(cmd,"[~+@]")[[1]]
+            y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
+            v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+                 dplyr::group_by({z}) %>%
+                 dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
+                 dplyr::ungroup() %>% data.frame()
+            "
+            cmd = ez.sprintf('{y}~{x}@{z}')
+        } else {
+            # y~x+a+b
+            tmp = strsplit(cmd,"[~+]")[[1]]
+            y = tmp[1]; x = tmp[2]
+            v = tmp[3:length(tmp)]; v = ez.vv(v,print2scr=F)
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', {v})) %>%
+                 ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
+            "
+            cmd = ez.sprintf('{y}~{x}')
+        }
+    } else if (type=='partial'){
+        if (grepl("|",cmd,fixed=TRUE)) {
+            # y~x+a+b|z
+            tmp = strsplit(cmd,"[~+|]")[[1]]
+            y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
+            v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+                 ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
+            "
+            cmd = ez.sprintf('{y}~{x}|{z}')
+        } else if (grepl("*",cmd,fixed=TRUE)) {
+            # y~x+a+b||z
+            tmp = strsplit(cmd,"[~+*]")[[1]]
+            y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
+            v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
+            # https://stackoverflow.com/a/40061201/2292993
+            # group_by has no effects for ez.zresidize directly
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+                 dplyr::group_by({z}) %>%
+                 dplyr::do({'{'}ez.zresidize(.,c('{y}','{x}'),c({v}),model='{model}',scale={scale}){'}'}) %>%
+                 dplyr::ungroup() %>% data.frame()
+            "
+            cmd = ez.sprintf('{y}~{x}*{z}')
+        } else if (grepl("@",cmd,fixed=TRUE)) {
+            # y~x+a+b|||z
+            tmp = strsplit(cmd,"[~+@]")[[1]]
+            y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
+            v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+                 dplyr::group_by({z}) %>%
+                 dplyr::do({'{'}ez.zresidize(.,c('{y}','{x}'),c({v}),model='{model}',scale={scale}){'}'}) %>%
+                 dplyr::ungroup() %>% data.frame()
+            "
+            cmd = ez.sprintf('{y}~{x}@{z}')
+        } else {
+            # y~x+a+b
+            tmp = strsplit(cmd,"[~+]")[[1]]
+            y = tmp[1]; x = tmp[2]
+            v = tmp[3:length(tmp)]; v = ez.vv(v,print2scr=F)
+            tt = "
+            df = ez.dropna(df,c('{y}', '{x}', {v})) %>%
+                 ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
+            "
+            cmd = ez.sprintf('{y}~{x}')
+        }
     }
     ez.esp(tt)
     gghistory=paste(gghistory,ez.sprintf(tt),sep='\n')
@@ -2381,7 +2436,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel = function(x, y, ...){"{"}
             panel.xyplot(x, y, ...)
             # print(names(list(...)))   # "subscripts", "grid", "type", "groups"
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{type}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
@@ -2438,7 +2493,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel = function(x, y, ...,model=model){"{"}
             # cross groups
             panel.xyplot(x, y, ...)
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{type}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
@@ -2499,7 +2554,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel.superpose(x, y, ...,
             panel.groups = function(x, y, ..., col){"{"}
             panel.xyplot(x, y, ...)
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(data.frame({x}=x,{y}=y), "{y}", "{x}", model = "{model}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(data.frame({x}=x,{y}=y), "{y}", "{x}", model = "{model}", type = "{type}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
@@ -2538,7 +2593,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel = function(x, y, ...){"{"}
             panel.xyplot(x, y, ...)
             # print(names(list(...)))   # "subscripts", "grid", "type", "groups"
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{type}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))

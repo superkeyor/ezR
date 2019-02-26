@@ -931,8 +931,8 @@ ez.zresid = function(model,method=1) {
 
 #' residualize variable, returning it changed in-place (i.e under its original column name)
 #' @description residualize variable, returning it changed in-place (i.e under its original column name)
-#' @param var dependent var
-#' @param covar covariates
+#' @param var  a single var or a vector of var names to regress out covar
+#' @param covar covariates, one or more than one covar
 #' @param model 'lm', 'lmrob' (MM-type Estimators, robustbase), 'lmRob' (automatically chooses, robust), 'rlm' (MASS)
 #' @param scale  unstandarize or standardize residual
 #' @param ... additional param passed to the specified model
@@ -940,33 +940,36 @@ ez.zresid = function(model,method=1) {
 #' @export
 ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
     data = data.frame(data)
-    var = ez.selcol(data,var); covar = ez.selcol(data,covar)
-    # borrowed codes from https://cran.r-project.org/web/packages/umx/index.html
-    form = paste0(var, " ~ ", paste(covar, collapse = " + "))
-    form = as.formula(form)
-    set.seed(20190117)
-    # na.exclude better than na.omit. extractor functions like residuals() or fitted() will pad their
-    # output with NAs for the omitted cases with na.exclude, thus having an output of the same length as
-    # the input variables.
-    na.action = na.exclude
-    if (model=='lm') m = stats::lm(form,data,na.action=na.action,...)
-    # MM-type Estimators
-    # for some reason, robustbase::lmrob.control() cannot have see with a single value, like seed=1313
-    if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
-    # lmRob function automatically chooses an appropriate algorithm to compute a final robust estimate with high breakdown point and high efficiency
-    if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
-    # increased maxit from 20, because sometimes, rlm fails
-    # suppress 'rlm' failed to converge in xx steps
-    if (model=='rlm') m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action,...))
-    # can only use resid, robust lms do not support stats::rstandard
-    tmp <- resid(m)
-    if (scale) tmp = as.vector(scale(tmp,center=T,scale=T))
-    oldNAs = sum(is.na(data[[var]]))
-    newNAs = sum(is.na(tmp))
-    if(newNAs > oldNAs){
-        ez.pprint(sprintf('%d cases of var %s lost due to missing covariates', newNAs - oldNAs, var))
-    }
-    data[[var]] = tmp
+    vars = var
+    for (var in vars){
+        var = ez.selcol(data,var); covar = ez.selcol(data,covar)
+        # borrowed codes from https://cran.r-project.org/web/packages/umx/index.html
+        form = paste0(var, " ~ ", paste(covar, collapse = " + "))
+        form = as.formula(form)
+        set.seed(20190117)
+        # na.exclude better than na.omit. extractor functions like residuals() or fitted() will pad their
+        # output with NAs for the omitted cases with na.exclude, thus having an output of the same length as
+        # the input variables.
+        na.action = na.exclude
+        if (model=='lm') m = stats::lm(form,data,na.action=na.action,...)
+        # MM-type Estimators
+        # for some reason, robustbase::lmrob.control() cannot have see with a single value, like seed=1313
+        if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
+        # lmRob function automatically chooses an appropriate algorithm to compute a final robust estimate with high breakdown point and high efficiency
+        if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
+        # increased maxit from 20, because sometimes, rlm fails
+        # suppress 'rlm' failed to converge in xx steps
+        if (model=='rlm') m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action,...))
+        # can only use resid, robust lms do not support stats::rstandard
+        tmp <- resid(m)
+        if (scale) tmp = as.vector(scale(tmp,center=T,scale=T))
+        oldNAs = sum(is.na(data[[var]]))
+        newNAs = sum(is.na(tmp))
+        if(newNAs > oldNAs){
+            ez.pprint(sprintf('%d cases of var %s lost due to missing covariates', newNAs - oldNAs, var))
+        }
+        data[[var]] = tmp
+    } # end for
     return(data)
 }
 
@@ -1214,14 +1217,18 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr "r2"          | "r2.lmrob"          | "r2.lmRob"          | "r2.rlm" (NA)
 #' \cr "r.spartial"  | "r.spartial.lmrob"  | "r.spartial.lmRob"  | "r.spartial.rlm" (NA)
 #' \cr "p.spartial"  | "p.spartial.lmrob"  | "p.spartial.lmRob"  | "p.spartial.rlm"
+#' \cr "r.partial"   | "r.partial.lmrob"   | "r.partial.lmRob"   | "r.partial.rlm" (NA)
+#' \cr "p.partial"   | "p.partial.lmrob"   | "p.partial.lmRob"   | "p.partial.rlm"
 #' \cr
-#' \cr The absolute value of the semipartial correlation of X with Y is always less than or equal to that of the partial correlation of X with Y.
+#' \cr Summary: The absolute value of the semipartial correlation of X with Y is always less than or equal to that of the partial correlation of X with Y.
+#' \cr MLR p = ppcor::pcor.test ~>= p.partial = (y.residual, x.residual)
+#' \cr ppcor::spcor.test ~>= p.spartial = (y, x.residual)
 #' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
 #' \cr 
-#' \cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r (not implemented in this function yet) the same in all cases.
+#' \cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r the same in all cases.
 #' \cr 
-#' \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result. This r.spartial, p.spartial are to be used in ez.scatterplot
+#' \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result.
 #' \cr 
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 #' \cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
@@ -1400,13 +1407,20 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
                 # for rlm, r returns NA
                 r.spartial = sign(sm$coefficients[2,1])*sqrt(sm$r.squared)
                 p.spartial = p
+                r.partial = r.spartial
+                p.partial = p.spartial
             } else {
-                # df.spartial = ez.zresidize(df, y, covar, model=model, scale=TRUE)
                 # this is semi-partial (residualize x) as would be done in multiple regression
                 df.spartial = ez.zresidize(df, x, covar, model=model, scale=TRUE)
                 tmp = get.stats(y=y, x=x, covar=NULL, df=df.spartial, model=model, ...)
                 r.spartial = tmp$r.spartial
                 p.spartial = tmp$p.spartial
+
+                df.partial = ez.zresidize(df, y, covar, model=model, scale=TRUE)
+                df.partial[[x]] = df.spartial[[x]]
+                tmp = get.stats(y=y, x=x, covar=NULL, df=df.partial, model=model, ...)
+                r.partial = tmp$r.partial
+                p.partial = tmp$p.partial
             }
 
             # df.bak with dropna, but not scaled yet, so na.rm needed
@@ -1414,13 +1428,13 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
 
             # toString(NULL) -> ''
-            return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.spartial=r.spartial, p.spartial=p.spartial,
+            return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.spartial=r.spartial, p.spartial=p.spartial, r.partial=r.partial, p.partial=p.partial,
                 uniques_drop_na.x=uniques_drop_na.x,min.x=min.x,max.x=max.x,mean.x=mean.x,sd.x=sd.x,
                 uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
                 ))
             }), error=function(e){
                 if (error) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
-                return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.spartial=NA, p.spartial=NA,
+                return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.spartial=NA, p.spartial=NA, r.partial=NA, p.partial=NA,
                     uniques_drop_na.x=NA,min.x=NA,max.x=NA,mean.x=NA,sd.x=NA,
                     uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
                     ))
@@ -1440,6 +1454,8 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
                         'stdbeta', 'stdbeta.lmrob', 'stdbeta.lmRob', 'stdbeta.rlm', 'p', 'p.lmrob', 'p.lmRob', 'p.rlm',
                         'r2', 'r2.lmrob', 'r2.lmRob', 'r2.rlm', 'r.spartial', 'r.spartial.lmrob', 'r.spartial.lmRob',
                         'r.spartial.rlm', 'p.spartial', 'p.spartial.lmrob', 'p.spartial.lmRob', 'p.spartial.rlm',
+                        'r.partial', 'r.partial.lmrob', 'r.partial.lmRob',
+                        'r.partial.rlm', 'p.partial', 'p.partial.lmrob', 'p.partial.lmRob', 'p.partial.rlm',
                         'uniques_drop_na.x', 'min.x', 'max.x', 'mean.x', 'sd.x', 'uniques_drop_na.y', 'min.y', 'max.y',
                         'mean.y', 'sd.y', 'dof', 'dof.lmrob', 'dof.lmRob', 'dof.rlm', 'bonferroni', 'fdr')
         newOrd = AmatchlikeB(names(out), desiredOrd)

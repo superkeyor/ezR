@@ -7,9 +7,9 @@
 ez.zresidize(data, var, covar, model = "lm", scale = TRUE, ...)
 }
 \arguments{
-\item{var}{dependent var}
+\item{var}{a single var or a vector of var names to regress out covar}
 
-\item{covar}{covariates}
+\item{covar}{covariates, one or more than one covar}
 
 \item{model}{'lm', 'lmrob' (MM-type Estimators, robustbase), 'lmRob' (automatically chooses, robust), 'rlm' (MASS)}
 

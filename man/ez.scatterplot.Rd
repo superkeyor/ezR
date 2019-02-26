@@ -5,11 +5,11 @@
 \title{scatter plot with lattice}
 \usage{
 ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
-  "rlm"), scale = FALSE, rp = TRUE, rp.x = 0.025, rp.y = 0.05,
-  se = TRUE, layout = NULL, rp.size = 14, line.width = 3,
-  point.size = 14, x.axis.size = 16, y.axis.size = 16, x.lab.size = 18,
-  y.lab.size = 18, title.size = 20, legend.size = c(0, 14),
-  line.color = "#BE1B22", line.style = 1, loess.color = "dark grey",
+  "rlm"), type = c("partial", "spartial"), scale = FALSE, rp = TRUE,
+  rp.x = 0.025, rp.y = 0.05, se = TRUE, layout = NULL, rp.size = 14,
+  line.width = 3, point.size = 14, x.axis.size = 16, y.axis.size = 16,
+  x.lab.size = 18, y.lab.size = 18, title.size = 20, legend.size = c(0,
+  14), line.color = "#BE1B22", line.style = 1, loess.color = "dark grey",
   loess.width = 3, loess.style = 2, point.color = "#0086B8",
   point.shape = 16, point.alpha = 0.9, colors = ez.palette("Zhu"),
   shapes = c(16, 17, 15, 3, 7, 8), ylab = NULL, xlab = NULL,
@@ -26,6 +26,8 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 \item{loess}{T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))}
 
 \item{model}{one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified}
+
+\item{type}{one of c('partial','spartial'), plot partial or semi-partial correlation}
 
 \item{scale}{when having covariates, z transform residuals}
 
