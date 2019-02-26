@@ -2318,7 +2318,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
         if (plot) car::boxCox(y ~ x, family = family, 
             xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
-                list(lambda.value=sprintf("%f",lambda),
+                list(lambda.value=sprintf("%.2f",lambda),
                     p.lambda.value=sprintf("%f",p.lambda),
                     gamma.value=sprintf("%f",gamma),
                     lambda.raw.value=sprintf("%f",lambda.raw),
@@ -2327,7 +2327,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
         if (value) {
             if (value.force | p.lambda < .05){
-                if (print2scr) cat(sprintf('Box-Cox: lambda = %f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
+                if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
                 
                 if (value.lambda=='raw') {
                     lambda = lambda.raw
