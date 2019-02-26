@@ -5,7 +5,7 @@
 \title{box-cox power transformation}
 \usage{
 ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-  value.force = TRUE, value.method = c("boxcox", "tukey.modified"),
+  value.force = TRUE, value.method = c("boxcox", "tukey"),
   value.lambda = c("rounded", "raw"), ...)
 }
 \arguments{

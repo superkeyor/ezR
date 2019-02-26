@@ -2273,7 +2273,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' transformed values. Essentially estimate/add a number (ie, gamma) to y to make it positive
 #' @export
 ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-    value.force = TRUE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
+    value.force = TRUE, value.method = c('boxcox','tukey'), value.lambda = c('rounded','raw'), ...) {
 
     if (!is.data.frame(y)) {
         x = rep(1, length(y))
@@ -2289,8 +2289,8 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         value.lambda = match.arg(value.lambda)
         if (any(y <= 0)) {
             family = "bcnPower"
-            if (value.method=='tukey.modified') {
-                ez.pprint('non-positive value exists, switching method from tukey.modified to boxcox...')
+            if (value.method=='tukey') {
+                ez.pprint('non-positive value exists, switching method from modified tukey to boxcox...')
                 value.method='boxcox'
             }
         }
@@ -2331,7 +2331,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                     out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)
                 }
             # modified tukey to keep ordering
-            } else if (value.method=='tukey.modified') {
+            } else if (value.method=='tukey') {
                 out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL)
                 if (lambda.in.use<0) out = -1*out
             }
