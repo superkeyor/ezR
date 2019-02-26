@@ -378,6 +378,7 @@ ez.vc = function(vec,...){
 #' @description vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 #' @param printn print first n and last n (useful for loooong vector). If 2n >= total length, print all. Inf=all
 #' @param plot plot single vector (call generic/default \code{\link[graphics]{plot}})
+#' @importFrom car basicPower bcPower bcnPower
 #' @export
 ez.vi = function(x,printn=35,plot=TRUE,...) {
     v = x
@@ -499,10 +500,10 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             hist(v, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
-            
+
             # boxcox
             family = ifelse(any(v <= 0), "bcnPower", "bcPower")
-            c = suppressWarnings(car::powerTransform(v ~ rep(1,length(v), family = family))
+            bc = suppressWarnings(car::powerTransform(v ~ rep(1,length(v), family = family)))
             sbc = suppressWarnings(summary(bc))
             lambda.raw = sbc$result[[1]]
             lambda = sbc$result[[2]]
@@ -2290,7 +2291,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param precise use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or original y if no transformation occurs.
 #' @importFrom car basicPower bcPower bcnPower
-#' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. 
+#' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses.
 #' \cr\cr \code{\link[car]{bcPower}} handles (a few) negative responses (Hawkins and Weisberg (2017)),
 #' while allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox
 #' transformed values. Essentially estimate/add a number (ie, gamma) to y to make it positive

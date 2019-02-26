@@ -36,7 +36,7 @@ returns transformed y, or original y if no transformation occurs.
 box-cox power transformation
 }
 \note{
-Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. 
+Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses.
 \cr\cr \code{\link[car]{bcPower}} handles (a few) negative responses (Hawkins and Weisberg (2017)),
 while allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox
 transformed values. Essentially estimate/add a number (ie, gamma) to y to make it positive
