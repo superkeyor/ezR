@@ -492,14 +492,14 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
         if (plot & is.numeric(v) & !all(is.na(v))) {
             opar = par(mfrow=c(3, 2), oma=c(0,0,0,0), mar = c(2,2,0.5,0.5))
             on.exit(par(opar))
-            plot(v, type='b', pch=20, col='#56B4E9', ...)
+            plot(v, type='b', pch=20, col='#56B4E9')
             abline(h = v.mean, col = "#E69F00", lty = 3, lwd = 2)
-            plot(sort(v), type='b', pch=20, col='#56B4E9', ...)
+            plot(sort(v), type='b', pch=20, col='#56B4E9')
             abline(h = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             hist(v, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
-            vv = ez.boxcox(v, plot=TRUE, print2scr = TRUE, value = TRUE, value.force = TRUE)
+            vv = ez.boxcox(v, plot=TRUE, print2scr = TRUE, value.force = TRUE)
             hist(vv, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = mean(vv,na.rm=TRUE), col = "#E69F00", lty = 3, lwd = 2)
         }
