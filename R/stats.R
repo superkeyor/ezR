@@ -1216,8 +1216,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr "p.spartial"  | "p.spartial.lmrob"  | "p.spartial.lmRob"  | "p.spartial.rlm"
 #' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
-#' \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T (together with MLR p) and also to be used in ez.scatterplot
-#' \cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual)
+#' \cr 
+#' \cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r (not implemented in this function yet) the same in all cases.
+#' \cr 
+#' \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result. This r.spartial, p.spartial are to be used in ez.scatterplot
+#' \cr 
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 #' \cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 #' \cr
@@ -1228,6 +1231,8 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' x=ez.zresidize(iris,'Sepal.Width','Petal.Width',scale=F)
 #' z=data.frame(Sepal.Length=y$Sepal.Length,Sepal.Width=x$Sepal.Width)
 #' ez.lms(z,'Sepal.Length','Sepal.Width')
+#' ppcor::pcor.test(iris$Sepal.Length,iris$Sepal.Width,iris$Petal.Width)
+#' ppcor::spcor.test(iris$Sepal.Length,iris$Sepal.Width,iris$Petal.Width)
 #' 
 #' y = c(1,2,3,4,5,6)
 #' x = c(2,4,15,20,25,36)
