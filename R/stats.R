@@ -1446,7 +1446,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
         out[] = lapply(out,unlist)
         out = tibble::rownames_to_column(out)
         out['bestp'] = out$rowname[which.min(out$p)]
-        out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.spartial', 'p.spartial'),sep='.')
+        out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.spartial', 'p.spartial', 'r.partial', 'p.partial'),sep='.')
         out = ez.clcolnames(out, '\\.lm$','')
         # UA=c('c','a','b'); UB=c('b','c','d'); # desired output: c('b','c','a')
         AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!(UA %in% UB)]))}
