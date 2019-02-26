@@ -2265,7 +2265,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param force T = transform regardless, or F = only if p.lambda rounded is less than .05.
 #' @param method boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.
 #' @param precise use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
-#' @return returns transformed y, or original y.
+#' @return returns transformed y, or original y if no transformation occurs.
 #' @importFrom car basicPower bcPower bcnPower
 #' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. 
 #' \cr\cr \code{\link[car]{bcPower}} handles (a few) negative responses (Hawkins and Weisberg (2017)),
@@ -2316,7 +2316,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         if (is.null(gamma)) gamma = NA
 
         if (force | p.lambda < .05){
-            if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
+            if (print2scr) cat(sprintf('Box-Cox: lambda.raw = %f, lambda = %.2f, p.lambda = %f, gamma = %f, n = %d\n', lambda.raw, lambda, p.lambda, gamma, length(y)))
 
             if (precise=='raw') {
                 lambda.in.use = lambda.raw
@@ -2343,7 +2343,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                 hist(y, col='#56B4E9',main=NULL,xlab=NULL)
                 abline(v = mean(y,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
                 car::boxCox(y ~ x, family = family,
-                xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
+                xlab = as.expression(substitute(lambda~"(raw)"~"="~lambda.raw.value*", "~lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~italic(n)~"="~n.value,
                     list(lambda.value=sprintf("%.2f",lambda),
                         p.lambda.value=sprintf("%f",p.lambda),
                         gamma.value=sprintf("%f",gamma),

@@ -30,7 +30,7 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 \item{precise}{use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda}
 }
 \value{
-returns transformed y, or original y.
+returns transformed y, or original y if no transformation occurs.
 }
 \description{
 box-cox power transformation
