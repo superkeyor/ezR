@@ -2356,11 +2356,6 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         } else {
             out = y
         }
-
-        if (!value){
-            out = list(lambda=lambda,p.lambda=p.lambda,gamma=gamma,lambda.raw=lambda.raw,n=length(y))
-        }
-
     } else if (is.data.frame(y) & is.null(col)) {
         y[] = lapply(y,ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
         out = y
