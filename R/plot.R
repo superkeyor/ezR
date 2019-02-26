@@ -860,7 +860,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         cmd = ez.trim(cmd)
         cmd = strsplit(cmd,'[~|]')[[1]]
         yy = cmd[1]
-        ylab = ifelse(is.null(ylab),yy,sprintf('ylab("%s")+',ylab))
+        ylab = ifelse(is.null(ylab),sprintf('ylab("%s")+',yy),sprintf('ylab("%s")+',ylab))
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx,"+",fixed=TRUE)[[1]] %>% sapply(trimws) %>% unname()
         covar = xx[-1]
@@ -911,7 +911,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
         yy = cmd[1]
-        ylab = ifelse(is.null(ylab),yy,sprintf('ylab("%s")+',ylab))
+        ylab = ifelse(is.null(ylab),sprintf('ylab("%s")+',yy),sprintf('ylab("%s")+',ylab))
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx," ",fixed=TRUE)[[1]]
         # yy|xx
@@ -1071,7 +1071,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
         yy = cmd[1]
-        ylab = ifelse(is.null(ylab),yy,sprintf('ylab("%s")+',ylab))
+        ylab = ifelse(is.null(ylab),sprintf('ylab("%s")+',yy),sprintf('ylab("%s")+',ylab))
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx," ",fixed=TRUE)[[1]]
         # yy|xx
