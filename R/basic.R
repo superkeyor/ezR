@@ -94,29 +94,6 @@ ez.moment = function(format='%Y-%m-%d_%H-%M-%S') {
     return(result)
 }
 
-#' pause the execution of an R script until a user presses the Enter key, no parameter () needed
-#' @description pause the execution of an R script until a user presses the Enter key, no parameter () needed
-#' @seealso \code{\link{ez.sleep}}
-#' @export
-ez.pause = function(){
-    # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
-
-    # https://support.rstudio.com/hc/en-us/articles/200713843?version=1.1.463&mode=desktop
-    # from rstudio debug help page: Menu Debug-->On Error-->
-    # set debug level, so that one can escape to cancel without invoking debug
-    op = options(error = NULL)
-    on.exit(options(op))
-    if (interactive())
-    {
-        invisible(readline(prompt = "Press <Enter> to continue..."))
-    }
-    else
-    {
-        cat("Press <Enter> to continue...")
-        invisible(readLines(file("stdin"), 1))
-    }
-}
-
 #' Empty Value
 #'
 #' Rails-inspired helper that checks if vector values are "empty", i.e. if it's: \code{NULL}, zero-length, \code{NA}, \code{NaN}, \code{FALSE}, an empty string. Note that unlike its native R \code{is.<something>} sibling functions, \code{is.empty} is vectorised (hence the "values").

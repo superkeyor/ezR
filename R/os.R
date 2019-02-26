@@ -56,8 +56,8 @@ ez.debug = function(debugMode=NULL) {
         else if (opt==FALSE) ez.pprint('Debug Mode Status: OFF')
         return(invisible(opt))
     }
-    else if (debugMode==1) {options(debug=T); ez.pprint('Set Debug Mode to ON')}
-    else if (debugMode==0) {options(debug=F); ez.pprint('Set Debug Mode to OFF')}
+    else if (debugMode==1) {options(debug=T); options(error = utils::recover); ez.pprint('Set Debug Mode to ON')}
+    else if (debugMode==0) {options(debug=F); options(error = NULL); ez.pprint('Set Debug Mode to OFF')}
     return(invisible(NULL))
 }
 
@@ -775,4 +775,30 @@ ez.getos = function(){
             os <- "linux"
     }
     tolower(os)
+}
+
+#' pause the execution of an R script until a user presses the Enter key, no parameter () needed
+#' @description pause the execution of an R script until a user presses the Enter key, no parameter () needed
+#' @seealso \code{\link{ez.sleep}}
+#' @export
+ez.pause = function(){
+    # https://diego.assencio.com/?index=86c137b502561d44b8be02f06d80ee16
+
+    # https://support.rstudio.com/hc/en-us/articles/200713843?version=1.1.463&mode=desktop
+    # https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+    # from rstudio debug help page: Menu Debug-->On Error-->
+    # set debug level, so that one can escape to cancel without invoking debug
+    # options(error = utils::recover)
+    # type c to return to recover from the browser. Type another frame number to browse some more, or type 0 to exit recover.
+    op = options(error = NULL)
+    on.exit(options(op))
+    if (interactive())
+    {
+        invisible(readline(prompt = "Press <Enter> to continue..."))
+    }
+    else
+    {
+        cat("Press <Enter> to continue...")
+        invisible(readLines(file("stdin"), 1))
+    }
 }
