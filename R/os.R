@@ -56,8 +56,8 @@ ez.debug = function(debugMode=NULL) {
         else if (opt==FALSE) ez.pprint('Debug Mode Status: OFF')
         return(invisible(opt))
     }
-    else if (debugMode==1) {options(debug=T); options(error = utils::recover); ez.pprint('Set Debug Mode to ON')}
-    else if (debugMode==0) {options(debug=F); options(error = NULL); ez.pprint('Set Debug Mode to OFF')}
+    else if (debugMode==1) {options(debug=T); ez.pprint('Set Debug Mode to ON')}
+    else if (debugMode==0) {options(debug=F); ez.pprint('Set Debug Mode to OFF')}
     return(invisible(NULL))
 }
 
