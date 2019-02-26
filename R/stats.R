@@ -502,7 +502,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
 
             # boxcox
-            family = ifelse(any(v <= 0), "bcnPower", "bcPower")
+            family = ifelse(any((v <= 0) %in% FALSE), "bcnPower", "bcPower")
             bc = suppressWarnings(car::powerTransform(v ~ 1, family = family))
             sbc = suppressWarnings(summary(bc))
             lambda.raw = sbc$result[[1]]
@@ -2324,7 +2324,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
         method = match.arg(method)
         precise = match.arg(precise)
-        if (any(y <= 0)) {
+        if (any((y <= 0) %in% FALSE)) {
             family = "bcnPower"
             if (method=='tukey') {
                 ez.pprint('non-positive value exists, switching method from modified tukey to boxcox...')
