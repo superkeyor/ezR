@@ -6,12 +6,12 @@
 \usage{
 ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
   bar.gap = 0.7, bar.width = 0.7, error.size = 0.7, error.gap = 0.7,
-  error.width = 0.3, error.direction = "both", ylab = "Mean",
-  xlab = NULL, zlab = NULL, legend.position = "top",
-  legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
-  xangle = 0, vjust = NULL, hjust = NULL, print2scr = TRUE,
-  point = FALSE, point.jitter = 0.15, point.size = 1.5, point.alpha = 1,
-  point.color = "grey55", theme.apa = TRUE, ...)
+  error.width = 0.3, error.direction = "both", ylab = NULL, xlab = NULL,
+  zlab = NULL, legend.position = "top", legend.direction = "horizontal",
+  legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
+  hjust = NULL, print2scr = TRUE, point = FALSE, point.jitter = 0.15,
+  point.size = 1.5, point.alpha = 1, point.color = "grey55",
+  theme.apa = TRUE, ...)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}

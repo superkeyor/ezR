@@ -826,7 +826,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab='Mean',xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
+ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
     point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=1,point.color='grey55',theme.apa=TRUE,...) {
     if (print2scr & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
 
@@ -840,7 +840,6 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     on.exit(options(oldOpts))
     color = ifelse(color=='bw','scale_fill_grey(start=0,end=0.8)','scale_fill_manual(values=colors)')
 
-    ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
@@ -861,6 +860,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         cmd = ez.trim(cmd)
         cmd = strsplit(cmd,'[~|]')[[1]]
         yy = cmd[1]
+        ylab = ifelse(is.null(ylab),yy,sprintf('ylab("%s")+',ylab))
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx,"+",fixed=TRUE)[[1]] %>% sapply(trimws) %>% unname()
         covar = xx[-1]
@@ -911,6 +911,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
         yy = cmd[1]
+        ylab = ifelse(is.null(ylab),yy,sprintf('ylab("%s")+',ylab))
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx," ",fixed=TRUE)[[1]]
         # yy|xx
@@ -1040,7 +1041,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
 #' @return a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab='Mean',xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
+ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1049,7 +1050,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
     # finally on exit the function, set it back to old value
     oldOpts = options(warn=1)
     on.exit(options(oldOpts))
-    ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
+
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
@@ -1070,6 +1071,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
     if (length(cmd)==2) {
         # yy|xx or yy|xx zz
         yy = cmd[1]
+        ylab = ifelse(is.null(ylab),yy,sprintf('ylab("%s")+',ylab))
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", cmd[2], perl=TRUE)
         xx = strsplit(xx," ",fixed=TRUE)[[1]]
         # yy|xx
