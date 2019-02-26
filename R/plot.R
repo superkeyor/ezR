@@ -2141,14 +2141,14 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
     # http://stackoverflow.com/a/13451587/2292993
     result = ez.lms(df=df,y=y,x=x,model=model,covar = NULL,report=F,plot=F,view=F,...)
     if (model=="lm") {
-        rvalue = result$r.residized
+        rvalue = result$r.spartial
         nvalue = result$n
-        pvalue = result$p.residized
+        pvalue = result$p.spartial
     } else {
         ez.esp('
-        rvalue = result$r.residized.{model}
+        rvalue = result$r.spartial.{model}
         nvalue = result$n.{model}
-        pvalue = result$p.residized.{model}
+        pvalue = result$p.spartial.{model}
         ')
     }
     rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))

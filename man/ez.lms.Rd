@@ -67,13 +67,13 @@ an invisible data frame or list of data frame (if many y and many x)
 \cr "stdbeta"     | "stdbeta.lmrob"     | "stdbeta.lmRob"     | "stdbeta.rlm"
 \cr "p"           | "p.lmrob"           | "p.lmRob"           | "p.rlm"
 \cr "r2"          | "r2.lmrob"          | "r2.lmRob"          | "r2.rlm" (NA)
-\cr "r.residized" | "r.residized.lmrob" | "r.residized.lmRob" | "r.residized.rlm" (NA)
-\cr "p.residized" | "p.residized.lmrob" | "p.residized.lmRob" | "p.residized.rlm"
+\cr "r.spartial"  | "r.spartial.lmrob"  | "r.spartial.lmRob"  | "r.spartial.rlm" (NA)
+\cr "p.spartial"  | "p.spartial.lmrob"  | "p.spartial.lmRob"  | "p.spartial.rlm"
 \cr
 \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
-\cr the r.residualized, p.residualized refers to semi-partial correlation (r.residualized is the same as ppcor::spcor.test result, p.residualized very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T (together with MLR p) and also to be used in ez.scatterplot
+\cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T (together with MLR p) and also to be used in ez.scatterplot
 \cr no column named r, r(.lm), r.lmrob etc in the result data frame
-\cr r2.rlm or r.residized.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
+\cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 \cr
 }
 \description{

@@ -1212,13 +1212,13 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr "stdbeta"     | "stdbeta.lmrob"     | "stdbeta.lmRob"     | "stdbeta.rlm"
 #' \cr "p"           | "p.lmrob"           | "p.lmRob"           | "p.rlm"
 #' \cr "r2"          | "r2.lmrob"          | "r2.lmRob"          | "r2.rlm" (NA)
-#' \cr "r.residized" | "r.residized.lmrob" | "r.residized.lmRob" | "r.residized.rlm" (NA)
-#' \cr "p.residized" | "p.residized.lmrob" | "p.residized.lmRob" | "p.residized.rlm"
+#' \cr "r.spartial"  | "r.spartial.lmrob"  | "r.spartial.lmRob"  | "r.spartial.rlm" (NA)
+#' \cr "p.spartial"  | "p.spartial.lmrob"  | "p.spartial.lmRob"  | "p.spartial.rlm"
 #' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
-#' \cr the r.residualized, p.residualized refers to semi-partial correlation (r.residualized is the same as ppcor::spcor.test result, p.residualized very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T (together with MLR p) and also to be used in ez.scatterplot
+#' \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result, but could be very different from p in multiple regression), which are printed out when report=T (together with MLR p) and also to be used in ez.scatterplot
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
-#' \cr r2.rlm or r.residized.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
+#' \cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 #' \cr
 #' @note To keep consistent with other R functions (eg, lm which converts numeric/non-numeric factor to values starting from 0), set start.at=0 in ez.2value(), then factor(1:2)->c(0,1), factor(c('girl','boy'))->c(1,0) # the level order is boy,girl
 #' \cr in lm() the coding (0,1) vs.(1,2) does not affect slope, but changes intercept (but a coding from 1,2->1,3 would change slope--interval difference matters)
@@ -1385,15 +1385,15 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             # residualized
             if (is.null(covar)) {
                 # for rlm, r returns NA
-                r.residized = sign(sm$coefficients[2,1])*sqrt(sm$r.squared)
-                p.residized = p
+                r.spartial = sign(sm$coefficients[2,1])*sqrt(sm$r.squared)
+                p.spartial = p
             } else {
-                # df.residized = ez.zresidize(df, y, covar, model=model, scale=TRUE)
+                # df.spartial = ez.zresidize(df, y, covar, model=model, scale=TRUE)
                 # this is semi-partial (residualize x) as would be done in multiple regression
-                df.residized = ez.zresidize(df, x, covar, model=model, scale=TRUE)
-                tmp = get.stats(y=y, x=x, covar=NULL, df=df.residized, model=model, ...)
-                r.residized = tmp$r.residized
-                p.residized = tmp$p.residized
+                df.spartial = ez.zresidize(df, x, covar, model=model, scale=TRUE)
+                tmp = get.stats(y=y, x=x, covar=NULL, df=df.spartial, model=model, ...)
+                r.spartial = tmp$r.spartial
+                p.spartial = tmp$p.spartial
             }
 
             # df.bak with dropna, but not scaled yet, so na.rm needed
@@ -1401,13 +1401,13 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
 
             # toString(NULL) -> ''
-            return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.residized=r.residized, p.residized=p.residized,
+            return(list(y=y, x=x, covar=toString(covar), n=n, dof=dof, r2=r2, stdbeta=stdbeta, p=p, r.spartial=r.spartial, p.spartial=p.spartial,
                 uniques_drop_na.x=uniques_drop_na.x,min.x=min.x,max.x=max.x,mean.x=mean.x,sd.x=sd.x,
                 uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
                 ))
             }), error=function(e){
                 if (error) ez.pprint(sprintf('EZ Error: %s(%s ~ %s). NA returned.',model,y,paste(c(x,covar), collapse = " + ")),color='red')
-                return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.residized=NA, p.residized=NA,
+                return(list(y=y, x=x, covar=toString(covar), n=NA, dof=NA, r2=NA, stdbeta=NA, p=NA, r.spartial=NA, p.spartial=NA,
                     uniques_drop_na.x=NA,min.x=NA,max.x=NA,mean.x=NA,sd.x=NA,
                     uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
                     ))
@@ -1419,14 +1419,14 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
         out[] = lapply(out,unlist)
         out = tibble::rownames_to_column(out)
         out['bestp'] = out$rowname[which.min(out$p)]
-        out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.residized', 'p.residized'),sep='.')
+        out = ez.2wide(out,'bestp','rowname',c('n', 'dof', 'r2', 'stdbeta', 'p', 'r.spartial', 'p.spartial'),sep='.')
         out = ez.clcolnames(out, '\\.lm$','')
         # UA=c('c','a','b'); UB=c('b','c','d'); # desired output: c('b','c','a')
         AmatchlikeB = function(UA,UB){return(c(UB[UB %in% UA], UA[!(UA %in% UB)]))}
         desiredOrd = c('orindex', 'y', 'ylbl', 'x', 'xlbl', 'covar', 'bestp', 'n', 'n.lmrob', 'n.lmRob', 'n.rlm',
                         'stdbeta', 'stdbeta.lmrob', 'stdbeta.lmRob', 'stdbeta.rlm', 'p', 'p.lmrob', 'p.lmRob', 'p.rlm',
-                        'r2', 'r2.lmrob', 'r2.lmRob', 'r2.rlm', 'r.residized', 'r.residized.lmrob', 'r.residized.lmRob',
-                        'r.residized.rlm', 'p.residized', 'p.residized.lmrob', 'p.residized.lmRob', 'p.residized.rlm',
+                        'r2', 'r2.lmrob', 'r2.lmRob', 'r2.rlm', 'r.spartial', 'r.spartial.lmrob', 'r.spartial.lmRob',
+                        'r.spartial.rlm', 'p.spartial', 'p.spartial.lmrob', 'p.spartial.lmRob', 'p.spartial.rlm',
                         'uniques_drop_na.x', 'min.x', 'max.x', 'mean.x', 'sd.x', 'uniques_drop_na.y', 'min.y', 'max.y',
                         'mean.y', 'sd.y', 'dof', 'dof.lmrob', 'dof.lmRob', 'dof.rlm', 'bonferroni', 'fdr')
         newOrd = AmatchlikeB(names(out), desiredOrd)
@@ -1457,11 +1457,11 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            if (!is.null(ez.selcol(result.report,'starts_with("p.residized.")'))){
-                robustp = result.report[i,ez.selcol(result.report,'starts_with("p.residized.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2),robustp),color='cyan')
+            if (!is.null(ez.selcol(result.report,'starts_with("p.spartial.")'))){
+                robustp = result.report[i,ez.selcol(result.report,'starts_with("p.spartial.")')] %>% ez.p.apa(prefix=0) %>% toString()
+                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2),robustp),color='cyan')
             } else {
-                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.residized[i],ez.p.apa(result.report$p.residized[i],prefix=2)),color='cyan')
+                ez.pprint(sprintf('lm(%s~%s): n = %d, MLR %s, r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2)),color='cyan')
             }
         }
         # ez.pprint('<<<<<<')
