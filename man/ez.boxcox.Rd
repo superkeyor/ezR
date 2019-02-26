@@ -5,8 +5,8 @@
 \title{box-cox power transformation}
 \usage{
 ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-  value = TRUE, value.force = FALSE, value.method = c("boxcox",
-  "tukey.modified"), value.lambda = c("rounded", "raw"), ...)
+  value.force = TRUE, value.method = c("boxcox", "tukey.modified"),
+  value.lambda = c("rounded", "raw"), ...)
 }
 \arguments{
 \item{y}{a data frame or a vector}
@@ -19,21 +19,18 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
 \item{na.rm}{rm na from y,x (pairwise), if not, NA stays as is. applicable only if y is a vector.}
 
-\item{plot}{boxcox plot. applicable only if y is a vector.}
+\item{plot}{boxcox plot. applicable only if y is a vector, only when there is an actual transformation}
 
 \item{print2scr}{print out transformation parameters, only when there is an actual transformation}
 
-\item{value}{return transformed y, or a list of transformation parameters. If y is a data frame, value will be always (internally) set to TRUE}
-
-\item{value.force}{transform regardless or only if p.lambda rounded is less than .05. otherwise returns original y}
+\item{value.force}{T = transform regardless, or F = only if p.lambda rounded is less than .05.}
 
 \item{value.method}{boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}}
 
 \item{value.lambda}{use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda}
 }
 \value{
-returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force).
-\cr If y is a data frame, always return a potentially transformed data frame, and no printout, no plot
+returns transformed y, or original y.
 }
 \description{
 box-cox power transformation

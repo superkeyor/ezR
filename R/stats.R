@@ -2260,21 +2260,19 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' \cr        if x is not a data frame, col is ignored
 #' \cr        could be multiple cols
 #' @param na.rm rm na from y,x (pairwise), if not, NA stays as is. applicable only if y is a vector.
-#' @param plot boxcox plot. applicable only if y is a vector.
+#' @param plot boxcox plot. applicable only if y is a vector, only when there is an actual transformation
 #' @param print2scr print out transformation parameters, only when there is an actual transformation
-#' @param value return transformed y, or a list of transformation parameters. If y is a data frame, value will be always (internally) set to TRUE
-#' @param value.force transform regardless or only if p.lambda rounded is less than .05. otherwise returns original y
+#' @param value.force T = transform regardless, or F = only if p.lambda rounded is less than .05.
 #' @param value.method boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}
 #' @param value.lambda use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
-#' @return returns transformed y, or a list of transformation parameters, otherwise original y (depending on value, value.force).
-#' \cr If y is a data frame, always return a potentially transformed data frame, and no printout, no plot
+#' @return returns transformed y, or original y.
 #' @importFrom car basicPower bcPower bcnPower
 #' @note Box and Cox (1964) generally deals with non-negative responses. This funciton can handle (a few) negative responses (Hawkins and Weisberg (2017))
 #' \cr while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
 #' \cr essentially estimate/add a number (ie, gamma) to y to make it positive
 #' @export
 ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-    value = TRUE, value.force = FALSE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
+    value.force = TRUE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
 
     if (!is.data.frame(y)) {
         x = rep(1, length(y))
@@ -2291,7 +2289,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         if (any(y <= 0)) {
             family = "bcnPower"
             if (value.method=='tukey.modified') {
-                ez.pprint('non-positive value exists, switching from tukey.modified to boxcox...')
+                ez.pprint('non-positive value exists, switching method from tukey.modified to boxcox...')
                 value.method='boxcox'
             }
         }
@@ -2316,49 +2314,47 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         gamma = sbc$result.gamma[[1]]
         if (is.null(gamma)) gamma = NA
 
-        if (value) {
-            if (value.force | p.lambda < .05){
-                if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
+        if (value.force | p.lambda < .05){
+            if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
 
-                if (value.lambda=='raw') {
-                    lambda.in.use = lambda.raw
-                } else {
-                    lambda.in.use = lambda
-                }
-
-                if (value.method=='boxcox') {
-                    if (family=='bcnPower') {
-                        out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)
-                    } else if (family=='bcPower') {
-                        out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)
-                    }
-                # modified tukey to keep ordering
-                } else if (value.method=='tukey.modified') {
-                    out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL)
-                    if (lambda.in.use<0) out = -1*out
-                }
-            # no transformation
+            if (value.lambda=='raw') {
+                lambda.in.use = lambda.raw
             } else {
-                out = y
+                lambda.in.use = lambda
             }
-        }
 
-        if (plot) {
-            graphics::layout(matrix(c(1,2,0,0,2,3), 3))
-            opar = par(oma=c(0,0,0,0), mar = c(4,2,0.5,0.5))
-            on.exit(par(opar))
-            hist(y, col='#56B4E9',main=NULL,xlab=NULL)
-            abline(v = mean(y,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
-            car::boxCox(y ~ x, family = family,
-            xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
-                list(lambda.value=sprintf("%.2f",lambda),
-                    p.lambda.value=sprintf("%f",p.lambda),
-                    gamma.value=sprintf("%f",gamma),
-                    lambda.raw.value=sprintf("%f",lambda.raw),
-                    n.value=sprintf("%d",length(y))
-                    ))))
-            hist(out, col='#56B4E9',main=NULL,xlab=NULL)
-            abline(v = mean(out,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+            if (value.method=='boxcox') {
+                if (family=='bcnPower') {
+                    out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)
+                } else if (family=='bcPower') {
+                    out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)
+                }
+            # modified tukey to keep ordering
+            } else if (value.method=='tukey.modified') {
+                out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL)
+                if (lambda.in.use<0) out = -1*out
+            }
+
+            if (plot) {
+                graphics::layout(matrix(c(1,2,0,0,2,3), 3))
+                opar = par(oma=c(0,0,0,0), mar = c(4,2,0.5,0.5))
+                on.exit(par(opar))
+                hist(y, col='#56B4E9',main=NULL,xlab=NULL)
+                abline(v = mean(y,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+                car::boxCox(y ~ x, family = family,
+                xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
+                    list(lambda.value=sprintf("%.2f",lambda),
+                        p.lambda.value=sprintf("%f",p.lambda),
+                        gamma.value=sprintf("%f",gamma),
+                        lambda.raw.value=sprintf("%f",lambda.raw),
+                        n.value=sprintf("%d",length(y))
+                        ))))
+                hist(out, col='#56B4E9',main=NULL,xlab=NULL)
+                abline(v = mean(out,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+            }
+        # no transformation
+        } else {
+            out = y
         }
 
         if (!value){
