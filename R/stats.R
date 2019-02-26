@@ -2316,7 +2316,37 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         gamma = sbc$result.gamma[[1]]
         if (is.null(gamma)) gamma = NA
 
-        if (plot) car::boxCox(y ~ x, family = family, 
+        if (value) {
+            if (value.force | p.lambda < .05){
+                if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
+                
+                if (value.lambda=='raw') {
+                    lambda.in.use = lambda.raw
+                }
+
+                if (value.method=='boxcox') {
+                    if (family=='bcnPower') {
+                        out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)
+                    } else if (family=='bcPower') {
+                        out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)
+                    }
+                # modified tukey to keep ordering
+                } else if (value.method=='tukey.modified') {
+                    out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL)
+                    if (lambda.in.use<0) out = -1*out
+                }
+            # no transformation    
+            } else {
+                out = y
+            }
+        }
+
+        if (plot) {
+            opar = par(mfrow=c(3, 1), oma=c(0,0,0,0), mar = c(2,2,0.5,0.5))
+            on.exit(par(opar))
+            hist(y, col='#56B4E9',main=NULL,xlab=NULL)
+            abline(y = mean(y,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+            car::boxCox(y ~ x, family = family, 
             xlab = as.expression(substitute(lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~lambda~"(raw)"~"="~lambda.raw.value*", "~italic(n)~"="~n.value,
                 list(lambda.value=sprintf("%.2f",lambda),
                     p.lambda.value=sprintf("%f",p.lambda),
@@ -2324,32 +2354,11 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                     lambda.raw.value=sprintf("%f",lambda.raw),
                     n.value=sprintf("%d",length(y))
                     ))))
+            hist(out, col='#56B4E9',main=NULL,xlab=NULL)
+            abline(out = mean(out,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+        }
 
-        if (value) {
-            if (value.force | p.lambda < .05){
-                if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
-                
-                if (value.lambda=='raw') {
-                    lambda = lambda.raw
-                }
-
-                if (value.method=='boxcox') {
-                    if (family=='bcnPower') {
-                        out = car::bcnPower(y, lambda=lambda, jacobian.adjusted = FALSE, gamma=gamma)
-                    } else if (family=='bcPower') {
-                        out = car::bcPower(y, lambda=lambda, jacobian.adjusted = FALSE, gamma=NULL)
-                    }
-                # modified tukey to keep ordering    
-                } else if (value.method=='tukey.modified') {
-                    out = car::basicPower(y,lambda=lambda, gamma=NULL)
-                    if (lambda<0) out = -1*out
-                }
-            # no transformation    
-            } else {
-                out = y
-            }
-        # return parameters
-        } else {
+        if (!value){
             out = list(lambda=lambda,p.lambda=p.lambda,gamma=gamma,lambda.raw=lambda.raw,n=length(y))
         }
 
