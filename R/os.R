@@ -640,7 +640,7 @@ ez.rm = function(x){
     else {
         result = file.rename(from,to)
     }
-    return(invisible(NULL))
+    return(invisible(to))
 }
 
 #' rename
@@ -687,7 +687,7 @@ ez.rn = Vectorize(.rn)
                           overwrite=overwrite) })
         }
     }
-    return(invisible(NULL))
+    return(invisible(to))
 }
 
 #' copy
@@ -720,7 +720,7 @@ ez.cp = Vectorize(.cp)
         if (!all(file.info(todir)$isdir %in% TRUE)) dir.create(todir, recursive=TRUE)
     }
     result = file.rename(from = from, to = to)
-    return(invisible(NULL))
+    return(invisible(to))
 }
 
 #' move
