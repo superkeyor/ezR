@@ -2362,11 +2362,11 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         }
 
     } else if (is.data.frame(y) & is.null(col)) {
-        y[] = lapply(y,ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        y[] = lapply(y,ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
         out = y
     } else if (is.data.frame(y) & !is.null(col)) {
         col = ez.selcol(y,col)
-        y[col] = lapply(y[col],ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value=T,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        y[col] = lapply(y[col],ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
         out = y
     }
     return(invisible(out))
