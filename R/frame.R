@@ -1861,8 +1861,8 @@ ez.ppq = function(...) {
 #' \cr 'c(sample_num,mother_num)', 'sample_num,mother_num', '1, col3:col5, col7:col8'
 #' @return returns vector of col names (if no col matched, resturn NULL, for easy later use with c(NULL,'a col') -> c('a col'))
 #' @examples
-#' \cr regular expression should use four slashes \\\\
-#' \cr 'matches("cci[i]?\\\\d\\\\d$")'
+#' regular expression should use four slashes \\\\
+#' 'matches("cci[i]?\\\\d\\\\d$")'
 #' @export
 ez.selcol = function(df,col=NULL, ...) {
     # optimize for big df or long col
