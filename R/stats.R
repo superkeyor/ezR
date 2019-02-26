@@ -503,7 +503,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
 
             # boxcox
             family = ifelse(any(v <= 0), "bcnPower", "bcPower")
-            bc = suppressWarnings(car::powerTransform(v ~ rep(1,length(v), family = family)))
+            bc = suppressWarnings(car::powerTransform(v ~ rep(1,length(v)), family = family))
             sbc = suppressWarnings(summary(bc))
             lambda.raw = sbc$result[[1]]
             lambda = sbc$result[[2]]
