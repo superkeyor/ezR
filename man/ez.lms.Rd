@@ -70,6 +70,8 @@ an invisible data frame or list of data frame (if many y and many x)
 \cr "r.spartial"  | "r.spartial.lmrob"  | "r.spartial.lmRob"  | "r.spartial.rlm" (NA)
 \cr "p.spartial"  | "p.spartial.lmrob"  | "p.spartial.lmRob"  | "p.spartial.rlm"
 \cr
+\cr The absolute value of the semipartial correlation of X with Y is always less than or equal to that of the partial correlation of X with Y.
+\cr
 \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
 \cr 
 \cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r (not implemented in this function yet) the same in all cases.
