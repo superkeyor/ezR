@@ -25,7 +25,7 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
 \item{value.force}{T = transform regardless, or F = only if p.lambda rounded is less than .05.}
 
-\item{value.method}{boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}}
+\item{value.method}{boxcox (scaled tukey, \code{\link[car]{bcPower}}, \code{\link[car]{bcnPower}}) or modified tukey (I modified \code{\link[car]{basicPower}}), both methods keep the ordering.}
 
 \item{value.lambda}{use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda}
 }
@@ -36,7 +36,8 @@ returns transformed y, or original y.
 box-cox power transformation
 }
 \note{
-Box and Cox (1964) generally deals with non-negative responses. This funciton can handle (a few) negative responses (Hawkins and Weisberg (2017))
-\cr while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
-\cr essentially estimate/add a number (ie, gamma) to y to make it positive
+Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. 
+\cr\cr \code{\link[car]{bcPower}} handles (a few) negative responses (Hawkins and Weisberg (2017)),
+while allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox
+transformed values. Essentially estimate/add a number (ie, gamma) to y to make it positive
 }

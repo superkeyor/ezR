@@ -2263,13 +2263,14 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param plot boxcox plot. applicable only if y is a vector, only when there is an actual transformation
 #' @param print2scr print out transformation parameters, only when there is an actual transformation
 #' @param value.force T = transform regardless, or F = only if p.lambda rounded is less than .05.
-#' @param value.method boxcox (scaled tukey) or modified tukey, both methods keep the ordering. see \code{\link[car]{bcPower}}
+#' @param value.method boxcox (scaled tukey, \code{\link[car]{bcPower}}, \code{\link[car]{bcnPower}}) or modified tukey (I modified \code{\link[car]{basicPower}}), both methods keep the ordering.
 #' @param value.lambda use rounded lambda, one of c(1, 0, -1, 0.5, 0.33, -0.5, -0.33, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or original y.
 #' @importFrom car basicPower bcPower bcnPower
-#' @note Box and Cox (1964) generally deals with non-negative responses. This funciton can handle (a few) negative responses (Hawkins and Weisberg (2017))
-#' \cr while allowing for the transformed data to be interpreted similarly to the interpretation of Box- Cox transformed values.
-#' \cr essentially estimate/add a number (ie, gamma) to y to make it positive
+#' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. 
+#' \cr\cr \code{\link[car]{bcPower}} handles (a few) negative responses (Hawkins and Weisberg (2017)),
+#' while allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox
+#' transformed values. Essentially estimate/add a number (ie, gamma) to y to make it positive
 #' @export
 ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
     value.force = TRUE, value.method = c('boxcox','tukey.modified'), value.lambda = c('rounded','raw'), ...) {
