@@ -499,9 +499,32 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             hist(v, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
-            vv = ez.boxcox(v, plot=TRUE, print2scr = TRUE, force = TRUE)
+            
+            # boxcox
+            family = ifelse(any(v <= 0), "bcnPower", "bcPower")
+            c = suppressWarnings(car::powerTransform(v ~ rep(1,length(v), family = family))
+            sbc = suppressWarnings(summary(bc))
+            lambda.raw = sbc$result[[1]]
+            lambda = sbc$result[[2]]
+            p.lambda = car::testTransform(bc,lambda=lambda)$pval
+            gamma = sbc$result.gamma[[1]]
+            if (is.null(gamma)) gamma = NA
+            cat(sprintf('Box-Cox: lambda.raw = %f, lambda = %.2f, p.lambda = %f, gamma = %f, n = %d\n', lambda.raw, lambda, p.lambda, gamma, length(v)))
+            if (family=='bcnPower') {
+                vv = car::bcnPower(v, lambda=lambda, jacobian.adjusted = FALSE, gamma=gamma)
+            } else if (family=='bcPower') {
+                vv = car::bcPower(v, lambda=lambda, jacobian.adjusted = FALSE, gamma=NULL)
+            }
+            car::boxCox(v ~ x, family = family,
+            xlab = as.expression(substitute(lambda~"(raw)"~"="~lambda.raw.value*", "~lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~italic(n)~"="~n.value,
+                list(lambda.value=sprintf("%.2f",lambda),
+                    p.lambda.value=sprintf("%f",p.lambda),
+                    gamma.value=sprintf("%f",gamma),
+                    lambda.raw.value=sprintf("%f",lambda.raw),
+                    n.value=sprintf("%d",length(v))
+                    ))))
             hist(vv, col='#56B4E9',main=NULL,xlab=NULL)
-            abline(v = mean(vv,na.rm=TRUE), col = "#E69F00", lty = 3, lwd = 2)
+            abline(v = mean(vv,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
         }
     }
     return(invisible(NULL))
