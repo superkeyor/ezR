@@ -5,8 +5,8 @@
 \title{box-cox power transformation}
 \usage{
 ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-  value.force = TRUE, value.method = c("boxcox", "tukey"),
-  value.lambda = c("rounded", "raw"), ...)
+  force = TRUE, method = c("boxcox", "tukey"), precise = c("rounded",
+  "raw"), ...)
 }
 \arguments{
 \item{y}{a data frame or a vector}
@@ -23,11 +23,11 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
 \item{print2scr}{print out transformation parameters, only when there is an actual transformation}
 
-\item{value.force}{T = transform regardless, or F = only if p.lambda rounded is less than .05.}
+\item{force}{T = transform regardless, or F = only if p.lambda rounded is less than .05.}
 
-\item{value.method}{boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.}
+\item{method}{boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.}
 
-\item{value.lambda}{use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda}
+\item{precise}{use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda}
 }
 \value{
 returns transformed y, or original y.

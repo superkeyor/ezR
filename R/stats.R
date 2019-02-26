@@ -492,14 +492,14 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
         if (plot & is.numeric(v) & !all(is.na(v))) {
             opar = par(mfrow=c(3, 2), oma=c(0,0,0,0), mar = c(2,2,0.5,0.5))
             on.exit(par(opar))
-            plot(v, type='b', pch=20, col='#56B4E9', ...)
+            plot(v, type='b', pch=20, col='#56B4E9')
             abline(h = v.mean, col = "#E69F00", lty = 3, lwd = 2)
-            plot(sort(v), type='b', pch=20, col='#56B4E9', ...)
+            plot(sort(v), type='b', pch=20, col='#56B4E9')
             abline(h = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             hist(v, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = v.mean, col = "#E69F00", lty = 3, lwd = 2)
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
-            vv = ez.boxcox(v, plot=TRUE, print2scr = TRUE, value.force = TRUE)
+            vv = ez.boxcox(v, plot=TRUE, print2scr = TRUE, force = TRUE)
             hist(vv, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = mean(vv,na.rm=TRUE), col = "#E69F00", lty = 3, lwd = 2)
         }
@@ -2262,9 +2262,9 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param na.rm rm na from y,x (pairwise), if not, NA stays as is. applicable only if y is a vector.
 #' @param plot boxcox plot. applicable only if y is a vector, only when there is an actual transformation
 #' @param print2scr print out transformation parameters, only when there is an actual transformation
-#' @param value.force T = transform regardless, or F = only if p.lambda rounded is less than .05.
-#' @param value.method boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.
-#' @param value.lambda use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
+#' @param force T = transform regardless, or F = only if p.lambda rounded is less than .05.
+#' @param method boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.
+#' @param precise use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or original y.
 #' @importFrom car basicPower bcPower bcnPower
 #' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. 
@@ -2273,7 +2273,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' transformed values. Essentially estimate/add a number (ie, gamma) to y to make it positive
 #' @export
 ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-    value.force = TRUE, value.method = c('boxcox','tukey'), value.lambda = c('rounded','raw'), ...) {
+    force = TRUE, method = c('boxcox','tukey'), precise = c('rounded','raw'), ...) {
 
     if (!is.data.frame(y)) {
         x = rep(1, length(y))
@@ -2285,13 +2285,13 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         if (!is.numeric(y) | is.factor(y) | is.character(y))
             stop("y must be numeric")
 
-        value.method = match.arg(value.method)
-        value.lambda = match.arg(value.lambda)
+        method = match.arg(method)
+        precise = match.arg(precise)
         if (any(y <= 0)) {
             family = "bcnPower"
-            if (value.method=='tukey') {
+            if (method=='tukey') {
                 ez.pprint('non-positive value exists, switching method from modified tukey to boxcox...')
-                value.method='boxcox'
+                method='boxcox'
             }
         }
         else {
@@ -2315,23 +2315,23 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         gamma = sbc$result.gamma[[1]]
         if (is.null(gamma)) gamma = NA
 
-        if (value.force | p.lambda < .05){
+        if (force | p.lambda < .05){
             if (print2scr) cat(sprintf('Box-Cox: lambda = %.2f, p.lambda = %f, gamma = %f, lambda.raw = %f, n = %d\n', lambda, p.lambda, gamma, lambda.raw, length(y)))
 
-            if (value.lambda=='raw') {
+            if (precise=='raw') {
                 lambda.in.use = lambda.raw
             } else {
                 lambda.in.use = lambda
             }
 
-            if (value.method=='boxcox') {
+            if (method=='boxcox') {
                 if (family=='bcnPower') {
                     out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)
                 } else if (family=='bcPower') {
                     out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)
                 }
             # modified tukey to keep ordering
-            } else if (value.method=='tukey') {
+            } else if (method=='tukey') {
                 out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL)
                 if (lambda.in.use<0) out = -1*out
             }
@@ -2358,11 +2358,11 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
             out = y
         }
     } else if (is.data.frame(y) & is.null(col)) {
-        y[] = lapply(y,ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        y[] = lapply(y,ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,force=force,method=method,precise=precise,...)
         out = y
     } else if (is.data.frame(y) & !is.null(col)) {
         col = ez.selcol(y,col)
-        y[col] = lapply(y[col],ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,value.force=value.force,value.method=value.method,value.lambda=value.lambda,...)
+        y[col] = lapply(y[col],ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,force=force,method=method,precise=precise,...)
         out = y
     }
     return(invisible(out))
