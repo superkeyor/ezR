@@ -368,7 +368,9 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 #' @param quote TRUE/FALSE, whether add a quote around each element (switch for string or number). NULL = auto (F for numeric, T otherwise)
 #' @param order vector order for printing out, 'as','az','za'
 #' @return returns string
-#' @note sprintf("c(%s)",ez.vv(vec,...)). Typical usage: ez.sprintf('model = "{model}", type = {ez.vc(type)}')
+#' @examples
+#' # sprintf("c(%s)",ez.vv(vec,...)). 
+#' # ez.sprintf('model = "{model}", type = {ez.vc(type)}')
 #' @export
 ez.vc = function(vec,...){
     return(sprintf("c(%s)",ez.vv(vec,...)))
