@@ -369,6 +369,8 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 #' @param order vector order for printing out, 'as','az','za'
 #' @return returns string
 #' @note sprintf("c(%s)",ez.vv(vec,...))
+#' @examples
+#' # Typical usage: model = "{model}", type = {ez.vc(type)}
 #' @export
 ez.vc = function(vec,...){
     return(sprintf("c(%s)",ez.vv(vec,...)))

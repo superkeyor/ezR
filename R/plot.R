@@ -2285,7 +2285,7 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
     x.axis.size=x.axis.size/bt            ; y.axis.size=y.axis.size/bt
     x.lab.size=x.lab.size/bt              ; y.lab.size=y.lab.size/bt
 
-    model = match.arg(model)
+    model = match.arg(model)              ; type = match.arg(type)
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=legend.size[2]}  # change default legend title size 0
     if (is.character(legend.position)) legend.position = ez.sprintf('space="{legend.position}"') else legend.position = ez.sprintf('corner=c({ez.vv(legend.position,print2scr=F)})')
 
@@ -2294,7 +2294,6 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
                               ####*covariate residualize begin*####
 ####************************************************************************************************
 if (grepl("+",cmd,fixed=TRUE)) {
-    type = match.arg(type)
     if (type=='spartial') {
         if (grepl("|",cmd,fixed=TRUE)) {
             # y~x+a+b|z
