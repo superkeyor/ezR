@@ -1423,8 +1423,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
                 r.spartial = tmp$r.spartial
                 p.spartial = tmp$p.spartial
 
-                df.partial = ez.zresidize(df, y, covar, model=model, scale=TRUE)
-                df.partial[[x]] = df.spartial[[x]]
+                df.partial = ez.zresidize(df, c(y,x), covar, model=model, scale=TRUE)
                 tmp = get.stats(y=y, x=x, covar=NULL, df=df.partial, model=model, ...)
                 r.partial = tmp$r.partial
                 p.partial = tmp$p.partial
