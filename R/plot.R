@@ -2192,6 +2192,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param df data frame
 #' @param cmd like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z", "y~x+a+b|||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z--gives interaction p value), +a+b optional for covariates residualization
 #' \cr y~x+a+b|||z plots separated by z groups
+#' @param lmline T/R lmline (for all data points), particularlly useful when separate lines are plotted for each group
 #' @param loess T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))
 #' @param model one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
 #' @param type one of c('partial','spartial'), plot partial or semi-partial correlation. Only applicable when covar exists
@@ -2505,7 +2506,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # here, panel.groups is a self-defined function, para col is from ... of panel.superpose()
             # other para could be group.number
             panel.groups = function(x, y, ..., col){"{"}
-            if ({lmline}) latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},col.se=col,col=col,lwd={line.width},lty={line.style})
+            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},col.se=col,col=col,lwd={line.width},lty={line.style})
             if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
             {"}"})
             {"}"}, as.table=TRUE, {dots}

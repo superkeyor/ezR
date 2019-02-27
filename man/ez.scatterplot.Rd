@@ -24,6 +24,8 @@ ez.scatterplot(df, cmd, lmline = TRUE, loess = FALSE, model = c("lm",
 \item{cmd}{like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z", "y~x+a+b|||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z--gives interaction p value), +a+b optional for covariates residualization
 \cr y~x+a+b|||z plots separated by z groups}
 
+\item{lmline}{T/R lmline (for all data points), particularlly useful when separate lines are plotted for each group}
+
 \item{loess}{T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))}
 
 \item{model}{one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified}
