@@ -2290,6 +2290,8 @@ ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rl
     if (is.character(legend.position)) legend.position = ez.sprintf('space="{legend.position}"') else legend.position = ez.sprintf('corner=c({ez.vv(legend.position,print2scr=F)})')
 
     cmd = ez.trim(cmd) %>% gsub("|||","@",.,fixed=TRUE) %>% gsub("||","*",.,fixed=TRUE)
+    # if not dots passed, dots will be ""
+    dots = unlist(list(...)); dots = paste(names(dots),dots,sep='=',collapse=',')
 ####************************************************************************************************
                               ####*covariate residualize begin*####
 ####************************************************************************************************
@@ -2451,7 +2453,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # do not add ... to panel.points
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, as.table=TRUE,', ..., '
+            {"}"}, as.table=TRUE, {dots}
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2509,7 +2511,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, as.table=TRUE,', ..., '
+            {"}"}, as.table=TRUE, {dots}
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2563,7 +2565,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # do not add ... to panel.points
             #panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, layout=c({layout}), as.table=TRUE,', ..., '
+            {"}"}, layout=c({layout}), as.table=TRUE, {dots}
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2601,7 +2603,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
             if ({loess}) panel.loess(x, y, col.line = "{loess.color}", lwd = {loess.width}, lty = {loess.style})
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}")
-            {"}"}, as.table=TRUE,', ..., '
+            {"}"}, as.table=TRUE, {dots}
         )
         ') # end sprintf
         gghistory=paste(gghistory,
