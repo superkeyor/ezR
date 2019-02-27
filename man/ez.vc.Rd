@@ -22,5 +22,5 @@ returns string
 vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }
 \note{
-sprintf("c(%s)",ez.vv(vec,...))
+sprintf("c(%s)",ez.vv(vec,...)). Typical usage: ez.sprintf('model = "{model}", type = {ez.vc(type)}')
 }
