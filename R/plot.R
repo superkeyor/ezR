@@ -2420,7 +2420,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
         pp = lattice::xyplot({y}~{x}, df, grid=F, 
-            type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
+            type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
@@ -2470,7 +2470,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
         pp = lattice::xyplot({y}~{x}, df, grid=F, 
-            type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
+            type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
@@ -2532,7 +2532,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
         pp = lattice::xyplot({y}~{x}|{z}, df, grid=F, 
-            type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
+            type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
