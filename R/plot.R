@@ -264,8 +264,9 @@ col2gray = col2grey
 #' print out a ggplot object's history, cat(pp$gghistory)
 #' @description print out a ggplot object's history, cat(pp$gghistory)
 #' @export
-gghistory=function(pp){
+gghistory = function(pp){
   cat(pp$gghistory)
+  print(pp)
   return(invisible(pp$gghistory))
 }
 
@@ -276,7 +277,7 @@ gghistory=function(pp){
 #' #however, if "+" is used in ggplot, use the following format
 #' df %>% {ggplot1(.,)+xlab('')} %>% ggpass() %>% {ggplot2(.,)+ylab('')}
 #' @export
-ggpass=function(pp){
+ggpass = function(pp){
     if ('ggplot' %in% class(pp)) {
         df=if (is.null(pp[['df']])) pp[['data']] else pp[['df']]
         print(pp)
