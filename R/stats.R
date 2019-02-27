@@ -372,8 +372,8 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 #' \dontrun{
 #' # sprintf("c(%s)",ez.vv(vec,...)). 
 #' # ez.sprintf('model = "|model|", type = |ez.vc(type)|')  
-#' # using | to replace with brace for documentation purpose, 
-#' because of weird error of roxygen "mismatched braces or quotes"
+#' # use | to replace with brace for documentation purpose, 
+#' # because of weird error of roxygen "mismatched braces or quotes"
 #' }
 #' @export
 ez.vc = function(vec,...){
