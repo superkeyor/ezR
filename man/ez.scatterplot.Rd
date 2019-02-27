@@ -4,18 +4,19 @@
 \alias{ez.scatterplot}
 \title{scatter plot with lattice}
 \usage{
-ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
-  "rlm"), type = c("spartial", "partial"), scale = FALSE, rp = TRUE,
-  rp.x = 0.025, rp.y = 0.05, se = TRUE, layout = NULL, rp.size = 14,
-  line.width = 3, point.size = 14, x.axis.size = 16, y.axis.size = 16,
-  x.lab.size = 18, y.lab.size = 18, title.size = 20, legend.size = c(0,
-  14), line.color = "#BE1B22", line.style = 1, loess.color = "dark grey",
-  loess.width = 3, loess.style = 2, point.color = "#0086B8",
-  point.shape = 16, point.alpha = 0.9, colors = ez.palette("Zhu"),
-  shapes = c(16, 17, 15, 3, 7, 8), ylab = NULL, xlab = NULL,
-  x.tick.number = 5, y.tick.number = 5, title = NULL, zlab = NULL,
-  legend.box = FALSE, legend.position = "top",
-  legend.direction = "horizontal", hack = FALSE, print2scr = TRUE, ...)
+ez.scatterplot(df, cmd, lmline = TRUE, loess = FALSE, model = c("lm",
+  "lmrob", "lmRob", "rlm"), type = c("spartial", "partial"), scale = FALSE,
+  rp = TRUE, rp.x = 0.025, rp.y = 0.05, se = TRUE, layout = NULL,
+  rp.size = 14, line.width = 3, point.size = 14, x.axis.size = 16,
+  y.axis.size = 16, x.lab.size = 18, y.lab.size = 18, title.size = 20,
+  legend.size = c(0, 14), line.color = "#BE1B22", line.style = 1,
+  loess.color = "dark grey", loess.width = 3, loess.style = 2,
+  point.color = "#0086B8", point.shape = 16, point.alpha = 0.9,
+  colors = ez.palette("Zhu"), shapes = c(16, 17, 15, 3, 7, 8),
+  ylab = NULL, xlab = NULL, x.tick.number = 5, y.tick.number = 5,
+  title = NULL, zlab = NULL, legend.box = FALSE,
+  legend.position = "top", legend.direction = "horizontal", hack = FALSE,
+  print2scr = TRUE, ...)
 }
 \arguments{
 \item{df}{data frame}
@@ -70,9 +71,11 @@ ez.scatterplot(df, cmd, loess = FALSE, model = c("lm", "lmrob", "lmRob",
 
 \item{hack}{T/F if more than 1 model specified, plot all in one plot}
 
-\item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit
-weird. lattice orders panels from the bottom up. To get what you want either use as.table = TRUE or
-reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))}
+\item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. E.g.,
+\cr xlim=c(1,10)
+\cr jitter.x=T, jitter.y=T, factor=1, amount=NULL see \code{\link[base]{jitter}}
+\cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up. 
+To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))}
 }
 \value{
 a lattice plot

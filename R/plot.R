@@ -2216,13 +2216,15 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr    c(x,y,two-element fractional numeric vector)     c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position, but within the plot box.
 #' @param legend.direction  horizontal or vertical
 #' @param legend.size c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. eg, xlim=c(1,10), layout=c(col,row)--a bit
-#' weird. lattice orders panels from the bottom up. To get what you want either use as.table = TRUE or
-#' reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))
+#' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. E.g.,
+#' \cr xlim=c(1,10)
+#' \cr jitter.x=T, jitter.y=T, factor=1, amount=NULL see \code{\link[base]{jitter}}
+#' \cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up. 
+#' To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))
 #' @return a lattice plot
 #' @note specify auto through param colors, shapes
 #' @export
-ez.scatterplot = function(df,cmd,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),type=c('spartial','partial'),scale=FALSE,rp=TRUE,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
+ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),type=c('spartial','partial'),scale=FALSE,rp=TRUE,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
     rp.size=14,line.width=3,point.size=14,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,title.size=20,legend.size=c(0,14),
     line.color='#BE1B22',line.style=1,
     loess.color='dark grey',loess.width=3,loess.style=2,
@@ -2416,7 +2418,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}, df, grid=F, type="",
+        pp = lattice::xyplot({y}~{x}, df, grid=F, 
+            type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
             groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
@@ -2443,16 +2446,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
                             just = c("left", "bottom"))
             # do not add ... to panel.smoother, panel.loess
             # panel.smoother ignores col.line, but accepts col
-            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
+            if ({lmline}) latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
             if ({loess}) panel.loess(x, y, col.line = "{loess.color}", lwd = {loess.width}, lty = {loess.style})
-
-            panel.superpose(x, y, ...,
-            panel.groups = function(x, y, ...){"{"}
-            panel.xyplot(x, y, ...)
-            # print(names(list(...)))   # a lot
-            # do not add ... to panel.points
-            panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
-            {"}"})
             {"}"}, as.table=TRUE, {dots}
         )
         ') # end sprintf
@@ -2473,8 +2468,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}, df, grid=F, type="",
-            groups = {z}, col = c({point.color}),
+        pp = lattice::xyplot({y}~{x}, df, grid=F, 
+            type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
+            groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
             par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
@@ -2498,18 +2494,19 @@ if (grepl("+",cmd,fixed=TRUE)) {
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
-            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
+            if ({lmline}) latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
             if ({loess}) panel.loess(x, y, col.line = "{loess.color}", lwd = {loess.width}, lty = {loess.style})
 
             # separate groups
             panel.superpose(x, y, ...,
-            # confusingly, specify col within panel.groups(), col magically appear and brought from col above
+            # print(names(list(...)))  # debug
+            # see also https://github.com/cran/lattice/blob/master/R/panel.superpose.R
+            # https://github.com/cran/lattice/blob/master/R/xyplot.R
+            # here, panel.groups is a self-defined function, para col is from ... of panel.superpose()
             # other para could be group.number
             panel.groups = function(x, y, ..., col){"{"}
-            panel.xyplot(x, y, ...)
-            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},col.se=col,col=col,lwd={line.width},lty={line.style})
+            if ({lmline}) latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},col.se=col,col=col,lwd={line.width},lty={line.style})
             if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
-            panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
             {"}"}, as.table=TRUE, {dots}
         )
@@ -2533,8 +2530,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}|{z}, df, grid=F, type="p",
-            groups = {z},pch = c({point.shape}), col = c({point.color}),
+        pp = lattice::xyplot({y}~{x}|{z}, df, grid=F, 
+            type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
+            groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
             par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
@@ -2559,11 +2557,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
-            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col=col)
+            if ({lmline}) latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col=col)
             if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
-            # print(names(list(...)))   # a lot
-            # do not add ... to panel.points
-            #panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
             {"}"}, layout=c({layout}), as.table=TRUE, {dots}
         )
@@ -2582,7 +2577,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}, df, grid=F, type="",
+        pp = lattice::xyplot({y}~{x}, df, grid=F, 
+            type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),
             par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
@@ -2600,9 +2596,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
                             just = c("left", "bottom"))
             # do not add ... to panel.smoother, panel.loess
             # panel.smoother ignores col.line, but accepts col
-            latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
+            if ({lmline}) latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
             if ({loess}) panel.loess(x, y, col.line = "{loess.color}", lwd = {loess.width}, lty = {loess.style})
-            panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}")
             {"}"}, as.table=TRUE, {dots}
         )
         ') # end sprintf
