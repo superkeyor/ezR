@@ -21,3 +21,11 @@ returns string
 \description{
 vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }
+\examples{
+\dontrun{
+# sprintf("c(\%s)",ez.vv(vec,...)). 
+# ez.sprintf('model = "|model|", type = |ez.vc(type)|')  
+# using | to replace with brace for documentation purpose, 
+because of weird error of roxygen "mismatched braces or quotes"
+}
+}
