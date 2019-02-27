@@ -1221,8 +1221,9 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr "p.partial"   | "p.partial.lmrob"   | "p.partial.lmRob"   | "p.partial.rlm"
 #' \cr
 #' \cr Summary: The absolute value of the semipartial correlation of X with Y is always less than or equal to that of the partial correlation of X with Y.
-#' \cr MLR p = ppcor::pcor.test ~>= p.partial = (y.residual, x.residual)
-#' \cr ppcor::spcor.test ~>= p.spartial = (y, x.residual)
+#' \cr MLR p = ppcor::pcor.test ~=(>?) p.partial = (y.residual, x.residual)
+#' \cr ppcor::spcor.test ~=(>?) p.spartial = (y, x.residual)
+#' \cr ? might be larger, because after residualized, no covar, so dof is larger ?
 #' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
 #' \cr 
