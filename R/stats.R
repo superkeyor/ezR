@@ -371,7 +371,6 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 #' @examples
 #' \dontrun{
 #' # sprintf("c(%s)",ez.vv(vec,...)). 
-#' # ez.sprintf('model = "\{model\}", type = \{ez.vc(type)\}')
 #' }
 #' @export
 ez.vc = function(vec,...){
