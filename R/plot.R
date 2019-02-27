@@ -2451,7 +2451,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # do not add ... to panel.points
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, as.table=TRUE,' ... '
+            {"}"}, as.table=TRUE,', ..., '
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2509,7 +2509,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             if ({loess}) panel.loess(x, y, col.line = col, lwd = {loess.width}, lty = {loess.style})
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, as.table=TRUE,' ... '
+            {"}"}, as.table=TRUE,', ..., '
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2563,7 +2563,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # do not add ... to panel.points
             #panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}))
             {"}"})
-            {"}"}, layout=c({layout}), as.table=TRUE,' ... '
+            {"}"}, layout=c({layout}), as.table=TRUE,', ..., '
         )
         ') # end sprintf
         gghistory=paste(gghistory,
@@ -2601,7 +2601,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             latticeExtra::panel.smoother(x,y,method=".scatterplot.ablinemethod",model="{model}",se={se},lwd={line.width},lty={line.style},col="{line.color}")
             if ({loess}) panel.loess(x, y, col.line = "{loess.color}", lwd = {loess.width}, lty = {loess.style})
             panel.points(x, y, cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}")
-            {"}"}, as.table=TRUE,' ... '
+            {"}"}, as.table=TRUE,', ..., '
         )
         ') # end sprintf
         gghistory=paste(gghistory,
