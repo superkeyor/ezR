@@ -2436,7 +2436,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel = function(x, y, ...){"{"}
             panel.xyplot(x, y, ...)
             # print(names(list(...)))   # "subscripts", "grid", "type", "groups"
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{type}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{ez.vc(type)}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
@@ -2493,7 +2493,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel = function(x, y, ...,model=model){"{"}
             # cross groups
             panel.xyplot(x, y, ...)
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{type}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{ez.vc(type)}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
@@ -2554,7 +2554,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel.superpose(x, y, ...,
             panel.groups = function(x, y, ..., col){"{"}
             panel.xyplot(x, y, ...)
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(data.frame({x}=x,{y}=y), "{y}", "{x}", model = "{model}", type = "{type}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(data.frame({x}=x,{y}=y), "{y}", "{x}", model = "{model}", type = "{ez.vc(type)}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
@@ -2593,7 +2593,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             panel = function(x, y, ...){"{"}
             panel.xyplot(x, y, ...)
             # print(names(list(...)))   # "subscripts", "grid", "type", "groups"
-            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{type}"))),
+            if ({rp}) grid::grid.text(ez.eval(as.expression(.scatterplot.rnp(df, "{y}", "{x}", model = "{model}", type = "{ez.vc(type)}"))),
                             x = unit({rp.x}, "npc"), y = unit({rp.y}, "npc"),
                             gp = grid::gpar(cex = {rp.size}, fontfamily = "{RMN}"),
                             just = c("left", "bottom"))
