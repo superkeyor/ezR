@@ -21,8 +21,3 @@ returns string
 \description{
 vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view excel), View (built-in).
 }
-\examples{
-\dontrun{
-# sprintf("c(\%s)",ez.vv(vec,...)). 
-}
-}
