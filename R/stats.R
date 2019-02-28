@@ -962,7 +962,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
         # for some reason, robustbase::lmrob.control() cannot have see with a single value, like seed=1313
         if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,data,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
         # lmRob function automatically chooses an appropriate algorithm to compute a final robust estimate with high breakdown point and high efficiency
-        if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
+        if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,data,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,trace=FALSE,...))
         # increased maxit from 20, because sometimes, rlm fails
         # suppress 'rlm' failed to converge in xx steps
         if (model=='rlm') m = suppressWarnings(MASS::rlm(form,data,maxit=500,na.action=na.action,...))
@@ -1384,7 +1384,7 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             if (model=='lmrob') m = suppressWarnings(robustbase::lmrob(form,df,control=robustbase::lmrob.control(max.it=500,maxit.scale=500),na.action=na.action,...))
             # lmRob function automatically chooses an appropriate algorithm to compute a final robust estimate
             # with high breakdown point and high efficiency
-            if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,df,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,...))
+            if (model=='lmRob') m = suppressWarnings(robust::lmRob(form,df,control=robust::lmRob.control(seed=1313,mxr=500,mxf=500,mxs=500),na.action=na.action,trace=FALSE,...))
             # increased maxit from 20, because sometimes, rlm fails
             # suppress 'rlm' failed to converge in xx steps
             if (model=='rlm') m = suppressWarnings(MASS::rlm(form,df,maxit=500,na.action=na.action,...))
