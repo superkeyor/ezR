@@ -1493,10 +1493,15 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.spartial.")'))){
-                robustp = result.report[i,ez.selcol(result.report,'starts_with("p.spartial.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                ez.pprint(sprintf('lm(%s~%s): n = %d, P %s, SP r = %.2f, %s, robust ps %s', Y,X,result.report$n,ez.p.apa(result.report$p.partial[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2),robustp),color='cyan')
+                robustp = result.report[i,ez.selcol(result.report,'starts_with("p.partial.")')] %>% ez.p.apa(prefix=0) %>% toString()
+                robustsp = result.report[i,ez.selcol(result.report,'starts_with("p.spartial.")')] %>% ez.p.apa(prefix=0) %>% toString()
+                ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s, %s; SP r = %.2f, %s, %s', Y,X,result.report$n,
+                    result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2),robustp,
+                    result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2),robustsp),color='cyan')
             } else {
-                ez.pprint(sprintf('lm(%s~%s): n = %d, P %s, SP r = %.2f, %s', Y,X,result.report$n,ez.p.apa(result.report$p.partial[i],prefix=2), result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2)),color='cyan')
+                ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s; SP r = %.2f, %s', Y,X,result.report$n,
+                    result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2),
+                    result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2)),color='cyan')
             }
         }
         # ez.pprint('<<<<<<')
