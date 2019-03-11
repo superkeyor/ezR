@@ -2279,7 +2279,7 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
         return(pp)
     }
 
-    if (print2scr) {ez.lms(df,cmd,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,error=T)}
+    if (print2scr) {ez.lms(df,cmd,report=T,model=model,view=F,plot=F,error=T)}
 
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
