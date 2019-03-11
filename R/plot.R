@@ -824,7 +824,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
@@ -894,7 +894,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                   sprintf('df=ez.dropna(df,c("%s","%s", "%s"))',yy,xx,paste(covar,sep='',collapse='","')),
                   tt,sep='\n')
 
-        if (theme.apa) tt = paste0(tt,'+theme_apa()')
+        if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
         eval(parse(text = tt))
         pp$gghistory=paste0(gghistory,'\nprint(pp)')
         pp$df=df.bak
@@ -1011,7 +1011,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             }
         }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -1039,7 +1039,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @return a ggplot object (+theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot) , +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=0.7,error.gap=0,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
@@ -1162,7 +1162,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
             }
         }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -1180,7 +1180,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
 #' @param facet  one of 'cols', 'rows', 'wrap'
-#' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE){
@@ -1274,7 +1274,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,f
         }
     }
 
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -1294,7 +1294,7 @@ ez.xyplot = function(df,cmd,ylab=NULL,xlab=NULL,xangle=0,vjust=NULL,hjust=NULL,f
 #' @param xsize x axis label font relative size
 #' @param ysize y axis label font relative size
 #' @param legend.position "bottom", "top", "left", "right", "none"
-#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot)
 #' @export
 ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c("blue", "white", "red"), basesize=9, xsize=1, ysize=1, legend.position="right",theme.apa=TRUE){
     df.bak=df
@@ -1366,7 +1366,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
                     , x, y, z, colors[1], colors[2], colors[3], basesize, legend.position, angle, xsize, ysize
         )
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     gghistory=paste(gghistory,tt,sep='\n')
     pp=p
@@ -1825,7 +1825,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @param facetfontsize fontsize of id level names (only valid when facet=T)
 #' @param color color for different id levels, if NULL, remain the same for different id levels
 #' @param linetype linetype for different id levels, if NULL, remain the same for different id levels
-#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot)
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
@@ -1902,13 +1902,13 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     if (is.null(color)) {
         cmd = sprintf('p = p + scale_color_manual(values=rep("black",nlevels(factor(df$%s))))
                       ',id)
-        if (theme.apa) cmd = paste0(cmd,'+theme_apa()')
+        if (theme.apa) cmd = paste0(cmd,'+ezR::theme_apa()')
         eval(parse(text = cmd))
     }
     if (is.null(linetype)) {
         cmd = sprintf('p = p + scale_linetype_manual(values=rep("solid",nlevels(factor(df$%s))))
                       ',id)
-        if (theme.apa) cmd = paste0(cmd,'+theme_apa()')
+        if (theme.apa) cmd = paste0(cmd,'+ezR::theme_apa()')
         eval(parse(text = cmd))
     }
     gghistory=paste(gghistory,cmd,sep='\n')
@@ -1927,7 +1927,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 #' @param basesize base font size
 #' @param xsize x axis label font relative size
 #' @param ysize y axis label font relative size
-#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot)
 #' @export
 ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=1){
 
@@ -2639,7 +2639,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param se standard error of linear regression line
 #' @param rug marginal rug indicating univariate distribution
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
-#' @return a ggplot object (+theme_apa() to get apa format plot)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot)
 #' @export
 ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
 ####************************************************************************************************
@@ -2740,7 +2740,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         }
         ####################################################### subfunction /
         '
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     gghistory=paste(gghistory,tt,sep='\n')
 
@@ -2868,7 +2868,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                    tt,sep='\n')
       }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -2898,7 +2898,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
 #' @param facet  one of 'cols', 'rows', 'wrap'
-#' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
@@ -3091,7 +3091,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             }
         }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -3120,7 +3120,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
@@ -3177,7 +3177,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palett
          sprintf('xx="%s"',xx),
          'dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
          tt,sep='\n')
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
@@ -3207,7 +3207,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palett
 #' @param hjust  hjust of x text NULL
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @param print.cmd T/F
-#' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+#' @return a ggplot object (+ezR::theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',colors=ez.palette("Zhu"),alpha=0.5,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE,...) {
@@ -3309,7 +3309,7 @@ ez.hist = function(x,cmd,bins=60,density=FALSE,xline=NULL,color='color',colors=e
             }
         }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+ezR::theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak

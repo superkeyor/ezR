@@ -23,7 +23,7 @@ ez.wherena(df, id = NULL, color = "red", angle = 270, basesize = 9,
 \item{ysize}{y axis label font relative size}
 }
 \value{
-a ggplot object (+theme_apa() to get apa format plot)
+a ggplot object (+ezR::theme_apa() to get apa format plot)
 }
 \description{
 visualize where all the NAs of a dataframe are

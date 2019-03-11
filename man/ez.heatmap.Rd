@@ -31,7 +31,7 @@ ez.heatmap(df, id, show.values = F, remove.zero = T, angle = 270,
 \item{legend.position}{"bottom", "top", "left", "right", "none"}
 }
 \value{
-a ggplot object (+theme_apa() to get apa format plot)
+a ggplot object (+ezR::theme_apa() to get apa format plot)
 }
 \description{
 plot a heatmap with values shown
