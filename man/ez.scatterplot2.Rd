@@ -61,7 +61,7 @@ ez.scatterplot2(df, cmd, rp.size = 5, rp.x = 0.25, rp.y = 0.99,
 \item{ellipse}{draw confidence ellipses, powered by stat_ellipse()}
 }
 \value{
-a ggplot object (+ezR::theme_apa() to get apa format plot)
+a ggplot object (+theme_apa() to get apa format plot)
 }
 \description{
 scatter plot with ggplot

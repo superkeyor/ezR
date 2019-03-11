@@ -53,7 +53,7 @@ ez.hist(x, cmd, bins = 60, density = FALSE, xline = NULL,
 \item{print.cmd}{T/F}
 }
 \value{
-a ggplot object (+ezR::theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 }
 \description{

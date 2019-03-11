@@ -30,7 +30,7 @@ ez.radarmap(df, id, stats = "mean", lwd = 1, angle = 0, fontsize = 0.8,
 \item{linetype}{linetype for different id levels, if NULL, remain the same for different id levels}
 }
 \value{
-a ggplot object (+ezR::theme_apa() to get apa format plot)
+a ggplot object (+theme_apa() to get apa format plot)
 }
 \description{
 variables/axes arranged in the shape of a radar map, scales are rescaled to 0-1
