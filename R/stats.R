@@ -1767,7 +1767,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             # sprintf('%.2e',NA) OK
-            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e\t%s\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
+            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e\t%s\t\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
