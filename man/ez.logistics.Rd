@@ -6,7 +6,8 @@
 \usage{
 ez.logistics(df, y, x, covar = NULL, report = T, view = F, plot = F,
   pmethods = c("bonferroni", "fdr"), cols = 3, point.size = 10,
-  point.shape = 16, lab.size = 18, text.size = 16, error = T, ...)
+  point.shape = 16, lab.size = 18, text.size = 16, error = T, pe = F,
+  ...)
 }
 \arguments{
 \item{df}{a data frame. Internally go through dropna (no ez.2value, scale)

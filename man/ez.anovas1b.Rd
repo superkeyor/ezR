@@ -6,7 +6,8 @@
 \usage{
 ez.anovas1b(df, y, x, covar = NULL, report = T, view = F, plot = F,
   cols = 3, pmethods = c("bonferroni", "fdr"), point.size = 10,
-  point.shape = 16, lab.size = 18, text.size = 16, error = T, ...)
+  point.shape = 16, lab.size = 18, text.size = 16, error = T, pe = F,
+  ...)
 }
 \arguments{
 \item{df}{a data frame, Internally go through dropna --> ez.2value(y),ez.2factor(x),ez.2value(covar)}

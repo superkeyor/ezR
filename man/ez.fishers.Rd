@@ -6,7 +6,7 @@
 \usage{
 ez.fishers(df, y, x, report = T, view = F, plot = F,
   pmethods = c("bonferroni", "fdr"), cols = 3, lab.size = 18,
-  text.size = 16, width = 300, error = T, ...)
+  text.size = 16, width = 300, error = T, pe = F, ...)
 }
 \arguments{
 \item{df}{a data frame, internal go through dropna --> ez.2factor}

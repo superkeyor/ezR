@@ -1005,7 +1005,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
     # yet another patch for cmd input
     if (grepl('[~|]',y[1],perl=TRUE)){
         # peel the onion
@@ -1100,7 +1100,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         ss = sm[['Sum Sq']]
         petasq2 = ss[2]/(ss[2]+ss[length(ss)])
         ph = ez.esp('summary( multcomp::glht(m, linfct=multcomp::mcp("{x}" = "Tukey")) )')
-        posthoc_tukey = paste0('(',names(ph$test$tstat),') ', ez.p.apa(ph$test$pvalues,prefix=2),'; ',collapse='')
+        posthoc_tukey = paste0('(',names(ph$test$tstat),') ', ez.p.apa(ph$test$pvalues,prefix=2,pe=pe),'; ',collapse='')
 
         # df.bak with dropna, so na.rm needed
         uniques_drop_na.x=length(unique(df.bak[[x]])); nlevels.x=nlevels(df.bak[[x]])
@@ -1141,7 +1141,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.pprint(sprintf('aov(%s~%s): %s\t%.2f\t%s',Y,X,result.report$raw.adj.mean.sd[i],result.report$F[i],ez.p.apa(result.report$p[i],prefix=0)),color='cyan')
+            ez.pprint(sprintf('aov(%s~%s): %s\t%.2f\t%s',Y,X,result.report$raw.adj.mean.sd[i],result.report$F[i],ez.p.apa(result.report$p[i],prefix=0,pe=pe)),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
@@ -1157,7 +1157,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
             if (result.report$F[i] < 1) {
                 ez.pprint(sprintf('aov(%s~%s): F(%s) < 1',Y,X,result.report$dof[i]),color='cyan')
             } else {
-                ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
+                ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
             }
         }
         # ez.pprint('<<<<<<')
@@ -1280,7 +1280,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' lm(y~x+zzz) %>% summary
 #' # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
 #' @export
-ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
+ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
     # yet another patch for cmd input
     if (grepl('~',y[1],fixed=TRUE)){
         # peel the onion
@@ -1493,15 +1493,15 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
             if (!is.null(ez.selcol(result.report,'starts_with("p.spartial.")'))){
-                robustp = result.report[i,ez.selcol(result.report,'starts_with("p.partial.")')] %>% ez.p.apa(prefix=0) %>% toString()
-                robustsp = result.report[i,ez.selcol(result.report,'starts_with("p.spartial.")')] %>% ez.p.apa(prefix=0) %>% toString()
+                robustp = result.report[i,ez.selcol(result.report,'starts_with("p.partial.")')] %>% ez.p.apa(prefix=0,pe=pe) %>% toString()
+                robustsp = result.report[i,ez.selcol(result.report,'starts_with("p.spartial.")')] %>% ez.p.apa(prefix=0,pe=pe) %>% toString()
                 ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s, %s; SP r = %.2f, %s, %s', Y,X,result.report$n,
-                    result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2),robustp,
-                    result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2),robustsp),color='cyan')
+                    result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2,pe=pe),robustp,
+                    result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2,pe=pe),robustsp),color='cyan')
             } else {
                 ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s; SP r = %.2f, %s', Y,X,result.report$n,
-                    result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2),
-                    result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2)),color='cyan')
+                    result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2,pe=pe),
+                    result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2,pe=pe)),color='cyan')
             }
         }
         # ez.pprint('<<<<<<')
@@ -1555,7 +1555,7 @@ ez.regressions=ez.lms
 #' \cr
 #' \cr dof
 #' @export
-ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,...) {
+ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x); if (!is.null(covar)) covar=ez.selcol(df,covar)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
     text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt ; point.size = point.size/bp
@@ -1646,7 +1646,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.pprint(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p,prefix=2)),color='cyan')
+            ez.pprint(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p,prefix=2,pe=pe)),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
@@ -1686,7 +1686,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' @note odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
 #' \cr also computes chisq.test
 #' @export
-ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,width=300,error=T,...) {
+ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,width=300,error=T,pe=F,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
     text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
@@ -1767,7 +1767,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             # sprintf('%.2e',NA) OK
-            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e, %s; X2 = %.2f, %s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=2)),color='cyan')
+            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e\t%s;\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
