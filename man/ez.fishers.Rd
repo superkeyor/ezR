@@ -37,4 +37,5 @@ fisher.test(y,x), for many y and/or many x
 }
 \note{
 odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
+\cr also computes chisq.test
 }

@@ -1141,7 +1141,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.pprint(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0)),color='cyan')
+            ez.pprint(sprintf('aov(%s~%s): %s\t%.2f\t%s',Y,X,result.report$raw.adj.mean.sd[i],result.report$F[i],ez.p.apa(result.report$p[i],prefix=0)),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
@@ -1684,6 +1684,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' @param error whether show error message when error occurs
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' @note odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
+#' \cr also computes chisq.test
 #' @export
 ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,width=300,error=T,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x)
@@ -1733,11 +1734,15 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         countTable = table(df[[y]],df[[x]])   # by default, pairwise NA auto removed
         counts = toString(countTable,width=width)
         total = sum(countTable)
-        out = list(y=y,x=x,p=p,odds_ratio=odds_ratio,counts=counts,total=total)
+
+        mm = suppressWarnings(chisq.test(df[[y]],df[[x]],...))
+        chisq = mm$statistic
+        p.chisq = mm$p.value
+        out = list(y=y,x=x,p=p,p.chisq=p.chisq,chisq=chisq,odds_ratio=odds_ratio,counts=counts,total=total)
         return(out)
         }, error = function(e) {
             if (error) ez.pprint(sprintf('EZ Error: fisher.test(%s, %s). NA returned.',y,x,color='red'))
-            return(list(y=y,x=x,p=NA,odds_ratio=NA,counts=NA,total=NA))
+            return(list(y=y,x=x,p=NA,p.chisq=NA,chisq=NA,odds_ratio=NA,counts=NA,total=NA))
         }) # end try catch
     }
 
@@ -1762,7 +1767,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             # sprintf('%.2e',NA) OK
-            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e, %s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2)),color='cyan')
+            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e, %s; X2 = %.2f, %s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=2)),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
