@@ -1685,6 +1685,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' @note odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
 #' \cr also computes chisq.test
+#' \cr fisher.test() does not produce a test statistic, but SPSS does (termed as D(x), or FI(x), see p 151 of IBM SPSS Exact Tests)
 #' @export
 ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,width=300,error=T,pe=F,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x)
