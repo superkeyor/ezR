@@ -1736,11 +1736,15 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 
         countTable = table(df[[y]],df[[x]])   # by default, pairwise NA auto removed
         rcategory = row.names(countTable); ccategory = colnames(countTable)
-        counts = paste0('(',toString(ccategory),')')
+        counts1 = paste0('(',toString(ccategory),')')
         for (i in 1:nrow(countTable)){
-            counts = paste0(counts, ' | ', rcategory[i], ': ', paste0(countTable[i,],collapse='\t'))
+            counts1 = paste0(counts1, ' | ', rcategory[i], ': ', paste0(countTable[i,],collapse='\t'))
         }
-        counts = toString(counts,width=width)
+        counts2 = paste0('(',toString(rcategory),')')
+        for (i in 1:ncol(countTable)){
+            counts2 = paste0(counts2, ' | ', ccategory[i], ': ', paste0(countTable[,i],collapse='/'))
+        }
+        counts = toString(paste0(counts1,'\n',counts2),width=width)
         total = sum(countTable)
 
         mm = suppressWarnings(chisq.test(df[[y]],df[[x]],...))
