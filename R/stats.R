@@ -1742,9 +1742,9 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         p.chisq = mm$p.value
 
         df = ez.factorelevel(df,c(y,x))
-        ph = suppressWarnings(ez.fisher.posthoc(table(df[[y]],df[[x]]), 
+        ph = ez.fisher.posthoc(table(df[[y]],df[[x]]), 
             compare = compare, fisher = TRUE, gtest = FALSE, chisq = TRUE, 
-            method = "fdr", correct = "none", cramer = FALSE, digits = 8))
+            method = "fdr", correct = "none", cramer = FALSE, digits = 8)
         posthoc_fisher = paste0('(',ph$Comparison,') ', ez.p.apa(ph$p.adj.Fisher,prefix=2,pe=pe), ', ', ez.p.apa(ph$p.adj.Chisq,prefix=0,pe=pe), '; ',collapse='')
 
         out = list(y=y,x=x,p=p,p.chisq=p.chisq,chisq=chisq,odds_ratio=odds_ratio,counts=counts,total=total,posthoc_fisher=posthoc_fisher)
@@ -1840,6 +1840,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #' @param correct The correction method to pass to \code{DescTools::GTest}.
 #' @param cramer If \code{"TRUE"}, includes and effect size, Cramer's V in the
 #'               output.
+#'               --jerry,does not support this because of cramerV() from the rcompansion package not included in this function
 #' @param digits The number of significant digits in the output.
 #' @param ... Additional arguments, passed to \code{stats::fisher.test}, 
 #'            \code{DescTools::GTest}, or \code{stats::chisq.test}.
@@ -1854,13 +1855,13 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #'           \code{\link{pairwiseNominalMatrix}}
 #'         
 #' @examples
-#' posthoc for fisher, essentially fisher and then apply fdr correction
-#' pairwiseNominalIndependence from rcompansion
-#' nbk %>% ez.factorelevel(c('dx','race'))->tmp
-#' table(tmp$dx,tmp$race) %>% ez.fisher.posthoc()
-#' note: table(tmp$race,tmp$dx) %>% ez.fisher.posthoc() is different
-#' also similar function from RVAideMemoire::fisher.multcomp
-#' but this funciton can do all (fisher, chisq and g-test)
+#' # posthoc for fisher, essentially fisher and then apply fdr correction
+#' # pairwiseNominalIndependence from rcompansion
+#' # nbk %>% ez.factorelevel(c('dx','race'))->tmp
+#' # table(tmp$dx,tmp$race) %>% ez.fisher.posthoc()
+#' # note: table(tmp$race,tmp$dx) %>% ez.fisher.posthoc() is different
+#' # also similar function from RVAideMemoire::fisher.multcomp
+#' # but this funciton can do all (fisher, chisq and g-test)
 #' 
 #' ### Independence test for a 4 x 2 matrix
 #' data(Anderson)
@@ -1880,8 +1881,8 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #' @export
 ez.fisher.posthoc = 
     function(x, compare="row",
-                     fisher=TRUE, gtest=TRUE, chisq=TRUE,
-                     method="fdr", correct="none", cramer=FALSE, digits=3, ...) 
+             fisher=TRUE, gtest=TRUE, chisq=TRUE,
+             method="fdr", correct="none", cramer=FALSE, digits=3, ...) 
     {
     if(compare=="row"){n = nrow(x)}
     if(compare=="column" | compare=="col"){n = ncol(x)}

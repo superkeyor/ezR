@@ -27,7 +27,8 @@ See \code{stats::p.adjust}.}
 \item{correct}{The correction method to pass to \code{DescTools::GTest}.}
 
 \item{cramer}{If \code{"TRUE"}, includes and effect size, Cramer's V in the
-output.}
+output.
+--jerry,does not support this because of cramerV() from the rcompansion package not included in this function}
 
 \item{digits}{The number of significant digits in the output.}
 
@@ -44,13 +45,13 @@ Conducts pairwise tests for a 2-dimensional matrix,
              or G-test.
 }
 \examples{
-posthoc for fisher, essentially fisher and then apply fdr correction
-pairwiseNominalIndependence from rcompansion
-nbk \%>\% ez.factorelevel(c('dx','race'))->tmp
-table(tmp$dx,tmp$race) \%>\% ez.fisher.posthoc()
-note: table(tmp$race,tmp$dx) \%>\% ez.fisher.posthoc() is different
-also similar function from RVAideMemoire::fisher.multcomp
-but this funciton can do all (fisher, chisq and g-test)
+# posthoc for fisher, essentially fisher and then apply fdr correction
+# pairwiseNominalIndependence from rcompansion
+# nbk \%>\% ez.factorelevel(c('dx','race'))->tmp
+# table(tmp$dx,tmp$race) \%>\% ez.fisher.posthoc()
+# note: table(tmp$race,tmp$dx) \%>\% ez.fisher.posthoc() is different
+# also similar function from RVAideMemoire::fisher.multcomp
+# but this funciton can do all (fisher, chisq and g-test)
 
 ### Independence test for a 4 x 2 matrix
 data(Anderson)
