@@ -5,8 +5,8 @@
 \title{fisher.test(y,x), for many y and/or many x}
 \usage{
 ez.fishers(df, y, x, report = T, view = F, plot = F,
-  pmethods = c("bonferroni", "fdr"), cols = 3, lab.size = 18,
-  text.size = 16, width = 300, error = T, pe = F, ...)
+  pmethods = c("bonferroni", "fdr"), compare = "row", cols = 3,
+  lab.size = 18, text.size = 16, width = 300, error = T, pe = F, ...)
 }
 \arguments{
 \item{df}{a data frame, internal go through dropna --> ez.2factor}
@@ -22,6 +22,8 @@ ez.fishers(df, y, x, report = T, view = F, plot = F,
 \item{plot}{T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05}
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
+
+\item{compare}{For posthoc, see more \code{\link{ez.fisher.posthoc}}. If "row", treats the rows as the grouping variable. If "column", treats the columns as the grouping variable.}
 
 \item{cols}{number of columns for multiplot. NULL=auto calculate}
 

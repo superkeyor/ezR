@@ -1678,6 +1678,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' @param report print results (in APA format)
 #' @param view call View(result)
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
+#' @param compare For posthoc, see more \code{\link{ez.fisher.posthoc}}. If "row", treats the rows as the grouping variable. If "column", treats the columns as the grouping variable.
 #' @param plot T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
 #' @param width width for toString(countTable,width=width)
@@ -1687,7 +1688,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' \cr also computes chisq.test
 #' \cr fisher.test() does not produce a test statistic, but SPSS does (termed as D(x), or FI(x), see p 151 of IBM SPSS Exact Tests)
 #' @export
-ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,lab.size=18,text.size=16,width=300,error=T,pe=F,...) {
+ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),compare='row',cols=3,lab.size=18,text.size=16,width=300,error=T,pe=F,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
     text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
@@ -1697,7 +1698,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         xlist = list(); plist = list()
         for (xx in x) {
             # plot = F; no need for sepearte plotlist
-            result = ez.fishers(df,y,xx,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,lab.size=lab.size,text.size=text.size,title.size=title.size,width=width)
+            result = ez.fishers(df,y,xx,error=error,view=view,plot=F,cols=cols,pmethods=pmethods,compare=compare,lab.size=lab.size,text.size=text.size,title.size=title.size,width=width)
             result = result %>% ez.dropna('p',print2scr=F)
             xlist[[xx]] = result
 
@@ -1726,7 +1727,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
     df = ez.dropna(df,print2scr=F)
     df = ez.2factor(df)
 
-    getStats = function(y,x,df,...){
+    getStats = function(y,x,df,compare,...){
         tryCatch({
         m = fisher.test(df[[y]],df[[x]],...) # by default, pairwise NA auto removed
         p = m$p.value
@@ -1739,15 +1740,22 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         mm = suppressWarnings(chisq.test(df[[y]],df[[x]],...))
         chisq = mm$statistic
         p.chisq = mm$p.value
-        out = list(y=y,x=x,p=p,p.chisq=p.chisq,chisq=chisq,odds_ratio=odds_ratio,counts=counts,total=total)
+
+        df = ez.factorelevel(df,c(y,x))
+        ph = suppressWarnings(ez.fisher.posthoc(table(df[[y]],df[[x]]), 
+            compare = compare, fisher = TRUE, gtest = FALSE, chisq = TRUE, 
+            method = "fdr", correct = "none", cramer = FALSE, digits = 8))
+        posthoc_fisher = paste0('(',ph$Comparison,') ', ez.p.apa(ph$p.adj.Fisher,prefix=2,pe=pe), ', ', ez.p.apa(ph$p.adj.Chisq,prefix=0,pe=pe), '; ',collapse='')
+
+        out = list(y=y,x=x,p=p,p.chisq=p.chisq,chisq=chisq,odds_ratio=odds_ratio,counts=counts,total=total,posthoc_fisher=posthoc_fisher)
         return(out)
         }, error = function(e) {
             if (error) ez.pprint(sprintf('EZ Error: fisher.test(%s, %s). NA returned.',y,x,color='red'))
-            return(list(y=y,x=x,p=NA,p.chisq=NA,chisq=NA,odds_ratio=NA,counts=NA,total=NA))
+            return(list(y=y,x=x,p=NA,p.chisq=NA,chisq=NA,odds_ratio=NA,counts=NA,total=NA,posthoc_fisher=NA))
         }) # end try catch
     }
 
-    result = mapply(getStats,y=y,x=x,MoreArgs=list(df=df,...),USE.NAMES=F)
+    result = mapply(getStats,y=y,x=x,MoreArgs=list(df=df,compare=compare,...),USE.NAMES=F)
     result = data.frame(t(result))
     result[] = lapply(result,unlist)
 
@@ -1769,6 +1777,10 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         for (i in 1:nrow(result.report)){
             # sprintf('%.2e',NA) OK
             ez.pprint(sprintf('fisher.test(%s,%s): n = %d, OR = %.2e\t%s\t\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$total[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
+        }
+
+        for (i in 1:nrow(result.report)){
+            ez.pprint(sprintf('FDR (fisher,chisq): %s', result.report$posthoc_fisher[i]),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
