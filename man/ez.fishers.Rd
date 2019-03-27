@@ -23,11 +23,11 @@ ez.fishers(df, y, x, report = T, view = F, plot = F,
 
 \item{pmethods}{c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.}
 
-\item{compare}{For posthoc, see more \code{\link{ez.fisher.posthoc}}. If "row", treats the rows as the grouping variable. If "column", treats the columns as the grouping variable.}
+\item{compare}{For posthoc, see more \code{\link{fisher.posthoc}}. If "row", treats the rows as the grouping variable. If "column", treats the columns as the grouping variable.}
 
 \item{cols}{number of columns for multiplot. NULL=auto calculate}
 
-\item{width}{width for toString(countTable,width=width)}
+\item{width}{width for toString(counts,width=width)}
 
 \item{error}{whether show error message when error occurs}
 }

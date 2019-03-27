@@ -1678,10 +1678,10 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' @param report print results (in APA format)
 #' @param view call View(result)
 #' @param pmethods c('bonferroni','fdr'), type p.adjust.methods for all methods. This correction applies for all possible tests that have been/could be done.
-#' @param compare For posthoc, see more \code{\link{ez.fisher.posthoc}}. If "row", treats the rows as the grouping variable. If "column", treats the columns as the grouping variable.
+#' @param compare For posthoc, see more \code{\link{fisher.posthoc}}. If "row", treats the rows as the grouping variable. If "column", treats the columns as the grouping variable.
 #' @param plot T/F, the black dash line is bonferroni p = 0.05 (again for tests only with a non-NA p values), the grey black dash is uncorrected p = 0.05
 #' @param cols number of columns for multiplot. NULL=auto calculate
-#' @param width width for toString(countTable,width=width)
+#' @param width width for toString(counts,width=width)
 #' @param error whether show error message when error occurs
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' @note odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
@@ -1725,7 +1725,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 
     df = df[, c(y,x), drop=F]
     df = ez.dropna(df,print2scr=F)
-    df = ez.2factor(df)
+    df = ez.2factor(df)  # do ez.factorelevel also internally
 
     getStats = function(y,x,df,compare,...){
         tryCatch({
@@ -1733,16 +1733,21 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         p = m$p.value
         # OR only exist for 2x2 table
         odds_ratio = if (is.null(m$estimate)) NA else m$estimate
+
         countTable = table(df[[y]],df[[x]])   # by default, pairwise NA auto removed
-        counts = toString(countTable,width=width)
+        rcategory = row.names(countTable); ccategory = colnames(countTable)
+        counts = paste0('(',toString(ccategory),')')
+        for (i in 1:nrow(countTable)){
+            counts = paste0(counts, ' | ', rcategory[i], ': ', paste0(countTable[i,],collapse='\t'))
+        }
+        counts = toString(counts,width=width)
         total = sum(countTable)
 
         mm = suppressWarnings(chisq.test(df[[y]],df[[x]],...))
         chisq = mm$statistic
         p.chisq = mm$p.value
-
-        df = ez.factorelevel(df,c(y,x))
-        ph = ez.fisher.posthoc(table(df[[y]],df[[x]]), 
+        
+        ph = fisher.posthoc(table(df[[y]],df[[x]]), 
             compare = compare, fisher = TRUE, gtest = FALSE, chisq = TRUE, 
             method = "fdr", correct = "none", cramer = FALSE, digits = 8)
         posthoc_fisher = paste0('(',ph$Comparison,') ', ez.p.apa(ph$p.adj.Fisher,prefix=2,pe=pe), ', ', ez.p.apa(ph$p.adj.Chisq,prefix=0,pe=pe), '; ',collapse='')
@@ -1776,11 +1781,15 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             # sprintf('%.2e',NA) OK
-            ez.pprint(sprintf('fisher.test(%s,%s): n = %d, OR = %.2e\t%s\t\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$total[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
+            ez.pprint(sprintf('fisher.test(%s,%s): N = %d, OR = %.2e\t%s\t\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$total[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
             ez.pprint(sprintf('FDR (fisher,chisq): %s', result.report$posthoc_fisher[i]),color='cyan')
+        }
+
+        for (i in 1:nrow(result.report)){
+            ez.pprint(sprintf('n%s', result.report$counts[i]),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
@@ -1858,8 +1867,8 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #' # posthoc for fisher, essentially fisher and then apply fdr correction
 #' # pairwiseNominalIndependence from rcompansion
 #' # nbk %>% ez.factorelevel(c('dx','race'))->tmp
-#' # table(tmp$dx,tmp$race) %>% ez.fisher.posthoc()
-#' # note: table(tmp$race,tmp$dx) %>% ez.fisher.posthoc() is different
+#' # table(tmp$dx,tmp$race) %>% fisher.posthoc()
+#' # note: table(tmp$race,tmp$dx) %>% fisher.posthoc() is different
 #' # also similar function from RVAideMemoire::fisher.multcomp
 #' # but this funciton can do all (fisher, chisq and g-test)
 #' 
@@ -1867,7 +1876,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #' data(Anderson)
 #' fisher.test(Anderson)
 #' Anderson = Anderson[(c("Heimlich", "Bloom", "Dougal", "Cobblestone")),]
-#' PT = ez.fisher.posthoc(Anderson,
+#' PT = fisher.posthoc(Anderson,
 #'                                  fisher = TRUE,
 #'                                  gtest  = FALSE,
 #'                                  chisq  = FALSE,
@@ -1879,7 +1888,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #'                                                               
 #' 
 #' @export
-ez.fisher.posthoc = 
+fisher.posthoc = 
     function(x, compare="row",
              fisher=TRUE, gtest=TRUE, chisq=TRUE,
              method="fdr", correct="none", cramer=FALSE, digits=3, ...) 
