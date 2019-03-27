@@ -5,7 +5,7 @@
 \title{fisher.test(y,x), for many y and/or many x}
 \usage{
 ez.fishers(df, y, x, report = T, view = F, plot = F,
-  pmethods = c("bonferroni", "fdr"), compare = "row", cols = 3,
+  pmethods = c("bonferroni", "fdr"), compare = "col", cols = 3,
   lab.size = 18, text.size = 16, width = 300, error = T, pe = F, ...)
 }
 \arguments{

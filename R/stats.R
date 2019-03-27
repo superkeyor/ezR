@@ -1688,7 +1688,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' \cr also computes chisq.test
 #' \cr fisher.test() does not produce a test statistic, but SPSS does (termed as D(x), or FI(x), see p 151 of IBM SPSS Exact Tests)
 #' @export
-ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),compare='row',cols=3,lab.size=18,text.size=16,width=300,error=T,pe=F,...) {
+ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),compare='col',cols=3,lab.size=18,text.size=16,width=300,error=T,pe=F,...) {
     y=ez.selcol(df,y); x=ez.selcol(df,x)
     bt = trellis.par.get("fontsize")$text ; bp = trellis.par.get("fontsize")$points
     text.size = text.size/bt ; title.size = (lab.size+2)/bt ; lab.size = lab.size/bt
