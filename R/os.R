@@ -90,7 +90,8 @@ ez.repo = function(repo=NULL){
     if (repo=='default') {
         options(repos = c(CRAN = 'https://cran.rstudio.com/'))
     } else {
-        options(repos = c(CRAN = sprintf('https://mran.revolutionanalytics.com/snapshot/%s',repo)))
+        # options(repos = c(CRAN = sprintf('https://mran.revolutionanalytics.com/snapshot/%s',repo)))
+        options(repos = c(CRAN = sprintf('https://cran.microsoft.com/snapshot/%s',repo)))
     }
     cat(sprintf('The repository now set to: %s\n',unname(getOption("repos"))))
     return(invisible(NULL))
