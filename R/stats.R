@@ -1956,7 +1956,7 @@ return(Z)
 #' @export
 #' @examples
 #' # dnn=c('row','col')
-ez.table = function(df, x, y=NULL, prop.r=TRUE, prop.c=TRUE, prop.t=TRUE, digits=2, max.width = 1, 
+ez.table = function(df, x, y=NULL, prop.r=TRUE, prop.c=TRUE, prop.t=TRUE, digits=1, max.width = 1, 
                        expected=FALSE, prop.chisq=FALSE, chisq = FALSE, fisher=FALSE, mcnemar=FALSE,
                        resid=FALSE, sresid=FALSE, asresid=FALSE,
                        missing.include=FALSE,

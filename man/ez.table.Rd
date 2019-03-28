@@ -5,7 +5,7 @@
 \title{table xy}
 \usage{
 ez.table(df, x, y = NULL, prop.r = TRUE, prop.c = TRUE, prop.t = TRUE,
-  digits = 2, max.width = 1, expected = FALSE, prop.chisq = FALSE,
+  digits = 1, max.width = 1, expected = FALSE, prop.chisq = FALSE,
   chisq = FALSE, fisher = FALSE, mcnemar = FALSE, resid = FALSE,
   sresid = FALSE, asresid = FALSE, missing.include = FALSE,
   format = "SPSS", dnn = NULL, ...)
