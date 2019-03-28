@@ -2,24 +2,18 @@
 % Please edit documentation in R/stats.R
 \name{ez.table}
 \alias{ez.table}
-\title{freq table}
+\title{table xy}
 \usage{
-ez.table(x, ..., dnn = NULL, exclude = c(NA, NaN), row.vars = NULL,
-  col.vars = NULL)
-}
-\arguments{
-\item{x, }{... df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z)}
-
-\item{dnn}{c('col','row')}
-
-\item{exclude}{values to use in the exclude argument of factor when interpreting non-factor objects. could be NULL to include NA}
-
-\item{row.vars}{a vector of integers giving the numbers of the variables, or a character vector giving the names of the variables to be used for the rows of the flat contingency table.}
-
-\item{col.vars}{a vector of integers giving the numbers of the variables, or a character vector giving the names of the variables to be used for the columns of the flat contingency table.}
+ez.table(df, x, y = NULL, prop.r = TRUE, prop.c = TRUE, prop.t = TRUE,
+  digits = 2, max.width = 1, expected = FALSE, prop.chisq = FALSE,
+  chisq = FALSE, fisher = FALSE, mcnemar = FALSE, resid = FALSE,
+  sresid = FALSE, asresid = FALSE, missing.include = FALSE,
+  format = "SPSS", dnn = NULL, ...)
 }
 \description{
-freq table, df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z), auto convert/reset factor
-\cr ez.table2 output is more beautiful, but must be two varibles/cols
-\cr result table can be further passed to prop.table(), addmargins(), addmargins(prop.table())
+(df, x, y) or (x, y), \code{\link[gmodels]{CrossTable}},  auto convert/reset factor
+\cr ez.table2 input could be one, two, or more varibles/cols
+}
+\examples{
+# dnn=c('row','col')
 }

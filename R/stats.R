@@ -1952,12 +1952,12 @@ return(Z)
 
 #' table xy
 #' @description (df, x, y) or (x, y), \code{\link[gmodels]{CrossTable}},  auto convert/reset factor
-#' \cr ez.table input could be one, two, or more varibles/cols
+#' \cr ez.table2 input could be one, two, or more varibles/cols
 #' @export
 #' @examples
 #' # dnn=c('row','col')
-ez.table2 = function(df, x, y=NULL, digits=2, max.width = 1, expected=FALSE, prop.r=FALSE, prop.c=FALSE,
-                       prop.t=TRUE, prop.chisq=FALSE, chisq = FALSE, fisher=TRUE, mcnemar=FALSE,
+ez.table = function(df, x, y=NULL, prop.r=TRUE, prop.c=TRUE, prop.t=TRUE, digits=2, max.width = 1, 
+                       expected=FALSE, prop.chisq=FALSE, chisq = FALSE, fisher=FALSE, mcnemar=FALSE,
                        resid=FALSE, sresid=FALSE, asresid=FALSE,
                        missing.include=FALSE,
                        format="SPSS", dnn = NULL, ...) {
@@ -1989,7 +1989,7 @@ ez.table2 = function(df, x, y=NULL, digits=2, max.width = 1, expected=FALSE, pro
 
 #' freq table
 #' @description freq table, df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z), auto convert/reset factor
-#' \cr ez.table2 output is more beautiful, but must be two varibles/cols
+#' \cr ez.table output is more beautiful, but must be two varibles/cols
 #' \cr result table can be further passed to prop.table(), addmargins(), addmargins(prop.table())
 #' @export
 #' @param x, ... df followed by col names (df, col1, col2, col3), or vector, factor (eg, x,y,z)
@@ -1997,7 +1997,7 @@ ez.table2 = function(df, x, y=NULL, digits=2, max.width = 1, expected=FALSE, pro
 #' @param exclude values to use in the exclude argument of factor when interpreting non-factor objects. could be NULL to include NA
 #' @param row.vars    a vector of integers giving the numbers of the variables, or a character vector giving the names of the variables to be used for the rows of the flat contingency table.
 #' @param col.vars    a vector of integers giving the numbers of the variables, or a character vector giving the names of the variables to be used for the columns of the flat contingency table.
-ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.vars = NULL) {
+ez.table2 = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.vars = NULL) {
     if (is.data.frame(x)) {
         # input = x[c(...)]  # when pass date frame, dnn not working
         dots=sapply(as.list(substitute(list(...)))[-1L], deparse)
@@ -2023,17 +2023,17 @@ ez.table = function(x, ..., dnn=NULL, exclude = c(NA, NaN), row.vars = NULL,col.
 
     print(theTable)
 
-    if (is.data.frame(x)) {
-        if (length(list(...))>0) {
-            fisher = ez.eval(cmd)
-            cat(sprintf("\nFisher's Exact Test, two-sided p = %f\n",fisher$p.value))
-        }
-    } else {
-        if (length(list(...))>0) {
-            fisher = fisher.test(x,...)
-            cat(sprintf("\nFisher's Exact Test, two-sided p = %f\n",fisher$p.value))
-        }
-    }
+    # if (is.data.frame(x)) {
+    #     if (length(list(...))>0) {
+    #         fisher = ez.eval(cmd)
+    #         cat(sprintf("\nFisher's Exact Test, two-sided p = %f\n",fisher$p.value))
+    #     }
+    # } else {
+    #     if (length(list(...))>0) {
+    #         fisher = fisher.test(x,...)
+    #         cat(sprintf("\nFisher's Exact Test, two-sided p = %f\n",fisher$p.value))
+    #     }
+    # }
 
     return(invisible(theTable))
 }
