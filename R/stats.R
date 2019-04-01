@@ -1083,6 +1083,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         dof = toString(sm[['Df']][c(2,length(sm[['Df']]))])
         MSE = sm[2,'Sum Sq']/sm[2,'Df']
         n = aggregate(df[[y]]~df[[x]],FUN=length)
+        N = sum(n[[2]])
         counts = sprintf('%s\t%d',n[[1]],n[[2]]) %>% paste0(collapse='\t')
         # no covar, no adjustment
         if (is.null(covar)) {
@@ -1106,14 +1107,14 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         uniques_drop_na.x=length(unique(df.bak[[x]])); nlevels.x=nlevels(df.bak[[x]])
         uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
 
-        return(list(y=y,x=x,covar=toString(covar),p=p,petasq2=petasq2,F=F,dof=dof,MSE=MSE,means=means,counts=counts,raw.adj.mean.sd=raw.adj.mean.sd,posthoc_tukey=posthoc_tukey,
+        return(list(y=y,x=x,covar=toString(covar),p=p,petasq2=petasq2,F=F,dof=dof,MSE=MSE,means=means,N=N,counts=counts,raw.adj.mean.sd=raw.adj.mean.sd,posthoc_tukey=posthoc_tukey,
             uniques_drop_na.x=uniques_drop_na.x,nlevels.x=nlevels.x,
             uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
             ))
         }, error = function(e) {
             options(oldcons)  # make sure restore
             if (error) ez.pprint(sprintf('EZ Error: aov(%s ~ %s). NA returned.',y,paste(c(x,covar), collapse = " + ")),color='red')
-            return(list(y=y,x=x,covar=toString(covar),p=NA_real_,petasq2=NA_real_,F=NA_real_,dof=NA_character_,MSE=NA_real_,means=NA_character_,counts=NA_character_,raw.adj.mean.sd=NA_character_,posthoc_tukey=NA_character_,
+            return(list(y=y,x=x,covar=toString(covar),p=NA_real_,petasq2=NA_real_,F=NA_real_,dof=NA_character_,MSE=NA_real_,means=NA_character_,N=NA,counts=NA_character_,raw.adj.mean.sd=NA_character_,posthoc_tukey=NA_character_,
                 uniques_drop_na.x=NA,nlevels.x=NA,
                 uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
                 ))
@@ -1149,7 +1150,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         }
 
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('n: %s', result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('N (%d): %s', result.report$N[i], result.report$counts[i]),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
