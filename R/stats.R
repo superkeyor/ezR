@@ -1084,7 +1084,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         MSE = sm[2,'Sum Sq']/sm[2,'Df']
         n = aggregate(df[[y]]~df[[x]],FUN=length)
         N = sum(n[[2]])
-        counts = sprintf('%s\t%d',n[[1]],n[[2]]) %>% paste0(collapse='\t')
+        counts = sprintf('%s,%d',n[[1]],n[[2]]) %>% paste0(collapse='; ')
         # no covar, no adjustment
         if (is.null(covar)) {
             avg = aggregate(df[[y]]~df[[x]],FUN=mean)
@@ -1150,7 +1150,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         }
 
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('N (%d): %s', result.report$N[i], result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('Available for %d participants (%s)', result.report$N[i], result.report$counts[i]),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
