@@ -1083,8 +1083,8 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         dof = toString(sm[['Df']][c(2,length(sm[['Df']]))])
         MSE = sm[2,'Sum Sq']/sm[2,'Df']
         n = aggregate(df[[y]]~df[[x]],FUN=length)
-        N = sum(n[[2]])
-        counts = sprintf('%s,%d',n[[1]],n[[2]]) %>% paste0(collapse='; ')
+        total = sum(n[[2]])
+        counts = sprintf('%s, %d',n[[1]],n[[2]]) %>% paste0(collapse='; ')
         # no covar, no adjustment
         if (is.null(covar)) {
             avg = aggregate(df[[y]]~df[[x]],FUN=mean)
@@ -1107,14 +1107,14 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         uniques_drop_na.x=length(unique(df.bak[[x]])); nlevels.x=nlevels(df.bak[[x]])
         uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
 
-        return(list(y=y,x=x,covar=toString(covar),p=p,petasq2=petasq2,F=F,dof=dof,MSE=MSE,means=means,N=N,counts=counts,raw.adj.mean.sd=raw.adj.mean.sd,posthoc_tukey=posthoc_tukey,
+        return(list(y=y,x=x,covar=toString(covar),p=p,petasq2=petasq2,F=F,dof=dof,MSE=MSE,means=means,total=total,counts=counts,raw.adj.mean.sd=raw.adj.mean.sd,posthoc_tukey=posthoc_tukey,
             uniques_drop_na.x=uniques_drop_na.x,nlevels.x=nlevels.x,
             uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
             ))
         }, error = function(e) {
             options(oldcons)  # make sure restore
             if (error) ez.pprint(sprintf('EZ Error: aov(%s ~ %s). NA returned.',y,paste(c(x,covar), collapse = " + ")),color='red')
-            return(list(y=y,x=x,covar=toString(covar),p=NA_real_,petasq2=NA_real_,F=NA_real_,dof=NA_character_,MSE=NA_real_,means=NA_character_,N=NA,counts=NA_character_,raw.adj.mean.sd=NA_character_,posthoc_tukey=NA_character_,
+            return(list(y=y,x=x,covar=toString(covar),p=NA_real_,petasq2=NA_real_,F=NA_real_,dof=NA_character_,MSE=NA_real_,means=NA_character_,total=NA,counts=NA_character_,raw.adj.mean.sd=NA_character_,posthoc_tukey=NA_character_,
                 uniques_drop_na.x=NA,nlevels.x=NA,
                 uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
                 ))
@@ -1150,7 +1150,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         }
 
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('Available for %d participants (%s)', result.report$N[i], result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('Available for %d participants (%s)', result.report$total[i], result.report$counts[i]),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
@@ -1737,15 +1737,16 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 
         countTable = table(df[[y]],df[[x]])   # by default, pairwise NA auto removed
         rcategory = row.names(countTable); ccategory = colnames(countTable)
-        counts1 = paste0('(',toString(ccategory),')')
+        counts1 = paste(ccategory, colSums(countTable), sep = ', ', collapse='; ')
+        counts2 = paste0('(',toString(ccategory),')')
         for (i in 1:nrow(countTable)){
-            counts1 = paste0(counts1, ' | ', rcategory[i], ': ', paste0(countTable[i,],collapse='\t'))
+            counts2 = paste0(counts2, ' | ', rcategory[i], ': ', paste0(countTable[i,],collapse='\t'))
         }
-        counts2 = paste0('(',toString(rcategory),')')
+        counts3 = paste0('(',toString(rcategory),')')
         for (i in 1:ncol(countTable)){
-            counts2 = paste0(counts2, ' | ', ccategory[i], ': ', paste0(countTable[,i],collapse='/'))
+            counts3 = paste0(counts3, ' | ', ccategory[i], ': ', paste0(countTable[,i],collapse='/'))
         }
-        counts = toString(paste0(counts1,'\n',counts2),width=width)
+        counts = toString(paste0('(',counts1,')','\n', counts2,'\n',counts3),width=width)
         total = sum(countTable)
 
         mm = suppressWarnings(chisq.test(df[[y]],df[[x]],...))
@@ -1755,7 +1756,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         ph = fisher.posthoc(table(df[[y]],df[[x]]), 
             compare = compare, fisher = TRUE, gtest = FALSE, chisq = TRUE, 
             method = "fdr", correct = "none", cramer = FALSE, digits = 8)
-        posthoc_fisher = paste0('(',ph$Comparison,') ', ez.p.apa(ph$p.adj.Fisher,prefix=2,pe=pe), ', ', ez.p.apa(ph$p.adj.Chisq,prefix=0,pe=pe), '; ',collapse='')
+        posthoc_fisher = paste0('(',ph$Comparison,') ', ez.p.apa(ph$p.adj.Fisher,prefix=2,pe=pe), ', ', ez.p.apa(ph$p.adj.Chisq,prefix=0,pe=pe), collapse='; ')
 
         out = list(y=y,x=x,p=p,p.chisq=p.chisq,chisq=chisq,odds_ratio=odds_ratio,counts=counts,total=total,posthoc_fisher=posthoc_fisher)
         return(out)
@@ -1786,7 +1787,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             # sprintf('%.2e',NA) OK
-            ez.pprint(sprintf('fisher.test(%s,%s): N = %d, OR = %.2e\t%s\t\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$total[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
+            ez.pprint(sprintf('fisher.test(%s,%s): OR = %.2e\t%s\t\tX2 = %.2f\t%s', result.report$y[i],result.report$x[i],result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe), result.report$chisq[i], ez.p.apa(result.report$p.chisq[i],prefix=0,pe=pe)),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
@@ -1794,7 +1795,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         }
 
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('n%s', result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('Available for %d participants %s', result.report$total[i], result.report$counts[i]),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
