@@ -1746,7 +1746,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         for (i in 1:ncol(countTable)){
             counts3 = paste0(counts3, ' | ', ccategory[i], ': ', paste0(countTable[,i],collapse='/'))
         }
-        counts = toString(paste0('(',counts1,')','\n', counts2,'\n',counts3),width=width)
+        counts = toString(paste0('(',counts1,').','\n', counts2,'\n',counts3),width=width)
         total = sum(countTable)
 
         mm = suppressWarnings(chisq.test(df[[y]],df[[x]],...))
@@ -1795,7 +1795,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         }
 
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('Available for %d participants %s.', result.report$total[i], result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('Available for %d participants %s', result.report$total[i], result.report$counts[i]),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
