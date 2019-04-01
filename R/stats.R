@@ -1150,7 +1150,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         }
 
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('Available for %d participants (%s)', result.report$total[i], result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('Available for %d participants (%s).', result.report$total[i], result.report$counts[i]),color='cyan')
         }
 
         for (i in 1:nrow(result.report)){
@@ -1795,7 +1795,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         }
 
         for (i in 1:nrow(result.report)){
-            ez.pprint(sprintf('Available for %d participants %s', result.report$total[i], result.report$counts[i]),color='cyan')
+            ez.pprint(sprintf('Available for %d participants %s.', result.report$total[i], result.report$counts[i]),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
