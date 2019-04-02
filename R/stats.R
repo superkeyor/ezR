@@ -2529,7 +2529,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         if (is.null(gamma)) gamma = NA
 
         if (force | p.lambda < .05){
-            if (print2scr) cat(sprintf('Box-Cox: lambda.raw = %f, lambda = %.2f, p.lambda = %f, gamma = %f, n = %d\n', lambda.raw, lambda, p.lambda, gamma, length(y)))
+            if (print2scr) cat(sprintf('Box-Cox%s: lambda.raw = %f, lambda = %.2f, p.lambda = %f, gamma = %f, n = %d\n', ifelse(is.null(col),'',sprintf(' (%s)',col)),lambda.raw, lambda, p.lambda, gamma, length(y)))
 
             if (precise=='raw') {
                 lambda.in.use = lambda.raw
@@ -2570,12 +2570,9 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         } else {
             out = y
         }
-    } else if (is.data.frame(y) & is.null(col)) {
-        y[] = lapply(y,ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,force=force,method=method,precise=precise,...)
-        out = y
-    } else if (is.data.frame(y) & !is.null(col)) {
+    } else if (is.data.frame(y)) {
         col = ez.selcol(y,col)
-        y[col] = lapply(y[col],ez.boxcox,na.rm=F,plot=F,print2scr=print2scr,force=force,method=method,precise=precise,...)
+        y[col] = lapply(1:length(col), function(j) {ez.boxcox(y=y[col][[j]],col=col[j],na.rm=F,plot=F,print2scr=print2scr,force=force,method=method,precise=precise,...)})
         out = y
     }
     return(invisible(out))
