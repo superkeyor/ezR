@@ -6,8 +6,9 @@
 \usage{
 ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
   bar.gap = 0.7, bar.width = 0.7, error.size = 0.7, error.gap = 0.7,
-  error.width = 0.3, error.direction = "both", ylab = NULL, xlab = NULL,
-  zlab = NULL, legend.position = "top", legend.direction = "horizontal",
+  error.width = 0.3, error.direction = "both", ylimits = NULL,
+  ybreaks = NULL, ylab = NULL, xlab = NULL, zlab = NULL,
+  legend.position = "top", legend.direction = "horizontal",
   legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
   hjust = NULL, print2scr = TRUE, point = FALSE, point.jitter = 0.15,
   point.size = 1.5, point.alpha = 1, point.color = "grey55",
@@ -32,6 +33,10 @@ ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
 \item{error.width}{the width of error bar (horizontal lines), could be 0 to show only vertical lines}
 
 \item{error.direction}{"both", "max", "min"}
+
+\item{ylimits}{e.g.,c(0,0.5). ylimits does not require ybreaks set}
+
+\item{ybreaks}{e.g.,seq(0,0.5,by=0.1). ybreaks requires ylimits set}
 
 \item{ylab}{y label NULL}
 

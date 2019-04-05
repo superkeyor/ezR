@@ -812,6 +812,8 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param error.gap  the location of errorbar, should be equal to bar.width(?)
 #' @param error.width the width of error bar (horizontal lines), could be 0 to show only vertical lines
 #' @param error.direction  "both", "max", "min"
+#' @param ylimits  e.g.,c(0,0.5). ylimits does not require ybreaks set
+#' @param ybreaks  e.g.,seq(0,0.5,by=0.1). ybreaks requires ylimits set
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL
 #' @param zlab  z/a/fill/legend label, only applicable when there is z provided NULL
@@ -827,7 +829,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
+ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylimits=NULL,ybreaks=NULL,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
     point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=1,point.color='grey55',theme.apa=TRUE,...) {
     if (print2scr & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
 
@@ -852,6 +854,9 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
 
     vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
     hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
+
+    ybreaks = ifelse(is.null(ybreaks),'waiver()',ez.vc(ybreaks))
+    ycontinous = ifelse(is.null(ylimits), '', ez.sprintf(' + scale_y_continuous(limits={ez.vc(ylimits)},breaks={ybreaks},oob=scales::rescale_none)'))
 
 ####************************************************************************************************
                                      ####*ancova start*####
@@ -887,8 +892,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                     %s %s %s %s %s
                     theme(axis.text.x=element_text(angle=%f %s %s)) +
                     theme(legend.direction="%s") +
-                    theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                    ,yy, xx, paste('+',covar,sep='',collapse=''), xx, xx, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                    theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
+                    ,yy, xx, paste('+',covar,sep='',collapse=''), xx, xx, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
                     )
         gghistory=paste(gghistory,
                   sprintf('df=ez.dropna(df,c("%s","%s", "%s"))',yy,xx,paste(covar,sep='',collapse='","')),
@@ -942,8 +947,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                          %s %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") +
-                         theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                         , xx, yy, yy, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                         theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
+                         , xx, yy, yy, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
                          )
             gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
@@ -970,8 +975,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                             %s %s
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") +
-                            theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                            , xx, zz, yy, yy, xx, zz, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                            theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
+                            , xx, zz, yy, yy, xx, zz, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
                 )
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
@@ -1001,8 +1006,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                                 %s %s
                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
                                 theme(legend.direction="%s") +
-                                theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                                , xx, zz, aa, yy, yy, zz, aa, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2]
+                                theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
+                                , xx, zz, aa, yy, yy, zz, aa, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
                     )
                     gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
