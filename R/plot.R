@@ -812,7 +812,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param error.gap  the location of errorbar, should be equal to bar.width(?)
 #' @param error.width the width of error bar (horizontal lines), could be 0 to show only vertical lines
 #' @param error.direction  "both", "max", "min"
-#' @param ylimits  e.g.,c(0,0.5). ylimits does not require ybreaks set
+#' @param ylimits  or ylim, e.g.,c(0,0.5). ylimits does not require ybreaks set
 #' @param ybreaks  e.g.,seq(0,0.5,by=0.1). ybreaks requires ylimits set
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL

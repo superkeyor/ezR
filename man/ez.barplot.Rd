@@ -34,7 +34,7 @@ ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
 
 \item{error.direction}{"both", "max", "min"}
 
-\item{ylimits}{e.g.,c(0,0.5). ylimits does not require ybreaks set}
+\item{ylimits}{or ylim, e.g.,c(0,0.5). ylimits does not require ybreaks set}
 
 \item{ybreaks}{e.g.,seq(0,0.5,by=0.1). ybreaks requires ylimits set}
 
