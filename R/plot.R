@@ -2312,7 +2312,13 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
         return(out)
       }
     }
-    dots = flattenlist(list(...)); dots = paste(names(dots),dots,sep='=',collapse=',')
+    dots = list(...)
+    if (length(dots)==0){
+        dots = ''
+    } else {
+        dots = flattenlist(list(...))
+        dots = paste(names(dots),dots,sep='=',collapse=',')
+    }
 ####************************************************************************************************
                               ####*covariate residualize begin*####
 ####************************************************************************************************
