@@ -2300,7 +2300,19 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
 
     cmd = ez.trim(cmd) %>% gsub("|||","@",.,fixed=TRUE) %>% gsub("||","*",.,fixed=TRUE)
     # if not dots passed, dots will be ""
-    dots = unlist(list(...)); dots = paste(names(dots),dots,sep='=',collapse=',')
+    # dots = unlist(list(...)); dots = paste(names(dots),dots,sep='=',collapse=',')
+    # the unlist() does not work well with ... when passed 'ylim=c(0,3)'
+    # https://stackoverflow.com/a/41882883/2292993
+    flattenlist <- function(x){  
+      morelists <- sapply(x, function(xprime) class(xprime)[1]=="list")
+      out <- c(x[!morelists], unlist(x[morelists], recursive=FALSE))
+      if(sum(morelists)){ 
+        Recall(out)
+      }else{
+        return(out)
+      }
+    }
+    dots = flattenlist(list(...)); dots = paste(names(dots),dots,sep='=',collapse=',')
 ####************************************************************************************************
                               ####*covariate residualize begin*####
 ####************************************************************************************************
