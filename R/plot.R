@@ -2216,7 +2216,8 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param point.size if less point, oen can increase size
 #' @param ylab  y label. NULL
 #' @param xlab  x label. NULL
-#' @param x.tick.number integer, how many ticks. can also set xlim, say xlim=c(1,10) via \code{...}
+#' @param xlimits c(0,1). xlimits does not require xbreaks set
+#' @param xbreaks seq(from=95, by=0.25, to=97). xbreaks requires xlimits set
 #' @param zlab  z legend label/title, only applicable when there is z provided. NULL
 #' @param legend.box  box of legend, T or F
 #' @param legend.position  legend position 'none' (I think this is not natively supported, but works) "left", "right", "top", and "bottom"
@@ -2224,12 +2225,11 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param legend.direction  horizontal or vertical
 #' @param legend.size c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
 #' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. E.g.,
-#' \cr xlim=c(1,10)
 #' \cr jitter.x=T, jitter.y=T, factor=1, amount=NULL see \code{\link[base]{jitter}}
 #' \cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up. 
 #' To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))
 #' @note specify auto through param colors, shapes
-#' @return a lattice plot
+#' @return a lattice plot, can use update() to change the plot
 #' @export
 ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),type=c('spartial','partial'),scale=FALSE,rp=TRUE,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
     rp.size=14,line.width=3,point.size=14,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,title.size=20,legend.size=c(0,14),
@@ -2237,7 +2237,7 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
     loess.color='dark grey',loess.width=3,loess.style=2,
     point.color='#0086B8',point.shape=16,point.alpha=0.90,
     colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),
-    ylab=NULL,xlab=NULL,x.tick.number=5,y.tick.number=5,
+    ylab=NULL,xlab=NULL,xbreaks=NULL,ybreaks=NULL,xlimits=NULL,ylimits=NULL,
     title=NULL,
     zlab=NULL,legend.box=FALSE,legend.position='top',legend.direction="horizontal",hack=FALSE,print2scr=TRUE,...){
 
@@ -2249,7 +2249,7 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
                     colors=colors, shapes=shapes,
                     ylab=ylab, xlab=xlab,
                     x.axis.size=x.axis.size, y.axis.size=y.axis.size, x.lab.size=x.lab.size, y.lab.size=y.lab.size,
-                    x.tick.number=x.tick.number, y.tick.number=y.tick.number, title.size=title.size,
+                    xbreaks=xbreaks, ybreaks=ybreaks, xlimits=xlimits, ylimits=ylimits, title.size=title.size,
                     zlab=zlab, legend.box=legend.box, legend.position=legend.position,
                     legend.direction=legend.direction, legend.size=legend.size, hack=FALSE, print2scr=print2scr, ...),SIMPLIFY=FALSE,USE.NAMES=TRUE)
         multiplot(plotlist=out,title=title)
@@ -2263,8 +2263,8 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
             loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
             point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, colors=colors,
             shapes=shapes, ylab=ylab, xlab=xlab, x.axis.size=x.axis.size, y.axis.size=y.axis.size,
-            x.lab.size=x.lab.size, y.lab.size=y.lab.size, x.tick.number=x.tick.number,
-            y.tick.number=y.tick.number, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
+            x.lab.size=x.lab.size, y.lab.size=y.lab.size, xbreaks=xbreaks,
+            ybreaks=ybreaks, xlimits=xlimits, ylimits=ylimits, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
             legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
             hack=hack, print2scr=F, ...)
         p2 = ez.scatterplot(df,gsub("||||","|||",cmd,fixed=TRUE),
@@ -2273,14 +2273,19 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
             loess.color=loess.color, loess.width=loess.width, loess.style=loess.style, point.color=point.color,
             point.shape=point.shape, point.alpha=point.alpha, point.size=point.size, colors=colors,
             shapes=shapes, ylab=ylab, xlab=xlab, x.axis.size=x.axis.size, y.axis.size=y.axis.size,
-            x.lab.size=x.lab.size, y.lab.size=y.lab.size, x.tick.number=x.tick.number,
-            y.tick.number=y.tick.number, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
+            x.lab.size=x.lab.size, y.lab.size=y.lab.size, xbreaks=xbreaks,
+            ybreaks=ybreaks, xlimits=xlimits, ylimits=ylimits, title=title, title.size=title.size, zlab=zlab, legend.box=legend.box,
             legend.position=legend.position, legend.direction=legend.direction, legend.size=legend.size,
             hack=hack, print2scr=print2scr, ...)
         # a bit ugly hack
         p1strip = paste0(p2$condlevels[[1]],collapse='+')
         pp = ez.esp('latticeExtra:::c.trellis("{p1strip}"=p1,p2,x.same=TRUE,y.same=TRUE,layout=c(dim(p1)+dim(p2),1))')
         if (!missing(layout)) pp$layout = layout
+        # c.trellis returns a new trellis object.
+        # http://latticeextra.r-forge.r-project.org/man/c.trellis.html
+        # fix scale limits and breaks
+        if (!is.null(xlimits)){pp=update(pp,scales=list(x=list(limits=xlimits,at=xbreaks)))}
+        if (!is.null(ylimits)){pp=update(pp,scales=list(y=list(limits=ylimits,at=ybreaks)))}
         return(pp)
     }
 
@@ -2297,6 +2302,11 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
     model = match.arg(model)              ; type = match.arg(type)
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=legend.size[2]}  # change default legend title size 0
     if (is.character(legend.position)) legend.position = ez.sprintf('space="{legend.position}"') else legend.position = ez.sprintf('corner=c({ez.vv(legend.position,print2scr=F)})')
+
+    xbreaks = ifelse(is.null(xbreaks),'',paste0(', at=', ez.vc(xbreaks)))
+    ybreaks = ifelse(is.null(ybreaks),'',paste0(', at=', ez.vc(ybreaks)))
+    xlimits = ifelse(is.null(xlimits),'',paste0(', limits=', ez.vc(xlimits)))
+    ylimits = ifelse(is.null(ylimits),'',paste0(', limits=', ez.vc(ylimits)))
 
     cmd = ez.trim(cmd) %>% gsub("|||","@",.,fixed=TRUE) %>% gsub("||","*",.,fixed=TRUE)
     # if not dots passed, dots will be ""
@@ -2451,8 +2461,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
             par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
             par.strip.text = list(cex={legend.size[2]}, fontfamily="{RMN}"),
             scales = list(
-                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={x.tick.number}, tck=c(1,0)),
-                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={y.tick.number}, tck=c(1,0))
+                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){xbreaks}{xlimits}),
+                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){ybreaks}{ylimits})
                 ),
             key = list(
                 fontfamily="{RMN}",
@@ -2501,8 +2511,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
             par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
             par.strip.text = list(cex={legend.size[2]}, fontfamily="{RMN}"),
             scales = list(
-                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={x.tick.number}, tck=c(1,0)),
-                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={y.tick.number}, tck=c(1,0))
+                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){xbreaks}{xlimits}),
+                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){ybreaks}{ylimits})
                 ),
             key = list(
                 fontfamily="{RMN}",
@@ -2563,8 +2573,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
             par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
             par.strip.text = list(cex={legend.size[2]}, fontfamily="{RMN}"),
             scales = list(
-                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={x.tick.number}, tck=c(1,0)),
-                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={y.tick.number}, tck=c(1,0))
+                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){xbreaks}{xlimits}),
+                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){ybreaks}{ylimits})
                 ),
             key = list(
                 fontfamily="{RMN}",
@@ -2609,8 +2619,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
             par.settings = list(strip.background=list(col="#D9D9D9"),strip.border=list(col="black"),grid.pars=list(fontfamily="{RMN}")),
             par.strip.text = list(cex={legend.size[2]}, fontfamily="{RMN}"),
             scales = list(
-                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={x.tick.number}, tck=c(1,0)),
-                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tick.number={y.tick.number}, tck=c(1,0))
+                x = list(cex={x.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){xbreaks}{xlimits}),
+                y = list(cex={y.axis.size}, fontfamily="{RMN}", rot=0, alternating=1, tck=c(1,0){ybreaks}{ylimits})
                 ),
             panel = function(x, y, ...){"{"}
             panel.xyplot(x, y, ...)

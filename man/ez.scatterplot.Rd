@@ -13,10 +13,10 @@ ez.scatterplot(df, cmd, lmline = TRUE, loess = FALSE, model = c("lm",
   loess.color = "dark grey", loess.width = 3, loess.style = 2,
   point.color = "#0086B8", point.shape = 16, point.alpha = 0.9,
   colors = ez.palette("Zhu"), shapes = c(16, 17, 15, 3, 7, 8),
-  ylab = NULL, xlab = NULL, x.tick.number = 5, y.tick.number = 5,
-  title = NULL, zlab = NULL, legend.box = FALSE,
-  legend.position = "top", legend.direction = "horizontal", hack = FALSE,
-  print2scr = TRUE, ...)
+  ylab = NULL, xlab = NULL, xbreaks = NULL, ybreaks = NULL,
+  xlimits = NULL, ylimits = NULL, title = NULL, zlab = NULL,
+  legend.box = FALSE, legend.position = "top",
+  legend.direction = "horizontal", hack = FALSE, print2scr = TRUE, ...)
 }
 \arguments{
 \item{df}{data frame}
@@ -60,7 +60,9 @@ ez.scatterplot(df, cmd, lmline = TRUE, loess = FALSE, model = c("lm",
 
 \item{xlab}{x label. NULL}
 
-\item{x.tick.number}{integer, how many ticks. can also set xlim, say xlim=c(1,10) via \code{...}}
+\item{xbreaks}{seq(from=95, by=0.25, to=97). xbreaks requires xlimits set}
+
+\item{xlimits}{c(0,1). xlimits does not require xbreaks set}
 
 \item{zlab}{z legend label/title, only applicable when there is z provided. NULL}
 
@@ -74,13 +76,12 @@ ez.scatterplot(df, cmd, lmline = TRUE, loess = FALSE, model = c("lm",
 \item{hack}{T/F if more than 1 model specified, plot all in one plot}
 
 \item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. E.g.,
-\cr xlim=c(1,10)
 \cr jitter.x=T, jitter.y=T, factor=1, amount=NULL see \code{\link[base]{jitter}}
 \cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up. 
 To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))}
 }
 \value{
-a lattice plot
+a lattice plot, can use update() to change the plot
 }
 \description{
 scatter plot with lattice
