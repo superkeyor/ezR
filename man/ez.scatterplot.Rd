@@ -60,7 +60,7 @@ ez.scatterplot(df, cmd, lmline = TRUE, loess = FALSE, model = c("lm",
 
 \item{xlab}{x label. NULL}
 
-\item{xbreaks}{seq(from=95, by=0.25, to=97). xbreaks requires xlimits set}
+\item{xbreaks}{seq(from=95, by=0.25, to=97). xbreaks does not require xlimits set}
 
 \item{xlimits}{c(0,1). xlimits does not require xbreaks set}
 

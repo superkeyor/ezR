@@ -2217,7 +2217,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param ylab  y label. NULL
 #' @param xlab  x label. NULL
 #' @param xlimits c(0,1). xlimits does not require xbreaks set
-#' @param xbreaks seq(from=95, by=0.25, to=97). xbreaks requires xlimits set
+#' @param xbreaks seq(from=95, by=0.25, to=97). xbreaks does not require xlimits set
 #' @param zlab  z legend label/title, only applicable when there is z provided. NULL
 #' @param legend.box  box of legend, T or F
 #' @param legend.position  legend position 'none' (I think this is not natively supported, but works) "left", "right", "top", and "bottom"
@@ -2284,8 +2284,10 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
         # c.trellis returns a new trellis object.
         # http://latticeextra.r-forge.r-project.org/man/c.trellis.html
         # fix scale limits and breaks
-        if (!is.null(xlimits)){pp=update(pp,scales=list(x=list(limits=xlimits,at=xbreaks)))}
-        if (!is.null(ylimits)){pp=update(pp,scales=list(y=list(limits=ylimits,at=ybreaks)))}
+        if (!is.null(xlimits)){pp=update(pp,scales=list(x=list(limits=xlimits)))}
+        if (!is.null(xbreaks)){pp=update(pp,scales=list(x=list(at=xbreaks)))}
+        if (!is.null(ylimits)){pp=update(pp,scales=list(y=list(limits=ylimits)))}
+        if (!is.null(ybreaks)){pp=update(pp,scales=list(y=list(at=ybreaks)))}
         return(pp)
     }
 
