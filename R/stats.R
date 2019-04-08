@@ -370,9 +370,9 @@ ez.vv = function(vec,printn=Inf,order='as',quote=NULL,print2scr=FALSE){
 #' @return returns string
 #' @examples
 #' \dontrun{
-#' # sprintf("c(%s)",ez.vv(vec,...)). 
-#' # ez.sprintf('model = "|model|", type = |ez.vc(type)|')  
-#' # use | to replace with brace for documentation purpose, 
+#' # sprintf("c(%s)",ez.vv(vec,...)).
+#' # ez.sprintf('model = "|model|", type = |ez.vc(type)|')
+#' # use | to replace with brace for documentation purpose,
 #' # because of weird error of roxygen "mismatched braces or quotes"
 #' }
 #' @export
@@ -1232,11 +1232,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' \cr ? might be larger, because after residualized, no covar, so dof is larger ?
 #' \cr
 #' \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
-#' \cr 
+#' \cr
 #' \cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r the same in all cases.
-#' \cr 
+#' \cr
 #' \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result.
-#' \cr 
+#' \cr
 #' \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 #' \cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 #' \cr
@@ -1249,7 +1249,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' ez.lms(z,'Sepal.Length','Sepal.Width')
 #' ppcor::pcor.test(iris$Sepal.Length,iris$Sepal.Width,iris$Petal.Width)
 #' ppcor::spcor.test(iris$Sepal.Length,iris$Sepal.Width,iris$Petal.Width)
-#' 
+#'
 #' y = c(1,2,3,4,5,6)
 #' x = c(2,4,15,20,25,36)
 #' z=factor(c('m','m','m','f','f','f'))
@@ -1277,7 +1277,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
 #' lm(y~x+z) %>% summary
 #' lm(y~x+scale(z)) %>% summary
 #' lm(y~x+zz) %>% summary
-#' lm(y~x+zzz) %>% summary
+#' lm(y~x+zzz) %>% summary()
 #' # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
 #' @export
 ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
@@ -1743,9 +1743,9 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         mm = suppressWarnings(chisq.test(df[[y]],df[[x]],...))
         chisq = mm$statistic
         p.chisq = mm$p.value
-        
-        ph = fisher.posthoc(table(df[[y]],df[[x]]), 
-            compare = compare, fisher = TRUE, gtest = FALSE, chisq = TRUE, 
+
+        ph = fisher.posthoc(table(df[[y]],df[[x]]),
+            compare = compare, fisher = TRUE, gtest = FALSE, chisq = TRUE,
             method = "fdr", correct = "none", cramer = FALSE, digits = 8)
         posthoc_fisher = paste0('(',ph$Comparison,') ', ez.p.apa(ph$p.adj.Fisher,prefix=2,pe=pe), ', ', ez.p.apa(ph$p.adj.Chisq,prefix=0,pe=pe), collapse='; ')
 
@@ -1833,7 +1833,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #'              in which at at least one dimension has more than two
 #'              levels, as a post-hoc test. Conducts Fisher exact, Chi-square,
 #'              or G-test.
-#' 
+#'
 #' @param x A two-way contingency table. At least one dimension should have
 #'          more than two levels.
 #' @param compare If \code{"row"}, treats the rows as the grouping variable.
@@ -1841,25 +1841,25 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #' @param fisher  If \code{"TRUE"}, conducts fisher exact test.
 #' @param gtest   If \code{"TRUE"}, conducts G-test.
 #' @param chisq   If \code{"TRUE"}, conducts Chi-square test of association.
-#' @param method  The method to adjust multiple p-values. 
+#' @param method  The method to adjust multiple p-values.
 #'                See \code{stats::p.adjust}.
 #' @param correct The correction method to pass to \code{DescTools::GTest}.
 #' @param cramer If \code{"TRUE"}, includes and effect size, Cramer's V in the
 #'               output.
 #'               --jerry,does not support this because of cramerV() from the rcompansion package not included in this function
 #' @param digits The number of significant digits in the output.
-#' @param ... Additional arguments, passed to \code{stats::fisher.test}, 
+#' @param ... Additional arguments, passed to \code{stats::fisher.test},
 #'            \code{DescTools::GTest}, or \code{stats::chisq.test}.
-#'           
+#'
 #' @author Salvatore Mangiafico, \email{mangiafico@njaes.rutgers.edu}
 #' @references \url{http://rcompanion.org/handbook/H_04.html}
 #' @concept Chi-square G-test Fisher contingency table nominal
 #' @return A data frame of comparisons, p-values, and adjusted p-values.
-#'         
+#'
 #' @seealso \code{\link{pairwiseMcnemar}}, \code{\link{groupwiseCMH}},
-#'           \code{\link{nominalSymmetryTest}}, 
+#'           \code{\link{nominalSymmetryTest}},
 #'           \code{\link{pairwiseNominalMatrix}}
-#'         
+#'
 #' @examples
 #' # posthoc for fisher, essentially fisher and then apply fdr correction
 #' # pairwiseNominalIndependence from rcompansion
@@ -1868,7 +1868,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #' # note: table(tmp$race,tmp$dx) %>% fisher.posthoc() is different
 #' # also similar function from RVAideMemoire::fisher.multcomp
 #' # but this funciton can do all (fisher, chisq and g-test)
-#' 
+#'
 #' ### Independence test for a 4 x 2 matrix
 #' data(Anderson)
 #' fisher.test(Anderson)
@@ -1878,17 +1878,17 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #'                                  gtest  = FALSE,
 #'                                  chisq  = FALSE,
 #'                                  cramer = TRUE)
-#' PT                                
+#' PT
 #' cldList(comparison = PT$Comparison,
 #'         p.value    = PT$p.adj.Fisher,
-#'         threshold  = 0.05)                             
-#'                                                               
-#' 
+#'         threshold  = 0.05)
+#'
+#'
 #' @export
-fisher.posthoc = 
+fisher.posthoc =
     function(x, compare="row",
              fisher=TRUE, gtest=TRUE, chisq=TRUE,
-             method="fdr", correct="none", cramer=FALSE, digits=3, ...) 
+             method="fdr", correct="none", cramer=FALSE, digits=3, ...)
     {
     if(compare=="row"){n = nrow(x)}
     if(compare=="column" | compare=="col"){n = ncol(x)}
@@ -1900,21 +1900,21 @@ fisher.posthoc =
     p.Chisq = rep(NA, N)
     Cramer = rep(NA, N)
 
-    k=0               
+    k=0
     for(i in 1:(n-1)){
          for(j in (i+1):n){
              k=k+1
- if (compare=="row"){  
+ if (compare=="row"){
          Namea = as.character(rownames(x)[i])
          Nameb = as.character(rownames(x)[j])
          Dataz = matrix(c(x[i,],x[j,]), nrow=2, byrow=TRUE)
          }
- if (compare=="column" | compare=="col"){  
+ if (compare=="column" | compare=="col"){
          Namea = as.character(colnames(x)[i])
          Nameb = as.character(colnames(x)[j])
          Dataz = matrix(c(x[,i],x[,j]), ncol=2, byrow=FALSE)
-         }     
- Z$Comparison[k] = paste0(Namea, " : ", Nameb)     
+         }
+ Z$Comparison[k] = paste0(Namea, " : ", Nameb)
  if(fisher==TRUE){
         p.Fisher[k] = signif(fisher.test(Dataz, ...)$p.value, digits=digits)}
  if(gtest==TRUE){
@@ -1925,15 +1925,15 @@ fisher.posthoc =
         Cramer[k] = cramerV(Dataz, digits=digits)}
     } # End j loop
  } # End i loop
- if(fisher==TRUE){ 
+ if(fisher==TRUE){
         Z$p.Fisher = p.Fisher
         Z$p.adj.Fisher = signif(p.adjust(Z$p.Fisher, method = method), digits=digits)
     }
- if(gtest==TRUE){ 
+ if(gtest==TRUE){
         Z$p.Gtest = p.Gtest
         Z$p.adj.Gtest = signif(p.adjust(Z$p.Gtest, method = method), digits=digits)
     }
- if(chisq==TRUE){ 
+ if(chisq==TRUE){
          Z$p.Chisq = p.Chisq
          Z$p.adj.Chisq = signif(p.adjust(Z$p.Chisq, method = method), digits=digits)
  }
@@ -1949,7 +1949,7 @@ return(Z)
 #' @export
 #' @examples
 #' # dnn=c('row','col')
-ez.table = function(df, x, y=NULL, prop.r=TRUE, prop.c=TRUE, prop.t=TRUE, digits=1, max.width = 1, 
+ez.table = function(df, x, y=NULL, prop.r=TRUE, prop.c=TRUE, prop.t=TRUE, digits=1, max.width = 1,
                        expected=FALSE, prop.chisq=FALSE, chisq = FALSE, fisher=FALSE, mcnemar=FALSE,
                        resid=FALSE, sresid=FALSE, asresid=FALSE,
                        missing.include=FALSE,

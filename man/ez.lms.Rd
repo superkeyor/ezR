@@ -79,11 +79,11 @@ an invisible data frame or list of data frame (if many y and many x)
 \cr ? might be larger, because after residualized, no covar, so dof is larger ?
 \cr
 \cr the stdbeta, p(.lm), p.lmrob etc in result data frame refer to stdbeta, p value for x in MLR, which are plotted when plot=T. the bestp is also selected based on this p value
-\cr 
+\cr
 \cr According to my own demo (see examples iris), MLR p is the same as p values from ppcor::pcor.test and SPSS Analyze->Correlate->Partial! also very close to the p value from manual calculation with correlation(y.residual, x.residual). partial r the same in all cases.
-\cr 
+\cr
 \cr the r.spartial, p.spartial refers to semi-partial correlation (r.spartial is the same as ppcor::spcor.test result, p.spartial very close to ppcor::spcor.test result.
-\cr 
+\cr
 \cr no column named r, r(.lm), r.lmrob etc in the result data frame
 \cr r2.rlm or r.spartial.rlm are NA, but p values are available, because I do not know how to get them from rlm yet
 \cr
@@ -130,6 +130,6 @@ zzz=c(-3,-3,-3,1,1,1)
 lm(y~x+z) \%>\% summary
 lm(y~x+scale(z)) \%>\% summary
 lm(y~x+zz) \%>\% summary
-lm(y~x+zzz) \%>\% summary
+lm(y~x+zzz) \%>\% summary()
 # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
 }

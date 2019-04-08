@@ -21,7 +21,7 @@ If \code{"column"}, treats the columns as the grouping variable.}
 
 \item{chisq}{If \code{"TRUE"}, conducts Chi-square test of association.}
 
-\item{method}{The method to adjust multiple p-values. 
+\item{method}{The method to adjust multiple p-values.
 See \code{stats::p.adjust}.}
 
 \item{correct}{The correction method to pass to \code{DescTools::GTest}.}
@@ -32,7 +32,7 @@ output.
 
 \item{digits}{The number of significant digits in the output.}
 
-\item{...}{Additional arguments, passed to \code{stats::fisher.test}, 
+\item{...}{Additional arguments, passed to \code{stats::fisher.test},
 \code{DescTools::GTest}, or \code{stats::chisq.test}.}
 }
 \value{
@@ -62,11 +62,11 @@ PT = fisher.posthoc(Anderson,
                                  gtest  = FALSE,
                                  chisq  = FALSE,
                                  cramer = TRUE)
-PT                                
+PT
 cldList(comparison = PT$Comparison,
         p.value    = PT$p.adj.Fisher,
-        threshold  = 0.05)                             
-                                                              
+        threshold  = 0.05)
+
 
 }
 \references{
@@ -74,7 +74,7 @@ cldList(comparison = PT$Comparison,
 }
 \seealso{
 \code{\link{pairwiseMcnemar}}, \code{\link{groupwiseCMH}},
-          \code{\link{nominalSymmetryTest}}, 
+          \code{\link{nominalSymmetryTest}},
           \code{\link{pairwiseNominalMatrix}}
 }
 \author{

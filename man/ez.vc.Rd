@@ -23,9 +23,9 @@ vc (c(vv)), vi (view everything print out), vv (view format vector), vx (view ex
 }
 \examples{
 \dontrun{
-# sprintf("c(\%s)",ez.vv(vec,...)). 
-# ez.sprintf('model = "|model|", type = |ez.vc(type)|')  
-# use | to replace with brace for documentation purpose, 
+# sprintf("c(\%s)",ez.vv(vec,...)).
+# ez.sprintf('model = "|model|", type = |ez.vc(type)|')
+# use | to replace with brace for documentation purpose,
 # because of weird error of roxygen "mismatched braces or quotes"
 }
 }
