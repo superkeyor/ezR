@@ -1050,19 +1050,18 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         return(invisible(xlist))
     }
 
-    df = df[, c(y,x,covar), drop=F]
-    df = ez.dropna(df,print2scr=F)
-    df.bak = df
-    df = ez.2value(df,y); df = ez.2factor(df,x)
-    if (!is.null(covar)){
-        for (vv in c(covar)){
-            # nonfactor nleves returns 0
-            if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... dummy coding instead?', vv))
-            df[[vv]]=ez.2value(df[[vv]])
-        }
-    }
-
     getStats = function(y,x,covar,df,...){
+        df = df[, c(y,x,covar), drop=F]
+        df = ez.dropna(df,print2scr=F)
+        df.bak = df
+        df = ez.2value(df,y); df = ez.2factor(df,x)
+        if (!is.null(covar)){
+            for (vv in c(covar)){
+                # nonfactor nleves returns 0
+                if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... dummy coding instead?', vv))
+                df[[vv]]=ez.2value(df[[vv]])
+            }
+        }
         tryCatch({
         # aov is wrapper of lm, so also accept na.action
         na.action=na.exclude
@@ -1343,22 +1342,6 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
         return(invisible(xlist))
     }
 
-    # drop na before scale, although all lm models below deal with na.action
-    # https://stats.stackexchange.com/a/11028/100493
-    # default, if not specified, na.action from options('na.action')
-    # otherwise scale results would be different
-    # if covar NULL, c() auto gets rid of it
-    df = df[, c(y,x,covar), drop=F]
-    df = ez.dropna(df,print2scr=F)
-    # also convert factor to value
-    for (vv in c(y,x,covar)){
-        # nonfactor nleves returns 0
-        if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... dummy coding instead?', vv))
-        df[[vv]]=ez.2value(df[[vv]])
-    }
-    df.bak = df
-    df[] = lapply(df, ez.scale)
-
     # processing lm to return something (like r n p)
     # @description processing lm to return something (like r n p)
     # @param y compatible with ez.selcol
@@ -1370,6 +1353,21 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
     # @return a data frame
     # @export
     getStats = function(y,x,covar,df,model=c('lm', 'lmrob', 'lmRob', 'rlm'),...){
+        # drop na before scale, although all lm models below deal with na.action
+        # https://stats.stackexchange.com/a/11028/100493
+        # default, if not specified, na.action from options('na.action')
+        # otherwise scale results would be different
+        # if covar NULL, c() auto gets rid of it
+        df = df[, c(y,x,covar), drop=F]
+        df = ez.dropna(df,print2scr=F)
+        # also convert factor to value
+        for (vv in c(y,x,covar)){
+            # nonfactor nleves returns 0
+            if (nlevels(df[[vv]])>2) ez.pprint(sprintf('col %s has >=3 factor levels, converting to number via ez.2value... dummy coding instead?', vv))
+            df[[vv]]=ez.2value(df[[vv]])
+        }
+        df.bak = df
+        df[] = lapply(df, ez.scale)
         # for one model
         get.stats = function(y,x,covar,df,model,...){
             tryCatch(suppressWarnings({
@@ -1588,16 +1586,10 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         return(invisible(xlist))
     }
 
-    # drop na before scale, although all lm models below deal with na.action
-    # https://stats.stackexchange.com/a/11028/100493
-    # default, if not specified, na.action from options('na.action')
-    # otherwise scale results would be different
-    # if covar NULL, c() auto gets rid of it
-    df = df[, c(y,x,covar), drop=F]
-    df = ez.dropna(df,print2scr=F)
-    df.bak = df
-
     getStats = function(y,x,covar,df,...){
+        df = df[, c(y,x,covar), drop=F]
+        df = ez.dropna(df,print2scr=F)
+        df.bak = df
         tryCatch({
         set.seed(20190117)   # may not need
         na.action=na.exclude
@@ -1724,11 +1716,10 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
         return(invisible(xlist))
     }
 
-    df = df[, c(y,x), drop=F]
-    df = ez.dropna(df,print2scr=F)
-    df = ez.2factor(df)  # do ez.factorelevel also internally
-
     getStats = function(y,x,df,compare,...){
+        df = df[, c(y,x), drop=F]
+        df = ez.dropna(df,print2scr=F)
+        df = ez.2factor(df)  # do ez.factorelevel also internally
         tryCatch({
         m = fisher.test(df[[y]],df[[x]],...) # by default, pairwise NA auto removed
         p = m$p.value
