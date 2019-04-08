@@ -1494,11 +1494,11 @@ ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmR
             if (!is.null(ez.selcol(result.report,'starts_with("p.spartial.")'))){
                 robustp = result.report[i,ez.selcol(result.report,'starts_with("p.partial.")')] %>% ez.p.apa(prefix=0,pe=pe) %>% toString()
                 robustsp = result.report[i,ez.selcol(result.report,'starts_with("p.spartial.")')] %>% ez.p.apa(prefix=0,pe=pe) %>% toString()
-                ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s, %s; SP r = %.2f, %s, %s', Y,X,result.report$n,
+                ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s, %s; SP r = %.2f, %s, %s', Y,X,result.report$n[i],
                     result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2,pe=pe),robustp,
                     result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2,pe=pe),robustsp),color='cyan')
             } else {
-                ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s; SP r = %.2f, %s', Y,X,result.report$n,
+                ez.pprint(sprintf('lm(%s~%s): n = %d, P r = %.2f, %s; SP r = %.2f, %s', Y,X,result.report$n[i],
                     result.report$r.partial[i],ez.p.apa(result.report$p.partial[i],prefix=2,pe=pe),
                     result.report$r.spartial[i],ez.p.apa(result.report$p.spartial[i],prefix=2,pe=pe)),color='cyan')
             }
@@ -1639,7 +1639,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
         # ez.pprint('>>>>>>')
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.pprint(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p,prefix=2,pe=pe)),color='cyan')
+            ez.pprint(sprintf('glm(%s~%s): OR = %.2f, %s', Y,X,result.report$odds_ratio[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe)),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
