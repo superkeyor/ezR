@@ -188,7 +188,7 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
         Accent = c('#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'),
         Set1Remix = c("#984EA3","#377EB8","#4DAF4A","#FF7F00","#E41A1C","#FFFF33","#A65628","#F781BF"),
         # Jerry remixed from Set 3
-        Zhu = c("#B3DE69","#80B1D3","#BC80BD","#FB8072","#FDB462"),
+        Zhu = c("#B3DE69","#80B1D3","#BC80BD","#FB8072","#FDB462",'#FFED6F', '#CCEBC5', '#D9D9D9', '#FCCDE5', '#BEBADA', '#FFFFB3', '#8DD3C7'),
         # well, I tested with col2grey(), not so true. Not sure about actual bw printer
         Printer = c("#FDAE61","#2B83BA","#D7191C","#ABDDA4","#FFFFBF"),
         Colorblind = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00","#CC79A7","#000000")
