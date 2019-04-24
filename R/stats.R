@@ -1678,7 +1678,7 @@ ez.logistics = function(df,y,x,covar=NULL,report=T,view=F,plot=F,pmethods=c('bon
 #' @param error whether show error message when error occurs
 #' @return an invisible data frame or list of data frame (if many y and many x)
 #' @note odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
-#' \cr also computes chisq.test, however whenever any of observed (expected?) values in cells < 5, fisher.test preferred.
+#' \cr also computes chisq.test, however whenever any of expected count in cells was less than five (not observed frequency), fisher.test preferred because of cells that have expected count less than 5.
 #' \cr fisher.test() does not produce a test statistic, but SPSS does (termed as D(x), or FI(x), see p 151 of IBM SPSS Exact Tests)
 #' @export
 ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr'),compare='col',cols=3,lab.size=18,text.size=16,width=300,error=T,pe=F,...) {

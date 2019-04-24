@@ -39,6 +39,6 @@ fisher.test(y,x), for many y and/or many x
 }
 \note{
 odds ratio only exist for 2x2 table, otherwise NA (arbitrary assigned by jerry)
-\cr also computes chisq.test, however whenever any of observed (expected?) values in cells < 5, fisher.test preferred.
+\cr also computes chisq.test, however whenever any of expected count in cells was less than five (not observed frequency), fisher.test preferred because of cells that have expected count less than 5.
 \cr fisher.test() does not produce a test statistic, but SPSS does (termed as D(x), or FI(x), see p 151 of IBM SPSS Exact Tests)
 }
