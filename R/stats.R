@@ -535,7 +535,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             abline(v = mean(vv,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
             }, error=function(e){
                 ez.print('boxcox transformation could not be performed.')
-            }
+            })
         }
     }
     return(invisible(NULL))
