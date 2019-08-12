@@ -508,6 +508,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             boxplot(v,col='#56B4E9',horizontal=TRUE);abline(v=v.mean,lty=3,lwd=2,col='#E69F00')
 
             # boxcox
+            tryCatch({
             family = ifelse(any((v <= 0) %in% TRUE), "bcnPower", "bcPower")
             bc = suppressWarnings(car::powerTransform(v ~ 1, family = family))
             sbc = suppressWarnings(summary(bc))
@@ -532,6 +533,9 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
                     ))))
             hist(vv, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = mean(vv,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+            }, error=function(e){
+                ez.print('boxcox transformation could not be performed.')
+            }
         }
     }
     return(invisible(NULL))
