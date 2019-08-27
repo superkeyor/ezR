@@ -2043,10 +2043,84 @@ ez.pasteattr = function(x, col=NULL, attrs=NULL, ...) {
 #' @param nomatch if 0, not return a row for the nomatch; if NA/NULL, return NA.
 #' @return returns a new data frame with rows in df[[col]] matching the vec elements. row names are normal (1:nrow)
 #' @note works best if your vec contains exactly the same elements as df[[col]], and neither contain duplicate values
-#' \cr Actually, duplicated elements in vec OK, will be mathched multiple times. Duplicates in df[[col]] will be picked using first match.
+#' \cr Actually, duplicated elements in vec OK, will be mathched multiple times. Duplicates in df[[col]] will be picked using first match. For example, df[[col]] has two rows id1_col2, id1_col1, vec = c(id1,id1), then returns two rows id1_col2, id1_col2.
 #' @export
 ez.match = function(df, col, vec, nomatch=0) {
     if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
     # https://stackoverflow.com/a/11977256/2292993
     df[match(vec, df[[col]], nomatch=nomatch),,drop=F]
+}
+
+#' similar to ez.match
+#' @description similar to ez.match
+#' @note Two differences from ez.match: 
+#' \cr 1. intersect(unique(vec),df[[col]]) will be used to match. 
+#' \cr 2. Duplicates in df[[col]] will be kept in order.
+#' \cr For example, df[[col]] has two rows id1_col2, id1_col1, vec = c(id1,id1), then returns two rows id1_col2, id1_col1.
+#' @export
+ez.match2 = function(df, col, vec) {
+    if (length(col)!=1 | !is.element(col,colnames(df)) | !is.character(col)) stop('Is your col single exisiting character?')
+    vec = dplyr::intersect(unique(vec),df[[col]])
+    vec = ez.esp('data.frame({col}=vec,stringsAsFactors=F)')
+    theAttr = ez.copyattr(df,col)
+    vec = ez.pasteattr(vec,col,theAttr)
+    
+    # https://stackoverflow.com/questions/17878048/merge-two-data-frames-while-keeping-the-original-row-order
+    # https://www.r-statistics.com/2012/01/merging-two-data-frame-objects-while-preserving-the-rows-order/
+    ############## function:
+    merge.with.order <- function(x,y, ..., sort = T, keep_order)
+    {
+        # this function works just like merge, only that it adds the option to return the merged data.frame ordered by x (1) or by y (2)
+        add.id.column.to.data <- function(DATA)
+        {
+            data.frame(DATA, id... = seq_len(nrow(DATA)))
+        }
+        # add.id.column.to.data(data.frame(x = rnorm(5), x2 = rnorm(5)))
+        order.by.id...and.remove.it <- function(DATA)
+        {
+            # gets in a data.frame with the "id..." column.  Orders by it and returns it
+            if(!any(colnames(DATA)=="id...")) stop("The function order.by.id...and.remove.it only works with data.frame objects which includes the 'id...' order column")
+            
+            DATA = data.frame(DATA)
+            ss_r <- order(DATA$id...)
+            ss_c <- colnames(DATA) != "id..."
+            DATA[ss_r, ss_c]
+        }
+ 
+        # tmp <- function(x) x==1; 1    # why we must check what to do if it is missing or not...
+        # tmp()
+ 
+        if(!missing(keep_order))
+        {
+            if(keep_order == 1) return(order.by.id...and.remove.it(merge(x=add.id.column.to.data(x),y=y,..., sort = FALSE)))
+            if(keep_order == 2) return(order.by.id...and.remove.it(merge(x=x,y=add.id.column.to.data(y),..., sort = FALSE)))
+            # if you didn't get "return" by now - issue a warning.
+            warning("The function merge.with.order only accepts NULL/1/2 values for the keep_order variable")
+        } else {return(merge(x=x,y=y,..., sort = sort))}
+    }
+    # ######## example:  
+        
+    # x <- data.frame(
+    #        ref = c( 'Ref1', 'Ref2' )
+    #      , label = c( 'Label01', 'Label02' )
+    #      )
+    # y <- data.frame(
+    #       id = c( 'A1', 'C2', 'B3', 'D4' )
+    #     , ref = c( 'Ref1', 'Ref2' , 'Ref3','Ref1' )
+    #     , val = c( 1.11, 2.22, 3.33, 4.44 )
+    #     )
+    # merge(x, y, by='ref', all.y = T, sort=F )
+    # merge(x, y, by='ref', all.y = T, sort=T )
+    # merge.with.order(x, y, by='ref', all.y = T, sort=T, keep_order=1)
+    # merge.with.order(x, y, by='ref', all.y = T, sort=F, keep_order=1)
+    # merge.with.order(x, y, by='ref', all.y = T, sort=T, keep_order=2)
+    # merge.with.order(x, y, by='ref', all.y = T, sort=F, keep_order=2)
+    
+    # both merge, left_join, join are problematic somehow
+    # res = merge(vec,df,by=col,all.x=TRUE,sort=FALSE)
+    # res = dplyr::left_join(vec,df,by=col)
+    # res = plyr::join(vec,df,by=col,type='left',match='all')
+    
+    res = merge.with.order(vec,df,by=col,all.x=TRUE,keep_order=1)
+    return(res)
 }

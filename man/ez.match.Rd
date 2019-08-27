@@ -21,5 +21,5 @@ kinda like filter(), but the order of rows are in the order of vec
 }
 \note{
 works best if your vec contains exactly the same elements as df[[col]], and neither contain duplicate values
-\cr Actually, duplicated elements in vec OK, will be mathched multiple times. Duplicates in df[[col]] will be picked using first match.
+\cr Actually, duplicated elements in vec OK, will be mathched multiple times. Duplicates in df[[col]] will be picked using first match. For example, df[[col]] has two rows id1_col2, id1_col1, vec = c(id1,id1), then returns two rows id1_col2, id1_col2.
 }
