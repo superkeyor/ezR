@@ -2120,7 +2120,8 @@ ez.match2 = function(df, col, vec) {
     # res = merge(vec,df,by=col,all.x=TRUE,sort=FALSE)
     # res = dplyr::left_join(vec,df,by=col)
     # res = plyr::join(vec,df,by=col,type='left',match='all')
-    
-    res = merge.with.order(vec,df,by=col,all.x=TRUE,keep_order=1)
+    # res = merge.with.order(vec,df,by=col,all.x=TRUE,keep_order=1)
+
+    res = dplyr::left_join(vec,df,by=col)
     return(res)
 }
