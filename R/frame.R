@@ -2116,12 +2116,13 @@ ez.match2 = function(df, col, vec) {
     # merge.with.order(x, y, by='ref', all.y = T, sort=T, keep_order=2)
     # merge.with.order(x, y, by='ref', all.y = T, sort=F, keep_order=2)
     
-    # both merge, left_join, join are problematic somehow
+    # both merge, left_join, join are problematic somehow??--further testing needed
     # res = merge(vec,df,by=col,all.x=TRUE,sort=FALSE)
     # res = dplyr::left_join(vec,df,by=col)
     # res = plyr::join(vec,df,by=col,type='left',match='all')
     # res = merge.with.order(vec,df,by=col,all.x=TRUE,keep_order=1)
 
+    # still use left_join
     vec$id... = seq_len(nrow(vec))
     df$id.... = seq_len(nrow(df))
     res = dplyr::left_join(vec,df,by=col) %>% dplyr::arrange(id...,id....) %>% dplyr::select(-id...,-id....)
