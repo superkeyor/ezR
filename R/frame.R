@@ -2122,6 +2122,8 @@ ez.match2 = function(df, col, vec) {
     # res = plyr::join(vec,df,by=col,type='left',match='all')
     # res = merge.with.order(vec,df,by=col,all.x=TRUE,keep_order=1)
 
-    res = dplyr::left_join(vec,df,by=col)
+    vec$id... = seq_len(nrow(vec)))
+    df$id.... = seq_len(nrow(df)))
+    res = dplyr::left_join(vec,df,by=col) %>% dplyr::arrange(id...,id....) %>% dplyr::select(-id...,-id....)
     return(res)
 }
