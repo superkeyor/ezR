@@ -17,11 +17,11 @@ ez.xyplot(df, cmd, ylab = NULL, xlab = NULL, xangle = 0, vjust = NULL,
 
 \item{xlab}{x label NULL}
 
-\item{xangle}{angle of x text 0}
+\item{xangle}{angle of x-axis text 0}
 
-\item{vjust}{vjust of x text NULL}
+\item{vjust}{vjust of x-axis text NULL. hjust and vjust are only defined between 0 and 1, 0 means left-justified, 1 means right-justified}
 
-\item{hjust}{hjust of x text NULL}
+\item{hjust}{hjust of x-axis text NULL}
 
 \item{facet}{one of 'cols', 'rows', 'wrap'}
 }

@@ -1181,9 +1181,9 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
 #' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL
-#' @param xangle  angle of x text 0
-#' @param vjust  vjust of x text NULL
-#' @param hjust  hjust of x text NULL
+#' @param xangle  angle of x-axis text 0
+#' @param vjust  vjust of x-axis text NULL. hjust and vjust are only defined between 0 and 1, 0 means left-justified, 1 means right-justified
+#' @param hjust  hjust of x-axis text NULL
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
