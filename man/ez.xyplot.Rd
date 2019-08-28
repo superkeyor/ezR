@@ -10,7 +10,7 @@ ez.xyplot(df, cmd, ylab = NULL, xlab = NULL, xangle = 0, vjust = NULL,
 \arguments{
 \item{df}{data frame in long format}
 
-\item{cmd}{like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous, x z a are discrete, g is individual/grouping variable
+\item{cmd}{like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous or discrete (e.g., dx), x z a are discrete, g is individual/grouping variable
 \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'}
 
 \item{ylab}{y label NULL}

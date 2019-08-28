@@ -1177,7 +1177,7 @@ ez.lineplot = function(df,cmd,colors=ez.palette("Zhu"),line.size=0.7,error.size=
 #' mimic xyplot with ggplot (slightly horizontally jittered)
 #' @description mimic xyplot with ggplot (slightly horizontally jittered)
 #' @param df data frame in long format
-#' @param cmd like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous, x z a are discrete, g is individual/grouping variable
+#' @param cmd like "y|x,g", "y|x z,g", or "y|x z a,g" where y is continous or discrete (e.g., dx), x z a are discrete, g is individual/grouping variable
 #' \cr 'FinalMem|Attention, SubjectID'     'FinalMem|Attention Condition, SubjectID'
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL
