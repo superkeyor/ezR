@@ -930,6 +930,7 @@ age_calc <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE) {
 #' @source This function was developed in part from this response on the R-Help mailing list.
 #' @seealso See also \code{\link{difftime}} which this function uses and mimics
 #' some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}}
+#' \cr may be like the Excel funciton: YEARFRAC()
 #' @author Jason P. Becker from package eeptools (sligthly modified by Jerry)
 #' @export
 #' @examples
