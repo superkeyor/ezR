@@ -45,8 +45,8 @@ age
 }
 \seealso{
 See also \code{\link{difftime}} which this function uses and mimics
-some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}}
-\cr may be like the Excel funciton: YEARFRAC()
+some functionality but at higher unit levels.  \code{\link{ez.date}} \code{\link{ez.is.date}} \code{\link{ez.is.date.like}} \code{\link{ez.age}} 
+may be like the Excel funciton: YEARFRAC
 }
 \author{
 Jason P. Becker from package eeptools (sligthly modified by Jerry)
