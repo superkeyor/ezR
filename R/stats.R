@@ -1009,7 +1009,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
     # yet another patch for cmd input
     if (grepl('[~|]',y[1],perl=TRUE)){
         # peel the onion
@@ -1145,7 +1145,11 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,view=F,plot=F,cols=3,pmethods=
         # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.pprint(sprintf('aov(%s~%s): %s\t%.2f\t%s',Y,X,result.report$raw.adj.mean.sd[i],result.report$F[i],ez.p.apa(result.report$p[i],prefix=0,pe=pe)),color='cyan')
+            if (reportF) {
+                ez.pprint(sprintf('aov(%s~%s): %s\t%.2f\t%s',Y,X,result.report$raw.adj.mean.sd[i],result.report$F[i],ez.p.apa(result.report$p[i],prefix=0,pe=pe)),color='cyan')
+            } else {
+                ez.pprint(sprintf('aov(%s~%s): %s\t%s',Y,X,result.report$raw.adj.mean.sd[i],ez.p.apa(result.report$p[i],prefix=0,pe=pe)),color='cyan')
+            }
         }
 
         for (i in 1:nrow(result.report)){
