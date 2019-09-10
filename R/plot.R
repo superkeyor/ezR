@@ -1834,7 +1834,7 @@ coord_radar <- function (theta = "x", start = 0, direction = 1)
 #' @note As a reminder, the returned ggplot object can be modified post-hoc
 #' @export
 #' @references \href{http://www.cmap.polytechnique.fr/~lepennec/R/Radar/RadarAndParallelPlots.html}{Erwan Le Pennec - CMAP}
-ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL,theme.apa=TRUE){
+ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet=FALSE, facetfontsize=1, color=id, linetype=NULL){
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -1848,7 +1848,7 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
 
     # 1) summarise
     if (stats!="none") {
-        cmd = sprintf('df.stats = dplyr::summarise_each(dplyr::group_by(df.ori,%s),
+        cmd = sprintf('df.stats = dplyr::summarise_all(dplyr::group_by(df.ori,%s),
                       funs(%s(.,na.rm=T)))
                       ',id,stats)
         eval(parse(text = cmd))
@@ -1907,13 +1907,11 @@ ez.radarmap = function(df, id, stats="mean", lwd=1, angle=0, fontsize=0.8, facet
     if (is.null(color)) {
         cmd = sprintf('p = p + scale_color_manual(values=rep("black",nlevels(factor(df$%s))))
                       ',id)
-        if (theme.apa) cmd = paste0(cmd,'+theme_apa()')
         eval(parse(text = cmd))
     }
     if (is.null(linetype)) {
         cmd = sprintf('p = p + scale_linetype_manual(values=rep("solid",nlevels(factor(df$%s))))
                       ',id)
-        if (theme.apa) cmd = paste0(cmd,'+theme_apa()')
         eval(parse(text = cmd))
     }
     gghistory=paste(gghistory,cmd,sep='\n')
