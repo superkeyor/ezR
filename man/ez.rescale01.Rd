@@ -12,3 +12,6 @@ if x is not numeric, return original x (unchanged)
 \description{
 rescale a vector to 0-1
 }
+\note{
+step 1: if there is negative value, x - min(x); step 2: x/max(x)
+}
