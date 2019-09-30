@@ -25,6 +25,7 @@ ez.nan2na(rep(c(0, -Inf, Inf, NA, NaN), 3))
 ez.nan2na(matrix(c(0, Inf, -Inf, 0), 2, 2))
 ez.nan2na(array(c(0, -Inf, Inf, 1, NaN), dim = c(2, 3, 4)))
 ez.nan2na(ts(rep(c(0, -Inf, Inf), 2), frequency = 5))
+ez.nan2na(factor(c('ab','de'))), ez.nan2na(c('ab','de'))  # returns the original
 }
 \seealso{
 \code{\link{is.finite}}, \code{\link{NA}}
