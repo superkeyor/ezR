@@ -952,6 +952,9 @@ ez.age <- function(dob, enddate=Sys.Date(), units='years', precise=TRUE){
     result = sapply(1:length(dob),function(i,dob,enddate,units,precise) {
             if (is.na(dob[i]) || is.na(enddate[i])) {
                 return(NA)
+            } else if (dob[i] > enddate[i]){
+                ez.pprint(sprintf('dob: %s > %s',dob[i],enddate[i]),'red')
+                return(NA)
             } else {
                 return(age_calc(dob[i],enddate[i],units,precise))
             }
