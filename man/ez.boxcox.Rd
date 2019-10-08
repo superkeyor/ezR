@@ -27,12 +27,12 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
 \item{method}{"tukey" here actually means modified tukey, \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}. 
 \cr Where \code{\link[car]{basicPower}} is: x^lambda if lambda not 0; log(x) if lambda 0
-\cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcPower}}
-\cr
+\cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcnPower}}
 \cr
 \cr "boxcox" is essentially scaled tukey: \code{out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)} for all positive, \code{out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)} for any non-positive--ie, zero or negative. The selection between \code{\link[car]{bcPower}} and \code{\link[car]{bcnPower}} is done automatically by this function.
-\cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0
-\cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0
+\cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0. gamma is NULL means 0.
+\cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0. This bcnPower is Hawkins and Weisberg (2017). While allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox 
+transformed but it is much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
 \cr
 \cr Therefore, both "tukey" and "boxcox" methods here keep the ordering.}
 
@@ -46,7 +46,4 @@ box-cox power transformation
 }
 \note{
 Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses.
-\cr\cr \code{\link[car]{bcnPower}} can handle negative responses (Hawkins and Weisberg (2017)),
-while allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox
-transformed but much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
 }
