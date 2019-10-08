@@ -2506,10 +2506,13 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         method = match.arg(method)
         precise = match.arg(precise)
         if (any((y <= 0) %in% TRUE)) {
-            family = "bcnPower"
             if (method=='tukey') {
-                ez.pprint('non-positive value exists, switching method from modified tukey to boxcox...')
+                ez.pprint('non-positive value exists, switching method from modified tukey to boxcox bcnPower...')
+                family = "bcnPower"
                 method='boxcox'
+            } else {
+                family = "bcnPower"
+                ez.pprint('non-positive value exists, switching method from boxcox bcPower to boxcox bcnPower...')
             }
         }
         else {
