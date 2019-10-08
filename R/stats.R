@@ -2475,7 +2475,16 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param plot boxcox plot. applicable only if y is a vector, only when there is an actual transformation
 #' @param print2scr print out transformation parameters, only when there is an actual transformation
 #' @param force T = transform regardless, or F = only if p.lambda rounded is less than .05.
-#' @param method boxcox (scaled tukey, \code{\link[car]{bcPower}} for all positive, \code{\link[car]{bcnPower}} for any non-positive--ie, zero or negative, auto select) or modified (I modified) tukey (\code{\link[car]{basicPower}} for all positive, auto switch to bcnPower if non-positive), both methods keep the ordering.
+#' @param method "tukey" here actually means modified tukey, \code{out = car::{\link[car]{basicPower}(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}. 
+#' \cr Where \code{{\link[car]{basicPower}} is: x^lambda if lambda not 0; log(x) if lambda 0
+#' \cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcPower}}
+#' \cr
+#' \cr
+#' \cr "boxcox" is essentially scaled tukey: out = car::\code{\link[car]{bcPower}}(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL) for all positive, out = car::\code{\link[car]{bcnPower}}(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma) for any non-positive--ie, zero or negative. The selection between \code{\link[car]{bcPower}} and \code{\link[car]{bcnPower}} is done automatically by this function.
+#' \cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0
+#' \cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0
+#' \cr
+#' \cr Therefore, both "tukey" and "boxcox" methods here keep the ordering. 
 #' @param precise use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or original y if no transformation occurs.
 #' @importFrom car basicPower bcPower bcnPower
