@@ -2480,9 +2480,9 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' \cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcnPower}}
 #' \cr
 #' \cr "boxcox" is essentially scaled tukey: \code{out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)} for all positive, \code{out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)} for any non-positive--ie, zero or negative. The selection between \code{\link[car]{bcPower}} and \code{\link[car]{bcnPower}} is done automatically by this function.
-#' \cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0. gamma is NULL means 0.
+#' \cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0. Here gamma NULL means 0.
 #' \cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0. This bcnPower is Hawkins and Weisberg (2017). While allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox 
-#' transformed but it is much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
+#' transformed, it is much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
 #' \cr
 #' \cr Therefore, both "tukey" and "boxcox" methods here keep the ordering. 
 #' @param precise use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
