@@ -2488,7 +2488,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param precise use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or original y if no transformation occurs.
 #' @importFrom car basicPower bcPower bcnPower
-#' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses.
+#' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. Also consider applying z transformation to boxcox-transformed data.
 #' @export
 ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
     force = TRUE, method = c('boxcox','tukey'), precise = c('rounded','raw'), ...) {

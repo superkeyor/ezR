@@ -45,5 +45,5 @@ returns transformed y, or original y if no transformation occurs.
 box-cox power transformation
 }
 \note{
-Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses.
+Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. Also consider applying z transformation to boxcox-transformed data.
 }
