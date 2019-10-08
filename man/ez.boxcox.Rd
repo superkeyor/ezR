@@ -25,6 +25,17 @@ ez.boxcox(y, col = NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
 
 \item{force}{T = transform regardless, or F = only if p.lambda rounded is less than .05.}
 
+\item{method}{"tukey" here actually means modified tukey, \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}. 
+\cr Where \code{\link[car]{basicPower}} is: x^lambda if lambda not 0; log(x) if lambda 0
+\cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcPower}}
+\cr
+\cr
+\cr "boxcox" is essentially scaled tukey: \code{out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)} for all positive, \code{out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)} for any non-positive--ie, zero or negative. The selection between \code{\link[car]{bcPower}} and \code{\link[car]{bcnPower}} is done automatically by this function.
+\cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0
+\cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0
+\cr
+\cr Therefore, both "tukey" and "boxcox" methods here keep the ordering.}
+
 \item{precise}{use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda}
 }
 \value{
