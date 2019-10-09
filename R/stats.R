@@ -888,7 +888,7 @@ ez.scale = function(x, col=NULL, center = TRUE, scale = TRUE) {
         x = as.vector(base::scale(x,center=center,scale=scale))
     } else if (is.data.frame(x)) {
         col = ez.selcol(x,col)
-        x[col] = lapply(x[col],ez.scale,col=col,center=center,scale=scale)
+        x[col] = lapply(x[col],ez.scale,col=NULL,center=center,scale=scale)
     } else {
         x = x
     } # end if
