@@ -882,7 +882,7 @@ ez.sd = stats::sd
 #' @export
 ez.scale = function(x, col=NULL, center = TRUE, scale = TRUE) {
     if (!is.data.frame(x)) {
-        if (!is.numeric(y) | is.factor(y) | is.character(y)){
+        if (!is.numeric(x) | is.factor(x) | is.character(x)){
             stop("input x must be numeric")
         }
         x = as.vector(base::scale(x,center=center,scale=scale))
