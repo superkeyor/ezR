@@ -11,6 +11,16 @@
 #' people = data.frame(sx, ht, wt)
 ez.frame = data.frame
 
+#' Generate a predefine data frame for testing, debugging, playing and etc
+#' @description Generate a predefine frame for testing, debugging, playing and etc
+#' @export
+ez.play = function() {
+    out = data.frame(AStrFac=c("hello","info","info","victory"),BStr=c("world","map","win","map"),FNum=c(3.400, -43.000, 0.123, -1.320),INum=c(9, 0, 2351, 101),Mix=c(NA,'ad',NA,329),Yam=c(19821123, 19821123, 30.102, NA),stringsAsFactors=T)
+    rownames(out)=c('a','b','c','d')
+    out[['BStr']] = as.character(out[['BStr']])
+    out
+}
+
 #' alias of \code{\link[data.table]{transpose}}
 #' @description alias of \code{\link[data.table]{transpose}}
 #' @export
