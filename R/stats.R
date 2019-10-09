@@ -866,16 +866,33 @@ ez.se = function(x) {
 #' @export
 ez.sd = stats::sd
 
-#' z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.
-#' @description z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.
+#' z score, scale, NA ignored & returned in place.
+#' @description z score, scale, NA ignored & returned in place.
+#' @param x a data frame or a vector
+#' @param col passed to \code{\link{ez.selcol}}
+#' \cr        if x is a data frame, col specified, process that col only.
+#' \cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
+#' \cr        if x is not a data frame, col is ignored
+#' \cr        could be multiple cols
+#' @return returns a new data frame or vector
 #' @note
-#' similar to base::scale, but 1d vector in and 1d vector out
-#' suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
+#' similar to base::scale, but no special scale attributes
 #' alias: \code{\link{ez.z}} and \code{\link{ez.scale}}
 #' @seealso \code{\link{ez.se}} \code{\link{ez.sd}}
 #' @export
-ez.scale = function(x,center = TRUE, scale = TRUE) {
-    as.vector(scale(x,center=center,scale=scale))
+ez.scale = function(x, col=NULL, center = TRUE, scale = TRUE) {
+    if (!is.data.frame(x)) {
+        if (!is.numeric(y) | is.factor(y) | is.character(y)){
+            stop("input x must be numeric")
+        }
+        x = as.vector(base::scale(x,center=center,scale=scale))
+    } else if (is.data.frame(x)) {
+        col = ez.selcol(x,col)
+        x[col] = lapply(x[col],ez.scale,col=col,center=center,scale=scale)
+    } else {
+        x = x
+    } # end if
+    return(x)
 }
 
 #' @rdname ez.scale
@@ -2500,8 +2517,9 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
             y <- y[!rmv]
             x <- x[!rmv]
         }
-        if (!is.numeric(y) | is.factor(y) | is.character(y))
+        if (!is.numeric(y) | is.factor(y) | is.character(y)) {
             stop("y must be numeric")
+        }
 
         method = match.arg(method)
         precise = match.arg(precise)

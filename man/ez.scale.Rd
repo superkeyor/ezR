@@ -3,18 +3,29 @@
 \name{ez.scale}
 \alias{ez.scale}
 \alias{ez.z}
-\title{z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.}
+\title{z score, scale, NA ignored & returned in place.}
 \usage{
-ez.scale(x, center = TRUE, scale = TRUE)
+ez.scale(x, col = NULL, center = TRUE, scale = TRUE)
 
-ez.z(x, center = TRUE, scale = TRUE)
+ez.z(x, col = NULL, center = TRUE, scale = TRUE)
+}
+\arguments{
+\item{x}{a data frame or a vector}
+
+\item{col}{passed to \code{\link{ez.selcol}}
+\cr        if x is a data frame, col specified, process that col only.
+\cr        if x is a data frame, col unspecified (i.e., NULL default), process all cols
+\cr        if x is not a data frame, col is ignored
+\cr        could be multiple cols}
+}
+\value{
+returns a new data frame or vector
 }
 \description{
-z score, scale, 1d vector in and 1d vector out, NA ignored/returned in place.
+z score, scale, NA ignored & returned in place.
 }
 \note{
-similar to base::scale, but 1d vector in and 1d vector out
-suitable for df[] = lapply(df,ez.scale) (no special scale attributes)
+similar to base::scale, but no special scale attributes
 alias: \code{\link{ez.z}} and \code{\link{ez.scale}}
 }
 \seealso{
