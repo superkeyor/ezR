@@ -703,7 +703,7 @@ ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=
 #' \cr        if x is not a data frame, col is ignored
 #' \cr        could be multiple cols
 #' @param method z score, mad, or IQR (John Tukey)
-#' @param cutoff abs() > cutoff will be treated as outliers. Default/auto values (i.e. if NA):
+#' @param cutoff abs(x) > cutoff will be treated as outliers. Default/auto values (i.e. if NA):
 #' \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
 #' \cr mad 2.5, which is the standard recommendation, or 5.2
 #' \cr iqr 1.5
@@ -712,7 +712,7 @@ ez.mvi = function(df,cmd,violin=TRUE,colors=ez.palette('Zhu'),n.size=4.5,m.size=
 #' corresponding cutoff, or same method with different cutoff).
 #' @param plot boxplot and hist before and after outlier processing.
 #' @param fillout how to process outlier, fill with na, mean, median (columnwise for data frame), or
-#' null --> remove outlier (only for vector or df with single col specified)
+#' null --> remove outlier (only for vector or df with single col specified, auto switch to na if otherwise)
 #' @return returns a new data frame or vector. If hack=T, returns nothings
 #' @note univariate outlier approach
 #' The Z-score method relies on the mean and standard deviation of a group of data to measure central

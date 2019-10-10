@@ -19,14 +19,14 @@ ez.outlier(x, col = NULL, method = c("z", "mad", "iqr"), cutoff = NA,
 
 \item{method}{z score, mad, or IQR (John Tukey)}
 
-\item{cutoff}{abs() > cutoff will be treated as outliers. Default/auto values (i.e. if NA):
+\item{cutoff}{abs(x) > cutoff will be treated as outliers. Default/auto values (i.e. if NA):
 \cr z 95% of values fall within 1.96, qnorm(0.025,lower.tail=F), or 3
 \cr mad 2.5, which is the standard recommendation, or 5.2
 \cr iqr 1.5
 \cr if multiple values specified, use the first one (an exception is hack=T, during which method and cutoff same length or scalar)}
 
 \item{fillout}{how to process outlier, fill with na, mean, median (columnwise for data frame), or
-null --> remove outlier (only for vector or df with single col specified)}
+null --> remove outlier (only for vector or df with single col specified, auto switch to na if otherwise)}
 
 \item{hack}{call mapply to try all method and cutoff (same length or scalar, ie, different methods with
 corresponding cutoff, or same method with different cutoff).}
