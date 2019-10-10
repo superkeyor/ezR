@@ -45,5 +45,8 @@ returns transformed y, or original y if no transformation occurs.
 box-cox power transformation
 }
 \note{
-Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. Also consider applying z transformation to boxcox-transformed data.
+Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. Also consider applying z standardization to boxcox-transformed data.
+\cr lambda is a tuning parameter that can be optimized in a way that the distribution of the transformed data has the largest similarity to a normal distribution. There are several proposals to optimize lambda.
+\cr The Box-Cox-transformed values do not guarantee normality although the data should be less skewed and should have less extreme values than before transformation. 
+\cr Some research (Zwiener et al, 2014, PLOS ONE) pointed out that z Standardization of covariates leads to better prediction performance independent of the underlying transformation used (eg., raw, log, boxcox)
 }
