@@ -5,7 +5,7 @@
 ###**************************************************.
 ###*without ez. in the function name.
 ###**************************************************.
-#' creat shorthand for Times New Roman cross-platform
+#' creat shorthand for Times New Roman cross-platform 
 #' @description creat shorthand for Times New Roman cross-platform
 #' @export
 # from https://github.com/trinker/plotflow/
