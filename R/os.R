@@ -64,8 +64,7 @@ ez.debug = function(debugMode=NULL) {
 #' get/set warn error mode
 #' @description get/set warn error mode
 #' @param warnErrorMode 1/0/NULL. if 1/0, set mode; if NULL, get mode, wrapper of getOption('warn')
-#' @return if 1/0 passed in, return invisible NULL
-#' \cr if NULL passed in, return the current status 1/0/NULL (corresponding to on/off/Not set)
+#' @return returns invisible 1/0/NULL (corresponding to on/off/Not set)
 #' @export
 ez.warn = function(warnErrorMode=NULL,print2scr=TRUE) {
     if (is.null(warnErrorMode)) {
@@ -81,13 +80,17 @@ ez.warn = function(warnErrorMode=NULL,print2scr=TRUE) {
             return(invisible(0))}
     }
     else if (warnErrorMode==1) {
+        opt = getOption('warn')
         options(warn=2)
         if (print2scr) {ez.pprint('Warn Error Mode Status: On')}
-        return(invisible(NULL))}
+        if (is.null(opt)) {return(invisible(NULL))}
+        else {return(invisible(opt-1))}}
     else if (warnErrorMode==0) {
+        opt = getOption('warn')
         options(warn=1)
         if (print2scr) {ez.pprint('Warn Error Mode Status: Off')}
-        return(invisible(NULL))}
+        if (is.null(opt)) {return(invisible(NULL))}
+        else {return(invisible(opt-1))}
 }
 
 #' print out or set the repo
