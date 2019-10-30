@@ -4,7 +4,7 @@
 \alias{ez.warn}
 \title{get/set warn error mode}
 \usage{
-ez.warn(warnErrorMode = NULL)
+ez.warn(warnErrorMode = NULL, print2scr = TRUE)
 }
 \arguments{
 \item{warnErrorMode}{1/0/NULL. if 1/0, set mode; if NULL, get mode, wrapper of getOption('warn')}
