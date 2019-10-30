@@ -10,8 +10,7 @@ ez.warn(warnErrorMode = NULL, print2scr = TRUE)
 \item{warnErrorMode}{1/0/NULL. if 1/0, set mode; if NULL, get mode, wrapper of getOption('warn')}
 }
 \value{
-if 1/0 passed in, return invisible NULL
-\cr if NULL passed in, return the current status 1/0/NULL (corresponding to on/off/Not set)
+returns invisible 1/0/NULL (corresponding to previous status on/off/Not set)
 }
 \description{
 get/set warn error mode
