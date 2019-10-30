@@ -64,7 +64,7 @@ ez.debug = function(debugMode=NULL) {
 #' get/set warn error mode
 #' @description get/set warn error mode
 #' @param warnErrorMode 1/0/NULL. if 1/0, set mode; if NULL, get mode, wrapper of getOption('warn')
-#' @return returns invisible 1/0/NULL (corresponding to previous status on/off/Not set)
+#' @return returns invisible 1/0/NULL (corresponding to old--if set, or current--if get, status on/off/Not set)
 #' @export
 ez.warn = function(warnErrorMode=NULL,print2scr=TRUE) {
     opt = getOption('warn')
