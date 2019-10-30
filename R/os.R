@@ -61,19 +61,21 @@ ez.debug = function(debugMode=NULL) {
     return(invisible(NULL))
 }
 
-#' warn error mode on/off 1/0 T/F. NULL-> getOption('warn')
-#' @description warn error mode on/off 1/0 T/F. NULL-> getOption('warn')
+#' get/set warn error mode
+#' @description get/set warn error mode
+#' @param warnErrorMode 1/0/NULL. if 1/0, set mode; if NULL, get mode, wrapper of getOption('warn')
+#' @return if 1/0 passed in, return invisible NULL
+#' \cr if NULL passed in, return the current status 1/0/NULL (corresponding to on/off/Not set)
 #' @export
 ez.warn = function(warnErrorMode=NULL) {
     if (is.null(warnErrorMode)) {
         opt = getOption('warn')
-        if (is.null(opt)) ez.pprint('Warn Error Mode Status: Not set yet')
-        else if (opt==2) ez.pprint('Warn Error Mode Status: On')
-        else if (opt==1) ez.pprint('Warn Error Mode Status: Off')
+        if (is.null(opt)) {ez.pprint('Warn Error Mode Status: Not set yet'); return(invisible(NULL))}
+        else if (opt==2) {ez.pprint('Warn Error Mode Status: On'); return(invisible(1))}
+        else if (opt==1) {ez.pprint('Warn Error Mode Status: Off'); return(invisible(0))}
     }
-    else if (warnErrorMode==1) {options(warn=2); ez.pprint('Warn Error Mode Status: On')}
-    else if (warnErrorMode==0) {options(warn=1); ez.pprint('Warn Error Mode Status: Off')}
-    return(invisible(NULL))
+    else if (warnErrorMode==1) {options(warn=2); ez.pprint('Warn Error Mode Status: On'); return(invisible(NULL))}
+    else if (warnErrorMode==0) {options(warn=1); ez.pprint('Warn Error Mode Status: Off'); return(invisible(NULL))}
 }
 
 #' print out or set the repo
