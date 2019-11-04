@@ -11,16 +11,16 @@ ez.logistics(df, y, x, covar = NULL, report = T, view = F, plot = F,
 }
 \arguments{
 \item{df}{a data frame. Internally go through dropna (no ez.2value, scale)
-\cr glm can handel factor by default (dummy coding)
+\cr glm can handel X factor by default (dummy coding), but not Y factor (You can't have factor/categorical response variables); see below
 \cr I do not do standarization here, because
 \cr While standardized coefficients in classic linear regression are well-defined,
 \cr logistic regression, like other generalized linear models, present additional complexity as a result of
 \cr the non-linear link function (logit), and non-normal error function (binomial).
 \cr https://think-lab.github.io/d/205/}
 
-\item{y}{compatible with \code{\link{ez.selcol}}}
+\item{y}{compatible with \code{\link{ez.selcol}}, could not be factor, has to be 0/1}
 
-\item{x}{compatible with \code{\link{ez.selcol}}}
+\item{x}{compatible with \code{\link{ez.selcol}}, can auto dummy coding factors}
 
 \item{covar}{NULL=no covar, compatible with \code{\link{ez.selcol}}}
 
