@@ -860,7 +860,7 @@ ez.recode2 = function(df, col, recodes){
 #' \cr But my script protects that; data type remains unchanged if there is no match
 #' \cr logic is tricky TRUE=='TRUE', FALSE=='FALSE' return TRUE; always convert them first to num, eg, mutate(preterm=as.integer(delivery_ega<37.0)) and then start from there.
 #' @param df data frame
-#' @param col column name evaluated by eval('dplyr::select()'), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided), all columns used
+#' @param col column name evaluated by eval('dplyr::select()'), can be single, or multiple/vector eg, c('col1','col2'). If skipped (not provided, ie, three-parameter format), all columns used
 #' @param oldval old value (e.g., -Inf, NA), can only be single, not multiple/vector. Note would not differentiate 5.0 and 5
 #' @param newval new value (e.g., NA), can only be single, not multiple/vector
 #' @return returns a new df, old one does not change
