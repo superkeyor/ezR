@@ -1343,7 +1343,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
                         }
                     }
 
-                    p = ggplot(df, aes(%s, %s)) +
+                    pp = ggplot(df, aes(%s, %s)) +
                     geom_tile(aes(fill = %s)) +
                     scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
                     geom_text(aes(fill = %s, label = remove0(%s,%s))) +
@@ -1358,7 +1358,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
         )
     } else {
         tt = sprintf('
-                    p = ggplot(df, aes(%s, %s)) +
+                    pp = ggplot(df, aes(%s, %s)) +
                     geom_tile(aes(fill = %s)) +
                     scale_fill_gradient2(low = "%s", mid = "%s", high = "%s") +
                     scale_x_discrete("", expand = c(0, 0)) +
@@ -1374,7 +1374,6 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
     if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     gghistory=paste(gghistory,tt,sep='\n')
-    pp=p
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
     return(pp)
