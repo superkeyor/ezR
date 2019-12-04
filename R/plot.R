@@ -2195,7 +2195,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @description scatter plot with lattice
 #' @param df data frame
 #' @param cmd like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z", "y~x+a+b|||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z--gives interaction p value), +a+b optional for covariates residualization
-#' \cr y~x+a+b|||z plots separated by z groups
+#' \cr y~x+a+b|||z plots separated by z groups, y~x+a+b||||z plots with and without z grouping
 #' @param lmline T/R lmline (for all data points), particularlly useful when separate lines are plotted for each group
 #' @param loess T/R adds a loess fit (uses panel.loess, the same as type = c("smooth"))
 #' @param model one of c('lm', 'lmrob', 'lmRob', 'rlm'), robustbase::lmrob--MM-type Estimators; robust::lmRob--automatically chooses an appropriate algorithm. one or more, 'lm' will always be included internally, even if not specified
@@ -2349,14 +2349,19 @@ if (grepl("+",cmd,fixed=TRUE)) {
             tmp = strsplit(cmd,"[~+*]")[[1]]
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
-            # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
-            # https://stackoverflow.com/a/40061201/2292993
-            # group_by has no effects for ez.zresidize directly
+            # # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
+            # # https://stackoverflow.com/a/40061201/2292993
+            # # group_by has no effects for ez.zresidize directly
+            # tt = "
+            # df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+            #      dplyr::group_by({z}) %>%
+            #      dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
+            #      dplyr::ungroup() %>% data.frame()
+            # "
+            # update (2019 Dec), it seems more reasonable to residize each group in the same way
             tt = "
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-                 dplyr::group_by({z}) %>%
-                 dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
-                 dplyr::ungroup() %>% data.frame()
+                 ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
             "
             cmd = ez.sprintf('{y}~{x}*{z}')
         } else if (grepl("@",cmd,fixed=TRUE)) {
@@ -2364,11 +2369,15 @@ if (grepl("+",cmd,fixed=TRUE)) {
             tmp = strsplit(cmd,"[~+@]")[[1]]
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            # tt = "
+            # df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+            #      dplyr::group_by({z}) %>%
+            #      dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
+            #      dplyr::ungroup() %>% data.frame()
+            # "
             tt = "
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-                 dplyr::group_by({z}) %>%
-                 dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='{model}',scale={scale}){'}'}) %>%
-                 dplyr::ungroup() %>% data.frame()
+                 ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
             "
             cmd = ez.sprintf('{y}~{x}@{z}')
         } else {
@@ -2398,14 +2407,18 @@ if (grepl("+",cmd,fixed=TRUE)) {
             tmp = strsplit(cmd,"[~+*]")[[1]]
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
-            # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
-            # https://stackoverflow.com/a/40061201/2292993
-            # group_by has no effects for ez.zresidize directly
+            # # grouping changes df data type which would fail lme4::lmList, ungroup and data.frame()
+            # # https://stackoverflow.com/a/40061201/2292993
+            # # group_by has no effects for ez.zresidize directly
+            # tt = "
+            # df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+            #      dplyr::group_by({z}) %>%
+            #      dplyr::do({'{'}ez.zresidize(.,c('{y}','{x}'),c({v}),model='{model}',scale={scale}){'}'}) %>%
+            #      dplyr::ungroup() %>% data.frame()
+            # "
             tt = "
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-                 dplyr::group_by({z}) %>%
-                 dplyr::do({'{'}ez.zresidize(.,c('{y}','{x}'),c({v}),model='{model}',scale={scale}){'}'}) %>%
-                 dplyr::ungroup() %>% data.frame()
+                 ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
             "
             cmd = ez.sprintf('{y}~{x}*{z}')
         } else if (grepl("@",cmd,fixed=TRUE)) {
@@ -2413,11 +2426,15 @@ if (grepl("+",cmd,fixed=TRUE)) {
             tmp = strsplit(cmd,"[~+@]")[[1]]
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
+            # tt = "
+            # df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
+            #      dplyr::group_by({z}) %>%
+            #      dplyr::do({'{'}ez.zresidize(.,c('{y}','{x}'),c({v}),model='{model}',scale={scale}){'}'}) %>%
+            #      dplyr::ungroup() %>% data.frame()
+            # "
             tt = "
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
-                 dplyr::group_by({z}) %>%
-                 dplyr::do({'{'}ez.zresidize(.,c('{y}','{x}'),c({v}),model='{model}',scale={scale}){'}'}) %>%
-                 dplyr::ungroup() %>% data.frame()
+                 ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
             "
             cmd = ez.sprintf('{y}~{x}@{z}')
         } else {

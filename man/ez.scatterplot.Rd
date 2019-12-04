@@ -22,7 +22,7 @@ ez.scatterplot(df, cmd, lmline = TRUE, loess = FALSE, model = c("lm",
 \item{df}{data frame}
 
 \item{cmd}{like "y~x+a+b", "y~x+a+b|z", "y~x+a+b||z", "y~x+a+b|||z"where y x are continous, z discrete (| one regression line, || multiple regression lines by levels of z--gives interaction p value), +a+b optional for covariates residualization
-\cr y~x+a+b|||z plots separated by z groups}
+\cr y~x+a+b|||z plots separated by z groups, y~x+a+b||||z plots with and without z grouping}
 
 \item{lmline}{T/R lmline (for all data points), particularlly useful when separate lines are plotted for each group}
 
