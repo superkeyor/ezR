@@ -936,7 +936,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2scr=T){
         #     df[[col]]=tryCatch(sjmisc_set_labels(df[[col]],""), error=function(e) df[[col]], warning = function(w) df[[col]], finally=df[[col]])
         # }
 
-        thefun = function(dfcol,oldval,newval) {
+        thefun = function(dfcol,col,oldval,newval) {
             lab = ez.getlabel(dfcol); labs = ez.getlabels(dfcol)
             # for factor, you cannot directly assign if the new val is not alredy in the levels, otherwise get "invalid factor level, NA generated"
             factored = ifelse(is.factor(dfcol), TRUE, FALSE)
@@ -965,7 +965,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2scr=T){
             dfcol = ez.setlabel(dfcol,lab); dfcol = ez.setlabels(dfcol,ez.flipflop(labs))
             return(dfcol)
         }
-        df[cols] = lapply(df[cols],thefun,oldval=oldval,newval=newval)
+        df[cols] = lapply(1:length(cols), function(j) {thefun(dfcol=df[cols][[j]],col=cols[j],oldval=oldval,newval=newval)})
 
     # three parameters passed
     } else {
