@@ -22,5 +22,18 @@ returns nothing
 Send mail with Gmail
 }
 \note{
-first-time use will auto pop url to save secret file, or manually gmailr::gmail_auth('compose') to generate .httr-oauth
+first-time use:
+https://github.com/r-lib/gmailr#setup
+1) create a google project for it. The easiest way to do this is via the Python Quickstart.
+https://developers.google.com/gmail/api/quickstart/python
+Click the Enable the Gmail API button.
+In the resulting dialog click the DOWNLOAD CLIENT CONFIGURATION on your computer.
+
+2) Tell gmailr where the JSON lives
+Call gmailr::gm_auth_configure(path = "path/to/downloaded/json")
+call gmailr::gm_auth() to start the OAuth flow to verify to google 
+that you would like your gmailr project to have access to your email. 
+You will get a scary warning about an untrusted application, 
+this is because the application is the one you just created, 
+click advanced and Go to gmailr to proceed to do the oauth flow.
 }

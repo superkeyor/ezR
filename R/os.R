@@ -765,9 +765,24 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' @param htmlbody '<b>Gmailr</b> is a <i>very</i> handy package!' or 'Email using R.'
 #' @param attachment default NULL, 'BazaarQueriesforURLData.txt'
 #' @return returns nothing
-#' @note first-time use will auto pop url to save secret file, or manually gmailr::gmail_auth('compose') to generate .httr-oauth
+#' @note first-time use:
+#' https://github.com/r-lib/gmailr#setup
+#' 1) create a google project for it. The easiest way to do this is via the Python Quickstart.
+#' https://developers.google.com/gmail/api/quickstart/python
+#' Click the Enable the Gmail API button.
+#' In the resulting dialog click the DOWNLOAD CLIENT CONFIGURATION on your computer.
+#' 
+#' 2) Tell gmailr where the JSON lives
+#' Call gmailr::gm_auth_configure(path = "path/to/downloaded/json")
+#' call gmailr::gm_auth() to start the OAuth flow to verify to google 
+#' that you would like your gmailr project to have access to your email. 
+#' You will get a scary warning about an untrusted application, 
+#' this is because the application is the one you just created, 
+#' click advanced and Go to gmailr to proceed to do the oauth flow.
 #' @export
 ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
+    gmailr::gm_auth_configure(path='~/Dropbox/Apps/RStudio/gmailr_credentials.json')
+    gmailr::gm_auth(email = TRUE, cache = "~/.R/gargle/gargle-oauth")
     # https://cran.r-project.org/web/packages/gmailr/vignettes/sending_messages.html
     msg = gmailr::mime()
     msg = gmailr::to(msg, to)
