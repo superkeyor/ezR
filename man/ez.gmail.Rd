@@ -22,6 +22,10 @@ returns nothing
 Send mail with Gmail
 }
 \note{
+works but not update: requires rlang >= 0.4.0, which would mess up dplyr
+As of rlang 0.4.0, dplyr must be at least version 0.8.0.
+dplyr 0.7.4 is too old for rlang 0.4.2.
+
 first-time use:
 https://github.com/r-lib/gmailr#setup
 1) create a google project for it. The easiest way to do this is via the Python Quickstart.
