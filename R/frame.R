@@ -984,6 +984,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2scr=T){
         # https://stackoverflow.com/questions/2723034/suppress-one-commands-output-in-r
         # notice the invisible(capture.output(expr)) does not work within a function which returns some value and you want to use this value
         allcols=colnames(df)
+        # windows does not have /dev/null
         if (ez.getos()=='windows'){
             sink("NUL")
         } else {
