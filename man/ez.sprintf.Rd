@@ -5,7 +5,7 @@
 \title{alias of \code{\link[glue]{glue}}}
 \usage{
 ez.sprintf(..., .sep = "", .envir = parent.frame(), .open = "{",
-  .close = "}", .na = "NA", .transformer = identity_transformer)
+  .close = "}")
 }
 \description{
 alias of \code{\link[glue]{glue}}
