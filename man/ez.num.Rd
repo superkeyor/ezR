@@ -5,7 +5,7 @@
 \title{convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric}
 \usage{
 ez.num(x, col = NULL, force = FALSE, print2scr = TRUE,
-  na.strings = c("", ".", "NA", "na", "N/A", "n/a", "NaN", "nan"), ...)
+  na.strings = c("-", "", ".", "NA", "na", "N/A", "n/a", "NaN", "nan"), ...)
 }
 \arguments{
 \item{x}{a character vector, data frame, list, or a factor}

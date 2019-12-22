@@ -243,7 +243,7 @@ ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/
 #' ez.num(d,col=NULL,force=T)
 #' ez.num(d,col=c("char","mixed_char"),force=F)
 #' ez.num(d,col=c("char","mixed_char"),force=T)
-ez.num = function(x, col=NULL, force=FALSE, print2scr=TRUE, na.strings=c('-',','.','NA','na','N/A','n/a','NaN','nan'), ...){
+ez.num = function(x, col=NULL, force=FALSE, print2scr=TRUE, na.strings=c('-','','.','NA','na','N/A','n/a','NaN','nan'), ...){
     oldNAs = ez.count(x)
 
     if (is.factor(x)) {
