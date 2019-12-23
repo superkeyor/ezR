@@ -22,7 +22,7 @@ returns nothing
 Send mail with Gmail
 }
 \note{
-works but not update: requires rlang >= 0.4.0, which would mess up dplyr
+updated gmailr requires rlang >= 0.4.0, which would mess up dplyr
 As of rlang 0.4.0, dplyr must be at least version 0.8.0.
 dplyr 0.7.4 is too old for rlang 0.4.2.
 

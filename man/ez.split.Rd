@@ -4,7 +4,7 @@
 \alias{ez.split}
 \title{alias of \code{\link[dplyr]{group_by}}}
 \usage{
-ez.split(.data, ..., add = FALSE)
+ez.split(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))
 }
 \description{
 alias of \code{\link[dplyr]{group_by}}

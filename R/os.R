@@ -766,7 +766,7 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' @param attachment default NULL, 'BazaarQueriesforURLData.txt'
 #' @return returns nothing
 #' @note 
-#' works but not update: requires rlang >= 0.4.0, which would mess up dplyr
+#' updated gmailr requires rlang >= 0.4.0, which would mess up dplyr
 #' As of rlang 0.4.0, dplyr must be at least version 0.8.0.
 #' dplyr 0.7.4 is too old for rlang 0.4.2.
 #' 
@@ -786,8 +786,13 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' click advanced and Go to gmailr to proceed to do the oauth flow.
 #' @export
 ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
-    gmailr::gm_auth_configure(path='~/Dropbox/Apps/RStudio/gmailr_credentials.json')
-    gmailr::gm_auth(email = TRUE, cache = "~/.R/gargle/gargle-oauth")
+    if (ez.getos()=='windows'){
+        gmailr::gm_auth_configure(path='D:/Downloads/Apps/PythonR/gmailr_credentials.json')
+        gmailr::gm_auth(email = TRUE, cache = "C:/Users/Jerry/.R/gargle/gargle-oauth")
+    } else {
+        gmailr::gm_auth_configure(path='~/Dropbox/Apps/RStudio/gmailr_credentials.json')
+        gmailr::gm_auth(email = TRUE, cache = "~/.R/gargle/gargle-oauth")
+    }
     # https://cran.r-project.org/web/packages/gmailr/vignettes/sending_messages.html
     msg = gmailr::mime()
     msg = gmailr::to(msg, to)
