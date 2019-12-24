@@ -141,7 +141,7 @@ ez.envr = ez.env
 #' sedit
 #' @description sedit
 #' @export
-sedit <- function(file=ez.csf()) {
+sedit <- function(file=ez.csf()){
     if (ez.getos()=='windows'){
         system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s"', file),wait=FALSE)
     } else {
