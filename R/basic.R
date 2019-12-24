@@ -173,7 +173,7 @@ ez.is.empty <- function(x, trim = TRUE, ...) {
 #' \cr NA, or na.strings
 ez.is.numeric.like <- function(x,naAsTrue=TRUE,na.strings=c('','.','NA','na','N/A','n/a','NaN','nan')){
     x = trimws(x,'both')
-    x[x %in% na.strings] = NA
+    x[x %in% na.strings] = NA_character_
     # https://stackoverflow.com/a/21154566/2292993
     result = grepl("^[\\-\\+]?[0-9]+[\\.]?[0-9]*$|^[\\-\\+]?[0-9]+[L]?$|^[\\-\\+]?[0-9]+[\\.]?[0-9]*[eE][\\-\\+]?[0-9]+$",x,perl=TRUE)
     if (naAsTrue) result = result | is.na(x)
@@ -312,6 +312,11 @@ ez.num = function(x, col=NULL, force=FALSE, print2scr=TRUE, na.strings=c('-','',
         if (!force) {
             if (all(ez.is.numeric.like(x,na.strings=na.strings))){
                 result = utils::type.convert(x, as.is = TRUE, na.strings=na.strings, ...)
+                if (is.logical(result) && all(is.na(result))){
+                    # type.convert convert first to NA, logic if possible
+                    # I would like NA numeric
+                    result = as.numeric(result)
+                }
             } else {
                 result = x
             }
