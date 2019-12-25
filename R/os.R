@@ -159,8 +159,6 @@ profile = function(){
         system("open -a 'Sublime Text' $HOME/.bash_profile")
     }
 }
-    
-
 
 #' rprofile
 #' @description rprofile
