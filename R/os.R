@@ -248,13 +248,13 @@ ez.ver = function(pkg=NULL){
     if (!is.null(pkg)) {
         cat(sprintf("%s\n%s: %s", R.version.string, pkg, as.character(packageVersion(pkg))))
     } else {
-        ip = data.frame(installed.packages()[,c(1,3:4)])
+        ip = installed.packages()[,c(1,3:4)]
+        rownames(ip) <- NULL
+        ip = data.frame(ip)
         # ip = ip[is.na(ip$Priority),1:2,drop=FALSE]
         ip = ip[,1:2,drop=FALSE]
-        ipnames = row.names(ip)
-        rownames(ip) <- NULL
         print(ip)
-        print(paste0(ipnames,collapse = ','))
+        print(paste0(ip$Package,collapse = ','))
 
         cat("\n")
         message(R.version.string)
