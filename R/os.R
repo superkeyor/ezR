@@ -255,6 +255,7 @@ ez.ver = function(pkg=NULL){
         ip = ip[,1:2,drop=FALSE]
         print(ip)
         print(paste0(ip$Package,collapse = ','))
+        cat(sprintf("\nTotal: %d\n",nrow(ip)))
 
         cat("\n")
         message(R.version.string)
