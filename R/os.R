@@ -159,7 +159,7 @@ profile = function(){system("open -a 'Sublime Text' $HOME/.bash_profile")}
 #' @export
 rprofile = function(){
     if (ez.getos()=='windows'){
-        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s"', '~/.Rprofile'),wait=FALSE)
+        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s"', '~/.Rprofile', 'D:/Downloads/Apps/PythonR/.Rprofile'),wait=FALSE)
     } else {
         system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStudio/.Rprofile")
     }
