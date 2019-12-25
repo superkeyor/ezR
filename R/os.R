@@ -261,6 +261,7 @@ ez.updateself = function(force=F) {
         ez.github('jerryzhujian9/ezR')
         ez.github('jerryzhujian9/bzR')
         ez.github('jerryzhujian9/mzR')
+        try(fzR::fz.reload(),silent=TRUE)
         cat('Please restart RStudio to make the change take effect!\n')
     }
 
