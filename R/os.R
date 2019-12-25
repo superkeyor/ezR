@@ -258,9 +258,9 @@ ez.updateself = function(force=F) {
         system('killall RStudio && sleep 2 && open -a RStudio', wait=FALSE)
         # system('osascript -e \'tell application "RStudio" to quit\'; open -a RStudio', wait=FALSE)
     } else {
-        ez.github('jerryzhujian9/ezR')
-        ez.github('jerryzhujian9/bzR')
-        ez.github('jerryzhujian9/mzR')
+        ez.github('jerryzhujian9/ezR',force=force)
+        ez.github('jerryzhujian9/bzR',force=force)
+        ez.github('jerryzhujian9/mzR',force=force)
         try(fzR::fz.reload(),silent=TRUE)
         cat('Please restart RStudio to make the change take effect!\n')
     }
