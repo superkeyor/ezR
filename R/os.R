@@ -54,9 +54,9 @@ ez.retry <- function(expr, nretry=5, sleep=3, verbose=FALSE, isError=function(x)
         attempts = attempts + 1
         if (attempts >= nretry) {
             if (verbose){
-                msg = sprintf("retry: too many retries [[%s]]", utils::capture.output(str(retval)))
+                msg = sprintf("Failed, too many retries [[%s]]", utils::capture.output(str(retval)))
             } else {
-                msg = sprintf("retry: too many retries. Failed.")
+                msg = sprintf("Failed, too many retries.")
             }
             # futile.logger::flog.fatal(msg)
             stop(msg)
