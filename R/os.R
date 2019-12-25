@@ -39,6 +39,45 @@ ez.open <- function(filePath) {
 #' @export
 ez.error = stop
 
+#' retry, wrapper of \code{\link{try}}
+#' @description retry, wrapper of \code{\link{try}}
+#' @param expr no need to quote the expr
+#' @param sleep time in seconds
+#' @export
+#' @note retry(func_that_might_fail(param1, param2), nretry=10, sleep=2) to retry calling that function 
+#' with those parameters, give up after 10 errors, and sleep 2 seconds between attempts.
+ez.retry <- function(expr, nretry=5, sleep=3, verbose=FALSE, isError=function(x) "try-error" %in% class(x)) {
+    # https://stackoverflow.com/a/26973761/2292993
+    attempts = 0
+    retval = try(eval(expr))
+    while (isError(retval)) {
+        attempts = attempts + 1
+        if (attempts >= nretry) {
+            if (verbose){
+                msg = sprintf("retry: too many retries [[%s]]", utils::capture.output(str(retval)))
+            } else {
+                msg = sprintf("retry: too many retries. Failed.")
+            }
+            # futile.logger::flog.fatal(msg)
+            stop(msg)
+        } else {
+            if (verbose){
+                msg = sprintf("retry: error in attempt %i/%i [[%s]]", attempts, nretry, 
+                                                    utils::capture.output(str(retval)))
+            } else {
+                msg = sprintf("retry: error in attempt %i/%i", attempts, nretry)
+            }
+            # futile.logger::flog.error(msg)
+            # warning(msg)
+            message(msg)
+        }
+        if (sleep > 0) Sys.sleep(sleep)
+        # Warning in eval(expr) : restarting interrupted promise evaluation
+        retval = suppressWarnings(try(eval(expr)))
+    }
+    return(retval)
+}
+
 #' exit without prompt to save workspace image
 #' @description exit without prompt to save workspace image
 #' @export
