@@ -800,6 +800,13 @@ ez.find = function(v){
 #' @description random number, alias of \code{\link{runif}}
 #' @examples
 #' runif(n, min = 0, max = 1)
+#' runif(n) generates n uniform random numbers between 0 and 1.
+#' runif(n, a, b) generates n uniform random numbers between a and b. 
+#' Two standard normal variates with a mean of 42 and a standard deviation of 9: rnorm(2, mean=42, sd=9).
+#' A binomial variate: rbinom(1, size=6, prob=0.333)
+#' Five poisson variate: rpois(5, lambda=8)
+#' Nine gamma variates: rgamma(9, shape=4, rate=0.333) 
+#' Sample(1:10, 3, replace=T) ->get integers
 #' @export
 ez.rand = runif
 
