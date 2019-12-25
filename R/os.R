@@ -152,7 +152,15 @@ sedit <- function(file=ez.csf()){
 #' profile
 #' @description profile
 #' @export
-profile = function(){system("open -a 'Sublime Text' $HOME/.bash_profile")}
+profile = function(){
+    if (ez.getos()=='windows'){
+        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s" "%s" "%s" "%s"', "D:/Downloads/Apps/cmder/note.txt", "D:/Downloads/Apps/cmder/config/user_profile.cmd", "D:/Downloads/Apps/cmder/config/user_aliases.cmd", "C:/Users/Jerry/cmder/config/user_profile.cmd", "C:/Users/Jerry/cmder/config/user_aliases.cmd"), wait=FALSE)
+    } else {
+        system("open -a 'Sublime Text' $HOME/.bash_profile")
+    }
+}
+    
+
 
 #' rprofile
 #' @description rprofile
