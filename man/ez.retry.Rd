@@ -4,18 +4,21 @@
 \alias{ez.retry}
 \title{retry, wrapper of \code{\link{try}}}
 \usage{
-ez.retry(expr, nretry = 5, sleep = 3, verbose = FALSE,
+ez.retry(expr, times = 5, pause = 3, verbose = FALSE,
   isError = function(x) "try-error" \%in\% class(x))
 }
 \arguments{
 \item{expr}{no need to quote the expr}
 
-\item{sleep}{time in seconds}
+\item{times}{max number of retry attempts}
+
+\item{pause}{time in seconds between attempts}
 }
 \description{
 retry, wrapper of \code{\link{try}}
 }
 \note{
-retry(func_that_might_fail(param1, param2), nretry=10, sleep=2) to retry calling that function 
-with those parameters, give up after 10 errors, and sleep 2 seconds between attempts.
+see also \code{\link[purrr]{insistently}}
+retry(func_that_might_fail(param1, param2), times=10, pause=2) to retry calling that function 
+with those parameters, give up after 10 errors, and pause 2 seconds between attempts.
 }

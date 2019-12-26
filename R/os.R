@@ -42,17 +42,19 @@ ez.error = stop
 #' retry, wrapper of \code{\link{try}}
 #' @description retry, wrapper of \code{\link{try}}
 #' @param expr no need to quote the expr
-#' @param sleep time in seconds
+#' @param times max number of retry attempts
+#' @param pause time in seconds between attempts
 #' @export
-#' @note retry(func_that_might_fail(param1, param2), nretry=10, sleep=2) to retry calling that function 
-#' with those parameters, give up after 10 errors, and sleep 2 seconds between attempts.
-ez.retry <- function(expr, nretry=5, sleep=3, verbose=FALSE, isError=function(x) "try-error" %in% class(x)) {
+#' @note see also \code{\link[purrr]{insistently}}
+#' retry(func_that_might_fail(param1, param2), times=10, pause=2) to retry calling that function 
+#' with those parameters, give up after 10 errors, and pause 2 seconds between attempts.
+ez.retry <- function(expr, times=5, pause=3, verbose=FALSE, isError=function(x) "try-error" %in% class(x)) {
     # https://stackoverflow.com/a/26973761/2292993
     attempts = 0
     retval = try(eval(expr))
     while (isError(retval)) {
         attempts = attempts + 1
-        if (attempts >= nretry) {
+        if (attempts >= times) {
             if (verbose){
                 msg = sprintf("Failed, too many retries [[%s]]", utils::capture.output(str(retval)))
             } else {
@@ -62,16 +64,16 @@ ez.retry <- function(expr, nretry=5, sleep=3, verbose=FALSE, isError=function(x)
             stop(msg)
         } else {
             if (verbose){
-                msg = sprintf("retry: error in attempt %i/%i [[%s]]", attempts, nretry, 
+                msg = sprintf("retry: error in attempt %i/%i [[%s]]", attempts, times, 
                                                     utils::capture.output(str(retval)))
             } else {
-                msg = sprintf("retry: error in attempt %i/%i", attempts, nretry)
+                msg = sprintf("retry: error in attempt %i/%i", attempts, times)
             }
             # futile.logger::flog.error(msg)
             # warning(msg)
             message(msg)
         }
-        if (sleep > 0) Sys.sleep(sleep)
+        if (pause > 0) Sys.sleep(pause)
         # Warning in eval(expr) : restarting interrupted promise evaluation
         retval = suppressWarnings(try(eval(expr)))
     }
