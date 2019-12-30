@@ -338,7 +338,7 @@ ez.num = function(x, col=NULL, force=FALSE, print2scr=TRUE, na.strings=c('-','',
 #' @description convert to date with friendly ori (no need to remember exact origin date)
 #' @param x a vector of char or num. 
 #' \cr a string factor treated as char (ie, using param format), a num factor cannot be processed
-#' @param ori one of 'Excel', 'Matlab', 'R', 'SPSS'. Ignored when x is character
+#' @param ori one of 'Excel', 'Matlab', 'R', 'SPSS', 'Javascript'. Ignored when x is character
 #' @param format specify in date format. Ignored when x is numeric. See examples (cannot have percentage sign here for documentation)
 #' @examples
 #' # format one of c("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d", "%m/%d/%Y", "%Y-%m-%d"). %y for two year digits
@@ -347,10 +347,11 @@ ez.num = function(x, col=NULL, force=FALSE, print2scr=TRUE, na.strings=c('-','',
 #' @export
 ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
     # from R help as.Date()
+    ori = toupper(ori)
     if (is.numeric(x)) {
-        if (ori=='Excel') origin="1899-12-30"
+        if (ori=='EXCEL') origin="1899-12-30"
         # if (ori=='Excel.Mac') origin="1904-01-01"  # tested on my mac, seems the same as Excel.Win
-        if (ori=='Matlab') origin="1970-01-01"
+        if (ori=='MATLAB') origin="1970-01-01"
         if (ori=='R') origin="1970-01-01"
         if (ori=='SPSS') {
             # http://scs.math.yorku.ca/index.php/R:_Importing_dates_from_SPSS
@@ -359,7 +360,14 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
             origin = "1582-10-14"
         }
         result = as.Date(x,origin=origin,...)
-        if (ori=='Matlab') result=result-719529
+        if (ori=='MATLAB') result=result-719529
+
+        # https://stackoverflow.com/a/38472078/2292993
+        if (ori=='JAVASCRIPT'){
+            # javascript is milliseconds
+            result = as.POSIXct(x/1000, origin="1970-01-01")
+            result = as.Date(result)
+        }
     }
     if (is.character(x) | is.factor(x)) {
         result=as.Date(x,format=format,...)

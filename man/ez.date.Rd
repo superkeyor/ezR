@@ -10,7 +10,7 @@ ez.date(x, ori = "Excel", format = "\%m/\%d/\%Y", ...)
 \item{x}{a vector of char or num. 
 \cr a string factor treated as char (ie, using param format), a num factor cannot be processed}
 
-\item{ori}{one of 'Excel', 'Matlab', 'R', 'SPSS'. Ignored when x is character}
+\item{ori}{one of 'Excel', 'Matlab', 'R', 'SPSS', 'Javascript'. Ignored when x is character}
 
 \item{format}{specify in date format. Ignored when x is numeric. See examples (cannot have percentage sign here for documentation)}
 }
