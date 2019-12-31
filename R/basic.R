@@ -359,15 +359,18 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
             x = x/86400
             origin = "1582-10-14"
         }
-        result = as.Date(x,origin=origin,...)
-        if (ori=='MATLAB') result=result-719529
 
         # https://stackoverflow.com/a/38472078/2292993
         if (ori=='JAVASCRIPT'){
             # javascript is milliseconds
             result = as.POSIXct(x/1000, origin="1970-01-01")
             result = as.Date(result)
+        } else {
+            result = as.Date(x,origin=origin,...)
         }
+
+        if (ori=='MATLAB') result=result-719529
+
     }
     if (is.character(x) | is.factor(x)) {
         result=as.Date(x,format=format,...)
