@@ -349,33 +349,27 @@ ez.date = function(x,ori="Excel",format="%m/%d/%Y",...) {
     # from R help as.Date()
     ori = toupper(ori)
     if (is.numeric(x)) {
-        if (ori=='EXCEL') origin="1899-12-30"
-        # if (ori=='Excel.Mac') origin="1904-01-01"  # tested on my mac, seems the same as Excel.Win
-        if (ori=='MATLAB') origin="1970-01-01"
-        if (ori=='R') origin="1970-01-01"
-        if (ori=='SPSS') {
+        # https://stackoverflow.com/a/38472078/2292993
+        if (ori=='JAVASCRIPT') {
+            # javascript is milliseconds
+            return( as.Date(as.POSIXct(x/1000, origin="1970-01-01")) )
+        } else if (ori=='EXCEL') {
+            # if (ori=='Excel.Mac') origin="1904-01-01"  
+            # tested on my mac, seems the same as Excel.Win
+            return( as.Date(x,origin="1899-12-30",...) )
+        } else if (ori=='MATLAB') {
+            return( as.Date(x,origin="1970-01-01",...) - 719529 )
+        } else if (ori=='R') {
+            return( as.Date(x,origin="1970-01-01",...) )
+        } else if (ori=='SPSS') {
             # http://scs.math.yorku.ca/index.php/R:_Importing_dates_from_SPSS
             # 24*60*60=86400
             x = x/86400
-            origin = "1582-10-14"
+            return( as.Date(x,origin = "1582-10-14",...) )
         }
-
-        # https://stackoverflow.com/a/38472078/2292993
-        if (ori=='JAVASCRIPT'){
-            # javascript is milliseconds
-            result = as.POSIXct(x/1000, origin="1970-01-01")
-            result = as.Date(result)
-        } else {
-            result = as.Date(x,origin=origin,...)
-        }
-
-        if (ori=='MATLAB') result=result-719529
-
+    } else if (is.character(x) | is.factor(x)) {
+        return(as.Date(x,format=format,...))
     }
-    if (is.character(x) | is.factor(x)) {
-        result=as.Date(x,format=format,...)
-    }
-    return(result)
 }
 
 #' convert to time
