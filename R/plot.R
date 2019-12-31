@@ -9,7 +9,7 @@
 #' @description creat shorthand for Times New Roman cross-platform
 #' @export
 # from https://github.com/trinker/plotflow/
-RMN = if (Sys.info()["sysname"]=="Windows") {windowsFonts(RMN=windowsFont("Times New Roman")); "RMN"} else "Times New Roman"
+RMN = ifelse(Sys.info()["sysname"]=="Windows", windowsFont("Times New Roman"), "Times New Roman")
 
 #' show shape
 #' @description show shape
