@@ -28,6 +28,15 @@ or = magrittr::or
 #' @export
 ez.sprintf = glue::glue
 
+#' make.names, but replace . with _
+#' @description make.names, but replace . with _
+#' @export
+ez.make.names = function(...){
+    r = make.names(...)
+    r = gsub(pattern = "[[:space:][:punct:]]", replacement = "_", r)
+    return(r)
+}
+
 #' wrap each element of a vector around ""
 #' @description wrap each element of a vector around ""
 #' @return returns a vector
