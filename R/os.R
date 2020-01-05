@@ -195,7 +195,7 @@ sedit <- function(file=ez.csf()){
 #' @export
 profile = function(){
     if (ez.getos()=='windows'){
-        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s" "%s" "%s" "%s"', "D:/Downloads/Apps/cmder/note.txt", "D:/Downloads/Apps/cmder/config/user_profile.cmd", "D:/Downloads/Apps/cmder/config/user_aliases.cmd", "C:/Users/Jerry/cmder/config/user_profile.cmd", "C:/Users/Jerry/cmder/config/user_aliases.cmd"), wait=FALSE)
+        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s" "%s" "%s" "%s"', "D:/Downloads/Dropbox/Apps/WinApps/cmder/note.txt", "D:/Downloads/Dropbox/Apps/WinApps/cmder/config/user_profile.cmd", "D:/Downloads/Dropbox/Apps/WinApps/cmder/config/user_aliases.cmd", "C:/Users/Jerry/cmder/config/user_profile.cmd", "C:/Users/Jerry/cmder/config/user_aliases.cmd"), wait=FALSE)
     } else {
         system("open -a 'Sublime Text' $HOME/.bash_profile")
     }
@@ -206,7 +206,7 @@ profile = function(){
 #' @export
 rprofile = function(){
     if (ez.getos()=='windows'){
-        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s"', 'D:/Downloads/Apps/PythonR/.Rprofile', '~/.Rprofile'), wait=FALSE)
+        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s"', 'D:/Downloads/Dropbox/Apps/WinApps/PythonR/.Rprofile', '~/.Rprofile'), wait=FALSE)
     } else {
         system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStudio/.Rprofile")
     }
@@ -846,7 +846,7 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' @export
 ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
     if (ez.getos()=='windows'){
-        gmailr::gm_auth_configure(path='D:/Downloads/Apps/PythonR/gmailr_credentials.json')
+        gmailr::gm_auth_configure(path='D:/Downloads/Dropbox/Apps/WinApps/PythonR/gmailr_credentials.json')
         gmailr::gm_auth(email = TRUE, cache = "C:/Users/Jerry/.R/gargle/gargle-oauth")
     } else {
         gmailr::gm_auth_configure(path='~/Dropbox/Apps/RStudio/gmailr_credentials.json')
