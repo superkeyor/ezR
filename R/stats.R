@@ -475,7 +475,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
         }
 
         # count everything, not just is.factor(v) | is.character(v) | is.logical(v)
-        freqtable=dplyr::count_(data.frame(tmpvar=v),"tmpvar")
+        freqtable=suppressWarnings(dplyr::count_(data.frame(tmpvar=v),"tmpvar"))
         vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
         if (!is.null(vallbl)){
             # ez.2label trick here, do not use the results from sjmisc_get_labels
