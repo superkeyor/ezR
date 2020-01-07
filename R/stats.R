@@ -196,7 +196,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, incomparables=FAL
         v.missing=sum(is.na(df[[var]]))
         v.unique=length(unique(df[[var]]))
         # count everything
-        freqtable=dplyr::count_(df,var)
+        freqtable=suppressWarnings(dplyr::count_(df,var))
         vallbl=sjmisc_get_labels(df[[var]],include.values='n',attr.only=T,include.non.labelled=F)
         if (!is.null(vallbl)){
             # ez.2label trick here, do not use the results from sjmisc_get_labels
@@ -475,7 +475,7 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
         }
 
         # count everything, not just is.factor(v) | is.character(v) | is.logical(v)
-        freqtable=suppressWarnings(dplyr::count_(data.frame(tmpvar=v),"tmpvar"))
+        freqtable=suppressWarnings(suppressWarnings(dplyr::count_(data.frame(tmpvar=v),"tmpvar")))
         vallbl=sjmisc_get_labels(v,include.values='n',attr.only=T,include.non.labelled=F)
         if (!is.null(vallbl)){
             # ez.2label trick here, do not use the results from sjmisc_get_labels
