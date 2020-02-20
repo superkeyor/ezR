@@ -1409,7 +1409,7 @@ ez.corrmap = function(df,x=NULL,y=NULL,corr.type="pearson",sig.level=0.05,insig=
                      method="ellipse",tl.col="black",tl.cex=0.4,tl.pos=NULL,tl.srt=45,
                      addgrid.col=rgb(1,1,1,.01),addCoef.col=NULL,diag=FALSE,
                      order=c("original", "AOE", "FPC", "hclust", "alphabet"),
-                     col=NULL,...){
+                     col=NULL,...) {
     # https://stackoverflow.com/a/25215323/2292993
     # call options(warn=1) to set the global warn (opt is alway global, even change inside a function) to 1, but returns the old value to oldWarn
     # finally on exit the function, set it back to old value
