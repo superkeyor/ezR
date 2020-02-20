@@ -1430,7 +1430,7 @@ ez.corrmap = function(df,x=NULL,y=NULL,corr.type="pearson",sig.level=0.05,insig=
         M = corrmatrix$r
         p.mat = corrmatrix$P
     } else {
-        x = ez.selcol(x); y = ez.selcol(y)
+        x = ez.selcol(df,x); y = ez.selcol(df,y)
         # alpha level of confidence intervals, ci=FALSE raise an error
         corrmatrix = psych::corr.test(data.matrix(df[,x,drop=F]), data.matrix(df[,y,drop=F]), use = "pairwise", method=corr.type, adjust="none", alpha=.05, ci=TRUE)
         M = corrmatrix$r
