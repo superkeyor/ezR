@@ -1382,6 +1382,8 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' plot a correlation matrix map
 #' @description a wrapper of \code{\link[corrplot]{corrplot}}; the correlation and p values are calculated with \code{\link[Hmisc]{rcorr}}, in which Missing values are deleted in pairs rather than deleting all rows of x having any missing variables
 #' @param df data frame in wide format, should be all numeric
+#' @param x cols in df, Both x y should be specified or be NULL. when specified, calculate correlation between cols x and cols y, get an asymmetric correlation matrix
+#' @param y cols in df
 #' @param corr.type "pearson" or "spearman", pairwise deletion for NA
 #' @param sig.level sig.level. make it 1 to essentially ignore param insig
 #' @param insig how to treat insig values, one of "pch"(show x, corrplot default),"p-value","blank", "n"(no change, as is)
@@ -1403,7 +1405,7 @@ ez.heatmap = function(df, id, show.values=F, remove.zero=T, angle=270, colors=c(
 #' @param ... see \code{\link[corrplot]{corrplot}} for more parameters
 #' @return returns a list (r, p) r: a matrix representing the corrmap (p > sig.level, set to NA/blank), p: all raw p values
 #' @export
-ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="lower",
+ez.corrmap = function(df,x=NULL,y=NULL,corr.type="pearson",sig.level=0.05,insig="blank",type="lower",
                      method="ellipse",tl.col="black",tl.cex=0.4,tl.pos=NULL,tl.srt=45,
                      addgrid.col=rgb(1,1,1,.01),addCoef.col=NULL,diag=FALSE,
                      order=c("original", "AOE", "FPC", "hclust", "alphabet"),
@@ -1423,9 +1425,18 @@ ez.corrmap = function(df,corr.type="pearson",sig.level=0.05,insig="blank",type="
         col  <- colorRampPalette(cols)(200)
     }
 
-    corrmatrix = Hmisc::rcorr(data.matrix(df), type=corr.type)
-    M = corrmatrix$r
-    p.mat = corrmatrix$P
+    if (is.null(x) && is.null(y)){
+        x = ez.selcol(x); y = ez.selcol(y)
+        # alpha level of confidence intervals, ci=FALSE raise an error
+        corrmatrix = psych::corr.test(data.matrix(dplyr::select(df,one_of(x))), data.matrix(dplyr::select(df,one_of(y)))), use = "pairwise", method=corr.type, adjust="none", alpha=.05, ci=TRUE)
+        M = corrmatrix$r
+        p.mat = corrmatrix$p
+    } else {
+        corrmatrix = Hmisc::rcorr(data.matrix(df), type=corr.type)
+        M = corrmatrix$r
+        p.mat = corrmatrix$P
+    }
+
 
     # increase tl.cex a bit to gain some margins for the map when tl.pos='n'
     if (!is.null(tl.pos)) {if (tl.pos=='n' & tl.cex < 1) {tl.cex = 1.5}}
