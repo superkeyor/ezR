@@ -1428,7 +1428,7 @@ ez.corrmap = function(df,x=NULL,y=NULL,corr.type="pearson",sig.level=0.05,insig=
     if (is.null(x) && is.null(y)){
         x = ez.selcol(x); y = ez.selcol(y)
         # alpha level of confidence intervals, ci=FALSE raise an error
-        corrmatrix = psych::corr.test(data.matrix(dplyr::select(df,one_of(x))), data.matrix(dplyr::select(df,one_of(y))), use = "pairwise", method=corr.type, adjust="none", alpha=.05, ci=TRUE)
+        corrmatrix = psych::corr.test(data.matrix(df[,x,drop=F]), data.matrix(df[,y,drop=F]), use = "pairwise", method=corr.type, adjust="none", alpha=.05, ci=TRUE)
         M = corrmatrix$r
         p.mat = corrmatrix$p
     } else {
