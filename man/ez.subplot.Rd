@@ -4,7 +4,7 @@
 \alias{ez.subplot}
 \title{subplot, wrapper of \code{\link{par}}}
 \usage{
-ez.subplot(n, m, ...)
+ez.subplot(n = 1, m = 1, ...)
 }
 \description{
 subplot, wrapper of \code{\link{par}}
@@ -14,4 +14,5 @@ subplot(n,m,...) divides the current figure into an n-by-m grid
 A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
 by columns (mfcol), or rows (mfrow), respectively.
 see more ?par
+call ez.subplot() again ie, ez.subplot(mfrow=c(1,1)), or call dev.off() to reset
 }

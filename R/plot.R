@@ -719,8 +719,9 @@ ez.pdfoff = dev.off
 #' A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
 #' by columns (mfcol), or rows (mfrow), respectively.
 #' see more ?par
+#' call ez.subplot() again ie, ez.subplot(mfrow=c(1,1)), or call dev.off() to reset
 #' @export
-ez.subplot = function(n, m, ...){
+ez.subplot = function(n=1, m=1, ...){
     par(mfrow=c(n,m), ...)
 }
 
