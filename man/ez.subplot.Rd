@@ -4,9 +4,11 @@
 \alias{ez.subplot}
 \title{subplot, wrapper of \code{\link{par}}}
 \usage{
-ez.subplot(n = 1, m = 1, xpd = NA, ...)
+ez.subplot(n = 1, m = 1, arr = "col", xpd = NA, ...)
 }
 \arguments{
+\item{arr}{arrangement, 'col' (draw colwise first, then move to next row) or 'row'}
+
 \item{xpd}{Clipping can occur either to the whole device (xpd = NA), to the current figure region (xpd = TRUE), or to the current plot region (xpd = FALSE, the default).}
 }
 \description{
@@ -17,5 +19,5 @@ subplot(n,m,...) divides the current figure into an n-by-m grid
 A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
 by columns (mfcol), or rows (mfrow), respectively.
 see more ?par
-call ez.subplot() again ie, ez.subplot(mfrow=c(1,1)), or call dev.off() to reset
+call ez.subplot() again ie, ez.subplot(1,1), or call dev.off() to reset
 }
