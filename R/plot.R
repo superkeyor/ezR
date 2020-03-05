@@ -714,6 +714,7 @@ ez.pdfoff = dev.off
 
 #' subplot, wrapper of \code{\link{par}}
 #' @description subplot, wrapper of \code{\link{par}}
+#' @param xpd Clipping can occur either to the whole device (xpd = NA), to the current figure region (xpd = TRUE), or to the current plot region (xpd = FALSE, the default). 
 #' @examples
 #' subplot(n,m,...) divides the current figure into an n-by-m grid
 #' A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
@@ -721,8 +722,8 @@ ez.pdfoff = dev.off
 #' see more ?par
 #' call ez.subplot() again ie, ez.subplot(mfrow=c(1,1)), or call dev.off() to reset
 #' @export
-ez.subplot = function(n=1, m=1, ...){
-    par(mfrow=c(n,m), ...)
+ez.subplot = function(n=1, m=1, xpd=NA, ...){
+    par(mfrow=c(n,m), xpd=xpd, ...)
 }
 
 #' embed a new plot within an existing plot at the coordinates specified (in user units of the existing plot)

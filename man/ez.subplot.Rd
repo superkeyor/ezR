@@ -4,7 +4,10 @@
 \alias{ez.subplot}
 \title{subplot, wrapper of \code{\link{par}}}
 \usage{
-ez.subplot(n = 1, m = 1, ...)
+ez.subplot(n = 1, m = 1, xpd = NA, ...)
+}
+\arguments{
+\item{xpd}{Clipping can occur either to the whole device (xpd = NA), to the current figure region (xpd = TRUE), or to the current plot region (xpd = FALSE, the default).}
 }
 \description{
 subplot, wrapper of \code{\link{par}}
