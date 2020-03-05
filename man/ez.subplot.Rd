@@ -4,10 +4,10 @@
 \alias{ez.subplot}
 \title{subplot, wrapper of \code{\link{par}}}
 \usage{
-ez.subplot(n = 1, m = 1, arr = "col", xpd = NA, ...)
+ez.subplot(n = 1, m = 1, arr = "row", xpd = NA, ...)
 }
 \arguments{
-\item{arr}{arrangement, 'col' (draw colwise first, then move to next row) or 'row'}
+\item{arr}{arrangement, 'col' (draw colwise) or 'row' (drow rowise)}
 
 \item{xpd}{Clipping can occur either to the whole device (xpd = NA), to the current figure region (xpd = TRUE), or to the current plot region (xpd = FALSE, the default).}
 }

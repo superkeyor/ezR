@@ -714,7 +714,7 @@ ez.pdfoff = dev.off
 
 #' subplot, wrapper of \code{\link{par}}
 #' @description subplot, wrapper of \code{\link{par}}
-#' @param arr arrangement, 'col' (draw colwise first, then move to next row) or 'row'
+#' @param arr arrangement, 'col' (draw colwise) or 'row' (drow rowise)
 #' @param xpd Clipping can occur either to the whole device (xpd = NA), to the current figure region (xpd = TRUE), or to the current plot region (xpd = FALSE, the default). 
 #' @examples
 #' subplot(n,m,...) divides the current figure into an n-by-m grid
@@ -723,7 +723,7 @@ ez.pdfoff = dev.off
 #' see more ?par
 #' call ez.subplot() again ie, ez.subplot(1,1), or call dev.off() to reset
 #' @export
-ez.subplot = function(n=1, m=1, arr='col', xpd=NA, ...){
+ez.subplot = function(n=1, m=1, arr='row', xpd=NA, ...){
     if(arr=='row'){
         par(mfrow=c(n,m), xpd=xpd, ...)
     } else {
