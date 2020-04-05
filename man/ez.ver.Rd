@@ -5,12 +5,18 @@
 \alias{ez.verr}
 \title{print the version of a package}
 \usage{
-ez.ver(pkg = NULL)
+ez.ver(pkg = NULL, all = FALSE, character.only = FALSE)
 
-ez.verr(pkg = NULL)
+ez.verr(pkg = NULL, all = FALSE, character.only = FALSE)
 }
 \arguments{
 \item{pkg}{package name in quotes, default is NULL}
+
+\item{all}{logical.  If \code{TRUE} all of the functions from the package 
+will be displayed regardless of whether they're exported or not.}
+
+\item{character.only}{logical. If \code{TRUE} the input is a variable 
+containing the package name.}
 }
 \value{
 if pkg not provided, prints R version, installed packages/versions and etc
