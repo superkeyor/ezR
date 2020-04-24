@@ -7,7 +7,9 @@
 ez.readt(file, ..., skip.rows = NULL, tolower = FALSE, makenames = TRUE)
 }
 \arguments{
-\item{skip.rows}{rows to skip (1 based) before read in, eg 1:3}
+\item{...}{more useful parameters from \code{\link{read.table}} \code{\link{read.csv}}, eg. strip.white, blank.lines.skip, na.strings, stringsAsFactors}
+
+\item{skip.rows}{rows to skip (1 based) before read in, eg 1:3, if negative,eg, -3:-5, counting from the last line}
 
 \item{tolower}{whether to convert all column names to lower case}
 
@@ -17,7 +19,7 @@ ez.readt(file, ..., skip.rows = NULL, tolower = FALSE, makenames = TRUE)
 returns a data frame
 }
 \description{
-read csv table, wrapper of \code{\link{read.csv}}
+read csv table/text, wrapper of \code{\link{read.csv}}
 }
 \examples{
 read.table(file, header = FALSE, sep = "",

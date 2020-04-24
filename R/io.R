@@ -2,10 +2,11 @@
 # import/export data file
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #' read csv table, wrapper of \code{\link{read.csv}}
-#' @description read csv table, wrapper of \code{\link{read.csv}}
+#' @description read csv table/text, wrapper of \code{\link{read.csv}}
 #' @param tolower whether to convert all column names to lower case
-#' @param skip.rows rows to skip (1 based) before read in, eg 1:3
+#' @param skip.rows rows to skip (1 based) before read in, eg 1:3, if negative,eg, -3:-5, counting from the last line
 #' @param makenames if F, keep as is. if T, call make.names(unique=TRUE,allow_=TRUE) _ kept, The character "X" is prepended if necessary. All invalid characters are translated to "." .1 .2 etc appended for uniqueness
+#' @param ... more useful parameters from \code{\link{read.table}} \code{\link{read.csv}}, eg. strip.white, blank.lines.skip, na.strings, stringsAsFactors
 #' @return returns a data frame
 #' @export
 #' @examples
@@ -24,14 +25,23 @@
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
 ez.readt = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
     if (!is.null(skip.rows)) {
-        tmp = readLines(file)
+        tmp = suppressWarnings(readLines(file))
+        skip.rows = sapply(skip.rows,function(skip, len) ifelse(skip>0,skip,len+skip+1), length(tmp))
         tmp = tmp[-(skip.rows)]
-        tmpFile = tempfile()
-        on.exit(unlink(tmpFile))
-        writeLines(tmp,tmpFile)
-        file = tmpFile
+        # solution 1:
+        # tmpFile = tempfile()
+        # on.exit(unlink(tmpFile))
+        # writeLines(tmp,tmpFile)
+        # file = tmpFile
+
+        # # solution 2:
+        # file = textConnection(tmp)
+
+        # solution 3:
+        result = read.csv(text=tmp, ...)
+    } else {
+        result = read.csv(file, ...)
     }
-    result = read.csv(file, ...)
     if (tolower) names(result) = tolower(names(result))
     if (length( ez.duplicated(names(result),value=T) )>0) {ez.pprint(sprintf('Duplicated col names found: %s. Will be handeled if makenames=T', toString(ez.duplicated(names(result),value=T)) ),color='red')}
     colnames(result) <- make.names(colnames(result),unique=TRUE,allow_=TRUE)
