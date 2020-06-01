@@ -106,6 +106,22 @@ ez.writer = ez.saver
 #' @export
 ez.readr = readRDS
 
+#' read a parquet (a columnar storage file format) file
+#' @description read a parquet (a columnar storage file format) file
+#' @note alias of \code{\link[arrow]{read_parquet}}
+#' @export
+ez.readp = arrow::read_parquet
+
+#' save a df to a parquet (a columnar storage file format) file
+#' @description save a df to a parquet (a columnar storage file format) file
+#' @note alias of \code{\link[arrow]{write_parquet}}
+#' @export
+ez.savep = arrow::write_parquet
+
+#' @rdname ez.savep
+#' @export
+ez.writep = ez.savep
+
 #' read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @description read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces
 #' @param tolower whether to convert all column names to lower case
