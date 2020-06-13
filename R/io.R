@@ -112,6 +112,16 @@ ez.readr = readRDS
 #' @export
 ez.readp = arrow::read_parquet
 
+#' read a list of parquet (a columnar storage file format) file
+#' @description read a list of parquet (a columnar storage file format) file
+#' @note Returns a data.frame. Use \code{\link[data.table]{rbindlist}}. ... passed to \code{\link[arrow]{read_parquet}}
+#' @export
+ez.readplist = function(plist,...){
+    data = lapply(plist,arrow::read_parquet,...)
+    data = data.frame(data.table::rbindlist(data))
+    return(data)
+}
+
 #' save a df to a parquet (a columnar storage file format) file
 #' @description save a df to a parquet (a columnar storage file format) file
 #' @note alias of \code{\link[arrow]{write_parquet}}
