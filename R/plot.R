@@ -881,7 +881,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @export
 ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylimits=NULL,ybreaks=NULL,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
     point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=1,point.color='grey55',theme.apa=TRUE,
-    signif=TRUE,prefix=-1,pe=T,annotations=NULL,map_signif_level=FALSE,y_position=NULL,xmin=NULL,xmax=NULL,margin_top=0.05,step_increase=0.5,extend_line=0,tip_length=0.03,size=0.5,textsize=3.88,family="",vjust2=0,parse=FALSE,manual=FALSE,orientation=NA,...) {
+    signif=TRUE,prefix=-1,pe=T,comparisons=NULL,annotations=NULL,map_signif_level=FALSE,y_position=NULL,xmin=NULL,xmax=NULL,margin_top=0.05,step_increase=0.5,extend_line=0,tip_length=0.03,size=0.5,textsize=3.88,family="",vjust2=0,parse=FALSE,manual=FALSE,orientation=NA,...) {
     signif = signif & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)
     if (signif) {
         res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=prefix,pe=pe)
