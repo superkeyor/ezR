@@ -2392,11 +2392,11 @@ group_labels <- function(var,
   var <- group_helper(var, groupsize, right.interval, groupcount)
   # Gruppen holen
   lvl <- levels(var)
-  # rückgabewert init
+  # ruckgabewert init
   retval <- rep(c(""), length(lvl))
   # alle Gruppierungen durchgehen
   for (i in 1:length(lvl)) {
-    # Länge jedes Labels der Gruppeneinteilungen auslesen
+    # Lange jedes Labels der Gruppeneinteilungen auslesen
     sublength <- nchar(lvl[i])
     # "(" und "]", das bei "cut"-Funktion automatisch erstellt wird,
     # aus dem Label entfernen
