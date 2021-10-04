@@ -44,10 +44,10 @@ ez.error = stop
 #' @param expr no need to quote the expr
 #' @param times max number of retry attempts
 #' @param pause time in seconds between attempts
-#' @export
 #' @note see also \code{\link[purrr]{insistently}}
 #' retry(func_that_might_fail(param1, param2), times=10, pause=2) to retry calling that function 
 #' with those parameters, give up after 10 errors, and pause 2 seconds between attempts.
+#' @export
 ez.retry <- function(expr, times=5, pause=3, verbose=FALSE, isError=function(x) "try-error" %in% class(x)) {
     # https://stackoverflow.com/a/26973761/2292993
     attempts = 0
@@ -129,8 +129,8 @@ ez.warn = function(warnErrorMode=NULL,print2scr=TRUE) {
 #' print out or set the repo
 #' @description print out or set the repo
 #' @param repo NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'
-#' @export
 #' @return returns NULL
+#' @export
 ez.repo = function(repo=NULL){
     if (is.null(repo)) {
         message(sprintf('The current repository is: %s\n',unname(getOption("repos"))))
@@ -150,8 +150,8 @@ ez.repo = function(repo=NULL){
 #' switch env
 #' @description switch env
 #' @param env NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)
-#' @export
 #' @return returns NULL
+#' @export
 ez.env=function(env=NULL){
     if (is.null(env)) {
         cat(readChar('~/Dropbox/Apps/RStudio/R3.3_library/note.txt', 1e5))
@@ -487,14 +487,14 @@ ez.which = find
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.who}}
 #' @return Print version information about R, the OS and attached or loaded packages.
-#' @export
 #' @seealso \code{\link{objects}}
+#' @export
 ez.whos = sessionInfo
 
 #' alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
 #' @description alias of \code{\link{sessionInfo}}, \code{\link{ez.whos}}
-#' @export
 #' @seealso \code{\link{objects}}
+#' @export
 ez.who = ez.whos
 
 #' user path like in Matlab
@@ -706,8 +706,8 @@ ez.ls = function(path='.', pattern=NULL, full=TRUE, hidden=FALSE){
 
 #' fls
 #' @description fls
-#' @export
 #' @return a char vector with 0, 1 or more elements
+#' @export
 ez.fls = function(path='.', pattern=NULL, hidden=FALSE){
     files = list.files(path = path, pattern = pattern, all.files = hidden,
                        full.names = TRUE, recursive = TRUE,
