@@ -16,7 +16,7 @@ underlying function is \code{\link{gsub}} with regular expression
 }
 \examples{
  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
-For portability, whitespace is taken as the character class [ \t\r\n] (space, horizontal tab, line feed, carriage return).
+For portability, whitespace is taken as the character class [ \\t\\r\\n] (space, horizontal tab, line feed, carriage return).
 }
 \seealso{
 \code{\link{trimws}}

@@ -700,7 +700,7 @@ ez.regexpi = function (s, pat, ignorecase = TRUE, once = FALSE, split = FALSE) {
 #' @param s a string or a data frame. if data frame, how will be ignored/forced to be 'both'
 #' @param how a num 1=left only; 2=right only; 3=left and right; 4 (default)=left and right and merge middle
 #' @examples  "Hi        buddy        what's up    Bro"  --> "Hi buddy what's up bro"
-#' For portability, whitespace is taken as the character class [ \t\r\n] (space, horizontal tab, line feed, carriage return).
+#' For portability, whitespace is taken as the character class [ \\t\\r\\n] (space, horizontal tab, line feed, carriage return).
 #' @seealso \code{\link{trimws}}
 #' @export
 ez.trim = function (s, how=4){

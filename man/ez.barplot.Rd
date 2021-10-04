@@ -120,7 +120,7 @@ named numeric vector to create custom mappings from p-values to annotation:
 For example: `c("***"=0.001, "**"=0.01, "*"=0.05)`.
 Alternatively, one can provide a function that takes a numeric argument
 (the p-value) and returns a string.
-map_signif_level = function(p) sprintf("p = %.2g", p)}
+map_signif_level = function(p) sprintf("p = \%.2g", p)}
 
 \item{y_position}{numeric vector with the y positions of the brackets}
 

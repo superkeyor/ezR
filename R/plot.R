@@ -847,7 +847,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #'   For example: `c("***"=0.001, "**"=0.01, "*"=0.05)`.
 #'   Alternatively, one can provide a function that takes a numeric argument
 #'   (the p-value) and returns a string.
-#'   map_signif_level = function(p) sprintf("p = %.2g", p)
+#'   map_signif_level = function(p) sprintf("p = \%.2g", p)
 #' @param xmin,xmax numeric vector with the positions of the left and right
 #'   sides of the brackets, respectively
 #' @param y_position numeric vector with the y positions of the brackets
