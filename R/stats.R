@@ -50,15 +50,27 @@ p.apa = function(pvalue,prefix=0,pe=F){
         } else {
             pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
         }
+    } else if (prefix==-1){
+        if (pvalue<=.0001) {
+            pvalue = '****'
+        } else if (pvalue<=.001) {
+            pvalue = '***'
+        } else if (pvalue<=.01) {
+            pvalue = '**'
+        } else if (pvalue<=.05) {
+            pvalue = '*'
+        } else {
+            pvalue = NA_character_
+        }
     }
     return(pvalue)
 }
 #' format p value according to apa for report
 #' @description format p value according to apa for report
 #' @param pvalue numeric vector
-#' @param prefix 0,1,2
+#' @param prefix -1,0,1,2
 #' @param pe affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001
-#' @return character vector prefix 0 (< .001, .003, .02); prefix 1 (< .001, = .003, = .02); prefix 2 (p < .001, p = .003, p = .02)
+#' @return character vector prefix -1 (****,***,**,*,NA); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
 #' @export
 ez.p.apa = Vectorize(p.apa)
 
@@ -1026,7 +1038,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
+ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,prefix=2,pe=F,...) {
     # yet another patch for cmd input
     if (grepl('[~|]',y[1],perl=TRUE)){
         # peel the onion
@@ -1121,7 +1133,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3
         ss = sm[['Sum Sq']]
         petasq2 = ss[2]/(ss[2]+ss[length(ss)])
         ph = ez.esp('summary( multcomp::glht(m, linfct=multcomp::mcp("{x}" = "Tukey")) )')
-        posthoc_tukey = paste0('(',names(ph$test$tstat),') ', ez.p.apa(ph$test$pvalues,prefix=2,pe=pe),'; ',collapse='')
+        posthoc_tukey = paste0('(',names(ph$test$tstat),') ', ez.p.apa(ph$test$pvalues,prefix=prefix,pe=pe),'; ',collapse='')
 
         # df.bak with dropna, so na.rm needed
         uniques_drop_na.x=length(unique(df.bak[[x]])); nlevels.x=nlevels(df.bak[[x]])
@@ -1182,7 +1194,7 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3
             if (result.report$F[i] < 1) {
                 ez.pprint(sprintf('aov(%s~%s): F(%s) < 1',Y,X,result.report$dof[i]),color='cyan')
             } else {
-                ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=2,pe=pe),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
+                ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=prefix,pe=pe),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
             }
         }
         # ez.pprint('<<<<<<')

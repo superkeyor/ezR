@@ -811,7 +811,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @description barplot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
-#' \cr or "y|x+covar1+covar2+..." (currently only supports anova1b)
+#' \cr or "y|x+covar1+covar2+..." (currently only supports anovas1b without covar)
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param bar.gap  the gap between bars
 #' @param bar.width  the width of bar itself
@@ -833,13 +833,70 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
+#' @param signif  add signif to the plot (only works for anovas1b without covar)
+#' @param comparisons A list of length-2 vectors. The entries in the vector are
+#'   either the names of 2 values on the x-axis or the 2 integers that
+#'   correspond to the index of the columns of interest. if NULL, permute all combinations. 
+#'   e.g., comparisons = list(c("compact", "pickup"), c("subcompact", "suv"))
+#' @param annotations character vector with alternative annotations. if NULL, auto compute
+#'   annotations = c("First", "Second"), formatC(0.92, digits=1)
+#' @param map_signif_level NOT WORKING (because I manually pass in annotations?)--Use prefix=-1, 
+#'   Boolean value, if the p-value are directly written as
+#'   annotation or asterisks are used instead. Alternatively one can provide a
+#'   named numeric vector to create custom mappings from p-values to annotation:
+#'   For example: `c("***"=0.001, "**"=0.01, "*"=0.05)`.
+#'   Alternatively, one can provide a function that takes a numeric argument
+#'   (the p-value) and returns a string.
+#'   map_signif_level = function(p) sprintf("p = %.2g", p)
+#' @param xmin,xmax numeric vector with the positions of the left and right
+#'   sides of the brackets, respectively
+#' @param y_position numeric vector with the y positions of the brackets
+#' @param size change the width of the lines of the bracket
+#' @param textsize change the size of the text
+#' @param family change the font used for the text
+#' @param vjust2 move the text up or down relative to the bracket
+#' @param margin_top numeric vector how much higher that the maximum value that
+#'   bars start as fraction of total height
+#' @param step_increase numeric vector with the increase in fraction of total
+#'   height for every additional comparison to minimize overlap.
+#' @param extend_line Numeric that allows to shorten (negative values) or extend
+#'   (positive value) the horizontal line between groups for each comparison;
+#'   defaults to 0.
+#' @param tip_length numeric vector with the fraction of total height that the
+#'   bar goes down to indicate the precise column
+#' @param parse If `TRUE`, the labels will be parsed into expressions and
+#'   displayed as described in `?plotmath`.
+#' @param manual Boolean flag that indicates that the parameters are provided
+#'   with a data.frame. This option is necessary if one wants to plot different
+#'   annotations per facet.
+#' @param na.rm If `FALSE` (the default), removes missing values with
+#'    a warning.  If `TRUE` silently removes missing values.
+#' @param orientation The orientation of the layer. The default (‘NA’)
+#' automatically determines the orientation from the aesthetic mapping.
+#' In the rare event that this fails it can be given explicitly by setting
+#' 'orientation' to either "x" or "y"
+#' @param ...  additional params to \code{\link[ggsignif]{geom_signif}}
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
 ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylimits=NULL,ybreaks=NULL,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
-    point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=1,point.color='grey55',theme.apa=TRUE,...) {
+    point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=1,point.color='grey55',theme.apa=TRUE,
+    signif=TRUE,prefix=-1,pe=T,annotations=NULL,map_signif_level=FALSE,y_position=NULL,xmin=NULL,xmax=NULL,margin_top=0.05,step_increase=0.5,extend_line=0,tip_length=0.03,size=0.5,textsize=3.88,family="",vjust2=0,parse=FALSE,manual=FALSE,orientation=NA,...) {
+    signif = signif & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)
+    if (signif) {
+        res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=prefix,pe=pe)
+        ## "(L2 - L1) p = .95; (L3 - L1) p < .001; (L3 - L2) p = 1.00; "
+        # if (is.null(annotations)) {annotations = stringr::str_extract_all(res$posthoc_tukey,'p [=\\<] \\d*\\.\\d+')[[1]]}
+        # (Join website/promote organization - Promiting an even) 8.90e-04; (Selling a product - Donation appeal) .78; 
+        if (is.null(annotations)) {annotations = stringr::str_match_all(a$posthoc_tukey,'\\) (.+?);')[[1]][,2]}
+        lvls = stringr::str_match_all(res$posthoc_tukey,'\\((.+?) - (.+?)\\)')[[1]][,2:3]
+        if (is.null(comparisons)) {comparisons=list();for (r in 1:nrow(lvls)){comparisons[[r]]=lvls[r,1:2]}}
+    }
+    # when comparisons are passed, test is ignored
+    signiftext = ifelse(signif,'+ggsignif::geom_signif(comparisons=comparisons,annotations=annotations,map_signif_level=map_signif_level,y_position=y_position,xmin=xmin,xmax=xmax,margin_top=margin_top,step_increase=step_increase,extend_line=extend_line,tip_length=tip_length,size=size,textsize=textsize,family=family,vjust=vjust2,parse=parse,manual=manual,orientation=orientation,...)','')
+    
     if (print2scr & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
-
+    
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -899,8 +956,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                     %s %s %s %s %s
                     theme(axis.text.x=element_text(angle=%f %s %s)) +
                     theme(legend.direction="%s") +
-                    theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
-                    ,yy, xx, paste('+',covar,sep='',collapse=''), xx, xx, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
+                    theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s%s'
+                    ,yy, xx, paste('+',covar,sep='',collapse=''), xx, xx, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous, signiftext
                     )
         gghistory=paste(gghistory,
                   sprintf('df=ez.dropna(df,c("%s","%s", "%s"))',yy,xx,paste(covar,sep='',collapse='","')),
@@ -954,8 +1011,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                          %s %s %s %s %s
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") +
-                         theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
-                         , xx, yy, yy, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
+                         theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s%s'
+                         , xx, yy, yy, xx, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, 'theme(legend.position="none")+', legend.box, points, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous, signiftext
                          )
             gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
@@ -982,8 +1039,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                             %s %s
                             theme(axis.text.x=element_text(angle=%f %s %s)) +
                             theme(legend.direction="%s") +
-                            theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
-                            , xx, zz, yy, yy, xx, zz, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
+                            theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s%s'
+                            , xx, zz, yy, yy, xx, zz, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous, signiftext
                 )
                 gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
@@ -1013,8 +1070,8 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
                                 %s %s
                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
                                 theme(legend.direction="%s") +
-                                theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s'
-                                , xx, zz, aa, yy, yy, zz, aa, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous
+                                theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))%s%s'
+                                , xx, zz, aa, yy, yy, zz, aa, xx, bar.gap, bar.width, color, ymin, ymax, error.size, error.width, error.gap, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], ycontinous, signiftext
                     )
                     gghistory=paste(gghistory,
                          sprintf('df=ez.dropna(df,c("%s","%s","%s","%s"))',yy,xx,zz,aa),
