@@ -1,8 +1,4 @@
-#' # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#' # environment, file, folder, os
-#' # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#' # options(warn=-1)  # turn off warning
-#' # options(warn=0)  # turn back on warning
+
 
 #' open a local file with default program (xlsx etc)
 #' @description open a local file with default program (xlsx etc)
