@@ -1,5 +1,3 @@
-
-
 #' open a local file with default program (xlsx etc)
 #' @description open a local file with default program (xlsx etc)
 #' @note \code{\link{browseURL}} does the same
