@@ -892,7 +892,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         lvls = stringr::str_match_all(res$posthoc_tukey,'\\((.+?) - (.+?)\\)')[[1]][,2:3]
         if (is.null(comparisons)) {comparisons=list();for (r in 1:nrow(lvls)){comparisons[[r]]=lvls[r,1:2]}}
     }
-    # ggsignif::geom_signif: when comparisons are passed, test is ignored
+    # ggsignif::geom_signif:  when comparisons are passed, test is ignored
     signiftext = ifelse(signif,'+ggsignif::geom_signif(comparisons=comparisons,annotations=annotations,map_signif_level=map_signif_level,y_position=y_position,xmin=xmin,xmax=xmax,margin_top=margin_top,step_increase=step_increase,extend_line=extend_line,tip_length=tip_length,size=size,textsize=textsize,family=family,vjust=vjust2,parse=parse,manual=manual,orientation=orientation,...)','')
     
     if (print2scr & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
