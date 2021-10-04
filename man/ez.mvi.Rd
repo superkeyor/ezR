@@ -4,8 +4,17 @@
 \alias{ez.mvi}
 \title{generic plot a customized boxplot with jittered stripplot, violin, and mean}
 \usage{
-ez.mvi(df, cmd, violin = TRUE, colors = ez.palette("Zhu"), n.size = 4.5,
-  m.size = 4.5, alpha = 0.7, facet = "cols", theme.apa = TRUE)
+ez.mvi(
+  df,
+  cmd,
+  violin = TRUE,
+  colors = ez.palette("Zhu"),
+  n.size = 4.5,
+  m.size = 4.5,
+  alpha = 0.7,
+  facet = "cols",
+  theme.apa = TRUE
+)
 }
 \arguments{
 \item{df}{data frame in long format}

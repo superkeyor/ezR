@@ -4,8 +4,14 @@
 \alias{ez.num}
 \title{convert a column (or all columns) in a data frame, or a vector into numeric type, call type.convert or as.numeric}
 \usage{
-ez.num(x, col = NULL, force = FALSE, print2scr = TRUE,
-  na.strings = c("-", "", ".", "NA", "na", "N/A", "n/a", "NaN", "nan"), ...)
+ez.num(
+  x,
+  col = NULL,
+  force = FALSE,
+  print2scr = TRUE,
+  na.strings = c("-", "", ".", "NA", "na", "N/A", "n/a", "NaN", "nan"),
+  ...
+)
 }
 \arguments{
 \item{x}{a character vector, data frame, list, or a factor}
@@ -81,19 +87,30 @@ ez.num(d,col=c("char","mixed_char"),force=T)
 \seealso{
 \code{\link{ez.2value}}
 
-Other data transformation functions: \code{\link{ez.2char}},
-  \code{\link{ez.2factor}}, \code{\link{ez.2label}},
-  \code{\link{ez.2long}}, \code{\link{ez.2lower}},
-  \code{\link{ez.2value}}, \code{\link{ez.2wide}},
-  \code{\link{ez.compute}}, \code{\link{ez.del}},
-  \code{\link{ez.label.get}}, \code{\link{ez.label.set}},
-  \code{\link{ez.labels.get}}, \code{\link{ez.labels.set}},
-  \code{\link{ez.move}}, \code{\link{ez.newcol}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.rename}},
-  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
-  \code{\link{ez.rncol}}, \code{\link{ez.select}},
-  \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.str}}, \code{\link{ez.unique}},
-  \code{\link{left_join}}
+Other data transformation functions: 
+\code{\link{ez.2char}()},
+\code{\link{ez.2factor}()},
+\code{\link{ez.2label}()},
+\code{\link{ez.2long}()},
+\code{\link{ez.2lower}()},
+\code{\link{ez.2value}()},
+\code{\link{ez.2wide}()},
+\code{\link{ez.compute}()},
+\code{\link{ez.del}()},
+\code{\link{ez.move}()},
+\code{\link{ez.newcol}()},
+\code{\link{ez.recode}()},
+\code{\link{ez.recols}()},
+\code{\link{ez.recol}()},
+\code{\link{ez.rename}()},
+\code{\link{ez.replace}()},
+\code{\link{ez.rncols}()},
+\code{\link{ez.rncol}()},
+\code{\link{ez.select}()},
+\code{\link{ez.sort}()},
+\code{\link{ez.split}()},
+\code{\link{ez.str}()},
+\code{\link{ez.unique}()},
+\code{\link{left_join}()}
 }
+\concept{data transformation functions}

@@ -56,19 +56,30 @@ for consistent and easy convertion, consider to use ez.num(c("2","4","7.3")), ez
 \seealso{
 \code{\link{ez.num}}
 
-Other data transformation functions: \code{\link{ez.2char}},
-  \code{\link{ez.2factor}}, \code{\link{ez.2label}},
-  \code{\link{ez.2long}}, \code{\link{ez.2lower}},
-  \code{\link{ez.2wide}}, \code{\link{ez.compute}},
-  \code{\link{ez.del}}, \code{\link{ez.label.get}},
-  \code{\link{ez.label.set}}, \code{\link{ez.labels.get}},
-  \code{\link{ez.labels.set}}, \code{\link{ez.move}},
-  \code{\link{ez.newcol}}, \code{\link{ez.num}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.rename}},
-  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
-  \code{\link{ez.rncol}}, \code{\link{ez.select}},
-  \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.str}}, \code{\link{ez.unique}},
-  \code{\link{left_join}}
+Other data transformation functions: 
+\code{\link{ez.2char}()},
+\code{\link{ez.2factor}()},
+\code{\link{ez.2label}()},
+\code{\link{ez.2long}()},
+\code{\link{ez.2lower}()},
+\code{\link{ez.2wide}()},
+\code{\link{ez.compute}()},
+\code{\link{ez.del}()},
+\code{\link{ez.move}()},
+\code{\link{ez.newcol}()},
+\code{\link{ez.num}()},
+\code{\link{ez.recode}()},
+\code{\link{ez.recols}()},
+\code{\link{ez.recol}()},
+\code{\link{ez.rename}()},
+\code{\link{ez.replace}()},
+\code{\link{ez.rncols}()},
+\code{\link{ez.rncol}()},
+\code{\link{ez.select}()},
+\code{\link{ez.sort}()},
+\code{\link{ez.split}()},
+\code{\link{ez.str}()},
+\code{\link{ez.unique}()},
+\code{\link{left_join}()}
 }
+\concept{data transformation functions}

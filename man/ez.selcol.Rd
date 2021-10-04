@@ -26,6 +26,6 @@ returns vector of col names (if no col matched, resturn NULL, for easy later use
 select col names in a df, evaluated by sprintf('dplyr::select(df,%s, ...)',toString(col)
 }
 \examples{
-regular expression should use four slashes \\\\\\\\
+regular expression should use four slashes \\\\
 'matches("cci[i]?\\\\\\\\d\\\\\\\\d$")'
 }

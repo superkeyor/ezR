@@ -4,8 +4,16 @@
 \alias{ez.sprintf}
 \title{alias of \code{\link[glue]{glue}}}
 \usage{
-ez.sprintf(..., .sep = "", .envir = parent.frame(), .open = "{",
-  .close = "}", .na = "NA", .transformer = identity_transformer)
+ez.sprintf(
+  ...,
+  .sep = "",
+  .envir = parent.frame(),
+  .open = "{",
+  .close = "}",
+  .na = "NA",
+  .transformer = identity_transformer,
+  .trim = TRUE
+)
 }
 \description{
 alias of \code{\link[glue]{glue}}

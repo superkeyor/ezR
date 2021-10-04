@@ -4,9 +4,18 @@
 \alias{ez.execute}
 \title{alias of \code{\link{system}}}
 \usage{
-ez.execute(command, intern = FALSE, ignore.stdout = FALSE,
-  ignore.stderr = FALSE, wait = TRUE, input = NULL,
-  show.output.on.console = TRUE, minimized = FALSE, invisible = TRUE)
+ez.execute(
+  command,
+  intern = FALSE,
+  ignore.stdout = FALSE,
+  ignore.stderr = FALSE,
+  wait = TRUE,
+  input = NULL,
+  show.output.on.console = TRUE,
+  minimized = FALSE,
+  invisible = TRUE,
+  timeout = 0
+)
 }
 \description{
 alias of \code{\link{system}}

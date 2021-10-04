@@ -4,8 +4,14 @@
 \alias{ggmultiplot}
 \title{Multiple plot function, accepts a list of ggplot (not plot) objects}
 \usage{
-ggmultiplot(..., plotlist = NULL, cols = NULL, layout = NULL,
-  title = "", title.size = 20)
+ggmultiplot(
+  ...,
+  plotlist = NULL,
+  cols = NULL,
+  layout = NULL,
+  title = "",
+  title.size = 20
+)
 }
 \arguments{
 \item{plotlist}{objects can be passed in ..., or to plotlist (as a list of ggplot objects)

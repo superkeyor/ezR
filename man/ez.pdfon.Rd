@@ -4,10 +4,27 @@
 \alias{ez.pdfon}
 \title{wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)}
 \usage{
-ez.pdfon(file = if (onefile) "Rplots.pdf" else "Rplot\%03d.pdf", width,
-  height, onefile, family, title, fonts, version, paper, encoding, bg, fg,
-  pointsize, pagecentre, colormodel, useDingbats, useKerning, fillOddEven,
-  compress)
+ez.pdfon(
+  file = if (onefile) "Rplots.pdf" else "Rplot\%03d.pdf",
+  width,
+  height,
+  onefile,
+  family,
+  title,
+  fonts,
+  version,
+  paper,
+  encoding,
+  bg,
+  fg,
+  pointsize,
+  pagecentre,
+  colormodel,
+  useDingbats,
+  useKerning,
+  fillOddEven,
+  compress
+)
 }
 \description{
 wrapper of \code{\link{pdf}}, direct all plotting to a pdf file(s)

@@ -4,8 +4,11 @@
 \alias{ez.is.numeric.like}
 \title{Check numeric}
 \usage{
-ez.is.numeric.like(x, naAsTrue = TRUE, na.strings = c("", ".", "NA", "na",
-  "N/A", "n/a", "NaN", "nan"))
+ez.is.numeric.like(
+  x,
+  naAsTrue = TRUE,
+  na.strings = c("", ".", "NA", "na", "N/A", "n/a", "NaN", "nan")
+)
 }
 \arguments{
 \item{x}{a str vector, or a factor of str vector, or numeric vector. x will be coerced and trimws.}

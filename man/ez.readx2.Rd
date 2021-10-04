@@ -4,9 +4,17 @@
 \alias{ez.readx2}
 \title{read an xlsx file, wrapper of \code{\link[xlsx]{read.xlsx}} from the xlsx package, internally trim (leading and trailing) string spaces}
 \usage{
-ez.readx2(file, sheetIndex = 1, tolower = FALSE, stringsAsFactors = FALSE,
-  blanksAsNA = TRUE, na.strings = c("", "."), makenames = TRUE,
-  detectDates = TRUE, ...)
+ez.readx2(
+  file,
+  sheetIndex = 1,
+  tolower = FALSE,
+  stringsAsFactors = FALSE,
+  blanksAsNA = TRUE,
+  na.strings = c("", "."),
+  makenames = TRUE,
+  detectDates = TRUE,
+  ...
+)
 }
 \arguments{
 \item{tolower}{whether to convert all column names to lower case}

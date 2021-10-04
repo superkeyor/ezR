@@ -9,12 +9,12 @@ ez.p.apa(pvalue, prefix = 0, pe = F)
 \arguments{
 \item{pvalue}{numeric vector}
 
-\item{prefix}{0,1,2}
+\item{prefix}{-1,0,1,2}
 
 \item{pe}{affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001}
 }
 \value{
-character vector prefix 0 (< .001, .003, .02); prefix 1 (< .001, = .003, = .02); prefix 2 (p < .001, p = .003, p = .02)
+character vector prefix -1 (****,***,**,*,NA); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
 }
 \description{
 format p value according to apa for report

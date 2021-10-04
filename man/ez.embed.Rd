@@ -4,8 +4,17 @@
 \alias{ez.embed}
 \title{embed a new plot within an existing plot at the coordinates specified (in user units of the existing plot)}
 \usage{
-ez.embed(fun, x, y = NULL, size = c(1, 1), vadj = 0.5, hadj = 0.5,
-  inset = c(0, 0), type = c("plt", "fig"), pars = NULL)
+ez.embed(
+  fun,
+  x,
+  y = NULL,
+  size = c(1, 1),
+  vadj = 0.5,
+  hadj = 0.5,
+  inset = c(0, 0),
+  type = c("plt", "fig"),
+  pars = NULL
+)
 }
 \description{
 embed a new plot within an existing plot at the coordinates specified (in user units of the existing plot)

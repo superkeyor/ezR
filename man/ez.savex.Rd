@@ -5,11 +5,25 @@
 \alias{ez.writex}
 \title{save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{writeData}} from the openxlsx package}
 \usage{
-ez.savex(x, file = "RData.xlsx", sheetName = "Sheet1", withFilter = TRUE,
-  rowNames = FALSE, colNames = TRUE, ...)
+ez.savex(
+  x,
+  file = "RData.xlsx",
+  sheetName = "Sheet1",
+  withFilter = TRUE,
+  rowNames = FALSE,
+  colNames = TRUE,
+  ...
+)
 
-ez.writex(x, file = "RData.xlsx", sheetName = "Sheet1", withFilter = TRUE,
-  rowNames = FALSE, colNames = TRUE, ...)
+ez.writex(
+  x,
+  file = "RData.xlsx",
+  sheetName = "Sheet1",
+  withFilter = TRUE,
+  rowNames = FALSE,
+  colNames = TRUE,
+  ...
+)
 }
 \arguments{
 \item{sheetName}{Name of the worksheet}

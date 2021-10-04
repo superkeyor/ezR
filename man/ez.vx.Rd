@@ -4,8 +4,16 @@
 \alias{ez.vx}
 \title{view the overview of a data frame or similar object (like spss variable view, but with much more information)}
 \usage{
-ez.vx(df, temp = NULL, id = NULL, file = NULL, width = 300,
-  incomparables = FALSE, debug = NULL, ...)
+ez.vx(
+  df,
+  temp = NULL,
+  id = NULL,
+  file = NULL,
+  width = 300,
+  incomparables = FALSE,
+  debug = NULL,
+  ...
+)
 }
 \arguments{
 \item{df}{a data frame}

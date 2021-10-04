@@ -5,11 +5,23 @@
 \alias{ez.writer}
 \title{save one (only one) object to a rds file}
 \usage{
-ez.saver(object, file = "", ascii = FALSE, version = NULL,
-  compress = TRUE, refhook = NULL)
+ez.saver(
+  object,
+  file = "",
+  ascii = FALSE,
+  version = NULL,
+  compress = TRUE,
+  refhook = NULL
+)
 
-ez.writer(object, file = "", ascii = FALSE, version = NULL,
-  compress = TRUE, refhook = NULL)
+ez.writer(
+  object,
+  file = "",
+  ascii = FALSE,
+  version = NULL,
+  compress = TRUE,
+  refhook = NULL
+)
 }
 \description{
 save one (only one) object to a rds file

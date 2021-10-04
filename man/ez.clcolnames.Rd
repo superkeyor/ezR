@@ -4,8 +4,15 @@
 \alias{ez.clcolnames}
 \title{sanitize col names}
 \usage{
-ez.clcolnames(df, pattern = "[[:space:][:punct:]]", replacement = ".",
-  fixed = FALSE, ignore.case = FALSE, perl = TRUE, col = NULL)
+ez.clcolnames(
+  df,
+  pattern = "[[:space:][:punct:]]",
+  replacement = ".",
+  fixed = FALSE,
+  ignore.case = FALSE,
+  perl = TRUE,
+  col = NULL
+)
 }
 \arguments{
 \item{df}{df}

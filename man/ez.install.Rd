@@ -4,14 +4,27 @@
 \alias{ez.install}
 \title{alias of \code{\link{install.packages}}}
 \usage{
-ez.install(pkgs, lib, repos = getOption("repos"),
-  contriburl = contrib.url(repos, type), method, available = NULL,
-  destdir = NULL, dependencies = NA, type = getOption("pkgType"),
+ez.install(
+  pkgs,
+  lib,
+  repos = getOption("repos"),
+  contriburl = contrib.url(repos, type),
+  method,
+  available = NULL,
+  destdir = NULL,
+  dependencies = NA,
+  type = getOption("pkgType"),
   configure.args = getOption("configure.args"),
-  configure.vars = getOption("configure.vars"), clean = FALSE,
-  Ncpus = getOption("Ncpus", 1L), verbose = getOption("verbose"),
-  libs_only = FALSE, INSTALL_opts, quiet = FALSE, keep_outputs = FALSE,
-  ...)
+  configure.vars = getOption("configure.vars"),
+  clean = FALSE,
+  Ncpus = getOption("Ncpus", 1L),
+  verbose = getOption("verbose"),
+  libs_only = FALSE,
+  INSTALL_opts,
+  quiet = FALSE,
+  keep_outputs = FALSE,
+  ...
+)
 }
 \description{
 alias of \code{\link{install.packages}}

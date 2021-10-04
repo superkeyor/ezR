@@ -4,8 +4,14 @@
 \alias{ez.print}
 \title{wrapper of \code{\link{cat}}, cat(string, "\\n", sep="")}
 \usage{
-ez.print(string, file = "", append = TRUE, sep = "", fill = FALSE,
-  labels = NULL)
+ez.print(
+  string,
+  file = "",
+  append = TRUE,
+  sep = "",
+  fill = FALSE,
+  labels = NULL
+)
 }
 \arguments{
 \item{string}{a single character vector, other types will be auto converted with as.character() by cat()
@@ -38,7 +44,7 @@ wrapper of \code{\link{cat}}, cat(string, "\\n", sep="")
 do not use R \code{\link{print}}, not actually printing \\n
 }
 \examples{
-# cat("hello","world",file="output.txt",sep="\\n",append=TRUE)
+# cat("hello","world",file="output.txt",sep="\n",append=TRUE)
 }
 \seealso{
 \code{\link{sprintf}}, \code{\link{ez.log}}, \code{\link{ez.join}}

@@ -5,11 +5,28 @@
 \alias{ez.notduplicated}
 \title{duplicated}
 \usage{
-ez.duplicated(x, col = NULL, vec = TRUE, vecgroup = FALSE, dim = 1,
-  incomparables = FALSE, value = FALSE, keepall = TRUE, ...)
+ez.duplicated(
+  x,
+  col = NULL,
+  vec = TRUE,
+  vecgroup = FALSE,
+  dim = 1,
+  incomparables = FALSE,
+  value = FALSE,
+  keepall = TRUE,
+  ...
+)
 
-ez.notduplicated(x, col = NULL, vec = TRUE, dim = 1,
-  incomparables = FALSE, value = FALSE, keepall = TRUE, ...)
+ez.notduplicated(
+  x,
+  col = NULL,
+  vec = TRUE,
+  dim = 1,
+  incomparables = FALSE,
+  value = FALSE,
+  keepall = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{a data frame or a vector/col of any data type (factor, char, numeric)}

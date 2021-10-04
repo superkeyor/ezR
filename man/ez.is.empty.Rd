@@ -29,8 +29,8 @@ is.empty(c())      # [1] TRUE
 is.empty(NA)       # [1] TRUE
 is.empty(NaN)      # [1] TRUE
 is.empty("")       # [1] TRUE
-is.empty(0)        # [1] TRUE --> (\\code{0} jerry changed to FALSE)
-is.empty(0.00)     # [1] TRUE --> (\\code{0} jerry changed to FALSE)
+is.empty(0)        # [1] TRUE --> (\code{0} jerry changed to FALSE)
+is.empty(0.00)     # [1] TRUE --> (\code{0} jerry changed to FALSE)
 is.empty("    ")   # [1] TRUE
 is.empty("foobar") # [1] FALSE
 is.empty("    ", trim = FALSE)    # [1] FALSE

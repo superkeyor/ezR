@@ -4,9 +4,17 @@
 \alias{ez.reads2}
 \title{read spss}
 \usage{
-ez.reads2(file, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = FALSE, blanksAsNA = TRUE, na.strings = c("", "."),
-  makenames = TRUE, ...)
+ez.reads2(
+  file,
+  atm2fac = 2,
+  usrna = TRUE,
+  tolower = FALSE,
+  stringsAsFactors = FALSE,
+  blanksAsNA = TRUE,
+  na.strings = c("", "."),
+  makenames = TRUE,
+  ...
+)
 }
 \arguments{
 \item{atm2fac}{c(1,2,3). atomic means logic,numeric/double,integer,character/string etc. Char to factor controlled separately by stringsAsFactors.

@@ -4,8 +4,17 @@
 \alias{ez.xyplot}
 \title{mimic xyplot with ggplot (slightly horizontally jittered)}
 \usage{
-ez.xyplot(df, cmd, ylab = NULL, xlab = NULL, xangle = 0, vjust = NULL,
-  hjust = NULL, facet = "cols", theme.apa = TRUE)
+ez.xyplot(
+  df,
+  cmd,
+  ylab = NULL,
+  xlab = NULL,
+  xangle = 0,
+  vjust = NULL,
+  hjust = NULL,
+  facet = "cols",
+  theme.apa = TRUE
+)
 }
 \arguments{
 \item{df}{data frame in long format}

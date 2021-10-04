@@ -4,8 +4,14 @@
 \alias{ez.frame}
 \title{alias of data.frame}
 \usage{
-ez.frame(..., row.names = NULL, check.rows = FALSE, check.names = TRUE,
-  fix.empty.names = TRUE, stringsAsFactors = default.stringsAsFactors())
+ez.frame(
+  ...,
+  row.names = NULL,
+  check.rows = FALSE,
+  check.names = TRUE,
+  fix.empty.names = TRUE,
+  stringsAsFactors = FALSE
+)
 }
 \description{
 alias of data.frame

@@ -4,9 +4,21 @@
 \alias{ez.include}
 \title{alias of \code{\link{library}}}
 \usage{
-ez.include(package, help, pos = 2, lib.loc = NULL, character.only = FALSE,
-  logical.return = FALSE, warn.conflicts = TRUE, quietly = FALSE,
-  verbose = getOption("verbose"))
+ez.include(
+  package,
+  help,
+  pos = 2,
+  lib.loc = NULL,
+  character.only = FALSE,
+  logical.return = FALSE,
+  warn.conflicts,
+  quietly = FALSE,
+  verbose = getOption("verbose"),
+  mask.ok,
+  exclude,
+  include.only,
+  attach.required = missing(include.only)
+)
 }
 \description{
 alias of \code{\link{library}}

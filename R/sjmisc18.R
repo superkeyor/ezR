@@ -2407,14 +2407,14 @@ group_labels <- function(var,
     lower <- as.numeric(subs[[1]][1])
     # Obergrenze als Zahlenwert
     upper <- as.numeric(subs[[1]][2])
-    # Prüfen, welche Intervallgrenze ein-
+    # Prufen, welche Intervallgrenze ein-
     # und welche ausgeschlossen werden soll
     if (right.interval) {
       lower <- lower + 1
     } else {
       upper <- upper - 1
     }
-    # Rückgabe des Strings
+    # Ruckgabe des Strings
     retval[i] <- c(paste(lower, "-", upper, sep = ""))
   }
   # set back variable labels

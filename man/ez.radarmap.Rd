@@ -4,8 +4,18 @@
 \alias{ez.radarmap}
 \title{draw a radar plot}
 \usage{
-ez.radarmap(df, id, stats = "mean", lwd = 1, angle = 0, fontsize = 0.8,
-  facet = FALSE, facetfontsize = 1, color = id, linetype = NULL)
+ez.radarmap(
+  df,
+  id,
+  stats = "mean",
+  lwd = 1,
+  angle = 0,
+  fontsize = 0.8,
+  facet = FALSE,
+  facetfontsize = 1,
+  color = id,
+  linetype = NULL
+)
 }
 \arguments{
 \item{df}{a data frame with a single variable as factor and all othere variables being numeric}

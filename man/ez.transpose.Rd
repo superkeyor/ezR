@@ -4,7 +4,13 @@
 \alias{ez.transpose}
 \title{alias of \code{\link[data.table]{transpose}}}
 \usage{
-ez.transpose(l, fill = NA, ignore.empty = FALSE)
+ez.transpose(
+  l,
+  fill = NA,
+  ignore.empty = FALSE,
+  keep.names = NULL,
+  make.names = NULL
+)
 }
 \description{
 alias of \code{\link[data.table]{transpose}}

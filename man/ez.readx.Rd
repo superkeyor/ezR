@@ -4,9 +4,17 @@
 \alias{ez.readx}
 \title{read an xlsx file, wrapper of \code{\link[openxlsx]{read.xlsx}}}
 \usage{
-ez.readx(file, sheet = 1, tolower = FALSE, stringsAsFactors = FALSE,
-  blanksAsNA = TRUE, na.strings = c("", "."), makenames = TRUE,
-  detectDates = TRUE, ...)
+ez.readx(
+  file,
+  sheet = 1,
+  tolower = FALSE,
+  stringsAsFactors = FALSE,
+  blanksAsNA = TRUE,
+  na.strings = c("", "."),
+  makenames = TRUE,
+  detectDates = TRUE,
+  ...
+)
 }
 \arguments{
 \item{sheet}{The name or index of the sheet to read data from.}

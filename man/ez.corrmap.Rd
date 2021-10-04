@@ -4,12 +4,26 @@
 \alias{ez.corrmap}
 \title{plot a correlation matrix map}
 \usage{
-ez.corrmap(df, x = NULL, y = NULL, corr.type = "pearson",
-  sig.level = 0.05, insig = "blank", type = "lower", method = "ellipse",
-  tl.col = "black", tl.cex = 0.4, tl.pos = NULL, tl.srt = 45,
-  addgrid.col = rgb(1, 1, 1, 0.01), addCoef.col = NULL, diag = FALSE,
-  order = c("original", "AOE", "FPC", "hclust", "alphabet"), col = NULL,
-  ...)
+ez.corrmap(
+  df,
+  x = NULL,
+  y = NULL,
+  corr.type = "pearson",
+  sig.level = 0.05,
+  insig = "blank",
+  type = "lower",
+  method = "ellipse",
+  tl.col = "black",
+  tl.cex = 0.4,
+  tl.pos = NULL,
+  tl.srt = 45,
+  addgrid.col = rgb(1, 1, 1, 0.01),
+  addCoef.col = NULL,
+  diag = FALSE,
+  order = c("original", "AOE", "FPC", "hclust", "alphabet"),
+  col = NULL,
+  ...
+)
 }
 \arguments{
 \item{df}{data frame in wide format, should be all numeric}

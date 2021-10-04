@@ -4,21 +4,64 @@
 \alias{ez.barplot}
 \title{barplot with ggplot}
 \usage{
-ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
-  bar.gap = 0.7, bar.width = 0.7, error.size = 0.7, error.gap = 0.7,
-  error.width = 0.3, error.direction = "both", ylimits = NULL,
-  ybreaks = NULL, ylab = NULL, xlab = NULL, zlab = NULL,
-  legend.position = "top", legend.direction = "horizontal",
-  legend.box = T, legend.size = c(0, 10), xangle = 0, vjust = NULL,
-  hjust = NULL, print2scr = TRUE, point = FALSE, point.jitter = 0.15,
-  point.size = 1.5, point.alpha = 1, point.color = "grey55",
-  theme.apa = TRUE, ...)
+ez.barplot(
+  df,
+  cmd,
+  color = "color",
+  colors = ez.palette("Zhu"),
+  bar.gap = 0.7,
+  bar.width = 0.7,
+  error.size = 0.7,
+  error.gap = 0.7,
+  error.width = 0.3,
+  error.direction = "both",
+  ylimits = NULL,
+  ybreaks = NULL,
+  ylab = NULL,
+  xlab = NULL,
+  zlab = NULL,
+  legend.position = "top",
+  legend.direction = "horizontal",
+  legend.box = T,
+  legend.size = c(0, 10),
+  xangle = 0,
+  vjust = NULL,
+  hjust = NULL,
+  print2scr = TRUE,
+  point = FALSE,
+  point.jitter = 0.15,
+  point.size = 1.5,
+  point.alpha = 1,
+  point.color = "grey55",
+  theme.apa = TRUE,
+  signif = TRUE,
+  prefix = -1,
+  pe = T,
+  comparisons = NULL,
+  annotations = NULL,
+  map_signif_level = FALSE,
+  y_position = NULL,
+  xmin = NULL,
+  xmax = NULL,
+  margin_top = 0.05,
+  step_increase = 0.5,
+  extend_line = 0,
+  tip_length = 0.03,
+  size = 0.5,
+  textsize = 3.88,
+  family = "",
+  vjust2 = 0,
+  parse = FALSE,
+  manual = FALSE,
+  orientation = NA,
+  ...
+)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
 
 \item{cmd}{like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
-\cr or "y|x+covar1+covar2+..." (currently only supports anova1b)}
+\cr or "y|x+covar1+covar2+..." (currently only supports anovas1b without covar)}
 
 \item{color}{"bw" or "color"  black/white or colorblind-friendly color}
 
@@ -59,6 +102,68 @@ ez.barplot(df, cmd, color = "color", colors = ez.palette("Zhu"),
 \item{vjust}{vjust of x text NULL}
 
 \item{hjust}{hjust of x text NULL}
+
+\item{signif}{add signif to the plot (only works for anovas1b without covar)}
+
+\item{comparisons}{A list of length-2 vectors. The entries in the vector are
+either the names of 2 values on the x-axis or the 2 integers that
+correspond to the index of the columns of interest. if NULL, permute all combinations. 
+e.g., comparisons = list(c("compact", "pickup"), c("subcompact", "suv"))}
+
+\item{annotations}{character vector with alternative annotations. if NULL, auto compute
+annotations = c("First", "Second"), formatC(0.92, digits=1)}
+
+\item{map_signif_level}{NOT WORKING (because I manually pass in annotations?)--Use prefix=-1, 
+Boolean value, if the p-value are directly written as
+annotation or asterisks are used instead. Alternatively one can provide a
+named numeric vector to create custom mappings from p-values to annotation:
+For example: `c("***"=0.001, "**"=0.01, "*"=0.05)`.
+Alternatively, one can provide a function that takes a numeric argument
+(the p-value) and returns a string.
+map_signif_level = function(p) sprintf("p = %.2g", p)}
+
+\item{y_position}{numeric vector with the y positions of the brackets}
+
+\item{xmin, xmax}{numeric vector with the positions of the left and right
+sides of the brackets, respectively}
+
+\item{margin_top}{numeric vector how much higher that the maximum value that
+bars start as fraction of total height}
+
+\item{step_increase}{numeric vector with the increase in fraction of total
+height for every additional comparison to minimize overlap.}
+
+\item{extend_line}{Numeric that allows to shorten (negative values) or extend
+(positive value) the horizontal line between groups for each comparison;
+defaults to 0.}
+
+\item{tip_length}{numeric vector with the fraction of total height that the
+bar goes down to indicate the precise column}
+
+\item{size}{change the width of the lines of the bracket}
+
+\item{textsize}{change the size of the text}
+
+\item{family}{change the font used for the text}
+
+\item{vjust2}{move the text up or down relative to the bracket}
+
+\item{parse}{If `TRUE`, the labels will be parsed into expressions and
+displayed as described in `?plotmath`.}
+
+\item{manual}{Boolean flag that indicates that the parameters are provided
+with a data.frame. This option is necessary if one wants to plot different
+annotations per facet.}
+
+\item{orientation}{The orientation of the layer. The default ('NA')
+automatically determines the orientation from the aesthetic mapping.
+In the rare event that this fails it can be given explicitly by setting
+'orientation' to either "x" or "y"}
+
+\item{...}{additional params to \code{\link[ggsignif]{geom_signif}}}
+
+\item{na.rm}{If `FALSE` (the default), removes missing values with
+a warning.  If `TRUE` silently removes missing values.}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)

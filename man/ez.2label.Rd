@@ -4,8 +4,14 @@
 \alias{ez.2label}
 \title{e=e, f=f, g/h/i->i, j=j, k=k}
 \usage{
-ez.2label(x, col = NULL, add.non.labelled = TRUE,
-  drop.missing.value = FALSE, prefix = FALSE, ...)
+ez.2label(
+  x,
+  col = NULL,
+  add.non.labelled = TRUE,
+  drop.missing.value = FALSE,
+  prefix = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{a data frame or a vector}
@@ -49,19 +55,30 @@ ez.2value: e=e, f(0,1)<-f[1,2], g<-g/h/i/j/k
 ez.2factor: ef->f, g/h->h, i=i, factor[x,y,z]<j/k
 }
 \seealso{
-Other data transformation functions: \code{\link{ez.2char}},
-  \code{\link{ez.2factor}}, \code{\link{ez.2long}},
-  \code{\link{ez.2lower}}, \code{\link{ez.2value}},
-  \code{\link{ez.2wide}}, \code{\link{ez.compute}},
-  \code{\link{ez.del}}, \code{\link{ez.label.get}},
-  \code{\link{ez.label.set}}, \code{\link{ez.labels.get}},
-  \code{\link{ez.labels.set}}, \code{\link{ez.move}},
-  \code{\link{ez.newcol}}, \code{\link{ez.num}},
-  \code{\link{ez.recode}}, \code{\link{ez.recols}},
-  \code{\link{ez.recol}}, \code{\link{ez.rename}},
-  \code{\link{ez.replace}}, \code{\link{ez.rncols}},
-  \code{\link{ez.rncol}}, \code{\link{ez.select}},
-  \code{\link{ez.sort}}, \code{\link{ez.split}},
-  \code{\link{ez.str}}, \code{\link{ez.unique}},
-  \code{\link{left_join}}
+Other data transformation functions: 
+\code{\link{ez.2char}()},
+\code{\link{ez.2factor}()},
+\code{\link{ez.2long}()},
+\code{\link{ez.2lower}()},
+\code{\link{ez.2value}()},
+\code{\link{ez.2wide}()},
+\code{\link{ez.compute}()},
+\code{\link{ez.del}()},
+\code{\link{ez.move}()},
+\code{\link{ez.newcol}()},
+\code{\link{ez.num}()},
+\code{\link{ez.recode}()},
+\code{\link{ez.recols}()},
+\code{\link{ez.recol}()},
+\code{\link{ez.rename}()},
+\code{\link{ez.replace}()},
+\code{\link{ez.rncols}()},
+\code{\link{ez.rncol}()},
+\code{\link{ez.select}()},
+\code{\link{ez.sort}()},
+\code{\link{ez.split}()},
+\code{\link{ez.str}()},
+\code{\link{ez.unique}()},
+\code{\link{left_join}()}
 }
+\concept{data transformation functions}

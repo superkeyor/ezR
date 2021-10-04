@@ -4,9 +4,17 @@
 \alias{ez.reads}
 \title{read spss}
 \usage{
-ez.reads(path, atm2fac = 2, usrna = TRUE, tolower = FALSE,
-  stringsAsFactors = FALSE, blanksAsNA = TRUE, na.strings = c("", "."),
-  makenames = TRUE, ...)
+ez.reads(
+  path,
+  atm2fac = 2,
+  usrna = TRUE,
+  tolower = FALSE,
+  stringsAsFactors = FALSE,
+  blanksAsNA = TRUE,
+  na.strings = c("", "."),
+  makenames = TRUE,
+  ...
+)
 }
 \arguments{
 \item{path}{File path to the data file}

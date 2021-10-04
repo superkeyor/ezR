@@ -4,11 +4,28 @@
 \alias{ez.piechart}
 \title{pie chart}
 \usage{
-ez.piechart(df, cmd, start = 0, direction = 1, color = "color",
-  colors = ez.palette("Zhu"), alpha = 1, n.size = 5.5, n.type = 3,
-  ylab = "", xlab = "", zlab = NULL, legend.position = "top",
-  legend.direction = "horizontal", legend.box = T, legend.size = c(0, 10),
-  xangle = 0, vjust = NULL, hjust = NULL, theme.apa = TRUE)
+ez.piechart(
+  df,
+  cmd,
+  start = 0,
+  direction = 1,
+  color = "color",
+  colors = ez.palette("Zhu"),
+  alpha = 1,
+  n.size = 5.5,
+  n.type = 3,
+  ylab = "",
+  xlab = "",
+  zlab = NULL,
+  legend.position = "top",
+  legend.direction = "horizontal",
+  legend.box = T,
+  legend.size = c(0, 10),
+  xangle = 0,
+  vjust = NULL,
+  hjust = NULL,
+  theme.apa = TRUE
+)
 }
 \arguments{
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}

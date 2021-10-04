@@ -4,8 +4,15 @@
 \alias{ez.wherena}
 \title{visualize where all the NAs of a dataframe are}
 \usage{
-ez.wherena(df, id = NULL, color = "red", angle = 270, basesize = 9,
-  xsize = 1, ysize = 1)
+ez.wherena(
+  df,
+  id = NULL,
+  color = "red",
+  angle = 270,
+  basesize = 9,
+  xsize = 1,
+  ysize = 1
+)
 }
 \arguments{
 \item{df}{data frame in wide format}

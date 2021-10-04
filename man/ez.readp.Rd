@@ -4,8 +4,13 @@
 \alias{ez.readp}
 \title{read a parquet (a columnar storage file format) file}
 \usage{
-ez.readp(file, col_select = NULL, as_data_frame = TRUE,
-  props = ParquetReaderProperties$create(), ...)
+ez.readp(
+  file,
+  col_select = NULL,
+  as_data_frame = TRUE,
+  props = ParquetArrowReaderProperties$create(),
+  ...
+)
 }
 \description{
 read a parquet (a columnar storage file format) file

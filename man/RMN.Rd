@@ -4,7 +4,9 @@
 \name{RMN}
 \alias{RMN}
 \title{creat shorthand for Times New Roman cross-platform}
-\format{An object of class \code{character} of length 1.}
+\format{
+An object of class \code{character} of length 1.
+}
 \usage{
 RMN
 }

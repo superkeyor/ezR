@@ -4,8 +4,13 @@
 \alias{ez.retry}
 \title{retry, wrapper of \code{\link{try}}}
 \usage{
-ez.retry(expr, times = 5, pause = 3, verbose = FALSE,
-  isError = function(x) "try-error" \%in\% class(x))
+ez.retry(
+  expr,
+  times = 5,
+  pause = 3,
+  verbose = FALSE,
+  isError = function(x) "try-error" \%in\% class(x)
+)
 }
 \arguments{
 \item{expr}{no need to quote the expr}
