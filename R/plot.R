@@ -871,7 +871,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #'   annotations per facet.
 #' @param na.rm If `FALSE` (the default), removes missing values with
 #'    a warning.  If `TRUE` silently removes missing values.
-#' @param orientation The orientation of the layer. The default (‘NA’)
+#' @param orientation The orientation of the layer. The default ('NA')
 #' automatically determines the orientation from the aesthetic mapping.
 #' In the rare event that this fails it can be given explicitly by setting
 #' 'orientation' to either "x" or "y"
