@@ -44,14 +44,14 @@ ez.barplot(
   y_position = NULL,
   xmin = NULL,
   xmax = NULL,
-  margin_top = 0.05,
+  margin_top = 0.1,
   step_increase = 0.5,
   extend_line = 0,
-  tip_length = 0.03,
+  tip_length = 0.15,
   size = 0.5,
   textsize = 3.88,
   family = "",
-  vjust2 = 0,
+  vjust2 = 0.4,
   parse = FALSE,
   manual = FALSE,
   orientation = NA,
@@ -135,7 +135,7 @@ map_signif_level = function(p) sprintf("p = \%.2g", p)}
 \item{xmin, xmax}{numeric vector with the positions of the left and right
 sides of the brackets, respectively}
 
-\item{margin_top}{numeric vector how much higher that the maximum value that
+\item{margin_top}{controls distance between the bar and the line. numeric vector how much higher that the maximum value that
 bars start as fraction of total height}
 
 \item{step_increase}{numeric vector with the increase in fraction of total
@@ -143,18 +143,18 @@ height for every additional comparison to minimize overlap.}
 
 \item{extend_line}{Numeric that allows to shorten (negative values) or extend
 (positive value) the horizontal line between groups for each comparison;
-defaults to 0.}
-
-\item{tip_length}{numeric vector with the fraction of total height that the
+defaults to 0.
 bar goes down to indicate the precise column}
 
-\item{size}{change the width of the lines of the bracket}
+\item{tip_length}{numeric vector with the fraction of total height that the}
+
+\item{size}{change the thickness of the lines of the bracket}
 
 \item{textsize}{change the size of the text}
 
 \item{family}{change the font used for the text}
 
-\item{vjust2}{move the text up or down relative to the bracket}
+\item{vjust2}{move the text up or down relative to the bracket (+down,-up)}
 
 \item{parse}{If `TRUE`, the labels will be parsed into expressions and
 displayed as described in `?plotmath`.}

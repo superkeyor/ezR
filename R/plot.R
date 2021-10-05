@@ -851,22 +851,22 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param prefix -1 (****,***,**,*,ns); 0 (< .001, .003, .2); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
 #' @param pe affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001
 #' @param showns if T, show ns or .2; F, only display significant ones
-#' @param xmin,xmax numeric vector with the positions of the left and right
-#'   sides of the brackets, respectively
-#' @param y_position numeric vector with the y positions of the brackets
-#' @param size change the width of the lines of the bracket
-#' @param textsize change the size of the text
-#' @param family change the font used for the text
-#' @param vjust2 move the text up or down relative to the bracket
-#' @param margin_top numeric vector how much higher that the maximum value that
-#'   bars start as fraction of total height
 #' @param step_increase numeric vector with the increase in fraction of total
 #'   height for every additional comparison to minimize overlap.
+#' @param vjust2 move the text up or down relative to the bracket (+down,-up)
+#' @param tip_length numeric vector with the fraction of total height that the
+#' @param size change the thickness of the lines of the bracket
+#' @param textsize change the size of the text
+#' @param family change the font used for the text
+#' @param margin_top controls distance between the bar and the line. numeric vector how much higher that the maximum value that
+#'   bars start as fraction of total height
 #' @param extend_line Numeric that allows to shorten (negative values) or extend
 #'   (positive value) the horizontal line between groups for each comparison;
 #'   defaults to 0.
-#' @param tip_length numeric vector with the fraction of total height that the
 #'   bar goes down to indicate the precise column
+#' @param xmin,xmax numeric vector with the positions of the left and right
+#'   sides of the brackets, respectively
+#' @param y_position numeric vector with the y positions of the brackets
 #' @param parse If `TRUE`, the labels will be parsed into expressions and
 #'   displayed as described in `?plotmath`.
 #' @param manual Boolean flag that indicates that the parameters are provided
@@ -884,7 +884,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @export
 ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,bar.width=0.7,error.size=0.7,error.gap=0.7,error.width=0.3,error.direction='both',ylimits=NULL,ybreaks=NULL,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,print2scr=TRUE,
     point=FALSE,point.jitter=0.15,point.size=1.5,point.alpha=1,point.color='grey55',theme.apa=TRUE,
-    signif=TRUE,prefix=-1,pe=TRUE,showns=FALSE,comparisons=NULL,annotations=NULL,map_signif_level=FALSE,y_position=NULL,xmin=NULL,xmax=NULL,margin_top=0.05,step_increase=0.5,extend_line=0,tip_length=0.03,size=0.5,textsize=3.88,family="",vjust2=0,parse=FALSE,manual=FALSE,orientation=NA,na.rm=TRUE,...) {
+    signif=TRUE,prefix=-1,pe=TRUE,showns=FALSE,comparisons=NULL,annotations=NULL,map_signif_level=FALSE,y_position=NULL,xmin=NULL,xmax=NULL,margin_top=0.1,step_increase=0.5,extend_line=0,tip_length=0.15,size=0.5,textsize=3.88,family="",vjust2=0.4,parse=FALSE,manual=FALSE,orientation=NA,na.rm=TRUE,...) {
     signif = signif & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)
     if (signif) {
         res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=prefix,pe=pe)
