@@ -897,6 +897,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             annotations = stringr::str_match_all(res$posthoc_tukey,'\\) (.+?);')[[1]][,2]
             if (!showns) {
                 # re-calculate p values to remove non-siginificant ones
+                res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=0,pe=T)
                 annotations2 = stringr::str_match_all(res$posthoc_tukey,'\\) (.+?);')[[1]][,2]
                 annotations2 = ez.num(annotations2,force=TRUE)
                 annotations[annotations2>.05]=NA
