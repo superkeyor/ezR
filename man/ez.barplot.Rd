@@ -105,6 +105,10 @@ ez.barplot(
 
 \item{signif}{add signif to the plot (only works for anovas1b without covar)}
 
+\item{prefix}{-1 (****,***,**,*,ns); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)}
+
+\item{pe}{affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001}
+
 \item{comparisons}{A list of length-2 vectors. The entries in the vector are
 either the names of 2 values on the x-axis or the 2 integers that
 correspond to the index of the columns of interest. if NULL, permute all combinations. 

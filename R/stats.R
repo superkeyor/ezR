@@ -60,7 +60,7 @@ p.apa = function(pvalue,prefix=0,pe=F){
         } else if (pvalue<=.05) {
             pvalue = '*'
         } else {
-            pvalue = NA_character_
+            pvalue = 'ns'
         }
     }
     return(pvalue)
@@ -70,7 +70,7 @@ p.apa = function(pvalue,prefix=0,pe=F){
 #' @param pvalue numeric vector
 #' @param prefix -1,0,1,2
 #' @param pe affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001
-#' @return character vector prefix -1 (****,***,**,*,NA); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
+#' @return character vector prefix -1 (****,***,**,*,ns); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
 #' @export
 ez.p.apa = Vectorize(p.apa)
 
@@ -976,6 +976,8 @@ ez.zresid = function(model,method=1) {
 #' @param scale  unstandarize or standardize residual
 #' @param ... additional param passed to the specified model
 #' @return dataframe with var residualized in place (i.e under its original column name). If covar have NA, then that row for var will be NA.
+#' @importFrom robust lmRob
+#' @importFrom robustbase lmrob lmrob.control
 #' @export
 ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
     data = data.frame(data)
@@ -1037,6 +1039,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
 #' \cr
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
+#' @importFrom effects effect
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,prefix=2,pe=F,...) {
     # yet another patch for cmd input
@@ -1316,6 +1319,9 @@ ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3
 #' lm(y~x+zz) %>% summary
 #' lm(y~x+zzz) %>% summary()
 #' # again, scale and different coding strategy only change intercept and beta(beta?, that is the purpose!), but not p
+#' @importFrom robust lmRob
+#' @importFrom robustbase lmrob lmrob.control
+#' @importFrom sfsmisc f.robftest
 #' @export
 ez.lms = function(df,y,x,covar=NULL,by=NULL,report=T,model=c('lm', 'lmrob', 'lmRob', 'rlm'),view=F,plot=F,pmethods=c('bonferroni','fdr'),cols=3,point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,pe=F,...) {
     # yet another patch for cmd input
@@ -1921,6 +1927,7 @@ ez.fishers = function(df,y,x,report=T,view=F,plot=F,pmethods=c('bonferroni','fdr
 #'         threshold  = 0.05)
 #'
 #'
+#' @importFrom DescTools GTest
 #' @export
 fisher.posthoc =
     function(x, compare="row",

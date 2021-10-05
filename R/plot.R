@@ -848,6 +848,8 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #'   Alternatively, one can provide a function that takes a numeric argument
 #'   (the p-value) and returns a string.
 #'   map_signif_level = function(p) sprintf("p = \%.2g", p)
+#' @param prefix -1 (****,***,**,*,ns); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
+#' @param pe affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001
 #' @param xmin,xmax numeric vector with the positions of the left and right
 #'   sides of the brackets, respectively
 #' @param y_position numeric vector with the y positions of the brackets
