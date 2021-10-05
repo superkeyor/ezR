@@ -2570,9 +2570,9 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         lambda.raw = sbc$result[[1]]
         # lambda, p.lambda are for rounded lambda
         lambda = sbc$result[[2]]
-        p.lambda = car::testTransform(bc,lambda=lambda)$pval
+        p.lambda = ez.num(car::testTransform(bc,lambda=lambda)$pval,force=T)
         gamma = sbc$result.gamma[[1]]
-        if (is.null(gamma)) gamma = NA_integer_
+        if (is.null(gamma)) gamma = NA
 
         if (force | p.lambda < .05){
             if (print2scr) cat(sprintf('Box-Cox%s: lambda.raw = %f, lambda = %.2f, p.lambda = %f, gamma = %f, n = %d\n', ifelse(is.null(col),'',sprintf(' (%s)',col)),lambda.raw, lambda, p.lambda, gamma, length(y)))
