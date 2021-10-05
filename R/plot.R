@@ -811,7 +811,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @description barplot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
-#' \cr or "y|x+covar1+covar2+..." (currently only supports anovas1b without covar)
+#' \cr or "y|x+covar1+covar2+..." (currently only supports anovas1b with/without covar)
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param bar.gap  the gap between bars
 #' @param bar.width  the width of bar itself
@@ -833,7 +833,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
-#' @param signif  add signif to the plot (only works for anovas1b without covar)
+#' @param signif  add signif to the plot (only works for anovas1b with/without covar)
 #' @param comparisons A list of length-2 vectors. The entries in the vector are
 #'   either the names of 2 values on the x-axis or the 2 integers that
 #'   correspond to the index of the columns of interest. if NULL, permute all combinations. 

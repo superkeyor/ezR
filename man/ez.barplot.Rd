@@ -63,7 +63,7 @@ ez.barplot(
 \item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
 
 \item{cmd}{like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
-\cr or "y|x+covar1+covar2+..." (currently only supports anovas1b without covar)}
+\cr or "y|x+covar1+covar2+..." (currently only supports anovas1b with/without covar)}
 
 \item{color}{"bw" or "color"  black/white or colorblind-friendly color}
 
@@ -105,7 +105,7 @@ ez.barplot(
 
 \item{hjust}{hjust of x text NULL}
 
-\item{signif}{add signif to the plot (only works for anovas1b without covar)}
+\item{signif}{add signif to the plot (only works for anovas1b with/without covar)}
 
 \item{prefix}{-1 (****,***,**,*,ns); 0 (< .001, .003, .2); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)}
 
