@@ -2509,22 +2509,22 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' @param plot boxcox plot. applicable only if y is a vector, only when there is an actual transformation
 #' @param print2scr print out transformation parameters, only when there is an actual transformation
 #' @param force T = transform regardless, or F = only if p.lambda rounded is less than .05.
-#' @param method "tukey" here actually means modified tukey, \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}. 
+#' @param method "tukey" here actually means modified tukey, \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}.
 #' \cr Where \code{\link[car]{basicPower}} is: x^lambda if lambda not 0; log(x) if lambda 0
 #' \cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcnPower}}
 #' \cr
 #' \cr "boxcox" is essentially scaled tukey: \code{out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)} for all positive, \code{out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)} for any non-positive--ie, zero or negative. The selection between \code{\link[car]{bcPower}} and \code{\link[car]{bcnPower}} is done automatically by this function.
 #' \cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0. Here gamma NULL means 0.
-#' \cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0. This bcnPower is Hawkins and Weisberg (2017). While allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox 
+#' \cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0. This bcnPower is Hawkins and Weisberg (2017). While allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox
 #' transformed, it is much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
 #' \cr
-#' \cr Therefore, both "tukey" and "boxcox" methods here keep the ordering. 
+#' \cr Therefore, both "tukey" and "boxcox" methods here keep the ordering.
 #' @param precise use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda
 #' @return returns transformed y, or original y if no transformation occurs.
 #' @importFrom car basicPower bcPower bcnPower
 #' @note Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} deal with non-negative responses. Also consider applying z standardization to boxcox-transformed data.
 #' \cr lambda is a tuning parameter that can be optimized in a way that the distribution of the transformed data has the largest similarity to a normal distribution. There are several proposals to optimize lambda.
-#' \cr The Box-Cox-transformed values do not guarantee normality although the data should be less skewed and should have less extreme values than before transformation. 
+#' \cr The Box-Cox-transformed values do not guarantee normality although the data should be less skewed and should have less extreme values than before transformation.
 #' \cr Some research (Zwiener et al, 2014, PLOS ONE) pointed out that z Standardization of covariates leads to better prediction performance independent of the underlying transformation used (eg., raw, log, boxcox)
 #' @export
 ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
@@ -2572,7 +2572,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         lambda = sbc$result[[2]]
         p.lambda = car::testTransform(bc,lambda=lambda)$pval
         gamma = sbc$result.gamma[[1]]
-        if (is.null(gamma)) gamma = NA
+        if (is.null(gamma)) gamma = NA_integer_
 
         if (force | p.lambda < .05){
             if (print2scr) cat(sprintf('Box-Cox%s: lambda.raw = %f, lambda = %.2f, p.lambda = %f, gamma = %f, n = %d\n', ifelse(is.null(col),'',sprintf(' (%s)',col)),lambda.raw, lambda, p.lambda, gamma, length(y)))

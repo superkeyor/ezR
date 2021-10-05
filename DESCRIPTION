@@ -43,4 +43,10 @@ Imports:
     XML,
     rentrez,
     car,
-    arrow
+    arrow,
+    DescTools,
+    effects,
+    robust,
+    robustbase,
+    sfsmisc
+    
