@@ -36,7 +36,8 @@ ez.barplot(
   theme.apa = TRUE,
   signif = TRUE,
   prefix = -1,
-  pe = T,
+  pe = TRUE,
+  showns = FALSE,
   comparisons = NULL,
   annotations = NULL,
   map_signif_level = FALSE,
@@ -54,6 +55,7 @@ ez.barplot(
   parse = FALSE,
   manual = FALSE,
   orientation = NA,
+  na.rm = TRUE,
   ...
 )
 }
@@ -105,9 +107,11 @@ ez.barplot(
 
 \item{signif}{add signif to the plot (only works for anovas1b without covar)}
 
-\item{prefix}{-1 (****,***,**,*,ns); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)}
+\item{prefix}{-1 (****,***,**,*,ns); 0 (< .001, .003, .2); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)}
 
 \item{pe}{affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001}
+
+\item{showns}{if T, show ns or .2; F, only display significant ones}
 
 \item{comparisons}{A list of length-2 vectors. The entries in the vector are
 either the names of 2 values on the x-axis or the 2 integers that
@@ -164,10 +168,10 @@ automatically determines the orientation from the aesthetic mapping.
 In the rare event that this fails it can be given explicitly by setting
 'orientation' to either "x" or "y"}
 
-\item{...}{additional params to \code{\link[ggsignif]{geom_signif}}}
-
-\item{na.rm}{If `FALSE` (the default), removes missing values with
+\item{na.rm}{If `FALSE`, removes missing values with
 a warning.  If `TRUE` silently removes missing values.}
+
+\item{...}{additional params to \code{\link[ggsignif]{geom_signif}}}
 }
 \value{
 a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
