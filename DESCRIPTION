@@ -20,6 +20,7 @@ Imports:
     roxygen2,
     xlsx,
     openxlsx,
+    tidyverse,
     dplyr,
     tidyr,
     coin,
@@ -48,5 +49,6 @@ Imports:
     effects,
     robust,
     robustbase,
-    sfsmisc
+    sfsmisc,
+    ggsignif
     
