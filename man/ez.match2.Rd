@@ -10,8 +10,8 @@ ez.match2(df, col, vec)
 similar to ez.match
 }
 \note{
-Two differences from ez.match: 
-\cr 1. intersect(unique(vec),df[[col]]) will be used to match. 
+Two differences from ez.match:
+\cr 1. intersect(unique(vec),df[[col]]) will be used to match.
 \cr 2. Duplicates in df[[col]] will be kept in order.
 \cr For example, df[[col]] has two rows id1_col2, id1_col1, vec = c(id1,id1), then returns two rows id1_col2, id1_col1.
 }

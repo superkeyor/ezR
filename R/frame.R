@@ -1473,7 +1473,7 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, vecgroup=FALSE, dim=1, incompara
         result = rep(0,length(result))
         # get d, duplicated elements
         d = duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
-        d = base::unique(x[which(d)])
+        d = base::unique(x[which(d),,drop=F])
 
         if (length(d)>0) {
             # convert x to character vector for easy manipulation
@@ -2068,8 +2068,8 @@ ez.match = function(df, col, vec, nomatch=0) {
 
 #' similar to ez.match
 #' @description similar to ez.match
-#' @note Two differences from ez.match: 
-#' \cr 1. intersect(unique(vec),df[[col]]) will be used to match. 
+#' @note Two differences from ez.match:
+#' \cr 1. intersect(unique(vec),df[[col]]) will be used to match.
 #' \cr 2. Duplicates in df[[col]] will be kept in order.
 #' \cr For example, df[[col]] has two rows id1_col2, id1_col1, vec = c(id1,id1), then returns two rows id1_col2, id1_col1.
 #' @export
@@ -2079,7 +2079,7 @@ ez.match2 = function(df, col, vec) {
     vec = ez.esp('data.frame({col}=vec,stringsAsFactors=F)')
     theAttr = ez.copyattr(df,col)
     vec = ez.pasteattr(vec,col,theAttr)
-    
+
     # https://stackoverflow.com/questions/17878048/merge-two-data-frames-while-keeping-the-original-row-order
     # https://www.r-statistics.com/2012/01/merging-two-data-frame-objects-while-preserving-the-rows-order/
     ############## function:
@@ -2095,16 +2095,16 @@ ez.match2 = function(df, col, vec) {
         {
             # gets in a data.frame with the "id..." column.  Orders by it and returns it
             if(!any(colnames(DATA)=="id...")) stop("The function order.by.id...and.remove.it only works with data.frame objects which includes the 'id...' order column")
-            
+
             DATA = data.frame(DATA)
             ss_r <- order(DATA$id...)
             ss_c <- colnames(DATA) != "id..."
             DATA[ss_r, ss_c]
         }
- 
+
         # tmp <- function(x) x==1; 1    # why we must check what to do if it is missing or not...
         # tmp()
- 
+
         if(!missing(keep_order))
         {
             if(keep_order == 1) return(order.by.id...and.remove.it(merge(x=add.id.column.to.data(x),y=y,..., sort = FALSE)))
@@ -2113,8 +2113,8 @@ ez.match2 = function(df, col, vec) {
             warning("The function merge.with.order only accepts NULL/1/2 values for the keep_order variable")
         } else {return(merge(x=x,y=y,..., sort = sort))}
     }
-    # ######## example:  
-        
+    # ######## example:
+
     # x <- data.frame(
     #        ref = c( 'Ref1', 'Ref2' )
     #      , label = c( 'Label01', 'Label02' )
@@ -2130,7 +2130,7 @@ ez.match2 = function(df, col, vec) {
     # merge.with.order(x, y, by='ref', all.y = T, sort=F, keep_order=1)
     # merge.with.order(x, y, by='ref', all.y = T, sort=T, keep_order=2)
     # merge.with.order(x, y, by='ref', all.y = T, sort=F, keep_order=2)
-    
+
     # both merge, left_join, join are problematic somehow??--further testing needed
     # res = merge(vec,df,by=col,all.x=TRUE,sort=FALSE)
     # res = dplyr::left_join(vec,df,by=col)
