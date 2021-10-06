@@ -891,7 +891,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         ## "(L2 - L1) p = .95; (L3 - L1) p < .001; (L3 - L2) p = 1.00; "
         # if (is.null(annotations)) {annotations = stringr::str_extract_all(res$posthoc_tukey,'p [=\\<] \\d*\\.\\d+')[[1]]}
         # (Join website/promote organization - Promiting an even) 8.90e-04; (Selling a product - Donation appeal) .78; 
-        lvls = stringr::str_match_all(res$posthoc_tukey,'\\((.+?) - (.+?)\\)')[[1]][,2:3]
+        lvls = stringr::str_match_all(res$posthoc_tukey,'\\((.+?) - (.+?)\\)')[[1]][,2:3,drop=F]
         if (is.null(comparisons)) {comparisons=list();for (r in 1:nrow(lvls)){comparisons[[r]]=lvls[r,1:2]}}
         if (is.null(annotations)) {
             annotations = stringr::str_match_all(res$posthoc_tukey,'\\) (.+?);')[[1]][,2]
