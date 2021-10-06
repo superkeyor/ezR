@@ -1473,7 +1473,7 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, vecgroup=FALSE, dim=1, incompara
         result = rep(0,length(result))
         # get d, duplicated elements
         d = duplicated(x, fromLast=TRUE, incomparables=incomparables, ...)
-        d = base::unique(x[which(d),,drop=F])
+        d = ifelse(is.vector(x), base::unique(x[which(d)]), base::unique(x[which(d),,drop=F]))
 
         if (length(d)>0) {
             # convert x to character vector for easy manipulation
