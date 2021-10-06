@@ -48,5 +48,6 @@ Imports:
     robust,
     robustbase,
     sfsmisc,
-    ggsignif
+    ggsignif,
+    psych
     
