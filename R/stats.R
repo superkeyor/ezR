@@ -35,7 +35,9 @@ round2 = function(x,n) {
 p.apa = function(pvalue,prefix=0,pe=F){
     if (is.na(pvalue)) {return(NA_character_)}
     if (prefix==2) {
-        if (pvalue<.001) {
+        if (pvalue<.0001) {
+            if (pe) pvalue = sprintf("p = %.2e", pvalue) else pvalue = sprintf("p < .0001")
+        } else if (pvalue<.001) {
             if (pe) pvalue = sprintf("p = %.2e", pvalue) else pvalue = sprintf("p < .001")
         } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
             pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
@@ -45,7 +47,9 @@ p.apa = function(pvalue,prefix=0,pe=F){
             pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
         }
     } else if (prefix==1) {
-        if (pvalue<.001) {
+        if (pvalue<.0001) {
+            if (pe) pvalue = sprintf("= %.2e", pvalue) else pvalue = sprintf("< .0001")
+        } else if (pvalue<.001) {
             if (pe) pvalue = sprintf("= %.2e", pvalue) else pvalue = sprintf("< .001")
         } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
             pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
@@ -55,7 +59,9 @@ p.apa = function(pvalue,prefix=0,pe=F){
             pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
         }
     } else if (prefix==0){
-        if (pvalue<.001) {
+        if (pvalue<.0001) {
+            if (pe) pvalue = sprintf(" %.2e", pvalue) else pvalue = sprintf("< .0001")
+        } else if (pvalue<.001) {
             if (pe) pvalue = sprintf("%.2e", pvalue) else pvalue = sprintf("< .001")
         } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
             pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
@@ -88,9 +94,9 @@ p.apa = function(pvalue,prefix=0,pe=F){
 #' format p value according to apa for report
 #' @description format p value according to apa for report
 #' @param pvalue numeric vector
-#' @param prefix -1,0,1,2
-#' @param pe affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001
-#' @return character vector prefix -1 (****,***,**,*,ns); 0 (< .001, .003, .02); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
+#' @param prefix -1,0,1,2,9
+#' @param pe affects only p < .0001 or < .001. if T, would be sth like 3.14e-04; otherwise < .0001 or < .001
+#' @return character vector prefix -1 (****,***,**,*,ns); 0 (< .0001, < .001, .003, .2); 1 (< .0001, < .001, = .003, = .02); 2 (p < .0001, < .001, p = .003, p = .02); 9 (.2e if <.001, raw value--ignore pe=T/F)
 #' @export
 ez.p.apa = Vectorize(p.apa)
 
@@ -1059,6 +1065,8 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
 #' \cr
 #' \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
+#' \cr
+#' \cr posthoc results are very close to spss output, but may have tiny differences (e.g., R .304 vs. SPSS .310)
 #' @importFrom effects effect
 #' @export
 ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,prefix=2,pe=F,...) {

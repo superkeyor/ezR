@@ -848,8 +848,8 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #'   Alternatively, one can provide a function that takes a numeric argument
 #'   (the p-value) and returns a string.
 #'   map_signif_level = function(p) sprintf("p = \%.2g", p)
-#' @param prefix -1 (****,***,**,*,ns); 0 (< .001, .003, .2); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)
-#' @param pe affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001
+#' @param prefix -1 (****,***,**,*,ns); 0 (< .0001, < .001, .003, .2); 1 (< .0001, < .001, = .003, = .02); 2 (p < .0001, < .001, p = .003, p = .02)
+#' @param pe affects only p < .0001 or < .001. if T, would be sth like 3.14e-04; otherwise < .0001 or < .001
 #' @param showns if T, show ns or .2; F, only display significant ones
 #' @param step_increase numeric vector with the increase in fraction of total
 #'   height for every additional comparison to minimize overlap.
@@ -897,7 +897,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
             annotations = stringr::str_match_all(res$posthoc_tukey,'\\) (.+?);')[[1]][,2]
             if (!showns) {
                 # re-calculate p values to remove non-siginificant ones
-                res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=0,pe=T)
+                res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=9,pe=T)
                 annotations2 = stringr::str_match_all(res$posthoc_tukey,'\\) (.+?);')[[1]][,2]
                 annotations2 = ez.num(annotations2,force=TRUE)
                 annotations[annotations2>.05]=NA

@@ -107,9 +107,9 @@ ez.barplot(
 
 \item{signif}{add signif to the plot (only works for anovas1b with/without covar)}
 
-\item{prefix}{-1 (****,***,**,*,ns); 0 (< .001, .003, .2); 1 (< .001, = .003, = .02); 2 (p < .001, p = .003, p = .02)}
+\item{prefix}{-1 (****,***,**,*,ns); 0 (< .0001, < .001, .003, .2); 1 (< .0001, < .001, = .003, = .02); 2 (p < .0001, < .001, p = .003, p = .02)}
 
-\item{pe}{affects only p < .001. if T, would be sth like 3.14e-04; otherwise < .001}
+\item{pe}{affects only p < .0001 or < .001. if T, would be sth like 3.14e-04; otherwise < .0001 or < .001}
 
 \item{showns}{if T, show ns or .2; F, only display significant ones}
 

@@ -64,4 +64,6 @@ In R, \code{\link[stats]{aov}} for 1- or mutiple- way (use : * syntax to include
 \cr Partial eta squared is a similar measure in which the effects of other independent variables and interactions are partialled out (ie, the proportion of variance that a variable explains that is not explained by other variables in the analysis). Partial Eta squared for factor1 = SSfactor1/(SSfactor1+SSerror)
 \cr
 \cr If covariates provided, adjusted means with SD, partial eta squared. Otherwise, raw mean SD, and (partial) eta squared. se=sd/sqrt(n)
+\cr
+\cr posthoc results are very close to spss output, but may have tiny differences (e.g., R .304 vs. SPSS .310)
 }
