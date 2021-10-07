@@ -115,13 +115,13 @@ ez.barplot(
 
 \item{comparisons}{A list of length-2 vectors. The entries in the vector are
 either the names of 2 values on the x-axis or the 2 integers that
-correspond to the index of the columns of interest. if NULL, permute all combinations. 
+correspond to the index of the columns of interest. if NULL, permute all combinations.
 e.g., comparisons = list(c("compact", "pickup"), c("subcompact", "suv"))}
 
 \item{annotations}{character vector with alternative annotations. if NULL, auto compute
 annotations = c("First", "Second"), formatC(0.92, digits=1)}
 
-\item{map_signif_level}{NOT WORKING (because I manually pass in annotations?)--Use prefix=-1, 
+\item{map_signif_level}{NOT WORKING (because I manually pass in annotations?)--Use prefix=-1,
 Boolean value, if the p-value are directly written as
 annotation or asterisks are used instead. Alternatively one can provide a
 named numeric vector to create custom mappings from p-values to annotation:

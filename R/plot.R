@@ -5,7 +5,7 @@
 ###**************************************************.
 ###*without ez. in the function name.
 ###**************************************************.
-#' creat shorthand for Times New Roman cross-platform 
+#' creat shorthand for Times New Roman cross-platform
 #' @description creat shorthand for Times New Roman cross-platform
 #' @export
 # from https://github.com/trinker/plotflow/
@@ -715,7 +715,7 @@ ez.pdfoff = dev.off
 #' subplot, wrapper of \code{\link{par}}
 #' @description subplot, wrapper of \code{\link{par}}
 #' @param arr arrangement, 'col' (draw colwise) or 'row' (drow rowise)
-#' @param xpd Clipping can occur either to the whole device (xpd = NA), to the current figure region (xpd = TRUE), or to the current plot region (xpd = FALSE, the default). 
+#' @param xpd Clipping can occur either to the whole device (xpd = NA), to the current figure region (xpd = TRUE), or to the current plot region (xpd = FALSE, the default).
 #' @examples
 #' subplot(n,m,...) divides the current figure into an n-by-m grid
 #' A vector of the form c(n, m). Subsequent figures will be drawn in an n-by-m array on the device
@@ -836,11 +836,11 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param signif  add signif to the plot (only works for anovas1b with/without covar)
 #' @param comparisons A list of length-2 vectors. The entries in the vector are
 #'   either the names of 2 values on the x-axis or the 2 integers that
-#'   correspond to the index of the columns of interest. if NULL, permute all combinations. 
+#'   correspond to the index of the columns of interest. if NULL, permute all combinations.
 #'   e.g., comparisons = list(c("compact", "pickup"), c("subcompact", "suv"))
 #' @param annotations character vector with alternative annotations. if NULL, auto compute
 #'   annotations = c("First", "Second"), formatC(0.92, digits=1)
-#' @param map_signif_level NOT WORKING (because I manually pass in annotations?)--Use prefix=-1, 
+#' @param map_signif_level NOT WORKING (because I manually pass in annotations?)--Use prefix=-1,
 #'   Boolean value, if the p-value are directly written as
 #'   annotation or asterisks are used instead. Alternatively one can provide a
 #'   named numeric vector to create custom mappings from p-values to annotation:
@@ -890,11 +890,11 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=prefix,pe=pe)
         ## "(L2 - L1) p = .95; (L3 - L1) p < .001; (L3 - L2) p = 1.00; "
         # if (is.null(annotations)) {annotations = stringr::str_extract_all(res$posthoc_tukey,'p [=\\<] \\d*\\.\\d+')[[1]]}
-        # (Join website/promote organization - Promiting an even) 8.90e-04; (Selling a product - Donation appeal) .78; 
+        # (Join website/promote organization - Promiting an even) 8.90e-04; (Selling a product - Donation appeal) .78;
         lvls = stringr::str_match_all(res$posthoc_tukey,'\\((.+?) - (.+?)\\) ')[[1]][,2:3,drop=F]
         if (is.null(comparisons)) {comparisons=list();for (r in 1:nrow(lvls)){comparisons[[r]]=lvls[r,1:2]}}
         if (is.null(annotations)) {
-            annotations = stringr::str_match_all(res$posthoc_tukey,'\\) ([e\\-\\d\\.]+?);')[[1]][,2]
+            annotations = stringr::str_match_all(res$posthoc_tukey,'\\) (.+?);')[[1]][,2]
             if (!showns) {
                 # re-calculate p values to remove non-siginificant ones
                 res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=9,pe=T)
@@ -906,9 +906,9 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     }
     # ggsignif::geom_signif: when comparisons are passed, test is ignored
     signiftext = ifelse(signif,'+ggsignif::geom_signif(comparisons=comparisons,annotations=annotations,map_signif_level=map_signif_level,y_position=y_position,xmin=xmin,xmax=xmax,margin_top=margin_top,step_increase=step_increase,extend_line=extend_line,tip_length=tip_length,size=size,textsize=textsize,family=family,vjust=vjust2,parse=parse,manual=manual,orientation=orientation,na.rm=na.rm,...)','')
-    
+
     if (print2scr & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
-    
+
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 
@@ -2311,7 +2311,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param legend.size c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
 #' @param ... other parameters passed to \code{\link[lattice]{xyplot}}. E.g.,
 #' \cr jitter.x=T, jitter.y=T, factor=1, amount=NULL see \code{\link[base]{jitter}}
-#' \cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up. 
+#' \cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up.
 #' To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))
 #' @note specify auto through param colors, shapes
 #' @return a lattice plot, can use update() to change the plot
@@ -2400,10 +2400,10 @@ ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 
     # dots = unlist(list(...)); dots = paste(names(dots),dots,sep='=',collapse=',')
     # the unlist() does not work well with ... when passed 'ylim=c(0,3)'
     # https://stackoverflow.com/a/41882883/2292993
-    flattenlist <- function(x){  
+    flattenlist <- function(x){
       morelists <- sapply(x, function(xprime) class(xprime)[1]=="list")
       out <- c(x[!morelists], unlist(x[morelists], recursive=FALSE))
-      if(sum(morelists)){ 
+      if(sum(morelists)){
         Recall(out)
       }else{
         return(out)
@@ -2557,7 +2557,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}, df, grid=F, 
+        pp = lattice::xyplot({y}~{x}, df, grid=F,
             type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
@@ -2607,7 +2607,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}, df, grid=F, 
+        pp = lattice::xyplot({y}~{x}, df, grid=F,
             type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
@@ -2669,7 +2669,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}|{z}, df, grid=F, 
+        pp = lattice::xyplot({y}~{x}|{z}, df, grid=F,
             type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
@@ -2716,7 +2716,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
-        pp = lattice::xyplot({y}~{x}, df, grid=F, 
+        pp = lattice::xyplot({y}~{x}, df, grid=F,
             type="p", cex = {point.size}, alpha = {point.alpha}, pch = {point.shape}, col = "{point.color}",
             ylab = list("{ylab}", cex={y.lab.size}, fontfamily="{RMN}"), xlab = list("{xlab}", cex={x.lab.size}, fontfamily="{RMN}"),
             main = list("{title}", cex= {title.size}, fontfamily="{RMN}"),

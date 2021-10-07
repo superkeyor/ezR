@@ -7,7 +7,7 @@
 ez.anovas1b(
   df,
   y,
-  x,
+  x = NULL,
   covar = NULL,
   report = T,
   reportF = F,
@@ -28,7 +28,7 @@ ez.anovas1b(
 \arguments{
 \item{df}{a data frame, Internally go through dropna --> ez.2value(y),ez.2factor(x),ez.2value(covar)}
 
-\item{y}{compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.barplot}} where not necessary to specify x, covar. y|x or y|x+covar, y~x or y~x+covar. cmd format can only handel 1 y, 1 x}
+\item{y}{compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.barplot}} where not necessary to specify x, covar. y|x or y|x+covar, y~x or y~x+covar. cmd format can only handel 1 y, 1 x (and covars)}
 
 \item{x}{compatible with \code{\link{ez.selcol}}}
 

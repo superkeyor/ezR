@@ -1043,7 +1043,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 #' @description anova or ancova 1b, aov(y~x+covar), for many y and/or many x
 #' @param df a data frame, Internally go through dropna --> ez.2value(y),ez.2factor(x),ez.2value(covar)
-#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.barplot}} where not necessary to specify x, covar. y|x or y|x+covar, y~x or y~x+covar. cmd format can only handel 1 y, 1 x
+#' @param y compatible with \code{\link{ez.selcol}}, or y could be cmd from \code{\link{ez.barplot}} where not necessary to specify x, covar. y|x or y|x+covar, y~x or y~x+covar. cmd format can only handel 1 y, 1 x (and covars)
 #' @param x compatible with \code{\link{ez.selcol}}
 #' @param covar NULL=no covar, compatible with \code{\link{ez.selcol}}
 #' @param view call View(result)
@@ -1069,7 +1069,7 @@ ez.zresidize = function(data,var,covar,model='lm',scale=TRUE,...){
 #' \cr posthoc results are very close to spss output, but may have tiny differences (e.g., R .304 vs. SPSS .310)
 #' @importFrom effects effect
 #' @export
-ez.anovas1b = function(df,y,x,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,prefix=2,pe=F,...) {
+ez.anovas1b = function(df,y,x=NULL,covar=NULL,report=T,reportF=F,view=F,plot=F,cols=3,pmethods=c('bonferroni','fdr'),point.size=10,point.shape=16,lab.size=18,text.size=16,error=T,prefix=2,pe=F,...) {
     # yet another patch for cmd input
     if (grepl('[~|]',y[1],perl=TRUE)){
         # peel the onion

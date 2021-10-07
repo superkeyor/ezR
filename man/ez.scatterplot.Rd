@@ -111,7 +111,7 @@ ez.scatterplot(
 
 \item{...}{other parameters passed to \code{\link[lattice]{xyplot}}. E.g.,
 \cr jitter.x=T, jitter.y=T, factor=1, amount=NULL see \code{\link[base]{jitter}}
-\cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up. 
+\cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up.
 To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))}
 }
 \value{
