@@ -18,37 +18,51 @@ ez.describe = function(x){
     # flush.console()
 }
 
+#' round2 always round half up (R's native round/sprintf may round .055 -> .05)
+#' @description round2 always round half up (R's native round/sprintf may round .055 -> .05)
+#' @export
+round2 = function(x,n) {
+    # https://stackoverflow.com/a/62546554/2292993
+    # R's native round/sprintf may round .055 -> .05
+  posneg = sign(x)
+  z = abs(x)*10^n
+  z = z + 0.5 + + sqrt(.Machine$double.eps)
+  z = trunc(as.numeric(as.character(z)))
+  z = z/10^n
+  (z)*posneg
+}
+
 p.apa = function(pvalue,prefix=0,pe=F){
     if (is.na(pvalue)) {return(NA_character_)}
     if (prefix==2) {
         if (pvalue<.001) {
             if (pe) pvalue = sprintf("p = %.2e", pvalue) else pvalue = sprintf("p < .001")
-        } else if (pvalue<.005) {
-            pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
+        } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
+            pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else if (pvalue<.01) {
             pvalue = sprintf("p = .01")
         } else {
-            pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+            pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
         }
     } else if (prefix==1) {
         if (pvalue<.001) {
             if (pe) pvalue = sprintf("= %.2e", pvalue) else pvalue = sprintf("< .001")
-        } else if (pvalue<.005) {
-            pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
+        } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
+            pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else if (pvalue<.01) {
             pvalue = sprintf("= .01")
         } else {
-            pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+            pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
         }
     } else if (prefix==0){
         if (pvalue<.001) {
             if (pe) pvalue = sprintf("%.2e", pvalue) else pvalue = sprintf("< .001")
-        } else if (pvalue<.005) {
-            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',pvalue)) )
+        } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
+            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else if (pvalue<.01) {
             pvalue = sprintf(".01")
         } else {
-            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',pvalue)) )
+            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
         }
     } else if (prefix==-1){
         if (pvalue<=.0001) {
