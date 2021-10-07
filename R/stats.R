@@ -76,6 +76,12 @@ p.apa = function(pvalue,prefix=0,pe=F){
         } else {
             pvalue = 'ns'
         }
+    } else if (prefix==9){
+        if (pvalue<.001) {
+            pvalue = sprintf("%.2e", pvalue)
+        } else {
+            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", as.character(pvalue)) )
+        }
     }
     return(pvalue)
 }
