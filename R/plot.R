@@ -894,10 +894,12 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         lvls = stringr::str_match_all(res$posthoc_tukey,'\\((.+?) - (.+?)\\) ')[[1]][,2:3,drop=F]
         if (is.null(comparisons)) {comparisons=list();for (r in 1:nrow(lvls)){comparisons[[r]]=lvls[r,1:2]}}
         if (is.null(annotations)) {
+            # handle different prefix situations
             annotations = stringr::str_match_all(res$posthoc_tukey,'\\) ([p ns\\<\\*e\\+\\-\\d\\.]+?);')[[1]][,2]
             if (!showns) {
                 # re-calculate p values to remove non-siginificant ones
                 res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=9,pe=T)
+                # should have only p values in numbers or scientific notations (+ for 0.00e+00)
                 annotations2 = stringr::str_match_all(res$posthoc_tukey,'\\) ([e\\+\\-\\d\\.]+?);')[[1]][,2]
                 annotations2 = ez.num(annotations2,force=TRUE)
                 annotations[annotations2>.05]=NA
