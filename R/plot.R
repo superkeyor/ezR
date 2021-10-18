@@ -915,7 +915,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     if (print2scr & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
 
     cmd.bak = cmd
-    _reorder = function(df,cmd,xx,reorder.direction){
+    .reorder = function(df,cmd,xx,reorder.direction){
         res = ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)
         # "L1\t2.68\tL2\t2.88\tL3\t1.66"
         means = strsplit(res$means,'\\t')[[1]]
@@ -968,7 +968,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         xx = strsplit(xx,"+",fixed=TRUE)[[1]] %>% sapply(trimws) %>% unname()
         covar = xx[-1]
         xx = xx[1]
-        if (reorder) df=_reorder(df,cmd.bak,xx,reorder.direction)
+        if (reorder) df=.reorder(df,cmd.bak,xx,reorder.direction)
 
         if (point) {
             points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha},color="{point.color}")+')
@@ -1022,7 +1022,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         if (length(xx)==1) {
             xx = xx[1]
             df=ez.dropna(df,c(yy,xx))
-            if (reorder) df=_reorder(df,cmd.bak,xx,reorder.direction)
+            if (reorder) df=.reorder(df,cmd.bak,xx,reorder.direction)
 
             # The width in geom_bar controls the bar width in relation to the x-axis
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.

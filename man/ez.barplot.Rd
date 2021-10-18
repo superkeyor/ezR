@@ -34,6 +34,8 @@ ez.barplot(
   point.alpha = 1,
   point.color = "grey55",
   theme.apa = TRUE,
+  reorder = FALSE,
+  reorder.direction = "az",
   signif = TRUE,
   prefix = -1,
   pe = TRUE,
@@ -104,6 +106,10 @@ ez.barplot(
 \item{vjust}{vjust of x text NULL}
 
 \item{hjust}{hjust of x text NULL}
+
+\item{reorder}{T/F whether to reorder x by the group means}
+
+\item{reorder.direction}{'az' or 'za'}
 
 \item{signif}{add signif to the plot (only works for anovas1b with/without covar)}
 
