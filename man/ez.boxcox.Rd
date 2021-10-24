@@ -29,19 +29,25 @@ ez.boxcox(
 
 \item{plot}{boxcox plot. applicable only if y is a vector, only when there is an actual transformation}
 
-\item{print2scr}{print out transformation parameters, only when there is an actual transformation}
+\item{print2scr}{print out transformation parameters}
 
 \item{force}{T = transform regardless, or F = only if p.lambda rounded is less than .05.}
 
-\item{method}{#' "boxcox" is \code{out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)} for all positive, \code{out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)} for any non-positive--ie, zero or negative. The selection between \code{\link[car]{bcPower}} and \code{\link[car]{bcnPower}} is done automatically by this function.
+\item{method}{"boxcox" is \code{out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)} for all positive, \code{out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)} for any non-positive--ie, zero or negative. 
+\cr 
+\cr The selection between \code{\link[car]{bcPower}} and \code{\link[car]{bcnPower}} is done automatically by this function.
+\cr 
 \cr Where \code{\link[car]{bcPower}} is: ((x+gamma)^(lambda)-1)/lambda if lambda not 0; log(x+gamma) if lambda 0. Here gamma NULL means 0.
+\cr 
 \cr \code{\link[car]{bcnPower}} is: ((0.5 * (x + sqrt(x^2 + gamma^2)))^lambda - 1)/lambda if lambda not 0; log(0.5 * (x + sqrt(x^2 + gamma^2))) if lambda 0. This bcnPower is Hawkins and Weisberg (2017). While allowing for the transformed data to be interpreted similarly to the interpretation of Box-Cox
 transformed, it is much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
 \cr
+\cr 
 "tukey" here actually means modified tukey, \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}.
+\cr 
 \cr Where \code{\link[car]{basicPower}} is: x^lambda if lambda not 0; log(x) if lambda 0
-\cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcnPower}}
 \cr
+\cr Because neither tukey or modified tukey could handle zero or negative input, this function will auto force switch to \code{\link[car]{bcnPower}}
 \cr Therefore, both "tukey" and "boxcox" methods here keep the ordering.}
 
 \item{precise}{use rounded lambda, one of c(0, 0.33, -0.33, 0.5, -0.5, 1, -1, 2, -2) or raw/calculated lambda}
