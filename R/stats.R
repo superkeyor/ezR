@@ -2532,8 +2532,8 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
     return(invisible(results))
 }
 
-#' box-cox power transformation \href{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}
-#' @description box-cox power transformation \href{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}
+#' box-cox power transformation \url{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}
+#' @description box-cox power transformation \url{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}
 #' @param y a data frame or a vector
 #' @param col passed to \code{\link{ez.selcol}}
 #' \cr        if x is a data frame, col specified, process that col only.

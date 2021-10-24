@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats.R
 \name{ez.boxcox}
 \alias{ez.boxcox}
-\title{box-cox power transformation \href{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}}
+\title{box-cox power transformation \url{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}}
 \usage{
 ez.boxcox(
   y,
@@ -56,7 +56,7 @@ transformed, it is much less biased than by setting the parameter gamma to be no
 returns transformed y, or original y if no transformation occurs.
 }
 \description{
-box-cox power transformation \href{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}
+box-cox power transformation \url{https://drive.google.com/file/d/1tsXLgRSq_svd-hvA02XmXSJmPX6SCbvf/view}{GDoc Note}
 }
 \note{
 Box and Cox (1964) \code{\link[car]{bcPower}} and modified tukey \code{\link[car]{basicPower}} can only deal with non-negative responses. Also consider applying z standardization to boxcox-transformed data.
