@@ -11,7 +11,7 @@ ez.boxcox(
   plot = TRUE,
   print2scr = TRUE,
   force = TRUE,
-  method = c("boxcox", "tukey"),
+  method = c("boxcox", "modified.tukey"),
   precise = c("rounded", "raw"),
   ...
 )
@@ -43,7 +43,7 @@ ez.boxcox(
 transformed, it is much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
 \cr
 \cr 
-"tukey" here actually means modified tukey, \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}.
+"modified.tukey" \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}.
 \cr 
 \cr Where \code{\link[car]{basicPower}} is: x^lambda if lambda not 0; log(x) if lambda 0
 \cr

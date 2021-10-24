@@ -2554,7 +2554,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' transformed, it is much less biased than by setting the parameter gamma to be non-zero in the Box-Cox family.
 #' \cr
 #' \cr 
-#' "tukey" here actually means modified tukey, \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}.
+#' "modified.tukey" \code{out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL); if (lambda.in.use<0) out = -1*out}.
 #' \cr 
 #' \cr Where \code{\link[car]{basicPower}} is: x^lambda if lambda not 0; log(x) if lambda 0
 #' \cr
@@ -2570,7 +2570,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' \cr see also \code{\link[MASS]{boxcox}}
 #' @export
 ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
-    force = TRUE, method = c('boxcox','tukey'), precise = c('rounded','raw'), ...) {
+    force = TRUE, method = c('boxcox','modified.tukey'), precise = c('rounded','raw'), ...) {
 
     if (!is.data.frame(y)) {
         x = rep(1, length(y))
@@ -2586,7 +2586,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         method = match.arg(method)
         precise = match.arg(precise)
         if (any((y <= 0) %in% TRUE)) {
-            if (method=='tukey') {
+            if (method=='modified.tukey') {
                 ez.pprint('zero or negative value exists, switching method from modified tukey to boxcox bcnPower...')
                 family = "bcnPower"
                 method='boxcox'
@@ -2634,7 +2634,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                     if (print2scr) cat(sprintf('Done! Box-Cox transformations (car::bcPower): lambda %f\n', lambda.in.use))
                 }
             # modified tukey to keep ordering
-            } else if (method=='tukey') {
+            } else if (method=='modified.tukey') {
                 out = car::basicPower(y,lambda=lambda.in.use, gamma=NULL)
                 if (lambda.in.use<0) {
                     out = -1*out
