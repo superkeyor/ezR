@@ -4,7 +4,7 @@
 \alias{ez.p.apa}
 \title{format p value according to apa for report}
 \usage{
-ez.p.apa(pvalue, prefix = 0, pe = F)
+ez.p.apa(pvalue, prefix = 0, pe = F, decimals = 3)
 }
 \arguments{
 \item{pvalue}{numeric vector}
@@ -12,6 +12,8 @@ ez.p.apa(pvalue, prefix = 0, pe = F)
 \item{prefix}{-1,0,1,2,9}
 
 \item{pe}{affects only p < .0001 or < .001. if T, would be sth like 3.14e-04; otherwise < .0001 or < .001}
+
+\item{decimals}{3 or 2 decimal places}
 }
 \value{
 character vector prefix -1 (****,***,**,*,ns); 0 (< .0001, < .001, .003, .2); 1 (< .0001, < .001, = .003, = .02); 2 (p < .0001, < .001, p = .003, p = .02); 9 (.2e if <.001, raw value--ignore pe=T/F)

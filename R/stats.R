@@ -32,43 +32,55 @@ round2 = function(x,n) {
   (z)*posneg
 }
 
-p.apa = function(pvalue,prefix=0,pe=F){
+p.apa = function(pvalue,prefix=0,pe=F,decimals=3){
     if (is.na(pvalue)) {return(NA_character_)}
     if (prefix==2) {
         if (pvalue<.0001) {
-            if (pe) pvalue = sprintf("p = %.2e", pvalue) else pvalue = sprintf("p < .0001")
+            if (pe & decimals==2) pvalue = sprintf("p = %.2e", pvalue) else pvalue = sprintf("p < .0001")
+            if (pe & decimals==3) pvalue = sprintf("p = %.3e", pvalue) else pvalue = sprintf("p < .0001")
         } else if (pvalue<.001) {
-            if (pe) pvalue = sprintf("p = %.2e", pvalue) else pvalue = sprintf("p < .001")
+            if (pe & decimals==2) pvalue = sprintf("p = %.2e", pvalue) else pvalue = sprintf("p < .001")
+            if (pe & decimals==3) pvalue = sprintf("p = %.3e", pvalue) else pvalue = sprintf("p < .001")
         } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
             pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else if (pvalue<.01) {
-            pvalue = sprintf("p = .01")
+            if (decimals==2) pvalue = sprintf("p = .01")
+            if (decimals==3) pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else {
-            pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
+            if (decimals==2) pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
+            if (decimals==3) pvalue = sprintf( "p = %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         }
     } else if (prefix==1) {
         if (pvalue<.0001) {
-            if (pe) pvalue = sprintf("= %.2e", pvalue) else pvalue = sprintf("< .0001")
+            if (pe & decimals==2) pvalue = sprintf("= %.2e", pvalue) else pvalue = sprintf("< .0001")
+            if (pe & decimals==3) pvalue = sprintf("= %.3e", pvalue) else pvalue = sprintf("< .0001")
         } else if (pvalue<.001) {
-            if (pe) pvalue = sprintf("= %.2e", pvalue) else pvalue = sprintf("< .001")
+            if (pe & decimals==2) pvalue = sprintf("= %.2e", pvalue) else pvalue = sprintf("< .001")
+            if (pe & decimals==3) pvalue = sprintf("= %.3e", pvalue) else pvalue = sprintf("< .001")
         } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
             pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else if (pvalue<.01) {
-            pvalue = sprintf("= .01")
+            if (decimals==2) pvalue = sprintf("= .01")
+            if (decimals==3) pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else {
-            pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
+            if (decimals==2) pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
+            if (decimals==3) pvalue = sprintf( "= %s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         }
     } else if (prefix==0){
         if (pvalue<.0001) {
-            if (pe) pvalue = sprintf(" %.2e", pvalue) else pvalue = sprintf("< .0001")
+            if (pe & decimals==2) pvalue = sprintf(" %.2e", pvalue) else pvalue = sprintf("< .0001")
+            if (pe & decimals==3) pvalue = sprintf(" %.3e", pvalue) else pvalue = sprintf("< .0001")
         } else if (pvalue<.001) {
-            if (pe) pvalue = sprintf("%.2e", pvalue) else pvalue = sprintf("< .001")
+            if (pe & decimals==2) pvalue = sprintf("%.2e", pvalue) else pvalue = sprintf("< .001")
+            if (pe & decimals==3) pvalue = sprintf("%.3e", pvalue) else pvalue = sprintf("< .001")
         } else if (pvalue<.005 | (pvalue>=.045 & pvalue<.055)) {
             pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else if (pvalue<.01) {
-            pvalue = sprintf(".01")
+            if (decimals==2) pvalue = sprintf(".01")
+            if (decimals==3) pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         } else {
-            pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
+            if (decimals==2) pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.2f',round2(pvalue,2))) )
+            if (decimals==3) pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", sprintf('%.3f',round2(pvalue,3))) )
         }
     } else if (prefix==-1){
         if (pvalue<=.0001) {
@@ -84,7 +96,8 @@ p.apa = function(pvalue,prefix=0,pe=F){
         }
     } else if (prefix==9){
         if (pvalue<.001) {
-            pvalue = sprintf("%.2e", pvalue)
+            if (decimals==2) pvalue = sprintf("%.2e", pvalue)
+            if (decimals==3) pvalue = sprintf("%.3e", pvalue)
         } else {
             pvalue = sprintf( "%s", gsub("^(\\s*[+|-]?)0\\.", "\\1.", as.character(pvalue)) )
         }
@@ -96,6 +109,7 @@ p.apa = function(pvalue,prefix=0,pe=F){
 #' @param pvalue numeric vector
 #' @param prefix -1,0,1,2,9
 #' @param pe affects only p < .0001 or < .001. if T, would be sth like 3.14e-04; otherwise < .0001 or < .001
+#' @param decimals 3 or 2 decimal places 
 #' @return character vector prefix -1 (****,***,**,*,ns); 0 (< .0001, < .001, .003, .2); 1 (< .0001, < .001, = .003, = .02); 2 (p < .0001, < .001, p = .003, p = .02); 9 (.2e if <.001, raw value--ignore pe=T/F)
 #' @export
 ez.p.apa = Vectorize(p.apa)
