@@ -812,7 +812,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
 #' @param cmd like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
 #' \cr or "y|x+covar1+covar2+..." (currently only supports anovas1b with/without covar)
-#' @param reorder T/F whether to reorder x by the group means
+#' @param reorder T/F whether to reorder x by the group means (raw means if no covar, adjusted means if covar)
 #' @param reorder.direction 'az' or 'za'
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param bar.gap  the gap between bars
@@ -889,6 +889,23 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     reorder=FALSE,reorder.direction='az',
     signif=TRUE,prefix=-1,pe=TRUE,showns=FALSE,comparisons=NULL,annotations=NULL,map_signif_level=FALSE,y_position=NULL,xmin=NULL,xmax=NULL,margin_top=0.1,step_increase=0.5,extend_line=0,tip_length=0.15,size=0.5,textsize=3.88,family="",vjust2=0.4,parse=FALSE,manual=FALSE,orientation=NA,na.rm=TRUE,...) {
     signif = signif & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)
+
+    if (reorder) {
+        xxx =str_match(cmd,"[~| ]+(.*?)[+ ]+")[1,2]
+        res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T)
+        # "L1\t2.68\tL2\t2.88\tL3\t1.66"
+        means = strsplit(res$means,'\\t')[[1]]
+        # https://stackoverflow.com/a/13462110/2292993
+        clvl = means[c(TRUE,FALSE)]; cmean = ez.num(means[c(FALSE,TRUE)])
+        cdf = data.frame(clvl=clvl,cmean=cmean)
+        if (reorder.direction=='az') {
+            cdf = dplyr::arrange(cdf,cmean) 
+        } else {
+            cdf = dplyr::arrange(cdf,desc(cmean)) 
+        }
+        df = ez.factorder(df,xxx,ord=cdf$clvl)
+    }
+
     if (signif) {
         res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T,prefix=prefix,pe=pe)
         ## "(L2 - L1) p = .95; (L3 - L1) p < .001; (L3 - L2) p = 1.00; "
@@ -913,22 +930,6 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
     signiftext = ifelse(signif,'+ggsignif::geom_signif(comparisons=comparisons,annotations=annotations,map_signif_level=map_signif_level,y_position=y_position,xmin=xmin,xmax=xmax,margin_top=margin_top,step_increase=step_increase,extend_line=extend_line,tip_length=tip_length,size=size,textsize=textsize,family=family,vjust=vjust2,parse=parse,manual=manual,orientation=orientation,na.rm=na.rm,...)','')
 
     if (print2scr & !grepl('[\\w\\.]+\\s+[\\w\\.]',cmd,perl=TRUE)) {ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)}
-
-    cmd.bak = cmd
-    .reorder = function(df,cmd,xx,reorder.direction){
-        res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T)
-        # "L1\t2.68\tL2\t2.88\tL3\t1.66"
-        means = strsplit(res$means,'\\t')[[1]]
-        # https://stackoverflow.com/a/13462110/2292993
-        clvl = means[c(TRUE,FALSE)]; cmean = ez.num(means[c(FALSE,TRUE)])
-        cdf = data.frame(clvl=clvl,cmean=cmean)
-        if (reorder.direction=='az') {
-            cdf = dplyr::arrange(cdf,cmean) 
-        } else {
-            cdf = dplyr::arrange(cdf,desc(cmean)) 
-        }
-        df = ez.factorder(df,xx,ord=cdf$clvl)
-    }
 
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
@@ -968,7 +969,6 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         xx = strsplit(xx,"+",fixed=TRUE)[[1]] %>% sapply(trimws) %>% unname()
         covar = xx[-1]
         xx = xx[1]
-        if (reorder) df=.reorder(df,cmd.bak,xx,reorder.direction)
 
         if (point) {
             points = ez.sprintf('geom_point(aes(x={xx},y={yy}),data=df,position=position_jitter(width={point.jitter}, height=0),size={point.size},alpha={point.alpha},color="{point.color}")+')
@@ -1022,7 +1022,6 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         if (length(xx)==1) {
             xx = xx[1]
             df=ez.dropna(df,c(yy,xx))
-            if (reorder) df=.reorder(df,cmd.bak,xx,reorder.direction)
 
             # The width in geom_bar controls the bar width in relation to the x-axis
             # while the width in position_dodge control the width of the space given to both bars also in relation to the x-axis.

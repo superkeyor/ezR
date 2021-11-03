@@ -107,7 +107,7 @@ ez.barplot(
 
 \item{hjust}{hjust of x text NULL}
 
-\item{reorder}{T/F whether to reorder x by the group means}
+\item{reorder}{T/F whether to reorder x by the group means (raw means if no covar, adjusted means if covar)}
 
 \item{reorder.direction}{'az' or 'za'}
 
