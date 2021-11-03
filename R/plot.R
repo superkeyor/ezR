@@ -1,4 +1,4 @@
-###**************************************************.
+ez.###**************************************************.
 ###*plot.
 ###**************************************************.
 
@@ -916,7 +916,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
 
     cmd.bak = cmd
     .reorder = function(df,cmd,xx,reorder.direction){
-        res = ez.anovas1b(df,cmd,report=T,view=F,plot=F,error=T)
+        res = ez.anovas1b(df,cmd,report=F,view=F,plot=F,error=T)
         # "L1\t2.68\tL2\t2.88\tL3\t1.66"
         means = strsplit(res$means,'\\t')[[1]]
         # https://stackoverflow.com/a/13462110/2292993
