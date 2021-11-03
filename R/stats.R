@@ -1173,7 +1173,7 @@ ez.anovas1b = function(df,y,x=NULL,covar=NULL,report=T,reportF=F,view=F,plot=F,c
             dev = data.frame(avg[[1]],avg$se*sqrt(n[[2]]))
         }
         means = sprintf('%s\t%.2f',avg[[1]],avg[[2]]) %>% paste0(collapse='\t')
-        raw.adj.mean.sd = sprintf('%.2f (%.2f)',avg[[2]],dev[[2]]) %>% paste0(collapse='\t')
+        raw.adj.mean.sd = sprintf('%.2f ± %.2f',avg[[2]],dev[[2]]) %>% paste0(collapse='\t')
         # page 523 in Discovering Stats using R 1st
         ss = sm[['Sum Sq']]
         petasq2 = ss[2]/(ss[2]+ss[length(ss)])
