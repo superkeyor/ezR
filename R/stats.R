@@ -1172,7 +1172,9 @@ ez.anovas1b = function(df,y,x=NULL,covar=NULL,report=T,reportF=F,view=F,plot=F,c
             # sd=se*sqrt(n)
             dev = data.frame(avg[[1]],avg$se*sqrt(n[[2]]))
         }
+        lvls = sprintf('%s',avg[[1]]) %>% paste0(collapse='\t')
         means = sprintf('%s\t%.2f',avg[[1]],avg[[2]]) %>% paste0(collapse='\t')
+        # raw.adj.mean.sd = sprintf('%.2f (%.2f)',avg[[2]],dev[[2]]) %>% paste0(collapse='\t')
         raw.adj.mean.sd = sprintf('%.2f ± %.2f',avg[[2]],dev[[2]]) %>% paste0(collapse='\t')
         # page 523 in Discovering Stats using R 1st
         ss = sm[['Sum Sq']]
@@ -1184,14 +1186,14 @@ ez.anovas1b = function(df,y,x=NULL,covar=NULL,report=T,reportF=F,view=F,plot=F,c
         uniques_drop_na.x=length(unique(df.bak[[x]])); nlevels.x=nlevels(df.bak[[x]])
         uniques_drop_na.y=length(unique(df.bak[[y]])); min.y=min(df.bak[[y]]); max.y=max(df.bak[[y]]); mean.y=mean(df.bak[[y]]); sd.y=sd(df.bak[[y]])
 
-        return(list(y=y,x=x,covar=toString(covar),p=p,petasq2=petasq2,F=F,dof=dof,MSE=MSE,means=means,total=total,counts=counts,raw.adj.mean.sd=raw.adj.mean.sd,posthoc_tukey=posthoc_tukey,
+        return(list(y=y,x=x,covar=toString(covar),p=p,petasq2=petasq2,F=F,dof=dof,MSE=MSE,lvls=lvls,means=means,total=total,counts=counts,raw.adj.mean.sd=raw.adj.mean.sd,posthoc_tukey=posthoc_tukey,
             uniques_drop_na.x=uniques_drop_na.x,nlevels.x=nlevels.x,
             uniques_drop_na.y=uniques_drop_na.y,min.y=min.y,max.y=max.y,mean.y=mean.y,sd.y=sd.y
             ))
         }, error = function(e) {
             options(oldcons)  # make sure restore
             if (error) ez.pprint(sprintf('EZ Error: aov(%s ~ %s). NA returned.',y,paste(c(x,covar), collapse = " + ")),color='red')
-            return(list(y=y,x=x,covar=toString(covar),p=NA_real_,petasq2=NA_real_,F=NA_real_,dof=NA_character_,MSE=NA_real_,means=NA_character_,total=NA,counts=NA_character_,raw.adj.mean.sd=NA_character_,posthoc_tukey=NA_character_,
+            return(list(y=y,x=x,covar=toString(covar),p=NA_real_,petasq2=NA_real_,F=NA_real_,dof=NA_character_,MSE=NA_real_,lvls=NA_character_,means=NA_character_,total=NA,counts=NA_character_,raw.adj.mean.sd=NA_character_,posthoc_tukey=NA_character_,
                 uniques_drop_na.x=NA,nlevels.x=NA,
                 uniques_drop_na.y=NA,min.y=NA,max.y=NA,mean.y=NA,sd.y=NA
                 ))
@@ -1219,6 +1221,7 @@ ez.anovas1b = function(df,y,x=NULL,covar=NULL,report=T,reportF=F,view=F,plot=F,c
         # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
+            ez.pprint(sprintf('levels: %s',result.report$lvls,color='cyan')
             if (reportF) {
                 ez.pprint(sprintf('aov(%s~%s): %s\t%.2f\t%s',Y,X,result.report$raw.adj.mean.sd[i],result.report$F[i],ez.p.apa(result.report$p[i],prefix=0,pe=pe)),color='cyan')
             } else {
