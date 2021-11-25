@@ -1221,7 +1221,7 @@ ez.anovas1b = function(df,y,x=NULL,covar=NULL,report=T,reportF=F,view=F,plot=F,c
         # ez.print(ifelse(is.null(covar), 'mean (sd), se=sd/sqrt(n)', 'adjusted mean (sd), se=sd/sqrt(n)'))
         for (i in 1:nrow(result.report)){
             Y = result.report$y[i]; X = paste(c(result.report$x[i],covar),collapse="+")
-            ez.pprint(sprintf('levels: %s',result.report$lvls,color='cyan'))
+            ez.pprint(sprintf('levels: %s',result.report$lvls),color='cyan')
             if (reportF) {
                 ez.pprint(sprintf('aov(%s~%s): %s\t%.2f\t%s',Y,X,result.report$raw.adj.mean.sd[i],result.report$F[i],ez.p.apa(result.report$p[i],prefix=0,pe=pe)),color='cyan')
             } else {
