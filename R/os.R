@@ -273,10 +273,10 @@ ez.updateself = function(force=F) {
     } else {
         detach('package:ezR',unload=TRUE)
         ez.github('jerryzhujian9/ezR',force=force)
+        library(ezR)
         # ez.github('jerryzhujian9/bzR',force=force)
         # ez.github('jerryzhujian9/mzR',force=force)
         try(fzR::fz.reload(),silent=TRUE)
-        library(ezR)
         cat('Please restart RStudio to make the change take effect!\n')
     }
 
