@@ -203,10 +203,11 @@ sedit <- function(file=ez.csf()){
 #' @export
 profile = function(){
     if (ez.getos()=='Windows'){
-        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s" "%s"', "%WINAPPS%/PortableApps/cmder/note.txt", "%WINAPPS%/PortableApps/cmder/cmder/config/user_profile.cmd", "%WINAPPS%/PortableApps/cmder/cmder/config/user_aliases.cmd",), wait=FALSE)
+        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s" "%s"', ez.fp("%WINAPPS%/PortableApps/cmder/note.txt"), ez.fp("%WINAPPS%/PortableApps/cmder/cmder/config/user_profile.cmd"), ez.fp("%WINAPPS%/PortableApps/cmder/cmder/config/user_aliases.cmd")), wait=FALSE)
     } else {
         system("open -a 'Sublime Text' ~/.bash_profile")
     }
+    return(invisible(NULL))
 }
 
 #' rprofile
@@ -218,6 +219,7 @@ rprofile = function(){
     } else {
         system("open -a 'Sublime Text' ~/.Rprofile")
     }
+    return(invisible(NULL))
 }
 
 #' wrapper of \code{\link{eval}}
@@ -274,6 +276,7 @@ ez.updateself = function(force=F) {
         # ez.github('jerryzhujian9/bzR',force=force)
         # ez.github('jerryzhujian9/mzR',force=force)
         try(fzR::fz.reload(),silent=TRUE)
+        library(ezR)
         cat('Please restart RStudio to make the change take effect!\n')
     }
 
