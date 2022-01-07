@@ -243,7 +243,7 @@ ez.esp = function(cmd,env = parent.frame()){
 #' @export
 ez.updateself = function(force=F) {
     # file.exists works for folder as well
-    if (file.exists('~/Dropbox/Apps/RStudio/ezR') & !force) {
+    if (ez.getos()=='osx' & file.exists('~/Dropbox/Apps/RStudio/ezR') & !force) {
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
@@ -930,7 +930,7 @@ ez.getos = function(){
         if (grepl("linux-gnu", R.version$os))
             os <- "linux"
     }
-    tolower(os)
+    tolower(unname(os))
 }
 
 #' pause the execution of an R script until a user presses the Enter key, no parameter () needed
