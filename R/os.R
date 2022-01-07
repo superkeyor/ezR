@@ -884,11 +884,11 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' @export
 ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
     if (ez.getos()=='windows'){
-        gmailr::gm_auth_configure(path='~/../Dropbox/Apps/WinApps/PythonR/gmailr_credentials.json')
-        gmailr::gm_auth(email = TRUE, cache = "~/../.R/gargle/gargle-oauth")
+        gmailr::gm_auth_configure(path='%WINAPPS%/RStudio/gmailr_credentials.json')
+        gmailr::gm_auth(email = TRUE, cache = "%WINAPPS%/RStudio/gmailr")
     } else {
         gmailr::gm_auth_configure(path='~/Dropbox/Apps/RStudio/gmailr_credentials.json')
-        gmailr::gm_auth(email = TRUE, cache = "~/.R/gargle/gargle-oauth")
+        gmailr::gm_auth(email = TRUE, cache = "~/Dropbox/Apps/RStudio/gmailr")
     }
     # https://cran.r-project.org/web/packages/gmailr/vignettes/sending_messages.html
     msg = gmailr::mime()
