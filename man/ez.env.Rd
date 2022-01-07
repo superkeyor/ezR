@@ -3,18 +3,15 @@
 \name{ez.env}
 \alias{ez.env}
 \alias{ez.envr}
-\title{switch env}
+\title{print env}
 \usage{
-ez.env(env = NULL)
+ez.env()
 
-ez.envr(env = NULL)
-}
-\arguments{
-\item{env}{NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)}
+ez.envr()
 }
 \value{
-returns NULL
+returns invisible NULL
 }
 \description{
-switch env
+print env
 }

@@ -7,7 +7,7 @@
 ez.getos()
 }
 \value{
-returns 'osx','linux', 'windows', test with ==
+returns 'Darwin','Linux', 'Windows', test with ==
 }
 \description{
 detect os

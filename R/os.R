@@ -147,33 +147,41 @@ ez.repo = function(repo=NULL){
     return(invisible(NULL))
 }
 
-#' switch env
-#' @description switch env
-#' @param env NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)
-#' @return returns NULL
+#' print env
+#' @description print env
+#' @return returns invisible NULL
 #' @export
-ez.env=function(env=NULL){
-    if (is.null(env)) {
-        cat(readChar('~/Dropbox/Apps/RStudio/R3.3_library/note.txt', 1e5))
-        message('\n',"Using library: ", .libPaths()[1])
-        return(invisible(NULL))
-    }
-
-    # if existing library is a symlink
-    if (Sys.readlink('/Library/Frameworks/R.framework/Versions/3.3/Resources/library') != '') {
-        file.remove('/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
-    }
-
-    file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),
-        '/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
-
-    # restart r session (restart does not reset .libPaths, so do not use)
-    # https://stackoverflow.com/questions/6313079/quit-and-restart-a-clean-r-session-from-within-r
-    # .rs.restartR()
-    message('Please restart RStudio to make the change take effect!')
-    system('killall RStudio; open -a RStudio')
+ez.env=function(){
+    message('\n',"Using library: ", .libPaths()[1])
     return(invisible(NULL))
 }
+# #' switch env
+# #' @description switch env
+# #' @param env NULL=print out current env (.libPaths()[1]); use symlink to trick (see code)
+# #' @return returns NULL
+# #' @export
+# ez.env=function(env=NULL){
+#     if (is.null(env)) {
+#         cat(readChar('~/Dropbox/Apps/RStudio/R3.3_library/note.txt', 1e5))
+#         message('\n',"Using library: ", .libPaths()[1])
+#         return(invisible(NULL))
+#     }
+
+#     # if existing library is a symlink
+#     if (Sys.readlink('/Library/Frameworks/R.framework/Versions/3.3/Resources/library') != '') {
+#         file.remove('/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
+#     }
+
+#     file.symlink(sprintf('~/Dropbox/Apps/RStudio/R3.3_library/%s/', env),
+#         '/Library/Frameworks/R.framework/Versions/3.3/Resources/library')
+
+#     # restart r session (restart does not reset .libPaths, so do not use)
+#     # https://stackoverflow.com/questions/6313079/quit-and-restart-a-clean-r-session-from-within-r
+#     # .rs.restartR()
+#     message('Please restart RStudio to make the change take effect!')
+#     system('killall RStudio; open -a RStudio')
+#     return(invisible(NULL))
+# }
 
 #' @rdname ez.env
 #' @export
@@ -183,7 +191,7 @@ ez.envr = ez.env
 #' @description sedit
 #' @export
 sedit <- function(file=ez.csf()){
-    if (ez.getos()=='windows'){
+    if (ez.getos()=='Windows'){
         system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s"', file),wait=FALSE)
     } else {
         system(sprintf("open -a 'Sublime Text' '%s'", file))
@@ -194,10 +202,10 @@ sedit <- function(file=ez.csf()){
 #' @description profile
 #' @export
 profile = function(){
-    if (ez.getos()=='windows'){
-        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s" "%s" "%s" "%s"', "~/../Dropbox/Apps/WinApps/cmder/note.txt", "~/../Dropbox/Apps/WinApps/cmder/config/user_profile.cmd", "~/../Dropbox/Apps/WinApps/cmder/config/user_aliases.cmd",), wait=FALSE)
+    if (ez.getos()=='Windows'){
+        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s" "%s"', "%WINAPPS%/PortableApps/cmder/note.txt", "%WINAPPS%/PortableApps/cmder/cmder/config/user_profile.cmd", "%WINAPPS%/PortableApps/cmder/cmder/config/user_aliases.cmd",), wait=FALSE)
     } else {
-        system("open -a 'Sublime Text' $HOME/.bash_profile")
+        system("open -a 'Sublime Text' ~/.bash_profile")
     }
 }
 
@@ -205,10 +213,10 @@ profile = function(){
 #' @description rprofile
 #' @export
 rprofile = function(){
-    if (ez.getos()=='windows'){
-        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s" "%s"', '~/../Dropbox/Apps/WinApps/PythonR/.Rprofile', '~/.Rprofile'), wait=FALSE)
+    if (ez.getos()=='Windows'){
+        system(sprintf('"C:\\Program Files\\Sublime Text 3\\subl.exe" "%s"', '~/.Rprofile'), wait=FALSE)
     } else {
-        system("open -a 'Sublime Text' $HOME/Dropbox/Apps/RStudio/.Rprofile")
+        system("open -a 'Sublime Text' ~/.Rprofile")
     }
 }
 
@@ -243,7 +251,7 @@ ez.esp = function(cmd,env = parent.frame()){
 #' @export
 ez.updateself = function(force=F) {
     # file.exists works for folder as well
-    if (ez.getos()=='osx' & file.exists('~/Dropbox/Apps/RStudio/ezR') & !force) {
+    if (ez.getos()=='Darwin' & file.exists('~/Dropbox/Apps/RStudio/ezR') & !force) {
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/ezR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
@@ -514,11 +522,25 @@ ez.execute = system
 #' @export
 ez.abspath = normalizePath
 
-#' Returns the full path by resolving ~ and relative path
-#' @description Returns the full path by resolving ~ and relative path
+#' Returns the full path with resolving
+#' @description Returns the full path with resolving
+#' @note Resolve ~, %WinEnvVar% relative path \cr
+#' Mac: ~  --> /Users/jerry \cr
+#' Windows: ~  --> C:\\Users\\Jerry\\Documents \cr
+#' Mac environment variable not supported (because it cannot load .bash_profile--check Sys.getenv()
+#' and tricker to parse a variable name in path)
+#' @examples 
+#' ez.fp('%WINAPPS%/RStudio')
 #' @export
-ez.fullpath = function(...) {
-    return(normalizePath(path.expand(...)))
+ez.fullpath = function(path) {
+    matches = stringr::str_match_all(path,'%(\\w+)%')
+    # always return a list even if no match
+    if (length(matches[[1]])) {
+        for (match in matches) {
+            path=gsub(match[1],Sys.getenv(match[2]),path,ignore.case=FALSE,perl=FALSE,fixed=TRUE)
+        }
+    }
+    return(normalizePath(path.expand(path)))
 }
 
 #' @rdname ez.fullpath
@@ -895,10 +917,9 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' click advanced and Go to gmailr to proceed to do the oauth flow.
 #' @export
 ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
-    if (ez.getos()=='windows'){
-        WINAPPS=Sys.getenv("WINAPPS")
-        gmailr::gm_auth_configure(path=ez.jp(WINAPPS,'RStudio/gmailr/gmailr_credentials.json'))
-        gmailr::gm_auth(email = TRUE, cache = ez.jp(WINAPPS,"RStudio/gmailr"))
+    if (ez.getos()=='Windows'){
+        gmailr::gm_auth_configure(path=ez.fp('%WINAPPS%/RStudio/gmailr/gmailr_credentials.json'))
+        gmailr::gm_auth(email = TRUE, cache = ez.fp("%WINAPPS%/RStudio/gmailr"))
     } else {
         gmailr::gm_auth_configure(path='~/Dropbox/Apps/RStudio/gmailr/gmailr_credentials.json')
         gmailr::gm_auth(email = TRUE, cache = "~/Dropbox/Apps/RStudio/gmailr")
@@ -916,7 +937,7 @@ ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
 
 #' detect os
 #' @description detect os
-#' @return returns 'osx','linux', 'windows', test with ==
+#' @return returns 'Darwin','Linux', 'Windows', test with ==
 #' @export
 ez.getos = function(){
     # https://stackoverflow.com/a/40212214/2292993
@@ -932,7 +953,12 @@ ez.getos = function(){
         if (grepl("linux-gnu", R.version$os))
             os <- "linux"
     }
-    tolower(unname(os))
+    os <- tolower(unname(os))
+    # consistent with python
+    if (os=='osx') {os='Darwin'}
+    if (os=='linux') {os='Linux'}
+    if (os=='windows') {os='Windows'}
+    return(os)
 }
 
 #' pause the execution of an R script until a user presses the Enter key, no parameter () needed

@@ -3,12 +3,22 @@
 \name{ez.fullpath}
 \alias{ez.fullpath}
 \alias{ez.fp}
-\title{Returns the full path by resolving ~ and relative path}
+\title{Returns the full path with resolving}
 \usage{
-ez.fullpath(...)
+ez.fullpath(path)
 
-ez.fp(...)
+ez.fp(path)
 }
 \description{
-Returns the full path by resolving ~ and relative path
+Returns the full path with resolving
+}
+\note{
+Resolve ~, %WinEnvVar% relative path \cr
+Mac: ~  --> /Users/jerry \cr
+Windows: ~  --> C:\\Users\\Jerry\\Documents \cr
+Mac environment variable not supported (because it cannot load .bash_profile--check Sys.getenv()
+and tricker to parse a variable name in path)
+}
+\examples{
+ez.fp('\%WINAPPS\%/RStudio')
 }

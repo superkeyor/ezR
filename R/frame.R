@@ -985,7 +985,7 @@ ez.replace = function(df, col, oldval, newval=NULL, print2scr=T){
         # notice the invisible(capture.output(expr)) does not work within a function which returns some value and you want to use this value
         allcols=colnames(df)
         # windows does not have /dev/null
-        if (ez.getos()=='windows'){
+        if (ez.getos()=='Windows'){
             sink("NUL")
         } else {
             sink("/dev/null")
