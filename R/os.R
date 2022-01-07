@@ -896,8 +896,9 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' @export
 ez.gmail = function(to,subject,htmlbody,attachment=NULL) {
     if (ez.getos()=='windows'){
-        gmailr::gm_auth_configure(path='%WINAPPS%/RStudio/gmailr/gmailr_credentials.json')
-        gmailr::gm_auth(email = TRUE, cache = "%WINAPPS%/RStudio/gmailr")
+        WINAPPS=Sys.getenv("WINAPPS")
+        gmailr::gm_auth_configure(path=ez.jp(WINAPPS,'RStudio/gmailr/gmailr_credentials.json'))
+        gmailr::gm_auth(email = TRUE, cache = ez.jp(WINAPPS,"RStudio/gmailr"))
     } else {
         gmailr::gm_auth_configure(path='~/Dropbox/Apps/RStudio/gmailr/gmailr_credentials.json')
         gmailr::gm_auth(email = TRUE, cache = "~/Dropbox/Apps/RStudio/gmailr")
