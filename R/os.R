@@ -273,6 +273,7 @@ ez.updateself = function(force=F) {
     } else {
         detach('package:ezR',unload=TRUE)
         ez.github('jerryzhujian9/ezR',force=force)
+        # library(ezR)  # not working, has to restart
         # ez.github('jerryzhujian9/bzR',force=force)
         # ez.github('jerryzhujian9/mzR',force=force)
         try(fzR::fz.reload(),silent=TRUE)
