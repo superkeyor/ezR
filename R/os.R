@@ -248,8 +248,8 @@ ez.updateself = function(force=F) {
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/bzR')
         # system('R --vanilla CMD INSTALL --no-multiarch --with-keep.source ~/Dropbox/Apps/RStudio/mzR')
         system('bash ~/Dropbox/Apps/RStudio/ezR/publish.sh')
-        system('bash ~/Dropbox/Apps/RStudio/bzR/publish.sh')
-        system('bash ~/Dropbox/Apps/RStudio/mzR/publish.sh')
+        # system('bash ~/Dropbox/Apps/RStudio/bzR/publish.sh')
+        # system('bash ~/Dropbox/Apps/RStudio/mzR/publish.sh')
         cat('Please restart RStudio to make the change take effect!\n')
         cat('Enter will restore env. #+shift+Q simply restart.\n')
         ez.pause()
@@ -261,8 +261,8 @@ ez.updateself = function(force=F) {
         # system('osascript -e \'tell application "RStudio" to quit\'; open -a RStudio', wait=FALSE)
     } else {
         ez.github('jerryzhujian9/ezR',force=force)
-        ez.github('jerryzhujian9/bzR',force=force)
-        ez.github('jerryzhujian9/mzR',force=force)
+        # ez.github('jerryzhujian9/bzR',force=force)
+        # ez.github('jerryzhujian9/mzR',force=force)
         try(fzR::fz.reload(),silent=TRUE)
         cat('Please restart RStudio to make the change take effect!\n')
     }
