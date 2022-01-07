@@ -513,6 +513,17 @@ ez.execute = system
 #' @export
 ez.abspath = normalizePath
 
+#' Returns the full path by resolving ~ and relative path
+#' @description Returns the full path by resolving ~ and relative path
+#' @export
+ez.fullpath = function(...) {
+    return(normalizePath(path.expand(...)))
+}
+
+#' @rdname ez.fullpath
+#' @export
+ez.fp = ez.fullpath
+
 #' join path
 #' @description join path
 #' @note \code{\link{file.path}} cannot handle/ignore trailing slash,
