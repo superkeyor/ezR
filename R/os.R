@@ -269,6 +269,7 @@ ez.updateself = function(force=F) {
         system('killall RStudio && sleep 2 && open -a RStudio', wait=FALSE)
         # system('osascript -e \'tell application "RStudio" to quit\'; open -a RStudio', wait=FALSE)
     } else {
+        detach('package:ezR',unload=TRUE)
         ez.github('jerryzhujian9/ezR',force=force)
         # ez.github('jerryzhujian9/bzR',force=force)
         # ez.github('jerryzhujian9/mzR',force=force)
