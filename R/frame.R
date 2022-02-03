@@ -1486,7 +1486,9 @@ ez.duplicated = function(x, col=NULL, vec=TRUE, vecgroup=FALSE, dim=1, incompara
                 d = sapply(d,paste,collapse='')
             }
 
-            for (i in 1:length(d)) {
+            # https://stackoverflow.com/a/24917351/2292993
+            # i in 1:length(d) 1:0 --> 1,0
+            for (i in seq_along(d)) {
                 result[which(y==d[[i]])] = i
             }
         }
