@@ -250,6 +250,7 @@ color.reverse = function(fore,opacity=0.5,back=c(255,255,255)){
     res = c()
     for (i in 1:3) {
         res[i] = (fore[i] - (1-opacity)*back[i])/opacity
+        if (res[i]<0) {res[i]=res[i]+255}
     }
     return(rgb(res[1],res[2],res[3],maxColorValue=255))
 }
