@@ -17,5 +17,5 @@ show.color(v, name, label = T)
 show color
 }
 \examples{
-show.color(ez.palette('Zhu'),'Current')
+show.color(ez.palette('Zhu'),'Current'), show.color("#89DAF7")
 }

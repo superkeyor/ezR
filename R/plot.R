@@ -66,7 +66,7 @@ show.line = function(){
 #' @param label T/F display actual color code for each v
 #' @export
 #' @examples
-#' show.color(ez.palette('Zhu'),'Current')
+#' show.color(ez.palette('Zhu'),'Current'), show.color("#89DAF7")
 show.color = function(v,name,label=T){
     if (!missing(v)) {
         # codes modified from https://github.com/karthik/wesanderson/blob/master/R/colors.R
@@ -201,7 +201,7 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
         opar <- par(mgp=c(2,0.25,0))
         on.exit(par(opar))
         plot(1, 1, xlim=c(0,(nc+1)), ylim=c(0,nr), type="n", axes=FALSE, bty="n", xlab="",ylab="")
-        for(i in 1:nr){
+        for (i in 1:nr){
         nj <- n[i]
         color = palcolors[[i]]
         rect(xleft=1:nj, ybottom=i-1, xright=2:(nj+1), ytop=i-0.2, col=color, border="light grey")
@@ -232,6 +232,26 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
     )
     out
     # structure(out, class = "palette", name = name)
+}
+
+#' calculate reverse color given an opacity
+#' @description calculate reverse color given an opacity
+#' @param fore top layer color in c(r,g,b) or #hex
+#' @param opacity 0...1
+#' @param back bottom layer color in c(r,g,b) or #hex default white background
+#' @return A vector of colors. To see the colors, call show.color()
+#' @export
+#' @examples
+#' # ('#89DAF7')
+color.reverse = function(fore,opacity=0.5,back=c(255,255,255)){
+    # https://graphicdesign.stackexchange.com/a/113050/172669
+    if (length(fore)==1) {fore=col2rgb(fore)}
+    if (length(back)==1) {back=col2rgb(back)}
+    res = c()
+    for (i in 1:3) {
+        res[i] = (fore[i] - (1-opacity)*back[i])/opacity
+    }
+    return(rgb(res[1],res[2],res[3],maxColorValue=255))
 }
 
 #' Convert colors to grey/grayscale so that you can see how your plot will look after photocopying or printing to a non-color printer.
