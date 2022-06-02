@@ -10,7 +10,7 @@ ez.labels.set(x, valuelabels, force.labels = FALSE, force.values = FALSE, ...)
 ez.setlabels(x, valuelabels, force.labels = FALSE, force.values = FALSE, ...)
 }
 \value{
-returns a new changed df
+returns a new changed var
 }
 \description{
 set value labels, wrapper of \code{\link{sjmisc_set_labels}}.
@@ -29,6 +29,8 @@ The usage of the original function is a bit confusing. Here, I summarize:
 \cr 3) if no exisiting attr, using haven style: labels
 \cr
 \cr 4) though x could be df, I generally use x as var
+\cr
+\cr example: df$gradelevel = ez.setlabels(df$gradelevel, c("freshman"=1,"Sophomore"=2,"Junior"=3,"Senior"=4))
 }
 \seealso{
 \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}

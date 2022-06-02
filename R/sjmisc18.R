@@ -8101,7 +8101,9 @@ sjmisc_set_labels=set_labels
 #' \cr 3) if no exisiting attr, using haven style: labels
 #' \cr
 #' \cr 4) though x could be df, I generally use x as var
-#' @return returns a new changed df
+#' \cr
+#' \cr example: df$gradelevel = ez.setlabels(df$gradelevel, c("freshman"=1,"Sophomore"=2,"Junior"=3,"Senior"=4))
+#' @return returns a new changed var 
 #' @family data transformation functions
 #' @export
 #' @seealso \code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}, \code{\link[tidyr]{separate}}, \code{\link[tidyr]{unite}}
