@@ -2558,7 +2558,7 @@ ez.citen = function(xmlFile,outFile=NULL,index=NULL){
 #' \cr        if x is not a data frame, col is ignored
 #' \cr        could be multiple cols
 #' @param na.rm rm na from y,x (pairwise), if not, NA stays as is. applicable only if y is a vector.
-#' @param plot boxcox plot. applicable only if y is a vector, only when there is an actual transformation
+#' @param plot boxcox plot. applicable only when there is an actual transformation
 #' @param print2scr print out transformation parameters
 #' @param force T = transform regardless, or F = only if p.lambda rounded is less than .05.
 #' @param method "boxcox" is \code{out = car::bcPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=NULL)} for all positive, \code{out = car::bcnPower(y, lambda=lambda.in.use, jacobian.adjusted = FALSE, gamma=gamma)} for any non-positive--ie, zero or negative. 
@@ -2685,7 +2685,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
         }
     } else if (is.data.frame(y)) {
         col = ez.selcol(y,col)
-        y[col] = lapply(1:length(col), function(j) {ez.boxcox(y=y[col][[j]],col=col[j],na.rm=F,plot=F,print2scr=print2scr,force=force,method=method,precise=precise,...)})
+        y[col] = lapply(1:length(col), function(j) {ez.boxcox(y=y[col][[j]],col=col[j],na.rm=F,plot=plot,print2scr=print2scr,force=force,method=method,precise=precise,...)})
         out = y
     }
     return(invisible(out))

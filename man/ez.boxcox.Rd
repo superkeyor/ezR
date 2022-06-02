@@ -27,7 +27,7 @@ ez.boxcox(
 
 \item{na.rm}{rm na from y,x (pairwise), if not, NA stays as is. applicable only if y is a vector.}
 
-\item{plot}{boxcox plot. applicable only if y is a vector, only when there is an actual transformation}
+\item{plot}{boxcox plot. applicable only when there is an actual transformation}
 
 \item{print2scr}{print out transformation parameters}
 
