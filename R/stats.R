@@ -2668,8 +2668,9 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                 hist(y, col='#56B4E9',main=NULL,xlab=NULL)
                 abline(v = mean(y,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
                 car::boxCox(y ~ x, family = family,
-                xlab = as.expression(substitute(lambda~"(raw)"~"="~lambda.raw.value*", "~lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~italic(n)~"="~n.value,
-                    list(lambda.value=sprintf("%.2f",lambda),
+                xlab = as.expression(substitute(variable~lambda~"(raw)"~"="~lambda.raw.value*", "~lambda~"="~lambda.value*", "~italic(p)~"="~p.lambda.value*", "~gamma~"="~gamma.value*", "~italic(n)~"="~n.value,
+                    list(variable=ifelse(is.null(col),"",sprintf("%s: ",col)),
+                        lambda.value=sprintf("%.2f",lambda),
                         p.lambda.value=sprintf("%f",p.lambda),
                         gamma.value=sprintf("%f",gamma),
                         lambda.raw.value=sprintf("%f",lambda.raw),
