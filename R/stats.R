@@ -2662,6 +2662,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
             }
 
             if (plot) {
+                old.par <- par(no.readonly = TRUE)
                 graphics::layout(matrix(c(1,2,0,0,2,3), 3))
                 opar = par(oma=c(0,0,0,0), mar = c(4,2,0.5,0.5))
                 on.exit(par(opar))
@@ -2678,6 +2679,7 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
                         ))))
                 hist(out, col='#56B4E9',main=NULL,xlab=NULL)
                 abline(v = mean(out,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
+                par(old.par)
             }
         # no transformation
         } else {
