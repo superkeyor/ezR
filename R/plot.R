@@ -554,10 +554,14 @@ theme_apa_nosize <- function(plot.box = FALSE){
     if (plot.box) {
         # panel.border without axis.line
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = "black"))
     } else {
         # no panel.border but axis.line
         out <- out + theme(panel.background = element_rect(fill = NA,colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "black"))
     }
@@ -618,9 +622,13 @@ theme_blackapa <- function(plot.box = TRUE, lab.size = 18, text.size = 16) {
     )
     if (plot.box) {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),            
                            panel.border = element_rect(fill = NA, colour = "grey55"))
     } else {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),            
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
@@ -681,9 +689,13 @@ theme_blackapa_nosize <- function(plot.box = TRUE) {
     )
     if (plot.box) {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),            
                            panel.border = element_rect(fill = NA, colour = "grey55"))
     } else {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),            
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
