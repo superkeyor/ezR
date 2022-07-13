@@ -518,10 +518,14 @@ theme_apa <- function(plot.box = FALSE, lab.size = 18, text.size = 16){
     if (plot.box) {
         # panel.border without axis.line
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),            
                            panel.border = element_rect(fill = NA, colour = "black"))
     } else {
         # no panel.border but axis.line
         out <- out + theme(panel.background = element_rect(fill = NA,colour = NA),
+                           panel.grid.major = element_blank(),
+                           panel.grid.minor = element_blank(),            
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "black"))
     }
