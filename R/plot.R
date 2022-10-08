@@ -3135,16 +3135,16 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
         xx = strsplit(xx,"/",fixed=TRUE)[[1]]
         df = ez.dropna(df, xx)
         dfdf = df %>% tidyr::gather_("theKey","theValue",xx)
-        # first compute pos
-        dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
-        # then compute n/pct
-        dfdf = dfdf %>% dplyr::mutate(pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         # keep factor order
         if (length(xx)==1) {
             dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx]]))
         } else {
             dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx[1]]]))
         }
+        # first compute pos
+        dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
+        # then compute n/pct
+        dfdf = dfdf %>% dplyr::mutate(pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         if (position=='stack') {
             if (is.null(ylab)) ylab='Count'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
