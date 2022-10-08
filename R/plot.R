@@ -519,13 +519,13 @@ theme_apa <- function(plot.box = FALSE, lab.size = 18, text.size = 16){
         # panel.border without axis.line
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.grid.major = element_blank(),
-                           panel.grid.minor = element_blank(),            
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = "black"))
     } else {
         # no panel.border but axis.line
         out <- out + theme(panel.background = element_rect(fill = NA,colour = NA),
                            panel.grid.major = element_blank(),
-                           panel.grid.minor = element_blank(),            
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "black"))
     }
@@ -627,12 +627,12 @@ theme_blackapa <- function(plot.box = TRUE, lab.size = 18, text.size = 16) {
     if (plot.box) {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.grid.major = element_blank(),
-                           panel.grid.minor = element_blank(),            
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = "grey55"))
     } else {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.grid.major = element_blank(),
-                           panel.grid.minor = element_blank(),            
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
@@ -694,12 +694,12 @@ theme_blackapa_nosize <- function(plot.box = TRUE) {
     if (plot.box) {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.grid.major = element_blank(),
-                           panel.grid.minor = element_blank(),            
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = "grey55"))
     } else {
         out <- out + theme(panel.background = element_rect(fill = NA, colour = NA),
                            panel.grid.major = element_blank(),
-                           panel.grid.minor = element_blank(),            
+                           panel.grid.minor = element_blank(),
                            panel.border = element_rect(fill = NA, colour = NA),
                            axis.line = element_line(colour = "grey55"))
     }
@@ -936,9 +936,9 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
         clvl = means[c(TRUE,FALSE)]; cmean = ez.num(means[c(FALSE,TRUE)])
         cdf = data.frame(clvl=clvl,cmean=cmean)
         if (reorder.direction=='az') {
-            cdf = dplyr::arrange(cdf,cmean) 
+            cdf = dplyr::arrange(cdf,cmean)
         } else {
-            cdf = dplyr::arrange(cdf,desc(cmean)) 
+            cdf = dplyr::arrange(cdf,desc(cmean))
         }
         df = ez.factorder(df,xxx,ord=cdf$clvl)
     }
@@ -3137,8 +3137,14 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
         dfdf = df %>% tidyr::gather_("theKey","theValue",xx)
         # first compute pos
         dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
-        # then compute n/pct without groupby (only 1 factor out there)
-        dfdf = dfdf %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+        # then compute n/pct
+        dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+        # keep factor order
+        if (length(xx)==1) {
+            dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx]]))
+        } else {
+            dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx[1]]]))
+        }
         if (position=='stack') {
             if (is.null(ylab)) ylab='Count'
             ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
