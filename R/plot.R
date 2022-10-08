@@ -3184,8 +3184,14 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                  'dfdf = df %>% tidyr::gather_("theKey","theValue",xx)',
                  '# first compute pos
                  dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
-                 # then compute n/pct without groupby (only 1 factor out there)
-                 dfdf = dfdf %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
+                 # then compute n/pct
+                 dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+                 # keep factor order
+                 if (length(xx)==1) {
+                     dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx]]))
+                 } else {
+                     dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx[1]]]))
+                 }',
                  tt,sep='\n')
     # xx|zz or xx|zz aa
     } else {
