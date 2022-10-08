@@ -3138,7 +3138,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
         # first compute pos
         dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
         # then compute n/pct
-        dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+        dfdf = dfdf %>% dplyr::mutate(pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         # keep factor order
         if (length(xx)==1) {
             dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx]]))
