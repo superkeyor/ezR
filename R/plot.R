@@ -3137,7 +3137,11 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
         df = ez.dropna(df, xx)
         dfdf = df %>% tidyr::gather_("theKey","theValue",xx)
         # keep factor order
-        dfdf = ez.factorder(dfdf,"theKey",ord=xx)
+        if (position=="fill") {
+            dfdf = ez.factorder(dfdf,"theKey",ord=rev(xx))
+        } else {
+            dfdf = ez.factorder(dfdf,"theKey",ord=xx)
+        }
         if (length(xx)==1) {
             dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx]]))
         } else {
@@ -3185,7 +3189,11 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                  sprintf('df=ez.dropna(df,xx)'),
                  'dfdf = df %>% tidyr::gather_("theKey","theValue",xx)',
                  '# keep factor order
-                 dfdf = ez.factorder(dfdf,"theKey",ord=xx)
+                 if (position=="fill") {
+                     dfdf = ez.factorder(dfdf,"theKey",ord=rev(xx))
+                 } else {
+                     dfdf = ez.factorder(dfdf,"theKey",ord=xx)
+                 }
                  if (length(xx)==1) {
                      dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx]]))
                  } else {
