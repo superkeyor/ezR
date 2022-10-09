@@ -3077,6 +3077,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param cmd like "x", c("x1", "x2", "x3"), "x|z", "x|z a" where x z a are all discrete.
 #' @param position so far can only be "stack", "fill", "both". ('dodge' not supported yet)
 #' @param n.size set to 0 to hide count/percentage
+#' @param n.angle 0, 45, 90, 180, 270
 #' @param n.type 1 = n for stack, pct for fill; 2 = pct for stack, n for fill; 3 = n (pct) for stack, pct (n) for fill; 4 = pct (n) for stack, n (pct) for fill
 #' @param alpha bar alpha value
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
@@ -3097,11 +3098,11 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
+ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.angle=0,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
     df.bak=df
     if (position=='both') {
-        p1=ez.countplot(df,cmd,'stack',color, colors, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
-        p2=ez.countplot(df,cmd,'fill',color, colors, alpha, n.size, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
+        p1=ez.countplot(df,cmd,'stack',color, colors, alpha, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
+        p2=ez.countplot(df,cmd,'fill',color, colors, alpha, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
         return(ggmultiplot(p1,p2,cols=1))
     }
 
@@ -3158,8 +3159,8 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                         geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))'
-                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack
+                         geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
+                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
             )
         } else if (position=='fill') {
             if (is.null(ylab)) ylab='Percentage'
@@ -3173,9 +3174,9 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                         geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+
+                         geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
                          scale_y_continuous(labels=scales::percent)+coord_flip()'
-                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
             )
         }
         gghistory=paste(gghistory,
@@ -3226,8 +3227,8 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                             geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))'
-                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack
+                             geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
+                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
                 )
             } else if (position=='fill') {
                 if (is.null(ylab)) ylab='Percentage'
@@ -3240,9 +3241,9 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              theme(axis.text.x=element_text(angle=%f %s %s)) +
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                             geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+
+                             geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
                              scale_y_continuous(labels=scales::percent)+coord_flip()'
-                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill
+                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
                 )
             }
             gghistory=paste(gghistory,
@@ -3270,8 +3271,8 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                                 geom_text(color="white", size=%f, aes(label=%s,y=pct.pos))+%s'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.stack, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
+                                 geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))+%s'
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 } else if (position=='fill') {
                     if (is.null(ylab)) ylab='Percentage'
@@ -3284,9 +3285,9 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                                 geom_text(color="white", size=%f, aes(label=%s,y=n.pos))+%s+
+                                 geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+%s+
                                  scale_y_continuous(labels=scales::percent)+coord_flip()'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 }
             gghistory=paste(gghistory,
@@ -3378,7 +3379,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palett
                        axis.line.x=element_blank(),axis.line.y=element_blank(),
                        axis.text.x=element_blank(),axis.text.y=element_blank(),
                        panel.background=element_rect(fill="white",color="white"))'
-                 , xx, alpha, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.type.fill, start, direction
+                 , xx, alpha, color, ylab, xlab, zlab, legend.position, legend.box, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill, start, direction
     )
     gghistory=paste(gghistory,
          sprintf('df=ez.dropna(df,c("%s"))',xx),

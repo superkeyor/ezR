@@ -12,6 +12,7 @@ ez.countplot(
   colors = ez.palette("Zhu"),
   alpha = 1,
   n.size = 5.5,
+  n.angle = 0,
   n.type = 3,
   width = 0.7,
   ylab = NULL,
@@ -40,6 +41,8 @@ ez.countplot(
 \item{alpha}{bar alpha value}
 
 \item{n.size}{set to 0 to hide count/percentage}
+
+\item{n.angle}{0, 45, 90, 180, 270}
 
 \item{n.type}{1 = n for stack, pct for fill; 2 = pct for stack, n for fill; 3 = n (pct) for stack, pct (n) for fill; 4 = pct (n) for stack, n (pct) for fill}
 
