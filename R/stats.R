@@ -2693,3 +2693,38 @@ ez.boxcox = function (y, col=NULL, na.rm = FALSE, plot = TRUE, print2scr = TRUE,
     }
     return(invisible(out))
 }
+
+#' calculate correlation matrix (for publication)
+#' @description calculate correlation matrix (for publication)
+#' @param df data frame
+#' @param file if not NULL, save matrix to an excel file
+#' @return returns invisible, save an excel file with results
+#' @note *** p < .001, ** p < .01, * < .05
+#' @export
+ez.corrmatrix = function(df,file='CorrMatrix.xlsx'){
+    # https://stackoverflow.com/a/56902023/2292993
+    corstarsl <- function(d){ 
+        x <- as.matrix(d) 
+        R <- Hmisc::rcorr(x)$r 
+        p <- Hmisc::rcorr(x)$P 
+
+        mystars <- ifelse(p < .001, "***", ifelse(p < .01, "** ", ifelse(p < .05, "* ", " ")))
+
+        R <- format(round(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
+
+        Rnew <- matrix(paste(R, mystars, sep=""), ncol=ncol(x)) 
+        diag(Rnew) <- paste(diag(R), " ", sep="") 
+        rownames(Rnew) <- colnames(x) 
+        colnames(Rnew) <- paste(colnames(x), "", sep="") 
+
+        Rnew <- as.matrix(Rnew)
+        Rnew[upper.tri(Rnew, diag = TRUE)] <- ""
+        Rnew <- as.data.frame(Rnew) 
+
+        Rnew <- cbind(Rnew[1:length(Rnew)-1])
+        return(Rnew) 
+    }
+    out=corstarsl(df)
+    if (!is.null(file)) ez.savex(out,file,rowNames=TRUE)
+    return(invisible(out))
+}
