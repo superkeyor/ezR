@@ -11,6 +11,7 @@ ez.countplot(
   color = "color",
   colors = ez.palette("Zhu"),
   alpha = 1,
+  title.size = 10,
   n.size = 5.5,
   n.angle = 0,
   n.type = 3,
