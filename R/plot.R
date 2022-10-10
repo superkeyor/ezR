@@ -503,9 +503,9 @@ multiplot <- function(..., plotlist=NULL, cols=NULL, layout=NULL, title='', titl
 #' @seealso \code{\link[ggplot2]{theme}} \code{\link{theme_apa_nosize}}
 #' @importFrom ggplot2 theme_bw theme element_blank element_text element_line element_rect
 #' @author Jerry modified from \href{https://github.com/trinker/plotflow}{trinker/plotflow}
-theme_apa <- function(plot.box = FALSE, lab.size = 18, text.size = 16){
+theme_apa <- function(plot.box = FALSE, title.size = 20, lab.size = 18, text.size = 16){
     out <- theme(
-        plot.title=element_text(family=RMN, size=lab.size+2, face="bold", colour="black"),
+        plot.title=element_text(family=RMN, size=title.size, face="bold", colour="black"),
         legend.title = element_text(family=RMN, colour="black"),
         legend.text = element_text(family=RMN, colour="black"),
         strip.text.x = element_text(family=RMN, size=text.size, colour="black"),
@@ -3098,7 +3098,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,title.size=10,n.size=5.5,n.angle=0,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
+ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,title.size=20,n.size=5.5,n.angle=0,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
     df.bak=df
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, colors, alpha, title.size, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
@@ -3310,7 +3310,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             }
         }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+theme_apa(title.size=title.size)')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
