@@ -236,7 +236,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, incomparables=FAL
     # col summary
     results = ez.header(variable=character(),class=character(),is_all_numeric_like=logical(),n=numeric(),missing=numeric(),unique_including_na=numeric(),
                         counts_levels_view1=character(),counts_levels_view2=character(),
-                        mean=numeric(),min=numeric(),max=numeric(),sum=numeric())
+                        mean=numeric(),sd=numeric(),min=numeric(),max=numeric(),sum=numeric())
     vars=colnames(df)
     allFactorUniqueValues=character()
     allFactorCounts=integer()
@@ -268,18 +268,20 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, incomparables=FAL
         # not all NA
         if ( is.numeric(df[[var]]) & !all(is.na(df[[var]])) ) {
             v.mean=mean(df[[var]],na.rm=TRUE)
+            v.sd=sd(df[[var]],na.rm=TRUE)
             v.min=min(df[[var]],na.rm=TRUE)
             v.max=max(df[[var]],na.rm=TRUE)
             v.sum=sum(df[[var]],na.rm=TRUE)
         } else if ( is.date(df[[var]]) & !all(is.na(df[[var]])) ) {
             # converted to numeric, to convert back to date: ez.date(ori='R')
             v.mean=mean(df[[var]],na.rm=TRUE)
+            v.sd=sd(df[[var]],na.rm=TRUE)
             v.min=min(df[[var]],na.rm=TRUE)
             v.max=max(df[[var]],na.rm=TRUE)
             # sum not defined for "Date" objects
             v.sum=NA
         } else {
-            v.mean=v.min=v.max=v.sum=NA
+            v.mean=v.sd=v.min=v.max=v.sum=NA
         }
         results = ez.append(results,list(v.variable,v.class,v.is_all_numeric_like,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2scr=FALSE)
     }
