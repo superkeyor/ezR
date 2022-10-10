@@ -283,7 +283,7 @@ ez.vx = function(df, temp=NULL, id=NULL, file=NULL, width=300, incomparables=FAL
         } else {
             v.mean=v.sd=v.min=v.max=v.sum=NA
         }
-        results = ez.append(results,list(v.variable,v.class,v.is_all_numeric_like,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.min,v.max,v.sum),print2scr=FALSE)
+        results = ez.append(results,list(v.variable,v.class,v.is_all_numeric_like,v.n,v.missing,v.unique,v.levels1,v.levels2,v.mean,v.sd,v.min,v.max,v.sum),print2scr=FALSE)
     }
     v.duplicated.varname=ez.duplicated(colnames(df),vec=TRUE,incomparables=incomparables,dim=1,vecgroup=TRUE)
     v.duplicated.varname[which(!v.duplicated.varname)]=NA
