@@ -2613,7 +2613,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # y~x|z
         tmp = strsplit(cmd,"[~|]")[[1]]
         y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
-        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
+        df=ez.dropna(df,c(y,x,z)) %>% ez.2factor(z) %>% ez.factorelevel(z)
         n = nlevels(df[[z]])
 
         if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
