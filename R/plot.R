@@ -2487,9 +2487,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
             tt = "
-            df = ez.2factor(df,'{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
+            df = ez.2factor(df,'{z}')
             "
             cmd = ez.sprintf('{y}~{x}|{z}')
         } else if (grepl("*",cmd,fixed=TRUE)) {
@@ -2508,9 +2508,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # "
             # update (2019 Dec), it seems more reasonable to residize each group in the same way
             tt = "
-            df = ez.2factor(df,'{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
+            df = ez.2factor(df,'{z}')
             "
             cmd = ez.sprintf('{y}~{x}*{z}')
         } else if (grepl("@",cmd,fixed=TRUE)) {
@@ -2525,9 +2525,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
             #      dplyr::ungroup() %>% data.frame()
             # "
             tt = "
-            df = ez.2factor(df,'{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
+            df = ez.2factor(df,'{z}')
             "
             cmd = ez.sprintf('{y}~{x}@{z}')
         } else {
@@ -2548,9 +2548,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
             tt = "
-            df = ez.2factor(df,'{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
+            df = ez.2factor(df,'{z}')
             "
             cmd = ez.sprintf('{y}~{x}|{z}')
         } else if (grepl("*",cmd,fixed=TRUE)) {
@@ -2568,9 +2568,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
             #      dplyr::ungroup() %>% data.frame()
             # "
             tt = "
-            df = ez.2factor(df,'{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
+            df = ez.2factor(df,'{z}')
             "
             cmd = ez.sprintf('{y}~{x}*{z}')
         } else if (grepl("@",cmd,fixed=TRUE)) {
@@ -2664,7 +2664,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # y~x||z
         tmp = strsplit(cmd,"[~*]")[[1]]
         y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
-        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
+        df=ez.dropna(df,c(y,x,z)) %>% ez.2factor(z) %>% ez.factorelevel(z)
         n = nlevels(df[[z]])
 
         if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
@@ -2725,7 +2725,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # y~x|||z
         tmp = strsplit(cmd,"[~@]")[[1]]
         y = trimws(tmp[1]); x = trimws(tmp[2]); z = trimws(tmp[3])
-        df=ez.dropna(df,c(y,x,z)) %>% ez.factorelevel(z)
+        df=ez.dropna(df,c(y,x,z)) %>% ez.2factor(z) %>% ez.factorelevel(z)
         n = nlevels(df[[z]])
 
         if (is.null(ylab)) ylab = y ; if (is.null(xlab)) xlab = x
@@ -2958,8 +2958,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)];
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
-        df = ez.2factor(df,'{z}')
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
+        df = ez.2factor(df,'{z}')
         df %<>% ez.zresidize('{x}',c({v}),model='lm',scale=TRUE)
         "
         cmd = ez.sprintf('{y}~{x}|{z}')
@@ -2968,8 +2968,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)];
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
-        df = ez.2factor(df,'{z}')
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
+        df = ez.2factor(df,'{z}')
         df %<>% dplyr::group_by({z}) %>%
             dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='lm',scale=TRUE){'}'}) %>%
             dplyr::ungroup() %>% data.frame()
