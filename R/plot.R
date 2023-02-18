@@ -2487,6 +2487,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
             tt = "
+            df = ez.2factor('{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
             "
@@ -2507,6 +2508,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             # "
             # update (2019 Dec), it seems more reasonable to residize each group in the same way
             tt = "
+            df = ez.2factor('{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
             "
@@ -2523,6 +2525,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             #      dplyr::ungroup() %>% data.frame()
             # "
             tt = "
+            df = ez.2factor('{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize('{x}',c({v}),model='{model}',scale={scale})
             "
@@ -2545,6 +2548,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)]
             v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
             tt = "
+            df = ez.2factor('{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
             "
@@ -2564,6 +2568,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             #      dplyr::ungroup() %>% data.frame()
             # "
             tt = "
+            df = ez.2factor('{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
             "
@@ -2580,6 +2585,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
             #      dplyr::ungroup() %>% data.frame()
             # "
             tt = "
+            df = ez.2factor('{z}')
             df = ez.dropna(df,c('{y}', '{x}', '{z}', {v})) %>%
                  ez.zresidize(c('{y}','{x}'),c({v}),model='{model}',scale={scale})
             "
@@ -2617,6 +2623,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
+        df = ez.2factor("{z}")
         pp = lattice::xyplot({y}~{x}, df, grid=F,
             type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
@@ -2667,6 +2674,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
+        df = ez.2factor("{z}")
         pp = lattice::xyplot({y}~{x}, df, grid=F,
             type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
@@ -2729,6 +2737,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         # the essence is: disable as many defaults as possible, and call panel with or without panel.superpose(panel.groups))
         # pass any additional parameters to xyplot(... )
         tt = ez.sprintf('
+        df = ez.2factor("{z}")
         pp = lattice::xyplot({y}~{x}|{z}, df, grid=F,
             type="p", cex = {point.size}, alpha = {point.alpha}, pch = c({point.shape}), col = c({point.color}),
             groups = {z},
@@ -2949,6 +2958,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)];
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
+        df = ez.2factor('{z}')
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
         df %<>% ez.zresidize('{x}',c({v}),model='lm',scale=TRUE)
         "
@@ -2958,6 +2968,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
         y = tmp[1]; x = tmp[2]; z = tmp[length(tmp)];
         v = tmp[3:(length(tmp)-1)]; v = ez.vv(v,print2scr=F)
         tt = "
+        df = ez.2factor('{z}')
         df = ez.dropna(df,c('{y}', '{x}', '{z}', {v}))
         df %<>% dplyr::group_by({z}) %>%
             dplyr::do({'{'}ez.zresidize(.,'{x}',c({v}),model='lm',scale=TRUE){'}'}) %>%
@@ -2988,6 +2999,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
       xx = trimws(cmd[2])
       zz = trimws(cmd[3])
       df=ez.dropna(df,c(yy,xx,zz))
+      df=ez.2factor(df,zz)
 
       rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
       rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
@@ -3043,6 +3055,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
           xx = trimws(cmd[2])
           zz = trimws(cmd[3])
           df=ez.dropna(df,c(yy,xx,zz))
+          df=ez.2factor(df,zz)
           rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
           rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
