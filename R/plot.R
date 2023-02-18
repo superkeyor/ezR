@@ -3055,7 +3055,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
           xx = trimws(cmd[2])
           zz = trimws(cmd[3])
           df=ez.dropna(df,c(yy,xx,zz))
-          df=ez.2factor(df,zz)
+          df=ez.2factor(df,zz) 
           rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
           rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
