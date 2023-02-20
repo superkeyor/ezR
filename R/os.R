@@ -905,12 +905,9 @@ ez.mv = Vectorize(.mv, SIMPLIFY = FALSE)
 #' As of rlang 0.4.0, dplyr must be at least version 0.8.0.
 #' dplyr 0.7.4 is too old for rlang 0.4.2.
 #' 
-#' first-time use:
+#' 1) first-time use:
 #' https://github.com/r-lib/gmailr#setup
-#' 1) create a google project for it. The easiest way to do this is via the Python Quickstart.
-#' https://developers.google.com/gmail/api/quickstart/python
-#' Click the Enable the Gmail API button.
-#' In the resulting dialog click the DOWNLOAD CLIENT CONFIGURATION on your computer.
+#' https://github.com/r-lib/gmailr/issues/143
 #' 
 #' 2) Tell gmailr where the JSON lives
 #' Call gmailr::gm_auth_configure(path = "path/to/downloaded/json")
