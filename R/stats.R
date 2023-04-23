@@ -1246,7 +1246,8 @@ ez.anovas1b = function(df,y,x=NULL,covar=NULL,report=T,reportF=F,view=F,plot=F,c
             # } else {
             #     ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=prefix,pe=pe),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
             # }
-            ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %.2f',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=prefix,pe=pe),ifelse(is.null(covar),'etasq2','partial etasq2'),result.report$petasq2[i]),color='cyan')
+            # https://stackoverflow.com/a/13353595/2292993
+            ez.pprint(sprintf('aov(%s~%s): F(%s) = %.2f, MSE = %.2f, %s, %s = %s',Y,X,result.report$dof[i],result.report$F[i],result.report$MSE[i],ez.p.apa(result.report$p[i],prefix=prefix,pe=pe),ifelse(is.null(covar),'etasq2','partial etasq2'),substring(sprintf("%.2f", result.report$petasq2[i]), 2)),color='cyan')
         }
         # ez.pprint('<<<<<<')
     }
