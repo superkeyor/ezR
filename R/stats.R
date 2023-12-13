@@ -18,10 +18,7 @@ ez.describe = function(x){
     # flush.console()
 }
 
-#' round2 always round half up (R's native round/sprintf may round .055 -> .05)
-#' @description round2 always round half up (R's native round/sprintf may round .055 -> .05)
-#' @export
-round2 = function(x,n) {
+round2_internal = function(x,n) {
     # https://stackoverflow.com/a/62546554/2292993
     # R's native round/sprintf may round .055 -> .05
   posneg = sign(x)
@@ -31,6 +28,10 @@ round2 = function(x,n) {
   z = z/10^n
   (z)*posneg
 }
+#' round2 always round half up (R's native round/sprintf may round .055 -> .05)
+#' @description round2 always round half up (R's native round/sprintf may round .055 -> .05)
+#' @export
+round2 = Vectorize(round2_internal)
 
 p.apa = function(pvalue,prefix=0,pe=F,decimals=3){
     if (is.na(pvalue)) {return(NA_character_)}
@@ -2714,7 +2715,6 @@ ez.corrmatrix = function(df,file='CorrMatrix.xlsx'){
 
         mystars <- ifelse(p < .001, "***", ifelse(p < .01, "** ", ifelse(p < .05, "* ", " ")))
 
-        round2v = Vectorize(round2)
         R <- format(round2(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
         # remove leading 0, such that 0.34 -> .34
         R <- gsub("^(\\s*[+|-]?)0\\.", "\\1.", R)
