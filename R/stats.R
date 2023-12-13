@@ -18,7 +18,10 @@ ez.describe = function(x){
     # flush.console()
 }
 
-round2_internal = function(x,n) {
+#' round2 always round half up (R's native round/sprintf may round .055 -> .05)
+#' @description round2 always round half up (R's native round/sprintf may round .055 -> .05)
+#' @export
+round2 = function(x,n) {
     # https://stackoverflow.com/a/62546554/2292993
     # R's native round/sprintf may round .055 -> .05
   posneg = sign(x)
@@ -28,10 +31,6 @@ round2_internal = function(x,n) {
   z = z/10^n
   (z)*posneg
 }
-#' round2 always round half up (R's native round/sprintf may round .055 -> .05)
-#' @description round2 always round half up (R's native round/sprintf may round .055 -> .05)
-#' @export
-round2 = Vectorize(round2_internal)
 
 p.apa = function(pvalue,prefix=0,pe=F,decimals=3){
     if (is.na(pvalue)) {return(NA_character_)}
