@@ -2709,12 +2709,15 @@ ez.corrmatrix = function(df,file='CorrMatrix.xlsx'){
     # https://stackoverflow.com/a/56902023/2292993
     corstarsl <- function(d){ 
         x <- as.matrix(d) 
-        R <- Hmisc::rcorr(x)$r 
+        R <- Hmisc::rcorr(x)$r
         p <- Hmisc::rcorr(x)$P 
 
         mystars <- ifelse(p < .001, "***", ifelse(p < .01, "** ", ifelse(p < .05, "* ", " ")))
 
-        R <- format(round(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
+        round2v = Vectorize(round2)
+        R <- format(round2(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
+        # remove leading 0, such that 0.34 -> .34
+        R <- gsub("^(\\s*[+|-]?)0\\.", "\\1.", R)
 
         Rnew <- matrix(paste(R, mystars, sep=""), ncol=ncol(x)) 
         diag(Rnew) <- paste(diag(R), " ", sep="") 
@@ -2723,12 +2726,19 @@ ez.corrmatrix = function(df,file='CorrMatrix.xlsx'){
 
         Rnew <- as.matrix(Rnew)
         Rnew[upper.tri(Rnew, diag = TRUE)] <- ""
+        diag(Rnew) <- "--"
         Rnew <- as.data.frame(Rnew) 
 
         Rnew <- cbind(Rnew[1:length(Rnew)-1])
         return(Rnew) 
     }
     out=corstarsl(df)
+    meansd <- function(v){
+        m=sprintf('%.2f',round2(mean(v,na.rm=TRUE),2))
+        s=sprintf('%.2f',round2(sd(v,na.rm=TRUE),2))
+        return(ez.sprintf("{m} ({s})"))
+    }
+    out['Mean (SD)'] = sapply(df,meansd)
     if (!is.null(file)) ez.savex(out,file,rowNames=TRUE)
     return(invisible(out))
 }
