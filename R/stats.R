@@ -18,8 +18,8 @@ ez.describe = function(x){
     # flush.console()
 }
 
-#' round2 always round half up (R's native round/sprintf may round .055 -> .05)
-#' @description round2 always round half up (R's native round/sprintf may round .055 -> .05)
+#' round2 always round half up (R's native round/sprintf may round .055 -> .05); vectorized
+#' @description round2 always round half up (R's native round/sprintf may round .055 -> .05); vectorized
 #' @export
 round2 = function(x,n) {
     # https://stackoverflow.com/a/62546554/2292993

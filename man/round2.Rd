@@ -2,10 +2,10 @@
 % Please edit documentation in R/stats.R
 \name{round2}
 \alias{round2}
-\title{round2 always round half up (R's native round/sprintf may round .055 -> .05)}
+\title{round2 always round half up (R's native round/sprintf may round .055 -> .05); vectorized}
 \usage{
 round2(x, n)
 }
 \description{
-round2 always round half up (R's native round/sprintf may round .055 -> .05)
+round2 always round half up (R's native round/sprintf may round .055 -> .05); vectorized
 }
