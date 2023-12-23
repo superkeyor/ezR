@@ -53,7 +53,7 @@ model.frame.gls <- function(formula, ...) {
   }
 }
 
-# old version, due to changes in the internals of `tibble::trunc_mat()`
+# discard, due to changes in the internals of `tibble::trunc_mat()`
 # #' @importFrom dplyr tbl_df trunc_mat
 # #
 # print.lbl_df <- function(x, ..., n = NULL, width = NULL) {
@@ -76,61 +76,6 @@ model.frame.gls <- function(formula, ...) {
 #   # use dplyr-print method now
 #   print(dmat, ..., n = n, width = width)
 # }
-
-tibble__trunc_mat <- function (x, n = NULL, width = NULL, n_extra = NULL) 
-{
-    # deprecate_soft("3.1.0", "tibble::trunc_mat()", details = "Printing has moved to the pillar package.")
-    rows <- nrow(x)
-    if (is.null(n) || n < 0) {
-        if (is.na(rows) || rows > tibble:::tibble_opt("print_max")) {
-            n <- tibble:::tibble_opt("print_min")  # max Inf, min 10 
-        }
-        else {
-            n <- rows
-        }
-    }
-    n_extra <- n_extra %||% tibble:::tibble_opt("max_extra_cols") # max col 100
-    if (is.na(rows)) {
-        df <- as.data.frame(head(x, n + 1))
-        if (nrow(df) <= n) {
-            rows <- nrow(df)
-        }
-        else {
-            df <- df[seq_len(n), , drop = FALSE]
-        }
-    }
-    else {
-        df <- as.data.frame(head(x, n))
-    }
-    shrunk <- shrink_mat(df, rows, n, star = has_rownames(x))
-    trunc_info <- list(width = width, rows_total = rows, rows_min = nrow(df), 
-        n_extra = n_extra, summary = tbl_sum(x))
-    structure(c(shrunk, trunc_info), class = c(paste0("trunc_mat_", 
-        class(x)), "trunc_mat"))
-}
-
-#' @importFrom tibble as_tibble 
-#
-print.lbl_df <- function(x, ..., n = NULL, width = NULL) {
-  # get labels
-  dlab <- get_label(x)
-  # if x of class tbl_df?
-  if (!"tbl_df" %in% class(x))
-    x <- tibble::as_tibble(x)
-  # get df matrix
-  dmat <- tibble__trunc_mat(x, n = n, width = width)
-  # set labels, if we have any
-  if (!is.null(dlab)) {
-    # iterate all columns
-    for (i in 1:ncol(dmat[[1]])) {
-      # replace first value of each column, which is the class description
-      # with variable label
-      dmat[[1]][[i]][1] <- dlab[i]
-    }
-  }
-  # use dplyr-print method now
-  print(dmat, ..., n = n, width = width)
-}
 
 #
 print.sjmisc_r2 <- function(x, ...) {
