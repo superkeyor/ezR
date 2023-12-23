@@ -79,7 +79,7 @@ model.frame.gls <- function(formula, ...) {
 
 tibble__trunc_mat <- function (x, n = NULL, width = NULL, n_extra = NULL) 
 {
-    deprecate_soft("3.1.0", "tibble::trunc_mat()", details = "Printing has moved to the pillar package.")
+    # deprecate_soft("3.1.0", "tibble::trunc_mat()", details = "Printing has moved to the pillar package.")
     rows <- nrow(x)
     if (is.null(n) || n < 0) {
         if (is.na(rows) || rows > tibble:::tibble_opt("print_max")) {
