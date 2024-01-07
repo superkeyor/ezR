@@ -152,7 +152,7 @@ ez.writep = ez.savep
 # #'           keepFormulas=FALSE, encoding="unknown", ...)
 # #' colClasses: Only numeric, character, Date, POSIXct, column types are accepted
 # #' colClasses=c("Date", "character","integer", rep("numeric", 2),  "POSIXct")
-# #' @export
+#  @export
 # ez.readx2 = function(file, sheetIndex=1, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
 #     result = xlsx::read.xlsx(file, sheetIndex, ...)
 #     if (tolower) names(result) = tolower(names(result))
@@ -449,7 +449,7 @@ ez.writes = ez.saves
 # #' @examples
 # #' (x, file, sheetName="Sheet1", row.names=FALSE,
 # #'   col.names=TRUE, append=FALSE, showNA=TRUE)
-# #' @export
+#  @export
 # ez.savex2 = function(x, file="RData.xlsx", sheetName="Sheet1", row.names=FALSE, showNA=FALSE, ...){
 #     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
 #     # require('xlsx')
@@ -461,7 +461,7 @@ ez.writes = ez.saves
 # }
 
 # #' @rdname ez.savex2
-# #' @export
+#  @export
 # ez.writex2 = ez.savex2
 
 #' save an xlsx file, alias of \code{\link{ez.writex}}, wrapper of \code{\link[openxlsx]{writeData}} from the openxlsx package

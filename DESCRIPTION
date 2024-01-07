@@ -7,7 +7,7 @@ Author: Jerry Zhu <jerryzhujian9@gmail.com>
 Maintainer: Jerry Zhu <jerryzhujian9@gmail.com>
 Description: This package represents an attempt to mimic/port relevant SPSS
     functions and include/wrap useful R-specific functions Data import/export,
-    wrangle, & stats removed xlsx/readx2, requires rJava, not use
+    wrangle, & stats removed xlsx/readx2/savex2/writex2, requires rJava, not use
 License: GNU3
 LazyData: TRUE
 Encoding: UTF-8
