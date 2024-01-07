@@ -470,8 +470,6 @@ ez.is.date.like = function(x,format="%m/%d/%Y",...) {
 #' \cr        if x is a data frame, col is NA (a special case), convert all numeric NAs to character NAs, for bind_rows. see https://github.com/tidyverse/dplyr/issues/2584
 #' \cr        if x is not a data frame, col is ignored
 #' @details Both value and variable label attributes will be removed when converting variables to characters.
-#' @examples
-#'
 #' @return returns a character vector or a data frame with changed col(s)
 #' @family data transformation functions
 #' @export
