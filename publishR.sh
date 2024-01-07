@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+source ~/.bash_profile
 
 csd=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # hack app

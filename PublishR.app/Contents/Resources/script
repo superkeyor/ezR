@@ -15,34 +15,28 @@ fi
 package=$(basename "$csd")
 cd $csd
 
-# fallback for wxpython
-python $csd/$package/prepublish.py || pythonw $csd/$package/prepublish.py
+if [[ -z $(git status -s) ]]
+then
+    echo "Tree is clean, no need to do anything, exiting..."
+    exit
+else
+R --vanilla -e "devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))"
 
-rm -rf dist
-rm -rf *.egg-info
+cd ..
+R --vanilla CMD INSTALL --no-multiarch --with-keep.source $package
 
-# python setup.py register
-
-python setup.py sdist
-# python setup.py sdist upload
-twine upload dist/*
-
-rm -rf *.egg-info
-
+cd $csd
 git add -A 
 git commit -m 'update' 
 git push origin master 
 
-# /Library/Frameworks/Python.framework/Versions/2.7/bin/pip install $package --upgrade
+fi
 
-# repeat several time to force upgrade
-pip install $package --upgrade --no-cache-dir --disable-pip-version-check
-pip install $package --upgrade --no-cache-dir --disable-pip-version-check
-pip install $package --upgrade --no-cache-dir --disable-pip-version-check
-# do not use this, seems not working??
-# Although not required, it’s common to locally install your project in "develop" or "editable" mode 
-# while you’re working on it. This allows the project to be both installed and editable in project form.
-# run the following:
-# python setup.py develop
-ls dist
-pip show ez | grep Version
+# tips about git push
+# 1) use https (no git ssh)
+# 2) Tell Git to use osxkeychain using the global credential.helper config by running (in the project folder):
+#    git config --global credential.helper osxkeychain  
+#    if credential-osxkeychain not installed, see https://help.github.com/articles/caching-your-github-password-in-git/
+# 3) The next time you clone an HTTPS URL that requires a password, you'll be prompted for your username and password, 
+#    and to grant access to the OSX keychain. After this, the username and password are stored in your keychain and 
+#    you won't be required to type them in to Git again.
