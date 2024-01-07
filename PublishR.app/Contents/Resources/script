@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+source ~/.bash_profile
 
 csd=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # hack app
@@ -14,21 +15,34 @@ fi
 package=$(basename "$csd")
 cd $csd
 
+# fallback for wxpython
+python $csd/$package/prepublish.py || pythonw $csd/$package/prepublish.py
 
-if [[ -z $(git status -s) ]]
-then
-    echo "Tree is clean, no need to do anything, exiting..."
-    exit
-else
+rm -rf dist
+rm -rf *.egg-info
 
-R --vanilla -e "devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))"
+# python setup.py register
 
-cd ..
-R --vanilla CMD INSTALL --no-multiarch --with-keep.source $package
+python setup.py sdist
+# python setup.py sdist upload
+twine upload dist/*
 
-cd $csd
+rm -rf *.egg-info
+
 git add -A 
 git commit -m 'update' 
 git push origin master 
 
-fi
+# /Library/Frameworks/Python.framework/Versions/2.7/bin/pip install $package --upgrade
+
+# repeat several time to force upgrade
+pip install $package --upgrade --no-cache-dir --disable-pip-version-check
+pip install $package --upgrade --no-cache-dir --disable-pip-version-check
+pip install $package --upgrade --no-cache-dir --disable-pip-version-check
+# do not use this, seems not working??
+# Although not required, it’s common to locally install your project in "develop" or "editable" mode 
+# while you’re working on it. This allows the project to be both installed and editable in project form.
+# run the following:
+# python setup.py develop
+ls dist
+pip show ez | grep Version
