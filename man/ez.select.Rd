@@ -4,7 +4,7 @@
 \alias{ez.select}
 \title{alias of \code{\link[dplyr]{filter}}}
 \usage{
-ez.select(.data, ..., .preserve = FALSE)
+ez.select(.data, ..., .by = NULL, .preserve = FALSE)
 }
 \description{
 alias of \code{\link[dplyr]{filter}}

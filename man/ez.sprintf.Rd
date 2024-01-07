@@ -11,6 +11,9 @@ ez.sprintf(
   .open = "{",
   .close = "}",
   .na = "NA",
+  .null = character(),
+  .comment = "#",
+  .literal = FALSE,
   .transformer = identity_transformer,
   .trim = TRUE
 )

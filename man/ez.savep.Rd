@@ -9,7 +9,7 @@ ez.savep(
   x,
   sink,
   chunk_size = NULL,
-  version = NULL,
+  version = "2.4",
   compression = default_parquet_compression(),
   compression_level = NULL,
   use_dictionary = NULL,
@@ -17,16 +17,14 @@ ez.savep(
   data_page_size = NULL,
   use_deprecated_int96_timestamps = FALSE,
   coerce_timestamps = NULL,
-  allow_truncated_timestamps = FALSE,
-  properties = NULL,
-  arrow_properties = NULL
+  allow_truncated_timestamps = FALSE
 )
 
 ez.writep(
   x,
   sink,
   chunk_size = NULL,
-  version = NULL,
+  version = "2.4",
   compression = default_parquet_compression(),
   compression_level = NULL,
   use_dictionary = NULL,
@@ -34,9 +32,7 @@ ez.writep(
   data_page_size = NULL,
   use_deprecated_int96_timestamps = FALSE,
   coerce_timestamps = NULL,
-  allow_truncated_timestamps = FALSE,
-  properties = NULL,
-  arrow_properties = NULL
+  allow_truncated_timestamps = FALSE
 )
 }
 \description{

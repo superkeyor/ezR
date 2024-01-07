@@ -9,6 +9,7 @@ ez.readp(
   col_select = NULL,
   as_data_frame = TRUE,
   props = ParquetArrowReaderProperties$create(),
+  mmap = TRUE,
   ...
 )
 }

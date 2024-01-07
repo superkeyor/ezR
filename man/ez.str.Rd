@@ -27,9 +27,6 @@ Both value and variable label attributes will be removed when converting variabl
 \note{
 ez.2char only coverts factor, ez.str coverts all types, both use as.character
 }
-\examples{
-
-}
 \seealso{
 \code{\link{ez.2char}}
 
