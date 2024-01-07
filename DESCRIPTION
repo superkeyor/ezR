@@ -18,7 +18,7 @@ Depends:
 Imports:
     devtools,
     roxygen2,
-    xlsx,
+    # xlsx,  # readx2, requires rJava, not use
     openxlsx,
     tidyverse,
     tidyr,
