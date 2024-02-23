@@ -26,6 +26,7 @@ Imports:
     Hmisc,
     reshape,
     lattice,
+    latticeExtra,
     corrplot,
     lme4,
     extrafont,

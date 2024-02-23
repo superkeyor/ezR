@@ -22,7 +22,7 @@ show.shape = function(){
     ggplot2 default shapes (only 6): c(16,17,15,3,7,8)
     '))
     opar<-par(font=2, mar=c(0.5,0,0,0))
-    on.exit(par(opar))
+    on.exit(par(usr=opar))
     y=rev(c(rep(1,6),rep(2,5), rep(3,5), rep(4,5), rep(5,5)))
     x=c(rep(1:5,5),6)
     plot(x, y, pch = 0:25, cex=1.5, ylim=c(1,5.5), xlim=c(1,6.5),
@@ -40,7 +40,7 @@ show.line = function(){
     '))
     # http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
     opar = par(mar=c(0,0,0,0))
-    on.exit(par(opar))
+    on.exit(par(usr=opar))
     # Set up the plotting area
     plot(NA, xlim=c(0,1), ylim=c(6.5, -0.5),
         xaxt="n", yaxt="n",
@@ -72,7 +72,7 @@ show.color = function(v,name,label=T){
         # codes modified from https://github.com/karthik/wesanderson/blob/master/R/colors.R
         n <- length(v)
         opar <- par(mar = c(0.5, 0.5, 0.5, 0.5))
-        on.exit(par(opar))
+        on.exit(par(usr=opar))
         image(1:n, 1, as.matrix(1:n), col = v,
         xlab = "", ylab = "", xaxt = "n", yaxt = "n", bty = "n")
         rect(0, 0.9, n + 1, 1.1, col = rgb(1, 1, 1, 0.8), border = NA)
@@ -199,7 +199,7 @@ ez.palette = function(name, n, type = c("discrete", "continuous"), nn=10){
         # nr row, nc col
         nr = length(palcolors); n = sapply(palcolors,length); nc = max(n)
         opar <- par(mgp=c(2,0.25,0))
-        on.exit(par(opar))
+        on.exit(par(usr=opar))
         plot(1, 1, xlim=c(0,(nc+1)), ylim=c(0,nr), type="n", axes=FALSE, bty="n", xlab="",ylab="")
         for (i in 1:nr){
         nj <- n[i]
@@ -791,7 +791,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
                    inset=c(0,0), type=c('plt','fig'), pars=NULL){
     type <- match.arg(type)
     old.par <- par( c(type, 'usr', names(pars) ) )
-    on.exit(par(old.par))
+    on.exit(par(usr=old.par))
     if(missing(x)) x <- locator(2)
     if(is.character(x)) {
         if(length(inset) == 1) inset <- rep(inset,2)
@@ -832,7 +832,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
         xyy <- grconvertY(y, to='nfc')
     }
 
-    par(pars)
+    par(usr=pars)
     if(type=='fig'){
         par(fig=c(xyx,xyy), new=TRUE)
     } else {
@@ -1728,7 +1728,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     "panel.hist.density" <-
     function(x,...) {
      if (!histogram) {return(NULL)}
-     usr <- par("usr"); on.exit(par(usr))
+     usr <- par("usr"); on.exit(par(usr=usr))
       # par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) )
          par(usr = c(usr[1] ,usr[2]  , 0, 1.5) )
        tax <- table(x)
@@ -1754,7 +1754,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     "panel.cor" <-
     function(x, y, prefix="",...)  {
 
-             usr <- par("usr"); on.exit(par(usr))
+             usr <- par("usr"); on.exit(par(usr=usr))
              par(usr = c(0, 1, 0, 1))
             if(is.null(wt)) { r  <- cor(x, y,use="pairwise",method=method)} else {
             r <- cor.wt(data.frame(x,y),w=wt[,c(1:2)])$r[1,2]}
@@ -1781,7 +1781,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     function (x, y,pch = par("pch"),
         col.smooth = "red", span = 2/3, iter = 3, ...)
     {
-      # usr <- par("usr"); on.exit(par(usr))
+      # usr <- par("usr"); on.exit(par(usr=usr))
      #  par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , usr[3],usr[4]) )     #doensn't affect the axis correctly
       xm <- mean(x,na.rm=TRUE)
       ym <- mean(y,na.rm=TRUE)
@@ -1863,7 +1863,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     function (x, y,   pch = par("pch"),
          col.smooth = "red", ...)
      { segments=51
-      usr <- par("usr"); on.exit(par(usr))
+      usr <- par("usr"); on.exit(par(usr=usr))
       par(usr = c(usr[1]-abs(.05*usr[1]) ,usr[2]+ abs(.05*usr[2])  , 0, 1.5) )
      xm <- mean(x,na.rm=TRUE)
       ym <- mean(y,na.rm=TRUE)
@@ -1894,7 +1894,7 @@ lm=FALSE,cor=TRUE,jiggle=FALSE,factor=2,hist.col="light grey",show.points=TRUE,r
     #The original organization was very clunky, but has finally been cleaned up with lots of extra comments removed  (8/13/17)
 
     old.par <- par(no.readonly = TRUE) # save default, for resetting...
-    on.exit(par(old.par))     #and when we quit the function, restore to original values
+    on.exit(par(usr=old.par))     #and when we quit the function, restore to original values
 
 
     if(missing(cex.cor)) cex.cor <- 1   #this allows us to scale the points separately from the correlations
