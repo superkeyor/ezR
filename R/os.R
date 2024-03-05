@@ -528,7 +528,7 @@ ez.abspath = normalizePath
 
 #' Returns the full path with resolving
 #' @description Returns the full path with resolving
-#' @note Resolve ~, %WinEnvVar% relative path \cr
+#' @note Resolve ~, %WinEnvVar%, * or ? wildcard, relative path \cr
 #' Mac: ~  --> /Users/jerry \cr
 #' Windows: ~  --> C:\\Users\\Jerry\\Documents \cr
 #' Mac environment variable not supported (because it cannot load .bash_profile--check Sys.getenv()
@@ -537,6 +537,7 @@ ez.abspath = normalizePath
 #' ez.fp('%WINAPPS%/RStudio')
 #' @export
 ez.fullpath = function(path) {
+    # resolve %WinEnvVar%
     matches = stringr::str_match_all(path,'%(\\w+)%')
     # always return a list even if no match
     if (length(matches[[1]])) {
@@ -544,6 +545,9 @@ ez.fullpath = function(path) {
             path=gsub(match[1],Sys.getenv(match[2]),path,ignore.case=FALSE,perl=FALSE,fixed=TRUE)
         }
     }
+    # resolve wildcard
+    has_wildcard = grepl("\\*|\\?", path)
+    if (has_wildcard) {path = Sys.glob(path)[1]}  # only returns the first item
     return(normalizePath(path.expand(path)))
 }
 

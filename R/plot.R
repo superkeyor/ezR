@@ -2358,7 +2358,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' @param point.color only applicable when not auto varied
 #' @param point.shape only applicable when not auto varied
 #' @param point.alpha  if overplot for points, one can reduce alpha
-#' @param point.size if less point, oen can increase size
+#' @param point.size if less point, one can increase size
 #' @param ylab  y label. NULL
 #' @param xlab  x label. NULL
 #' @param xlimits c(0,1). xlimits does not require xbreaks set

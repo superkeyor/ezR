@@ -78,7 +78,7 @@ ez.scatterplot(
 
 \item{rp.size}{r p values font size, ignored if rp=FALSE}
 
-\item{point.size}{if less point, oen can increase size}
+\item{point.size}{if less point, one can increase size}
 
 \item{legend.size}{c(0,12) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
