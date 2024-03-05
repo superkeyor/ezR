@@ -545,10 +545,11 @@ ez.fullpath = function(path) {
             path=gsub(match[1],Sys.getenv(match[2]),path,ignore.case=FALSE,perl=FALSE,fixed=TRUE)
         }
     }
+    path = path.expand(path)
     # resolve wildcard
     has_wildcard = grepl("\\*|\\?", path)
-    if (has_wildcard) {path = Sys.glob(path)[1]}  # only returns the first item
-    return(normalizePath(path.expand(path)))
+    if (has_wildcard) {path = Sys.glob(path)}
+    return(normalizePath(path))
 }
 
 #' @rdname ez.fullpath
