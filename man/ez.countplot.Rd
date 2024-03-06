@@ -23,7 +23,6 @@ ez.countplot(
   legend.direction = "horizontal",
   legend.box = T,
   legend.size = c(0, 10),
-  xsize = 16,
   xangle = 0,
   vjust = NULL,
   hjust = NULL,
@@ -67,8 +66,6 @@ ez.countplot(
 
 \item{legend.size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
-\item{xsize}{size of x text}
-
 \item{xangle}{angle of x text 0}
 
 \item{vjust}{vjust of x text NULL}
@@ -78,7 +75,7 @@ ez.countplot(
 \item{facet}{one of 'cols', 'rows', 'wrap'}
 }
 \value{
-a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
+a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none), +theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 }
 \description{
