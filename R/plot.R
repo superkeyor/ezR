@@ -3118,8 +3118,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
 ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,title.size=20,n.size=5.5,n.angle=0,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xsize=16,xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
     df.bak=df
     if (position=='both') {
-        p1=ez.countplot(df,cmd,'stack',color, colors, alpha, title.size, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
-        p2=ez.countplot(df,cmd,'fill',color, colors, alpha, title.size, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
+        p1=ez.countplot(df,cmd,'stack',color, colors, alpha, title.size, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xsize, xangle, vjust, hjust, facet, theme.apa)
+        p2=ez.countplot(df,cmd,'fill',color, colors, alpha, title.size, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xsize, xangle, vjust, hjust, facet, theme.apa)
         return(ggmultiplot(p1,p2,cols=1))
     }
 
