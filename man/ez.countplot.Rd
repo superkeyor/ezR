@@ -66,11 +66,11 @@ ez.countplot(
 
 \item{legend.size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
 
-\item{xangle}{angle of x text 0}
+\item{xangle}{angle of x text 0    (not effective for this plot)}
 
-\item{vjust}{vjust of x text NULL}
+\item{vjust}{vjust of x text NULL  (not effective for this plot)}
 
-\item{hjust}{hjust of x text NULL}
+\item{hjust}{hjust of x text NULL  (not effective for this plot)}
 
 \item{facet}{one of 'cols', 'rows', 'wrap'}
 }

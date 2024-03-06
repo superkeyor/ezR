@@ -3107,9 +3107,9 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param legend.box  box of legend, T or F
 #' @param legend.direction  horizontal or vertical
 #' @param legend.size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
-#' @param xangle  angle of x text 0
-#' @param vjust  vjust of x text NULL
-#' @param hjust  hjust of x text NULL
+#' @param xangle  angle of x text 0    (not effective for this plot)
+#' @param vjust  vjust of x text NULL  (not effective for this plot)
+#' @param hjust  hjust of x text NULL  (not effective for this plot)
 #' @param facet  one of 'cols', 'rows', 'wrap'
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none), +theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
@@ -3177,7 +3177,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
-                         theme(axis.text.x=element_text(angle=%f %s %s)) +
+                         theme(axis.text.x=element_text(angle=%f %s %s)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + 
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                          geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
@@ -3192,7 +3192,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
-                         theme(axis.text.x=element_text(angle=%f %s %s)) +
+                         theme(axis.text.x=element_text(angle=%f %s %s)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + 
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                          geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
@@ -3250,7 +3250,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
-                             theme(axis.text.x=element_text(angle=%f %s %s)) +
+                             theme(axis.text.x=element_text(angle=%f %s %s)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + 
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
@@ -3264,7 +3264,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
-                             theme(axis.text.x=element_text(angle=%f %s %s)) +
+                             theme(axis.text.x=element_text(angle=%f %s %s)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + 
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
@@ -3296,7 +3296,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
-                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
+                                 theme(axis.text.x=element_text(angle=%f %s %s)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + 
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))+%s'
@@ -3310,7 +3310,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
-                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
+                                 theme(axis.text.x=element_text(angle=%f %s %s)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + 
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+%s+
