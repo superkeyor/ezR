@@ -3318,7 +3318,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             }
         }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa(title.size=title.size)')
+    if (theme.apa) tt = paste0(tt,'+theme_apa(title.size=title.size)+theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
