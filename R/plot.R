@@ -3285,7 +3285,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                 zz = zz[1]
                 df=ez.dropna(df,c(xx,zz,aa))
                 # grouping by aa (facet) then xx, notice group_by_(c(aa,xx)) is equal to group_by_(aa). count_(xx,zz,aa) gives error!
-                dfdf = df %>% dplyr::count(c({{xx}},{{zz}},{{aa}})) %>% dplyr::group_by({{aa}},{{xx}}) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+                dfdf = df %>% dplyr::count(c("xx","zz","aa")) %>% dplyr::group_by("aa","xx") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
                 if (position=='stack') {
                     if (is.null(ylab)) ylab='Count'
                     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
