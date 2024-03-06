@@ -3164,7 +3164,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx[1]]]))
         }
         # first compute pos
-        dfdf = dfdf %>% dplyr::count(c("theKey","theValue")) %>% dplyr::group_by("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
+        dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
         # then compute n/pct
         dfdf = dfdf %>% dplyr::mutate(pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         if (position=='stack') {
@@ -3241,7 +3241,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                         pvalue = sprintf("%.2f", pvalue)
                     }
             }, error = function(e) {})
-            dfdf = df %>% dplyr::count(c(!!xx,!!zz)) %>% dplyr::group_by(!!xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+            dfdf = df %>% dplyr::count_(c(xx,zz)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
             if (position=='stack') {
                 if (is.null(ylab)) ylab='Count'
                 ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
