@@ -3338,6 +3338,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
 #' @param direction   1, clockwise; -1, anticlockwise
 #' @param n.size set to 0 to hide count/percentage
 #' @param n.type 1 = pct; 2 = n; 3 = pct (n); 4 = n (pct)
+#' @param n.angle 0, 45, 90, 180, 270
 #' @param alpha pie alpha value
 #' @param color  "bw" or "color"  black/white or colorblind-friendly color
 #' @param ylab  y label
@@ -3355,7 +3356,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
+ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palette("Zhu"),alpha=1,n.size=5.5,n.type=3,n.angle=0,ylab='',xlab='',zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,theme.apa=TRUE) {
     df.bak=df
     gghistory=sprintf('df=%s',deparse(substitute(df)))
 

@@ -14,6 +14,7 @@ ez.piechart(
   alpha = 1,
   n.size = 5.5,
   n.type = 3,
+  n.angle = 0,
   ylab = "",
   xlab = "",
   zlab = NULL,
@@ -43,6 +44,8 @@ ez.piechart(
 \item{n.size}{set to 0 to hide count/percentage}
 
 \item{n.type}{1 = pct; 2 = n; 3 = pct (n); 4 = n (pct)}
+
+\item{n.angle}{0, 45, 90, 180, 270}
 
 \item{ylab}{y label}
 
