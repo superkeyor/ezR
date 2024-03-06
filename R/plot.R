@@ -3133,8 +3133,6 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
     legend.box = ifelse(legend.box,'theme(legend.background = element_rect(color = "black"))+','')
-    vjust = ifelse(is.null(vjust),'',sprintf(',vjust=%f',vjust))
-    hjust = ifelse(is.null(hjust),'',sprintf(',hjust=%f',hjust))
     n.type.stack = c('n.str','pct.str','n.pct.str','pct.n.str')[n.type]
     n.type.fill = c('pct.str','n.str','pct.n.str','n.pct.str')[n.type]
 
