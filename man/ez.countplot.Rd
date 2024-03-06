@@ -23,6 +23,7 @@ ez.countplot(
   legend.direction = "horizontal",
   legend.box = T,
   legend.size = c(0, 10),
+  xsize = 16,
   xangle = 0,
   vjust = NULL,
   hjust = NULL,
@@ -31,7 +32,8 @@ ez.countplot(
 )
 }
 \arguments{
-\item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
+\item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+\cr         if it is already summary data, use mutate(tidyr::uncount(counter), value = 1) to turn into long format}
 
 \item{cmd}{like "x", c("x1", "x2", "x3"), "x|z", "x|z a" where x z a are all discrete.}
 
@@ -64,6 +66,8 @@ ez.countplot(
 \item{legend.box}{box of legend, T or F}
 
 \item{legend.size}{c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text}
+
+\item{xsize}{size of x text}
 
 \item{xangle}{angle of x text 0}
 

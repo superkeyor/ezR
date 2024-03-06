@@ -29,7 +29,8 @@ ez.piechart(
 )
 }
 \arguments{
-\item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
+\item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+\cr         if it is already summary data, use mutate(tidyr::uncount(counter), value = 1) to turn into long format}
 
 \item{cmd}{a single col name}
 

@@ -847,6 +847,7 @@ ez.embed = function(fun, x, y=NULL, size=c(1,1), vadj=0.5, hadj=0.5,
 #' barplot with ggplot
 #' @description barplot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' \cr         if it is already summary data, use mutate(tidyr::uncount(counter), value = 1) to turn into long format
 #' @param cmd like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
 #' \cr or "y|x+covar1+covar2+..." (currently only supports anovas1b with/without covar)
 #' @param reorder T/F whether to reorder x by the group means (raw means if no covar, adjusted means if covar)
@@ -1162,6 +1163,7 @@ ez.barplot = function(df,cmd,color='color',colors=ez.palette("Zhu"),bar.gap=0.7,
 #' line plot with ggplot
 #' @description line plot with ggplot
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' \cr         if it is already summary data, use mutate(tidyr::uncount(counter), value = 1) to turn into long format
 #' @param cmd like "y|x, y|x z, y|x z a" where y (axis) is continous, x (axis) z/a (legend) are discrete, during plot x z a ->x z(za combined)
 #' @param line.size  the thickness of line, only applicable when there is z provided
 #' @param error.size  the thickness of error bar line
@@ -3087,6 +3089,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' plot count data
 #' @description plot count data, eg, ez.countplot(iris, 'Species'). See also \code{\link{ez.piechart}} \code{\link{ez.hist}}
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' \cr         if it is already summary data, use mutate(tidyr::uncount(counter), value = 1) to turn into long format
 #' @param cmd like "x", c("x1", "x2", "x3"), "x|z", "x|z a" where x z a are all discrete.
 #' @param position so far can only be "stack", "fill", "both". ('dodge' not supported yet)
 #' @param n.size set to 0 to hide count/percentage
@@ -3104,6 +3107,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param legend.box  box of legend, T or F
 #' @param legend.direction  horizontal or vertical
 #' @param legend.size c(0,10) the first number 0 controls the legend title, 0=hide; the second number controls legend.key.size, legend.text
+#' @param xsize  size of x text
 #' @param xangle  angle of x text 0
 #' @param vjust  vjust of x text NULL
 #' @param hjust  hjust of x text NULL
@@ -3111,7 +3115,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @return a ggplot object (+theme_apa() to get apa format plot), +scale_y_continuous(limits=c(-5,8),breaks=seq(-5,8,by=2),oob=scales::rescale_none)
 #' \cr see http://stackoverflow.com/a/31437048/2292993 for discussion
 #' @export
-ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,title.size=20,n.size=5.5,n.angle=0,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
+ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("Zhu"),alpha=1,title.size=20,n.size=5.5,n.angle=0,n.type=3,width=0.7,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),xsize=16,xangle=0,vjust=NULL,hjust=NULL,facet='cols',theme.apa=TRUE) {
     df.bak=df
     if (position=='both') {
         p1=ez.countplot(df,cmd,'stack',color, colors, alpha, title.size, n.size, n.angle, n.type, width, ylab, xlab, zlab, legend.position, legend.direction, legend.box, legend.size, xangle, vjust, hjust, facet, theme.apa)
@@ -3174,11 +3178,11 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
-                         theme(axis.text.x=element_text(angle=%f %s %s)) +
+                         theme(axis.text.x=element_text(size=%f, angle=%f %s %s)) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                          geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
-                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
+                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xsize, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
             )
         } else if (position=='fill') {
             if (is.null(ylab)) ylab='Percentage'
@@ -3189,12 +3193,12 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
                          ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
-                         theme(axis.text.x=element_text(angle=%f %s %s)) +
+                         theme(axis.text.x=element_text(size=%f, angle=%f %s %s)) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                          geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
                          scale_y_continuous(labels=scales::percent)+coord_flip()'
-                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
+                         , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xsize, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
             )
         }
         gghistory=paste(gghistory,
@@ -3247,11 +3251,11 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
-                             theme(axis.text.x=element_text(angle=%f %s %s)) +
+                             theme(axis.text.x=element_text(size=%f, angle=%f %s %s)) +
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
-                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
+                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xsize, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
                 )
             } else if (position=='fill') {
                 if (is.null(ylab)) ylab='Percentage'
@@ -3261,12 +3265,12 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                              %s + %s %s %s %s %s
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
-                             theme(axis.text.x=element_text(angle=%f %s %s)) +
+                             theme(axis.text.x=element_text(size=%f, angle=%f %s %s)) +
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
                              scale_y_continuous(labels=scales::percent)+coord_flip()'
-                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
+                             , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, xsize, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
                 )
             }
             gghistory=paste(gghistory,
@@ -3291,11 +3295,11 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
-                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
+                                 theme(axis.text.x=element_text(size=%f, angle=%f %s %s)) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))+%s'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xsize, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 } else if (position=='fill') {
                     if (is.null(ylab)) ylab='Percentage'
@@ -3305,12 +3309,12 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
-                                 theme(axis.text.x=element_text(angle=%f %s %s)) +
+                                 theme(axis.text.x=element_text(size=%f, angle=%f %s %s)) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+%s+
                                  scale_y_continuous(labels=scales::percent)+coord_flip()'
-                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
+                                 , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, xsize, xangle, vjust, hjust, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 }
             gghistory=paste(gghistory,
@@ -3333,6 +3337,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
 #' pie chart
 #' @description pie chart
 #' @param df data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+#' \cr         if it is already summary data, use mutate(tidyr::uncount(counter), value = 1) to turn into long format
 #' @param cmd a single col name
 #' @param start   offset of starting point from 12 o'clock in radians eg, pi/3
 #' @param direction   1, clockwise; -1, anticlockwise

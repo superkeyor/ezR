@@ -62,7 +62,8 @@ ez.barplot(
 )
 }
 \arguments{
-\item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)}
+\item{df}{data frame in long format (but be careful that standard error might be inaccurate depending on grouping in the long format)
+\cr         if it is already summary data, use mutate(tidyr::uncount(counter), value = 1) to turn into long format}
 
 \item{cmd}{like "y|x, y|x z, y|x z a", where y (axis) is continous, x (axis) z/a (legend) are discrete; during plot x z a ->x za(combined)
 \cr or "y|x+covar1+covar2+..." (currently only supports anovas1b with/without covar)}
