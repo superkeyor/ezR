@@ -3174,7 +3174,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                         geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())'
+                         geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
                          , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
             )
         } else if (position=='fill') {
@@ -3189,7 +3189,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                          geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
-                         scale_y_continuous(labels=scales::percent) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + coord_flip()'
+                         scale_y_continuous(labels=scales::percent) + coord_flip()'
                          , 'theKey','theValue', position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
             )
         }
@@ -3245,7 +3245,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              ggtitle(paste0("N = ",nrow(df),", p = %s (Fisher)")) +
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                             geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos)) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())'
+                             geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))'
                              , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack
                 )
             } else if (position=='fill') {
@@ -3259,7 +3259,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                              theme(legend.direction="%s") +
                              theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                              geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+
-                             scale_y_continuous(labels=scales::percent) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + coord_flip()'
+                             scale_y_continuous(labels=scales::percent) + coord_flip()'
                              , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, pvalue, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill
                 )
             }
@@ -3289,7 +3289,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
-                                 geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))+%s + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())'
+                                 geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=pct.pos))+%s'
                                  , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.stack, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 } else if (position=='fill') {
@@ -3304,7 +3304,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+%s+
-                                 scale_y_continuous(labels=scales::percent) + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + coord_flip()'
+                                 scale_y_continuous(labels=scales::percent) + coord_flip()'
                                  , xx, zz, position, alpha, width, color, ylab, xlab, zlab, legend.position, legend.box, title.size, legend.direction, legend.size[1], legend.size[2], legend.size[2], n.size, n.angle, n.type.fill, sprintf(ifelse(facet=="cols","facet_grid(.~%s)",ifelse(facet=="rows","facet_grid(%s~.)","facet_wrap(~%s)")),aa)
                     )
                 }
@@ -3319,6 +3319,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
         }
     }
     if (theme.apa) tt = paste0(tt,'+theme_apa(title.size=title.size)')
+    # hide axis (unnecessary for countplot) after applying theme.apa
     if (position=="stack") tt = paste0(tt+'+theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())')
     if (position=='fill') tt = paste0(tt+'+theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())')
     eval(parse(text = tt))
