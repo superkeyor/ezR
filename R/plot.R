@@ -3285,6 +3285,8 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                 zz = zz[1]
                 df=ez.dropna(df,c(xx,zz,aa))
                 # grouping by aa (facet) then xx, notice group_by_(c(aa,xx)) is equal to group_by_(aa). count_(xx,zz,aa) gives error!
+                # !! is used to unquote this symbol within the count() function, allowing dplyr to interpret it as a column name.
+                # sym() takes string as input and turn them into symbol.
                 dfdf = df %>% dplyr::count(!!rlang::sym(xx),!!rlang::sym(zz),!!rlang::sym(aa)) %>% dplyr::group_by(!!rlang::sym(aa),!!rlang::sym(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
                 if (position=='stack') {
                     if (is.null(ylab)) ylab='Count'
