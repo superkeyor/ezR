@@ -3151,7 +3151,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
         xx = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", xx, perl=TRUE)
         xx = strsplit(xx,"/",fixed=TRUE)[[1]]
         df = ez.dropna(df, xx)
-        dfdf = df %>% tidyr::gather_("theKey","theValue",xx)
+        dfdf = df %>% tidyr::gather(!!"theKey",!!"theValue",!!rlang::sym(xx))
         # keep factor order
         if (position=="fill") {
             dfdf = ez.factorder(dfdf,"theKey",ord=rev(xx))
@@ -3164,7 +3164,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx[1]]]))
         }
         # first compute pos
-        dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
+        dfdf = dfdf %>% dplyr::count(!!"theKey",!!"theValue") %>% dplyr::group_by(!!"theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
         # then compute n/pct
         dfdf = dfdf %>% dplyr::mutate(pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
         if (position=='stack') {
@@ -3176,7 +3176,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                          geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
-                         ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
+                         ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
@@ -3191,7 +3191,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
             pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                          geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                          %s + %s %s %s %s %s
-                         ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
+                         ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
                          theme(axis.text.x=element_text(angle=%f %s %s)) +
                          theme(legend.direction="%s") +
                          theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
@@ -3203,7 +3203,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
         gghistory=paste(gghistory,
                  sprintf('xx=c(%s)',ez.vv(xx,print2scr=FALSE)),
                  sprintf('df=ez.dropna(df,xx)'),
-                 'dfdf = df %>% tidyr::gather_("theKey","theValue",xx)',
+                 'dfdf = df %>% tidyr::gather(theKey,theValue,xx)',
                  '# keep factor order
                  if (position=="fill") {
                      dfdf = ez.factorder(dfdf,"theKey",ord=rev(xx))
@@ -3216,9 +3216,9 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                      dfdf = ez.factorder(dfdf,"theValue",ord=levels(df[[xx[1]]]))
                  }
                  # first compute pos
-                 dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
+                 dfdf = dfdf %>% dplyr::count(theKey,theValue) %>% dplyr::group_by(theKey) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct)
                  # then compute n/pct
-                 dfdf = dfdf %>% dplyr::count_(c("theKey","theValue")) %>% dplyr::group_by_("theKey") %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
+                 dfdf = dfdf %>% dplyr::count(theKey,theValue) %>% dplyr::group_by(theKey) %>% dplyr::mutate(pct=n/sum(dfdf[["n"]]),pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
                  tt,sep='\n')
     # xx|zz or xx|zz aa
     } else {
@@ -3241,7 +3241,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                         pvalue = sprintf("%.2f", pvalue)
                     }
             }, error = function(e) {})
-            dfdf = df %>% dplyr::count(c(!!as.name(xx),!!as.name(zz))) %>% dplyr::group_by(!!as.name(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+            dfdf = df %>% dplyr::count(!!rlang::sym(xx),!!rlang::sym(zz)) %>% dplyr::group_by(!!rlang::sym(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
             if (position=='stack') {
                 if (is.null(ylab)) ylab='Count'
                 ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
@@ -3276,7 +3276,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                      sprintf('df=ez.dropna(df,c("%s","%s"))',xx,zz),
                      sprintf('xx="%s"',xx),
                      sprintf('zz="%s"',zz),
-                     'dfdf = df %>% dplyr::count_(c(xx,zz)) %>% dplyr::group_by_(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
+                     'dfdf = df %>% dplyr::count(xx,zz) %>% dplyr::group_by(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
                      tt,sep='\n')
         # xx|zz aa
         } else {
@@ -3285,7 +3285,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                 zz = zz[1]
                 df=ez.dropna(df,c(xx,zz,aa))
                 # grouping by aa (facet) then xx, notice group_by_(c(aa,xx)) is equal to group_by_(aa). count_(xx,zz,aa) gives error!
-                dfdf = df %>% dplyr::count_(c(xx,zz,aa)) %>% dplyr::group_by_(aa,xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+                dfdf = df %>% dplyr::count(!!rlang::sym(xx),!!rlang::sym(zz),!!rlang::sym(aa)) %>% dplyr::group_by(!!rlang::sym(aa),!!rlang::sym(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
                 if (position=='stack') {
                     if (is.null(ylab)) ylab='Count'
                     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
@@ -3293,7 +3293,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                     pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                                  geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
-                                 ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
+                                 ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
@@ -3307,7 +3307,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                     pp = ggplot2::ggplot(dfdf, aes(x=%s,n,fill=%s)) +
                                  geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
-                                 ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) + 
+                                 ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
                                  theme(axis.text.x=element_text(angle=%f %s %s)) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
@@ -3321,7 +3321,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                      sprintf('xx="%s"',xx),
                      sprintf('zz="%s"',zz),
                      sprintf('aa="%s"',aa),
-                     'dfdf = df %>% dplyr::count_(c(xx,zz,aa)) %>% dplyr::group_by_(aa,xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
+                     'dfdf = df %>% dplyr::count(xx,zz,aa) %>% dplyr::group_by(aa,xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
                      tt,sep='\n')
             }
         }
@@ -3384,7 +3384,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palett
     # note that xylab internally twised because of coord_polar()
     if (ylab=='') ylab=xx
     df = ez.dropna(df, xx)
-    dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
+    dfdf = df %>% dplyr::count(!!rlang::sym(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))
     # https://github.com/tidyverse/ggplot2/issues/2058
     # https://github.com/tidyverse/ggplot2/issues/2242
     # axis.text seems to have a bug. so always use:
@@ -3412,7 +3412,7 @@ ez.piechart = function(df,cmd,start=0,direction=1,color='color',colors=ez.palett
     gghistory=paste(gghistory,
          sprintf('df=ez.dropna(df,c("%s"))',xx),
          sprintf('xx="%s"',xx),
-         'dfdf = df %>% dplyr::count_(c(xx)) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
+         'dfdf = df %>% dplyr::count(xx) %>% dplyr::mutate(pct=n/sum(n),pct.pos=cumsum(n)-0.5*n,n.pos=cumsum(pct)-0.5*pct,pct.str=sprintf("%0.1f%%",pct*100),n.str=sprintf("(%d)",n),n.pct.str=sprintf("%d (%0.1f%%)",n,pct*100),pct.n.str=sprintf("%0.1f%% (%d)",pct*100,n))',
          tt,sep='\n')
     if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
