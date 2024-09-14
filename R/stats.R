@@ -588,8 +588,8 @@ ez.vi = function(x,printn=35,plot=TRUE,...) {
             hist(vv, col='#56B4E9',main=NULL,xlab=NULL)
             abline(v = mean(vv,na.rm=T), col = "#E69F00", lty = 3, lwd = 2)
             }, error=function(e){
-                ez.print('boxcox transformation could not be performed.')
-                ez.print('Please use ez.boxcox for more robust transformation.')
+                ez.pprint('boxcox transformation could not be performed.','red')
+                ez.pprint('Please use ez.boxcox for more robust transformation.','red')
             })
         }
     }
