@@ -2030,6 +2030,7 @@ ez.copyattr = function(x, col=NULL, attrs=c('label', 'labels'), ...) {
 #' @param col evaluated by \code{\link{ez.selcol}}(x,col). Or, NULL=all cols.
 #' @param attrs a list of list ($sex $sex$label $sex$labels for df) or list ($label $labels for vector). Works fine even if the list or list of list is empty, or if list has $sex $race but df has 'sex', no 'race'
 #' \cr when only two parameters passed in, will be interpreted as (x,attrs) with col=NULL
+#' \cr e.g., attrs=list(sex=list(labels=c("male"=1,"female"=2))
 #' @return returns a new data frame or vector
 #' @export
 ez.pasteattr = function(x, col=NULL, attrs=NULL, ...) {
