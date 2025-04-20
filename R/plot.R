@@ -2898,7 +2898,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         # http://stackoverflow.com/a/13451587/2292993
         lmrp = function(m) {
             nvalue = m$df.residual + 2
-            rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
+            rvalue = sign(coef(m)[2])[[1]]*sqrt(summary(m)$r.squared)
             rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
             pvalue = summary(m)$coefficients[2,4]
             if (pvalue<.001) {
