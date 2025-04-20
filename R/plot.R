@@ -3053,7 +3053,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                   %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,point.color,point.shape,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,'theme(legend.position="none")',legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,point.alpha,point.size,point.color,point.shape,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,'theme(legend.position="none")+',legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
