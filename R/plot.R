@@ -2953,7 +2953,6 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         }
         ####################################################### subfunction /
         '
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     gghistory=paste(gghistory,tt,sep='\n')
 
@@ -3306,7 +3305,7 @@ ez.countplot = function(df,cmd,position='both',color='color',colors=ez.palette("
                                  geom_bar(position=position_%s(reverse=TRUE),stat="identity",alpha=%f,width=%f) +
                                  %s + %s %s %s %s %s
                                  ggtitle(paste0("N = ",nrow(df))) + theme(plot.title = element_text(size=%f,face="bold")) +
-                                 theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) + 
+                                 theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
                                  theme(legend.direction="%s") +
                                  theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))+
                                  geom_text(color="white", size=%f, angle=%f, aes(label=%s,y=n.pos))+%s+
