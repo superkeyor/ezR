@@ -2868,7 +2868,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
         pplist[[i]] = ez.scatterplot2(df = dftmp,
             cmd=cmd, line.color=colors[i], point.color=colors[i], point.shape=shapes[i],
-            rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, point.jitter.x=point.jitter.x, point.jitter.y=point.jitter.y, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse, theme.apa=theme.apa)
+            rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, point.jitter.x=point.jitter.x, point.jitter.y=point.jitter.y, rug.size=rug.size, ylab=ylab, xlab=xlab, xlimits=xlimits, ylimits=ylimits, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse, theme.apa=theme.apa)
     }
     ez.pprint('an invisible plotlist returned, call ggmultiplot(plotlist)')
     return(invisible(pplist))
@@ -2890,6 +2890,8 @@ if (grepl("|||",cmd,fixed=TRUE)) {
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    xlimits.original=xlimits
+    ylimits.original=ylimits
     xlimits = ifelse( is.null(xlimits),'',sprintf('scale_x_continuous(limits=%s)+', ez.vc(xlimits)) )
     ylimits = ifelse( is.null(ylimits),'',sprintf('scale_y_continuous(limits=%s)+', ez.vc(ylimits)) )
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
@@ -3014,8 +3016,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
       df=ez.dropna(df,c(yy,xx,zz))
       df=ez.2factor(df,zz)
 
-      rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
-      rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
+      rp.x = ifelse( is.null(xlimits.original), min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x, xlimits.original[1] + (xlimits.original[2]-xlimits.original[1])*rp.x)
+      rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] + (ylimits.original[2]-ylimits.original[1])*rp.y)
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
@@ -3042,8 +3044,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
       yy = trimws(cmd[1])
       xx = trimws(cmd[2])
       df=ez.dropna(df,c(yy,xx))
-      rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
-      rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
+      rp.x = ifelse( is.null(xlimits.original), min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x, xlimits.original[1] + (xlimits.original[2]-xlimits.original[1])*rp.x)
+      rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] + (ylimits.original[2]-ylimits.original[1])*rp.y)
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
@@ -3069,8 +3071,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
           zz = trimws(cmd[3])
           df=ez.dropna(df,c(yy,xx,zz))
           df=ez.2factor(df,zz)
-          rp.x = min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x
-          rp.y = max(df[[yy]]) + (min(df[[yy]])-max(df[[yy]]))*rp.y
+          rp.x = ifelse( is.null(xlimits.original), min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x, xlimits.original[1] + (xlimits.original[2]-xlimits.original[1])*rp.x)
+          rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] + (ylimits.original[2]-ylimits.original[1])*rp.y)
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
           se = ifelse(se,'TRUE','FALSE')
           rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
