@@ -3017,7 +3017,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
       df=ez.2factor(df,zz)
 
       rp.x = ifelse( is.null(xlimits.original), min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x, xlimits.original[1] + (xlimits.original[2]-xlimits.original[1])*rp.x)
-      rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] + (ylimits.original[2]-ylimits.original[1])*rp.y)
+      rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] - (ylimits.original[2]-ylimits.original[1])*rp.y)
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
@@ -3045,7 +3045,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
       xx = trimws(cmd[2])
       df=ez.dropna(df,c(yy,xx))
       rp.x = ifelse( is.null(xlimits.original), min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x, xlimits.original[1] + (xlimits.original[2]-xlimits.original[1])*rp.x)
-      rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] + (ylimits.original[2]-ylimits.original[1])*rp.y)
+      rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] - (ylimits.original[2]-ylimits.original[1])*rp.y)
       # http://stackoverflow.com/a/27959418/2292993
       rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp(lm(%s ~ %s, df))), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx),'')
       se = ifelse(se,'TRUE','FALSE')
@@ -3072,7 +3072,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
           df=ez.dropna(df,c(yy,xx,zz))
           df=ez.2factor(df,zz)
           rp.x = ifelse( is.null(xlimits.original), min(df[[xx]]) + (max(df[[xx]])-min(df[[xx]]))*rp.x, xlimits.original[1] + (xlimits.original[2]-xlimits.original[1])*rp.x)
-          rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] + (ylimits.original[2]-ylimits.original[1])*rp.y)
+          rp.y = ifelse( is.null(ylimits.original), min(df[[yy]]) + (max(df[[yy]])-min(df[[yy]]))*rp.y, ylimits.original[1] - (ylimits.original[2]-ylimits.original[1])*rp.y)
           rp = ifelse(rp,sprintf('geom_label(family = RMN,size=%f,aes(x = %f, y = %f, label = lmrp2("%s","%s","%s",df)), parse = TRUE)+',rp.size,rp.x,rp.y,yy,xx,zz),'')
           se = ifelse(se,'TRUE','FALSE')
           rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
