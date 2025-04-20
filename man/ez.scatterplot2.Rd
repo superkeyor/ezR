@@ -20,6 +20,7 @@ ez.scatterplot2(
   point.jitter.x = 0,
   point.jitter.y = 0,
   rug.size = 0.25,
+  title = NULL,
   ylab = NULL,
   xlab = NULL,
   xlimits = NULL,

@@ -2853,7 +2853,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,point.jitter.x=0,point.jitter.y=0,rug.size=0.25,ylab=NULL,xlab=NULL,xlimits=NULL,ylimits=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
+ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,point.jitter.x=0,point.jitter.y=0,rug.size=0.25,title=NULL,ylab=NULL,xlab=NULL,xlimits=NULL,ylimits=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
 ####************************************************************************************************
                                      ####*recursive call*####
 ####************************************************************************************************
@@ -3092,6 +3092,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                    tt,sep='\n')
       }
     }
+    if (!is.null(title)) tt = paste0(tt,sprintf('+labs(title=%s)',title))
     if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
