@@ -3019,7 +3019,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
       ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
       tt = sprintf('
                   pp=ggplot(df, aes(x=%s, y=%s)) +
-                  geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),point.jitter.x=%f,point.jitter.y=%f) + %s
+                  geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),position=position_jitter(width=%f,height=%f)) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                   %s %s %s %s
@@ -3048,7 +3048,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
       # legend is ignored, but because lab might be empty, better to keep the legend commands here
       tt = sprintf('
                   pp=ggplot(df, aes(x=%s, y=%s)) +
-                  geom_point(alpha=%f,size=%f,color="%s",shape=%d,point.jitter.x=%f,point.jitter.y=%f) + %s
+                  geom_point(alpha=%f,size=%f,color="%s",shape=%d,position=position_jitter(width=%f,height=%f)) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   %s %s %s
                   theme(legend.direction="%s") +
@@ -3073,7 +3073,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
           ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
           tt = sprintf('
                       pp=ggplot(df, aes(x=%s, y=%s)) +
-                      geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),point.jitter.x=%f,point.jitter.y=%f) + %s
+                      geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),position=position_jitter(width=%f,height=%f)) + %s
                       geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
                       scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                       %s %s %s %s
