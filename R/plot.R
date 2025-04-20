@@ -3092,7 +3092,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                    tt,sep='\n')
       }
     }
-    if (!is.null(title)) tt = paste0(tt,sprintf('+labs(title=%s)',title))
+    if (!is.null(title)) tt = paste0(tt,sprintf('+labs(title="%s")',title))
     if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
