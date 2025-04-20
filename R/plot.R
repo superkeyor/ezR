@@ -2912,14 +2912,15 @@ if (grepl("|||",cmd,fixed=TRUE)) {
             rvalue = sign(coef(m)[2])[[1]]*sqrt(summary(m)$r.squared)
             rvalue = ifelse(abs(rvalue)>=.005, format_no_leading_zero(sprintf("%.2f",rvalue)), format_no_leading_zero(sprintf("%.2e", rvalue)))
             pvalue = summary(m)$coefficients[2,4]
-            # if (pvalue<.001) {
-            #     pvalue = sprintf("%.2e", pvalue)
-            # } else if (pvalue<.01) {
-            #     pvalue = sprintf("%.3f", pvalue)
-            # } else {
-            #     pvalue = sprintf("%.2f", pvalue)
-            # }
-            pvalue=ez.p.apa(pvalue)
+            if (pvalue<.001) {
+                pvalue = sprintf("%.2e", pvalue)
+            } else if (pvalue<.01) {
+                pvalue = sprintf("%.3f", pvalue)
+            } else {
+                pvalue = sprintf("%.2f", pvalue)
+            }
+            pvalue=format_no_leading_zero(pvalue)
+            # pvalue=ez.p.apa(pvalue,prefix=1)
 
             eq <- substitute(italic(r)~"="~rvalue*","~italic(n)~"="~nvalue*","~italic(p)~"="~pvalue,list(rvalue = rvalue,nvalue = nvalue,pvalue = pvalue))
             as.character(as.expression(eq));
@@ -2947,14 +2948,15 @@ if (grepl("|||",cmd,fixed=TRUE)) {
             # interaction p value
             mm = eval(parse(text=sprintf("lm(%s ~ %s*%s, df)",y,x,z)))
             pvalue = summary(mm)$coefficients[4,4]
-            # if (pvalue<.001) {
-            #     pvalue = sprintf("%.2e", pvalue)
-            # } else if (pvalue<.01) {
-            #     pvalue = sprintf("%.3f", pvalue)
-            # } else {
-            #     pvalue = sprintf("%.2f", pvalue)
-            # }
-            pvalue=ez.p.apa(pvalue)
+            if (pvalue<.001) {
+                pvalue = sprintf("%.2e", pvalue)
+            } else if (pvalue<.01) {
+                pvalue = sprintf("%.3f", pvalue)
+            } else {
+                pvalue = sprintf("%.2f", pvalue)
+            }
+            pvalue=format_no_leading_zero(pvalue)
+            # pvalue=ez.p.apa(pvalue,prefix=1)
 
             eq <- substitute(italic(r[levs])~"="~rvalue*","~italic(p)~"="~pvalue,list(levs=paste0("(", paste(names(rvalue),collapse=", "), ")"),rvalue = paste0("(", paste(rvalue,collapse=", "), ")"),pvalue = pvalue))
             as.character(as.expression(eq));
