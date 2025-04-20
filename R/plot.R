@@ -3086,7 +3086,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
                    tt,sep='\n')
       }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')  # somehow not working, likely the ggplot commands were not written correctly, conflicting with theme_apa()??
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
