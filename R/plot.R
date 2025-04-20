@@ -2864,7 +2864,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
         pplist[[i]] = ez.scatterplot2(df = dftmp,
             cmd=cmd, line.color=colors[i], point.color=colors[i], point.shape=shapes[i],
-            rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse)
+            rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse, theme.apa=theme.apa)
     }
     ez.pprint('an invisible plotlist returned, call ggmultiplot(plotlist)')
     return(invisible(pplist))
@@ -2953,6 +2953,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         }
         ####################################################### subfunction /
         '
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')
     eval(parse(text = tt))
     gghistory=paste(gghistory,tt,sep='\n')
 
