@@ -2897,7 +2897,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         # http://stackoverflow.com/a/7549819/2292993
         # http://stackoverflow.com/a/13451587/2292993
         format_no_leading_zero <- function(formatted) {
-          sub("^([-]?)0\\.", "\\1.", formatted)
+          sub("^([-]?)0\\\\.", "\\\\1.", formatted)
         }
         lmrp = function(m) {
             nvalue = m$df.residual + 2
