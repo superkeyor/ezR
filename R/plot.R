@@ -2896,10 +2896,13 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         # https://gist.github.com/kdauria/524eade46135f6348140
         # http://stackoverflow.com/a/7549819/2292993
         # http://stackoverflow.com/a/13451587/2292993
+        format_no_leading_zero <- function(formatted) {
+          sub("^([-]?)0\\.", "\\1.", formatted)
+        }
         lmrp = function(m) {
             nvalue = m$df.residual + 2
             rvalue = sign(coef(m)[2])[[1]]*sqrt(summary(m)$r.squared)
-            rvalue = ifelse(abs(rvalue)>=.005, sprintf("%.2f",rvalue), sprintf("%.2e", rvalue))
+            rvalue = ifelse(abs(rvalue)>=.005, format_no_leading_zero(sprintf("%.2f",rvalue)), format_no_leading_zero(sprintf("%.2e", rvalue)))
             pvalue = summary(m)$coefficients[2,4]
             # if (pvalue<.001) {
             #     pvalue = sprintf("%.2e", pvalue)
@@ -2918,7 +2921,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         lmrp2 = function(y,x,z,df) {
             m = eval(parse(text=sprintf("lme4::lmList(%s ~ %s|%s, df)",y,x,z)))
             rvalue = sign(coef(m)[2])*sqrt(summary(m)$r.squared)
-            rvalue = apply(rvalue,1,function(rval) ifelse(abs(rval)>=.005, sprintf("%.2f",rval), sprintf("%.2e", rval)))
+            rvalue = apply( rvalue,1,function(rval) ifelse( abs(rval)>=.005, format_no_leading_zero(sprintf("%.2f",rval)), format_no_leading_zero(sprintf("%.2e", rval)) ) )
 
             # separate p values
             # pvalue = summary(m)$coefficients[,4,2]
