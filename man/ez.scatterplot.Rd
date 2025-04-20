@@ -115,7 +115,7 @@ ez.scatterplot(
 To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))}
 }
 \value{
-a lattice plot, can use update() to change the plot
+a lattice plot, can use update() to change the plot, e.g., pp=update(pp,scales=list(y=list(at=ybreaks)))
 }
 \description{
 scatter plot with lattice

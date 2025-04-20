@@ -22,6 +22,8 @@ ez.scatterplot2(
   rug.size = 0.25,
   ylab = NULL,
   xlab = NULL,
+  xlimits = NULL,
+  ylimits = NULL,
   zlab = NULL,
   legend.position = "top",
   legend.direction = "horizontal",
@@ -65,6 +67,10 @@ ez.scatterplot2(
 \item{ylab}{y label NULL}
 
 \item{xlab}{x label NULL}
+
+\item{xlimits}{e.g., c(0,1)}
+
+\item{ylimits}{e.g., c(0,1)}
 
 \item{zlab}{z/fill/legend label, only applicable when there is z provided NULL}
 

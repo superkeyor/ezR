@@ -2376,7 +2376,7 @@ ez.wherena = function(df,id=NULL,color="red",angle=270,basesize=9,xsize=1,ysize=
 #' \cr layout=c(col,row)--a bit weird. lattice orders panels from the bottom up.
 #' To get what you want either use as.table = TRUE or reverse the ordering in index.cond. eg, as.table=F, index.cond=list(c(3,2,1))
 #' @note specify auto through param colors, shapes
-#' @return a lattice plot, can use update() to change the plot
+#' @return a lattice plot, can use update() to change the plot, e.g., pp=update(pp,scales=list(y=list(at=ybreaks)))
 #' @export
 ez.scatterplot = function(df,cmd,lmline=TRUE,loess=FALSE,model=c('lm', 'lmrob', 'lmRob', 'rlm'),type=c('spartial','partial'),scale=FALSE,rp=TRUE,rp.x=0.025,rp.y=0.05,se=TRUE,layout=NULL,
     rp.size=14,line.width=3,point.size=14,x.axis.size=16,y.axis.size=16,x.lab.size=18,y.lab.size=18,title.size=20,legend.size=c(0,14),
@@ -2839,6 +2839,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param rp.y  r p values y position (0-1, relative to top left, big-->bottom), ignored if rp=FALSE
 #' @param ylab  y label NULL
 #' @param xlab  x label NULL
+#' @param xlimits e.g., c(0,1)
+#' @param ylimits e.g., c(0,1)
 #' @param zlab  z/fill/legend label, only applicable when there is z provided NULL
 #' @param legend.position  legend position 'top', 'bottom', 'left', 'right', 'none', c(x,y,two-element numeric vector)
 #' \cr         c(0,0) corresponds to the "bottom left" and c(1,1) corresponds to the "top right" position.
@@ -2851,7 +2853,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,point.jitter.x=0,point.jitter.y=0,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
+ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,point.jitter.x=0,point.jitter.y=0,rug.size=0.25,ylab=NULL,xlab=NULL,xlimits=NULL,ylimits=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
 ####************************************************************************************************
                                      ####*recursive call*####
 ####************************************************************************************************
@@ -2888,6 +2890,8 @@ if (grepl("|||",cmd,fixed=TRUE)) {
 
     ylab = ifelse(is.null(ylab),'',sprintf('ylab("%s")+',ylab))
     xlab = ifelse(is.null(xlab),'',sprintf('xlab("%s")+',xlab))
+    xlimits = ifelse( is.null(xlimits),'',sprintf('scale_x_continuous(limits=%s)+', ez.vc(xlimits)) )
+    ylimits = ifelse( is.null(ylimits),'',sprintf('scale_y_continuous(limits=%s)+', ez.vc(ylimits)) )
     if ((!is.null(zlab)) && legend.size[1]==0) {legend.size[1]=10}  # change default legend title size 0
     zlab = ifelse(is.null(zlab),'',sprintf('labs(fill="%s")+',zlab))
     legend.position = ifelse(is.character(legend.position), sprintf('theme(legend.position="%s")+',legend.position), sprintf('theme(legend.position=c(%s))+',paste(legend.position,collapse=',')))
@@ -3018,14 +3022,14 @@ if (grepl("+",cmd,fixed=TRUE)) {
       rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
       ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
       tt = sprintf('
-                  pp=ggplot(df, aes(x=%s, y=%s)) +
+                  pp=ggplot(df, aes(x=%s, y=%s)) + %s %s
                   geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),position=position_jitter(width=%f,height=%f)) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                   %s %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,zz,zz,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,xlimits,ylimits,point.alpha,point.size,zz,zz,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
@@ -3047,13 +3051,13 @@ if (grepl("+",cmd,fixed=TRUE)) {
       ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm") +'),'')
       # legend is ignored, but because lab might be empty, better to keep the legend commands here
       tt = sprintf('
-                  pp=ggplot(df, aes(x=%s, y=%s)) +
+                  pp=ggplot(df, aes(x=%s, y=%s)) + %s %s
                   geom_point(alpha=%f,size=%f,color="%s",shape=%d,position=position_jitter(width=%f,height=%f)) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,point.color,point.shape,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,'theme(legend.position="none")+',legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,xlimits,ylimits,point.alpha,point.size,point.color,point.shape,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,'theme(legend.position="none")+',legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
@@ -3072,14 +3076,14 @@ if (grepl("+",cmd,fixed=TRUE)) {
           rug = ifelse(rug,sprintf('geom_rug(sides ="tr",position="jitter",size=%f,aes(color=%s)) +',rug.size,zz),'')
           ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
           tt = sprintf('
-                      pp=ggplot(df, aes(x=%s, y=%s)) +
+                      pp=ggplot(df, aes(x=%s, y=%s)) + %s %s
                       geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),position=position_jitter(width=%f,height=%f)) + %s
                       geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
                       scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                       %s %s %s %s
                       theme(legend.direction="%s") +
                       theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                      ,xx,yy,point.alpha,point.size,zz,zz,point.jitter.x,point.jitter.y,rp,se,zz,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                      ,xx,yy,xlimits,ylimits,point.alpha,point.size,zz,zz,point.jitter.x,point.jitter.y,rp,se,zz,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
           )
           gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
