@@ -17,6 +17,8 @@ ez.scatterplot2(
   point.shape = 16,
   point.alpha = 0.95,
   point.size = 3,
+  point.jitter.x = 0,
+  point.jitter.y = 0,
   rug.size = 0.25,
   ylab = NULL,
   xlab = NULL,
@@ -53,6 +55,10 @@ ez.scatterplot2(
 \item{point.alpha}{if overplot for points, reduce alpha}
 
 \item{point.size}{if less point, increase size}
+
+\item{point.jitter.x}{0=no jitter,e.g., 0.1}
+
+\item{point.jitter.y}{0=no jitter,e.g., 0.1}
 
 \item{rug.size}{rug size}
 

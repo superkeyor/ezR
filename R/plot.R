@@ -2831,6 +2831,8 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param point.shape only applicable when y~x (ie, not auto varied with aes()). for auto ones, use scale_*_*
 #' @param point.alpha  if overplot for points, reduce alpha
 #' @param point.size if less point, increase size
+#' @param point.jitter.x 0=no jitter,e.g., 0.1
+#' @param point.jitter.y 0=no jitter,e.g., 0.1
 #' @param rug.size rug size
 #' @param rp.size  r p values font size, ignored if rp=FALSE
 #' @param rp.x  r p values x position (0-1, relative to top left, big-->right), ignored if rp=FALSE. Internally, convert to geom_label(x,y) where x,y refers to actually x,y axis value
@@ -2849,7 +2851,7 @@ if (grepl("+",cmd,fixed=TRUE)) {
 #' @param ellipse draw confidence ellipses, powered by stat_ellipse()
 #' @return a ggplot object (+theme_apa() to get apa format plot)
 #' @export
-ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
+ez.scatterplot2 = function(df,cmd,rp.size=5,rp.x=0.25,rp.y=0.99,colors=ez.palette("Zhu"),shapes=c(16,17,15,3,7,8),line.color='#BE1B22',point.color='#0086B8',point.shape=16,point.alpha=0.95,point.size=3,point.jitter.x=0,point.jitter.y=0,rug.size=0.25,ylab=NULL,xlab=NULL,zlab=NULL,legend.position='top',legend.direction="horizontal",legend.box=T,legend.size=c(0,10),rp=TRUE,se=TRUE,rug=FALSE,ellipse=FALSE,theme.apa=TRUE){
 ####************************************************************************************************
                                      ####*recursive call*####
 ####************************************************************************************************
@@ -2864,7 +2866,7 @@ if (grepl("|||",cmd,fixed=TRUE)) {
         dftmp = 'df %>% dplyr::filter({z} %in% "{lvls[i]}")' %>% ez.esp()
         pplist[[i]] = ez.scatterplot2(df = dftmp,
             cmd=cmd, line.color=colors[i], point.color=colors[i], point.shape=shapes[i],
-            rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse, theme.apa=theme.apa)
+            rp.size=rp.size, rp.x=rp.x, rp.y=rp.y, point.alpha=point.alpha, point.size=point.size, point.jitter.x=point.jitter.x, point.jitter.y=point.jitter.y, rug.size=rug.size, ylab=ylab, xlab=xlab, zlab=zlab, legend.position=legend.position, legend.direction=legend.direction, legend.box=legend.box, legend.size=legend.size, rp=rp, se=se, rug=rug, ellipse=ellipse, theme.apa=theme.apa)
     }
     ez.pprint('an invisible plotlist returned, call ggmultiplot(plotlist)')
     return(invisible(pplist))
@@ -3017,13 +3019,13 @@ if (grepl("+",cmd,fixed=TRUE)) {
       ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
       tt = sprintf('
                   pp=ggplot(df, aes(x=%s, y=%s)) +
-                  geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
+                  geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),point.jitter.x=%f,point.jitter.y=%f) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                   %s %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,zz,zz,rp,se,line.color,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,point.alpha,point.size,zz,zz,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
@@ -3046,12 +3048,12 @@ if (grepl("+",cmd,fixed=TRUE)) {
       # legend is ignored, but because lab might be empty, better to keep the legend commands here
       tt = sprintf('
                   pp=ggplot(df, aes(x=%s, y=%s)) +
-                  geom_point(alpha=%f,size=%f,color="%s",shape=%d) + %s
+                  geom_point(alpha=%f,size=%f,color="%s",shape=%d,point.jitter.x=%f,point.jitter.y=%f) + %s
                   geom_smooth(method=lm,se=%s,color="%s") + %s %s
                   %s %s %s
                   theme(legend.direction="%s") +
                   theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                  ,xx,yy,point.alpha,point.size,point.color,point.shape,rp,se,line.color,rug,ellipse,ylab,xlab,'theme(legend.position="none")',legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                  ,xx,yy,point.alpha,point.size,point.color,point.shape,point.jitter.x,point.jitter.y,rp,se,line.color,rug,ellipse,ylab,xlab,'theme(legend.position="none")',legend.direction,legend.size[1],legend.size[2],legend.size[2]
       )
       gghistory=paste(gghistory,
                sprintf('df=ez.dropna(df,c("%s","%s"))',yy,xx),
@@ -3071,20 +3073,20 @@ if (grepl("+",cmd,fixed=TRUE)) {
           ellipse = ifelse(ellipse,sprintf('stat_ellipse(type = "norm",aes(color=%s)) +',zz),'')
           tt = sprintf('
                       pp=ggplot(df, aes(x=%s, y=%s)) +
-                      geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s)) + %s
+                      geom_point(alpha=%f,size=%f,aes(color=%s,shape=%s),point.jitter.x=%f,point.jitter.y=%f) + %s
                       geom_smooth(method=lm,se=%s,aes(color=%s)) + %s %s
                       scale_color_manual(values=colors) + scale_shape_manual(values=shapes) +
                       %s %s %s %s
                       theme(legend.direction="%s") +
                       theme(legend.title=element_text(size=%f,face ="bold")) + theme(legend.key.size=unit(%f,"pt")) + theme(legend.text=element_text(size=%f))'
-                      ,xx,yy,point.alpha,point.size,zz,zz,rp,se,zz,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
+                      ,xx,yy,point.alpha,point.size,zz,zz,point.jitter.x,point.jitter.y,rp,se,zz,rug,ellipse,ylab,xlab,zlab,legend.position,legend.direction,legend.size[1],legend.size[2],legend.size[2]
           )
           gghistory=paste(gghistory,
                    sprintf('df=ez.dropna(df,c("%s","%s","%s"))',yy,xx,zz),
                    tt,sep='\n')
       }
     }
-    if (theme.apa) tt = paste0(tt,'+theme_apa()')
+    if (theme.apa) tt = paste0(tt,'+theme_apa()')  # somehow not working, likely the ggplot commands were not written correctly, conflicting with theme_apa()??
     eval(parse(text = tt))
     pp$gghistory=paste0(gghistory,'\nprint(pp)')
     pp$df=df.bak
