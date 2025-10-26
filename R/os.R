@@ -10,7 +10,7 @@
 #' @export
 ez.open <- function(filePath) {
     # https://stackoverflow.com/a/10969105/2292993
-    f=filePath
+    f=ez.fullpath(filePath)
     if (missing(f)) {
         stop('No file to open!')
     }
@@ -528,15 +528,25 @@ ez.abspath = normalizePath
 
 #' Returns the full path with resolving
 #' @description Returns the full path with resolving
-#' @note Resolve ~, %WinEnvVar%, * or ? wildcard, relative path \cr
-#' Mac: ~  --> /Users/jerry \cr
+#' @note Resolve ~, $HOME, %WinEnvVar%, * or ? wildcard, relative path \cr
+#' Mac: ~ $HOME  --> /Users/jerry \cr
 #' Windows: ~  --> C:\\Users\\Jerry\\Documents \cr
-#' Mac environment variable not supported (because it cannot load .bash_profile--check Sys.getenv()
-#' and tricker to parse a variable name in path)
+#' Mac environment variable not (fully) supported (because it cannot load .bash_profile--check Sys.getenv()
+#' for a list of available variables)
 #' @examples 
 #' ez.fp('%WINAPPS%/RStudio')
 #' @export
 ez.fullpath = function(path) {
+    # resolve $EnvVar (Unix-style)
+    matches_dollar = stringr::str_match_all(path, '\\$(\\w+)')
+    if (length(matches_dollar[[1]])) {
+        for (i in 1:nrow(matches_dollar[[1]])) {
+            match = matches_dollar[[1]][i, ]
+            path = gsub(match[1], Sys.getenv(match[2]), path, 
+                       ignore.case = FALSE, perl = FALSE, fixed = TRUE)
+        }
+    }
+
     # resolve %WinEnvVar%
     matches = stringr::str_match_all(path,'%(\\w+)%')
     # always return a list even if no match
@@ -545,10 +555,14 @@ ez.fullpath = function(path) {
             path=gsub(match[1],Sys.getenv(match[2]),path,ignore.case=FALSE,perl=FALSE,fixed=TRUE)
         }
     }
+
+    # resolve ~
     path = path.expand(path)
+
     # resolve wildcard
     has_wildcard = grepl("\\*|\\?", path)
     if (has_wildcard) {path = Sys.glob(path)}
+
     return(normalizePath(path))
 }
 

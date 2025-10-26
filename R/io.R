@@ -24,6 +24,7 @@
 #' read.csv(file, header = TRUE, sep = ",",
 #'          dec = ".", fill = TRUE, comment.char = "", ...)
 ez.readt = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
+    file=ez.fullpath(file)
     if (!is.null(skip.rows)) {
         tmp = suppressWarnings(readLines(file))
         skip.rows = sapply(skip.rows,function(skip, len) ifelse(skip>0,skip,len+skip+1), length(tmp))
@@ -60,6 +61,7 @@ ez.readt = function(file, ..., skip.rows=NULL, tolower=FALSE, makenames=TRUE){
 #' sep: not applicable when file is csv
 #' @export
 ez.savet = function(x, file="RData.csv", row.names=FALSE, col.names=TRUE, na = "", ...){
+    file=ez.fullpath(file)
     # hack to remove row.names, http://stackoverflow.com/questions/12117629/
     x = data.frame(x)
     if (row.names==FALSE) {rownames(x) <- NULL}
@@ -188,6 +190,7 @@ ez.writep = ez.savep
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
 ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, detectDates=TRUE, ...){
+    file=ez.fullpath(file)
     result = openxlsx::read.xlsx(file, sheet, detectDates=detectDates, ...)
     if (tolower) names(result) = tolower(names(result))
     # char to factor
@@ -222,6 +225,7 @@ ez.readx = function(file, sheet=1, tolower=FALSE, stringsAsFactors=FALSE, blanks
 #'          rows = NULL, cols = NULL, check.names = FALSE, namedRegion = NULL)
 #' @export
 ez.readxlist = function(file, print2scr=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
+    file=ez.fullpath(file)
     result = list()
     sheetnames = openxlsx::getSheetNames(file)
     for (i in 1:length(sheetnames)) {
@@ -251,6 +255,7 @@ ez.readxlist = function(file, print2scr=TRUE, tolower=FALSE, stringsAsFactors=FA
 #' @note wrapper of \code{\link{sjmisc_read_spss}}, uderlying of which it uses HAVEN v0.2.1/v1.1.0
 #' @export
 ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
+    path=ez.fullpath(path)
     # internal notes
     # foreign: variable.labels (as df attributes), value.labels
     # haven: label = variable label, labels = value labels
@@ -337,6 +342,7 @@ ez.reads = function(path, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors
 #' @note As of Nov, 2017, haven package eariler version is somewhat buggy, less powerful, but has been evolving a lot. I am not going to update haven right now. So stick with foreign. Potentially, one can also use SPSS R plugin to pass data between SPSS and R. see the "extra-variable" bug https://stackoverflow.com/a/7724879/2292993
 #' @export
 ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactors=FALSE, blanksAsNA=TRUE, na.strings=c('','.'), makenames=TRUE, ...){
+    file=ez.fullpath(file)
     # internal notes
     # foreign: variable.labels (as df attributes), value.labels
     # haven: label = variable label, labels = value labels
@@ -421,6 +427,7 @@ ez.reads2 = function(file, atm2fac=2, usrna=TRUE, tolower=FALSE, stringsAsFactor
 #          value labels will be converted to UTF-8.
 #' @export
 ez.saves = function(df, path, enc.to.utf8=FALSE){
+    path=ez.fullpath(path)
     # http://www-01.ibm.com/support/docview.wss?uid=swg21476969
     # the spss format using an older version format (likely from pspp)
     # For SPSS Version 12 and below, The maximum numeric width is 16 and the maximum string width is 255
@@ -504,6 +511,7 @@ ez.writes = ez.saves
 #'            asTable = c(TRUE, TRUE, FALSE), withFilter = c(TRUE, FALSE, FALSE))
 #' @export
 ez.savex = function(x, file="RData.xlsx", sheetName="Sheet1", withFilter=TRUE, rowNames=FALSE, colNames=TRUE, ...){
+    file=ez.fullpath(file)
     x = data.frame(x)
     # # openxlsx::write.xlsx does not support (ie, ignore) withFilter, call underlying openxlsx::writeData
     # openxlsx::write.xlsx(x=x, file=file, asTable=FALSE, sheetName=sheetName, ..., rowNames=rowNames, colNames=colNames)
@@ -524,6 +532,7 @@ ez.writex = ez.savex
 #' @return returns file path
 #' @export
 ez.savexlist = function(xlist, file='RData.xlsx', withFilter=TRUE, rowNames = TRUE, colNames = TRUE, ...) {
+    file=ez.fullpath(file)
     # https://github.com/awalker89/openxlsx/issues/111
     if (ez.getos()=='Linux') {Sys.setenv(R_ZIPCMD= "/usr/bin/zip")}
 
@@ -604,6 +613,7 @@ ez.writexlist = ez.savexlist
 #' @author Christoph Schmidt <christoph.schmidt@@med.uni-jena.de>
 # 17.12.15
 ez.savem <- function(file, vars){
+    file=ez.fullpath(file)
     fn=file
     if(!stringr::str_detect(fn, "^.*\\.mat$")){
         fn <- paste(fn, ".mat", sep = "")
@@ -684,6 +694,7 @@ ez.writem = ez.savem
 #' @description show the content of a file in read-only mode, wrapper of wrapper of \code{\link{file.show}}
 #' @export
 ez.type = function(path){
+    path=ez.fullpath(path)
     result = file.show(path,title='File (read-only)')
 }
 
@@ -691,6 +702,7 @@ ez.type = function(path){
 #' @description edit a file, wrapper of wrapper of \code{\link{file.edit}}
 #' @export
 ez.edit = function(path){
+    path=ez.fullpath(path)
     result = file.edit(path)
 }
 
@@ -784,6 +796,7 @@ ez.xlcolconv = Vectorize(xlcolconv)
 #' @param file file path to xls file
 #' @export
 ez.resavex = function(file){
+    file=ez.fullpath(file)
     # not use, because libre will save as =TRUE() =FALSE()
     # # sometimes, openxlsx are not saved well
     # # let the xlsx file go through libre office to make sure contents are saved OK.

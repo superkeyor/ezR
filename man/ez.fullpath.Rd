@@ -13,11 +13,11 @@ ez.fp(path)
 Returns the full path with resolving
 }
 \note{
-Resolve ~, %WinEnvVar%, * or ? wildcard, relative path \cr
-Mac: ~  --> /Users/jerry \cr
+Resolve ~, $HOME, %WinEnvVar%, * or ? wildcard, relative path \cr
+Mac: ~ $HOME  --> /Users/jerry \cr
 Windows: ~  --> C:\\Users\\Jerry\\Documents \cr
-Mac environment variable not supported (because it cannot load .bash_profile--check Sys.getenv()
-and tricker to parse a variable name in path)
+Mac environment variable not (fully) supported (because it cannot load .bash_profile--check Sys.getenv()
+for a list of available variables)
 }
 \examples{
 ez.fp('\%WINAPPS\%/RStudio')
