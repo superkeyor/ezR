@@ -7,7 +7,7 @@
 ez.repo(repo = NULL)
 }
 \arguments{
-\item{repo}{NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'}
+\item{repo}{NULL=print out current repo; 'default'='https://packagemanager.posit.co/cran/latest'; else like '2016-08-01'='https://packagemanager.posit.co/cran/2016-08-01'}
 }
 \value{
 returns NULL

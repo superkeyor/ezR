@@ -128,7 +128,7 @@ ez.warn = function(warnErrorMode=NULL,print2scr=TRUE) {
 
 #' print out or set the repo
 #' @description print out or set the repo
-#' @param repo NULL=print out current repo; 'default'='https://cran.rstudio.com/'; else like '2016-08-01'='https://mran.revolutionanalytics.com/snapshot/2016-08-01'
+#' @param repo NULL=print out current repo; 'default'='https://packagemanager.posit.co/cran/latest'; else like '2016-08-01'='https://packagemanager.posit.co/cran/2016-08-01'
 #' @return returns NULL
 #' @export
 ez.repo = function(repo=NULL){
@@ -138,12 +138,116 @@ ez.repo = function(repo=NULL){
     }
 
     if (repo=='default') {
-        options(repos = c(CRAN = 'https://cran.rstudio.com/'))
+        options(repos = c(CRAN = 'https://packagemanager.posit.co/cran/latest'))
     } else {
-        # options(repos = c(CRAN = sprintf('https://mran.revolutionanalytics.com/snapshot/%s',repo)))
-        options(repos = c(CRAN = sprintf('https://cran.microsoft.com/snapshot/%s',repo)))
+        options(repos = c(CRAN = sprintf('https://packagemanager.posit.co/cran/%s',repo)))
     }
     cat(sprintf('The repository now set to: %s\n',unname(getOption("repos"))))
+    return(invisible(NULL))
+}
+
+#' find the first CRAN snapshot date that has a binary build of a package for this OS and R version
+#' @description steps through Posit Package Manager CRAN snapshot dates (start, start + by, ...)
+#'   until one whose binary index (current OS and current R minor version) contains the package,
+#'   then, if refine=TRUE, searches back between the last date without the binary and that date
+#'   (bisection, a handful of requests) to find the very first day the binary appears
+#' @param pkg package name, e.g. "XML"
+#' @param start first snapshot date to try, default 2023-12-21 (2023/12/21 also works)
+#' @param end last date to try, default today
+#' @param by step between dates, default "1 month"
+#' @param version optional, require this exact version, e.g. "3.99-0.16", NULL=any version
+#' @param refine TRUE to find the first day the binary appears, FALSE to stop at the first hit of the scan
+#' @param install TRUE to install the binary from the snapshot that was found (the earliest date if refine=TRUE)
+#' @param base base url of the Posit Package Manager CRAN repo
+#' @param verbose print one line per date tried
+#' @return invisible list (package, version, date, repo, cmd, scan_date, platform, rversion), NULL if none found.
+#'   date is the earliest date found, scan_date is the date where the monthly scan first hit,
+#'   cmd is the install.packages command for that snapshot, it is also printed.
+#' @note works for macOS and Windows, where CRAN-style binaries exist. Snapshots exist on
+#'   business days only, Posit falls back to the nearest snapshot for other dates, so the
+#'   result is accurate to a business day. Bisection assumes the binary does not come and go
+#'   between the last miss and the first hit. If the very first date tried already has the binary,
+#'   nothing earlier is checked, lower start to look further back.
+#' @examples
+#' ez.find.bin("XML")
+#' ez.find.bin("XML", version="3.99-0.16", install=TRUE)
+#' ez.find.bin("XML", refine=FALSE)
+ez.find.bin = function(pkg, start="2023-12-21", end=Sys.Date(), by="1 month",
+                       version=NULL, refine=TRUE, install=FALSE,
+                       base="https://packagemanager.posit.co/cran", verbose=TRUE){
+
+    if (.Platform$pkgType=="source"){
+        stop('this OS has no CRAN-style binary packages (pkgType is "source"), use macOS or Windows')
+    }
+    start = as.Date(start)
+    end = as.Date(end)
+    if (start>end) stop('start date is after end date')
+
+    dates = format(seq(start, end, by=by))
+    rver = paste(R.version$major, R.version$minor, sep=".")
+
+    # check one snapshot date, returns list(found, version, repo)
+    check = function(d){
+        repo = paste0(base, "/", d)
+        # binary index for the current OS and R minor version, a date without one gives an error
+        ap = tryCatch(
+            suppressWarnings(utils::available.packages(utils::contrib.url(repo, type="binary"))),
+            error=function(e) NULL)
+
+        has = !is.null(ap) && pkg %in% rownames(ap)
+        ver = if (has) unname(ap[pkg,"Version"]) else NA_character_
+        found = has && (is.null(version) || ver==version)
+
+        if (verbose){
+            msg = if (found) paste('FOUND', pkg, ver)
+                  else if (has) paste('binary is', ver, 'not', version)
+                  else if (is.null(ap)) 'no binary index'
+                  else 'package not in binary index'
+            cat(d, ':', msg, '\n')
+        }
+        return(list(found=found, version=ver, repo=repo))
+    }
+
+    prev = NULL   # last scan date without the binary
+    for (d in dates){
+        r = check(d)
+        if (!r$found){
+            prev = as.Date(d)
+            next
+        }
+
+        hi = as.Date(d)   # earliest date known to have the binary
+        if (refine){
+            if (is.null(prev)){
+                if (verbose) cat('binary already present on the first date tried, lower start to look earlier\n')
+            } else {
+                lo = prev   # latest date known not to have it
+                if (verbose) cat('refining between', format(lo), '(no) and', format(hi), '(yes)\n')
+                while (as.numeric(hi-lo) > 1){
+                    mid = lo + floor(as.numeric(hi-lo)/2)
+                    rm = check(format(mid))
+                    if (rm$found){
+                        hi = mid
+                        r = rm
+                    } else {
+                        lo = mid
+                    }
+                }
+            }
+        }
+
+        cmd = sprintf('install.packages("%s", repos = "%s", type = "binary")', pkg, r$repo)
+        res = list(package=pkg, version=r$version, date=format(hi), repo=r$repo, cmd=cmd,
+                   scan_date=d, platform=.Platform$pkgType, rversion=rver)
+        if (verbose) cat('first date with binary:', res$date, pkg, res$version, '\n')
+        # always print the command to install this binary
+        cat(cmd, '\n')
+        if (install) utils::install.packages(pkg, repos=r$repo, type="binary")
+        return(invisible(res))
+    }
+
+    message('no binary of ', pkg, if (!is.null(version)) paste0(' ', version), ' found for R ', rver,
+            ' on ', .Platform$pkgType, ' between ', format(start), ' and ', format(end))
     return(invisible(NULL))
 }
 
