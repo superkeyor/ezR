@@ -487,41 +487,65 @@ ez.import = library
 #' @export
 ez.include = ez.import
 
-#' alias of \code{\link{install.packages}}
-#' @description alias of \code{\link{install.packages}}
+#' Install packages, optionally from a specific Posit Package Manager snapshot
+#' @description Like \code{\link{install.packages}}: installs one or more packages (always,
+#'   even if already installed) and passes all other arguments through. Differences:
+#'   \code{dependencies} defaults to \code{TRUE}, and \code{repo} selects a repository
+#'   for this call only (the previous \code{getOption("repos")} is restored afterwards).
+#' @param pkgs character vector of one or more package names, e.g. \code{'dplyr'} or
+#'   \code{c('dplyr', 'ggplot2')}
+#' @param ... other arguments passed to \code{\link{install.packages}} (lib, type, ...).
+#'   Note: an explicit native \code{repos=} passed here overrides \code{repo}.
+#' @param dependencies passed to \code{\link{install.packages}} (default TRUE, which also
+#'   installs Suggests; use NA for the native default)
+#' @param repo NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager,
+#'   \code{https://packagemanager.posit.co/cran/latest}), or a snapshot date such as
+#'   '2024-01-15' (\code{https://packagemanager.posit.co/cran/2024-01-15}). Same values as
+#'   \code{\link{ez.repo}}; unlike \code{ez.repo}, it is not kept after the call.
+#' @examples
+#' \dontrun{
+#' ez.install('dplyr')
+#' ez.install("dplyr")
+#' ez.install(c('dplyr', 'ggplot2'))
+#' ez.install('dplyr', repo='2024-01-15')    # snapshot for this call only
+#' ez.install('dplyr', repo='default')       # latest Posit Package Manager CRAN
+#' ez.install('dplyr', dependencies=FALSE)
+#' }
 #' @export
-ez.install = install.packages
-
-#' install many packages at the same time
-#' @description install many packages at the same time
-#' @param pkgs c()
-#' @param repos "https://mran.revolutionanalytics.com/snapshot/2018-01-11"  (if NULL, getOption("repos"))
-#' @param load if T also load pkgs: sapply(pkgs, require, character.only = TRUE)
-#' @export
-ez.installs = function(pkgs,load=FALSE,repos=NULL) {
-    if (is.null(repos)) repos=getOption("repos")
-    new.pkgs <- pkgs[!(pkgs %in% installed.packages()[, "Package"])]
-    if (length(new.pkgs)) {
-        install.packages(new.pkgs, dependencies = TRUE, repos=repos)
+ez.install = function(pkgs, ..., dependencies=TRUE, repo=NULL){
+    if (!is.null(repo)) {
+        old = options(repos = getOption("repos"))
+        on.exit(options(old), add = TRUE)
+        suppressMessages(capture.output(ez.repo(repo)))
     }
-    if (load) sapply(pkgs, require, character.only = TRUE)
+    install.packages(pkgs, ..., dependencies=dependencies)
 }
 
-#' require a package, if not exist auto install and auto load
-#' @description require a package, if not exist auto install and auto load
-#' @param pkg pkg name in string
-#' @param autoload auto load or not (default=TRUE)
+#' Attach packages, installing any that are missing first
+#' @description Like \code{\link{require}} for one or more packages, but missing packages
+#'   are installed via \code{\link{ez.install}} (so \code{dependencies=TRUE}) before attaching.
+#' @param pkgs character vector of one or more package names, e.g. \code{'dplyr'} or
+#'   \code{c('dplyr', 'ggplot2')}
+#' @param ... other arguments passed to \code{\link{require}} (quietly, warn.conflicts, ...)
+#' @param lib.loc library location(s), used for both the installed check and \code{\link{require}}
+#' @param repo NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager),
+#'   or a snapshot date such as '2024-01-15'. Same values as \code{\link{ez.repo}}; applies
+#'   only to the install, if one is needed, and is not kept afterwards.
+#' @return invisibly, a named logical vector: was each package attached successfully
+#' @examples
+#' \dontrun{
+#' ez.require('dplyr')
+#' ez.require("dplyr")
+#' ez.require(c('dplyr', 'ggplot2'))
+#' ez.require('dplyr', repo='2024-01-15')    # install from snapshot if missing
+#' ez.require('dplyr', quietly=TRUE)         # passed to require()
+#' }
 #' @export
-ez.require = function(pkg, autoload=TRUE){
-    tt = sprintf("require('%s')",pkg)
-    if (!eval(parse(text = tt))) {
-        tt = sprintf("install.packages('%s')",pkg)
-        eval(parse(text = tt))
-    }
-    if (autoload) {
-        tt = sprintf("require('%s')",pkg)
-        eval(parse(text = tt))
-    }
+ez.require = function(pkgs, ..., lib.loc=NULL, repo=NULL){
+    missing.pkgs = pkgs[!vapply(pkgs, function(p) nzchar(system.file(package=p, lib.loc=lib.loc)), logical(1))]
+    if (length(missing.pkgs)) ez.install(missing.pkgs, repo=repo)
+    res = vapply(pkgs, function(p) require(p, lib.loc=lib.loc, character.only=TRUE, ...), logical(1))
+    invisible(res)
 }
 
 #' unload a package, wrapper of detach(pkg, unload=TRUE, character.only = TRUE)

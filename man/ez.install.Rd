@@ -2,30 +2,38 @@
 % Please edit documentation in R/os.R
 \name{ez.install}
 \alias{ez.install}
-\title{alias of \code{\link{install.packages}}}
+\title{Install packages, optionally from a specific Posit Package Manager snapshot}
 \usage{
-ez.install(
-  pkgs,
-  lib,
-  repos = getOption("repos"),
-  contriburl = contrib.url(repos, type),
-  method,
-  available = NULL,
-  destdir = NULL,
-  dependencies = NA,
-  type = getOption("pkgType"),
-  configure.args = getOption("configure.args"),
-  configure.vars = getOption("configure.vars"),
-  clean = FALSE,
-  Ncpus = getOption("Ncpus", 1L),
-  verbose = getOption("verbose"),
-  libs_only = FALSE,
-  INSTALL_opts,
-  quiet = FALSE,
-  keep_outputs = FALSE,
-  ...
-)
+ez.install(pkgs, ..., dependencies = TRUE, repo = NULL)
+}
+\arguments{
+\item{pkgs}{character vector of one or more package names, e.g. \code{'dplyr'} or
+\code{c('dplyr', 'ggplot2')}}
+
+\item{...}{other arguments passed to \code{\link{install.packages}} (lib, type, ...).
+Note: an explicit native \code{repos=} passed here overrides \code{repo}.}
+
+\item{dependencies}{passed to \code{\link{install.packages}} (default TRUE, which also
+installs Suggests; use NA for the native default)}
+
+\item{repo}{NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager,
+\code{https://packagemanager.posit.co/cran/latest}), or a snapshot date such as
+'2024-01-15' (\code{https://packagemanager.posit.co/cran/2024-01-15}). Same values as
+\code{\link{ez.repo}}; unlike \code{ez.repo}, it is not kept after the call.}
 }
 \description{
-alias of \code{\link{install.packages}}
+Like \code{\link{install.packages}}: installs one or more packages (always,
+  even if already installed) and passes all other arguments through. Differences:
+  \code{dependencies} defaults to \code{TRUE}, and \code{repo} selects a repository
+  for this call only (the previous \code{getOption("repos")} is restored afterwards).
+}
+\examples{
+\dontrun{
+ez.install('dplyr')
+ez.install("dplyr")
+ez.install(c('dplyr', 'ggplot2'))
+ez.install('dplyr', repo='2024-01-15')    # snapshot for this call only
+ez.install('dplyr', repo='default')       # latest Posit Package Manager CRAN
+ez.install('dplyr', dependencies=FALSE)
+}
 }

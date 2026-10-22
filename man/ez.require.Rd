@@ -2,15 +2,35 @@
 % Please edit documentation in R/os.R
 \name{ez.require}
 \alias{ez.require}
-\title{require a package, if not exist auto install and auto load}
+\title{Attach packages, installing any that are missing first}
 \usage{
-ez.require(pkg, autoload = TRUE)
+ez.require(pkgs, ..., lib.loc = NULL, repo = NULL)
 }
 \arguments{
-\item{pkg}{pkg name in string}
+\item{pkgs}{character vector of one or more package names, e.g. \code{'dplyr'} or
+\code{c('dplyr', 'ggplot2')}}
 
-\item{autoload}{auto load or not (default=TRUE)}
+\item{...}{other arguments passed to \code{\link{require}} (quietly, warn.conflicts, ...)}
+
+\item{lib.loc}{library location(s), used for both the installed check and \code{\link{require}}}
+
+\item{repo}{NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager),
+or a snapshot date such as '2024-01-15'. Same values as \code{\link{ez.repo}}; applies
+only to the install, if one is needed, and is not kept afterwards.}
+}
+\value{
+invisibly, a named logical vector: was each package attached successfully
 }
 \description{
-require a package, if not exist auto install and auto load
+Like \code{\link{require}} for one or more packages, but missing packages
+  are installed via \code{\link{ez.install}} (so \code{dependencies=TRUE}) before attaching.
+}
+\examples{
+\dontrun{
+ez.require('dplyr')
+ez.require("dplyr")
+ez.require(c('dplyr', 'ggplot2'))
+ez.require('dplyr', repo='2024-01-15')    # install from snapshot if missing
+ez.require('dplyr', quietly=TRUE)         # passed to require()
+}
 }
