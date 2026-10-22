@@ -376,10 +376,10 @@ ez.updateself = function(force=F) {
         # system('osascript -e \'tell application "RStudio" to quit\'; open -a RStudio', wait=FALSE)
     } else {
         detach('package:ezR',unload=TRUE)
-        ez.github('jerryzhujian9/ezR',force=force)
+        ez.github('superkeyor/ezR',force=force)
         # library(ezR)  # not working, has to restart
-        # ez.github('jerryzhujian9/bzR',force=force)
-        # ez.github('jerryzhujian9/mzR',force=force)
+        # ez.github('superkeyor/bzR',force=force)
+        # ez.github('superkeyor/mzR',force=force)
         try(fzR::fz.reload(),silent=TRUE)
         cat('Please restart RStudio to make the change take effect!\n')
     }
@@ -395,14 +395,14 @@ ez.updateself = function(force=F) {
     #     cat('Please restart RStudio to make the change take effect!\n')
     #     system2('killall RStudio; open -a RStudio', stdout=TRUE, stderr=TRUE)
     # }, warning = function(w) {
-    #     ez.github('jerryzhujian9/ezR')
-    #     ez.github('jerryzhujian9/bzR')
-    #     ez.github('jerryzhujian9/mzR')
+    #     ez.github('superkeyor/ezR')
+    #     ez.github('superkeyor/bzR')
+    #     ez.github('superkeyor/mzR')
     #     cat('Please restart RStudio to make the change take effect!\n')
     # }, error = function(e) {
-    #     ez.github('jerryzhujian9/ezR')
-    #     ez.github('jerryzhujian9/bzR')
-    #     ez.github('jerryzhujian9/mzR')
+    #     ez.github('superkeyor/ezR')
+    #     ez.github('superkeyor/bzR')
+    #     ez.github('superkeyor/mzR')
     #     cat('Please restart RStudio to make the change take effect!\n')
     # }
     # )
