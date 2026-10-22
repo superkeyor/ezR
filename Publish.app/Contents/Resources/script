@@ -24,15 +24,14 @@ R --vanilla -e "devtools::document(roclets=c('rd', 'collate', 'namespace', 'vign
 
 # cd ..
 # R --vanilla CMD INSTALL --no-multiarch --with-keep.source $package
-# 
-# for renv
-Rscript -e "remotes::install_github('superkeyor/ezR@master', INSTALL_opts = c('--no-multiarch', '--with-keep.source'), force = TRUE)"
 
 cd $csd
 git add -A 
 git commit -m 'update' 
 git push origin master 
 
+# for renv, install directly from github
+Rscript -e "remotes::install_github('superkeyor/ezR@master', INSTALL_opts = c('--no-multiarch', '--with-keep.source'), force = TRUE)"
 fi
 
 # tips about git push
