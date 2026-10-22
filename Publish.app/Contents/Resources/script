@@ -23,7 +23,10 @@ else
 R --vanilla -e "devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))"
 
 cd ..
-R --vanilla CMD INSTALL --no-multiarch --with-keep.source $package
+# R --vanilla CMD INSTALL --no-multiarch --with-keep.source $package
+# 
+# for renv
+Rscript -e "remotes::install_local('$package', INSTALL_opts = c('--no-multiarch', '--with-keep.source'), force = TRUE)"
 
 cd $csd
 git add -A 
