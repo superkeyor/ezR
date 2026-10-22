@@ -128,7 +128,7 @@ ez.warn = function(warnErrorMode=NULL,print2scr=TRUE) {
 
 #' print out or set the repo
 #' @description print out or set the repo
-#' @param repo NULL=print out current repo; 'default'='https://packagemanager.posit.co/cran/latest'; else like '2016-08-01'='https://packagemanager.posit.co/cran/2016-08-01'
+#' @param repo NULL=print out current repo; 'default'='https://cloud.r-project.org' (standard CRAN); 'latest'='https://packagemanager.posit.co/cran/latest'; else like '2016-08-01'='https://packagemanager.posit.co/cran/2016-08-01'
 #' @return returns NULL
 #' @export
 ez.repo = function(repo=NULL){
@@ -138,7 +138,7 @@ ez.repo = function(repo=NULL){
     }
 
     if (repo=='default') {
-        options(repos = c(CRAN = 'https://packagemanager.posit.co/cran/latest'))
+        options(repos = c(CRAN = 'https://cloud.r-project.org'))
     } else {
         options(repos = c(CRAN = sprintf('https://packagemanager.posit.co/cran/%s',repo)))
     }
@@ -487,7 +487,7 @@ ez.import = library
 #' @export
 ez.include = ez.import
 
-#' Install packages, optionally from a specific Posit Package Manager snapshot
+#' Install packages, optionally from a specific repository
 #' @description Like \code{\link{install.packages}}: installs one or more packages (always,
 #'   even if already installed) and passes all other arguments through. Differences:
 #'   \code{dependencies} defaults to \code{TRUE}, and \code{repo} selects a repository
@@ -498,7 +498,8 @@ ez.include = ez.import
 #'   Note: an explicit native \code{repos=} passed here overrides \code{repo}.
 #' @param dependencies passed to \code{\link{install.packages}} (default TRUE, which also
 #'   installs Suggests; use NA for the native default)
-#' @param repo NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager,
+#' @param repo NULL (keep current repos), 'default' (standard CRAN,
+#'   \code{https://cloud.r-project.org}), 'latest' (Posit Package Manager latest,
 #'   \code{https://packagemanager.posit.co/cran/latest}), or a snapshot date such as
 #'   '2024-01-15' (\code{https://packagemanager.posit.co/cran/2024-01-15}). Same values as
 #'   \code{\link{ez.repo}}; unlike \code{ez.repo}, it is not kept after the call.
@@ -508,7 +509,8 @@ ez.include = ez.import
 #' ez.install("dplyr")
 #' ez.install(c('dplyr', 'ggplot2'))
 #' ez.install('dplyr', repo='2024-01-15')    # snapshot for this call only
-#' ez.install('dplyr', repo='default')       # latest Posit Package Manager CRAN
+#' ez.install('dplyr', repo='latest')        # latest Posit Package Manager CRAN
+#' ez.install('dplyr', repo='default')       # standard CRAN
 #' ez.install('dplyr', dependencies=FALSE)
 #' }
 #' @export
@@ -528,9 +530,11 @@ ez.install = function(pkgs, ..., dependencies=TRUE, repo=NULL){
 #'   \code{c('dplyr', 'ggplot2')}
 #' @param ... other arguments passed to \code{\link{require}} (quietly, warn.conflicts, ...)
 #' @param lib.loc library location(s), used for both the installed check and \code{\link{require}}
-#' @param repo NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager),
-#'   or a snapshot date such as '2024-01-15'. Same values as \code{\link{ez.repo}}; applies
-#'   only to the install, if one is needed, and is not kept afterwards.
+#' @param repo NULL (keep current repos), 'default' (standard CRAN,
+#'   \code{https://cloud.r-project.org}), 'latest' (Posit Package Manager latest,
+#'   \code{https://packagemanager.posit.co/cran/latest}), or a snapshot date such as
+#'   '2024-01-15'. Same values as \code{\link{ez.repo}}; applies only to the install, if one
+#'   is needed, and is not kept afterwards.
 #' @return invisibly, a named logical vector: was each package attached successfully
 #' @examples
 #' \dontrun{
@@ -538,6 +542,7 @@ ez.install = function(pkgs, ..., dependencies=TRUE, repo=NULL){
 #' ez.require("dplyr")
 #' ez.require(c('dplyr', 'ggplot2'))
 #' ez.require('dplyr', repo='2024-01-15')    # install from snapshot if missing
+#' ez.require('dplyr', repo='latest')        # install from latest Posit CRAN if missing
 #' ez.require('dplyr', quietly=TRUE)         # passed to require()
 #' }
 #' @export

@@ -14,9 +14,11 @@ ez.require(pkgs, ..., lib.loc = NULL, repo = NULL)
 
 \item{lib.loc}{library location(s), used for both the installed check and \code{\link{require}}}
 
-\item{repo}{NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager),
-or a snapshot date such as '2024-01-15'. Same values as \code{\link{ez.repo}}; applies
-only to the install, if one is needed, and is not kept afterwards.}
+\item{repo}{NULL (keep current repos), 'default' (standard CRAN,
+\code{https://cloud.r-project.org}), 'latest' (Posit Package Manager latest,
+\code{https://packagemanager.posit.co/cran/latest}), or a snapshot date such as
+'2024-01-15'. Same values as \code{\link{ez.repo}}; applies only to the install, if one
+is needed, and is not kept afterwards.}
 }
 \value{
 invisibly, a named logical vector: was each package attached successfully
@@ -31,6 +33,7 @@ ez.require('dplyr')
 ez.require("dplyr")
 ez.require(c('dplyr', 'ggplot2'))
 ez.require('dplyr', repo='2024-01-15')    # install from snapshot if missing
+ez.require('dplyr', repo='latest')        # install from latest Posit CRAN if missing
 ez.require('dplyr', quietly=TRUE)         # passed to require()
 }
 }

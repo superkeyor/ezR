@@ -2,7 +2,7 @@
 % Please edit documentation in R/os.R
 \name{ez.install}
 \alias{ez.install}
-\title{Install packages, optionally from a specific Posit Package Manager snapshot}
+\title{Install packages, optionally from a specific repository}
 \usage{
 ez.install(pkgs, ..., dependencies = TRUE, repo = NULL)
 }
@@ -16,7 +16,8 @@ Note: an explicit native \code{repos=} passed here overrides \code{repo}.}
 \item{dependencies}{passed to \code{\link{install.packages}} (default TRUE, which also
 installs Suggests; use NA for the native default)}
 
-\item{repo}{NULL (keep current repos), 'default' (latest CRAN on Posit Package Manager,
+\item{repo}{NULL (keep current repos), 'default' (standard CRAN,
+\code{https://cloud.r-project.org}), 'latest' (Posit Package Manager latest,
 \code{https://packagemanager.posit.co/cran/latest}), or a snapshot date such as
 '2024-01-15' (\code{https://packagemanager.posit.co/cran/2024-01-15}). Same values as
 \code{\link{ez.repo}}; unlike \code{ez.repo}, it is not kept after the call.}
@@ -33,7 +34,8 @@ ez.install('dplyr')
 ez.install("dplyr")
 ez.install(c('dplyr', 'ggplot2'))
 ez.install('dplyr', repo='2024-01-15')    # snapshot for this call only
-ez.install('dplyr', repo='default')       # latest Posit Package Manager CRAN
+ez.install('dplyr', repo='latest')        # latest Posit Package Manager CRAN
+ez.install('dplyr', repo='default')       # standard CRAN
 ez.install('dplyr', dependencies=FALSE)
 }
 }
